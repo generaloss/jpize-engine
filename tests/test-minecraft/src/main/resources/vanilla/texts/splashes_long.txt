@@ -1,0 +1,1 @@
+This text is hard to read if you play the game at the default resolution, but at 1080p it's fine!

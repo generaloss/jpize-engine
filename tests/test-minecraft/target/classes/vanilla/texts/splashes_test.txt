@@ -1,0 +1,6 @@
+§lBold Text long bold text
+§oItalic Text long italic text
+§nUnderlined Text long underlined text
+§mStriked Text long striked text
+§kObfuscated Text long obfuscated text
+§4Colored Text long colored text

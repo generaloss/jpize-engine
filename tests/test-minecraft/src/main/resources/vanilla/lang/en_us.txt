@@ -1,0 +1,48 @@
+language.code : en_us
+language.name : English
+language.region : United States
+
+menu.singleplayer : Singleplayer
+menu.multiplayer : Multiplayer
+menu.mods : Mods
+menu.options : Options...
+menu.quit : Quit Game
+
+options.title : Options
+options.videoSettings : Graphics...
+options.audioSettings : Audio...
+options.language : Language...
+options.controls : Controls...
+options.resourcePacks : Resources...
+
+audioSettings.title : Audio Settings
+audioSettings.master : Master Volume: %s%
+audioSettings.music : Music: %s%
+audioSettings.ambient : Ambient: %s%
+audioSettings.players : Players: %s%
+audioSettings.blocks : Blocks: %s%
+audioSettings.weather : Weather: %s%
+audioSettings.device : Device: %s
+
+videoSettings.title : Video Settings
+videoSettings.fov : FOV: %s
+videoSettings.maxFramerate : Max Framerate: %s
+videoSettings.renderDistance : Render Distance: %s
+videoSettings.fullscreen : Fullscreen: %s
+videoSettings.mipmapLevels : Mipmap Levels: %s
+videoSettings.showFps : Show FPS: %s
+
+selectWorld.title : Select World
+selectWorld.edit : Edit
+selectWorld.delete : Delete
+selectWorld.recreate : Re-Create
+selectWorld.play : Play Selected World
+selectWorld.create : Create New World
+
+gui.done : Done
+gui.cancel : Cancel
+
+text.off : OFF
+text.on : ON
+text.unlimited : Unlimited
+text.vSync : V-Sync
