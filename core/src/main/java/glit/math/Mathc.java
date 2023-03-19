@@ -69,4 +69,12 @@ public class Mathc{
         return (float) Math.random();
     }
 
+    public static short min(short a, short b){
+        return (short) Math.min(a, b);
+    }
+
+    public static short max(short a, short b){
+        return (short) Math.max(a, b);
+    }
+
 }

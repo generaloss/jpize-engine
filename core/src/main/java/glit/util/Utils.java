@@ -58,7 +58,7 @@ public class Utils{
 
 
     public static void free(ByteBuffer buffer){
-        // LibCStdlib.free(buffer);
+        LibCStdlib.free(buffer);
     }
 
     public static void free(ShortBuffer buffer){

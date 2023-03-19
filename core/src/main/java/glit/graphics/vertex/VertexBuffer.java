@@ -3,6 +3,8 @@ package glit.graphics.vertex;
 import glit.context.Disposable;
 import glit.graphics.gl.BufferUsage;
 
+import java.nio.*;
+
 import static org.lwjgl.opengl.GL33.*;
 
 public class VertexBuffer implements Disposable{
@@ -82,6 +84,44 @@ public class VertexBuffer implements Disposable{
         glBufferData(GL_ARRAY_BUFFER, data, usage.gl);
         dataSize = data.length;
     }
+
+
+    public void setData(IntBuffer buffer, BufferUsage usage){
+        bind();
+        glBufferData(GL_ARRAY_BUFFER, buffer, usage.gl);
+        dataSize = buffer.limit();
+    }
+
+    public void setData(ByteBuffer buffer, BufferUsage usage){
+        bind();
+        glBufferData(GL_ARRAY_BUFFER, buffer, usage.gl);
+        dataSize = buffer.limit();
+    }
+
+    public void setData(FloatBuffer buffer, BufferUsage usage){
+        bind();
+        glBufferData(GL_ARRAY_BUFFER, buffer, usage.gl);
+        dataSize = buffer.limit();
+    }
+
+    public void setData(LongBuffer buffer, BufferUsage usage){
+        bind();
+        glBufferData(GL_ARRAY_BUFFER, buffer, usage.gl);
+        dataSize = buffer.limit();
+    }
+
+    public void setData(ShortBuffer buffer, BufferUsage usage){
+        bind();
+        glBufferData(GL_ARRAY_BUFFER, buffer, usage.gl);
+        dataSize = buffer.limit();
+    }
+
+    public void setData(DoubleBuffer buffer, BufferUsage usage){
+        bind();
+        glBufferData(GL_ARRAY_BUFFER, buffer, usage.gl);
+        dataSize = buffer.limit();
+    }
+
 
     public void setSubData(long offset, float[] data){
         bind();

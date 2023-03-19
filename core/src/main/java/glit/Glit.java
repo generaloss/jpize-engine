@@ -6,7 +6,7 @@ import glit.context.ContextListener;
 import glit.context.Screen;
 import glit.graphics.gl.BlendFactor;
 import glit.graphics.gl.Target;
-import glit.graphics.util.Gl;
+import glit.graphics.gl.Gl;
 import glit.io.*;
 import glit.io.glfw.Key;
 import glit.math.vecmath.point.Point2f;

@@ -1,6 +1,7 @@
 package glit.context;
 
 import glit.audio.Audio;
+import glit.graphics.gl.Gl;
 import glit.graphics.postprocess.FrameBufferObject;
 import glit.graphics.postprocess.RenderBufferObject;
 import glit.graphics.texture.Texture;

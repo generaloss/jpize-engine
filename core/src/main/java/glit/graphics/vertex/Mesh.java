@@ -8,7 +8,6 @@ import glit.util.FastArrayList;
 public class Mesh implements Disposable, Cloneable{
 
     private Primitive mode;
-    private int vertexCount;
     private float[] vertices, indices;
     private final VertexAttr[] attributes;
     private final VertexArray vao;
@@ -32,7 +31,6 @@ public class Mesh implements Disposable, Cloneable{
         attributes = mesh.attributes;
         vertices = mesh.vertices.clone();
         mode = mesh.mode;
-        vertexCount = mesh.vertexCount;
 
         vao = new VertexArray();
         vbo = new VertexBuffer();
@@ -44,7 +42,7 @@ public class Mesh implements Disposable, Cloneable{
 
 
     public void render(){
-        vao.drawArrays(vertexCount, mode);
+        vao.drawArrays(vbo.getVertexCount(), mode);
         // vao.drawElements(indices.length, mode);
     }
 
@@ -54,7 +52,6 @@ public class Mesh implements Disposable, Cloneable{
 
     public void setVertices(float[] vertices){
         this.vertices = vertices;
-        vertexCount = vertices.length / vbo.getVertexSize();
         vbo.setData(vertices, BufferUsage.DYNAMIC_DRAW);
     }
 
@@ -66,8 +63,7 @@ public class Mesh implements Disposable, Cloneable{
                 return false;
             vertices[i] = v;
         }
-        vertexCount = vertices.length / vbo.getVertexSize();
-
+        
         vbo.setData(vertices, BufferUsage.DYNAMIC_DRAW);
         return true;
     }

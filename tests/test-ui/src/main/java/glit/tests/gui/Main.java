@@ -4,7 +4,7 @@ import glit.Glit;
 import glit.context.ContextListener;
 import glit.graphics.texture.Texture;
 import glit.graphics.texture.TextureRegion;
-import glit.graphics.util.Gl;
+import glit.graphics.gl.Gl;
 import glit.graphics.util.batch.TextureBatch;
 import glit.gui.Align;
 import glit.gui.LayoutType;

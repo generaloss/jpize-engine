@@ -3,6 +3,7 @@ package glit.graphics.util;
 import glit.context.Disposable;
 import glit.files.FileHandle;
 import glit.graphics.camera.Camera;
+import glit.graphics.gl.Gl;
 import glit.graphics.gl.Type;
 import glit.graphics.texture.CubeMap;
 import glit.graphics.vertex.Mesh;

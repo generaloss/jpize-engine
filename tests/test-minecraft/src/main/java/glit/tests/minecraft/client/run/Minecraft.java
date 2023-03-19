@@ -2,7 +2,7 @@ package glit.tests.minecraft.client.run;
 
 import glit.Glit;
 import glit.context.ContextListener;
-import glit.graphics.util.Gl;
+import glit.graphics.gl.Gl;
 import glit.tests.minecraft.client.game.Session;
 import glit.tests.minecraft.utils.log.Logger;
 

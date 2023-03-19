@@ -1,5 +1,7 @@
 package glit.util.time;
 
+import glit.Glit;
+
 public class Sync{
 
     private long prevTime;
@@ -8,6 +10,10 @@ public class Sync{
 
     public Sync(double fps){
         setFps(fps);
+    }
+
+    public Sync(){
+        this(Glit.monitor().getRefreshRate());
     }
 
     public void setFps(double fps){

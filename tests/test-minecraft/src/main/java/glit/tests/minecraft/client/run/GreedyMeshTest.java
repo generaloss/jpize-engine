@@ -2,9 +2,9 @@ package glit.tests.minecraft.client.run;
 
 import glit.Glit;
 import glit.context.ContextListener;
+import glit.graphics.gl.Gl;
 import glit.graphics.texture.Pixmap;
 import glit.graphics.texture.Texture;
-import glit.graphics.util.*;
 import glit.graphics.util.batch.TextureBatch;
 import glit.graphics.util.color.Color;
 import glit.graphics.util.color.IColor;

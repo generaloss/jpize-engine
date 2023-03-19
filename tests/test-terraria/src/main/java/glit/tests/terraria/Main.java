@@ -4,7 +4,7 @@ import glit.Glit;
 import glit.context.ContextListener;
 import glit.graphics.font.BitmapFont;
 import glit.graphics.font.FontLoader;
-import glit.graphics.util.Gl;
+import glit.graphics.gl.Gl;
 import glit.graphics.util.batch.TextureBatch;
 import glit.io.glfw.Key;
 import glit.math.Maths;

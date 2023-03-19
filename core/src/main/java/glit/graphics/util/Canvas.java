@@ -1,12 +1,14 @@
 package glit.graphics.util;
 
 import glit.Glit;
+import glit.context.Disposable;
+import glit.graphics.gl.Gl;
 import glit.graphics.gl.Target;
 import glit.graphics.texture.Pixmap;
 import glit.graphics.texture.Texture;
 import glit.graphics.util.batch.TextureBatch;
 
-public class Canvas extends Pixmap{
+public class Canvas extends Pixmap implements Disposable{
 
     private final TextureBatch batch;
     private final Texture frameTexture;
@@ -48,7 +50,6 @@ public class Canvas extends Pixmap{
     public void dispose(){
         batch.dispose();
         frameTexture.dispose();
-        super.dispose();
     }
 
 }

@@ -1,6 +1,5 @@
 package glit.graphics.texture;
 
-import glit.context.Disposable;
 import glit.context.Resizable;
 import glit.graphics.gl.InternalFormat;
 import glit.graphics.util.color.Color;
@@ -11,7 +10,7 @@ import glit.util.Utils;
 
 import java.nio.ByteBuffer;
 
-public class Pixmap implements Cloneable, Disposable, Resizable{
+public class Pixmap implements Cloneable, Resizable{
 
     public static final InternalFormat FORMAT = InternalFormat.RGBA8;
     private ByteBuffer buffer;
@@ -405,11 +404,6 @@ public class Pixmap implements Cloneable, Disposable, Resizable{
     @Override
     public Pixmap clone(){
         return new Pixmap(this);
-    }
-
-    @Override
-    public void dispose(){
-        Utils.free(buffer);
     }
 
 }

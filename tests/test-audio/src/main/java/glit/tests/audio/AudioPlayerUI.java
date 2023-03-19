@@ -4,7 +4,7 @@ import glit.Glit;
 import glit.audio.sound.Sound;
 import glit.context.Disposable;
 import glit.graphics.texture.Texture;
-import glit.graphics.util.Gl;
+import glit.graphics.gl.Gl;
 import glit.graphics.util.batch.TextureBatch;
 import glit.gui.Align;
 import glit.gui.LayoutType;

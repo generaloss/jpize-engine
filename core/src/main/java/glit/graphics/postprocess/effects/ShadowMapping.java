@@ -9,7 +9,7 @@ import glit.graphics.gl.Type;
 import glit.graphics.gl.Wrap;
 import glit.graphics.postprocess.FrameBufferObject;
 import glit.graphics.texture.Texture;
-import glit.graphics.util.Gl;
+import glit.graphics.gl.Gl;
 import glit.graphics.util.Shader;
 import glit.math.vecmath.matrix.Matrix4f;
 import glit.math.vecmath.vector.Vec3f;

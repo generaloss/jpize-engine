@@ -163,7 +163,6 @@ public class Window implements Disposable, Resizable{
             GLFWImage image = GLFWImage.malloc();
             GLFWImage.Buffer iconBuffer = GLFWImage.malloc(1);
             image.set(pixmap.getWidth(), pixmap.getHeight(), pixmap.getBuffer());
-            pixmap.dispose();
 
             iconBuffer.put(0, image);
             glfwSetWindowIcon(id, iconBuffer);
