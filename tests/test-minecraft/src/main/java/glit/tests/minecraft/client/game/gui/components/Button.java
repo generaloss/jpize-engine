@@ -4,7 +4,7 @@ import glit.graphics.texture.TextureRegion;
 import glit.graphics.util.batch.Batch;
 import glit.gui.Align;
 import glit.gui.components.ExpandType;
-import glit.gui.components.ExpandableImage;
+import glit.gui.components.NinePatchImage;
 import glit.gui.components.RegionMesh;
 import glit.gui.constraint.Constraint;
 import glit.tests.minecraft.client.game.Session;
@@ -17,7 +17,7 @@ public class Button extends MComponent{
     private final Session session;
 
     private final TextureRegion texture, hoverTexture, blockedTexture;
-    private final ExpandableImage background;
+    private final NinePatchImage background;
     private final TextView textView;
     private Runnable listener;
     private boolean blocked;
@@ -28,7 +28,7 @@ public class Button extends MComponent{
         this.hoverTexture = session.getResourceManager().getTexture("button_hover");
         this.blockedTexture = session.getResourceManager().getTexture("button_blocked");
 
-        background = new ExpandableImage(texture, new RegionMesh(0,0, 2,2, 198,17, 200,20));
+        background = new NinePatchImage(texture, new RegionMesh(0,0, 2,2, 198,17, 200,20));
         background.setSize(Constraint.match_parent, Constraint.match_parent);
         background.setExpandType(ExpandType.HORIZONTAL);
         super.setAsParentFor(background);

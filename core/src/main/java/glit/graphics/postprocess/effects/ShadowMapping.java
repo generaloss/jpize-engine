@@ -4,7 +4,7 @@ import glit.Glit;
 import glit.context.Disposable;
 import glit.files.FileHandle;
 import glit.graphics.gl.Filter;
-import glit.graphics.gl.InternalFormat;
+import glit.graphics.gl.SizedFormat;
 import glit.graphics.gl.Type;
 import glit.graphics.gl.Wrap;
 import glit.graphics.postprocess.FrameBufferObject;
@@ -42,7 +42,7 @@ public class ShadowMapping implements Disposable{
         fbo.setWrite(false);
         fbo.setRead(false);
 
-        fbo.getInfo().setInternalFormat(InternalFormat.DEPTH_COMPONENT32);
+        fbo.getInfo().setSizedFormat(SizedFormat.DEPTH_COMPONENT32);
         fbo.getInfo().setWrap(Wrap.CLAMP_TO_BORDER);
         fbo.getInfo().setFilter(Filter.NEAREST);
         fbo.getInfo().setType(Type.FLOAT);

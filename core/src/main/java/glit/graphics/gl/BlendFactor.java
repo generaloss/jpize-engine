@@ -25,10 +25,10 @@ public enum BlendFactor{
     SRC_ALPHA_SATURATE       (GL_SRC_ALPHA_SATURATE      );
 
 
-    public final int gl;
+    public final int GL;
 
-    BlendFactor(int gl){
-        this.gl = gl;
+    BlendFactor(int GL){
+        this.GL = GL;
     }
 
 }

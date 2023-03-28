@@ -9,10 +9,10 @@ public enum PolygonMode{
     FILL(GL_FILL);
 
 
-    public final int gl;
+    public final int GL;
 
-    PolygonMode(int gl){
-        this.gl = gl;
+    PolygonMode(int GL){
+        this.GL = GL;
     }
 
 }

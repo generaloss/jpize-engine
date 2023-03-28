@@ -30,7 +30,7 @@ public class TextureBatch extends Batch{
     private final Matrix3f transformMatrix, rotationMatrix, shearMatrix, scaleMatrix, flipMatrix;
 
     private int size, vertexOffset;
-    private final int maxSize;
+    private final int batchSize;
     private final float[] vertices;
 
     private Texture lastTexture;
@@ -38,16 +38,16 @@ public class TextureBatch extends Batch{
     private Shader customShader;
 
     public TextureBatch(){
-        this(1000);
+        this(256);
     }
 
-    public TextureBatch(int maxSize){
-        this.maxSize = maxSize;
+    public TextureBatch(int batchSize){
+        this.batchSize = batchSize;
 
         // Shader
         shader = new Shader(
-            new FileHandle("shader/batch/classic_batch.vert").readString(),
-            new FileHandle("shader/batch/classic_batch.frag").readString()
+            new FileHandle("shader/batch/batch.vert").readString(),
+            new FileHandle("shader/batch/batch.frag").readString()
         );
 
         { // Create VAO, VBO, EBO
@@ -58,8 +58,8 @@ public class TextureBatch extends Batch{
 
             ebo = new ElementBuffer();
 
-            int[] indices = new int[QUAD_INDICES * maxSize];
-            for(int i = 0; i < maxSize; i++){
+            int[] indices = new int[QUAD_INDICES * batchSize];
+            for(int i = 0; i < batchSize; i++){
                 int indexQuadOffset = QUAD_INDICES * i;
                 int vertexQuadOffset = QUAD_VERTICES * i;
 
@@ -74,7 +74,7 @@ public class TextureBatch extends Batch{
             ebo.setData(indices, BufferUsage.STATIC_DRAW);
         }
 
-        vertices = new float[QUAD_VERTICES * maxSize * vbo.getVertexSize()];
+        vertices = new float[QUAD_VERTICES * batchSize * vbo.getVertexSize()];
 
         transformOrigin = new Vec2f(0.5);
         transformMatrix = new Matrix3f();
@@ -87,8 +87,8 @@ public class TextureBatch extends Batch{
 
     @Override
     public void draw(Texture texture, float x, float y, float width, float height){
-        if(size + 1 >= maxSize)
-            return;
+        if(size + 1 >= batchSize)
+            end();
 
         if(texture != lastTexture){
             end();
@@ -101,8 +101,8 @@ public class TextureBatch extends Batch{
 
     @Override
     public void draw(TextureRegion texReg, float x, float y, float width, float height){
-        if(size + 1 >= maxSize)
-            return;
+        if(size + 1 >= batchSize)
+            end();
 
         Texture texture = texReg.getTexture();
         if(texture != lastTexture){
@@ -116,8 +116,8 @@ public class TextureBatch extends Batch{
 
     @Override
     public void draw(Texture texture, float x, float y, float width, float height, Region region){
-        if(size + 1 >= maxSize)
-            return;
+        if(size + 1 >= batchSize)
+            end();
 
         if(texture != lastTexture){
             end();
@@ -130,8 +130,8 @@ public class TextureBatch extends Batch{
 
     @Override
     public void draw(TextureRegion texReg, float x, float y, float width, float height, Region region){
-        if(size + 1 >= maxSize)
-            return;
+        if(size + 1 >= batchSize)
+            end();
 
         Texture texture = texReg.getTexture();
         if(texture != lastTexture){
@@ -170,9 +170,9 @@ public class TextureBatch extends Batch{
     }
 
 
-    public void end(){
+    public int end(){
         if(lastTexture == null || size == 0)
-            return;
+            return -1;
 
         Shader usedShader = customShader == null ? shader : customShader;
 
@@ -183,17 +183,22 @@ public class TextureBatch extends Batch{
 
         vbo.setData(vertices, BufferUsage.STREAM_DRAW);
         vao.drawElements(size * QUAD_INDICES);
-
+        
         // Reset
+        int sizeResult = size;
+        
         size = 0;
         vertexOffset = 0;
+    
+        return sizeResult;
     }
-
-
+    
+    
+    
     public void useShader(Shader shader){
         customShader = shader;
     }
-
+    
 
     private void addTexturedQuad(float x, float y, float width, float height, float u1, float v1, float u2, float v2){
         Vec2f origin = new Vec2f(width * transformOrigin.x, height * transformOrigin.y);

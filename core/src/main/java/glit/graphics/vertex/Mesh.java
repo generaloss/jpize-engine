@@ -5,7 +5,7 @@ import glit.graphics.gl.BufferUsage;
 import glit.graphics.gl.Primitive;
 import glit.util.FastArrayList;
 
-public class Mesh implements Disposable, Cloneable{
+public class Mesh implements Disposable{
 
     private Primitive mode;
     private float[] vertices, indices;
@@ -80,7 +80,7 @@ public class Mesh implements Disposable, Cloneable{
         vao.dispose();
         // ebo.dispose();
     }
-
+    
     @Override
     public Mesh clone(){
         return new Mesh(this);

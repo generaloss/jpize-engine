@@ -13,10 +13,10 @@ public enum Filter{
     LINEAR                 (GL_LINEAR);
 
 
-    public final int gl;
+    public final int GL;
 
-    Filter(int gl){
-        this.gl = gl;
+    Filter(int GL){
+        this.GL = GL;
     }
 
 }

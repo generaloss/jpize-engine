@@ -1,7 +1,7 @@
 package glit.graphics.texture;
 
 import glit.context.Resizable;
-import glit.graphics.gl.InternalFormat;
+import glit.graphics.gl.SizedFormat;
 import glit.graphics.util.color.Color;
 import glit.graphics.util.color.IColor;
 import glit.math.Maths;
@@ -10,9 +10,9 @@ import glit.util.Utils;
 
 import java.nio.ByteBuffer;
 
-public class Pixmap implements Cloneable, Resizable{
+public class Pixmap implements Resizable{
 
-    public static final InternalFormat FORMAT = InternalFormat.RGBA8;
+    public static final SizedFormat FORMAT = SizedFormat.RGBA8;
     private ByteBuffer buffer;
     private int width, height;
 

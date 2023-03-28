@@ -114,39 +114,39 @@ public class Mouse{
     }
 
     public boolean isLeftDown(){
-        return down[Key.MOUSE_LEFT.glfw];
+        return down[Key.MOUSE_LEFT.GLFW];
     }
 
     public boolean isLeftPressed(){
-        return pressed[Key.MOUSE_LEFT.glfw];
+        return pressed[Key.MOUSE_LEFT.GLFW];
     }
 
     public boolean isLeftReleased(){
-        return released[Key.MOUSE_LEFT.glfw];
+        return released[Key.MOUSE_LEFT.GLFW];
     }
 
     public boolean isRightDown(){
-        return down[Key.MOUSE_RIGHT.glfw];
+        return down[Key.MOUSE_RIGHT.GLFW];
     }
 
     public boolean isRightPressed(){
-        return pressed[Key.MOUSE_RIGHT.glfw];
+        return pressed[Key.MOUSE_RIGHT.GLFW];
     }
 
     public boolean isRightReleased(){
-        return released[Key.MOUSE_RIGHT.glfw];
+        return released[Key.MOUSE_RIGHT.GLFW];
     }
 
     public boolean isButtonDown(Key button){
-        return down[button.glfw];
+        return down[button.GLFW];
     }
 
     public boolean isButtonPressed(Key button){
-        return pressed[button.glfw];
+        return pressed[button.GLFW];
     }
 
     public boolean isButtonReleased(Key button){
-        return released[button.glfw];
+        return released[button.GLFW];
     }
 
 

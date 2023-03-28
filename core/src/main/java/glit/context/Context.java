@@ -4,6 +4,7 @@ import glit.audio.Audio;
 import glit.graphics.gl.Gl;
 import glit.graphics.postprocess.FrameBufferObject;
 import glit.graphics.postprocess.RenderBufferObject;
+import glit.graphics.texture.CubeMap;
 import glit.graphics.texture.Texture;
 import glit.graphics.texture.TextureArray;
 import glit.graphics.util.*;
@@ -75,19 +76,20 @@ public class Context{
             keyboard.reset();
             window.swapBuffers();
         }
-
+    
+        Shader.unbind();
         VertexArray.unbind();
         VertexBuffer.unbind();
         ElementBuffer.unbind();
-        Shader.unbind();
         Texture.unbind();
+        CubeMap.unbind();
         TextureArray.unbind();
         FrameBufferObject.unbind();
         RenderBufferObject.unbind();
-
+    
         window.dispose();
-        listener.dispose();
         audio.dispose();
+        listener.dispose();
 
         Utils.invokeStatic(ScreenQuad.class, "dispose");
         Utils.invokeStatic(ScreenQuadShader.class, "dispose");

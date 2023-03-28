@@ -22,7 +22,7 @@ public class VertexArray implements Disposable{
 
     public void drawArrays(int verticesNum, Primitive mode){
         bind();
-        glDrawArrays(mode.gl, 0, verticesNum);
+        glDrawArrays(mode.GL, 0, verticesNum);
     }
 
 
@@ -36,7 +36,7 @@ public class VertexArray implements Disposable{
 
     public void drawElements(int indicesNum, Primitive mode, Type indicesType){
         bind();
-        glDrawElements(mode.gl, indicesNum, indicesType.gl, 0);
+        glDrawElements(mode.GL, indicesNum, indicesType.GL, 0);
     }
 
     public int getId(){

@@ -1,9 +1,9 @@
 package glit.graphics.postprocess;
 
 import glit.Glit;
-import glit.context.Disposable;
 import glit.context.Resizable;
 import glit.graphics.gl.Filter;
+import glit.graphics.gl.GlObject;
 import glit.graphics.gl.Wrap;
 import glit.graphics.texture.Texture;
 import glit.graphics.texture.TextureParameters;
@@ -14,24 +14,27 @@ import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL33.*;
 
-public class FrameBufferObject implements Disposable, Resizable{
+public class FrameBufferObject extends GlObject implements Resizable{
 
-    private int frameBuffer, width, height, attachment;
+    private int width, height, attachment;
     private final Texture texture;
     private boolean draw, read;
 
 
     public FrameBufferObject(int width, int height){
+        super(GL_FRAMEBUFFER);
+        
         this.width = width;
         this.height = height;
         attachment = GL_COLOR_ATTACHMENT0;
         draw = true;
         read = true;
-
-        texture = new Texture(glGenTextures(), width, height);
-        texture.getParameters().setWrap(Wrap.CLAMP_TO_EDGE);
-        texture.getParameters().setFilter(Filter.NEAREST);
-        texture.getParameters().setMipmapLevels(0);
+        
+        texture = new Texture(width, height);
+        texture.getParameters()
+            .setWrap(Wrap.CLAMP_TO_EDGE)
+            .setFilter(Filter.NEAREST)
+            .setMipmapLevels(0);
     }
 
     public FrameBufferObject(){
@@ -58,10 +61,10 @@ public class FrameBufferObject implements Disposable, Resizable{
 
     public void create(){
         texture.update();
-
-        frameBuffer = glGenFramebuffers();
+    
+        ID = glGenFramebuffers();
         bind();
-        glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture.getId(), 0);
+        glFramebufferTexture2D(TARGET, attachment, GL_TEXTURE_2D, texture.getID(), 0);
         glDrawBuffer(draw ? attachment : GL_NONE);
         glReadBuffer(read ? attachment : GL_NONE);
         unbind();
@@ -77,7 +80,7 @@ public class FrameBufferObject implements Disposable, Resizable{
 
     public void copyTo(Texture texture){
         bind();
-        glBindTexture(GL_TEXTURE_2D, texture.getId());
+        texture.bind();
         glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, width, height);
         unbind();
     }
@@ -88,12 +91,12 @@ public class FrameBufferObject implements Disposable, Resizable{
         int height = texture.getHeight();
 
         ByteBuffer buffer = ByteBuffer.allocateDirect(width * height * texture.getFormat().getChannels());
-        glReadPixels(0, 0, width, height, texture.getFormat().gl, texture.getType().gl, buffer);
+        glReadPixels(0, 0, width, height, texture.getFormat().GL, texture.getType().GL, buffer);
 
         unbind();
         return buffer;
     }
-
+    
 
     public void renderToScreen(){
         unbind();
@@ -101,22 +104,10 @@ public class FrameBufferObject implements Disposable, Resizable{
         ScreenQuadShader.use(texture);
         ScreenQuad.render();
     }
-
-
-    public void bind(){
-        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-    }
-
-    public static void unbind(){
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    }
+    
 
     public Texture getTexture(){
         return texture;
-    }
-
-    public int getId(){
-        return frameBuffer;
     }
 
     public int getWidth(){
@@ -126,13 +117,22 @@ public class FrameBufferObject implements Disposable, Resizable{
     public int getHeight(){
         return height;
     }
-
-
+    
+    public void bind(){
+        glBindFramebuffer(TARGET, ID);
+    }
+    
+    
     @Override
     public void dispose(){
-        glDeleteFramebuffers(frameBuffer);
-
+        glDeleteFramebuffers(ID);
+        
         texture.dispose();
+    }
+    
+    
+    public static void unbind(){
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
 }

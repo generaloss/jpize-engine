@@ -10,7 +10,7 @@ import glit.math.vecmath.vector.Vec2f;
 
 import static glit.gui.components.ExpandType.*;
 
-public class ExpandableImage extends UIComponent<Batch>{
+public class NinePatchImage extends UIComponent<Batch>{
 
     private final TextureRegion[] regions;
     private TextureRegion texture;
@@ -19,13 +19,13 @@ public class ExpandableImage extends UIComponent<Batch>{
     private ExpandType type;
 
 
-    public ExpandableImage(TextureRegion textureRegion, RegionMesh mesh){
+    public NinePatchImage(TextureRegion textureRegion, RegionMesh mesh){
         regions = new TextureRegion[9];
         setTexture(textureRegion, mesh);
         setExpandType(DEFAULT);
     }
 
-    public ExpandableImage(Texture texture, RegionMesh mesh){
+    public NinePatchImage(Texture texture, RegionMesh mesh){
         this(new TextureRegion(texture), mesh);
     }
 

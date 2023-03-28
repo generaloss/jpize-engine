@@ -1,34 +1,33 @@
 package glit.graphics.postprocess;
 
 import glit.Glit;
-import glit.context.Disposable;
 import glit.context.Resizable;
-import glit.graphics.gl.Filter;
-import glit.graphics.gl.InternalFormat;
-import glit.graphics.gl.Type;
-import glit.graphics.gl.Wrap;
+import glit.graphics.gl.*;
 import glit.graphics.texture.Texture;
 import glit.graphics.texture.TextureParameters;
 
 import static org.lwjgl.opengl.GL33.*;
 
-public class RenderBufferObject implements Disposable, Resizable{
+public class RenderBufferObject extends GlObject implements Resizable{
 
-    private int renderBuffer, width, height, attachment;
+    private int width, height, attachment;
     private final Texture texture;
 
 
     public RenderBufferObject(int width, int height){
+        super(GL_RENDERBUFFER);
+        
         this.width = width;
         this.height = height;
         attachment = GL_DEPTH_ATTACHMENT;
 
-        texture = new Texture(glGenTextures(), width, height);
-        texture.getParameters().setInternalFormat(InternalFormat.DEPTH_COMPONENT32);
-        texture.getParameters().setType(Type.FLOAT);
-        texture.getParameters().setWrap(Wrap.CLAMP_TO_EDGE);
-        texture.getParameters().setFilter(Filter.NEAREST);
-        texture.getParameters().setMipmapLevels(0);
+        texture = new Texture(width, height);
+        texture.getParameters()
+            .setSizedFormat(SizedFormat.DEPTH_COMPONENT32)
+            .setType(Type.FLOAT)
+            .setWrap(Wrap.CLAMP_TO_EDGE)
+            .setFilter(Filter.NEAREST)
+            .setMipmapLevels(0);
     }
 
     public RenderBufferObject(){
@@ -47,11 +46,11 @@ public class RenderBufferObject implements Disposable, Resizable{
     public void create(){
         texture.update();
 
-        renderBuffer = glGenRenderbuffers();
+        ID = glGenRenderbuffers();
         bind();
-        glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture.getId(), 0);
-        glRenderbufferStorage(GL_RENDERBUFFER, texture.getParameters().getInternalFormat().gl, width, height);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, renderBuffer);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture.getID(), 0);
+        glRenderbufferStorage(TARGET, texture.getSizedFormat().GL, width, height);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment, TARGET, ID);
         unbind();
     }
 
@@ -62,24 +61,13 @@ public class RenderBufferObject implements Disposable, Resizable{
         texture.resize(width, height);
 
         bind();
-        glRenderbufferStorage(GL_RENDERBUFFER, texture.getInternalFormat().gl, width, height);
+        glRenderbufferStorage(TARGET, texture.getSizedFormat().GL, width, height);
         unbind();
     }
-
-    public void bind(){
-        glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-    }
-
-    public static void unbind(){
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    }
+    
 
     public Texture getTexture(){
         return texture;
-    }
-
-    public int getId(){
-        return renderBuffer;
     }
 
     public int getWidth(){
@@ -89,13 +77,22 @@ public class RenderBufferObject implements Disposable, Resizable{
     public int getHeight(){
         return height;
     }
+    
+    public void bind(){
+        glBindRenderbuffer(TARGET, ID);
+    }
 
 
     @Override
     public void dispose(){
-        glDeleteRenderbuffers(renderBuffer);
+        glDeleteRenderbuffers(ID);
 
         texture.dispose();
+    }
+    
+    
+    public static void unbind(){
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
     }
 
 }

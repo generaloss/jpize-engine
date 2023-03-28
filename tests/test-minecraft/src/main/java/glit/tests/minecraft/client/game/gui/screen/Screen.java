@@ -3,6 +3,7 @@ package glit.tests.minecraft.client.game.gui.screen;
 import glit.Glit;
 import glit.context.Disposable;
 import glit.context.Resizable;
+import glit.graphics.gl.Wrap;
 import glit.graphics.texture.Region;
 import glit.graphics.texture.Texture;
 import glit.graphics.util.batch.Batch;
@@ -26,6 +27,8 @@ public abstract class Screen implements Resizable, Disposable{
         this.session = session;
 
         options_background = session.getResourceManager().getTexture("options_background").getTexture();
+        options_background.getParameters().setWrap(Wrap.REPEAT);
+        options_background.update();
     }
 
     public void update(Batch batch){

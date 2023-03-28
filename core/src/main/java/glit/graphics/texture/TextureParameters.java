@@ -1,32 +1,46 @@
 package glit.graphics.texture;
 
-import glit.graphics.gl.Filter;
-import glit.graphics.gl.InternalFormat;
-import glit.graphics.gl.Type;
-import glit.graphics.gl.Wrap;
+import glit.graphics.gl.*;
+import glit.graphics.gl.Format;
+import glit.graphics.gl.SizedFormat;
 import glit.graphics.util.color.Color;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.GL_TEXTURE_MAX_LEVEL;
+import static org.lwjgl.opengl.GL12.GL_TEXTURE_WRAP_R;
 
 public class TextureParameters{
 
-    protected Filter minFilter;
-    protected Filter magFilter;
-    protected Wrap wrapS;
-    protected Wrap wrapT;
-    protected final Color borderColor;
-
-    protected InternalFormat internalFormat;
-    protected Type type;
-    protected int mipmapLevels;
+    private Filter minFilter, magFilter;
+    private Wrap wrapS, wrapT, wrapR;
+    
+    private SizedFormat format;
+    private Type type;
+    
+    private int mipmapLevels;
+    private final Color borderColor;
 
     public TextureParameters(){
         minFilter = Filter.LINEAR_MIPMAP_LINEAR;
         magFilter = Filter.NEAREST;
-        wrapS = Wrap.REPEAT;
-        wrapT = Wrap.REPEAT;
+        wrapS = Wrap.CLAMP_TO_EDGE;
+        wrapT = Wrap.CLAMP_TO_EDGE;
+        wrapR = Wrap.CLAMP_TO_EDGE;
         type = Type.UNSIGNED_BYTE;
-        internalFormat = InternalFormat.RGBA8;
+        format = SizedFormat.RGBA8;
         mipmapLevels = 1;
         borderColor = new Color(0, 0, 0, 0);
+    }
+    
+    
+    public void use(int glTarget){
+        glTexParameteri(glTarget, GL_TEXTURE_MIN_FILTER, minFilter.GL);
+        glTexParameteri(glTarget, GL_TEXTURE_MAG_FILTER, magFilter.GL);
+        glTexParameteri(glTarget, GL_TEXTURE_WRAP_S, wrapS.GL);
+        glTexParameteri(glTarget, GL_TEXTURE_WRAP_T, wrapT.GL);
+        glTexParameteri(glTarget, GL_TEXTURE_WRAP_R, wrapR.GL);
+        glTexParameterfv(glTarget, GL_TEXTURE_BORDER_COLOR, borderColor.toArray());
+        glTexParameteri(glTarget, GL_TEXTURE_MAX_LEVEL, mipmapLevels);
     }
 
 
@@ -37,14 +51,30 @@ public class TextureParameters{
     public Wrap getWrapT(){
         return wrapT;
     }
-
-    public void setWrap(Wrap wrap){
-        setWrap(wrap, wrap);
+    
+    public Wrap getWrapR(){
+        return wrapR;
     }
 
-    public void setWrap(Wrap s, Wrap t){
+    public TextureParameters setWrap(Wrap wrap){
+        setWrap(wrap, wrap, wrap);
+        
+        return this;
+    }
+    
+    public TextureParameters setWrap(Wrap s, Wrap t){
         wrapS = s;
         wrapT = t;
+    
+        return this;
+    }
+    
+    public TextureParameters setWrap(Wrap s, Wrap t, Wrap r){
+        wrapS = s;
+        wrapT = t;
+        wrapR = r;
+    
+        return this;
     }
 
 
@@ -56,36 +86,49 @@ public class TextureParameters{
         return magFilter;
     }
 
-    public void setFilter(Filter filter){
+    public TextureParameters setFilter(Filter filter){
         setFilter(filter, filter);
+        
+        return this;
     }
 
-    public void setFilter(Filter min, Filter mag){
+    public TextureParameters setFilter(Filter min, Filter mag){
         minFilter = min;
         magFilter = mag;
+    
+        return this;
     }
-
-
+    
+    
     public Color getBorderColor(){
         return borderColor;
     }
-
-
-    public InternalFormat getInternalFormat(){
-        return internalFormat;
+    
+    
+    public Format getFormat(){
+        return format.getBase();
     }
-
-    public void setInternalFormat(InternalFormat internalFormat){
-        this.internalFormat = internalFormat;
+    
+    
+    public SizedFormat getSizedFormat(){
+        return format;
     }
-
+    
+    public TextureParameters setSizedFormat(SizedFormat sizedFormat){
+        this.format = sizedFormat;
+    
+        return this;
+    }
+    
 
     public Type getType(){
         return type;
     }
 
-    public void setType(Type type){
+    public TextureParameters setType(Type type){
         this.type = type;
+    
+        return this;
     }
 
 
@@ -93,8 +136,10 @@ public class TextureParameters{
         return mipmapLevels;
     }
 
-    public void setMipmapLevels(int mipmapLevels){
+    public TextureParameters setMipmapLevels(int mipmapLevels){
         this.mipmapLevels = mipmapLevels;
+    
+        return this;
     }
 
 }

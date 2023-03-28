@@ -16,11 +16,11 @@ public enum Type{
     DOUBLE         (GL_DOUBLE         , 8);
 
 
-    public final int gl;
+    public final int GL;
     private final int size;
 
-    Type(int gl, int size){
-        this.gl = gl;
+    Type(int GL, int size){
+        this.GL = GL;
         this.size = size;
     }
 

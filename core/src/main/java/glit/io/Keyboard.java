@@ -38,35 +38,35 @@ public class Keyboard{
     }
 
     public boolean isDown(Key key){
-        return down[key.glfw];
+        return down[key.GLFW];
     }
 
     public boolean isPressed(Key key){
-        return pressed[key.glfw];
+        return pressed[key.GLFW];
     }
 
     public boolean isReleased(Key key){
-        return released[key.glfw];
+        return released[key.GLFW];
     }
 
 
     public boolean isDown(Key... keys){
         for(Key key: keys)
-            if(down[key.glfw])
+            if(down[key.GLFW])
                 return true;
         return false;
     }
 
     public boolean isPressed(Key... keys){
         for(Key key: keys)
-            if(pressed[key.glfw])
+            if(pressed[key.GLFW])
                 return true;
         return false;
     }
 
     public boolean isReleased(Key... keys){
         for(Key key: keys)
-            if(released[key.glfw])
+            if(released[key.GLFW])
                 return true;
         return false;
     }
@@ -74,21 +74,21 @@ public class Keyboard{
 
     public boolean isDownAll(Key... keys){
         for(Key key: keys)
-            if(!down[key.glfw])
+            if(!down[key.GLFW])
                 return false;
         return true;
     }
 
     public boolean isPressedAll(Key... keys){
         for(Key key: keys)
-            if(!pressed[key.glfw])
+            if(!pressed[key.GLFW])
                 return false;
         return true;
     }
 
     public boolean isReleasedAll(Key... keys){
         for(Key key: keys)
-            if(!released[key.glfw])
+            if(!released[key.GLFW])
                 return false;
         return true;
     }

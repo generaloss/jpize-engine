@@ -3,11 +3,12 @@ package glit.tests.minecraft.client.game.gui.screen.screens;
 import glit.Glit;
 import glit.files.FileHandle;
 import glit.graphics.camera.PerspectiveCamera;
+import glit.graphics.postprocess.effects.MotionBlur;
 import glit.graphics.texture.Texture;
 import glit.graphics.texture.TextureRegion;
+import glit.graphics.util.SkyBox;
 import glit.graphics.util.batch.Batch;
 import glit.graphics.util.color.ImmutableColor;
-import glit.graphics.util.SkyBox;
 import glit.gui.Align;
 import glit.gui.LayoutType;
 import glit.gui.components.Image;
@@ -33,6 +34,8 @@ public class MainMenuScreen extends Screen{
 
     private final FileHandle splashesFile;
     private final TextView splashTextView;
+    
+    private final MotionBlur postEffect = new MotionBlur();
 
     public MainMenuScreen(Session session){
         super(session);
@@ -166,14 +169,16 @@ public class MainMenuScreen extends Screen{
     @Override
     public void render(Batch batch){
         // Panorama
+        postEffect.begin();
         camera.getRot().yaw -= Glit.getDeltaTime() * 2;
         camera.update();
         skyBox.render(camera);
+        postEffect.end();
         // Panorama Overlay
         batch.setAlpha(0.8F);
         batch.draw(panorama_overlay, 0, 0, Glit.getWidth(), Glit.getHeight());
         batch.setAlpha(1F);
-
+        
         // UI
         layout.render(batch);
         layoutTexts.render(batch);
@@ -189,7 +194,9 @@ public class MainMenuScreen extends Screen{
     }
 
     @Override
-    public void resize(int width, int height){ }
+    public void resize(int width, int height){
+        postEffect.resize(width, height);
+    }
 
 
     @Override

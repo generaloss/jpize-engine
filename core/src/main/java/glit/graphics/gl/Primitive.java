@@ -16,10 +16,10 @@ public enum Primitive{
     TRIANGLE_FAN   (GL_TRIANGLE_FAN);
 
 
-    public final int gl;
+    public final int GL;
 
-    Primitive(int gl){
-        this.gl = gl;
+    Primitive(int GL){
+        this.GL = GL;
     }
 
 }

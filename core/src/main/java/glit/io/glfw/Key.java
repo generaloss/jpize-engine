@@ -136,10 +136,10 @@ public enum Key{
     MENU           (348);
 
 
-    public final int glfw;
+    public final int GLFW;
 
-    Key(int glfw){
-        this.glfw = glfw;
+    Key(int GLFW){
+        this.GLFW = GLFW;
     }
 
 

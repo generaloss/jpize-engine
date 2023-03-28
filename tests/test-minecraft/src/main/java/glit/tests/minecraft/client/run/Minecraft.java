@@ -2,7 +2,9 @@ package glit.tests.minecraft.client.run;
 
 import glit.Glit;
 import glit.context.ContextListener;
+import glit.graphics.gl.DepthFunc;
 import glit.graphics.gl.Gl;
+import glit.graphics.gl.Target;
 import glit.tests.minecraft.client.game.Session;
 import glit.tests.minecraft.utils.log.Logger;
 
@@ -19,6 +21,8 @@ public class Minecraft implements ContextListener{
 
     @Override
     public void init(){
+        Gl.enable(Target.DEPTH_TEST);
+        Gl.depthFunc(DepthFunc.LEQUAL);
         Thread.currentThread().setName("Render Thread");
 
         session = new Session();
@@ -26,7 +30,7 @@ public class Minecraft implements ContextListener{
 
     @Override
     public void render(){
-        Gl.clearBufferColor();
+        Gl.clearBuffer(true);
         session.render();
     }
 

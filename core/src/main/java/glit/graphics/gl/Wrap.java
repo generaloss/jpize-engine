@@ -14,10 +14,10 @@ public enum Wrap{
     MIRROR_CLAMP_TO_EDGE (GL_MIRROR_CLAMP_TO_EDGE);
 
 
-    public final int gl;
+    public final int GL;
 
-    Wrap(int gl){
-        this.gl = gl;
+    Wrap(int GL){
+        this.GL = GL;
     }
 
 }

@@ -33,7 +33,7 @@ public class AudioPlayerUI implements Disposable{
         layout.alignItems(Align.UP);
 
         RegionMesh sliderTextureMesh = new RegionMesh(0, 0, 3, 4, 93, 20, 96, 24);
-        ExpandableImage sliderBackground = new ExpandableImage(sliderBarTexture, sliderTextureMesh);
+        NinePatchImage sliderBackground = new NinePatchImage(sliderBarTexture, sliderTextureMesh);
         sliderBackground.setExpandType(ExpandType.HORIZONTAL);
 
         Slider positionSlider = new Slider(sliderBackground, sliderHandleTexture);

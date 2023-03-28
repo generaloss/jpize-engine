@@ -9,10 +9,10 @@ public enum Face{
     FRONT_AND_BACK (GL_FRONT_AND_BACK);
 
 
-    public final int gl;
+    public final int GL;
 
-    Face(int gl){
-        this.gl = gl;
+    Face(int GL){
+        this.GL = GL;
     }
 
 }

@@ -29,7 +29,7 @@ public class VertexBuffer implements Disposable{
             VertexAttr attribute = attributes[i];
             int typeSize = attribute.getType().getSize();
 
-            glVertexAttribPointer(i, attribute.getCount(), attribute.getType().gl, attribute.isNormalize(), vertexSize * typeSize, pointer);
+            glVertexAttribPointer(i, attribute.getCount(), attribute.getType().GL, attribute.isNormalize(), vertexSize * typeSize, pointer);
             glEnableVertexAttribArray(i);
 
             pointer += attribute.getCount() * typeSize;
@@ -51,74 +51,74 @@ public class VertexBuffer implements Disposable{
 
     public void setData(long size, BufferUsage usage){
         bind();
-        glBufferData(GL_ARRAY_BUFFER, size, usage.gl);
+        glBufferData(GL_ARRAY_BUFFER, size, usage.GL);
         dataSize = size;
     }
 
     public void setData(float[] data, BufferUsage usage){
         bind();
-        glBufferData(GL_ARRAY_BUFFER, data, usage.gl);
+        glBufferData(GL_ARRAY_BUFFER, data, usage.GL);
         dataSize = data.length;
     }
 
     public void setData(double[] data, BufferUsage usage){
         bind();
-        glBufferData(GL_ARRAY_BUFFER, data, usage.gl);
+        glBufferData(GL_ARRAY_BUFFER, data, usage.GL);
         dataSize = data.length;
     }
 
     public void setData(int[] data, BufferUsage usage){
         bind();
-        glBufferData(GL_ARRAY_BUFFER, data, usage.gl);
+        glBufferData(GL_ARRAY_BUFFER, data, usage.GL);
         dataSize = data.length;
     }
 
     public void setData(short[] data, BufferUsage usage){
         bind();
-        glBufferData(GL_ARRAY_BUFFER, data, usage.gl);
+        glBufferData(GL_ARRAY_BUFFER, data, usage.GL);
         dataSize = data.length;
     }
 
     public void setData(long[] data, BufferUsage usage){
         bind();
-        glBufferData(GL_ARRAY_BUFFER, data, usage.gl);
+        glBufferData(GL_ARRAY_BUFFER, data, usage.GL);
         dataSize = data.length;
     }
 
 
     public void setData(IntBuffer buffer, BufferUsage usage){
         bind();
-        glBufferData(GL_ARRAY_BUFFER, buffer, usage.gl);
+        glBufferData(GL_ARRAY_BUFFER, buffer, usage.GL);
         dataSize = buffer.limit();
     }
 
     public void setData(ByteBuffer buffer, BufferUsage usage){
         bind();
-        glBufferData(GL_ARRAY_BUFFER, buffer, usage.gl);
+        glBufferData(GL_ARRAY_BUFFER, buffer, usage.GL);
         dataSize = buffer.limit();
     }
 
     public void setData(FloatBuffer buffer, BufferUsage usage){
         bind();
-        glBufferData(GL_ARRAY_BUFFER, buffer, usage.gl);
+        glBufferData(GL_ARRAY_BUFFER, buffer, usage.GL);
         dataSize = buffer.limit();
     }
 
     public void setData(LongBuffer buffer, BufferUsage usage){
         bind();
-        glBufferData(GL_ARRAY_BUFFER, buffer, usage.gl);
+        glBufferData(GL_ARRAY_BUFFER, buffer, usage.GL);
         dataSize = buffer.limit();
     }
 
     public void setData(ShortBuffer buffer, BufferUsage usage){
         bind();
-        glBufferData(GL_ARRAY_BUFFER, buffer, usage.gl);
+        glBufferData(GL_ARRAY_BUFFER, buffer, usage.GL);
         dataSize = buffer.limit();
     }
 
     public void setData(DoubleBuffer buffer, BufferUsage usage){
         bind();
-        glBufferData(GL_ARRAY_BUFFER, buffer, usage.gl);
+        glBufferData(GL_ARRAY_BUFFER, buffer, usage.GL);
         dataSize = buffer.limit();
     }
 

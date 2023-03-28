@@ -53,11 +53,11 @@ public class TextureBatchFast extends Batch{
 
         // Shader
 
-        String vs = new FileHandle("shader/batch/batch.vert").readString().replace(
+        String vs = new FileHandle("shader/batch/fast_batch.vert").readString().replace(
             "POS_FUNC", roundPosition ? "vec4(round(pos.x), round(pos.y), 0, pos.w)" : "pos"
         );
 
-        String fs = new FileHandle("shader/batch/batch.frag").readString().replace(
+        String fs = new FileHandle("shader/batch/fast_batch.frag").readString().replace(
             "TEX_SLOTS", Integer.toString(maxTextures)
         );
 

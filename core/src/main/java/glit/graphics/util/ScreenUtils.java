@@ -21,7 +21,7 @@ public class ScreenUtils{
         int height = Glit.getHeight();
 
         ByteBuffer buffer = ByteBuffer.allocateDirect(width * height * 4).order(ByteOrder.LITTLE_ENDIAN);
-        glReadPixels(0, 0, width, height, Format.BGRA.gl, Type.UNSIGNED_BYTE.gl, buffer);
+        glReadPixels(0, 0, width, height, Format.BGRA.GL, Type.UNSIGNED_BYTE.GL, buffer);
 
         int[] pixels = new int[width * height];
         buffer.asIntBuffer().get(pixels);

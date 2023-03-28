@@ -38,11 +38,11 @@ public class Gl{
 
 
     public static boolean isEnabled(Target target){
-        return glIsEnabled(target.gl);
+        return glIsEnabled(target.GL);
     }
 
     public static void enable(Target target){
-        glEnable(target.gl);
+        glEnable(target.GL);
     }
 
     public static void enable(Target... targets){
@@ -51,7 +51,7 @@ public class Gl{
     }
 
     public static void disable(Target target){
-        glDisable(target.gl);
+        glDisable(target.GL);
     }
 
     public static void disable(Target... targets){
@@ -61,11 +61,11 @@ public class Gl{
 
 
     public static void blendFunc(BlendFactor sFactor, BlendFactor dFactor){
-        glBlendFunc(sFactor.gl, dFactor.gl);
+        glBlendFunc(sFactor.GL, dFactor.GL);
     }
 
     public static void depthFunc(DepthFunc func){
-        glDepthFunc(func.gl);
+        glDepthFunc(func.GL);
     }
 
 
@@ -74,7 +74,7 @@ public class Gl{
     }
 
     public static void cullFace(Face mode){
-        glCullFace(mode.gl);
+        glCullFace(mode.GL);
     }
 
 
@@ -93,7 +93,7 @@ public class Gl{
 
 
     public static void setPolygonMode(Face face, PolygonMode mode){
-        glPolygonMode(face.gl, mode.gl);
+        glPolygonMode(face.GL, mode.GL);
     }
 
 }

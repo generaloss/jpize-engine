@@ -93,10 +93,10 @@ public enum Target{
     SEPARABLE_2D                  (GL_SEPARABLE_2D                 );
 
 
-    public final int gl;
+    public final int GL;
 
-    Target(int gl){
-        this.gl = gl;
+    Target(int GL){
+        this.GL = GL;
     }
 
 }

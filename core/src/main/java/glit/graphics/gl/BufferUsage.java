@@ -16,10 +16,10 @@ public enum BufferUsage{
     DYNAMIC_COPY (GL_DYNAMIC_COPY),
     STREAM_COPY  (GL_STREAM_COPY );
 
-    public final int gl;
+    public final int GL;
 
-    BufferUsage(int gl){
-        this.gl = gl;
+    BufferUsage(int GL){
+        this.GL = GL;
     }
 
 }

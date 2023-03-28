@@ -14,10 +14,10 @@ public enum DepthFunc{
     ALWAYS  (GL_ALWAYS  );
 
 
-    public final int gl;
+    public final int GL;
 
-    DepthFunc(int gl){
-        this.gl = gl;
+    DepthFunc(int GL){
+        this.GL = GL;
     }
 
 }

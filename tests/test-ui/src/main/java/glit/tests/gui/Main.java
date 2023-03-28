@@ -9,7 +9,7 @@ import glit.graphics.util.batch.TextureBatch;
 import glit.gui.Align;
 import glit.gui.LayoutType;
 import glit.gui.components.ExpandType;
-import glit.gui.components.ExpandableImage;
+import glit.gui.components.NinePatchImage;
 import glit.gui.components.Layout;
 import glit.gui.components.RegionMesh;
 import glit.gui.constraint.Constraint;
@@ -44,7 +44,7 @@ public class Main implements ContextListener{
         layout.setLayoutType(LayoutType.HORIZONTAL);
         layout.alignItems(Align.CENTER);
 
-        ExpandableImage button = new ExpandableImage(buttonTextureRegion, regionMesh);
+        NinePatchImage button = new NinePatchImage(buttonTextureRegion, regionMesh);
         button.setExpandType(ExpandType.HORIZONTAL);
         button.setSize(Constraint.relative(0.333), Constraint.relative(0.333));
         layout.put("button", button);

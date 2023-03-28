@@ -17,32 +17,32 @@ public class ElementBuffer implements Disposable{
 
     public void setData(long size, BufferUsage usage){
         bind();
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, usage.gl);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, usage.GL);
     }
 
     public void setData(float[] data, BufferUsage usage){
         bind();
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.gl);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.GL);
     }
 
     public void setData(double[] data, BufferUsage usage){
         bind();
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.gl);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.GL);
     }
 
     public void setData(int[] data, BufferUsage usage){
         bind();
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.gl);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.GL);
     }
 
     public void setData(short[] data, BufferUsage usage){
         bind();
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.gl);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.GL);
     }
 
     public void setData(long[] data, BufferUsage usage){
         bind();
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.gl);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.GL);
     }
 
     public void setSubData(long offset, float[] data){
