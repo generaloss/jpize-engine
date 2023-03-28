@@ -1,13 +1,12 @@
-#version 400
+#version 330
 
 in vec2 uv;
 flat in vec4 color;
-flat in int texIndex;
 
 out vec4 FragColor;
 
-uniform sampler2D u_textures[TEX_SLOTS];
+uniform sampler2D u_texture;
 
 void main(){
-    FragColor = color * texture2D(u_textures[texIndex], uv);
+    FragColor = color * texture2D(u_texture, uv);
 }
