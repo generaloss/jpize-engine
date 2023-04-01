@@ -1,6 +1,6 @@
 package glit.io.glfw;
 
-import glit.Glit;
+import glit.Pize;
 
 public enum Key{
 
@@ -144,15 +144,15 @@ public enum Key{
 
 
     public boolean isDown(){
-        return Glit.isDown(this);
+        return Pize.isDown(this);
     }
 
     public boolean isPressed(){
-        return Glit.isPressed(this);
+        return Pize.isPressed(this);
     }
 
     public boolean isReleased(){
-        return Glit.isReleased(this);
+        return Pize.isReleased(this);
     }
 
 }

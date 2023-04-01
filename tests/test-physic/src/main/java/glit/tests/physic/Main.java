@@ -1,6 +1,6 @@
 package glit.tests.physic;
 
-import glit.Glit;
+import glit.Pize;
 import glit.context.ContextListener;
 import glit.graphics.gl.Gl;
 import glit.graphics.util.batch.TextureBatch;
@@ -13,8 +13,8 @@ import glit.physic.Collider2D;
 public class Main implements ContextListener{
 
     public static void main(String[] args){
-        Glit.create("Physics",1280,720);
-        Glit.init(new Main());
+        Pize.create("Physics",1280,720);
+        Pize.run(new Main());
     }
 
 
@@ -34,17 +34,17 @@ public class Main implements ContextListener{
 
     @Override
     public void render(){
-        Glit.window().setTitle("Physics (fps: " + Glit.getFps() + ")");
+        Pize.window().setTitle("Physics (fps: " + Pize.getFPS() + ")");
 
-        if(Glit.isDown(Key.ESCAPE))
-            Glit.exit();
-        if(Glit.isDown(Key.F11))
-            Glit.window().toggleFullscreen();
-        if(Glit.isDown(Key.V))
-            Glit.window().toggleVsync();
+        if(Pize.isDown(Key.ESCAPE))
+            Pize.exit();
+        if(Pize.isDown(Key.F11))
+            Pize.window().toggleFullscreen();
+        if(Pize.isDown(Key.V))
+            Pize.window().toggleVsync();
 
-        if(Glit.isTouched())
-            rect1.vel().add(new Vec2d(Glit.getCursorPos().sub(rect1.pos())).nor());
+        if(Pize.isTouched())
+            rect1.vel().add(new Vec2d(Pize.getCursorPos().sub(rect1.pos())).nor());
         Vec2d move = Collider2D.getCollidedMove(rect1, rect1.vel(), rect2);
         rect1.pos().add(move);
         rect1.vel().clampToMax().reduce(0.3).collidedAxesToZero(move);

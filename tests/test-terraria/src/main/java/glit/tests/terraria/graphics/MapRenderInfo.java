@@ -1,6 +1,6 @@
 package glit.tests.terraria.graphics;
 
-import glit.Glit;
+import glit.Pize;
 
 public class MapRenderInfo{
 
@@ -14,8 +14,8 @@ public class MapRenderInfo{
 
 
     public void update(){
-        int windowWidth = Glit.getWidth();
-        int windowHeight = Glit.getHeight();
+        int windowWidth = Pize.getWidth();
+        int windowHeight = Pize.getHeight();
 
         if(windowWidth > windowHeight)
             cellSize = (float) windowWidth / TILES_PER_SCREEN;

@@ -9,7 +9,7 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
     
-    <groupId>glit.tests</groupId>
+    <groupId>pizza-engine.tests</groupId>
     <artifactId>tests</artifactId>
     <version>1.0.0</version>
 
@@ -21,35 +21,36 @@
         <module>test-terraria</module>
         <module>test-model-3d</module>
         <module>test-particle</module>
+        <module>test-project-vostok</module>
     </modules>
     
     <dependencies>
         <dependency>
-            <groupId>glit</groupId>
+            <groupId>pizza-engine</groupId>
             <artifactId>core</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>glit</groupId>
+            <groupId>pizza-engine</groupId>
             <artifactId>net</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>glit</groupId>
+            <groupId>pizza-engine</groupId>
             <artifactId>particle</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>glit</groupId>
+            <groupId>pizza-engine</groupId>
             <artifactId>physic</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>glit</groupId>
+            <groupId>pizza-engine</groupId>
             <artifactId>ui</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>

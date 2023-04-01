@@ -4,11 +4,10 @@ import glit.context.Disposable;
 
 public abstract class GlObject implements Disposable{
     
-    protected final int TARGET;
-    protected int ID;
+    protected final int ID;
     
-    public GlObject(int TARGET){
-        this.TARGET = TARGET;
+    public GlObject(int ID){
+        this.ID = ID;
     }
     
     

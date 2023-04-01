@@ -53,7 +53,7 @@ public class TextureAtlas{
 
     public int put(String path){
         int id = images.size();
-        images.add(new AtlasImage(PixmapLoader.loadFrom(path), id));
+        images.add(new AtlasImage(PixmapLoader.load(path), id));
         return id;
     }
 

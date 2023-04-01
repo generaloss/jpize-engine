@@ -1,16 +1,14 @@
 package glit.graphics.vertex;
 
-import glit.context.Disposable;
 import glit.graphics.gl.BufferUsage;
+import glit.graphics.gl.GlObject;
 
 import static org.lwjgl.opengl.GL33.*;
 
-public class ElementBuffer implements Disposable{
-
-    private final int id;
-
+public class ElementBuffer extends GlObject{
+    
     public ElementBuffer(){
-        id = glGenBuffers();
+        super(glGenBuffers());
         bind();
     }
 
@@ -72,21 +70,17 @@ public class ElementBuffer implements Disposable{
 
 
     public void bind(){
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
     }
 
     public static void unbind(){
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
-    public int getId(){
-        return id;
-    }
-
 
     @Override
     public void dispose(){
-        glDeleteBuffers(id);
+        glDeleteBuffers(ID);
     }
 
 }

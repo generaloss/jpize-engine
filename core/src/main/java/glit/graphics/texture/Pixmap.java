@@ -10,17 +10,15 @@ import glit.util.Utils;
 
 import java.nio.ByteBuffer;
 
-public class Pixmap implements Resizable{
+public class Pixmap extends Sizable implements Resizable{
 
     public static final SizedFormat FORMAT = SizedFormat.RGBA8;
     private ByteBuffer buffer;
-    private int width, height;
 
     // CONSTRUCTOR
     public Pixmap(ByteBuffer buffer, int width, int height){
+        super(width, height);
         this.buffer = buffer.duplicate();
-        this.width = width;
-        this.height = height;
     }
 
     public Pixmap(Pixmap pixmap){
@@ -28,20 +26,18 @@ public class Pixmap implements Resizable{
     }
 
     public Pixmap(int width, int height){
+        super(width, height);
         buffer = ByteBuffer.allocateDirect(width * height * 4);
-        this.width = width;
-        this.height = height;
     }
+    
 
     // SET
     public void set(Pixmap pixmap){
         if(pixmap == null)
             return;
 
-        if(width != pixmap.width || height != pixmap.height){
-            width = pixmap.width;
-            height = pixmap.height;
-
+        if(!pixmap.match(this)){
+            setSize(pixmap);
             Utils.free(buffer);
             buffer = ByteBuffer.allocateDirect(width * height * 4);
         }
@@ -364,30 +360,45 @@ public class Pixmap implements Resizable{
     }
 
     // RESIZE
+    @Override
     public void resize(int width, int height){
-        if(this.width == width && this.height == height)
+        if(super.match(width, height))
             return;
 
-        this.width = width;
-        this.height = height;
+        setSize(width, height);
         Utils.free(buffer);
         buffer = ByteBuffer.allocateDirect(width * height * 4);
     }
-
-    // GETTERS
-    public int getWidth(){
-        return width;
+    
+    // MIPMAPPED
+    public Pixmap getMipmapped(){
+        Pixmap pixmap = new Pixmap(width / 2, height / 2);
+    
+        for(int x = 0; x < pixmap.width; x++){
+            for(int y = 0; y < pixmap.height; y++){
+                pixmap.setPixel(x, y, 1, 0, 0, 1F);
+            }
+        }
+    
+        return pixmap;
     }
 
-    public int getHeight(){
-        return height;
-    }
-
-    public float getAspect(){
-        return (float) width / height;
-    }
-
+    // GET BUFFER
     public ByteBuffer getBuffer(){
+        return buffer;
+    }
+    
+    public ByteBuffer getAlphaMultipliedBuffer(){
+        ByteBuffer buffer = this.buffer.duplicate();
+        
+        for(int i = 0; i < buffer.capacity(); i += 4){
+            float alpha = (buffer.get(i + 3) & 0xFF) / 255F;
+            
+            buffer.put(i    , (byte) ((int) ((buffer.get(i    ) & 0xFF) * alpha) & 0xFF));
+            buffer.put(i + 1, (byte) ((int) ((buffer.get(i + 1) & 0xFF) * alpha) & 0xFF));
+            buffer.put(i + 2, (byte) ((int) ((buffer.get(i + 2) & 0xFF) * alpha) & 0xFF));
+        }
+        
         return buffer;
     }
 
@@ -401,7 +412,6 @@ public class Pixmap implements Resizable{
     }
 
 
-    @Override
     public Pixmap clone(){
         return new Pixmap(this);
     }

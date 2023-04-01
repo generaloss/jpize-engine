@@ -1,6 +1,6 @@
 package glit.tests.minecraft.client.game;
 
-import glit.Glit;
+import glit.Pize;
 import glit.files.FileHandle;
 import glit.graphics.util.ScreenUtils;
 import glit.io.glfw.Key;
@@ -122,13 +122,13 @@ public class Session implements Renderer{
 
         gameRenderer.render();
 
-        if(Glit.isDown(Key.R))
+        if(Pize.isDown(Key.R))
             resourceManager.reload();
 
-        if(Glit.isDown(options.getKey(KeyMapping.FULLSCREEN)))
-            Glit.window().toggleFullscreen();
+        if(Pize.isDown(options.getKey(KeyMapping.FULLSCREEN)))
+            Pize.window().toggleFullscreen();
 
-        if(Glit.isDown(options.getKey(KeyMapping.SCREENSHOT)))
+        if(Pize.isDown(options.getKey(KeyMapping.SCREENSHOT)))
             takeScreenshot();
     }
 
@@ -205,7 +205,7 @@ public class Session implements Renderer{
         String date = dateTimeFormatter.format(ZonedDateTime.now());
 
         FileHandle file = new FileHandle(Session.GAME_DIR_PATH + "screenshots/" + date + ".png");
-        file.mkdirs();
+        file.mkDirs();
 
         ScreenUtils.saveScreenshot(file.getPath());
     }

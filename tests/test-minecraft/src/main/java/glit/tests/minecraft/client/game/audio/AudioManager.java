@@ -1,6 +1,6 @@
 package glit.tests.minecraft.client.game.audio;
 
-import glit.Glit;
+import glit.Pize;
 import glit.audio.sound.AudioSource;
 import glit.context.Disposable;
 import glit.tests.minecraft.client.game.Session;
@@ -49,7 +49,7 @@ public class AudioManager implements Disposable{
     }
 
     public void setDevice(String audioDevice){
-        Glit.audio().getDevice(audioDevice).makeCurrent();
+        Pize.audio().getDevice(audioDevice).makeCurrent();
         for(AudioSource audioSource: audioSources)
             if(audioSource.isPlaying()){
                 audioSource.pause();

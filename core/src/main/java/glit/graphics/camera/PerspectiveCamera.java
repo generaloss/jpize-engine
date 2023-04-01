@@ -1,26 +1,24 @@
 package glit.graphics.camera;
 
-import glit.Glit;
+import glit.Pize;
+import glit.context.Resizable;
 import glit.math.util.Frustum;
 import glit.math.vecmath.matrix.Matrix4f;
 
-public class PerspectiveCamera extends Camera3D{
+public class PerspectiveCamera extends Camera3D implements Resizable{
 
-    private int width, height;
     private float fieldOfView, near, far;
-
-    private final Frustum frustum;
     private final Matrix4f projection, view, imaginaryView;
+    private final Frustum frustum;
     private boolean dirtyProjection, imaginaryX, imaginaryY, imaginaryZ;
 
-
     public PerspectiveCamera(double near, double far, double fieldOfView){
-        this(Glit.getWidth(), Glit.getHeight(), near, far, fieldOfView);
+        this(Pize.getWidth(), Pize.getHeight(), near, far, fieldOfView);
     }
 
     public PerspectiveCamera(int width, int height, double near, double far, double fieldOfView){
-        this.width = width;
-        this.height = height;
+        super(width, height);
+        
         this.near = (float) near;
         this.far = (float) far;
         this.fieldOfView = (float) fieldOfView;
@@ -55,12 +53,11 @@ public class PerspectiveCamera extends Camera3D{
 
     @Override
     public void resize(int width, int height){
-        if(this.width != width || this.height != height){
-            this.width = width;
-            this.height = height;
-
-            dirtyProjection = true;
-        }
+        if(match(width, height))
+            return;
+    
+        setSize(width, height);
+        dirtyProjection = true;
     }
 
     public void setImaginaryOrigins(boolean x, boolean y, boolean z){
@@ -118,15 +115,5 @@ public class PerspectiveCamera extends Camera3D{
     public Matrix4f getProjection(){
         return projection;
     }
-
-    @Override
-    public float getWidth(){
-        return width;
-    }
-
-    @Override
-    public float getHeight(){
-        return height;
-    }
-
+    
 }

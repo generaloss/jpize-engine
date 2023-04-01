@@ -15,7 +15,7 @@ public class Keyboard{
         down = new boolean[GLFW_KEY_LAST + 1];
         released = new boolean[GLFW_KEY_LAST + 1];
 
-        glfwSetKeyCallback(window.getId(), (long windowId, int key, int scancode, int action, int mods)->{
+        glfwSetKeyCallback(window.getID(), (long windowId, int key, int scancode, int action, int mods)->{
             if(key == -1)
                 return;
 

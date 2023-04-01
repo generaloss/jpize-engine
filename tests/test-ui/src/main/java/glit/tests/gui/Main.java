@@ -1,6 +1,6 @@
 package glit.tests.gui;
 
-import glit.Glit;
+import glit.Pize;
 import glit.context.ContextListener;
 import glit.graphics.texture.Texture;
 import glit.graphics.texture.TextureRegion;
@@ -18,9 +18,9 @@ import glit.io.glfw.Key;
 public class Main implements ContextListener{
 
     public static void main(String[] args){
-        Glit.create("GUI", 480, 360);
-        Glit.window().setIcon("icon.png");
-        Glit.init(new Main());
+        Pize.create("GUI", 480, 360);
+        Pize.window().setIcon("icon.png");
+        Pize.run(new Main());
     }
 
 
@@ -52,8 +52,8 @@ public class Main implements ContextListener{
 
     @Override
     public void render(){
-        if(Glit.isDown(Key.ESCAPE))
-            Glit.exit();
+        if(Pize.isDown(Key.ESCAPE))
+            Pize.exit();
         Gl.clearBufferColor();
         Gl.clearColor(0.08, 0.11, 0.15, 1);
 

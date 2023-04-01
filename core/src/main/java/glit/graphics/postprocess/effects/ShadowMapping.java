@@ -1,6 +1,6 @@
 package glit.graphics.postprocess.effects;
 
-import glit.Glit;
+import glit.Pize;
 import glit.context.Disposable;
 import glit.files.FileHandle;
 import glit.graphics.gl.Filter;
@@ -72,7 +72,7 @@ public class ShadowMapping implements Disposable{
 
     public void end(){
         FrameBufferObject.unbind();
-        Gl.setViewport(Glit.getWidth(), Glit.getHeight());
+        Gl.setViewport(Pize.getWidth(), Pize.getHeight());
     }
 
     public Texture getShadowMap(){

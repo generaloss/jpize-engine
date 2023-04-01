@@ -1,6 +1,6 @@
 package glit.tests.minecraft.client.world.world.renderer;
 
-import glit.Glit;
+import glit.Pize;
 import glit.graphics.camera.PerspectiveCamera;
 import glit.math.Maths;
 import glit.math.vecmath.matrix.Matrix4f;
@@ -26,7 +26,7 @@ public class GameCamera{ // Adapter
     public void update(){
         camera.setFov(Maths.lerp(prevFov, newFov, Maths.clamp(fovInterpolationTime, 0, 1)));
 
-        fovInterpolationTime += Glit.getDeltaTime() * 6;
+        fovInterpolationTime += Pize.getDeltaTime() * 6;
 
         camera.update();
     }

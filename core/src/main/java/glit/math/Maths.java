@@ -25,15 +25,15 @@ public class Maths{
     }
 
 
-    public static int module(int a){
+    public static int abs(int a){
         return a < 0 ? -a : a;
     }
 
-    public static float module(float a){
+    public static float abs(float a){
         return a < 0 ? -a : a;
     }
 
-    public static double module(double a){
+    public static double abs(double a){
         return a < 0 ? -a : a;
     }
 
@@ -52,12 +52,12 @@ public class Maths{
 
 
     public static float fract(float a){
-        a = module(a);
+        a = abs(a);
         return a - floor(a);
     }
 
     public static double fract(double a){
-        a = module(a);
+        a = abs(a);
         return a - floor(a);
     }
 
@@ -76,11 +76,15 @@ public class Maths{
 
 
     public static float random(float min, float max){
-        return Mathc.random() * (max - min) + min;
+        return lerp(min, max, Mathc.random());
     }
 
     public static int random(int min, int max){
-        return round(Math.random() * (max - min) + min);
+        return round(lerp(min, max, Mathc.random()));
+    }
+    
+    public static float random(float max){
+        return Mathc.random() * max;
     }
 
     public static int random(int max){
@@ -92,7 +96,7 @@ public class Maths{
     }
 
     static public boolean randomBoolean(){
-        return Math.random() < 0.5;
+        return randomBoolean(0.5F);
     }
 
     public static long randomSeed(int length){
@@ -105,14 +109,39 @@ public class Maths{
 
         return Long.parseLong(seed.toString());
     }
-
-
+    
+    
     public static float lerp(float start, float end, float t){
         return start + (end - start) * t;
     }
-
-    public static int lerp(int start, int end, float t){
-        return start + round((end - start) * t);
+    
+    public static int lerp(int start, int end, int t){
+        return start + (end - start) * t;
+    }
+    
+    public static float cerp(float a, float b, float c, float d, float t){
+        float p = (d - c) - (a - b);
+        float q = (a - b) - p;
+        float r = c - a;
+        
+        return t * (t * (t * p + q) + r) + b; // pt3 + qt2 + rt + b
+    }
+    
+    
+    public static float cubicCurve(float t){
+        return -2 * t * t * t  +  3 * t * t;
+    }
+    
+    public static float cosineCurve(float t){
+        return (1 - Mathc.cos(t / PI)) / 2;
+    }
+    
+    public static float quinticCurve(float t){
+        return t * t * t * (t * (t * 6 - 15) + 10);
+    }
+    
+    public static float hermiteCurve(float t){
+        return t * t * (3 - 2 * t);
     }
 
 
@@ -130,6 +159,14 @@ public class Maths{
             value -= interval * ceil((value - end) / interval);
 
         return value;
+    }
+    
+    
+    public static int pow(int a, int b){
+        int result = a;
+        for(; b > 0; b--)
+            result *= a;
+        return result;
     }
 
 }

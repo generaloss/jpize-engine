@@ -26,7 +26,7 @@ public class ScreenQuad{
     private ScreenQuad(){
         vao = new VertexArray();
         vbo = new VertexBuffer();
-        vbo.enableAttributes(new VertexAttr(2, Type.FLOAT), new VertexAttr(2, Type.FLOAT));
+        vbo.enableAttributes(new VertexAttr(2, Type.FLOAT), new VertexAttr(2, Type.FLOAT)); // pos, tex
         vbo.setData(vertices, BufferUsage.STATIC_DRAW);
     }
 
@@ -34,6 +34,7 @@ public class ScreenQuad{
     public static void render(){
         if(instance == null)
             instance = new ScreenQuad();
+        
         instance.vao.drawArrays(6);
     }
 

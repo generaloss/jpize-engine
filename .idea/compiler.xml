@@ -12,6 +12,7 @@
         <module name="test-physic" />
         <module name="test-terraria" />
         <module name="core" />
+        <module name="test-project-vostok" />
         <module name="ui" />
         <module name="test-ui" />
         <module name="particle" />

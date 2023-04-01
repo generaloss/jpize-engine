@@ -1,6 +1,6 @@
 package glit.tests.audio;
 
-import glit.Glit;
+import glit.Pize;
 import glit.audio.io.WavFile;
 import glit.audio.sound.Sound;
 import glit.audio.util.SoundGenerator;
@@ -11,9 +11,9 @@ import glit.io.glfw.Key;
 public class Main implements ContextListener{
 
     public static void main(String[] args){
-        Glit.create("Audio", 700, 150);
-        Glit.window().setIcon("icon.png");
-        Glit.init(new Main());
+        Pize.create("Audio", 700, 150);
+        Pize.window().setIcon("icon.png");
+        Pize.run(new Main());
     }
 
 
@@ -51,8 +51,8 @@ public class Main implements ContextListener{
 
     @Override
     public void render(){
-        if(Glit.isDown(Key.ESCAPE))
-            Glit.exit();
+        if(Pize.isDown(Key.ESCAPE))
+            Pize.exit();
 
         AudioPlayerUI.renderUI();
     }

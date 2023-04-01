@@ -1,6 +1,6 @@
 package glit.graphics.postprocess.effects;
 
-import glit.Glit;
+import glit.Pize;
 import glit.files.FileHandle;
 import glit.graphics.postprocess.FrameBufferObject;
 import glit.graphics.postprocess.PostProcessEffect;
@@ -21,8 +21,8 @@ public class GaussianBlur implements PostProcessEffect{
     public GaussianBlur(float radius){
         this.radius = radius;
 
-        int width = Glit.getWidth();
-        int height = Glit.getHeight();
+        int width = Pize.getWidth();
+        int height = Pize.getHeight();
 
         // Frame Buffer 1 & Render Buffer
         fbo1 = new FrameBufferObject(width, height);

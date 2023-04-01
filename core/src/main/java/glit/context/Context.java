@@ -7,7 +7,10 @@ import glit.graphics.postprocess.RenderBufferObject;
 import glit.graphics.texture.CubeMap;
 import glit.graphics.texture.Texture;
 import glit.graphics.texture.TextureArray;
-import glit.graphics.util.*;
+import glit.graphics.util.ScreenQuad;
+import glit.graphics.util.ScreenQuadShader;
+import glit.graphics.util.Shader;
+import glit.graphics.util.TextureUtils;
 import glit.graphics.vertex.ElementBuffer;
 import glit.graphics.vertex.VertexArray;
 import glit.graphics.vertex.VertexBuffer;
@@ -17,7 +20,8 @@ import glit.io.Window;
 import glit.util.Utils;
 import glit.util.time.DeltaTimeCounter;
 import glit.util.time.FpsCounter;
-import org.lwjgl.glfw.GLFW;
+
+import static org.lwjgl.glfw.GLFW.*;
 
 public class Context{
 
@@ -66,7 +70,7 @@ public class Context{
             fpsCounter.update();
             deltaTimeCounter.update();
 
-            window.pollEvents();
+            glfwPollEvents();
 
             if(screen != null)
                 screen.render();
@@ -95,7 +99,7 @@ public class Context{
         Utils.invokeStatic(ScreenQuadShader.class, "dispose");
         Utils.invokeStatic(TextureUtils.class, "dispose");
 
-        GLFW.glfwTerminate();
+        glfwTerminate();
     }
 
     public void setScreen(Screen screen){

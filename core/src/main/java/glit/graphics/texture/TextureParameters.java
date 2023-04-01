@@ -5,9 +5,9 @@ import glit.graphics.gl.Format;
 import glit.graphics.gl.SizedFormat;
 import glit.graphics.util.color.Color;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.GL_TEXTURE_MAX_LEVEL;
-import static org.lwjgl.opengl.GL12.GL_TEXTURE_WRAP_R;
+import java.nio.ByteBuffer;
+
+import static org.lwjgl.opengl.GL46.*;
 
 public class TextureParameters{
 
@@ -16,31 +16,59 @@ public class TextureParameters{
     
     private SizedFormat format;
     private Type type;
+    private final Color borderColor;
     
     private int mipmapLevels;
-    private final Color borderColor;
+    private float anisotropyLevels, lodBias;
 
+    
     public TextureParameters(){
-        minFilter = Filter.LINEAR_MIPMAP_LINEAR;
+        minFilter = Filter.NEAREST_MIPMAP_LINEAR;
         magFilter = Filter.NEAREST;
+        
         wrapS = Wrap.CLAMP_TO_EDGE;
         wrapT = Wrap.CLAMP_TO_EDGE;
         wrapR = Wrap.CLAMP_TO_EDGE;
-        type = Type.UNSIGNED_BYTE;
+        
         format = SizedFormat.RGBA8;
-        mipmapLevels = 1;
-        borderColor = new Color(0, 0, 0, 0);
+        type = Type.UNSIGNED_BYTE;
+        borderColor = new Color(0, 0, 0, 0F);
+    
+        mipmapLevels = 4;
+        anisotropyLevels = 0;
+        lodBias = -15;
     }
     
     
-    public void use(int glTarget){
-        glTexParameteri(glTarget, GL_TEXTURE_MIN_FILTER, minFilter.GL);
-        glTexParameteri(glTarget, GL_TEXTURE_MAG_FILTER, magFilter.GL);
-        glTexParameteri(glTarget, GL_TEXTURE_WRAP_S, wrapS.GL);
-        glTexParameteri(glTarget, GL_TEXTURE_WRAP_T, wrapT.GL);
-        glTexParameteri(glTarget, GL_TEXTURE_WRAP_R, wrapR.GL);
-        glTexParameterfv(glTarget, GL_TEXTURE_BORDER_COLOR, borderColor.toArray());
-        glTexParameteri(glTarget, GL_TEXTURE_MAX_LEVEL, mipmapLevels);
+    public void use(int TARGET){
+        glTexParameteri(TARGET, GL_TEXTURE_MIN_FILTER, minFilter.GL);
+        glTexParameteri(TARGET, GL_TEXTURE_MAG_FILTER, magFilter.GL);
+        glTexParameteri(TARGET, GL_TEXTURE_WRAP_S, wrapS.GL);
+        glTexParameteri(TARGET, GL_TEXTURE_WRAP_T, wrapT.GL);
+        glTexParameteri(TARGET, GL_TEXTURE_WRAP_R, wrapR.GL);
+        glTexParameterfv(TARGET, GL_TEXTURE_BORDER_COLOR, borderColor.toArray());
+        glTexParameteri(TARGET, GL_TEXTURE_MAX_LEVEL, mipmapLevels);
+        glTexParameterf(TARGET, GL_TEXTURE_MAX_ANISOTROPY, Math.min(anisotropyLevels, glGetFloat(GL_MAX_TEXTURE_MAX_ANISOTROPY)));
+        glTexParameterf(TARGET, GL_TEXTURE_LOD_BIAS, Math.min(lodBias, glGetInteger(GL_MAX_TEXTURE_LOD_BIAS)));
+    }
+    
+    
+    public void texImage2D(int target, ByteBuffer buffer, int width, int height){
+        texImage2D(target, buffer, width, height, 0);
+    }
+    
+    public void texImage2D(int target, ByteBuffer buffer, int width, int height, int level){
+        glTexImage2D(
+            target, level, format.GL, width, height,
+            0, format.getBase().GL, type.GL, buffer
+        );
+    }
+    
+    public void texSubImage3D(int target, ByteBuffer buffer, int width, int height, int z){
+        glTexSubImage3D(
+            target, 0, 0, 0, z, width, height, 1,
+            format.getBase().GL, type.GL, buffer
+        );
     }
 
 
@@ -139,6 +167,28 @@ public class TextureParameters{
     public TextureParameters setMipmapLevels(int mipmapLevels){
         this.mipmapLevels = mipmapLevels;
     
+        return this;
+    }
+    
+    
+    public float getAnisotropyLevels(){
+        return anisotropyLevels;
+    }
+    
+    public TextureParameters setAnisotropyLevels(float anisotropyLevels){
+        this.anisotropyLevels = anisotropyLevels;
+        
+        return this;
+    }
+    
+    
+    public float getLodBias(){
+        return lodBias;
+    }
+    
+    public TextureParameters setLodBias(float lodBias){
+        this.lodBias = lodBias;
+        
         return this;
     }
 

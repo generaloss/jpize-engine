@@ -1,6 +1,6 @@
 package glit.tests.terraria;
 
-import glit.Glit;
+import glit.Pize;
 import glit.context.ContextListener;
 import glit.graphics.font.BitmapFont;
 import glit.graphics.font.FontLoader;
@@ -20,9 +20,9 @@ import static glit.tests.terraria.tile.TileType.DIRT;
 public class Main implements ContextListener{
 
     public static void main(String[] args){
-        Glit.create("Terraria", 1280, 720);
-        Glit.window().setIcon("icon.png");
-        Glit.init(new Main());
+        Pize.create("Terraria", 1280, 720);
+        Pize.window().setIcon("icon.png");
+        Pize.run(new Main());
     }
 
 
@@ -58,36 +58,36 @@ public class Main implements ContextListener{
         gameRenderer.renderEntities(world.getEntities());
         player.update(world);
 
-        font.drawText(batch, "fps: " + Glit.getFps(), 10, 10);
+        font.drawText(batch, "fps: " + Pize.getFPS(), 10, 10);
         batch.end();
 
-        if(Glit.isDown(Key.ESCAPE))
-            Glit.exit();
-        if(Glit.isDown(Key.F11))
-            Glit.window().toggleFullscreen();
-        if(Glit.isDown(Key.V))
-            Glit.window().toggleVsync();
+        if(Pize.isDown(Key.ESCAPE))
+            Pize.exit();
+        if(Pize.isDown(Key.F11))
+            Pize.window().toggleFullscreen();
+        if(Pize.isDown(Key.V))
+            Pize.window().toggleVsync();
     }
 
     private void ctrl(){
-        int scroll = Glit.mouse().getScroll();
+        int scroll = Pize.mouse().getScroll();
         gameRenderer.getRenderInfo().mulScale(
             scroll < 0 ?
-                1 / Math.pow(1.1, Maths.module(scroll)) : scroll > 0 ?
-                Math.pow(1.1, Maths.module(scroll))
+                1 / Math.pow(1.1, Maths.abs(scroll)) : scroll > 0 ?
+                Math.pow(1.1, Maths.abs(scroll))
                 : 1
         );
 
         gameRenderer.getCamera().getPos().set( player.pos().clone().add(player.rect().getCenter()) );
 
-        Point2f touch = new Point2f(Glit.getX(), Glit.getY())
-            .sub(gameRenderer.getCamera().getWidth() / 2, gameRenderer.getCamera().getHeight() / 2)
+        Point2f touch = new Point2f(Pize.getX(), Pize.getY())
+            .sub(gameRenderer.getCamera().getWidth() / 2F, gameRenderer.getCamera().getHeight() / 2F)
             .div(gameRenderer.getRenderInfo().getCellSize() * gameRenderer.getRenderInfo().getScale())
             .add(gameRenderer.getCamera().getPos());
 
         MapTile tile = world.getTileMap().getTile(touch.xf(), touch.yf());
-        if(tile != null && Glit.isTouched())
-            tile.setType(Glit.mouse().isLeftPressed() ? AIR : DIRT);
+        if(tile != null && Pize.isTouched())
+            tile.setType(Pize.mouse().isLeftPressed() ? AIR : DIRT);
 
         if(player.pos().y < -100)
             player.pos().y = world.getTileMap().getHeight();

@@ -1,27 +1,23 @@
 package glit.graphics.texture;
 
 import glit.graphics.gl.Format;
+import glit.graphics.gl.GlObject;
 import glit.graphics.gl.SizedFormat;
 import glit.graphics.gl.Type;
-import glit.graphics.gl.GlObject;
 
-import java.nio.ByteBuffer;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.GL30.glGenerateMipmap;
+import static org.lwjgl.opengl.GL33.*;
 
 public abstract class GlTexture extends GlObject{
     
     protected final TextureParameters parameters;
+    protected final int TEXTURE_TYPE;
     
-    public GlTexture(int GL_TARGET){
-        super(GL_TARGET);
+    public GlTexture(int TEXTURE_TYPE){
+        super(glGenTextures());
+        this.TEXTURE_TYPE = TEXTURE_TYPE;
         
-        ID = glGenTextures();
         parameters = new TextureParameters();
     }
-    
     
     
     public TextureParameters getParameters(){
@@ -41,34 +37,12 @@ public abstract class GlTexture extends GlObject{
     }
     
     
-    
-    protected void texImage2D(int glTarget, ByteBuffer buffer, int width, int height){
-        glTexImage2D(
-            glTarget, 0, parameters.getSizedFormat().GL, width, height,
-            0, parameters.getFormat().GL,
-            parameters.getType().GL, buffer
-        );
-    }
-    
-    protected void texImage2D(ByteBuffer buffer, int width, int height){
-        texImage2D(TARGET,buffer, width, height);
-    }
-    
-    protected void texSubImage3D(int glTarget, ByteBuffer buffer, int width, int height, int z){
-        glTexSubImage3D(glTarget, 0, 0, 0, z, width, height, 1, parameters.getFormat().GL, parameters.getType().GL, buffer);
-    }
-    
-    protected void texSubImage3D(ByteBuffer buffer, int width, int height, int z){
-        texSubImage3D(TARGET, buffer, width, height, z);
-    }
-    
-    
     protected void genMipMap(){
-        glGenerateMipmap(TARGET);
+        glGenerateMipmap(TEXTURE_TYPE);
     }
     
     public void bind(){
-        glBindTexture(TARGET, ID);
+        glBindTexture(TEXTURE_TYPE, ID);
     }
     
     

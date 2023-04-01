@@ -1,6 +1,6 @@
 package glit.graphics.util.batch;
 
-import glit.Glit;
+import glit.Pize;
 import glit.files.FileHandle;
 import glit.graphics.camera.Camera;
 import glit.graphics.gl.BufferUsage;
@@ -166,7 +166,7 @@ public class TextureBatch extends Batch{
         if(viewMatrix == null) viewMatrix = new Matrix4f();
         if(projectionMatrix == null) projectionMatrix = new Matrix4f();
 
-        begin(projectionMatrix.toOrthographic(0, 0, Glit.getWidth(), Glit.getHeight()), viewMatrix);
+        begin(projectionMatrix.toOrthographic(0, 0, Pize.getWidth(), Pize.getHeight()), viewMatrix);
     }
 
 

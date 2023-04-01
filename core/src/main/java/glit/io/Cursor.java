@@ -14,7 +14,7 @@ public class Cursor implements Disposable{
     private final long id;
 
     public Cursor(String filepath){
-        Pixmap cursorTextureData = PixmapLoader.loadFrom(filepath);
+        Pixmap cursorTextureData = PixmapLoader.load(filepath);
         GLFWImage cursorBuffer = GLFWImage.malloc();
         cursorBuffer.set(cursorTextureData.getWidth(), cursorTextureData.getHeight(), cursorTextureData.getBuffer());
         id = glfwCreateCursor(cursorBuffer, 0, 0);

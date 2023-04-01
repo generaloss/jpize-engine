@@ -1,6 +1,6 @@
 package glit.gui;
 
-import glit.Glit;
+import glit.Pize;
 import glit.gui.constraint.*;
 
 import java.util.*;
@@ -240,10 +240,10 @@ public abstract class UIComponent<C> implements Cloneable{
 
 
     public boolean isHover(){
-        float mouseX = Glit.getX();
-        float mouseY = Glit.getY();
+        float mouseX = Pize.getX();
+        float mouseY = Pize.getY();
 
-        if(!Glit.window().isFocused() || mouseX < 0 || mouseX >= Glit.getWidth() || mouseY < 0 || mouseY >= Glit.getHeight())
+        if(!Pize.window().isFocused() || mouseX < 0 || mouseX >= Pize.getWidth() || mouseY < 0 || mouseY >= Pize.getHeight())
             return false;
 
         boolean hover = !( mouseX < x || mouseY < y || mouseX > x + width || mouseY > y + height);
@@ -265,8 +265,8 @@ public abstract class UIComponent<C> implements Cloneable{
     }
 
     private boolean isChildHover(Collection<UIComponent<C>> childList){
-        float mouseX = Glit.getX();
-        float mouseY = Glit.getY();
+        float mouseX = Pize.getX();
+        float mouseY = Pize.getY();
 
         boolean hover = true;
 
@@ -280,15 +280,15 @@ public abstract class UIComponent<C> implements Cloneable{
     }
 
     public boolean isTouchDown(){
-        return Glit.isTouchDown() && isHover();
+        return Pize.isTouchDown() && isHover();
     }
 
     public boolean isTouched(){
-        return Glit.isTouched() && isHover();
+        return Pize.isTouched() && isHover();
     }
 
     public boolean isTouchReleased(){
-        return Glit.isTouchReleased() && isHover();
+        return Pize.isTouchReleased() && isHover();
     }
 
 
@@ -358,13 +358,13 @@ public abstract class UIComponent<C> implements Cloneable{
 
     private float getParentWidth(){
         if(parent == null)
-            return Glit.getWidth();
+            return Pize.getWidth();
         return parent.getWidth();
     }
 
     private float getParentHeight(){
         if(parent == null)
-            return Glit.getHeight();
+            return Pize.getHeight();
         return parent.getHeight();
     }
 

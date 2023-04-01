@@ -1,6 +1,6 @@
 package glit.tests.audio;
 
-import glit.Glit;
+import glit.Pize;
 import glit.audio.sound.Sound;
 import glit.context.Disposable;
 import glit.graphics.texture.Texture;
@@ -62,7 +62,7 @@ public class AudioPlayerUI implements Disposable{
             if(currentPointer != pointer)
                 sound.setPosition(currentPointer * sound.getDuration());
 
-            pointer = positionSlider.getValue() + 1 / sound.getDuration() * Glit.getDeltaTime() * sound.getPitch();
+            pointer = positionSlider.getValue() + 1 / sound.getDuration() * Pize.getDeltaTime() * sound.getPitch();
             positionSlider.setValue(pointer);
         }
         if(positionSlider.isTouchDown())

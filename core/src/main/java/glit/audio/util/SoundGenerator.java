@@ -1,6 +1,6 @@
 package glit.audio.util;
 
-import glit.Glit;
+import glit.Pize;
 import glit.math.Maths;
 
 import java.nio.ByteBuffer;
@@ -13,7 +13,7 @@ public class SoundGenerator{
 
 
     public SoundGenerator(){
-        samplingRate = Glit.audio().getCurrent().getFrequency();
+        samplingRate = Pize.audio().getCurrent().getFrequency();
     }
 
 

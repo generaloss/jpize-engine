@@ -79,7 +79,7 @@ public class Vec2f extends Tuple2f implements Cloneable{
     }
 
 
-    public double dot(float x, float y){
+    public float dot(float x, float y){
         return this.x * x + this.y * y;
     }
 
@@ -87,7 +87,7 @@ public class Vec2f extends Tuple2f implements Cloneable{
         return this.x * x + this.y * y;
     }
 
-    public double dot(Vec2f vector){
+    public float dot(Vec2f vector){
         return x * vector.x + y * vector.y;
     }
 

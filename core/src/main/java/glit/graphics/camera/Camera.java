@@ -1,16 +1,18 @@
 package glit.graphics.camera;
 
 import glit.context.Resizable;
+import glit.graphics.texture.Sizable;
 import glit.math.vecmath.matrix.Matrix4f;
 
-public interface Camera extends Resizable{
+public abstract class Camera extends Sizable implements Resizable{
+    
+    public Camera(int width, int height){
+        super(width, height);
+    }
+    
+    public abstract void update();
 
-    void update();
-
-    Matrix4f getView();
-    Matrix4f getProjection();
-
-    float getWidth();
-    float getHeight();
+    public abstract Matrix4f getView();
+    public abstract Matrix4f getProjection();
 
 }

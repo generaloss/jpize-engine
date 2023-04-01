@@ -1,6 +1,6 @@
 package glit.gui.components;
 
-import glit.Glit;
+import glit.Pize;
 import glit.graphics.texture.Texture;
 import glit.graphics.util.batch.Batch;
 import glit.gui.UIComponent;
@@ -33,7 +33,7 @@ public class Slider extends UIComponent<Batch>{
 
         if(isTouchDown())
             drag = true;
-        else if(Glit.isTouchReleased())
+        else if(Pize.isTouchReleased())
             drag = false;
 
         if(!drag)
@@ -41,7 +41,7 @@ public class Slider extends UIComponent<Batch>{
 
         prevValue = value;
 
-        float mouseX = Glit.getX();
+        float mouseX = Pize.getX();
         value = Maths.clamp(( mouseX - x - sliderWidthT / 2 ) / ( width - sliderWidthT ),0,1);
 
         if(divisions > 0)

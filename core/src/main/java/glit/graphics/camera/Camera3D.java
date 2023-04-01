@@ -3,13 +3,15 @@ package glit.graphics.camera;
 import glit.math.util.EulerAngle;
 import glit.math.vecmath.vector.Vec3f;
 
-public abstract class Camera3D implements Camera{
+public abstract class Camera3D extends Camera{
 
     protected final Vec3f position;
     protected final EulerAngle rotation;
 
 
-    public Camera3D(){
+    public Camera3D(int width, int height){
+        super(width, height);
+        
         position = new Vec3f();
         rotation = new EulerAngle();
     }

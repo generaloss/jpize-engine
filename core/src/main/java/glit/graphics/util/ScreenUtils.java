@@ -1,6 +1,6 @@
 package glit.graphics.util;
 
-import glit.Glit;
+import glit.Pize;
 import glit.files.FileHandle;
 import glit.graphics.gl.Format;
 import glit.graphics.gl.Type;
@@ -17,8 +17,8 @@ import static org.lwjgl.opengl.GL33.glReadPixels;
 public class ScreenUtils{
 
     public static void saveScreenshot(File file, String format){
-        int width = Glit.getWidth();
-        int height = Glit.getHeight();
+        int width = Pize.getWidth();
+        int height = Pize.getHeight();
 
         ByteBuffer buffer = ByteBuffer.allocateDirect(width * height * 4).order(ByteOrder.LITTLE_ENDIAN);
         glReadPixels(0, 0, width, height, Format.BGRA.GL, Type.UNSIGNED_BYTE.GL, buffer);

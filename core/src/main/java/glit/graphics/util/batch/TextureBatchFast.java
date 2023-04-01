@@ -1,6 +1,6 @@
 package glit.graphics.util.batch;
 
-import glit.Glit;
+import glit.Pize;
 import glit.files.FileHandle;
 import glit.graphics.camera.Camera;
 import glit.graphics.gl.BufferUsage;
@@ -189,7 +189,7 @@ public class TextureBatchFast extends Batch{
         if(defaultView == null) defaultView = new Matrix4f();
         if(defaultProjection == null) defaultProjection = new Matrix4f();
 
-        end(defaultProjection.toOrthographic(0, 0, Glit.getWidth(), Glit.getHeight()), defaultView);
+        end(defaultProjection.toOrthographic(0, 0, Pize.getWidth(), Pize.getHeight()), defaultView);
     }
 
 

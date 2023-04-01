@@ -1,6 +1,6 @@
 package glit.tests.minecraft.client.game.gui.screen.screens;
 
-import glit.Glit;
+import glit.Pize;
 import glit.graphics.util.batch.Batch;
 import glit.gui.Align;
 import glit.gui.LayoutType;
@@ -25,7 +25,7 @@ public class IngameGUI extends Screen{
         layout.alignItems(Align.LEFT_UP);
 
         // <FPS>
-        TextView fps = new TextView(session, new Component().formattedText(Glit.getFps() + " FPS"));
+        TextView fps = new TextView(session, new Component().formattedText(Pize.getFPS() + " FPS"));
         fps.setPosition(Constraint.relativeToHeight(0.005));
         fps.disableShadow(true);
         fps.show(session.getOptions().isShowFps());
@@ -35,7 +35,7 @@ public class IngameGUI extends Screen{
 
     @Override
     public void render(Batch batch){
-        ((TextComponent) ((TextView) layout.get("fps")).getText().getComponent(0)) .setText(Glit.getFps() + " FPS");
+        ((TextComponent) ((TextView) layout.get("fps")).getText().getComponent(0)) .setText(Pize.getFPS() + " FPS");
 
         layout.render(batch);
     }

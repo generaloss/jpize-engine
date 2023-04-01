@@ -1,14 +1,14 @@
 package glit.gui.constraint;
 
-import glit.Glit;
+import glit.Pize;
 
 import java.util.function.DoubleSupplier;
 
 public interface Constraint{
 
     PixelConstraint zero = pixel(0);
-    PixelConstraint scr_width = pixel(Glit::getWidth);
-    PixelConstraint scr_height = pixel(Glit::getHeight);
+    PixelConstraint scr_width = pixel(Pize::getWidth);
+    PixelConstraint scr_height = pixel(Pize::getHeight);
     RelativeConstraint match_parent = relative(1);
 
 

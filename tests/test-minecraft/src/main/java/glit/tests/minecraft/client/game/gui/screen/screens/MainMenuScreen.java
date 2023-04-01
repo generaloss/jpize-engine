@@ -1,9 +1,9 @@
 package glit.tests.minecraft.client.game.gui.screen.screens;
 
-import glit.Glit;
+import glit.Pize;
 import glit.files.FileHandle;
 import glit.graphics.camera.PerspectiveCamera;
-import glit.graphics.postprocess.effects.MotionBlur;
+import glit.graphics.postprocess.effects.GaussianBlur;
 import glit.graphics.texture.Texture;
 import glit.graphics.texture.TextureRegion;
 import glit.graphics.util.SkyBox;
@@ -35,7 +35,7 @@ public class MainMenuScreen extends Screen{
     private final FileHandle splashesFile;
     private final TextView splashTextView;
     
-    private final MotionBlur postEffect = new MotionBlur();
+    private final GaussianBlur postEffect = new GaussianBlur(1);
 
     public MainMenuScreen(Session session){
         super(session);
@@ -170,13 +170,13 @@ public class MainMenuScreen extends Screen{
     public void render(Batch batch){
         // Panorama
         postEffect.begin();
-        camera.getRot().yaw -= Glit.getDeltaTime() * 2;
+        camera.getRot().yaw -= Pize.getDeltaTime() * 2;
         camera.update();
         skyBox.render(camera);
         postEffect.end();
         // Panorama Overlay
         batch.setAlpha(0.8F);
-        batch.draw(panorama_overlay, 0, 0, Glit.getWidth(), Glit.getHeight());
+        batch.draw(panorama_overlay, 0, 0, Pize.getWidth(), Pize.getHeight());
         batch.setAlpha(1F);
         
         // UI
@@ -195,13 +195,14 @@ public class MainMenuScreen extends Screen{
 
     @Override
     public void resize(int width, int height){
+        postEffect.setRadius(15);
         postEffect.resize(width, height);
     }
 
 
     @Override
     public void close(){
-        Glit.exit();
+        Pize.exit();
     }
 
     @Override

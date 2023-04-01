@@ -20,8 +20,8 @@ public class TextureArray extends GlTexture{
             Pixmap td = textureData[z];
             pixmapList.add(td);
     
-            texSubImage3D(td.getBuffer(), td.getWidth(), td.getHeight(), z);
-            parameters.use(TARGET);
+            parameters.texSubImage3D(GL_TEXTURE_2D_ARRAY, td.getBuffer(), td.getWidth(), td.getHeight(), z);
+            parameters.use(TEXTURE_TYPE);
             genMipMap();
         }
         unbind();
@@ -33,11 +33,11 @@ public class TextureArray extends GlTexture{
         
         pixmapList = new ArrayList<>();
         for(int z = 0; z < bufferedImage.length; z++){
-            Pixmap td = PixmapLoader.loadFrom(bufferedImage[z]);
+            Pixmap td = PixmapLoader.load(bufferedImage[z]);
             pixmapList.add(td);
-
-            texSubImage3D(td.getBuffer(), td.getWidth(), td.getHeight(), z);
-            parameters.use(TARGET);
+    
+            parameters.texSubImage3D(GL_TEXTURE_2D_ARRAY, td.getBuffer(), td.getWidth(), td.getHeight(), z);
+            parameters.use(TEXTURE_TYPE);
             genMipMap();
         }
         unbind();
@@ -51,9 +51,9 @@ public class TextureArray extends GlTexture{
         for(int z = 0; z < texture.length; z++){
             Pixmap td = texture[z].getPixmap().clone();
             pixmapList.add(td);
-            
-            texSubImage3D(td.getBuffer(), td.getWidth(), td.getHeight(), z);
-            parameters.use(TARGET);
+    
+            parameters.texSubImage3D(GL_TEXTURE_2D_ARRAY, td.getBuffer(), td.getWidth(), td.getHeight(), z);
+            parameters.use(TEXTURE_TYPE);
             genMipMap();
         }
         unbind();
@@ -70,13 +70,13 @@ public class TextureArray extends GlTexture{
         pixmapList = new ArrayList<>();
         for(int z = 0; z < file.length; z++){
             String f = file[z];
-            Pixmap td = PixmapLoader.loadFrom(f, false, invY);
+            Pixmap td = PixmapLoader.load(f, false, invY);
             pixmapList.add(td);
     
-            texSubImage3D(td.getBuffer(), td.getWidth(), td.getHeight(), z);
+            parameters.texSubImage3D(GL_TEXTURE_2D_ARRAY, td.getBuffer(), td.getWidth(), td.getHeight(), z);
         }
         
-        parameters.use(TARGET);
+        parameters.use(TEXTURE_TYPE);
         genMipMap();
     }
 

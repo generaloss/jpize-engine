@@ -17,45 +17,43 @@ import static org.lwjgl.opengl.GL.createCapabilities;
 
 public class Window implements Disposable, Resizable{
 
-    private final long id;
+    private final long ID;
     private int width, height, x, y, windowedLastWidth, windowedLastHeight, windowedLastX, windowedLastY;
     private boolean vsync, fullscreen, focused, resizable;
     private String title;
-
+    
     public Window(String title, int width, int height){
-        this(title, width, height, true, true);
+        this(title, width, height, true, true, 1);
     }
-
-    public Window(String title, int width, int height, boolean resizable, boolean vsync){
-        this.title = title;
+    
+    public Window(String title, int width, int height, boolean resizable, boolean vsync, int samples){
         this.width = width;
         this.height = height;
+        
         this.resizable = resizable;
         this.vsync = vsync;
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-        glfwWindowHint(GLFW_SAMPLES, 4);
+        glfwWindowHint(GLFW_RESIZABLE, resizable ? 1 : 0);
+        glfwWindowHint(GLFW_SAMPLES, samples);
 
-        id = glfwCreateWindow(width, height, title, 0, 0);
-        if(id == 0)
+        ID = glfwCreateWindow(width, height, title, 0, 0);
+        if(ID == 0)
             throw new Error("Failed to create the GLFW Window");
 
         Monitor monitor = MonitorManager.getPrimary();
-        glfwSetWindowPos(id, monitor.getWidth() / 2 - width / 2, monitor.getHeight() / 2 - height / 2);
+        glfwSetWindowPos(ID, monitor.getWidth() / 2 - width / 2, monitor.getHeight() / 2 - height / 2);
 
-        glfwMakeContextCurrent(id);
+        glfwMakeContextCurrent(ID);
         createCapabilities();
         glfwSwapInterval(1);
 
-        glfwSetWindowFocusCallback(id, (id, flag)->focused = flag);
-
-        glfwSetWindowSizeCallback(id, (id, w, h)->{
+        glfwSetWindowFocusCallback(ID, (id, flag)->focused = flag);
+        glfwSetWindowSizeCallback(ID, (id, w, h)->{
             this.width = w;
             this.height = h;
         });
-
-        glfwSetWindowPosCallback(id, (id, x, y)->{
+        glfwSetWindowPosCallback(ID, (id, x, y)->{
             this.x = x;
             this.y = y;
         });
@@ -77,9 +75,9 @@ public class Window implements Disposable, Resizable{
             windowedLastY = y;
             windowedLastWidth = width;
             windowedLastHeight = height;
-            glfwSetWindowMonitor(id, monitor.getId(), 0, 0, monitor.getWidth(), monitor.getHeight(), monitor.getRefreshRate());
+            glfwSetWindowMonitor(ID, monitor.getId(), 0, 0, monitor.getWidth(), monitor.getHeight(), monitor.getRefreshRate());
         }else
-            glfwSetWindowMonitor(id, 0, windowedLastX, windowedLastY, windowedLastWidth, windowedLastHeight, monitor.getRefreshRate());
+            glfwSetWindowMonitor(ID, 0, windowedLastX, windowedLastY, windowedLastWidth, windowedLastHeight, monitor.getRefreshRate());
     }
 
     public void toggleFullscreen(){
@@ -110,26 +108,18 @@ public class Window implements Disposable, Resizable{
 
     public void setTitle(String title){
         this.title = title;
-        glfwSetWindowTitle(id, title);
+        glfwSetWindowTitle(ID, title);
     }
 
 
     @Override
     public void resize(int width, int height){
-        glfwSetWindowSize(id, width, height);
-    }
-
-    public int getWidth(){
-        return width;
-    }
-
-    public int getHeight(){
-        return height;
+        glfwSetWindowSize(ID, width, height);
     }
 
 
     public void setPos(int x, int y){
-        glfwSetWindowPos(id, x, y);
+        glfwSetWindowPos(ID, x, y);
     }
 
     public int getX(){
@@ -147,7 +137,7 @@ public class Window implements Disposable, Resizable{
 
     public void setResizable(boolean resizable){
         this.resizable = resizable;
-        glfwSetWindowAttrib(id, GLFW_RESIZABLE, resizable ? 1 : 0);
+        glfwSetWindowAttrib(ID, GLFW_RESIZABLE, resizable ? 1 : 0);
     }
 
     public void toggleResizable(){
@@ -158,63 +148,68 @@ public class Window implements Disposable, Resizable{
     public void setIcon(String filePath){
         try{
             BufferedImage bufferedImage = ImageIO.read(new FileHandle(filePath).input());
-            Pixmap pixmap = PixmapLoader.loadFrom(bufferedImage);
+            Pixmap pixmap = PixmapLoader.load(bufferedImage);
 
             GLFWImage image = GLFWImage.malloc();
             GLFWImage.Buffer iconBuffer = GLFWImage.malloc(1);
             image.set(pixmap.getWidth(), pixmap.getHeight(), pixmap.getBuffer());
 
             iconBuffer.put(0, image);
-            glfwSetWindowIcon(id, iconBuffer);
+            glfwSetWindowIcon(ID, iconBuffer);
         }catch(IOException e){
             throw new RuntimeException(e);
         }
     }
 
     public void setCursor(Cursor cursor){
-        glfwSetCursor(id, cursor != null ? cursor.getId() : 0);
-    }
-
-    public float aspect(){
-        return (float) width / height;
+        glfwSetCursor(ID, cursor != null ? cursor.getId() : 0);
     }
 
 
     public void swapBuffers(){
-        glfwSwapBuffers(id);
-    }
-
-    public void pollEvents(){
-        glfwPollEvents();
+        glfwSwapBuffers(ID);
     }
 
 
     public void show(){
-        glfwShowWindow(id);
+        glfwShowWindow(ID);
     }
 
     public void hide(){
-        glfwHideWindow(id);
+        glfwHideWindow(ID);
     }
 
 
     public boolean closeRequest(){
-        return glfwWindowShouldClose(id);
+        return glfwWindowShouldClose(ID);
     }
 
     public boolean isFocused(){
         return focused;
     }
+    
+    
+    public int getWidth(){
+        return width;
+    }
+    
+    public int getHeight(){
+        return height;
+    }
+    
+    public float aspect(){
+        return (float) width / height;
+    }
 
 
-    public long getId(){
-        return id;
+    public long getID(){
+        return ID;
     }
 
     @Override
     public void dispose(){
-        glfwFreeCallbacks(id);
-        glfwDestroyWindow(id);
+        glfwFreeCallbacks(ID);
+        glfwDestroyWindow(ID);
     }
 
 }

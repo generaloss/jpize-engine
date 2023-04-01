@@ -1,6 +1,6 @@
 package glit.graphics.postprocess.effects;
 
-import glit.Glit;
+import glit.Pize;
 import glit.files.FileHandle;
 import glit.graphics.postprocess.FrameBufferObject;
 import glit.graphics.postprocess.PostProcessEffect;
@@ -20,8 +20,8 @@ public class MotionBlur implements PostProcessEffect{
 
 
     public MotionBlur(){
-        int width = Glit.getWidth();
-        int height = Glit.getHeight();
+        int width = Pize.getWidth();
+        int height = Pize.getHeight();
 
         // Frame & Render Buffer 1
         fbo1 = new FrameBufferObject(width, height);

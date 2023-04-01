@@ -14,7 +14,7 @@ public class Mouse{
     private final boolean[] down, pressed, released;
 
     public Mouse(Window window){
-        this.windowId = window.getId();
+        this.windowId = window.getID();
         visible = true;
 
         down = new boolean[GLFW_MOUSE_BUTTON_LAST + 1];

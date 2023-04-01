@@ -1,7 +1,8 @@
 package glit.graphics.util;
 
-import glit.Glit;
+import glit.Pize;
 import glit.context.Disposable;
+import glit.graphics.camera.OrthographicCamera;
 import glit.graphics.gl.Gl;
 import glit.graphics.gl.Target;
 import glit.graphics.texture.Pixmap;
@@ -11,6 +12,7 @@ import glit.graphics.util.batch.TextureBatch;
 public class Canvas extends Pixmap implements Disposable{
 
     private final TextureBatch batch;
+    private final OrthographicCamera camera;
     private final Texture frameTexture;
 
 
@@ -18,12 +20,13 @@ public class Canvas extends Pixmap implements Disposable{
         super(width, height);
 
         batch = new TextureBatch();
+        camera = new OrthographicCamera();
         batch.flip(false, true);
         frameTexture = new Texture(this);
     }
 
     public Canvas(){
-        this(Glit.getWidth(), Glit.getHeight());
+        this(Pize.getWidth(), Pize.getHeight());
     }
 
 
@@ -33,7 +36,9 @@ public class Canvas extends Pixmap implements Disposable{
             Gl.disable(Target.CULL_FACE);
 
         frameTexture.setPixmap(this);
-        batch.draw(frameTexture, 0, 0, Glit.getWidth(), Glit.getHeight());
+        camera.update();
+        batch.begin(camera);
+        batch.draw(frameTexture, 0, 0, Pize.getWidth(), Pize.getHeight());
         batch.end();
 
         if(cullFace)
@@ -44,6 +49,7 @@ public class Canvas extends Pixmap implements Disposable{
     public void resize(int width, int height){
         super.resize(width, height);
         frameTexture.resize(width, height);
+        camera.resize(width, height);
     }
 
     @Override

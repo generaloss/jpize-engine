@@ -1,7 +1,7 @@
 package glit.graphics.util;
 
-import glit.context.Disposable;
 import glit.files.FileHandle;
+import glit.graphics.gl.GlObject;
 import glit.graphics.texture.CubeMap;
 import glit.graphics.texture.Texture;
 import glit.graphics.texture.TextureArray;
@@ -14,30 +14,29 @@ import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL33.*;
 
-public class Shader implements Disposable{
+public class Shader extends GlObject{
 
-    private final int id;
     private final HashMap<String, Integer> uniforms;
     private int num_sampler2D, num_samplerCube, num_sampler2DArray;
 
 
     public Shader(String vertexCode, String fragmentCode){
-        id = glCreateProgram();
+        super(glCreateProgram());
 
-        int vertexShaderId = createShader(vertexCode, GL_VERTEX_SHADER);
-        int fragmentShaderId = createShader(fragmentCode, GL_FRAGMENT_SHADER);
-        glAttachShader(id, vertexShaderId);
-        glAttachShader(id, fragmentShaderId);
+        int vertexShaderID = createShader(vertexCode, GL_VERTEX_SHADER);
+        int fragmentShaderID = createShader(fragmentCode, GL_FRAGMENT_SHADER);
+        glAttachShader(ID, vertexShaderID);
+        glAttachShader(ID, fragmentShaderID);
 
-        glLinkProgram(id);
-        if(glGetProgrami(id, GL_LINK_STATUS) == GL_FALSE)
-            throw new RuntimeException("Linking shader error: " + glGetProgramInfoLog(id));
-        glValidateProgram(id);
-        if(glGetProgrami(id, GL_VALIDATE_STATUS) == GL_FALSE)
-            throw new RuntimeException("Validating shader error: " + glGetProgramInfoLog(id));
+        glLinkProgram(ID);
+        if(glGetProgrami(ID, GL_LINK_STATUS) == GL_FALSE)
+            throw new RuntimeException("Linking shader error: " + glGetProgramInfoLog(ID));
+        glValidateProgram(ID);
+        if(glGetProgrami(ID, GL_VALIDATE_STATUS) == GL_FALSE)
+            throw new RuntimeException("Validating shader error: " + glGetProgramInfoLog(ID));
 
-        glDeleteShader(vertexShaderId);
-        glDeleteShader(fragmentShaderId);
+        glDeleteShader(vertexShaderID);
+        glDeleteShader(fragmentShaderID);
 
         uniforms = new HashMap<>();
         detectUniforms(vertexCode);
@@ -49,25 +48,25 @@ public class Shader implements Disposable{
     }
 
     public Shader(String vertexCode, String fragmentCode, String geometryCode){
-        id = glCreateProgram();
+        super(glCreateProgram());
 
-        int vertexShaderId = createShader(vertexCode, GL_VERTEX_SHADER);
-        int fragmentShaderId = createShader(fragmentCode, GL_FRAGMENT_SHADER);
-        int geometryShaderId = createShader(geometryCode, GL_GEOMETRY_SHADER);
-        glAttachShader(id, vertexShaderId);
-        glAttachShader(id, fragmentShaderId);
-        glAttachShader(id, geometryShaderId);
+        int vertexShaderID = createShader(vertexCode, GL_VERTEX_SHADER);
+        int fragmentShaderID = createShader(fragmentCode, GL_FRAGMENT_SHADER);
+        int geometryShaderID = createShader(geometryCode, GL_GEOMETRY_SHADER);
+        glAttachShader(ID, vertexShaderID);
+        glAttachShader(ID, fragmentShaderID);
+        glAttachShader(ID, geometryShaderID);
 
-        glLinkProgram(id);
-        if(glGetProgrami(id, GL_LINK_STATUS) == GL_FALSE)
-            throw new RuntimeException("Linking shader error: " + glGetProgramInfoLog(id));
-        glValidateProgram(id);
-        if(glGetProgrami(id, GL_VALIDATE_STATUS) == GL_FALSE)
-            throw new RuntimeException("Validating shader error: " + glGetProgramInfoLog(id));
+        glLinkProgram(ID);
+        if(glGetProgrami(ID, GL_LINK_STATUS) == GL_FALSE)
+            throw new RuntimeException("Linking shader error: " + glGetProgramInfoLog(ID));
+        glValidateProgram(ID);
+        if(glGetProgrami(ID, GL_VALIDATE_STATUS) == GL_FALSE)
+            throw new RuntimeException("Validating shader error: " + glGetProgramInfoLog(ID));
 
-        glDeleteShader(vertexShaderId);
-        glDeleteShader(fragmentShaderId);
-        glDeleteShader(geometryShaderId);
+        glDeleteShader(vertexShaderID);
+        glDeleteShader(fragmentShaderID);
+        glDeleteShader(geometryShaderID);
 
         uniforms = new HashMap<>();
         detectUniforms(vertexCode);
@@ -100,7 +99,7 @@ public class Shader implements Disposable{
             name = name.strip();                                    // 'type name'
             name = name.substring(name.lastIndexOf(" ") + 1);       // 'name'
 
-            uniforms.put(name, glGetUniformLocation(id, name));
+            uniforms.put(name, glGetUniformLocation(ID, name));
         }
     }
 
@@ -169,15 +168,11 @@ public class Shader implements Disposable{
 
 
     public void bindAttribute(int index, String name){
-        glBindAttribLocation(id, index, name);
+        glBindAttribLocation(ID, index, name);
     }
-
-    public int getID(){
-        return id;
-    }
-
+    
     public void bind(){
-        glUseProgram(id);
+        glUseProgram(ID);
 
         num_sampler2D = 0;
         num_samplerCube = 0;
@@ -191,7 +186,7 @@ public class Shader implements Disposable{
 
     @Override
     public void dispose(){
-        glDeleteProgram(id);
+        glDeleteProgram(ID);
     }
 
 

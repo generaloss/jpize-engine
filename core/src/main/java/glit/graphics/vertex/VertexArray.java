@@ -1,17 +1,15 @@
 package glit.graphics.vertex;
 
-import glit.context.Disposable;
+import glit.graphics.gl.GlObject;
 import glit.graphics.gl.Primitive;
 import glit.graphics.gl.Type;
 
 import static org.lwjgl.opengl.GL33.*;
 
-public class VertexArray implements Disposable{
-
-    private final int id;
+public class VertexArray extends GlObject{
 
     public VertexArray(){
-        id = glGenVertexArrays();
+        super(glGenVertexArrays());
         bind();
     }
 
@@ -38,13 +36,9 @@ public class VertexArray implements Disposable{
         bind();
         glDrawElements(mode.GL, indicesNum, indicesType.GL, 0);
     }
-
-    public int getId(){
-        return id;
-    }
-
+    
     public void bind(){
-        glBindVertexArray(id);
+        glBindVertexArray(ID);
     }
 
     public static void unbind(){
@@ -54,7 +48,7 @@ public class VertexArray implements Disposable{
 
     @Override
     public void dispose(){
-        glDeleteVertexArrays(id);
+        glDeleteVertexArrays(ID);
     }
 
 }

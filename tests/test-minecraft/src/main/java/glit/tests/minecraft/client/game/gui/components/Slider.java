@@ -1,6 +1,6 @@
 package glit.tests.minecraft.client.game.gui.components;
 
-import glit.Glit;
+import glit.Pize;
 import glit.graphics.texture.Region;
 import glit.graphics.texture.TextureRegion;
 import glit.graphics.util.batch.Batch;
@@ -89,7 +89,7 @@ public class Slider extends MComponent{
 
         if(isTouchDown())
             drag = true;
-        else if(Glit.isTouchReleased())
+        else if(Pize.isTouchReleased())
             drag = false;
 
         prevValue = value;
@@ -97,7 +97,7 @@ public class Slider extends MComponent{
         if(!drag)
             return;
 
-        float mouseX = Glit.getX();
+        float mouseX = Pize.getX();
         value = Maths.clamp((mouseX - x - halfHandleWidth) / (width - handleWidth), 0, 1);
 
         if(divisions > 0)

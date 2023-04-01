@@ -1,6 +1,6 @@
 package glit.tests.minecraft.client.game.gui.screen;
 
-import glit.Glit;
+import glit.Pize;
 import glit.context.Disposable;
 import glit.context.Resizable;
 import glit.graphics.gl.Wrap;
@@ -32,12 +32,12 @@ public abstract class Screen implements Resizable, Disposable{
     }
 
     public void update(Batch batch){
-        if(shouldCloseOnEsc() && Glit.isDown(Key.ESCAPE))
+        if(shouldCloseOnEsc() && Pize.isDown(Key.ESCAPE))
             close();
 
         if(renderDirtBackground()){
             batch.setColor(0.25F, 0.25F, 0.25F, 1F);
-            batch.draw(options_background, 0, 0, Glit.getWidth(), Glit.getHeight(), new Region(0, 0, 11 * Glit.getAspect(), 11));
+            batch.draw(options_background, 0, 0, Pize.getWidth(), Pize.getHeight(), new Region(0, 0, 11 * Pize.getAspect(), 11));
             batch.setColor(1, 1, 1, 1F);
         }
     }

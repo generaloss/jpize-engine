@@ -1,6 +1,6 @@
 package glit.tests.minecraft.client.run;
 
-import glit.Glit;
+import glit.Pize;
 import glit.context.ContextListener;
 import glit.graphics.texture.Pixmap;
 import glit.graphics.texture.Texture;
@@ -28,22 +28,22 @@ public class BiomeGeneratorTest implements ContextListener{
 
     @Override
     public void render(){
-        Glit.window().setTitle("Minecraft (fps: " + Glit.getFps() + ")");
+        Pize.window().setTitle("Minecraft (fps: " + Pize.getFPS() + ")");
 
-        if(Glit.isDown(Key.ESCAPE))
-            Glit.exit();
-        if(Glit.isDown(Key.F11))
-            Glit.window().toggleFullscreen();
-        if(Glit.isDown(Key.V))
-            Glit.window().toggleVsync();
+        if(Pize.isDown(Key.ESCAPE))
+            Pize.exit();
+        if(Pize.isDown(Key.F11))
+            Pize.window().toggleFullscreen();
+        if(Pize.isDown(Key.V))
+            Pize.window().toggleVsync();
 
         Gl.clearBufferColor();
         Gl.clearColor(0.4, 0.6, 1);
         batch.begin();
 
-        batch.draw(mapTexture, 0, 0, Glit.getHeight(), Glit.getHeight());
-        float pixel16 = Glit.getHeight() / (float) mapTexture.getHeight() * 16;
-        batch.draw(cellTexture, Maths.floor(Glit.getX() / pixel16) * pixel16, Maths.floor(Glit.getY() / pixel16) * pixel16, pixel16, pixel16);
+        batch.draw(mapTexture, 0, 0, Pize.getHeight(), Pize.getHeight());
+        float pixel16 = Pize.getHeight() / (float) mapTexture.getHeight() * 16;
+        batch.draw(cellTexture, Maths.floor(Pize.getX() / pixel16) * pixel16, Maths.floor(Pize.getY() / pixel16) * pixel16, pixel16, pixel16);
         batch.end();
     }
 
@@ -68,7 +68,7 @@ public class BiomeGeneratorTest implements ContextListener{
         heightMapNoise.setSeed((int) Maths.randomSeed(4));
         heightMapNoise.setFractalOctaves(8);
         heightMapNoise.setFrequency(0.002F);
-        heightMapNoise.SetRotationType3D(FastNoiseLite.RotationType3D.ImproveXZPlanes);
+        heightMapNoise.setRotationType3D(FastNoiseLite.RotationType3D.ImproveXZPlanes);
 
         FastNoiseLite riverNoise = new FastNoiseLite();
         riverNoise.setNoiseType(FastNoiseLite.NoiseType.Perlin);

@@ -1,6 +1,6 @@
 package glit.graphics.postprocess;
 
-import glit.Glit;
+import glit.Pize;
 import glit.context.Resizable;
 import glit.graphics.gl.Filter;
 import glit.graphics.gl.GlObject;
@@ -22,7 +22,7 @@ public class FrameBufferObject extends GlObject implements Resizable{
 
 
     public FrameBufferObject(int width, int height){
-        super(GL_FRAMEBUFFER);
+        super(glGenFramebuffers());
         
         this.width = width;
         this.height = height;
@@ -38,7 +38,7 @@ public class FrameBufferObject extends GlObject implements Resizable{
     }
 
     public FrameBufferObject(){
-        this(Glit.getWidth(), Glit.getHeight());
+        this(Pize.getWidth(), Pize.getHeight());
     }
 
 
@@ -61,10 +61,9 @@ public class FrameBufferObject extends GlObject implements Resizable{
 
     public void create(){
         texture.update();
-    
-        ID = glGenFramebuffers();
+        
         bind();
-        glFramebufferTexture2D(TARGET, attachment, GL_TEXTURE_2D, texture.getID(), 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture.getID(), 0);
         glDrawBuffer(draw ? attachment : GL_NONE);
         glReadBuffer(read ? attachment : GL_NONE);
         unbind();
@@ -119,7 +118,7 @@ public class FrameBufferObject extends GlObject implements Resizable{
     }
     
     public void bind(){
-        glBindFramebuffer(TARGET, ID);
+        glBindFramebuffer(GL_FRAMEBUFFER, ID);
     }
     
     

@@ -1,6 +1,6 @@
 package glit.graphics.postprocess;
 
-import glit.Glit;
+import glit.Pize;
 import glit.context.Resizable;
 import glit.graphics.gl.*;
 import glit.graphics.texture.Texture;
@@ -15,7 +15,7 @@ public class RenderBufferObject extends GlObject implements Resizable{
 
 
     public RenderBufferObject(int width, int height){
-        super(GL_RENDERBUFFER);
+        super(glGenRenderbuffers());
         
         this.width = width;
         this.height = height;
@@ -31,7 +31,7 @@ public class RenderBufferObject extends GlObject implements Resizable{
     }
 
     public RenderBufferObject(){
-        this(Glit.getWidth(), Glit.getHeight());
+        this(Pize.getWidth(), Pize.getHeight());
     }
 
 
@@ -45,12 +45,11 @@ public class RenderBufferObject extends GlObject implements Resizable{
 
     public void create(){
         texture.update();
-
-        ID = glGenRenderbuffers();
+        
         bind();
         glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture.getID(), 0);
-        glRenderbufferStorage(TARGET, texture.getSizedFormat().GL, width, height);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment, TARGET, ID);
+        glRenderbufferStorage(GL_RENDERBUFFER, texture.getSizedFormat().GL, width, height);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, ID);
         unbind();
     }
 
@@ -61,7 +60,7 @@ public class RenderBufferObject extends GlObject implements Resizable{
         texture.resize(width, height);
 
         bind();
-        glRenderbufferStorage(TARGET, texture.getSizedFormat().GL, width, height);
+        glRenderbufferStorage(GL_RENDERBUFFER, texture.getSizedFormat().GL, width, height);
         unbind();
     }
     
@@ -79,7 +78,7 @@ public class RenderBufferObject extends GlObject implements Resizable{
     }
     
     public void bind(){
-        glBindRenderbuffer(TARGET, ID);
+        glBindRenderbuffer(GL_RENDERBUFFER, ID);
     }
 
 

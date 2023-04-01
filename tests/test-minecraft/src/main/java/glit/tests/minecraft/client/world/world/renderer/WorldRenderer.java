@@ -1,6 +1,6 @@
 package glit.tests.minecraft.client.world.world.renderer;
 
-import glit.Glit;
+import glit.Pize;
 import glit.io.glfw.Key;
 import glit.tests.minecraft.client.game.Session;
 import glit.tests.minecraft.client.game.Renderer;
@@ -27,11 +27,11 @@ public class WorldRenderer implements Renderer{
         Key sprintKey = session.getOptions().getKey(KeyMapping.SPRINT);
         float fov = session.getOptions().getFov();
 
-        if(Glit.isDown(zoomKey))
+        if(Pize.isDown(zoomKey))
             camera.setFov(fov * 0.3F);
-        else if(Glit.isDown(sprintKey))
+        else if(Pize.isDown(sprintKey))
             camera.setFov(fov * 0.9F);
-        else if(Glit.isReleased(zoomKey, sprintKey))
+        else if(Pize.isReleased(zoomKey, sprintKey))
             camera.setFov(fov);
     }
 

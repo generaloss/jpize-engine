@@ -1,6 +1,6 @@
 package glit.tests.terraria.entity;
 
-import glit.Glit;
+import glit.Pize;
 import glit.graphics.util.batch.Batch;
 import glit.graphics.util.TextureUtils;
 import glit.io.glfw.Key;
@@ -54,11 +54,11 @@ public class Player extends Entity{
 
         // Moving
 
-        float delta = Glit.getDeltaTime();
+        float delta = Pize.getDeltaTime();
 
-        if(Glit.isPressed(Key.A))
+        if(Pize.isPressed(Key.A))
             getVelocity().x -= 0.7;
-        if(Glit.isPressed(Key.D))
+        if(Pize.isPressed(Key.D))
             getVelocity().x += 0.7;
 
         // Auto jump
@@ -81,7 +81,7 @@ public class Player extends Entity{
 
         getVelocity().y -= 2;
 
-        if(Glit.isPressed(Key.SPACE) && isCollideDown)
+        if(Pize.isPressed(Key.SPACE) && isCollideDown)
             getVelocity().y = 50;
 
         // Process collisions

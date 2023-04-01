@@ -1,21 +1,18 @@
 package glit.graphics.camera;
 
-import glit.Glit;
+import glit.Pize;
+import glit.context.Resizable;
 import glit.math.Maths;
 import glit.math.vecmath.matrix.Matrix4f;
 
-public class CenteredOrthographicCamera extends Camera2D{
-
-    private int width, height;
+public class CenteredOrthographicCamera extends Camera2D implements Resizable{
+    
     private float scale, rotation;
-
     private final Matrix4f projection, view, scalingMatrix, translationMatrix, rotationMatrix;
     private boolean dirtyProjection, imaginaryX, imaginaryY;
 
-
     public CenteredOrthographicCamera(int width, int height){
-        this.width = width;
-        this.height = height;
+        super(width, height);
 
         scale = 1;
         view = new Matrix4f();
@@ -28,7 +25,7 @@ public class CenteredOrthographicCamera extends Camera2D{
     }
 
     public CenteredOrthographicCamera(){
-        this(Glit.getWidth(), Glit.getHeight());
+        this(Pize.getWidth(), Pize.getHeight());
     }
 
 
@@ -48,12 +45,11 @@ public class CenteredOrthographicCamera extends Camera2D{
 
     @Override
     public void resize(int width, int height){
-        if(this.width != width || this.height != height){
-            this.width = width;
-            this.height = height;
-
-            dirtyProjection = true;
-        }
+        if(super.match(width, height))
+            return;
+    
+        setSize(width, height);
+        dirtyProjection = true;
     }
 
     public void setImaginaryOrigins(boolean x, boolean y){
@@ -93,16 +89,6 @@ public class CenteredOrthographicCamera extends Camera2D{
     @Override
     public Matrix4f getView(){
         return view;
-    }
-
-    @Override
-    public float getWidth(){
-        return width;
-    }
-
-    @Override
-    public float getHeight(){
-        return height;
     }
 
 }

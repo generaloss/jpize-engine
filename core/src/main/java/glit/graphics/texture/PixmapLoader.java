@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
 
 public class PixmapLoader{
 
-    public static Pixmap loadFrom(BufferedImage bufferedImage, boolean invX, boolean invY){
+    public static Pixmap load(BufferedImage bufferedImage, boolean invX, boolean invY){
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
 
@@ -35,30 +35,30 @@ public class PixmapLoader{
         return pixmap;
     }
 
-    public static Pixmap loadFrom(BufferedImage bufferedImage){
-        return loadFrom(bufferedImage, false, false);
+    public static Pixmap load(BufferedImage bufferedImage){
+        return load(bufferedImage, false, false);
     }
 
 
-    public static Pixmap loadFrom(FileHandle file, boolean invX, boolean invY){
+    public static Pixmap load(FileHandle file, boolean invX, boolean invY){
         try{
-            return loadFrom(ImageIO.read(file.input()), invX, invY);
+            return load(ImageIO.read(file.input()), invX, invY);
         }catch(IOException e){
             throw new RuntimeException("Pixmap " + file.input().toString() + " does not exists");
         }
     }
 
-    public static Pixmap loadFrom(FileHandle file){
-        return loadFrom(file, false, false);
+    public static Pixmap load(FileHandle file){
+        return load(file, false, false);
     }
 
 
-    public static Pixmap loadFrom(String filepath, boolean invX, boolean invY){
-        return loadFrom(new FileHandle(filepath), invX, invY);
+    public static Pixmap load(String filepath, boolean invX, boolean invY){
+        return load(new FileHandle(filepath), invX, invY);
     }
 
-    public static Pixmap loadFrom(String filepath){
-        return loadFrom(filepath, false, false);
+    public static Pixmap load(String filepath){
+        return load(filepath, false, false);
     }
 
 }

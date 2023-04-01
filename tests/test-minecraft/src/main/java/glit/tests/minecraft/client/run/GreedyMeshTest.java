@@ -1,6 +1,6 @@
 package glit.tests.minecraft.client.run;
 
-import glit.Glit;
+import glit.Pize;
 import glit.context.ContextListener;
 import glit.graphics.gl.Gl;
 import glit.graphics.texture.Pixmap;
@@ -115,20 +115,20 @@ public class GreedyMeshTest implements ContextListener{
 
     @Override
     public void render(){
-        Glit.window().setTitle("Minecraft (fps: " + Glit.getFps() + ")");
+        Pize.window().setTitle("Minecraft (fps: " + Pize.getFPS() + ")");
 
-        if(Glit.isDown(Key.ESCAPE))
-            Glit.exit();
-        if(Glit.isDown(Key.F11))
-            Glit.window().toggleFullscreen();
-        if(Glit.isDown(Key.V))
-            Glit.window().toggleVsync();
+        if(Pize.isDown(Key.ESCAPE))
+            Pize.exit();
+        if(Pize.isDown(Key.F11))
+            Pize.window().toggleFullscreen();
+        if(Pize.isDown(Key.V))
+            Pize.window().toggleVsync();
 
         Gl.clearBufferColor();
         Gl.clearColor(0.4, 0.6, 1);
         batch.begin();
 
-        if(Glit.isPressed(Key.S))
+        if(Pize.isPressed(Key.S))
             for(int i = 0; i < WIDTH; i++)
                 for(int j = 0; j < HEIGHT; j++){
                     batch.setColor(colors[map[i][j]]);
@@ -141,14 +141,14 @@ public class GreedyMeshTest implements ContextListener{
             }
         }
 
-        if(Glit.isDown(Key.S) || Glit.isReleased(Key.S))
+        if(Pize.isDown(Key.S) || Pize.isReleased(Key.S))
             System.out.println(batch.size());
 
-        if(Glit.isTouched()){
-            final int color = Glit.mouse().isLeftPressed() ? 1 : 0;
+        if(Pize.isTouched()){
+            final int color = Pize.mouse().isLeftPressed() ? 1 : 0;
 
-            int x = Glit.getX() / SIZE;
-            int y = Glit.getY() / SIZE;
+            int x = Pize.getX() / SIZE;
+            int y = Pize.getY() / SIZE;
 
             if(map[x][y] != color){
                 map[x][y] = color;

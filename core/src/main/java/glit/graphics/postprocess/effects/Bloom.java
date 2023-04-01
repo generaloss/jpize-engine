@@ -1,6 +1,6 @@
 package glit.graphics.postprocess.effects;
 
-import glit.Glit;
+import glit.Pize;
 import glit.files.FileHandle;
 import glit.graphics.postprocess.FrameBufferObject;
 import glit.graphics.postprocess.PostProcessEffect;
@@ -27,8 +27,8 @@ public class Bloom implements PostProcessEffect{
         exposure = 2F;
         gamma = 0.6F;
 
-        int width = Glit.getWidth();
-        int height = Glit.getHeight();
+        int width = Pize.getWidth();
+        int height = Pize.getHeight();
 
         // Frame Buffer 1 & Render Buffer
         colorBuffer = new FrameBufferObject(width, height);

@@ -1,6 +1,6 @@
 package glit.tests.minecraft.client.game.options;
 
-import glit.Glit;
+import glit.Pize;
 import glit.audio.Audio;
 import glit.files.FileHandle;
 import glit.io.glfw.Key;
@@ -25,11 +25,11 @@ public class Options{
     private int fov = 90;
     private int renderDistance = 8;
     private int mipmapLevels = 1;
-    private int maxFramerate = Glit.monitor().getRefreshRate();
+    private int maxFramerate = Pize.monitor().getRefreshRate();
     private boolean fullscreen = false;
     private boolean showFps = false;
     private float mouseSensitivity = 0.5F;
-    private String audioDevice = Glit.audio().getCurrent().getName();
+    private String audioDevice = Pize.audio().getCurrent().getName();
 
 
     public Options(Session session, String gameDirPath){
@@ -39,23 +39,25 @@ public class Options{
         keyMappings = new HashMap<>();
 
         optionsFile = new FileHandle(gameDirPath + "options.txt", true);
+        optionsFile.mkParentDirs();
         optionsFile.create();
-
-        load();
+        
         init();
     }
 
 
     private void init(){
+        load();
+        
         List<String> availableAudioDevices = Audio.getAvailableDevices();
         if(availableAudioDevices != null && availableAudioDevices.contains(audioDevice))
-            Glit.audio().getDevice(audioDevice).makeCurrent();
+            Pize.audio().getDevice(audioDevice).makeCurrent();
         else{
-            audioDevice = Glit.audio().getCurrent().getName();
+            audioDevice = Pize.audio().getCurrent().getName();
             save();
         }
 
-        Glit.window().setFullscreen(fullscreen);
+        Pize.window().setFullscreen(fullscreen);
         setMaxFramerate(maxFramerate, VideoSettingsScreen.MAX_SETTING_FRAMERATE);
     }
 
@@ -108,8 +110,7 @@ public class Options{
                     }
 
                 }
-            }catch(IllegalArgumentException ignored){
-            }
+            }catch(IllegalArgumentException ignored){ }
         }
 
         in.close();
@@ -196,7 +197,7 @@ public class Options{
         session.getFpsLimiter().setFps(maxFramerate);
 
         session.getFpsLimiter().enable(maxFramerate > 0 && maxFramerate < unlimitedThreshold);
-        Glit.window().setVsync(maxFramerate == 0);
+        Pize.window().setVsync(maxFramerate == 0);
     }
 
 
@@ -207,7 +208,7 @@ public class Options{
     public void setFullscreen(boolean fullscreen){
         this.fullscreen = fullscreen;
 
-        Glit.window().setFullscreen(fullscreen);
+        Pize.window().setFullscreen(fullscreen);
     }
 
 

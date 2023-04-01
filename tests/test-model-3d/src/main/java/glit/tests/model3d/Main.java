@@ -1,6 +1,6 @@
 package glit.tests.model3d;
 
-import glit.Glit;
+import glit.Pize;
 import glit.context.ContextListener;
 import glit.files.FileHandle;
 import glit.io.glfw.Key;
@@ -16,8 +16,8 @@ import java.util.stream.Stream;
 public class Main implements ContextListener{
 
     public static void main(String[] args){
-        Glit.create("Model 3D", 1280, 720);
-        Glit.init(new Main());
+        Pize.create("Model 3D", 1280, 720);
+        Pize.run(new Main());
     }
 
 
@@ -97,8 +97,8 @@ public class Main implements ContextListener{
 
     @Override
     public void render(){
-        if(Glit.isDown(Key.ESCAPE))
-            Glit.exit();
+        if(Pize.isDown(Key.ESCAPE))
+            Pize.exit();
     }
 
     @Override

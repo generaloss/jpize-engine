@@ -1,6 +1,6 @@
 package glit.tests.minecraft.server.server;
 
-import glit.Glit;
+import glit.Pize;
 import glit.io.glfw.Key;
 import glit.tests.minecraft.server.world.world.ServerWorld;
 import glit.tests.minecraft.utils.log.Logger;
@@ -66,7 +66,7 @@ public abstract class Server{
 
     private void tick(){
         // throw new Error(" I WANT pizza ");
-        if(Glit.isPressed(Key.F))
+        if(Pize.isPressed(Key.F))
             Logger.instance().debug("F IS PRESSED!!!!!");
     }
 

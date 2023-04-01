@@ -51,5 +51,10 @@ public class Random{
     public int randomSign(){
         return 1 | (random.nextInt() >> 31);
     }
+    
+    
+    public void randomBytes(byte[] bytes){
+        random.nextBytes(bytes);
+    }
 
 }

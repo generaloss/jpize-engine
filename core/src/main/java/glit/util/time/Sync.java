@@ -1,6 +1,6 @@
 package glit.util.time;
 
-import glit.Glit;
+import glit.Pize;
 
 public class Sync{
 
@@ -13,7 +13,7 @@ public class Sync{
     }
 
     public Sync(){
-        this(Glit.monitor().getRefreshRate());
+        this(Pize.monitor().getRefreshRate());
     }
 
     public void setFps(double fps){

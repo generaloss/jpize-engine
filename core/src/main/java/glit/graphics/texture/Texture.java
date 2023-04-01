@@ -14,23 +14,21 @@ public class Texture extends GlTexture implements Resizable{
     
     public Texture(int width, int height){
         super(GL_TEXTURE_2D);
-        
         resize(width, height);
     }
 
     public Texture(Pixmap pixmap){
         super(GL_TEXTURE_2D);
-        
         this.pixmap = pixmap;
         resize(pixmap.getWidth(), pixmap.getHeight());
     }
 
     public Texture(String filepath){
-        this(PixmapLoader.loadFrom(filepath));
+        this(PixmapLoader.load(filepath));
     }
 
     public Texture(FileHandle file){
-        this(PixmapLoader.loadFrom(file));
+        this(PixmapLoader.load(file));
     }
 
     public Texture(Texture texture){
@@ -46,20 +44,42 @@ public class Texture extends GlTexture implements Resizable{
 
     public void update(){
         bind();
-        texImage2D(pixmap != null ? pixmap.getBuffer() : null, width, height);
         parameters.use(GL_TEXTURE_2D);
+        parameters.texImage2D(GL_TEXTURE_2D, pixmap != null ? pixmap.getBuffer() : null, width, height);
         genMipMap();
     }
 
+    public void regenerateMipmapLevels(Pixmap... mipmaps){
+        if(mipmaps.length == 0)
+            return;
+    
+        bind();
+        parameters.setMipmapLevels(mipmaps.length);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, parameters.getMipmapLevels());
+        
+        for(int i = 0; i < parameters.getMipmapLevels(); i++){
+            Pixmap pixmap = mipmaps[i];
+            parameters.texImage2D(GL_TEXTURE_2D, pixmap.getBuffer(), pixmap.width, pixmap.height, i + 1);
+        }
+    }
+    
     public void regenerateMipmapLevels(int levels){
         if(parameters.getMipmapLevels() == levels)
             return;
-
+        
+        bind();
         parameters.setMipmapLevels(levels);
-
-        glBindTexture(GL_TEXTURE_2D, ID);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, parameters.getMipmapLevels());
-        glGenerateMipmap(GL_TEXTURE_2D);
+        genMipMap();
+    }
+    
+    protected void genMipMapManual(){
+        Pixmap pixmap = this.pixmap.getMipmapped();
+        for(int level = 1; level <= parameters.getMipmapLevels(); level++){
+            parameters.texImage2D(GL_TEXTURE_2D, pixmap.getBuffer(), pixmap.width, pixmap.height, level);
+            if(level != parameters.getMipmapLevels())
+                pixmap = pixmap.getMipmapped();
+        }
     }
 
     public Texture setPixmap(Pixmap pixmap){
@@ -69,8 +89,8 @@ public class Texture extends GlTexture implements Resizable{
         this.pixmap.set(pixmap);
         this.width = pixmap.getWidth();
         this.height = pixmap.getHeight();
-        
         update();
+        
         return this;
     }
     

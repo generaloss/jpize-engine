@@ -1,21 +1,19 @@
 package glit.graphics.vertex;
 
-import glit.context.Disposable;
 import glit.graphics.gl.BufferUsage;
+import glit.graphics.gl.GlObject;
 
 import java.nio.*;
 
 import static org.lwjgl.opengl.GL33.*;
 
-public class VertexBuffer implements Disposable{
+public class VertexBuffer extends GlObject{
 
-    private final int id;
     private int vertexSize;
     private long dataSize;
 
-
     public VertexBuffer(){
-        id = glGenBuffers();
+        super(glGenBuffers());
         bind();
     }
 
@@ -155,21 +153,17 @@ public class VertexBuffer implements Disposable{
 
 
     public void bind(){
-        glBindBuffer(GL_ARRAY_BUFFER, id);
+        glBindBuffer(GL_ARRAY_BUFFER, ID);
     }
 
     public static void unbind(){
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    public int getId(){
-        return id;
-    }
-
 
     @Override
     public void dispose(){
-        glDeleteBuffers(id);
+        glDeleteBuffers(ID);
     }
 
 }

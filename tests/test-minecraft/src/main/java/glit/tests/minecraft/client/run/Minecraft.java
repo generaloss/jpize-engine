@@ -1,6 +1,6 @@
 package glit.tests.minecraft.client.run;
 
-import glit.Glit;
+import glit.Pize;
 import glit.context.ContextListener;
 import glit.graphics.gl.DepthFunc;
 import glit.graphics.gl.Gl;
@@ -11,9 +11,9 @@ import glit.tests.minecraft.utils.log.Logger;
 public class Minecraft implements ContextListener{
 
     public static void main(String[] args){
-        Glit.create("Minecraft", 925, 530);
-        Glit.window().setIcon("icon.png");
-        Glit.init(new Minecraft());
+        Pize.create("Minecraft", 925, 530);
+        Pize.window().setIcon("icon.png");
+        Pize.run(new Minecraft());
     }
 
 
