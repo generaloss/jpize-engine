@@ -2,6 +2,7 @@ package megalul.projectvostok;
 
 import glit.Pize;
 import glit.graphics.camera.PerspectiveCamera;
+import glit.io.glfw.Key;
 import glit.math.vecmath.vector.Vec3f;
 import megalul.projectvostok.chunk.Chunk;
 import megalul.projectvostok.chunk.data.ChunkPos;
@@ -17,6 +18,7 @@ public class GameCamera extends PerspectiveCamera{
     private final Vec3f up = new Vec3f(0, 1, 0);
     private float dAngX, dAngY;
     private boolean doNotRotateInTheNextFrame;
+    private boolean doNotRotate;
 
     public GameCamera(Main session, double near, double far, double fieldOfView){
         super(near, far, fieldOfView);
@@ -29,8 +31,13 @@ public class GameCamera extends PerspectiveCamera{
 
 
     public void update(){
-        if(Pize.window().isFocused()){
-            if(!doNotRotateInTheNextFrame && Pize.mouse().inWindow()){
+        if(Pize.isDown(Key.R)){
+            doNotRotate = !doNotRotate;
+            Pize.mouse().show(doNotRotate);
+        }
+        
+        if(Pize.window().isFocused() && Pize.mouse().inWindow() && !doNotRotate){
+            if(!doNotRotateInTheNextFrame){
                 float x = Pize.mouse().getX();
                 float y = Pize.mouse().getY();
                 dAngX += Pize.getWidth() / 2F - x;
@@ -47,11 +54,11 @@ public class GameCamera extends PerspectiveCamera{
             Pize.mouse().setPos(Pize.getWidth() / 2, Pize.getHeight() / 2);
             doNotRotateInTheNextFrame = false;
         }
-
+        
 
         float speed = Pize.getDeltaTime() * 20;
         if(isPressed(KeyMapping.SPRINT))
-            speed *= 3;
+            speed *= 4;
 
         Vec3f dir = getRot().direction();
         Vec3f acceleration = dir.clone();

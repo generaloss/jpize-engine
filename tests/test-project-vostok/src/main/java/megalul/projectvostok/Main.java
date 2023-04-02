@@ -90,6 +90,7 @@ public class Main implements ContextListener{
 
         font.drawText(uiBatch, "1, 2, 3 - set render mode", 25, 25 + font.getScaledLineHeight() * 0);
         font.drawText(uiBatch, "B - set block in camera", 25, 25 + font.getScaledLineHeight() * 1);
+        font.drawText(uiBatch, "R - show mouse", 25, 25 + font.getScaledLineHeight() * 2);
 
         uiBatch.end();
     }
