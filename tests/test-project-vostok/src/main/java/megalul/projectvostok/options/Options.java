@@ -20,8 +20,8 @@ public class Options{
     private final FileHandle optionsFile;
 
     private final Map<KeyMapping, Key> keyMappings;
-    private int fov = 80;
-    private int renderDistance = 8;
+    private int fov = 90;
+    private int renderDistance = 16;
     private int maxFramerate = 0;
     private boolean fullscreen = false;
     private boolean showFps = false;

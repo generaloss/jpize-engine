@@ -44,6 +44,14 @@ public class Chunk{
         field.set(x, y, z, block);
     }
     
+    public int fastGetBlockID(int x, int y, int z){
+        return field.fastGetID(x, y, z);
+    }
+    
+    public void fastSetBlock(int x, int y, int z, BlockState block){
+        field.fastSet(x, y, z, block);
+    }
+    
     public boolean isDirty(){
         return field.isDirty();
     }
@@ -58,6 +66,10 @@ public class Chunk{
 
     public int getMinY(){
         return field.getHeightDepthMap().getMin();
+    }
+    
+    public ChunkField getField(){
+        return field;
     }
 
 

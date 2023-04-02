@@ -1,59 +1,50 @@
 package megalul.projectvostok.chunk.mesh;
 
 import glit.graphics.util.color.Color;
+import glit.util.time.Stopwatch;
+import megalul.projectvostok.Main;
 import megalul.projectvostok.block.BlockState;
+import megalul.projectvostok.block.blocks.Block;
 import megalul.projectvostok.chunk.Chunk;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static megalul.projectvostok.chunk.ChunkUtils.C_VOLUME;
 import static megalul.projectvostok.chunk.ChunkUtils.SIZE;
 
 public class ChunkBuilder{
 
-    public static final float AO_BRIGHTNESS = 0.65F;
+    public static final float AO_BRIGHTNESS = 0.75F;
     
-
-    private static final List<Float> verticesList = new ArrayList<>();
-    private static final byte[] masks = new byte[C_VOLUME];
+    
     private static Chunk chunk;
-
     private static int vertexIndex;
-    private static Color v_color = new Color();
-    private static float[] v_ao = new float[4];
+    private static final List<Float> verticesList = new ArrayList<>();
+    private static final Color v_color = new Color(1, 1, 1, 1F);
 
     public static float[] build(Chunk chunk){
+        Stopwatch timer = new Stopwatch().start();
+        
         ChunkBuilder.chunk = chunk;
         vertexIndex = 0;
 
         for(int x = 0; x < SIZE; x++)
             for(int z = 0; z < SIZE; z++){
-
-                // final int bx = x - 1; // Block X
-                // final int bz = z - 1; // Block Z
-
-                //final int hx = Maths.clamp(x, 0, SIZE_IDX);
-                //final int hz = Maths.clamp(z, 0, SIZE_IDX);
-
                 final int maxHeight = chunk.getHeight(x, z) + 1;
-
-                for(int y = chunk.getDepth(x, z); y < maxHeight; y++){
+                final int minHeight = Main.UPDATE_DEPTH_MAP ? chunk.getDepth(x, z) : 0;
+                
+                for(int y = minHeight; y < maxHeight; y++){
                     final BlockState block = chunk.getBlock(x, y, z);
                     if(block.getProp().isEmpty())
                         continue;
 
                     if(block.getProp().isSolid()){
-                        //byte mask = 0;
-
-                        if(chunk.getBlock(x - 1, y, z).getProp().isEmpty()) addNxFace(x, y, z);//mask |= 1;
-                        if(chunk.getBlock(x + 1, y, z).getProp().isEmpty()) addPxFace(x, y, z);//mask |= 2;
-                        if(chunk.getBlock(x, y - 1, z).getProp().isEmpty()) addNyFace(x, y, z);//mask |= 4;
-                        if(chunk.getBlock(x, y + 1, z).getProp().isEmpty()) addPyFace(x, y, z);//mask |= 8;
-                        if(chunk.getBlock(x, y, z - 1).getProp().isEmpty()) addNzFace(x, y, z);//mask |= 16;
-                        if(chunk.getBlock(x, y, z + 1).getProp().isEmpty()) addPzFace(x, y, z);//mask |= 32;
-
-                        //masks[getIndexC(bx, y, bz)] = mask;
+                        if(chunk.getBlock(x - 1, y, z).getProp().isEmpty()) addNxFace(x, y, z);
+                        if(chunk.getBlock(x + 1, y, z).getProp().isEmpty()) addPxFace(x, y, z);
+                        if(chunk.getBlock(x, y - 1, z).getProp().isEmpty()) addNyFace(x, y, z);
+                        if(chunk.getBlock(x, y + 1, z).getProp().isEmpty()) addPyFace(x, y, z);
+                        if(chunk.getBlock(x, y, z - 1).getProp().isEmpty()) addNzFace(x, y, z);
+                        if(chunk.getBlock(x, y, z + 1).getProp().isEmpty()) addPzFace(x, y, z);
                     }
                 }
             }
@@ -64,97 +55,29 @@ public class ChunkBuilder{
         // addVertex(16, 200, 16, 1, 1);
         // addVertex(0 , 200, 16, 0, 1);
         // addVertex(0 , 200, 0 , 0, 0);
-
-        /*for(int i = 0; i < masks.length; i++){
-            final int x = i % C_SIZE;
-            if(x == 0 || x == C_SIZE_IDX)
-                continue;
-            final int z = (i - x) / C_SIZE % C_SIZE;
-            if(z == 0  || z == C_SIZE_IDX)
-                continue;
-            final int y = (i - x - z * C_SIZE) / C_AREA;
-            final byte mask = masks[i];
-
-            final int bx = x - 1;
-            final int bz = z - 1;
-
-            if((mask      & 1) == 1){
-                setAO(AO[
-                        (((masks[getIndexC(x, y, z)] << 0 & 1))     ) |
-                        (((masks[getIndexC(x, y, z)] << 0 & 1)) << 1) |
-                        (((masks[getIndexC(x, y, z)] << 0 & 1)) << 2) |
-                        (((masks[getIndexC(x, y, z)] << 0 & 1)) << 3)
-                ]);
-                addNxFace(bx, y, bz);
-            }
-            if((mask >> 1 & 1) == 1){
-                setAO(AO[
-                        (((masks[getIndexC(x, y, z)] << 0 & 1))     ) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 1) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 2) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 3)
-                        ]);
-                addPxFace(bx, y, bz);
-            }
-            if((mask >> 2 & 1) == 1){
-                setAO(AO[
-                        (((masks[getIndexC(x, y, z)] << 0 & 1))     ) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 1) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 2) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 3)
-                        ]);
-                addNyFace(bx, y, bz);
-            }
-            if((mask >> 3 & 1) == 1){
-                setAO(AO[
-                        (((masks[getIndexC(x, y, z)] << 0 & 1))     ) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 1) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 2) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 3)
-                        ]);
-                addPyFace(bx, y, bz);
-            }
-            if((mask >> 4 & 1) == 1){
-                setAO(AO[
-                        (((masks[getIndexC(x, y, z)] << 0 & 1))     ) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 1) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 2) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 3)
-                        ]);
-                addNzFace(bx, y, bz);
-            }
-            if((mask >> 5 & 1) == 1){
-                setAO(AO[
-                        (((masks[getIndexC(x, y, z)] << 0 & 1))     ) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 1) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 2) |
-                                (((masks[getIndexC(x, y, z)] << 0 & 1)) << 3)
-                        ]);
-                addPzFace(bx, y, bz);
-            }
-        }*/
-
+        
         float[] array = new float[verticesList.size()];
         for(int i = 0; i < array.length; i++)
             array[i] = verticesList.get(i);
 
         verticesList.clear();
-        Arrays.fill(masks, (byte) 0);
-
+    
+        // System.out.println("Build: " + timer.getMillis() + " (" + vertexIndex + " vertices)");
+        
         return array;
     }
     
     
     public static float getAO(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3){
         return
-            chunk.getBlock(x1, y1, z1).getProp().isSolid() ||
-            chunk.getBlock(x2, y2, z2).getProp().isSolid() ||
-            chunk.getBlock(x3, y3, z3).getProp().isSolid()
+            chunk.fastGetBlockID(x1, y1, z1) != Block.AIR.id ||
+            chunk.fastGetBlockID(x2, y2, z2) != Block.AIR.id ||
+            chunk.fastGetBlockID(x3, y3, z3) != Block.AIR.id
             ? AO_BRIGHTNESS : 1;
     }
     
 
-    private static void addNxFace(int x, int y, int z){
+    private static void addNxFace(int x, int y, int z){ // No errors
         float ao0 = getAO(x-1, y+1, z,  x-1, y, z+1,  x-1, y+1, z+1);
         float ao1 = getAO(x-1, y-1, z,  x-1, y, z+1,  x-1, y-1, z+1);
         float ao2 = getAO(x-1, y-1, z,  x-1, y, z-1,  x-1, y-1, z-1);
@@ -168,7 +91,7 @@ public class ChunkBuilder{
         addVertex(x  , y+1, z+1, 1, 1, ao0 * 0.75F);
     }
 
-    private static void addPxFace(int x, int y, int z){
+    private static void addPxFace(int x, int y, int z){ // No errors
         float ao0 = getAO(x+1, y+1, z,  x+1, y, z-1,  x+1, y+1, z-1);
         float ao1 = getAO(x+1, y-1, z,  x+1, y, z-1,  x+1, y-1, z-1);
         float ao2 = getAO(x+1, y-1, z,  x+1, y, z+1,  x+1, y-1, z+1);
@@ -182,7 +105,7 @@ public class ChunkBuilder{
         addVertex(x+1, y+1, z  , 1, 1, ao0 * 0.75F);
     }
 
-    private static void addNyFace(int x, int y, int z){
+    private static void addNyFace(int x, int y, int z){ // No errors
         float ao0 = getAO(x+1, y-1, z,  x, y-1, z-1,  x+1, y-1, z-1);
         float ao1 = getAO(x-1, y-1, z,  x, y-1, z-1,  x-1, y-1, z-1);
         float ao2 = getAO(x-1, y-1, z,  x, y-1, z+1,  x-1, y-1, z+1);
@@ -196,7 +119,7 @@ public class ChunkBuilder{
         addVertex(x+1, y  , z  , 1, 1, ao0 * 0.7F);
     }
 
-    private static void addPyFace(int x, int y, int z){
+    private static void addPyFace(int x, int y, int z){ // No errors
         float ao0 = getAO(x-1, y+1, z,  x, y+1, z-1,  x-1, y+1, z-1);
         float ao1 = getAO(x+1, y+1, z,  x, y+1, z-1,  x+1, y+1, z-1);
         float ao2 = getAO(x+1, y+1, z,  x, y+1, z+1,  x+1, y+1, z+1);
@@ -225,8 +148,8 @@ public class ChunkBuilder{
     }
 
     private static void addPzFace(int x, int y, int z){
-        float ao0 = getAO(x+1, y, z+1,  x, y-1, z+1,  x-1, y+1, z-1);
-        float ao1 = getAO(x-1, y, z+1,  x, y-1, z+1,  x+1, y-1, z-1);
+        float ao0 = getAO(x+1, y, z+1,  x, y-1, z+1,  x+1, y-1, z+1);
+        float ao1 = getAO(x-1, y, z+1,  x, y-1, z+1,  x-1, y-1, z+1);
         float ao2 = getAO(x-1, y, z+1,  x, y+1, z+1,  x-1, y+1, z+1);
         float ao3 = getAO(x+1, y, z+1,  x, y+1, z+1,  x+1, y+1, z+1);
     

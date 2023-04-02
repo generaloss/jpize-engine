@@ -4,8 +4,7 @@ import megalul.projectvostok.block.blocks.Block;
 
 public class BlockState{
 
-    public static final BlockState AIR = new BlockState(Block.AIR);
-
+    public static final BlockState AIR = Block.AIR.getState();
 
     private final short state; // 8bits=data, 8bits=id
     private final Block type;

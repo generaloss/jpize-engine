@@ -1,7 +1,7 @@
-graphics.fov : 110
+graphics.fov : 90
 graphics.renderDistance : 16
 graphics.maxFramerate : 0
-graphics.fullscreen : false
+graphics.fullscreen : true
 graphics.showFps : true
 control.mouseSensitivity : 0.5
 key.forward : w
