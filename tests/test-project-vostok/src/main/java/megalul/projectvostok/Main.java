@@ -48,8 +48,7 @@ public class Main implements ContextListener{
         font = FontLoader.getDefault();
     
         camera = new GameCamera(this, 0.1, 1000, 110);
-        //camera.getPos().y = ChunkUtils.HEIGHT;
-        camera.getPos().set(9, 126, -31);
+        camera.getPos().y = 16 + 128 + 1;
         camera.getRot().set(0, 0, 0);
 
         fpsSync = new Sync(0);

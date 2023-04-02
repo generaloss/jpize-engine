@@ -237,7 +237,6 @@ public class ChunkProvider{
                 }
     
         // corners
-        
         neighbor = allChunks.get(chunk.getPos().getNeighbor(-1, 1));
         if(neighbor != null)
             for(int y = 0; y < HEIGHT; y++){
