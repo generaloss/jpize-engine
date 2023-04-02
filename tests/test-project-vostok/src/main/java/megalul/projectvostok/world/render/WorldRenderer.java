@@ -28,8 +28,7 @@ public class WorldRenderer implements Disposable{
         chunkShader = new Shader(new FileHandle("shader/chunk.vert"), new FileHandle("shader/chunk.frag"));
         chunkMatrix = new Matrix4f();
         
-        atlasTexture = new Texture("texture/atlas_0.png");
-        //atlasTexture.regenerateMipmapLevels(PixmapLoader.load("texture/atlas_1.png"), PixmapLoader.load("texture/atlas_2.png"),PixmapLoader.load("texture/atlas_3.png"), PixmapLoader.load("texture/atlas_4.png"));
+        atlasTexture = new Texture("texture/stone.png");
     }
 
     public void render(){

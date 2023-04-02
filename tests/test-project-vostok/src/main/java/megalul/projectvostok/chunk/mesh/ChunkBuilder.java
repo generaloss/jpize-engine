@@ -12,19 +12,19 @@ import static megalul.projectvostok.chunk.ChunkUtils.SIZE;
 
 public class ChunkBuilder{
 
-    public static final float AO_BRIGHTNESS = 0.5F;
-    public static final int[] AO_INDICES = new int[]{ 3, 0, 1, 1, 2, 3 };
-    public static final byte[] AO = calcAO();
-
+    public static final float AO_BRIGHTNESS = 0.65F;
+    
 
     private static final List<Float> verticesList = new ArrayList<>();
     private static final byte[] masks = new byte[C_VOLUME];
+    private static Chunk chunk;
 
     private static int vertexIndex;
     private static Color v_color = new Color();
     private static float[] v_ao = new float[4];
 
     public static float[] build(Chunk chunk){
+        ChunkBuilder.chunk = chunk;
         vertexIndex = 0;
 
         for(int x = 0; x < SIZE; x++)
@@ -143,87 +143,103 @@ public class ChunkBuilder{
 
         return array;
     }
-
-
-
-
-
-
-
-    private static void setAO(byte ao){
-        for(int i = 0; i < 4; i++)
-            v_ao[i] = (ao >> i & 1) == 1 ? AO_BRIGHTNESS : 1;
+    
+    
+    public static float getAO(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3){
+        return
+            chunk.getBlock(x1, y1, z1).getProp().isSolid() ||
+            chunk.getBlock(x2, y2, z2).getProp().isSolid() ||
+            chunk.getBlock(x3, y3, z3).getProp().isSolid()
+            ? AO_BRIGHTNESS : 1;
     }
-
-    private static byte[] calcAO(){
-        byte[] ao = new byte[8 * 8];
-
-        for(int i = 0; i < ao.length; i++){
-            int v1 = i % 2;
-        }
-
-        return ao;
-    }
-
+    
 
     private static void addNxFace(int x, int y, int z){
-        addVertex(x  , y+1, z+1, 1, 1);
-        addVertex(x  , y  , z+1, 0, 1);
-        addVertex(x  , y  , z  , 0, 0);
-        addVertex(x  , y  , z  , 0, 0);
-        addVertex(x  , y+1, z  , 1, 0);
-        addVertex(x  , y+1, z+1, 1, 1);
+        float ao0 = getAO(x-1, y+1, z,  x-1, y, z+1,  x-1, y+1, z+1);
+        float ao1 = getAO(x-1, y-1, z,  x-1, y, z+1,  x-1, y-1, z+1);
+        float ao2 = getAO(x-1, y-1, z,  x-1, y, z-1,  x-1, y-1, z-1);
+        float ao3 = getAO(x-1, y+1, z,  x-1, y, z-1,  x-1, y+1, z-1);
+        
+        addVertex(x  , y+1, z+1, 1, 1, ao0 * 0.75F);
+        addVertex(x  , y  , z+1, 0, 1, ao1 * 0.75F);
+        addVertex(x  , y  , z  , 0, 0, ao2 * 0.75F);
+        addVertex(x  , y  , z  , 0, 0, ao2 * 0.75F);
+        addVertex(x  , y+1, z  , 1, 0, ao3 * 0.75F);
+        addVertex(x  , y+1, z+1, 1, 1, ao0 * 0.75F);
     }
 
     private static void addPxFace(int x, int y, int z){
-        addVertex(x+1, y+1, z  , 1, 1);
-        addVertex(x+1, y  , z  , 0, 1);
-        addVertex(x+1, y  , z+1, 0, 0);
-        addVertex(x+1, y  , z+1, 0, 0);
-        addVertex(x+1, y+1, z+1, 1, 0);
-        addVertex(x+1, y+1, z  , 1, 1);
+        float ao0 = getAO(x+1, y+1, z,  x+1, y, z-1,  x+1, y+1, z-1);
+        float ao1 = getAO(x+1, y-1, z,  x+1, y, z-1,  x+1, y-1, z-1);
+        float ao2 = getAO(x+1, y-1, z,  x+1, y, z+1,  x+1, y-1, z+1);
+        float ao3 = getAO(x+1, y+1, z,  x+1, y, z+1,  x+1, y+1, z+1);
+    
+        addVertex(x+1, y+1, z  , 1, 1, ao0 * 0.75F);
+        addVertex(x+1, y  , z  , 0, 1, ao1 * 0.75F);
+        addVertex(x+1, y  , z+1, 0, 0, ao2 * 0.75F);
+        addVertex(x+1, y  , z+1, 0, 0, ao2 * 0.75F);
+        addVertex(x+1, y+1, z+1, 1, 0, ao3 * 0.75F);
+        addVertex(x+1, y+1, z  , 1, 1, ao0 * 0.75F);
     }
 
     private static void addNyFace(int x, int y, int z){
-        addVertex(x+1, y  , z  , 1, 1);
-        addVertex(x  , y  , z  , 0, 1);
-        addVertex(x  , y  , z+1, 0, 0);
-        addVertex(x  , y  , z+1, 0, 0);
-        addVertex(x+1, y  , z+1, 1, 0);
-        addVertex(x+1, y  , z  , 1, 1);
+        float ao0 = getAO(x+1, y-1, z,  x, y-1, z-1,  x+1, y-1, z-1);
+        float ao1 = getAO(x-1, y-1, z,  x, y-1, z-1,  x-1, y-1, z-1);
+        float ao2 = getAO(x-1, y-1, z,  x, y-1, z+1,  x-1, y-1, z+1);
+        float ao3 = getAO(x+1, y-1, z,  x, y-1, z+1,  x+1, y-1, z+1);
+    
+        addVertex(x+1, y  , z  , 1, 1, ao0 * 0.7F);
+        addVertex(x  , y  , z  , 0, 1, ao1 * 0.7F);
+        addVertex(x  , y  , z+1, 0, 0, ao2 * 0.7F);
+        addVertex(x  , y  , z+1, 0, 0, ao2 * 0.7F);
+        addVertex(x+1, y  , z+1, 1, 0, ao3 * 0.7F);
+        addVertex(x+1, y  , z  , 1, 1, ao0 * 0.7F);
     }
 
     private static void addPyFace(int x, int y, int z){
-        addVertex(x  , y+1, z  , 0, 0);
-        addVertex(x+1, y+1, z  , 1, 0);
-        addVertex(x+1, y+1, z+1, 1, 1);
-        addVertex(x+1, y+1, z+1, 1, 1);
-        addVertex(x  , y+1, z+1, 0, 1);
-        addVertex(x  , y+1, z  , 0, 0);
+        float ao0 = getAO(x-1, y+1, z,  x, y+1, z-1,  x-1, y+1, z-1);
+        float ao1 = getAO(x+1, y+1, z,  x, y+1, z-1,  x+1, y+1, z-1);
+        float ao2 = getAO(x+1, y+1, z,  x, y+1, z+1,  x+1, y+1, z+1);
+        float ao3 = getAO(x-1, y+1, z,  x, y+1, z+1,  x-1, y+1, z+1);
+    
+        addVertex(x  , y+1, z  , 0, 0, ao0);
+        addVertex(x+1, y+1, z  , 1, 0, ao1);
+        addVertex(x+1, y+1, z+1, 1, 1, ao2);
+        addVertex(x+1, y+1, z+1, 1, 1, ao2);
+        addVertex(x  , y+1, z+1, 0, 1, ao3);
+        addVertex(x  , y+1, z  , 0, 0, ao0);
     }
 
     private static void addNzFace(int x, int y, int z){
-        addVertex(x  , y   ,z  , 0, 0);
-        addVertex(x+1, y   ,z  , 1, 0);
-        addVertex(x+1, y+1 ,z  , 1, 1);
-        addVertex(x+1, y+1 ,z  , 1, 1);
-        addVertex(x  , y+1 ,z  , 0, 1);
-        addVertex(x  , y   ,z  , 0, 0);
+        float ao0 = getAO(x-1, y, z-1,  x, y-1, z-1,  x-1, y-1, z-1);
+        float ao1 = getAO(x+1, y, z-1,  x, y-1, z-1,  x+1, y-1, z-1);
+        float ao2 = getAO(x+1, y, z-1,  x, y+1, z-1,  x+1, y+1, z-1);
+        float ao3 = getAO(x-1, y, z-1,  x, y+1, z-1,  x-1, y+1, z-1);
+    
+        addVertex(x  , y   ,z  , 0, 0, ao0 * 0.9F);
+        addVertex(x+1, y   ,z  , 1, 0, ao1 * 0.9F);
+        addVertex(x+1, y+1 ,z  , 1, 1, ao2 * 0.9F);
+        addVertex(x+1, y+1 ,z  , 1, 1, ao2 * 0.9F);
+        addVertex(x  , y+1 ,z  , 0, 1, ao3 * 0.9F);
+        addVertex(x  , y   ,z  , 0, 0, ao0 * 0.9F);
     }
 
     private static void addPzFace(int x, int y, int z){
-        addVertex(x+1, y  , z+1, 0, 0);
-        addVertex(x  , y  , z+1, 1, 0);
-        addVertex(x  , y+1, z+1, 1, 1);
-        addVertex(x  , y+1, z+1, 1, 1);
-        addVertex(x+1, y+1, z+1, 0, 1);
-        addVertex(x+1, y  , z+1, 0, 0);
+        float ao0 = getAO(x+1, y, z+1,  x, y-1, z+1,  x-1, y+1, z-1);
+        float ao1 = getAO(x-1, y, z+1,  x, y-1, z+1,  x+1, y-1, z-1);
+        float ao2 = getAO(x-1, y, z+1,  x, y+1, z+1,  x-1, y+1, z+1);
+        float ao3 = getAO(x+1, y, z+1,  x, y+1, z+1,  x+1, y+1, z+1);
+    
+        addVertex(x+1, y  , z+1, 0, 0, ao0 * 0.9F);
+        addVertex(x  , y  , z+1, 1, 0, ao1 * 0.9F);
+        addVertex(x  , y+1, z+1, 1, 1, ao2 * 0.9F);
+        addVertex(x  , y+1, z+1, 1, 1, ao2 * 0.9F);
+        addVertex(x+1, y+1, z+1, 0, 1, ao3 * 0.9F);
+        addVertex(x+1, y  , z+1, 0, 0, ao0 * 0.9F);
     }
 
 
-    private static void addVertex(float x, float y, float z, float u, float v){
-        float ao = 1;//v_ao[AO_INDICES[vertexIndex % 6]];
-
+    private static void addVertex(float x, float y, float z, float u, float v, float ao){
         verticesList.add(x);
         verticesList.add(y);
         verticesList.add(z);
@@ -231,8 +247,8 @@ public class ChunkBuilder{
         verticesList.add(v_color.g() * ao);
         verticesList.add(v_color.b() * ao);
         verticesList.add(v_color.a());
-        verticesList.add((u + 1) / 3);
-        verticesList.add((v + 1) / 3);
+        verticesList.add((u));// + 1) / 3);
+        verticesList.add((v));// + 1) / 3);
 
         vertexIndex++;
     }

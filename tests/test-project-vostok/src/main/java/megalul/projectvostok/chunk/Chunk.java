@@ -43,7 +43,7 @@ public class Chunk{
     public void setBlock(int x, int y, int z, BlockState block){
         field.set(x, y, z, block);
     }
-
+    
     public boolean isDirty(){
         return field.isDirty();
     }
@@ -75,5 +75,5 @@ public class Chunk{
     public int hashCode(){
         return position.hashCode();
     }
-
+    
 }

@@ -49,7 +49,7 @@ public class GameCamera extends PerspectiveCamera{
         }
 
 
-        float speed = Pize.getDeltaTime() * 150;
+        float speed = Pize.getDeltaTime() * 15;
         if(isPressed(KeyMapping.SPRINT))
             speed *= 3;
 

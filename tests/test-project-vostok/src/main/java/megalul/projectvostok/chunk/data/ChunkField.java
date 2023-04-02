@@ -75,30 +75,84 @@ public class ChunkField{
 
 
     private void updateEdgesOfNeighborChunks(int x, int y, int z, BlockState block){
+        Chunk neighbor;
         if(x == 0){
-            Chunk neighbor = getNeighbor(-1, 0);
+            neighbor = getNeighbor(-1, 0);
             if(neighbor != null){
                 neighbor.setBlock(SIZE, y, z, block);
                 chunkOf.getProvider().rebuildChunk(neighbor);
             }
+            if(z == 0){
+                neighbor = getNeighbor(-1, -1);
+                if(neighbor != null){
+                    neighbor.setBlock(SIZE, y, SIZE, block);
+                    chunkOf.getProvider().rebuildChunk(neighbor);
+                }
+            }else if(z == SIZE_IDX){
+                neighbor = getNeighbor(-1 , 1);
+                if(neighbor != null){
+                    neighbor.setBlock(SIZE, y, -1, block);
+                    chunkOf.getProvider().rebuildChunk(neighbor);
+                }
+            }
         }else if(x == SIZE_IDX){
-            Chunk neighbor = getNeighbor(1, 0);
+            neighbor = getNeighbor(1, 0);
             if(neighbor != null){
                 neighbor.setBlock(-1, y, z, block);
                 chunkOf.getProvider().rebuildChunk(neighbor);
             }
+            if(z == 0){
+                neighbor = getNeighbor(1, -1);
+                if(neighbor != null){
+                    neighbor.setBlock(-1, y, SIZE, block);
+                    chunkOf.getProvider().rebuildChunk(neighbor);
+                }
+            }else if(z == SIZE_IDX){
+                neighbor = getNeighbor(1 , 1);
+                if(neighbor != null){
+                    neighbor.setBlock(-1, y, -1, block);
+                    chunkOf.getProvider().rebuildChunk(neighbor);
+                }
+            }
         }
+        
         if(z == 0){
-            Chunk neighbor = getNeighbor(0, -1);
+            neighbor = getNeighbor(0, -1);
             if(neighbor != null){
                 neighbor.setBlock(x, y, SIZE, block);
                 chunkOf.getProvider().rebuildChunk(neighbor);
             }
+            if(x == 0){
+                neighbor = getNeighbor(-1, -1);
+                if(neighbor != null){
+                    neighbor.setBlock(SIZE, y, SIZE, block);
+                    chunkOf.getProvider().rebuildChunk(neighbor);
+                }
+            }else if(x == SIZE_IDX){
+                neighbor = getNeighbor(1, -1);
+                if(neighbor != null){
+                    neighbor.setBlock(-1, y, SIZE, block);
+                    chunkOf.getProvider().rebuildChunk(neighbor);
+                }
+            }
         }else if(z == SIZE_IDX){
-            Chunk neighbor = getNeighbor(0 , 1);
+            neighbor = getNeighbor(0 , 1);
             if(neighbor != null){
                 neighbor.setBlock(x, y, -1, block);
                 chunkOf.getProvider().rebuildChunk(neighbor);
+            }
+            if(x == 0){
+                neighbor = getNeighbor(-1, 1);
+                if(neighbor != null){
+                    neighbor.setBlock(SIZE, y, -1, block);
+                    chunkOf.getProvider().rebuildChunk(neighbor);
+                }
+            }else if(x == SIZE_IDX){
+                neighbor = getNeighbor(1, 1);
+                if(neighbor != null){
+                    neighbor.setBlock(-1, y, -1, block);
+                    chunkOf.getProvider().rebuildChunk(neighbor);
+                }
             }
         }
     }

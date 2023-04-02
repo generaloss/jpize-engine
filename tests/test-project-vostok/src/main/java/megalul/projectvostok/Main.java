@@ -26,7 +26,7 @@ public class Main implements ContextListener{
 
 
     public static void main(String[] args){
-        Pize.create("Project Vostok", 1280, 720);
+        Pize.create("Project Vostok", 2440, 1280);
 
         Gl.enable(Target.DEPTH_TEST);
 

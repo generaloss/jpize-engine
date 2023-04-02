@@ -36,7 +36,7 @@ public class TextureParameters{
     
         mipmapLevels = 4;
         anisotropyLevels = 0;
-        lodBias = -15;
+        lodBias = -glGetFloat(GL_MAX_TEXTURE_LOD_BIAS);
     }
     
     

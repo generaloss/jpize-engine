@@ -235,6 +235,37 @@ public class ChunkProvider{
                     if(loaded)
                         chunk.setBlock(i, y, SIZE, neighbor.getBlock(i, y, 0));
                 }
+    
+        // corners
+        
+        neighbor = allChunks.get(chunk.getPos().getNeighbor(-1, 1));
+        if(neighbor != null)
+            for(int y = 0; y < HEIGHT; y++){
+                neighbor.setBlock(SIZE, y, -1, loaded ? chunk.getBlock(0, y, SIZE_IDX) : BlockState.AIR);
+                if(loaded)
+                    chunk.setBlock(-1, y, SIZE, neighbor.getBlock(SIZE_IDX, y, 0));
+            }
+        neighbor = allChunks.get(chunk.getPos().getNeighbor(1, 1));
+        if(neighbor != null)
+            for(int y = 0; y < HEIGHT; y++){
+                neighbor.setBlock(-1, y, -1, loaded ? chunk.getBlock(SIZE_IDX, y, SIZE_IDX) : BlockState.AIR);
+                if(loaded)
+                    chunk.setBlock(SIZE, y, SIZE, neighbor.getBlock(0, y, 0));
+            }
+        neighbor = allChunks.get(chunk.getPos().getNeighbor(-1, -1));
+        if(neighbor != null)
+            for(int y = 0; y < HEIGHT; y++){
+                neighbor.setBlock(SIZE, y, SIZE, loaded ? chunk.getBlock(0, y, 0) : BlockState.AIR);
+                if(loaded)
+                    chunk.setBlock(SIZE, y, -1, neighbor.getBlock(0, y, SIZE_IDX));
+            }
+        neighbor = allChunks.get(chunk.getPos().getNeighbor(-1, 1));
+        if(neighbor != null)
+            for(int y = 0; y < HEIGHT; y++){
+                neighbor.setBlock(SIZE, y, -1, loaded ? chunk.getBlock(0, y, SIZE_IDX) : BlockState.AIR);
+                if(loaded)
+                    chunk.setBlock(-1, y, SIZE, neighbor.getBlock(SIZE_IDX, y, 0));
+            }
     }
 
 
