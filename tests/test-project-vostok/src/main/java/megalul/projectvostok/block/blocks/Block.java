@@ -11,17 +11,15 @@ public enum Block{
     
     public final int id;
     public final BlockProperties properties;
-    private BlockState defaultState;
+    private final short defaultState;
 
     Block(BlockProperties properties){
         this.id = properties.getID();
         this.properties = properties;
+        defaultState = BlockState.getState(id);
     }
 
-    public BlockState getState(){
-        if(defaultState == null)
-            defaultState = new BlockState(this);
-        
+    public short getState(){
         return defaultState;
     }
 

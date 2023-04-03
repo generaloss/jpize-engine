@@ -5,14 +5,17 @@ import glit.math.vecmath.vector.Vec2f;
 import glit.math.vecmath.vector.Vec3f;
 import glit.util.time.FpsCounter;
 import megalul.projectvostok.Main;
-import megalul.projectvostok.block.BlockState;
+import megalul.projectvostok.block.blocks.Block;
 import megalul.projectvostok.chunk.Chunk;
 import megalul.projectvostok.chunk.data.ChunkPos;
 import megalul.projectvostok.chunk.gen.DefaultGenerator;
 import megalul.projectvostok.chunk.mesh.ChunkBuilder;
 import megalul.projectvostok.chunk.mesh.ChunkMesh;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -147,8 +150,6 @@ public class ChunkProvider{
         for(Chunk chunk: allChunks.values()){
             if(isOffTheGrid(chunk.getPos()))
                 unloadChunk(chunk);
-            else if(chunk.isDirty())
-                rebuildChunk(chunk);
         }
     
         for(Chunk chunk: allMeshes.keySet())
@@ -193,7 +194,6 @@ public class ChunkProvider{
 
         mesh.setVertices(vertices);
         allMeshes.put(chunk, mesh);
-        chunk.onMeshUpdate();
     }
 
     public void rebuildChunk(Chunk chunk){
@@ -207,7 +207,7 @@ public class ChunkProvider{
         if(neighbor != null)
             for(int i = 0; i < SIZE; i++)
                 for(int y = 0; y < HEIGHT; y++){
-                    neighbor.setBlock(SIZE, y, i, loaded ? chunk.getBlock(0, y, i) : BlockState.AIR);
+                    neighbor.setBlock(SIZE, y, i, loaded ? chunk.getBlock(0, y, i) : Block.AIR.getState());
                     if(loaded)
                         chunk.setBlock(-1, y, i, neighbor.getBlock(SIZE_IDX, y, i));
                 }
@@ -215,7 +215,7 @@ public class ChunkProvider{
         if(neighbor != null)
             for(int i = 0; i < SIZE; i++)
                 for(int y = 0; y < HEIGHT; y++){
-                    neighbor.setBlock(-1, y, i, loaded ? chunk.getBlock(SIZE_IDX, y, i) : BlockState.AIR);
+                    neighbor.setBlock(-1, y, i, loaded ? chunk.getBlock(SIZE_IDX, y, i) : Block.AIR.getState());
                     if(loaded)
                         chunk.setBlock(SIZE, y, i, neighbor.getBlock(0, y, i));
                 }
@@ -223,7 +223,7 @@ public class ChunkProvider{
         if(neighbor != null)
             for(int i = 0; i < SIZE; i++)
                 for(int y = 0; y < HEIGHT; y++){
-                    neighbor.setBlock(i, y, SIZE, loaded ? chunk.getBlock(i, y, 0) : BlockState.AIR);
+                    neighbor.setBlock(i, y, SIZE, loaded ? chunk.getBlock(i, y, 0) : Block.AIR.getState());
                     if(loaded)
                         chunk.setBlock(i, y, -1, neighbor.getBlock(i, y, SIZE_IDX));
                 }
@@ -231,7 +231,7 @@ public class ChunkProvider{
         if(neighbor != null)
             for(int i = 0; i < SIZE; i++)
                 for(int y = 0; y < HEIGHT; y++){
-                    neighbor.setBlock(i, y, -1, loaded ? chunk.getBlock(i, y, SIZE_IDX) : BlockState.AIR);
+                    neighbor.setBlock(i, y, -1, loaded ? chunk.getBlock(i, y, SIZE_IDX) : Block.AIR.getState());
                     if(loaded)
                         chunk.setBlock(i, y, SIZE, neighbor.getBlock(i, y, 0));
                 }
@@ -240,28 +240,28 @@ public class ChunkProvider{
         neighbor = allChunks.get(chunk.getPos().getNeighbor(-1, 1));
         if(neighbor != null)
             for(int y = 0; y < HEIGHT; y++){
-                neighbor.setBlock(SIZE, y, -1, loaded ? chunk.getBlock(0, y, SIZE_IDX) : BlockState.AIR);
+                neighbor.setBlock(SIZE, y, -1, loaded ? chunk.getBlock(0, y, SIZE_IDX) : Block.AIR.getState());
                 if(loaded)
                     chunk.setBlock(-1, y, SIZE, neighbor.getBlock(SIZE_IDX, y, 0));
             }
         neighbor = allChunks.get(chunk.getPos().getNeighbor(1, 1));
         if(neighbor != null)
             for(int y = 0; y < HEIGHT; y++){
-                neighbor.setBlock(-1, y, -1, loaded ? chunk.getBlock(SIZE_IDX, y, SIZE_IDX) : BlockState.AIR);
+                neighbor.setBlock(-1, y, -1, loaded ? chunk.getBlock(SIZE_IDX, y, SIZE_IDX) : Block.AIR.getState());
                 if(loaded)
                     chunk.setBlock(SIZE, y, SIZE, neighbor.getBlock(0, y, 0));
             }
         neighbor = allChunks.get(chunk.getPos().getNeighbor(-1, -1));
         if(neighbor != null)
             for(int y = 0; y < HEIGHT; y++){
-                neighbor.setBlock(SIZE, y, SIZE, loaded ? chunk.getBlock(0, y, 0) : BlockState.AIR);
+                neighbor.setBlock(SIZE, y, SIZE, loaded ? chunk.getBlock(0, y, 0) : Block.AIR.getState());
                 if(loaded)
                     chunk.setBlock(SIZE, y, -1, neighbor.getBlock(0, y, SIZE_IDX));
             }
         neighbor = allChunks.get(chunk.getPos().getNeighbor(-1, 1));
         if(neighbor != null)
             for(int y = 0; y < HEIGHT; y++){
-                neighbor.setBlock(SIZE, y, -1, loaded ? chunk.getBlock(0, y, SIZE_IDX) : BlockState.AIR);
+                neighbor.setBlock(SIZE, y, -1, loaded ? chunk.getBlock(0, y, SIZE_IDX) : Block.AIR.getState());
                 if(loaded)
                     chunk.setBlock(-1, y, SIZE, neighbor.getBlock(SIZE_IDX, y, 0));
             }

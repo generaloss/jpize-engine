@@ -22,7 +22,7 @@ import megalul.projectvostok.world.render.WorldRenderer;
 public class Main implements ContextListener{
 
     public static String GAME_DIR_PATH = "./";
-    public static boolean UPDATE_DEPTH_MAP = true;
+    public static boolean UPDATE_DEPTH_MAP = false;
 
 
     public static void main(String[] args){
@@ -112,6 +112,9 @@ public class Main implements ContextListener{
         Vec3f camPos = camera.getPos();
         if(Pize.isPressed(Key.B))
             world.setBlock(camPos.x(), Maths.clamp(camPos.yf(), 0, 255), camPos.z(), Block.DIRT.getState());
+        
+        if(Pize.isDown(Key.R))
+            camera.showMouse(!camera.isMouseShow());
     }
 
 
@@ -126,7 +129,7 @@ public class Main implements ContextListener{
 
         options.save();
     }
-
+    
 
     public Options getOptions(){
         return options;

@@ -3,6 +3,7 @@ package megalul.projectvostok.chunk.mesh;
 import glit.graphics.util.color.Color;
 import glit.util.time.Stopwatch;
 import megalul.projectvostok.Main;
+import megalul.projectvostok.block.BlockProperties;
 import megalul.projectvostok.block.BlockState;
 import megalul.projectvostok.block.blocks.Block;
 import megalul.projectvostok.chunk.Chunk;
@@ -34,17 +35,17 @@ public class ChunkBuilder{
                 final int minHeight = Main.UPDATE_DEPTH_MAP ? chunk.getDepth(x, z) : 0;
                 
                 for(int y = minHeight; y < maxHeight; y++){
-                    final BlockState block = chunk.getBlock(x, y, z);
-                    if(block.getProp().isEmpty())
+                    final BlockProperties block = BlockState.getProps(chunk.getBlock(x, y, z));
+                    if(block.isEmpty())
                         continue;
 
-                    if(block.getProp().isSolid()){
-                        if(chunk.getBlock(x - 1, y, z).getProp().isEmpty()) addNxFace(x, y, z);
-                        if(chunk.getBlock(x + 1, y, z).getProp().isEmpty()) addPxFace(x, y, z);
-                        if(chunk.getBlock(x, y - 1, z).getProp().isEmpty()) addNyFace(x, y, z);
-                        if(chunk.getBlock(x, y + 1, z).getProp().isEmpty()) addPyFace(x, y, z);
-                        if(chunk.getBlock(x, y, z - 1).getProp().isEmpty()) addNzFace(x, y, z);
-                        if(chunk.getBlock(x, y, z + 1).getProp().isEmpty()) addPzFace(x, y, z);
+                    if(block.isSolid()){
+                        if(chunk.getBlockID(x - 1, y, z) == 0) addNxFace(x, y, z);
+                        if(chunk.getBlockID(x + 1, y, z) == 0) addPxFace(x, y, z);
+                        if(chunk.getBlockID(x, y - 1, z) == 0) addNyFace(x, y, z);
+                        if(chunk.getBlockID(x, y + 1, z) == 0) addPyFace(x, y, z);
+                        if(chunk.getBlockID(x, y, z - 1) == 0) addNzFace(x, y, z);
+                        if(chunk.getBlockID(x, y, z + 1) == 0) addPzFace(x, y, z);
                     }
                 }
             }
@@ -70,9 +71,9 @@ public class ChunkBuilder{
     
     public static float getAO(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3){
         return
-            chunk.fastGetBlockID(x1, y1, z1) != Block.AIR.id ||
-            chunk.fastGetBlockID(x2, y2, z2) != Block.AIR.id ||
-            chunk.fastGetBlockID(x3, y3, z3) != Block.AIR.id
+            chunk.getBlockID(x1, y1, z1) != Block.AIR.id ||
+            chunk.getBlockID(x2, y2, z2) != Block.AIR.id ||
+            chunk.getBlockID(x3, y3, z3) != Block.AIR.id
             ? AO_BRIGHTNESS : 1;
     }
     

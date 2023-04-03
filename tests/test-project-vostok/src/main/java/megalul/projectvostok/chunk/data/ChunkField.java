@@ -13,7 +13,6 @@ public class ChunkField{
     
     private final short[] blocks;
     private final HeightDepthMap heightDepthMap;
-    private volatile boolean dirty;
     
     public ChunkField(Chunk chunkOf){
         this.chunkOf = chunkOf;
@@ -23,30 +22,32 @@ public class ChunkField{
     }
     
     
-    public BlockState get(int x, int y, int z){
-        return new BlockState(blocks[getIndexC(x, y, z)]);
+    public short get(int x, int y, int z){
+        return blocks[getIndexC(x, y, z)];
     }
     
-    public void set(int x, int y, int z, BlockState block){
-        byte oldID = BlockState.getIDFromState(blocks[getIndexC(x, y, z)]);
-        blocks[getIndexC(x, y, z)] = block.getState();
+    public void set(int x, int y, int z, short block){
+        byte oldID = getID(x, y, z);
+        byte id = BlockState.getID(block);
         
-        if(oldID != block.getID() && !isOutOfBounds(x, z)){
-            dirty = true;
+        blocks[getIndexC(x, y, z)] = block;
+        
+        if(oldID != id && !isOutOfBounds(x, z)){
+            chunkOf.getProvider().rebuildChunk(chunkOf);
             
             updateEdgesOfNeighborChunks(x, y, z, block);
             
-            updateHeight(x, y, z, !block.getProp().isEmpty());
+            updateHeight(x, y, z, id != 0);
             if(Main.UPDATE_DEPTH_MAP)
-                updateDepth(x, y, z, !block.getProp().isEmpty());
+                updateDepth(x, y, z, id != 0);
         }
     }
     
-    public void fastSet(int x, int y, int z, BlockState block){
-        byte oldID = BlockState.getIDFromState(blocks[getIndexC(x, y, z)]);
-        blocks[getIndexC(x, y, z)] = block.getState();
+    public void fastSet(int x, int y, int z, short block){
+        byte oldID = getID(x, y, z);
+        blocks[getIndexC(x, y, z)] = block;
     
-        if(oldID != block.getID() && !isOutOfBounds(x, z))
+        if(oldID != BlockState.getID(block) && !isOutOfBounds(x, z))
             updateEdgesOfNeighborChunks(x, y, z, block);
     }
     
@@ -54,19 +55,19 @@ public class ChunkField{
         for(int x = 0; x < SIZE; x++)
             for(int z = 0; z < SIZE; z++){
                 for(int y = HEIGHT_IDX; y >= 0; y--)
-                    if(fastGetID(x, y, z) != Block.AIR.id){
+                    if(getID(x, y, z) != Block.AIR.id){
                         heightDepthMap.setHeight(x, z, y);
                         break;
                     }
                 if(Main.UPDATE_DEPTH_MAP)
                     for(int y = 0; y < HEIGHT; y++)
-                        if(fastGetID(x, y, z) != Block.AIR.id){
+                        if(getID(x, y, z) != Block.AIR.id){
                             heightDepthMap.setDepth(x, z, y);
                             break;
                         }
             }
     
-        dirty = true;
+        chunkOf.getProvider().rebuildChunk(chunkOf);
         
         heightDepthMap.updateMax();
         if(Main.UPDATE_DEPTH_MAP)
@@ -78,7 +79,7 @@ public class ChunkField{
         int height = heightDepthMap.getHeight(x, z);
         
         if(y == height && !placed)
-            for(height--; fastGetID(x, height, z) == Block.AIR.id && height > 0; )
+            for(height--; getID(x, height, z) == Block.AIR.id && height > 0; )
                 height--;
         else if(y > height && placed)
             height = y;
@@ -91,7 +92,7 @@ public class ChunkField{
         int depth = heightDepthMap.getDepth(x, z);
         
         if(y == depth && !placed)
-            for(depth++; fastGetID(x, depth, z) == Block.AIR.id && depth < HEIGHT_IDX; )
+            for(depth++; getID(x, depth, z) == Block.AIR.id && depth < HEIGHT_IDX; )
                 depth++;
         else if(y < depth && placed)
             depth = y;
@@ -100,12 +101,12 @@ public class ChunkField{
         heightDepthMap.updateMin();
     }
     
-    public int fastGetID(int x, int y, int z){
-        return BlockState.getIDFromState(blocks[getIndexC(x, y, z)]);
+    public byte getID(int x, int y, int z){
+        return BlockState.getID(get(x, y, z));
     }
     
     
-    private void updateEdgesOfNeighborChunks(int x, int y, int z, BlockState block){
+    private void updateEdgesOfNeighborChunks(int x, int y, int z, short block){
         Chunk neighbor;
         if(x == 0){
             neighbor = getNeighbor(-1, 0);
@@ -195,14 +196,6 @@ public class ChunkField{
     
     public HeightDepthMap getHeightDepthMap(){
         return heightDepthMap;
-    }
-    
-    public boolean isDirty(){
-        return dirty;
-    }
-    
-    public void onMeshUpdate(){
-        dirty = false;
     }
     
 }

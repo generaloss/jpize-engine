@@ -2,7 +2,6 @@ package megalul.projectvostok;
 
 import glit.Pize;
 import glit.graphics.camera.PerspectiveCamera;
-import glit.io.glfw.Key;
 import glit.math.vecmath.vector.Vec3f;
 import megalul.projectvostok.chunk.Chunk;
 import megalul.projectvostok.chunk.data.ChunkPos;
@@ -17,26 +16,19 @@ public class GameCamera extends PerspectiveCamera{
 
     private final Vec3f up = new Vec3f(0, 1, 0);
     private float dAngX, dAngY;
-    private boolean doNotRotateInTheNextFrame;
-    private boolean doNotRotate;
+    private boolean showMouse, doNotRotateInTheNextFrame;
 
     public GameCamera(Main session, double near, double far, double fieldOfView){
         super(near, far, fieldOfView);
-
         this.session = session;
 
+        Pize.mouse().show(showMouse);
         doNotRotateInTheNextFrame = true;
-        Pize.mouse().show(false);
     }
 
 
     public void update(){
-        if(Pize.isDown(Key.R)){
-            doNotRotate = !doNotRotate;
-            Pize.mouse().show(doNotRotate);
-        }
-        
-        if(Pize.window().isFocused() && Pize.mouse().inWindow() && !doNotRotate){
+        if(Pize.window().isFocused() && Pize.mouse().inWindow() && !showMouse){
             if(!doNotRotateInTheNextFrame){
                 float x = Pize.mouse().getX();
                 float y = Pize.mouse().getY();
@@ -92,6 +84,16 @@ public class GameCamera extends PerspectiveCamera{
 
     private boolean isPressed(KeyMapping key){
         return Pize.isPressed(session.getOptions().getKey(key));
+    }
+    
+    
+    public boolean isMouseShow(){
+        return showMouse;
+    }
+    
+    public void showMouse(boolean showMouse){
+        this.showMouse = showMouse;
+        Pize.mouse().show(showMouse);
     }
     
     
