@@ -1,6 +1,6 @@
 package megalul.projectvostok.options;
 
-import glit.io.glfw.Key;
+import pize.io.glfw.Key;
 
 public enum KeyMapping implements Option<Key>{
 

@@ -1,11 +1,10 @@
 package megalul.projectvostok.options;
 
-import glit.Pize;
-import glit.files.FileHandle;
-import glit.io.glfw.Key;
-import glit.util.io.FastReader;
+import pize.Pize;
+import pize.files.FileHandle;
+import pize.io.glfw.Key;
+import pize.util.io.FastReader;
 import megalul.projectvostok.Main;
-import megalul.projectvostok.chunk.ChunkUtils;
 
 import java.io.PrintStream;
 import java.util.HashMap;
@@ -16,36 +15,32 @@ public class Options{
     public static int UNLIMITED_FPS_SETTING_THRESHOLD = 256;
 
 
-    private final Main session;
+    private final Main sessionOF;
     private final FileHandle optionsFile;
 
     private final Map<KeyMapping, Key> keyMappings;
-    private int fov = 90;
+    private int fov = 70;
     private int renderDistance = 16;
     private int maxFramerate = 0;
     private boolean fullscreen = false;
     private boolean showFps = false;
     private float mouseSensitivity = 0.5F;
 
-    public Options(Main session, String gameDirPath){
-        this.session = session;
+    public Options(Main sessionOF, String gameDirPath){
+        this.sessionOF = sessionOF;
 
         keyMappings = new HashMap<>();
 
         optionsFile = new FileHandle(gameDirPath + "options.txt", true);
         optionsFile.create();
-
-        load();
-        init();
     }
-
-
-    private void init(){
-        Pize.window().setFullscreen(fullscreen);
-        setMaxFramerate(maxFramerate);
+    
+    public Main getSessionOf(){
+        return sessionOF;
     }
+    
 
-    private void load(){
+    public void load(){
         FastReader reader = optionsFile.reader();
 
         try{
@@ -82,7 +77,9 @@ public class Options{
                     }
                 }
             }
-        }catch(Throwable ignored){ }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void save(){
@@ -118,7 +115,7 @@ public class Options{
 
     public void setFOV(int fov){
         this.fov = fov;
-        session.getCamera().setFov(fov);
+        sessionOF.getCamera().setFov(fov);
     }
 
 
@@ -128,7 +125,7 @@ public class Options{
 
     public void setRenderDistance(int renderDistance){
         this.renderDistance = renderDistance;
-        session.getCamera().setFar((renderDistance + 0.5F) * ChunkUtils.SIZE * 2);
+        sessionOF.getCamera().setDistance(renderDistance);
     }
 
 
@@ -138,9 +135,9 @@ public class Options{
 
     public void setMaxFramerate(int maxFramerate){
         this.maxFramerate = maxFramerate;
-        session.getFpsSync().setFps(maxFramerate);
+        sessionOF.getFpsSync().setFps(maxFramerate);
 
-        session.getFpsSync().enable(maxFramerate > 0 && maxFramerate < UNLIMITED_FPS_SETTING_THRESHOLD);
+        sessionOF.getFpsSync().enable(maxFramerate > 0 && maxFramerate < UNLIMITED_FPS_SETTING_THRESHOLD);
         Pize.window().setVsync(maxFramerate == 0);
     }
 
@@ -171,6 +168,7 @@ public class Options{
 
     public void setMouseSensitivity(float mouseSensitivity){
         this.mouseSensitivity = mouseSensitivity;
+        sessionOF.getPlayerController().getRotationController().setSensitivity(mouseSensitivity);
     }
 
 }

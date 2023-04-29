@@ -1,6 +1,7 @@
 package megalul.projectvostok.block.blocks;
 
 import megalul.projectvostok.block.BlockProperties;
+import megalul.projectvostok.block.model.BlockTextureRegion;
 
 public class Air extends BlockProperties{
 
@@ -9,8 +10,28 @@ public class Air extends BlockProperties{
     }
 
     @Override
-    public boolean isSolid(){
+    public final boolean isSolid(){
         return false;
+    }
+    
+    @Override
+    public final boolean isTransparent(){
+        return true;
+    }
+    
+    @Override
+    public final BlockTextureRegion getTextureRegion(){
+        return null;
+    }
+    
+    @Override
+    public final int getLightLevel(){
+        return 0;
+    }
+    
+    @Override
+    public final int getOpacity(){
+        return 0;
     }
 
 }

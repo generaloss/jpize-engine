@@ -1,16 +1,15 @@
 package megalul.projectvostok.world;
 
-import glit.math.Maths;
-import glit.math.vecmath.vector.Vec2f;
-import glit.math.vecmath.vector.Vec3f;
-import glit.util.time.FpsCounter;
-import megalul.projectvostok.Main;
+import pize.math.Maths;
+import pize.math.vecmath.vector.Vec2f;
+import pize.math.vecmath.vector.Vec3f;
+import pize.util.time.FpsCounter;
 import megalul.projectvostok.block.blocks.Block;
 import megalul.projectvostok.chunk.Chunk;
-import megalul.projectvostok.chunk.data.ChunkPos;
 import megalul.projectvostok.chunk.gen.DefaultGenerator;
 import megalul.projectvostok.chunk.mesh.ChunkBuilder;
 import megalul.projectvostok.chunk.mesh.ChunkMesh;
+import megalul.projectvostok.chunk.storage.ChunkPos;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,9 +22,7 @@ import static megalul.projectvostok.chunk.ChunkUtils.*;
 
 public class ChunkProvider{
     
-    private static final int MAX_LOAD_TASKS = 128;
-
-    private final Main session;
+    private final World worldOF;
     
     public final FpsCounter findTps, loadTps, buildTps, checkTps;
     
@@ -38,8 +35,8 @@ public class ChunkProvider{
     private final List<ChunkMesh> toDispose;
 
 
-    public ChunkProvider(Main session){
-        this.session = session;
+    public ChunkProvider(World worldOF){
+        this.worldOF = worldOF;
     
         frontiers = new ArrayList<>();
         newFrontiers = new ArrayList<>();
@@ -73,6 +70,11 @@ public class ChunkProvider{
         }, "Check Chunks");
     }
     
+    public World getWorldOf(){
+        return worldOF;
+    }
+    
+    
     private void newThread(Runnable runnable, String name){
         Thread thread = new Thread(()->{
             while(!Thread.currentThread().isInterrupted()){
@@ -83,8 +85,8 @@ public class ChunkProvider{
         thread.setDaemon(true);
         thread.start();
     }
-
-
+    
+    
     private void findChunks(){
         Vec3f camPos = getCamPos();
         if(frontiers.size() == 0)
@@ -118,7 +120,7 @@ public class ChunkProvider{
     }
     
     private void ensureFrontier(ChunkPos chunkPos){
-        if(frontiers.contains(chunkPos) || !session.getCamera().isChunkSeen(chunkPos) || isOffTheGrid(chunkPos))
+        if(frontiers.contains(chunkPos) || isOffTheGrid(chunkPos)) // || !worldOF.getSessionOf().getCamera().isChunkSeen(chunkPos)
             return;
         
         frontiers.add(chunkPos);
@@ -177,6 +179,7 @@ public class ChunkProvider{
         Chunk chunk = new Chunk(this, chunkPos);
         allChunks.put(chunkPos, chunk);
         DefaultGenerator.getInstance().generate(chunk);
+        worldOF.getLight().updateChunkSkyLight(chunk);
 
         updateNeighborChunksEdgesAndSelf(chunk, true);
         toBuildQueue.add(chunk);
@@ -197,7 +200,7 @@ public class ChunkProvider{
     }
 
     public void rebuildChunk(Chunk chunk){
-        if(!toBuildQueue.contains(chunk) && !built.containsKey(chunk))
+        if(!toBuildQueue.contains(chunk))
             toBuildQueue.add(chunk);
     }
     
@@ -208,32 +211,52 @@ public class ChunkProvider{
             for(int i = 0; i < SIZE; i++)
                 for(int y = 0; y < HEIGHT; y++){
                     neighbor.setBlock(SIZE, y, i, loaded ? chunk.getBlock(0, y, i) : Block.AIR.getState());
-                    if(loaded)
+                    neighbor.setSkyLight(SIZE, y, i, loaded ? chunk.getSkyLight(0, y, i) : MAX_LIGHT_LEVEL);
+                    neighbor.setBlockLight(SIZE, y, i, loaded ? chunk.getBlockLight(0, y, i) : MAX_LIGHT_LEVEL);
+                    if(loaded){
                         chunk.setBlock(-1, y, i, neighbor.getBlock(SIZE_IDX, y, i));
+                        chunk.setSkyLight(-1, y, i, neighbor.getSkyLight(SIZE_IDX, y, i));
+                        chunk.setBlockLight(-1, y, i, neighbor.getBlockLight(SIZE_IDX, y, i));
+                    }
                 }
         neighbor = allChunks.get(chunk.getPos().getNeighbor(1, 0));
         if(neighbor != null)
             for(int i = 0; i < SIZE; i++)
                 for(int y = 0; y < HEIGHT; y++){
                     neighbor.setBlock(-1, y, i, loaded ? chunk.getBlock(SIZE_IDX, y, i) : Block.AIR.getState());
-                    if(loaded)
+                    neighbor.setSkyLight(-1, y, i, loaded ? chunk.getSkyLight(SIZE_IDX, y, i) : MAX_LIGHT_LEVEL);
+                    neighbor.setBlockLight(-1, y, i, loaded ? chunk.getBlockLight(SIZE_IDX, y, i) : MAX_LIGHT_LEVEL);
+                    if(loaded){
                         chunk.setBlock(SIZE, y, i, neighbor.getBlock(0, y, i));
+                        chunk.setSkyLight(SIZE, y, i, neighbor.getSkyLight(0, y, i));
+                        chunk.setBlockLight(SIZE, y, i, neighbor.getBlockLight(0, y, i));
+                    }
                 }
         neighbor = allChunks.get(chunk.getPos().getNeighbor(0, -1));
         if(neighbor != null)
             for(int i = 0; i < SIZE; i++)
                 for(int y = 0; y < HEIGHT; y++){
                     neighbor.setBlock(i, y, SIZE, loaded ? chunk.getBlock(i, y, 0) : Block.AIR.getState());
-                    if(loaded)
+                    neighbor.setSkyLight(i, y, SIZE, loaded ? chunk.getSkyLight(i, y, 0) : MAX_LIGHT_LEVEL);
+                    neighbor.setBlockLight(i, y, SIZE, loaded ? chunk.getBlockLight(i, y, 0) : MAX_LIGHT_LEVEL);
+                    if(loaded){
                         chunk.setBlock(i, y, -1, neighbor.getBlock(i, y, SIZE_IDX));
+                        chunk.setSkyLight(i, y, -1, neighbor.getSkyLight(i, y, SIZE_IDX));
+                        chunk.setBlockLight(i, y, -1, neighbor.getBlockLight(i, y, SIZE_IDX));
+                    }
                 }
         neighbor = allChunks.get(chunk.getPos().getNeighbor(0, 1));
         if(neighbor != null)
             for(int i = 0; i < SIZE; i++)
                 for(int y = 0; y < HEIGHT; y++){
                     neighbor.setBlock(i, y, -1, loaded ? chunk.getBlock(i, y, SIZE_IDX) : Block.AIR.getState());
-                    if(loaded)
+                    neighbor.setSkyLight(i, y, -1, loaded ? chunk.getSkyLight(i, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
+                    neighbor.setBlockLight(i, y, -1, loaded ? chunk.getBlockLight(i, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
+                    if(loaded){
                         chunk.setBlock(i, y, SIZE, neighbor.getBlock(i, y, 0));
+                        chunk.setSkyLight(i, y, SIZE, neighbor.getSkyLight(i, y, 0));
+                        chunk.setBlockLight(i, y, SIZE, neighbor.getBlockLight(i, y, 0));
+                    }
                 }
     
         // corners
@@ -241,29 +264,49 @@ public class ChunkProvider{
         if(neighbor != null)
             for(int y = 0; y < HEIGHT; y++){
                 neighbor.setBlock(SIZE, y, -1, loaded ? chunk.getBlock(0, y, SIZE_IDX) : Block.AIR.getState());
-                if(loaded)
+                neighbor.setSkyLight(SIZE, y, -1, loaded ? chunk.getSkyLight(0, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
+                neighbor.setBlockLight(SIZE, y, -1, loaded ? chunk.getBlockLight(0, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
+                if(loaded){
                     chunk.setBlock(-1, y, SIZE, neighbor.getBlock(SIZE_IDX, y, 0));
+                    chunk.setSkyLight(-1, y, SIZE, neighbor.getSkyLight(SIZE_IDX, y, 0));
+                    chunk.setBlockLight(-1, y, SIZE, neighbor.getBlockLight(SIZE_IDX, y, 0));
+                }
             }
         neighbor = allChunks.get(chunk.getPos().getNeighbor(1, 1));
         if(neighbor != null)
             for(int y = 0; y < HEIGHT; y++){
                 neighbor.setBlock(-1, y, -1, loaded ? chunk.getBlock(SIZE_IDX, y, SIZE_IDX) : Block.AIR.getState());
-                if(loaded)
+                neighbor.setSkyLight(-1, y, -1, loaded ? chunk.getSkyLight(SIZE_IDX, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
+                neighbor.setBlockLight(-1, y, -1, loaded ? chunk.getBlockLight(SIZE_IDX, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
+                if(loaded){
                     chunk.setBlock(SIZE, y, SIZE, neighbor.getBlock(0, y, 0));
+                    chunk.setSkyLight(SIZE, y, SIZE, neighbor.getSkyLight(0, y, 0));
+                    chunk.setBlockLight(SIZE, y, SIZE, neighbor.getBlockLight(0, y, 0));
+                }
             }
         neighbor = allChunks.get(chunk.getPos().getNeighbor(-1, -1));
         if(neighbor != null)
             for(int y = 0; y < HEIGHT; y++){
                 neighbor.setBlock(SIZE, y, SIZE, loaded ? chunk.getBlock(0, y, 0) : Block.AIR.getState());
-                if(loaded)
-                    chunk.setBlock(SIZE, y, -1, neighbor.getBlock(0, y, SIZE_IDX));
+                neighbor.setSkyLight(SIZE, y, SIZE, loaded ? chunk.getSkyLight(0, y, 0) : MAX_LIGHT_LEVEL);
+                neighbor.setBlockLight(SIZE, y, SIZE, loaded ? chunk.getBlockLight(0, y, 0) : MAX_LIGHT_LEVEL);
+                if(loaded){
+                    chunk.setBlock(-1, y, -1, neighbor.getBlock(SIZE_IDX, y, SIZE_IDX));
+                    chunk.setSkyLight(-1, y, -1, neighbor.getSkyLight(SIZE_IDX, y, SIZE_IDX));
+                    chunk.setBlockLight(-1, y, -1, neighbor.getBlockLight(SIZE_IDX, y, SIZE_IDX));
+                }
             }
         neighbor = allChunks.get(chunk.getPos().getNeighbor(-1, 1));
         if(neighbor != null)
             for(int y = 0; y < HEIGHT; y++){
                 neighbor.setBlock(SIZE, y, -1, loaded ? chunk.getBlock(0, y, SIZE_IDX) : Block.AIR.getState());
-                if(loaded)
+                neighbor.setSkyLight(SIZE, y, -1, loaded ? chunk.getSkyLight(0, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
+                neighbor.setBlockLight(SIZE, y, -1, loaded ? chunk.getBlockLight(0, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
+                if(loaded){
                     chunk.setBlock(-1, y, SIZE, neighbor.getBlock(SIZE_IDX, y, 0));
+                    chunk.setSkyLight(-1, y, SIZE, neighbor.getSkyLight(SIZE_IDX, y, 0));
+                    chunk.setBlockLight(-1, y, SIZE, neighbor.getBlockLight(SIZE_IDX, y, 0));
+                }
             }
     }
 
@@ -290,7 +333,7 @@ public class ChunkProvider{
 
 
     private boolean isOffTheGrid(int x, int z){
-        return distToChunk(x, z, getCamPos()) > session.getOptions().getRenderDistance();
+        return distToChunk(x, z, getCamPos()) > worldOF.getSessionOf().getOptions().getRenderDistance();
     }
 
     private boolean isOffTheGrid(ChunkPos chunkPos){
@@ -303,7 +346,7 @@ public class ChunkProvider{
     }
 
     private Vec3f getCamPos(){
-        return session.getCamera().getPos().clone().div(SIZE);
+        return worldOF.getSessionOf().getCamera().getPos().clone().div(SIZE);
     }
 
 }

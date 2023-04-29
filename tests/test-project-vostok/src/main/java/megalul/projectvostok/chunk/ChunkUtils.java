@@ -2,7 +2,7 @@ package megalul.projectvostok.chunk;
 
 public class ChunkUtils{
 
-    public static final int SIZE_SHIFT = 4;
+    public static final int SIZE_SHIFT = 4; //? Степень двойки
 
     public static final int SIZE = 1 << SIZE_SHIFT;
     public static final int HEIGHT = 256;
@@ -22,6 +22,9 @@ public class ChunkUtils{
 
     public static final int C_SIZE_IDX = C_SIZE - 1;
     public static final int C_HEIGHT_IDX = C_HEIGHT - 1;
+    
+    // Light
+    public static final int MAX_LIGHT_LEVEL = 15;
 
 
     public static int getIndexC(int x, int y, int z){
@@ -46,12 +49,16 @@ public class ChunkUtils{
     }
 
 
-    public static int getLocalPos(int xOrZ){
-        return xOrZ & SIZE_IDX;
+    public static int getLocalPos(int XorZ){
+        return XorZ & SIZE_IDX;
     }
 
     public static int getChunkPos(int xOrZ){
         return xOrZ >> SIZE_SHIFT;
+    }
+    
+    public static Chunk getNeighborChunk(Chunk chunk, int x, int z){
+        return chunk.getProviderOf().getChunk(chunk.getPos().getNeighbor(x, z));
     }
 
 }

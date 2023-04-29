@@ -1,11 +1,11 @@
 package megalul.projectvostok.chunk.mesh;
 
-import glit.context.Disposable;
-import glit.graphics.gl.BufferUsage;
-import glit.graphics.gl.Type;
-import glit.graphics.vertex.VertexArray;
-import glit.graphics.vertex.VertexAttr;
-import glit.graphics.vertex.VertexBuffer;
+import pize.context.Disposable;
+import pize.graphics.gl.BufferUsage;
+import pize.graphics.gl.Type;
+import pize.graphics.vertex.VertexArray;
+import pize.graphics.vertex.VertexAttr;
+import pize.graphics.vertex.VertexBuffer;
 
 public class ChunkMesh implements Disposable{
 
