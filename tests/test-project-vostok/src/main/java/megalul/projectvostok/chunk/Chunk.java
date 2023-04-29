@@ -84,13 +84,17 @@ public class Chunk{
         if(previousBlock.equals(targetBlock))
             return;
         
+        boolean placed = !targetBlock.isEmpty();
+        
         ChunkBlockUtils.updateNeighborChunksEdges(this, x, y, z, state);
-        ChunkHeightUtils.updateHeight(storage, x, y, z, !targetBlock.isEmpty());
+        ChunkHeightUtils.updateHeight(storage, x, y, z, placed);
         
         if(previousBlock.isGlow())
             getProviderOf().getWorldOf().getLight().decreaseBlockLight(this, x, y, z, previousBlock.getLightLevel());
         else if(targetBlock.isGlow())
             getProviderOf().getWorldOf().getLight().increaseBlockLight(this, x, y, z, targetBlock.getLightLevel());
+        
+        getProviderOf().getWorldOf().getLight().updateBlockLight(this, x, y, z, placed);
         
         rebuild();
     }

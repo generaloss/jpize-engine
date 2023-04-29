@@ -203,6 +203,42 @@ public class WorldLight{
         propagateIncrease();
     }
     
+    // UPDATE BLOCKS
+    
+    public void updateBlockLight(Chunk chunk, int lx, int ly, int lz, boolean placed){
+        Chunk neighborChunk;
+        int neighborX, neighborY, neighborZ;
+        
+        for(int i = 0; i < 6; i++){
+            final Vec3i normal = normal3DFromIndex[i];
+            
+            neighborX = lx + normal.x;
+            neighborZ = lz + normal.z;
+            
+            if(neighborX > SIZE_IDX || neighborZ > SIZE_IDX || neighborX < 0 || neighborZ < 0){
+                neighborChunk = getNeighborChunk(chunk, normal.x, normal.z);
+                if(neighborChunk == null)
+                    continue;
+                
+                neighborX = getLocalPos(neighborX);
+                neighborZ = getLocalPos(neighborZ);
+            }else
+                neighborChunk = chunk;
+            
+            neighborY = ly + normal.y;
+            if(neighborY < 0 || neighborY > HEIGHT_IDX)
+                continue;
+            
+            int neighborLevel = neighborChunk.getBlockLight(neighborX, neighborY, neighborZ);
+            if(neighborLevel > 1){
+                addInQueueIncrease(neighborChunk, neighborX, neighborY, neighborZ, neighborLevel);
+                propagateIncrease();
+            }
+            
+        }
+        
+    }
+    
     // OTHER
     
     private void rebuildNeighborChunks(Chunk chunk, int lx, int lz, int level){ //: (HARAM ALGORITHM) and works only with MAX_LIGHT_LEVEL = 15
@@ -238,11 +274,11 @@ public class WorldLight{
     /** SKY LIGHT **/
     
     public void updateChunkSkyLight(Chunk chunk){
-        for(int x = 0; x < SIZE; x++)
-            for(int z = 0; z < SIZE; z++)
-                updateChunkSkyLight(chunk, x, z);
+        // for(int x = 0; x < SIZE; x++)
+        //     for(int z = 0; z < SIZE; z++)
+        //         updateChunkSkyLight(chunk, x, z);
         
-        chunk.rebuild();
+        // chunk.rebuild();
     }
     
     private void updateSideSkyLight(Chunk chunk, int x, int z){
@@ -286,7 +322,7 @@ public class WorldLight{
         // for(int y = height + 1; y < HEIGHT; y++)
         //     chunk.getStorage().setSkyLight(x, y, z, MAX_LIGHT_LEVEL);
         
-        updateSideSkyLight(chunk, x, z);
+        // updateSideSkyLight(chunk, x, z);
     }
     
 }
