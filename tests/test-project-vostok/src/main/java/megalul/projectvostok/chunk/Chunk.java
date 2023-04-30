@@ -88,15 +88,15 @@ public class Chunk{
         ChunkBlockUtils.updateNeighborChunksEdges(this, x, y, z, state);
         ChunkHeightUtils.updateHeight(storage, x, y, z, !targetBlock.isEmpty());
         
+        if(targetBlock.isTransparent())
+            getProviderOf().getWorldOf().getLight().updateBrokeBlockLight(this, x, y, z);
+        else
+            getProviderOf().getWorldOf().getLight().updatePlaceBlockLight(this, x, y, z);
+        
         if(previousBlock.isGlow())
             getProviderOf().getWorldOf().getLight().decreaseBlockLight(this, x, y, z, previousBlock.getLightLevel());
         else if(targetBlock.isGlow())
             getProviderOf().getWorldOf().getLight().increaseBlockLight(this, x, y, z, targetBlock.getLightLevel());
-        
-        if(targetBlock.isTransparent())
-            getProviderOf().getWorldOf().getLight().updateBrokeBlockLight(this, x, y, z);
-        else
-            setBlockLight(x, y, z, targetBlock.getLightLevel());
         
         rebuild(Priority.SET_BLOCK);
     }

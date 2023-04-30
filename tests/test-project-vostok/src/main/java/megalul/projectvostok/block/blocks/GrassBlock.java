@@ -14,9 +14,9 @@ public class GrassBlock extends BlockProperties{
         super(id);
         
         region = new BlockTextureRegion(
-            new Region(5 / 8F, 1 / 8F, 6 / 8F, 2 / 8F),
+            new Region(1 / 8F, 3 / 8F, 2 / 8F, 4 / 8F),
             Block.DIRT.properties.getTextureRegion().getPx(),
-            new Region(4 / 8F, 1 / 8F, 5 / 8F, 2 / 8F)
+            new Region(1 / 8F, 2 / 8F, 2 / 8F, 3 / 8F)
         );
     }
     

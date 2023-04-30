@@ -19,8 +19,8 @@ public class CameraRotationController{
     }
     
     public void update(){
-        if(Pize.window().isFocused() && Pize.mouse().inWindow() && !showMouse){
-            if(!nextFrameRotationLock){
+        if(Pize.window().isFocused() && !showMouse){
+            if(!nextFrameRotationLock && Pize.mouse().inWindow()){
                 float x = Pize.mouse().getX();
                 float y = Pize.mouse().getY();
                 dAngX += Pize.getWidth() / 2F - x;

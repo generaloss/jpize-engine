@@ -202,9 +202,14 @@ public class WorldLight{
     
     // UPDATE BLOCKS
     
+    public void updatePlaceBlockLight(Chunk chunk, int lx, int ly, int lz){
+        decreaseBlockLight(chunk, lx, ly, lz, chunk.getBlockLight(lx, ly, lz));
+    }
+    
     public void updateBrokeBlockLight(Chunk chunk, int lx, int ly, int lz){
         Chunk neighborChunk;
         int neighborX, neighborY, neighborZ;
+        int maxLevel = 0;
         
         for(int i = 0; i < 6; i++){
             final Vec3i normal = normal3DFromIndex[i];
@@ -228,12 +233,13 @@ public class WorldLight{
             
             int neighborLevel = neighborChunk.getBlockLight(neighborX, neighborY, neighborZ);
             if(neighborLevel > 1){
+                maxLevel = Math.max(maxLevel, neighborLevel);
                 addInQueueIncrease(neighborChunk, neighborX, neighborY, neighborZ, neighborLevel);
                 propagateIncrease();
             }
-            
         }
         
+        rebuildNeighborChunks(chunk, lx, lz, maxLevel - 1);
     }
     
     // OTHER

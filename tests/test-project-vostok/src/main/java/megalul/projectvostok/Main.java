@@ -1,7 +1,18 @@
 package megalul.projectvostok;
 
+import megalul.projectvostok.block.blocks.Block;
 import megalul.projectvostok.chunk.mesh.ChunkBuilder;
+import megalul.projectvostok.control.FirstPersonPlayerCameraTarget;
+import megalul.projectvostok.control.GameCamera;
+import megalul.projectvostok.control.PlayerController;
+import megalul.projectvostok.control.RayCast;
+import megalul.projectvostok.entity.Player;
+import megalul.projectvostok.options.KeyMapping;
+import megalul.projectvostok.options.Options;
+import megalul.projectvostok.world.ChunkProvider;
+import megalul.projectvostok.world.World;
 import megalul.projectvostok.world.light.WorldLight;
+import megalul.projectvostok.world.render.WorldRenderer;
 import pize.Pize;
 import pize.context.ContextListener;
 import pize.files.FileHandle;
@@ -12,16 +23,6 @@ import pize.graphics.util.batch.TextureBatch;
 import pize.io.glfw.Key;
 import pize.math.vecmath.vector.Vec3i;
 import pize.util.time.Sync;
-import megalul.projectvostok.block.blocks.Block;
-import megalul.projectvostok.block.model.BlockFace;
-import megalul.projectvostok.control.FirstPersonPlayerCameraTarget;
-import megalul.projectvostok.control.GameCamera;
-import megalul.projectvostok.control.PlayerController;
-import megalul.projectvostok.control.RayCast;
-import megalul.projectvostok.entity.Player;
-import megalul.projectvostok.options.Options;
-import megalul.projectvostok.world.World;
-import megalul.projectvostok.world.render.WorldRenderer;
 
 public class Main implements ContextListener{
 
@@ -45,6 +46,8 @@ public class Main implements ContextListener{
     private final RayCast rayCast;
     private final WorldRenderer renderer;
     private final Sync fpsSync;
+    
+    private float zoomFOV;
 
     public Main(){
         uiBatch = new TextureBatch(200);
@@ -93,13 +96,10 @@ public class Main implements ContextListener{
         uiBatch.setColor(0.5F, 0.4F, 0.1F, 1);
         uiBatch.begin();
 
+        // INFO
         font.drawText(uiBatch, "fps: " + Pize.getFPS(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight());
-        font.drawText(uiBatch,
-            "position: " + camera.getX() + ", " + camera.getY() + ", " + camera.getZ(),
-            25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 2);
-        font.drawText(uiBatch,
-            "chunk: " + camera.chunkX() + ", " + camera.chunkZ(),
-            25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 3);
+        font.drawText(uiBatch, "position: " + camera.getX() + ", " + camera.getY() + ", " + camera.getZ(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 2);
+        font.drawText(uiBatch, "chunk: " + camera.chunkX() + ", " + camera.chunkZ(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 3);
         font.drawText(uiBatch, "Threads:", 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 4);
         font.drawText(uiBatch, "chunk find tps: " + world.getProvider().findTps.get(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 5);
         font.drawText(uiBatch, "chunk load tps: " + world.getProvider().loadTps.get(),   25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 6);
@@ -109,21 +109,32 @@ public class Main implements ContextListener{
         font.drawText(uiBatch, "render chunks: " + world.getProvider().getChunks().stream().filter(camera::isChunkSeen).count(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 10);
         font.drawText(uiBatch, "Light time (I/D): " + WorldLight.increaseTime + " ms, " + WorldLight.decreaseTime + " ms", 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 11);
         font.drawText(uiBatch, "Chunk build time (T/V): " + ChunkBuilder.buildTime + " ms, " + ChunkBuilder.vertexCount + " vertices", 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 12);
+        Vec3i imaginaryPos = rayCast.getImaginaryBlockPosition();
+        Vec3i selectedPos = rayCast.getSelectedBlockPosition();
+        font.drawText(uiBatch, "Selected light level (F/B): " + world.getLight(imaginaryPos.x, imaginaryPos.y, imaginaryPos.z) + ", " + world.getLight(selectedPos.x, selectedPos.y, selectedPos.z), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 13);
 
+        // CTRL HINT
         font.drawText(uiBatch, "1, 2, 3 - set render mode", 25, 25 + font.getScaledLineHeight() * 0);
         font.drawText(uiBatch, "R - show mouse", 25, 25 + font.getScaledLineHeight() * 1);
         font.drawText(uiBatch, "F3 + G - show chunk border", 25, 25 + font.getScaledLineHeight() * 2);
+        font.drawText(uiBatch, options.getKey(KeyMapping.ZOOM) + " + Mouse Wheel - zoom", 25, 25 + font.getScaledLineHeight() * 3);
+        font.drawText(uiBatch, "L - stop loading chunks", 25, 25 + font.getScaledLineHeight() * 4);
 
         uiBatch.end();
     }
 
     private void controls(){
+        // EXIT
         if(Pize.isDown(Key.ESCAPE))
             Pize.exit();
+        
+        // FULLSCREEN
         if(Pize.isDown(Key.F11)){
             playerController.getRotationController().lockNextFrame();
             Pize.window().toggleFullscreen();
         }
+        
+        // RENDER MODE
         if(Pize.isDown(Key.NUM_1))
             Gl.setPolygonMode(Face.FRONT, PolygonMode.FILL);
         if(Pize.isDown(Key.NUM_2))
@@ -131,19 +142,21 @@ public class Main implements ContextListener{
         if(Pize.isDown(Key.NUM_3))
             Gl.setPolygonMode(Face.FRONT, PolygonMode.POINT);
         
+        // MOUSE SET BLOCK
         if(Pize.isTouched() && rayCast.isSelected()){
-            Vec3i blockPos = rayCast.getSelectedBlockPosition().clone();
-            
             if(Pize.mouse().isLeftDown()){
+                Vec3i blockPos = rayCast.getSelectedBlockPosition();
                 world.setBlock(blockPos.x, blockPos.y, blockPos.z, Block.AIR.getState());
             }else if(Pize.mouse().isRightDown()){
-                BlockFace blockFace = rayCast.getSelectedFace();
-                blockPos.add(blockFace.x, blockFace.y, blockFace.z);
-                
+                Vec3i blockPos = rayCast.getImaginaryBlockPosition();
                 world.setBlock(blockPos.x, blockPos.y, blockPos.z, Block.LAMP.getState());
+            }else if(Pize.mouse().isMiddleDown()){
+                Vec3i blockPos = rayCast.getImaginaryBlockPosition();
+                world.setBlock(blockPos.x, blockPos.y, blockPos.z, Block.OAK_LOG.getState());
             }
         }
         
+        // KEYBOARD SET BLOCK
         if(Pize.isPressed(Key.B)){
             final Vec3i camPos = new Vec3i(
                 camera.getPos().xf(),
@@ -153,11 +166,29 @@ public class Main implements ContextListener{
             world.setBlock(camPos.x, camPos.y, camPos.z, Block.GLASS.getState());
         }
         
+        // SHOW MOUSE
         if(Pize.isDown(Key.R))
             playerController.getRotationController().switchShowMouse();
         
+        // CHUNK BORDER
         if(Pize.isPressed(Key.F3) && Pize.isDown(Key.G))
             renderer.toggleShowChunkBorder();
+        
+        // ZOOM
+        if(Pize.isDown(options.getKey(KeyMapping.ZOOM)))
+            zoomFOV = options.getFOV() / 3F;
+        else if(Pize.isPressed(options.getKey(KeyMapping.ZOOM))){
+            zoomFOV -= Pize.mouse().getScroll() * (zoomFOV / 8);
+            if(zoomFOV >= options.getFOV())
+                zoomFOV = options.getFOV();
+            
+            camera.setFov(zoomFOV);
+        }else if(Pize.isReleased(options.getKey(KeyMapping.ZOOM)))
+            camera.setFov(options.getFOV());
+        
+       // STOP LOAD CHUNKS
+       if(Pize.isDown(Key.L))
+           ChunkProvider.doLoadChunks = !ChunkProvider.doLoadChunks;
     }
 
 

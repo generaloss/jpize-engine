@@ -19,19 +19,21 @@ import static megalul.projectvostok.chunk.ChunkUtils.*;
 
 public class ChunkProvider{
     
+    public static boolean doLoadChunks = true;
+    
+    
     private final World worldOF;
     
     public final FpsCounter findTps, loadTps, buildTps, checkTps;
     
     private final List<ChunkPos> frontiers, newFrontiers;
-    
     private final Map<ChunkPos, Chunk> allChunks;
     private final List<ChunkPos> loadQueue;
     private final Queue<Chunk> toBuildQueue;
     private final Map<Chunk, float[]> built;
     private final Map<Chunk, ChunkMesh> allMeshes;
     private final List<ChunkMesh> toDispose;
-
+    
 
     public ChunkProvider(World worldOF){
         this.worldOF = worldOF;
@@ -86,6 +88,9 @@ public class ChunkProvider{
     
     
     private void findChunks(){
+        if(!doLoadChunks)
+            return;
+        
         final Vec3f camPos = getCamPos();
         
         if(frontiers.size() == 0)
@@ -251,7 +256,7 @@ public class ChunkProvider{
     
     
     private void updateEdge(int y, boolean loaded, Chunk chunk1, Chunk chunk2, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
-        chunk2.setBlock(x1, y, y1, loaded ? chunk1.getBlock(x2, y, y2) : Block.AIR.getState());
+        chunk2.setBlock(x1, y, y1, loaded ? chunk1.getBlock(x2, y, y2) : Block.VOID_AIR.getState());
         chunk2.setSkyLight(x1, y, y1, loaded ? chunk1.getSkyLight(x2, y, y2) : MAX_LIGHT_LEVEL);
         chunk2.setBlockLight(x1, y, y1, loaded ? chunk1.getBlockLight(x2, y, y2) : MAX_LIGHT_LEVEL);
         

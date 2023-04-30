@@ -65,6 +65,14 @@ public class World{
         return 0;
     }
     
+    public int getLight(int x, int y, int z){
+        Chunk targetChunk = getChunk(x, z);
+        if(targetChunk != null)
+            return targetChunk.getLight(getLocalPos(x), y, getLocalPos(z));
+        
+        return 0;
+    }
+    
     public void setLight(int x, int y, int z, int level){ //: REMOVE
         Chunk targetChunk = getChunk(x, z);
         if(targetChunk != null && level > targetChunk.getSkyLight(getLocalPos(x), y, getLocalPos(z)))

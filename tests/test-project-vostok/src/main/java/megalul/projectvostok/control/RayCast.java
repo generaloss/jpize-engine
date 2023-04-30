@@ -17,14 +17,16 @@ public class RayCast{
     private final Main sessionOF;
     
     private float rayLength;
-    private final Vec3i selectedBlock;
+    private final Vec3i selectedBlock, imaginarySelectedBlock;
     private BlockFace selectedFace;
     private boolean selected;
     
     public RayCast(Main sessionOF, float length){
         this.sessionOF = sessionOF;
-        selectedBlock = new Vec3i();
+        
         setRayLength(length);
+        selectedBlock = new Vec3i();
+        imaginarySelectedBlock = new Vec3i();
     }
     
     public Main getSessionOf(){
@@ -86,6 +88,7 @@ public class RayCast{
             byte block = BlockState.getID(sessionOF.getWorld().getBlock(selectedBlock.x, selectedBlock.y, selectedBlock.z));
             if(block != Block.AIR.ID){
                 selectedFace = BlockFace.fromNormal(faceNormal.x, faceNormal.y, faceNormal.z);
+                imaginarySelectedBlock.set(selectedBlock).add(selectedFace.x, selectedFace.y, selectedFace.z);
                 selected = true;
                 
                 break;
@@ -101,6 +104,10 @@ public class RayCast{
     
     public Vec3i getSelectedBlockPosition(){
         return selectedBlock;
+    }
+    
+    public Vec3i getImaginaryBlockPosition(){
+        return imaginarySelectedBlock;
     }
     
     public float getRayLength(){

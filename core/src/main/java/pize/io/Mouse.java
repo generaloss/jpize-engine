@@ -124,7 +124,19 @@ public class Mouse{
     public boolean isLeftReleased(){
         return released[Key.MOUSE_LEFT.GLFW];
     }
-
+    
+    public boolean isMiddleDown(){
+        return down[Key.MOUSE_MIDDLE.GLFW];
+    }
+    
+    public boolean isMiddlePressed(){
+        return pressed[Key.MOUSE_MIDDLE.GLFW];
+    }
+    
+    public boolean isMiddleReleased(){
+        return released[Key.MOUSE_MIDDLE.GLFW];
+    }
+    
     public boolean isRightDown(){
         return down[Key.MOUSE_RIGHT.GLFW];
     }

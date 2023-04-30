@@ -110,7 +110,7 @@ public class Pize{
     }
 
     public static boolean isTouched(){
-        return mouse().isLeftPressed() || mouse().isRightPressed();
+        return mouse().isLeftPressed() || mouse().isMiddlePressed() || mouse().isRightPressed();
     }
 
     public static boolean isTouchReleased(){
