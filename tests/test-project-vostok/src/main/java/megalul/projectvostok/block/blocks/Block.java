@@ -4,8 +4,9 @@ import megalul.projectvostok.block.BlockProperties;
 import megalul.projectvostok.block.BlockState;
 
 public enum Block{
-
-    AIR(new Air(0)), // ID must be 0
+    
+    VOID_AIR(new VoidAir(-1)),
+    AIR(new Air(0)),
     DIRT(new Dirt(1)),
     GRASS_BLOCK(new GrassBlock(2)),
     STONE(new Stone(3)),
@@ -29,7 +30,11 @@ public enum Block{
     }
 
     public static Block fromID(int id){
-        return Block.values()[id];
+        for(Block block: values())
+            if(block.ID == id)
+                return block;
+        
+        return null;
     }
 
 }

@@ -94,6 +94,7 @@ public class WorldRenderer implements Disposable, Resizable{
             chunkShader.setUniform("u_projection", camera.getProjection());
             chunkShader.setUniform("u_view", camera.getView());
             chunkShader.setUniform("u_atlas", atlasTexture);
+            chunkShader.setUniform("u_brightness", sessionOF.getOptions().getBrightness());
             renderAllChunkMeshes();
             Gl.disable(Target.POLYGON_OFFSET_FILL);
             

@@ -3,6 +3,7 @@ package megalul.projectvostok.world.light;
 import megalul.projectvostok.block.BlockProperties;
 import megalul.projectvostok.block.blocks.Block;
 import megalul.projectvostok.chunk.Chunk;
+import megalul.projectvostok.chunk.Priority;
 import megalul.projectvostok.chunk.storage.ChunkPos;
 import megalul.projectvostok.world.World;
 import pize.math.vecmath.vector.Vec2i;
@@ -27,8 +28,8 @@ public class WorldLight{
     public WorldLight(World worldOF){
         this.worldOF = worldOF;
         
-        blockLightIncreaseQueue = new ArrayDeque<>();
-        blockLightDecreaseQueue = new ArrayDeque<>();
+        blockLightIncreaseBfsQueue = new ArrayDeque<>();
+        blockLightDecreaseBfsQueue = new ArrayDeque<>();
     }
     
     public World getWorldOf(){
@@ -57,11 +58,7 @@ public class WorldLight{
         }
     }
     
-    public final Queue<LightNode> blockLightIncreaseQueue;
-    
-    public void increaseBlockLight(int x, int y, int z, int level){
-        increaseBlockLight(worldOF.getChunk(x, z), getLocalPos(x), y, getLocalPos(z), level);
-    }
+    public final Queue<LightNode> blockLightIncreaseBfsQueue;
     
     public void increaseBlockLight(Chunk chunkOF, int lx, int ly, int lz, int level){
         if(chunkOF.getBlockLight(lx, ly, lz) < level){
@@ -77,7 +74,7 @@ public class WorldLight{
     }
     
     private void addInQueueIncrease(Chunk chunkOF, int lx, int ly, int lz, int level){
-        blockLightIncreaseQueue.add(new LightNode(chunkOF, lx, ly, lz, level));
+        blockLightIncreaseBfsQueue.add(new LightNode(chunkOF, lx, ly, lz, level));
     }
     
     private void propagateIncrease(){
@@ -85,8 +82,8 @@ public class WorldLight{
         int neighborX, neighborY, neighborZ;
         int targetLevel;
         
-        while(!blockLightIncreaseQueue.isEmpty()){
-            final LightNode lightEntry = blockLightIncreaseQueue.poll();
+        while(!blockLightIncreaseBfsQueue.isEmpty()){
+            final LightNode lightEntry = blockLightIncreaseBfsQueue.poll();
             
             final Chunk chunk = lightEntry.chunkOF;
             final byte x = lightEntry.x;
@@ -131,7 +128,7 @@ public class WorldLight{
     
     // DECREASE
     
-    public final Queue<LightNode> blockLightDecreaseQueue;
+    public final Queue<LightNode> blockLightDecreaseBfsQueue;
     
     public void decreaseBlockLight(int x, int y, int z, int level){
         decreaseBlockLight(worldOF.getChunk(x, z), getLocalPos(x), y, getLocalPos(z), level);
@@ -151,15 +148,15 @@ public class WorldLight{
     }
     
     private void addInQueueDecrease(Chunk chunkOF, int lx, int ly, int lz, int level){
-        blockLightDecreaseQueue.add(new LightNode(chunkOF, lx, ly, lz, level));
+        blockLightDecreaseBfsQueue.add(new LightNode(chunkOF, lx, ly, lz, level));
     }
     
     private void propagateDecrease(){
         Chunk neighborChunk;
         int neighborX, neighborY, neighborZ;
         
-        while(!blockLightDecreaseQueue.isEmpty()){
-            final LightNode lightEntry = blockLightDecreaseQueue.poll();
+        while(!blockLightDecreaseBfsQueue.isEmpty()){
+            final LightNode lightEntry = blockLightDecreaseBfsQueue.poll();
             
             final Chunk chunk = lightEntry.chunkOF;
             final byte x = lightEntry.x;
@@ -205,7 +202,7 @@ public class WorldLight{
     
     // UPDATE BLOCKS
     
-    public void updateBlockLight(Chunk chunk, int lx, int ly, int lz, boolean placed){
+    public void updateBrokeBlockLight(Chunk chunk, int lx, int ly, int lz){
         Chunk neighborChunk;
         int neighborX, neighborY, neighborZ;
         
@@ -249,24 +246,24 @@ public class WorldLight{
         
         Chunk neighbor;
         if(nx){
-            neighbor = getNeighborChunk(chunk, -1, 0); if(neighbor != null) neighbor.rebuild();
-            if(nz){ neighbor = getNeighborChunk(chunk, -1, -1); if(neighbor != null) neighbor.rebuild();}
-            if(pz){ neighbor = getNeighborChunk(chunk, -1, 1); if(neighbor != null) neighbor.rebuild();}
+            neighbor = getNeighborChunk(chunk, -1, 0); if(neighbor != null) neighbor.rebuild(Priority.UPDATE_LIGHT);
+            if(nz){ neighbor = getNeighborChunk(chunk, -1, -1); if(neighbor != null) neighbor.rebuild(Priority.UPDATE_LIGHT);}
+            if(pz){ neighbor = getNeighborChunk(chunk, -1, 1); if(neighbor != null) neighbor.rebuild(Priority.UPDATE_LIGHT);}
         }
         if(px){
-            neighbor = getNeighborChunk(chunk, 1, 0); if(neighbor != null) neighbor.rebuild();
-            if(nz){ neighbor = getNeighborChunk(chunk, 1, -1); if(neighbor != null) neighbor.rebuild();}
-            if(pz){ neighbor = getNeighborChunk(chunk, 1, 1); if(neighbor != null) neighbor.rebuild();}
+            neighbor = getNeighborChunk(chunk, 1, 0); if(neighbor != null) neighbor.rebuild(Priority.UPDATE_LIGHT);
+            if(nz){ neighbor = getNeighborChunk(chunk, 1, -1); if(neighbor != null) neighbor.rebuild(Priority.UPDATE_LIGHT);}
+            if(pz){ neighbor = getNeighborChunk(chunk, 1, 1); if(neighbor != null) neighbor.rebuild(Priority.UPDATE_LIGHT);}
         }
         if(nz){
-            neighbor = getNeighborChunk(chunk, 0, -1); if(neighbor != null) neighbor.rebuild();
-            if(nx){ neighbor = getNeighborChunk(chunk, -1, -1); if(neighbor != null) neighbor.rebuild();}
-            if(px){ neighbor = getNeighborChunk(chunk, 1, -1); if(neighbor != null) neighbor.rebuild();}
+            neighbor = getNeighborChunk(chunk, 0, -1); if(neighbor != null) neighbor.rebuild(Priority.UPDATE_LIGHT);
+            if(nx){ neighbor = getNeighborChunk(chunk, -1, -1); if(neighbor != null) neighbor.rebuild(Priority.UPDATE_LIGHT);}
+            if(px){ neighbor = getNeighborChunk(chunk, 1, -1); if(neighbor != null) neighbor.rebuild(Priority.UPDATE_LIGHT);}
         }
         if(pz){
-            neighbor = getNeighborChunk(chunk, 0, 1); if(neighbor != null) neighbor.rebuild();
-            if(nx){ neighbor = getNeighborChunk(chunk, -1, 1); if(neighbor != null) neighbor.rebuild();}
-            if(px){ neighbor = getNeighborChunk(chunk, 1, 1); if(neighbor != null) neighbor.rebuild();}
+            neighbor = getNeighborChunk(chunk, 0, 1); if(neighbor != null) neighbor.rebuild(Priority.UPDATE_LIGHT);
+            if(nx){ neighbor = getNeighborChunk(chunk, -1, 1); if(neighbor != null) neighbor.rebuild(Priority.UPDATE_LIGHT);}
+            if(px){ neighbor = getNeighborChunk(chunk, 1, 1); if(neighbor != null) neighbor.rebuild(Priority.UPDATE_LIGHT);}
         }
     }
     

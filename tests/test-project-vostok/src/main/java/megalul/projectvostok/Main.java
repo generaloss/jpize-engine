@@ -1,5 +1,7 @@
 package megalul.projectvostok;
 
+import megalul.projectvostok.chunk.mesh.ChunkBuilder;
+import megalul.projectvostok.world.light.WorldLight;
 import pize.Pize;
 import pize.context.ContextListener;
 import pize.files.FileHandle;
@@ -105,6 +107,8 @@ public class Main implements ContextListener{
         font.drawText(uiBatch, "chunk check tps: " + world.getProvider().checkTps.get(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 8);
         font.drawText(uiBatch, "meshes: " + world.getProvider().getMeshes().size(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 9);
         font.drawText(uiBatch, "render chunks: " + world.getProvider().getChunks().stream().filter(camera::isChunkSeen).count(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 10);
+        font.drawText(uiBatch, "Light time (I/D): " + WorldLight.increaseTime + " ms, " + WorldLight.decreaseTime + " ms", 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 11);
+        font.drawText(uiBatch, "Chunk build time (T/V): " + ChunkBuilder.buildTime + " ms, " + ChunkBuilder.vertexCount + " vertices", 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 12);
 
         font.drawText(uiBatch, "1, 2, 3 - set render mode", 25, 25 + font.getScaledLineHeight() * 0);
         font.drawText(uiBatch, "R - show mouse", 25, 25 + font.getScaledLineHeight() * 1);
@@ -146,8 +150,7 @@ public class Main implements ContextListener{
                 camera.getPos().yf(),
                 camera.getPos().zf()
             );
-            world.getLight().increaseBlockLight(camPos.x, camPos.y, camPos.z, 15);
-            // world.setBlock(camPos.x, camPos.y, camPos.z, Block.LAMP.getState());
+            world.setBlock(camPos.x, camPos.y, camPos.z, Block.GLASS.getState());
         }
         
         if(Pize.isDown(Key.R))

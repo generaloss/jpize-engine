@@ -1,11 +1,11 @@
 package megalul.projectvostok.chunk.mesh;
 
 import megalul.projectvostok.block.BlockProperties;
-import megalul.projectvostok.block.blocks.Block;
 import megalul.projectvostok.block.model.BlockTextureRegion;
 import megalul.projectvostok.chunk.Chunk;
 import megalul.projectvostok.chunk.ChunkUtils;
 import pize.graphics.texture.Region;
+import pize.util.time.Stopwatch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +16,15 @@ public class ChunkBuilder{
 
     public static final float AO_BRIGHTNESS = 0.7F;
     
+    public static float buildTime;
+    public static int vertexCount;
+    
     private static Chunk chunk;
     private static int vertexIndex;
     private static final List<Float> verticesList = new ArrayList<>();
 
     public static float[] build(Chunk chunk){
-        // Stopwatch timer = new Stopwatch().start();
+        Stopwatch timer = new Stopwatch().start();
         
         ChunkBuilder.chunk = chunk;
         vertexIndex = 0;
@@ -59,10 +62,10 @@ public class ChunkBuilder{
         float[] array = new float[verticesList.size()];
         for(int i = 0; i < array.length; i++)
             array[i] = verticesList.get(i);
-        
         verticesList.clear();
-    
-        // System.out.println("Build: " + timer.getMillis() + " (" + vertexIndex + " vertices)");
+        
+        buildTime = timer.getMillis();
+        vertexCount = vertexIndex;
         
         return array;
     }
@@ -88,119 +91,171 @@ public class ChunkBuilder{
             ? AO_BRIGHTNESS : 1;
     }
     
-    public static float getLight(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3){
-        return
-            chunk.getBlockID(x1, y1, z1) != Block.AIR.ID ||
-                chunk.getBlockID(x2, y2, z2) != Block.AIR.ID ||
-                chunk.getBlockID(x3, y3, z3) != Block.AIR.ID
-                ? AO_BRIGHTNESS : 1;
+    public static float getLight(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, int x4, int y4, int z4){
+        float result = 0;
+        byte n = 0;
+        
+        if(chunk.getBlockProps(x1, y1, z1).isTransparent()){
+            result += chunk.getLight(x1, y1, z1);
+            n++;
+        }
+        
+        if(chunk.getBlockProps(x2, y2, z2).isTransparent()){
+            result += chunk.getLight(x2, y2, z2);
+            n++;
+        }
+        
+        if(chunk.getBlockProps(x3, y3, z3).isTransparent()){
+            result += chunk.getLight(x3, y3, z3);
+            n++;
+        }
+        
+        if(chunk.getBlockProps(x4, y4, z4).isTransparent()){
+            result += chunk.getLight(x4, y4, z4);
+            n++;
+        }
+        
+        if(n == 0)
+            return 0;
+        
+        return result / n;
     }
     
 
     private static void addNxFace(final int x, final int y, final int z, final Region region){
-        final float light = ((float) chunk.getLight(x - 1, y, z) / ChunkUtils.MAX_LIGHT_LEVEL);
+        final float light0 = getLight(x-1, y  , z,  x-1, y, z+1,  x-1, y+1, z+1,  x-1, y+1, z  ) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light1 = getLight(x-1, y  , z,  x-1, y, z+1,  x-1, y-1, z+1,  x-1, y-1, z  ) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light2 = getLight(x-1, y  , z,  x-1, y, z-1,  x-1, y-1, z-1,  x-1, y-1, z  ) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light3 = getLight(x-1, y  , z,  x-1, y, z-1,  x-1, y+1, z-1,  x-1, y+1, z  ) / ChunkUtils.MAX_LIGHT_LEVEL;
+        
         final float ao0 = getAO(x-1, y+1, z,  x-1, y, z+1,  x-1, y+1, z+1);
         final float ao1 = getAO(x-1, y-1, z,  x-1, y, z+1,  x-1, y-1, z+1);
         final float ao2 = getAO(x-1, y-1, z,  x-1, y, z-1,  x-1, y-1, z-1);
         final float ao3 = getAO(x-1, y+1, z,  x-1, y, z-1,  x-1, y+1, z-1);
+        
         final float shadow = 0.8F;
         
-        addVertex(x  , y+1, z+1, region.u2f(), region.v1f(), shadow * ao0, light);
-        addVertex(x  , y  , z+1, region.u2f(), region.v2f(), shadow * ao1, light);
-        addVertex(x  , y  , z  , region.u1f(), region.v2f(), shadow * ao2, light);
-        addVertex(x  , y  , z  , region.u1f(), region.v2f(), shadow * ao2, light);
-        addVertex(x  , y+1, z  , region.u1f(), region.v1f(), shadow * ao3, light);
-        addVertex(x  , y+1, z+1, region.u2f(), region.v1f(), shadow * ao0, light);
+        addVertex(x  , y+1, z+1, region.u2f(), region.v1f(), shadow * ao0 * light0);
+        addVertex(x  , y  , z+1, region.u2f(), region.v2f(), shadow * ao1 * light1);
+        addVertex(x  , y  , z  , region.u1f(), region.v2f(), shadow * ao2 * light2);
+        addVertex(x  , y  , z  , region.u1f(), region.v2f(), shadow * ao2 * light2);
+        addVertex(x  , y+1, z  , region.u1f(), region.v1f(), shadow * ao3 * light3);
+        addVertex(x  , y+1, z+1, region.u2f(), region.v1f(), shadow * ao0 * light0);
     }
 
     private static void addPxFace(final int x, final int y, final int z, final Region region){
-        final float light = ((float) chunk.getLight(x + 1, y, z) / ChunkUtils.MAX_LIGHT_LEVEL);
+        final float light0 = getLight(x+1, y, z,  x+1, y, z-1,  x+1, y+1, z-1,  x+1, y+1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light1 = getLight(x+1, y, z,  x+1, y, z-1,  x+1, y-1, z-1,  x+1, y-1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light2 = getLight(x+1, y, z,  x+1, y, z+1,  x+1, y-1, z+1,  x+1, y-1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light3 = getLight(x+1, y, z,  x+1, y, z+1,  x+1, y+1, z+1,  x+1, y+1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        
         final float ao0 = getAO(x+1, y+1, z,  x+1, y, z-1,  x+1, y+1, z-1);
         final float ao1 = getAO(x+1, y-1, z,  x+1, y, z-1,  x+1, y-1, z-1);
         final float ao2 = getAO(x+1, y-1, z,  x+1, y, z+1,  x+1, y-1, z+1);
         final float ao3 = getAO(x+1, y+1, z,  x+1, y, z+1,  x+1, y+1, z+1);
+        
         final float shadow = 0.8F;
         
-        addVertex(x+1, y+1, z  , region.u2f(), region.v1f(), shadow * ao0, light);
-        addVertex(x+1, y  , z  , region.u2f(), region.v2f(), shadow * ao1, light);
-        addVertex(x+1, y  , z+1, region.u1f(), region.v2f(), shadow * ao2, light);
-        addVertex(x+1, y  , z+1, region.u1f(), region.v2f(), shadow * ao2, light);
-        addVertex(x+1, y+1, z+1, region.u1f(), region.v1f(), shadow * ao3, light);
-        addVertex(x+1, y+1, z  , region.u2f(), region.v1f(), shadow * ao0, light);
+        addVertex(x+1, y+1, z  , region.u2f(), region.v1f(), shadow * ao0 * light0);
+        addVertex(x+1, y  , z  , region.u2f(), region.v2f(), shadow * ao1 * light1);
+        addVertex(x+1, y  , z+1, region.u1f(), region.v2f(), shadow * ao2 * light2);
+        addVertex(x+1, y  , z+1, region.u1f(), region.v2f(), shadow * ao2 * light2);
+        addVertex(x+1, y+1, z+1, region.u1f(), region.v1f(), shadow * ao3 * light3);
+        addVertex(x+1, y+1, z  , region.u2f(), region.v1f(), shadow * ao0 * light0);
     }
 
     private static void addNyFace(final int x, final int y, final int z, final Region region){
-        final float light = ((float) chunk.getLight(x, y - 1, z) / ChunkUtils.MAX_LIGHT_LEVEL);
+        final float light0 = getLight(x, y-1, z,  x, y-1, z-1,  x+1, y-1, z-1,  x+1, y-1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light1 = getLight(x, y-1, z,  x, y-1, z-1,  x-1, y-1, z-1,  x-1, y-1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light2 = getLight(x, y-1, z,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y-1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light3 = getLight(x, y-1, z,  x, y-1, z+1,  x+1, y-1, z+1,  x+1, y-1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        
         final float ao0 = getAO(x+1, y-1, z,  x, y-1, z-1,  x+1, y-1, z-1);
         final float ao1 = getAO(x-1, y-1, z,  x, y-1, z-1,  x-1, y-1, z-1);
         final float ao2 = getAO(x-1, y-1, z,  x, y-1, z+1,  x-1, y-1, z+1);
         final float ao3 = getAO(x+1, y-1, z,  x, y-1, z+1,  x+1, y-1, z+1);
+        
         final float shadow = 0.6F;
         
-        addVertex(x+1, y  , z  , region.u2f(), region.v2f(), shadow * ao0, light);
-        addVertex(x  , y  , z  , region.u1f(), region.v2f(), shadow * ao1, light);
-        addVertex(x  , y  , z+1, region.u1f(), region.v1f(), shadow * ao2, light);
-        addVertex(x  , y  , z+1, region.u1f(), region.v1f(), shadow * ao2, light);
-        addVertex(x+1, y  , z+1, region.u2f(), region.v1f(), shadow * ao3, light);
-        addVertex(x+1, y  , z  , region.u2f(), region.v2f(), shadow * ao0, light);
+        addVertex(x+1, y  , z  , region.u2f(), region.v2f(), shadow * ao0 * light0);
+        addVertex(x  , y  , z  , region.u1f(), region.v2f(), shadow * ao1 * light1);
+        addVertex(x  , y  , z+1, region.u1f(), region.v1f(), shadow * ao2 * light2);
+        addVertex(x  , y  , z+1, region.u1f(), region.v1f(), shadow * ao2 * light2);
+        addVertex(x+1, y  , z+1, region.u2f(), region.v1f(), shadow * ao3 * light3);
+        addVertex(x+1, y  , z  , region.u2f(), region.v2f(), shadow * ao0 * light0);
     }
 
     private static void addPyFace(final int x, final int y, final int z, final Region region){
-        final float light = ((float) chunk.getLight(x, y + 1, z) / ChunkUtils.MAX_LIGHT_LEVEL);
+        final float light0 = getLight(x, y+1, z,  x, y+1, z-1,  x-1, y+1, z-1,  x-1, y+1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light1 = getLight(x, y+1, z,  x, y+1, z-1,  x+1, y+1, z-1,  x+1, y+1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light2 = getLight(x, y+1, z,  x, y+1, z+1,  x+1, y+1, z+1,  x+1, y+1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light3 = getLight(x, y+1, z,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y+1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        
         final float ao0 = getAO(x-1, y+1, z,  x, y+1, z-1,  x-1, y+1, z-1);
         final float ao1 = getAO(x+1, y+1, z,  x, y+1, z-1,  x+1, y+1, z-1);
         final float ao2 = getAO(x+1, y+1, z,  x, y+1, z+1,  x+1, y+1, z+1);
         final float ao3 = getAO(x-1, y+1, z,  x, y+1, z+1,  x-1, y+1, z+1);
+        
         final float shadow = 1;
         
-        addVertex(x  , y+1, z  , region.u1f(), region.v1f(), shadow * ao0, light);
-        addVertex(x+1, y+1, z  , region.u2f(), region.v1f(), shadow * ao1, light);
-        addVertex(x+1, y+1, z+1, region.u2f(), region.v2f(), shadow * ao2, light);
-        addVertex(x+1, y+1, z+1, region.u2f(), region.v2f(), shadow * ao2, light);
-        addVertex(x  , y+1, z+1, region.u1f(), region.v2f(), shadow * ao3, light);
-        addVertex(x  , y+1, z  , region.u1f(), region.v1f(), shadow * ao0, light);
+        addVertex(x  , y+1, z  , region.u1f(), region.v1f(), shadow * ao0 * light0);
+        addVertex(x+1, y+1, z  , region.u2f(), region.v1f(), shadow * ao1 * light1);
+        addVertex(x+1, y+1, z+1, region.u2f(), region.v2f(), shadow * ao2 * light2);
+        addVertex(x+1, y+1, z+1, region.u2f(), region.v2f(), shadow * ao2 * light2);
+        addVertex(x  , y+1, z+1, region.u1f(), region.v2f(), shadow * ao3 * light3);
+        addVertex(x  , y+1, z  , region.u1f(), region.v1f(), shadow * ao0 * light0);
     }
 
     private static void addNzFace(final int x, final int y, final int z, final Region region){
-        final float light = ((float) chunk.getLight(x, y, z - 1) / ChunkUtils.MAX_LIGHT_LEVEL);
+        final float light0 = getLight(x, y, z-1,  x, y-1, z-1,  x-1, y-1, z-1,  x, y-1, z-1) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light1 = getLight(x, y, z-1,  x, y-1, z-1,  x+1, y-1, z-1,  x, y-1, z-1) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light2 = getLight(x, y, z-1,  x, y+1, z-1,  x+1, y+1, z-1,  x, y+1, z-1) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light3 = getLight(x, y, z-1,  x, y+1, z-1,  x-1, y+1, z-1,  x, y+1, z-1) / ChunkUtils.MAX_LIGHT_LEVEL;
+        
         final float ao0 = getAO(x-1, y, z-1,  x, y-1, z-1,  x-1, y-1, z-1);
         final float ao1 = getAO(x+1, y, z-1,  x, y-1, z-1,  x+1, y-1, z-1);
         final float ao2 = getAO(x+1, y, z-1,  x, y+1, z-1,  x+1, y+1, z-1);
         final float ao3 = getAO(x-1, y, z-1,  x, y+1, z-1,  x-1, y+1, z-1);
+        
         final float shadow = 0.7F;
         
-        addVertex(x  , y   ,z  , region.u2f(), region.v2f(), shadow * ao0, light);
-        addVertex(x+1, y   ,z  , region.u1f(), region.v2f(), shadow * ao1, light);
-        addVertex(x+1, y+1 ,z  , region.u1f(), region.v1f(), shadow * ao2, light);
-        addVertex(x+1, y+1 ,z  , region.u1f(), region.v1f(), shadow * ao2, light);
-        addVertex(x  , y+1 ,z  , region.u2f(), region.v1f(), shadow * ao3, light);
-        addVertex(x  , y   ,z  , region.u2f(), region.v2f(), shadow * ao0, light);
+        addVertex(x  , y   ,z  , region.u2f(), region.v2f(), shadow * ao0 * light0);
+        addVertex(x+1, y   ,z  , region.u1f(), region.v2f(), shadow * ao1 * light1);
+        addVertex(x+1, y+1 ,z  , region.u1f(), region.v1f(), shadow * ao2 * light2);
+        addVertex(x+1, y+1 ,z  , region.u1f(), region.v1f(), shadow * ao2 * light2);
+        addVertex(x  , y+1 ,z  , region.u2f(), region.v1f(), shadow * ao3 * light3);
+        addVertex(x  , y   ,z  , region.u2f(), region.v2f(), shadow * ao0 * light0);
     }
 
     private static void addPzFace(final int x, final int y, final int z, final Region region){
-        final float light = ((float) chunk.getLight(x, y, z + 1) / 16F);
+        final float light0 = getLight(x, y, z+1,  x, y-1, z+1,  x+1, y-1, z+1,  x+1, y, z+1) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light1 = getLight(x, y, z+1,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y, z+1) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light2 = getLight(x, y, z+1,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y, z+1) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light3 = getLight(x, y, z+1,  x, y+1, z+1,  x+1, y+1, z+1,  x+1, y, z+1) / ChunkUtils.MAX_LIGHT_LEVEL;
+        
         final float ao0 = getAO(x+1, y, z+1,  x, y-1, z+1,  x+1, y-1, z+1);
         final float ao1 = getAO(x-1, y, z+1,  x, y-1, z+1,  x-1, y-1, z+1);
         final float ao2 = getAO(x-1, y, z+1,  x, y+1, z+1,  x-1, y+1, z+1);
         final float ao3 = getAO(x+1, y, z+1,  x, y+1, z+1,  x+1, y+1, z+1);
+        
         final float shadow = 0.7F;
     
-        addVertex(x+1, y  , z+1, region.u2f(), region.v2f(), shadow * ao0, light);
-        addVertex(x  , y  , z+1, region.u1f(), region.v2f(), shadow * ao1, light);
-        addVertex(x  , y+1, z+1, region.u1f(), region.v1f(), shadow * ao2, light);
-        addVertex(x  , y+1, z+1, region.u1f(), region.v1f(), shadow * ao2, light);
-        addVertex(x+1, y+1, z+1, region.u2f(), region.v1f(), shadow * ao3, light);
-        addVertex(x+1, y  , z+1, region.u2f(), region.v2f(), shadow * ao0, light);
+        addVertex(x+1, y  , z+1, region.u2f(), region.v2f(), shadow * ao0 * light0);
+        addVertex(x  , y  , z+1, region.u1f(), region.v2f(), shadow * ao1 * light1);
+        addVertex(x  , y+1, z+1, region.u1f(), region.v1f(), shadow * ao2 * light2);
+        addVertex(x  , y+1, z+1, region.u1f(), region.v1f(), shadow * ao2 * light2);
+        addVertex(x+1, y+1, z+1, region.u2f(), region.v1f(), shadow * ao3 * light3);
+        addVertex(x+1, y  , z+1, region.u2f(), region.v2f(), shadow * ao0 * light0);
     }
 
 
-    private static void addVertex(final int x, final int y, final int z, final float u, final float v, final float shadow, final float light){
+    private static void addVertex(final int x, final int y, final int z, final float u, final float v,final float light){
         verticesList.add((float) x);
         verticesList.add((float) y);
         verticesList.add((float) z);
-        verticesList.add(shadow * light);
-        verticesList.add(shadow * light);
-        verticesList.add(shadow * light);
+        verticesList.add(light);
+        verticesList.add(light);
+        verticesList.add(light);
         verticesList.add(1F);
         verticesList.add((u));
         verticesList.add((v));

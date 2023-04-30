@@ -33,8 +33,8 @@ public class Chunk{
         return position;
     }
     
-    public void rebuild(){
-        providerOF.rebuildChunk(this);
+    public void rebuild(Priority priority){
+        providerOF.rebuildChunk(this, priority);
     }
     
     
@@ -75,28 +75,30 @@ public class Chunk{
     }
     
     public void setBlock(int x, int y, int z, short state){
-        BlockProperties previousBlock = BlockState.getProps(storage.setBlock(x, y, z, state));
-        if(isOutOfBounds(x, z))
+        if(isOutOfBounds(x, z)){
+            storage.setBlock(x, y, z, state);
             return;
+        }
         
+        BlockProperties previousBlock = BlockState.getProps(storage.setBlock(x, y, z, state));
         BlockProperties targetBlock = BlockState.getProps(state);
-        
         if(previousBlock.equals(targetBlock))
             return;
         
-        boolean placed = !targetBlock.isEmpty();
-        
         ChunkBlockUtils.updateNeighborChunksEdges(this, x, y, z, state);
-        ChunkHeightUtils.updateHeight(storage, x, y, z, placed);
+        ChunkHeightUtils.updateHeight(storage, x, y, z, !targetBlock.isEmpty());
         
         if(previousBlock.isGlow())
             getProviderOf().getWorldOf().getLight().decreaseBlockLight(this, x, y, z, previousBlock.getLightLevel());
         else if(targetBlock.isGlow())
             getProviderOf().getWorldOf().getLight().increaseBlockLight(this, x, y, z, targetBlock.getLightLevel());
         
-        getProviderOf().getWorldOf().getLight().updateBlockLight(this, x, y, z, placed);
+        if(targetBlock.isTransparent())
+            getProviderOf().getWorldOf().getLight().updateBrokeBlockLight(this, x, y, z);
+        else
+            setBlockLight(x, y, z, targetBlock.getLightLevel());
         
-        rebuild();
+        rebuild(Priority.SET_BLOCK);
     }
     
     public void setBlockFast(int x, int y, int z, short state){

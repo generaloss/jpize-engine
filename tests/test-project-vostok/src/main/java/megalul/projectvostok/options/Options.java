@@ -25,6 +25,7 @@ public class Options{
     private boolean fullscreen = false;
     private boolean showFps = false;
     private float mouseSensitivity = 0.5F;
+    private float brightness = 0.5F;
 
     public Options(Main sessionOF, String gameDirPath){
         this.sessionOF = sessionOF;
@@ -67,6 +68,7 @@ public class Options{
                             case "maxFramerate" -> setMaxFramerate(Integer.parseInt(value));
                             case "fullscreen" -> setFullscreen(Boolean.parseBoolean(value));
                             case "showFps" -> setShowFPS(Boolean.parseBoolean(value));
+                            case "brightness" -> setBrightness(Float.parseFloat(value));
                         }
                     }
                     case "key" -> setKey(KeyMapping.valueOf(key.toUpperCase()), Key.valueOf(value.toUpperCase()));
@@ -90,6 +92,7 @@ public class Options{
         out.println("graphics.maxFramerate : " + maxFramerate);
         out.println("graphics.fullscreen : " + fullscreen);
         out.println("graphics.showFps : " + showFps);
+        out.println("graphics.brightness : " + brightness);
 
         out.println("control.mouseSensitivity : " + mouseSensitivity);
 
@@ -159,6 +162,15 @@ public class Options{
 
     public void setShowFPS(boolean showFps){
         this.showFps = showFps;
+    }
+    
+    
+    public float getBrightness(){
+        return brightness;
+    }
+    
+    public void setBrightness(float brightness){
+        this.brightness = brightness;
     }
 
 

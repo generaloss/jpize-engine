@@ -21,7 +21,7 @@ public class ChunkStorage{
         skyLight = new byte[C_VOLUME];
         blockLight = new byte[C_VOLUME];
         
-        Arrays.fill(skyLight, (byte) 1);
+        Arrays.fill(skyLight, (byte) 0);
     }
     
     

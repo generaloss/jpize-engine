@@ -1,20 +1,17 @@
 package megalul.projectvostok.world;
 
-import pize.math.Maths;
-import pize.math.vecmath.vector.Vec2f;
-import pize.math.vecmath.vector.Vec3f;
-import pize.util.time.FpsCounter;
 import megalul.projectvostok.block.blocks.Block;
 import megalul.projectvostok.chunk.Chunk;
+import megalul.projectvostok.chunk.Priority;
 import megalul.projectvostok.chunk.gen.DefaultGenerator;
 import megalul.projectvostok.chunk.mesh.ChunkBuilder;
 import megalul.projectvostok.chunk.mesh.ChunkMesh;
 import megalul.projectvostok.chunk.storage.ChunkPos;
+import pize.math.vecmath.vector.Vec2f;
+import pize.math.vecmath.vector.Vec3f;
+import pize.util.time.FpsCounter;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -27,9 +24,10 @@ public class ChunkProvider{
     public final FpsCounter findTps, loadTps, buildTps, checkTps;
     
     private final List<ChunkPos> frontiers, newFrontiers;
+    
     private final Map<ChunkPos, Chunk> allChunks;
     private final List<ChunkPos> loadQueue;
-    private final List<Chunk> toBuildQueue;
+    private final Queue<Chunk> toBuildQueue;
     private final Map<Chunk, float[]> built;
     private final Map<Chunk, ChunkMesh> allMeshes;
     private final List<ChunkMesh> toDispose;
@@ -37,12 +35,12 @@ public class ChunkProvider{
 
     public ChunkProvider(World worldOF){
         this.worldOF = worldOF;
-    
+        
         frontiers = new ArrayList<>();
         newFrontiers = new ArrayList<>();
         allChunks = new ConcurrentHashMap<>();
         loadQueue = new CopyOnWriteArrayList<>();
-        toBuildQueue = new CopyOnWriteArrayList<>();
+        toBuildQueue = new ArrayDeque<>();
         built = new ConcurrentHashMap<>();
         allMeshes = new ConcurrentHashMap<>();
         toDispose = new CopyOnWriteArrayList<>();
@@ -88,7 +86,8 @@ public class ChunkProvider{
     
     
     private void findChunks(){
-        Vec3f camPos = getCamPos();
+        final Vec3f camPos = getCamPos();
+        
         if(frontiers.size() == 0)
             ensureFrontier(new ChunkPos(
                 getChunkPos(camPos.xf()),
@@ -104,17 +103,12 @@ public class ChunkProvider{
             ensureFrontier(frontierPos.getNeighbor(0, 1));
         }
     
-        for(ChunkPos frontier: frontiers)
-            if(!loadQueue.contains(frontier) && !allChunks.containsKey(frontier))
-                newFrontiers.add(frontier);
-    
         frontiers.removeIf(this::isOffTheGrid);
         newFrontiers.removeIf(this::isOffTheGrid);
         
         if(newFrontiers.size() == 0)
             return;
         
-        newFrontiers.sort((pos1, pos2)->Maths.round(distToChunk(pos1.x, pos1.z, camPos) - Maths.round(distToChunk(pos2.x, pos2.z, camPos))));
         loadQueue.addAll(newFrontiers);
         newFrontiers.clear();
     }
@@ -124,6 +118,7 @@ public class ChunkProvider{
             return;
         
         frontiers.add(chunkPos);
+        newFrontiers.add(chunkPos);
     }
     
 
@@ -138,8 +133,9 @@ public class ChunkProvider{
     }
 
     private void buildChunks(){
-        for(Chunk chunk: toBuildQueue){
-            toBuildQueue.remove(chunk);
+        while(!toBuildQueue.isEmpty()){
+            Chunk chunk = toBuildQueue.poll();
+            
             if(isOffTheGrid(chunk.getPos()))
                 continue;
             
@@ -199,115 +195,71 @@ public class ChunkProvider{
         allMeshes.put(chunk, mesh);
     }
 
-    public void rebuildChunk(Chunk chunk){
+    public void rebuildChunk(Chunk chunk, Priority priority){
         if(!toBuildQueue.contains(chunk))
             toBuildQueue.add(chunk);
     }
     
 
     private void updateNeighborChunksEdgesAndSelf(Chunk chunk, boolean loaded){
-        Chunk neighbor = allChunks.get(chunk.getPos().getNeighbor(-1, 0));
+        // neighbors
+        Chunk neighbor = getNeighborChunk(chunk, -1, 0);
         if(neighbor != null)
             for(int i = 0; i < SIZE; i++)
-                for(int y = 0; y < HEIGHT; y++){
-                    neighbor.setBlock(SIZE, y, i, loaded ? chunk.getBlock(0, y, i) : Block.AIR.getState());
-                    neighbor.setSkyLight(SIZE, y, i, loaded ? chunk.getSkyLight(0, y, i) : MAX_LIGHT_LEVEL);
-                    neighbor.setBlockLight(SIZE, y, i, loaded ? chunk.getBlockLight(0, y, i) : MAX_LIGHT_LEVEL);
-                    if(loaded){
-                        chunk.setBlock(-1, y, i, neighbor.getBlock(SIZE_IDX, y, i));
-                        chunk.setSkyLight(-1, y, i, neighbor.getSkyLight(SIZE_IDX, y, i));
-                        chunk.setBlockLight(-1, y, i, neighbor.getBlockLight(SIZE_IDX, y, i));
-                    }
-                }
-        neighbor = allChunks.get(chunk.getPos().getNeighbor(1, 0));
+                for(int y = 0; y < HEIGHT; y++)
+                    updateEdge(y, loaded, chunk, neighbor, SIZE, i, 0, i, -1, i, SIZE_IDX, i);
+        
+        neighbor = getNeighborChunk(chunk, 1, 0);
         if(neighbor != null)
             for(int i = 0; i < SIZE; i++)
-                for(int y = 0; y < HEIGHT; y++){
-                    neighbor.setBlock(-1, y, i, loaded ? chunk.getBlock(SIZE_IDX, y, i) : Block.AIR.getState());
-                    neighbor.setSkyLight(-1, y, i, loaded ? chunk.getSkyLight(SIZE_IDX, y, i) : MAX_LIGHT_LEVEL);
-                    neighbor.setBlockLight(-1, y, i, loaded ? chunk.getBlockLight(SIZE_IDX, y, i) : MAX_LIGHT_LEVEL);
-                    if(loaded){
-                        chunk.setBlock(SIZE, y, i, neighbor.getBlock(0, y, i));
-                        chunk.setSkyLight(SIZE, y, i, neighbor.getSkyLight(0, y, i));
-                        chunk.setBlockLight(SIZE, y, i, neighbor.getBlockLight(0, y, i));
-                    }
-                }
-        neighbor = allChunks.get(chunk.getPos().getNeighbor(0, -1));
+                for(int y = 0; y < HEIGHT; y++)
+                    updateEdge(y, loaded, chunk, neighbor, -1, i, SIZE_IDX, i, SIZE, i, 0, i);
+        
+        neighbor = getNeighborChunk(chunk, 0, -1);
         if(neighbor != null)
             for(int i = 0; i < SIZE; i++)
-                for(int y = 0; y < HEIGHT; y++){
-                    neighbor.setBlock(i, y, SIZE, loaded ? chunk.getBlock(i, y, 0) : Block.AIR.getState());
-                    neighbor.setSkyLight(i, y, SIZE, loaded ? chunk.getSkyLight(i, y, 0) : MAX_LIGHT_LEVEL);
-                    neighbor.setBlockLight(i, y, SIZE, loaded ? chunk.getBlockLight(i, y, 0) : MAX_LIGHT_LEVEL);
-                    if(loaded){
-                        chunk.setBlock(i, y, -1, neighbor.getBlock(i, y, SIZE_IDX));
-                        chunk.setSkyLight(i, y, -1, neighbor.getSkyLight(i, y, SIZE_IDX));
-                        chunk.setBlockLight(i, y, -1, neighbor.getBlockLight(i, y, SIZE_IDX));
-                    }
-                }
-        neighbor = allChunks.get(chunk.getPos().getNeighbor(0, 1));
+                for(int y = 0; y < HEIGHT; y++)
+                    updateEdge(y, loaded, chunk, neighbor, i, SIZE, i, 0, i, -1, i, SIZE_IDX);
+        
+        neighbor = getNeighborChunk(chunk, 0, 1);
         if(neighbor != null)
             for(int i = 0; i < SIZE; i++)
-                for(int y = 0; y < HEIGHT; y++){
-                    neighbor.setBlock(i, y, -1, loaded ? chunk.getBlock(i, y, SIZE_IDX) : Block.AIR.getState());
-                    neighbor.setSkyLight(i, y, -1, loaded ? chunk.getSkyLight(i, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
-                    neighbor.setBlockLight(i, y, -1, loaded ? chunk.getBlockLight(i, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
-                    if(loaded){
-                        chunk.setBlock(i, y, SIZE, neighbor.getBlock(i, y, 0));
-                        chunk.setSkyLight(i, y, SIZE, neighbor.getSkyLight(i, y, 0));
-                        chunk.setBlockLight(i, y, SIZE, neighbor.getBlockLight(i, y, 0));
-                    }
-                }
+                for(int y = 0; y < HEIGHT; y++)
+                    updateEdge(y, loaded, chunk, neighbor, i, -1, i, SIZE_IDX, i, SIZE, i, 0);
     
         // corners
-        neighbor = allChunks.get(chunk.getPos().getNeighbor(-1, 1));
+        neighbor = getNeighborChunk(chunk, -1, 1);
         if(neighbor != null)
-            for(int y = 0; y < HEIGHT; y++){
-                neighbor.setBlock(SIZE, y, -1, loaded ? chunk.getBlock(0, y, SIZE_IDX) : Block.AIR.getState());
-                neighbor.setSkyLight(SIZE, y, -1, loaded ? chunk.getSkyLight(0, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
-                neighbor.setBlockLight(SIZE, y, -1, loaded ? chunk.getBlockLight(0, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
-                if(loaded){
-                    chunk.setBlock(-1, y, SIZE, neighbor.getBlock(SIZE_IDX, y, 0));
-                    chunk.setSkyLight(-1, y, SIZE, neighbor.getSkyLight(SIZE_IDX, y, 0));
-                    chunk.setBlockLight(-1, y, SIZE, neighbor.getBlockLight(SIZE_IDX, y, 0));
-                }
-            }
-        neighbor = allChunks.get(chunk.getPos().getNeighbor(1, 1));
+            for(int y = 0; y < HEIGHT; y++)
+                updateEdge(y, loaded, chunk, neighbor, SIZE, -1, 0, SIZE_IDX, -1, SIZE, SIZE_IDX, 0);
+        
+        neighbor = getNeighborChunk(chunk, 1, 1);
         if(neighbor != null)
-            for(int y = 0; y < HEIGHT; y++){
-                neighbor.setBlock(-1, y, -1, loaded ? chunk.getBlock(SIZE_IDX, y, SIZE_IDX) : Block.AIR.getState());
-                neighbor.setSkyLight(-1, y, -1, loaded ? chunk.getSkyLight(SIZE_IDX, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
-                neighbor.setBlockLight(-1, y, -1, loaded ? chunk.getBlockLight(SIZE_IDX, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
-                if(loaded){
-                    chunk.setBlock(SIZE, y, SIZE, neighbor.getBlock(0, y, 0));
-                    chunk.setSkyLight(SIZE, y, SIZE, neighbor.getSkyLight(0, y, 0));
-                    chunk.setBlockLight(SIZE, y, SIZE, neighbor.getBlockLight(0, y, 0));
-                }
-            }
-        neighbor = allChunks.get(chunk.getPos().getNeighbor(-1, -1));
+            for(int y = 0; y < HEIGHT; y++)
+                updateEdge(y, loaded, chunk, neighbor, -1, -1, SIZE_IDX, SIZE_IDX, SIZE, SIZE, 0, 0);
+        
+        neighbor = getNeighborChunk(chunk, -1, -1);
         if(neighbor != null)
-            for(int y = 0; y < HEIGHT; y++){
-                neighbor.setBlock(SIZE, y, SIZE, loaded ? chunk.getBlock(0, y, 0) : Block.AIR.getState());
-                neighbor.setSkyLight(SIZE, y, SIZE, loaded ? chunk.getSkyLight(0, y, 0) : MAX_LIGHT_LEVEL);
-                neighbor.setBlockLight(SIZE, y, SIZE, loaded ? chunk.getBlockLight(0, y, 0) : MAX_LIGHT_LEVEL);
-                if(loaded){
-                    chunk.setBlock(-1, y, -1, neighbor.getBlock(SIZE_IDX, y, SIZE_IDX));
-                    chunk.setSkyLight(-1, y, -1, neighbor.getSkyLight(SIZE_IDX, y, SIZE_IDX));
-                    chunk.setBlockLight(-1, y, -1, neighbor.getBlockLight(SIZE_IDX, y, SIZE_IDX));
-                }
-            }
-        neighbor = allChunks.get(chunk.getPos().getNeighbor(-1, 1));
+            for(int y = 0; y < HEIGHT; y++)
+                updateEdge(y, loaded, chunk, neighbor, SIZE, SIZE, 0, 0, -1, -1, SIZE_IDX, SIZE_IDX);
+        
+        neighbor = getNeighborChunk(chunk, -1, 1);
         if(neighbor != null)
-            for(int y = 0; y < HEIGHT; y++){
-                neighbor.setBlock(SIZE, y, -1, loaded ? chunk.getBlock(0, y, SIZE_IDX) : Block.AIR.getState());
-                neighbor.setSkyLight(SIZE, y, -1, loaded ? chunk.getSkyLight(0, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
-                neighbor.setBlockLight(SIZE, y, -1, loaded ? chunk.getBlockLight(0, y, SIZE_IDX) : MAX_LIGHT_LEVEL);
-                if(loaded){
-                    chunk.setBlock(-1, y, SIZE, neighbor.getBlock(SIZE_IDX, y, 0));
-                    chunk.setSkyLight(-1, y, SIZE, neighbor.getSkyLight(SIZE_IDX, y, 0));
-                    chunk.setBlockLight(-1, y, SIZE, neighbor.getBlockLight(SIZE_IDX, y, 0));
-                }
-            }
+            for(int y = 0; y < HEIGHT; y++)
+                updateEdge(y, loaded, chunk, neighbor, SIZE, -1, 0, SIZE_IDX, -1, SIZE, SIZE_IDX, 0);
+    }
+    
+    
+    private void updateEdge(int y, boolean loaded, Chunk chunk1, Chunk chunk2, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
+        chunk2.setBlock(x1, y, y1, loaded ? chunk1.getBlock(x2, y, y2) : Block.AIR.getState());
+        chunk2.setSkyLight(x1, y, y1, loaded ? chunk1.getSkyLight(x2, y, y2) : MAX_LIGHT_LEVEL);
+        chunk2.setBlockLight(x1, y, y1, loaded ? chunk1.getBlockLight(x2, y, y2) : MAX_LIGHT_LEVEL);
+        
+        if(loaded){
+            chunk1.setBlock(x3, y, y3, chunk2.getBlock(x4, y, y4));
+            chunk1.setSkyLight(x3, y, y3, chunk2.getSkyLight(x4, y, y4));
+            chunk1.setBlockLight(x3, y, y3, chunk2.getBlockLight(x4, y, y4));
+        }
     }
 
 

@@ -1,5 +1,6 @@
 package megalul.projectvostok.chunk.gen;
 
+import megalul.projectvostok.chunk.Priority;
 import pize.math.Maths;
 import pize.math.function.FastNoiseLite;
 import megalul.projectvostok.block.blocks.Block;
@@ -38,7 +39,7 @@ public class DefaultGenerator implements ChunkGenerator{
                     chunk.setBlockFast(i, y, j, Block.GRASS_BLOCK.getState());
             }
         
-        chunk.rebuild();
+        chunk.rebuild(Priority.NEW_CHUNK);
         // System.out.println("Gen: " + timer.getMillis());
     }
 

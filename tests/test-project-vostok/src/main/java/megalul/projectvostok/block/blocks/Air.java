@@ -15,11 +15,6 @@ public class Air extends BlockProperties{
     }
     
     @Override
-    public final boolean isTransparent(){
-        return true;
-    }
-    
-    @Override
     public final BlockTextureRegion getTextureRegion(){
         return null;
     }
