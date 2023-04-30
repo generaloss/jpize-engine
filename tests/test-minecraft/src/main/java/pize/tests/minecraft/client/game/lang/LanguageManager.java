@@ -24,7 +24,7 @@ public class LanguageManager{
     public void updateAvailableLanguages(){
         languages.clear();
 
-        FileHandle langDir = new FileHandle("vanilla/lang/");
+        FileHandle langDir = new FileHandle("vanilla/lang/", true);
 
         FileHandle[] langList = langDir.list();
         if(langList == null)

@@ -7,6 +7,7 @@ import pize.audio.util.SoundGenerator;
 import pize.context.ContextListener;
 import pize.files.FileHandle;
 import pize.io.glfw.Key;
+import pize.util.Utils;
 
 public class Main implements ContextListener{
 
@@ -22,7 +23,7 @@ public class Main implements ContextListener{
 
     @Override
     public void init(){
-        FileHandle file = new FileHandle("Generated.wav");
+        FileHandle file = new FileHandle("Generated.wav", true);
         file.create();
 
         // Generate WAV File and Save
@@ -32,7 +33,7 @@ public class Main implements ContextListener{
         wavFile.save();
 
         // Load Generated WAV
-        sound = new Sound("Generated.wav");
+        sound = new Sound(file);
         System.out.println("Generated.wav duration: " + sound.getDuration() + " sec");
         sound.setVolume(0.25F);
         sound.play();

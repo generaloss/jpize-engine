@@ -24,10 +24,11 @@ import pize.io.glfw.Key;
 import pize.math.vecmath.vector.Vec3i;
 import pize.util.time.Sync;
 
+import static megalul.projectvostok.chunk.ChunkUtils.HEIGHT_IDX;
+
 public class Main implements ContextListener{
 
     public static String GAME_DIR_PATH = "./";
-    public static boolean UPDATE_DEPTH_MAP = false;
 
 
     public static void main(String[] args){
@@ -48,6 +49,7 @@ public class Main implements ContextListener{
     private final Sync fpsSync;
     
     private float zoomFOV;
+    private int infoLineNum, hintLineNum;
 
     public Main(){
         uiBatch = new TextureBatch(200);
@@ -93,37 +95,54 @@ public class Main implements ContextListener{
         if(!options.isShowFPS())
             return;
 
+        infoLineNum = 0;
+        hintLineNum = 0;
+
         uiBatch.setColor(0.5F, 0.4F, 0.1F, 1);
         uiBatch.begin();
 
         // INFO
-        font.drawText(uiBatch, "fps: " + Pize.getFPS(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight());
-        font.drawText(uiBatch, "position: " + camera.getX() + ", " + camera.getY() + ", " + camera.getZ(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 2);
-        font.drawText(uiBatch, "chunk: " + camera.chunkX() + ", " + camera.chunkZ(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 3);
-        font.drawText(uiBatch, "Threads:", 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 4);
-        font.drawText(uiBatch, "chunk find tps: " + world.getProvider().findTps.get(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 5);
-        font.drawText(uiBatch, "chunk load tps: " + world.getProvider().loadTps.get(),   25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 6);
-        font.drawText(uiBatch, "chunk build tps: " + world.getProvider().buildTps.get(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 7);
-        font.drawText(uiBatch, "chunk check tps: " + world.getProvider().checkTps.get(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 8);
-        font.drawText(uiBatch, "meshes: " + world.getProvider().getMeshes().size(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 9);
-        font.drawText(uiBatch, "render chunks: " + world.getProvider().getChunks().stream().filter(camera::isChunkSeen).count(), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 10);
-        font.drawText(uiBatch, "Light time (I/D): " + WorldLight.increaseTime + " ms, " + WorldLight.decreaseTime + " ms", 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 11);
-        font.drawText(uiBatch, "Chunk build time (T/V): " + ChunkBuilder.buildTime + " ms, " + ChunkBuilder.vertexCount + " vertices", 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 12);
-        Vec3i imaginaryPos = rayCast.getImaginaryBlockPosition();
-        Vec3i selectedPos = rayCast.getSelectedBlockPosition();
-        font.drawText(uiBatch, "Selected light level (F/B): " + world.getLight(imaginaryPos.x, imaginaryPos.y, imaginaryPos.z) + ", " + world.getLight(selectedPos.x, selectedPos.y, selectedPos.z), 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * 13);
+        final Vec3i selectedPos = rayCast.getSelectedBlockPosition();
+        final Vec3i imaginaryPos = rayCast.getImaginaryBlockPosition();
+        imaginaryPos.y = Math.max(0, Math.min(imaginaryPos.y, HEIGHT_IDX));
+
+        info("fps: " + Pize.getFPS());
+        info("position: " + camera.getX() + ", " + camera.getY() + ", " + camera.getZ());
+        info("chunk: " + camera.chunkX() + ", " + camera.chunkZ());
+        info("Threads:");
+        info("chunk find tps: " + world.getProvider().findTps.get());
+        info("chunk load tps: " + world.getProvider().loadTps.get());
+        info("chunk build tps: " + world.getProvider().buildTps.get());
+        info("chunk check tps: " + world.getProvider().checkTps.get());
+        info("meshes: " + world.getProvider().getMeshes().size());
+        info("render chunks: " + world.getProvider().getChunks().stream().filter(camera::isChunkSeen).count());
+        info("Light time (I/D): " + WorldLight.increaseTime + " ms, " + WorldLight.decreaseTime + " ms");
+        info("Chunk build time (T/V): " + ChunkBuilder.buildTime + " ms, " + ChunkBuilder.vertexCount + " vertices");
+        info("Selected light level (F/B): " + world.getLight(imaginaryPos.x, imaginaryPos.y, imaginaryPos.z) + ", " + world.getLight(selectedPos.x, selectedPos.y, selectedPos.z));
 
         // CTRL HINT
-        font.drawText(uiBatch, "1, 2, 3 - set render mode", 25, 25 + font.getScaledLineHeight() * 0);
-        font.drawText(uiBatch, "R - show mouse", 25, 25 + font.getScaledLineHeight() * 1);
-        font.drawText(uiBatch, "F3 + G - show chunk border", 25, 25 + font.getScaledLineHeight() * 2);
-        font.drawText(uiBatch, options.getKey(KeyMapping.ZOOM) + " + Mouse Wheel - zoom", 25, 25 + font.getScaledLineHeight() * 3);
-        font.drawText(uiBatch, "L - stop loading chunks", 25, 25 + font.getScaledLineHeight() * 4);
+        hint("1, 2, 3 - set render mode");
+        hint("R - show mouse");
+        hint("F3 + G - show chunk border");
+        hint(options.getKey(KeyMapping.ZOOM) + " + mouse wheel - zoom");
+        hint("L - stop loading chunks");
 
         uiBatch.end();
     }
 
-    private void controls(){
+
+    private void info(String text){
+        infoLineNum++;
+        font.drawText(uiBatch, text, 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * infoLineNum);
+    }
+
+    private void hint(String text){
+        hintLineNum++;
+        font.drawText(uiBatch, text, 25, 25 + font.getScaledLineHeight() * hintLineNum);
+    }
+
+
+    private void controls(){//: HARAM
         // EXIT
         if(Pize.isDown(Key.ESCAPE))
             Pize.exit();

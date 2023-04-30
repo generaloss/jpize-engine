@@ -34,8 +34,6 @@ public class MainMenuScreen extends Screen{
 
     private final FileHandle splashesFile;
     private final TextView splashTextView;
-    
-    private final GaussianBlur postEffect = new GaussianBlur(1);
 
     public MainMenuScreen(Session session){
         super(session);
@@ -169,11 +167,9 @@ public class MainMenuScreen extends Screen{
     @Override
     public void render(Batch batch){
         // Panorama
-        postEffect.begin();
         camera.getRot().yaw -= Pize.getDeltaTime() * 2;
         camera.update();
         skyBox.render(camera);
-        postEffect.end();
         // Panorama Overlay
         batch.setAlpha(0.8F);
         batch.draw(panorama_overlay, 0, 0, Pize.getWidth(), Pize.getHeight());
@@ -195,8 +191,7 @@ public class MainMenuScreen extends Screen{
 
     @Override
     public void resize(int width, int height){
-        postEffect.setRadius(15);
-        postEffect.resize(width, height);
+
     }
 
 
