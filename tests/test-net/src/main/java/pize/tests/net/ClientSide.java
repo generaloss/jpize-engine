@@ -45,6 +45,7 @@ public class ClientSide implements TcpListener<byte[]>{
                     Utils.delayElapsed(1000);
                     final PingPacket ping = new PingPacket(System.nanoTime());
                     ping.write((TcpByteChannel) sender);
+                    System.out.println("TIME TX: " + System.nanoTime());
                 }
                 
                 default -> System.out.println("   received: ?Unknown Packet Type?");

@@ -31,30 +31,35 @@ public class TcpByteChannel extends NetChannel<byte[]>{
                 
                 while(!Thread.interrupted() && !closed){
                     Thread.yield();
-                    Utils.delayMillis(10);
                     
-                    // if(socket.isInputShutdown() || socket.isOutputShutdown() || socket.isClosed())
-                    //     close();
-                    
-                    if(available() == 0)
+                    if(inStream.available() == 0)
                         continue;
+                    
+                    if(socket.isInputShutdown() || socket.isOutputShutdown() || socket.isClosed()){
+                        System.out.println("in: " + socket.isInputShutdown() + ", out: " + socket.isOutputShutdown() + ", s: " + socket.isClosed());
+                        close();
+                    }
                     
                     int length = inStream.readInt();
                     if(length == -1){
+                        System.out.println("len: -1");
                         close();
-                        
-                    }else if(length != 0 && inStream.available() != 0){
+                    }
+                    else if(length != 0 && inStream.available() != 0){
                         byte[] bytes = new byte[length];
                         
                         if(encodingKey != null)
                             bytes = encodingKey.decrypt(bytes);
                         
+                        System.out.println("reading " + length + " bytes");
                         inStream.readFully(bytes);
+                        System.out.println("read");
                         receivedQueue.add(bytes);
+                        System.out.println("TIME RX: " + System.nanoTime());
                     }
                 }
             }catch(IOException e){ // Socket closed
-                System.err.println("TcpByteChannel (receiving error): " + e.getMessage());
+                System.err.println("Socket closed");
                 setClosed();
             }
         });
