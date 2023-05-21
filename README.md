@@ -19,6 +19,23 @@ Modules:
 * Files (Resources: Internal / External)
 * Utils (FastReader, FpsCounter, Sync, Stopwatch, TickGenerator, ...etc)
 
+#### 2D Graphics:
+``` java
+TextureBatch batch = new TextureBatch(); // canvas for textures
+Texture texture = new Texture("texture.png");
+
+batch.begin();
+
+// rotate, shift and scale for subsequent textures
+batch.rotate(angle);
+batch.shear(angle_x, angle_y);
+batch.scale(scale);
+// texture drawing
+batch.draw(texture, x, y, width, height);
+
+batch.end();
+```
+
 ### Net:
 * Security Keys (AES, RSA)
 * TCP / UDP Client and Server
