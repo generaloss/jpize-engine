@@ -32,13 +32,13 @@ public class TcpByteChannel extends NetChannel<byte[]>{
                 while(!Thread.interrupted() && !closed){
                     Thread.yield();
                     
-                    if(inStream.available() == 0)
-                        continue;
-                    
                     if(socket.isInputShutdown() || socket.isOutputShutdown() || socket.isClosed()){
-                        System.out.println("in: " + socket.isInputShutdown() + ", out: " + socket.isOutputShutdown() + ", s: " + socket.isClosed());
+                        System.out.println("in: " + socket.isInputShutdown() + ", out: " + socket.isOutputShutdown() + ", socket: " + socket.isClosed());
                         close();
                     }
+                    
+                    if(inStream.available() == 0)
+                        continue;
                     
                     int length = inStream.readInt();
                     if(length == -1){
@@ -58,7 +58,7 @@ public class TcpByteChannel extends NetChannel<byte[]>{
                         System.out.println("TIME RX: " + System.nanoTime());
                     }
                 }
-            }catch(IOException e){ // Socket closed
+            }catch(IOException e){
                 System.err.println("Socket closed");
                 setClosed();
             }

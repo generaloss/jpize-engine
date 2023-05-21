@@ -1,12 +1,8 @@
 package pize.tests.net;
 
 import pize.net.NetChannel;
-import pize.net.tcp.TcpByteChannel;
 import pize.net.tcp.TcpClient;
 import pize.net.tcp.TcpListener;
-import pize.util.Utils;
-
-import java.io.IOException;
 
 public class ClientSide implements TcpListener<byte[]>{
     
@@ -26,6 +22,7 @@ public class ClientSide implements TcpListener<byte[]>{
     
     @Override
     public void received(byte[] data, NetChannel<byte[]> sender){
+        /*
         try{
             PacketUtils.receive(data);
             switch(PacketUtils.packetTypeID){
@@ -54,6 +51,7 @@ public class ClientSide implements TcpListener<byte[]>{
         }catch(IOException e){
             e.printStackTrace();
         }
+        */
     }
     
     @Override
