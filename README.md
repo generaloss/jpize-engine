@@ -36,10 +36,22 @@ batch.draw(texture, x, y, width, height);
 batch.end();
 ```
 
+#### Load Audio:
+``` java
+Sound sound = new Sound("sound.mp3");
+
+sound.setVolume(0.5F);
+sound.setLooping(true);
+sound.setPitch(1.5F);
+
+sound.play();
+```
+
 ### Net:
 * Security Keys (AES, RSA)
 * TCP / UDP Client and Server
 
+#### Server-Client example:
 ``` java
 KeyAES key = new KeyAES(512); // generate key for connection encoding
 
@@ -62,7 +74,9 @@ client.send("Hello, World!".getBytes());
 
 ### Physics:
 * AABB Collider (2D, 3D)
-* Utils (Velocity, Body) 
+* Utils (Velocity, Body)
+
+
 
 ### UI:
 * Constraint (pixel, relative, aspect) - used to determine the static or dynamic position and size of ui components.
