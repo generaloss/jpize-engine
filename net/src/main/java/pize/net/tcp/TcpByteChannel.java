@@ -37,7 +37,7 @@ public class TcpByteChannel extends NetChannel<byte[]>{
                         close();
                     }
                     
-                    if(inStream.available() == 0)
+                    if(inStream.available() < 1)
                         continue;
                     
                     int length = inStream.readInt();
@@ -45,7 +45,7 @@ public class TcpByteChannel extends NetChannel<byte[]>{
                         System.out.println("len: -1");
                         close();
                     }
-                    else if(length != 0 && inStream.available() != 0){
+                    else if(length != 0){
                         byte[] bytes = new byte[length];
                         
                         if(encodingKey != null)

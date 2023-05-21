@@ -1,7 +1,5 @@
 package pize.net.tcp;
 
-import pize.util.Utils;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -38,10 +36,10 @@ public class TcpClient{
     private void receivePackets(){
         final Thread receiveThread = new Thread(()->{
             while(!Thread.interrupted() && !channel.isClosed()){
+                Thread.yield();
+                
                 if(channel.isAvailable())
                     listener.received(channel.nextPacket(), channel);
-                
-                Thread.yield();
             }
             listener.disconnected(channel);
         });
