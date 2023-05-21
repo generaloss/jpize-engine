@@ -24,10 +24,10 @@ Modules:
 * AABB Collider (2D, 3D)
 * Utils (Velocity, Body) 
 
-### UI
-``` java
-I want pizza
-```
+### UI:
+* Constraint (pixel, relative, aspect) - used to determine the static or dynamic position and size of ui components.
+* Align (center, up, right, ...etc)
+* LayoutType (vertical / horizontal / none)
 
 ## Bugs and Feedback
 For bugs, questions and discussions please use the [GitHub Issues](https://github.com/GeneralPashon/Pizza-Engine/issues).
