@@ -35,7 +35,7 @@ batch.draw(texture, x, y, width, height);
 batch.end();
 ```
 
-#### 2. Get Input & FPS:
+#### 2. Input:
 ``` java
 // mouse
 Pize.getX(); // position
