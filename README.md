@@ -46,6 +46,11 @@ sound.setPitch(1.5F);
 sound.play();
 ```
 
+#### 3. Math:
+``` java
+
+```
+
 ### Net:
 * Security Keys (AES, RSA)
 * TCP / UDP Client and Server
