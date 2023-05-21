@@ -79,18 +79,7 @@ sound.setPitch(1.5F);
 sound.play();
 ```
 
-#### 4. Load Audio:
-``` java
-Sound sound = new Sound("sound.mp3");
-
-sound.setVolume(0.5F);
-sound.setLooping(true);
-sound.setPitch(1.5F);
-
-sound.play();
-```
-
-#### 5. Resources:
+#### 4. Resources:
 ``` java
 // internal / external
 Resource res = new Resource(path, true); // external
