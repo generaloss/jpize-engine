@@ -1,6 +1,5 @@
 package pize.net.tcp;
 
-import pize.util.MTArrayList;
 import pize.util.Utils;
 
 import java.io.Closeable;
@@ -8,95 +7,111 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
-import java.util.Iterator;
+import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class TcpServer implements Closeable{
 
     private ServerSocket serverSocket;
-    private MTArrayList<TcpConnection> connections;
-    private Thread connectorThread, receiverThread;
-    private final TcpServerListener<TcpPacket> listener;
+    private CopyOnWriteArrayList<TcpByteChannel> channels;
+    private final TcpListener<byte[]> listener;
     private boolean closed;
 
-    public TcpServer(TcpServerListener<TcpPacket> listener){
+    public TcpServer(TcpListener<byte[]> listener){
         this.listener = listener;
-
         closed = true;
     }
 
-    public synchronized TcpServer start(String ip, int port){
+    public synchronized void run(String address, int port){
         if(!closed)
-            throw new RuntimeException("Already enabled");
+            throw new RuntimeException("Server already running");
 
         try{
             serverSocket = new ServerSocket();
-            serverSocket.bind(new InetSocketAddress(InetAddress.getByName(ip), port));
+            serverSocket.bind(new InetSocketAddress(InetAddress.getByName(address), port));
             serverSocket.setPerformancePreferences(0, 2, 1);
             closed = false;
 
-            connections = new MTArrayList<>();
-
-            connectorThread = new Thread(()->{
-                try{
-                    while(!Thread.interrupted()){
-                        TcpConnection connection = new TcpConnection(serverSocket.accept());
-                        connections.add(connection);
-                        listener.connected(connection);
-                    }
-                }catch(IOException ignored){
-                }
-            });
-            connectorThread.setDaemon(true);
-            connectorThread.setPriority(Thread.MIN_PRIORITY);
-            connectorThread.start();
-
-            receiverThread = new Thread(()->{
-                while(!Thread.interrupted()){
-                    for(int i = 0; i < connections.size(); i++){
-                        TcpConnection connection = connections.get(i);
-                        if(connection.isClosed()){
-                            connections.remove(connection);
-                            listener.disconnected(connection);
-                            continue;
-                        }
-                        if(connection.available() != 0)
-                            listener.received(connection.next(), connection);
-                    }
+            channels = new CopyOnWriteArrayList<>();
+            waitConnections();
+            receivePackets();
+        }catch(IOException e){
+            System.err.println("TcpServer (run error): " + e.getMessage());
+        }
+    }
+    
+    private void waitConnections(){
+        final Thread connectorThread = new Thread(()->{
+            try{
+                while(!Thread.interrupted() && !closed){
+                    TcpByteChannel channel = new TcpByteChannel(serverSocket.accept());
+                    channels.add(channel);
+                    listener.connected(channel);
+                    
                     Thread.yield();
                 }
-            });
-
-            receiverThread.setDaemon(true);
-            receiverThread.setPriority(Thread.MIN_PRIORITY);
-            receiverThread.start();
-
-        }catch(Exception e){
-            throw new RuntimeException("TcpServer startup error: " + e.getMessage());
-        }
-
-        return this;
+            }catch(IOException e){
+                System.err.println("TcpServer (connect client error): " + e.getMessage());
+            }
+        });
+        
+        connectorThread.setDaemon(true);
+        connectorThread.setPriority(Thread.MIN_PRIORITY);
+        connectorThread.start();
     }
 
-    public void broadcast(TcpPacket packet){
-        for(TcpConnection connection: connections)
-            connection.send(packet);
+    private void receivePackets(){
+        final Thread receiveThread = new Thread(()->{
+            while(!Thread.interrupted() && !closed){
+                for(int i = 0; i < channels.size(); i++){
+                    final TcpByteChannel channel = channels.get(i);
+                    if(channel.isAvailable())
+                        listener.received(channel.nextPacket(), channel);
+                    
+                    else if(channel.isClosed())
+                        disconnect(channel);
+                }
+                
+                Thread.yield();
+            }
+        });
+        
+        receiveThread.setDaemon(true);
+        receiveThread.setPriority(Thread.MIN_PRIORITY);
+        receiveThread.start();
     }
+    
+    
+    public void broadcast(byte[] packet){
+        for(TcpByteChannel channel: channels)
+            channel.send(packet);
+    }
+    
+    public void disconnect(TcpByteChannel channel){
+        channels.remove(channel);
+        listener.disconnected(channel);
+        channel.close();
+    }
+    
 
-    public Iterator<TcpConnection> getConnections(){
-        return connections.iterator();
+    public Collection<TcpByteChannel> getAllChannels(){
+        return channels;
+    }
+    
+    
+    public boolean isClosed(){
+        return closed;
     }
 
     @Override
     public void close(){
         if(closed)
             return;
-
-        connectorThread.interrupt();
-        receiverThread.interrupt();
-
-        for(TcpConnection connection: connections)
+        
+        for(TcpByteChannel connection: channels)
             connection.close();
-        connections.clear();
+        channels.clear();
+        closed = true;
 
         Utils.close(serverSocket);
     }

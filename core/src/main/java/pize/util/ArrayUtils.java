@@ -6,6 +6,7 @@ public class ArrayUtils{
         for(int i: arr)
             if(i == e)
                 return true;
+        
         return false;
     }
 
@@ -13,6 +14,7 @@ public class ArrayUtils{
         float[] c = new float[a.length + b.length];
         System.arraycopy(a, 0, c, 0, a.length);
         System.arraycopy(b, 0, c, a.length, b.length);
+        
         return c;
     }
 
@@ -20,6 +22,7 @@ public class ArrayUtils{
         float[] c = add(a, b[0]);
         for(int i = 1; i < b.length; i++)
             c = add(c, b[i]);
+        
         return c;
     }
 

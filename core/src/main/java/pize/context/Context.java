@@ -17,7 +17,7 @@ import pize.io.Mouse;
 import pize.io.Window;
 import pize.util.Utils;
 import pize.util.time.DeltaTimeCounter;
-import pize.util.time.FpsCounter;
+import pize.util.time.PerSecCounter;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
@@ -29,7 +29,7 @@ public class Context{
     private final Keyboard keyboard;
     private final Mouse mouse;
 
-    private final FpsCounter fpsCounter;
+    private final PerSecCounter fpsCounter;
     private final DeltaTimeCounter deltaTimeCounter;
 
     private Screen screen;
@@ -43,8 +43,8 @@ public class Context{
         this.keyboard = keyboard;
         this.mouse = mouse;
 
-        fpsCounter = new FpsCounter();
-        fpsCounter.update();
+        fpsCounter = new PerSecCounter();
+        fpsCounter.count();
         deltaTimeCounter = new DeltaTimeCounter();
         deltaTimeCounter.update();
     }
@@ -66,7 +66,7 @@ public class Context{
                 listener.resize(width, height);
             }
 
-            fpsCounter.update();
+            fpsCounter.count();
             deltaTimeCounter.update();
 
             glfwPollEvents();

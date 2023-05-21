@@ -1,14 +1,14 @@
 package pize.graphics.util;
 
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.camera.PerspectiveCamera;
 
 public class BaseShader extends Shader{
 
     public BaseShader(){
         super(
-            new FileHandle("shader/base/base.vert"),
-            new FileHandle("shader/base/base.frag")
+            new Resource("shader/base/base.vert"),
+            new Resource("shader/base/base.frag")
         );
     }
 

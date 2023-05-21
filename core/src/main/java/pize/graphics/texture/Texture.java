@@ -1,7 +1,7 @@
 package pize.graphics.texture;
 
 import pize.context.Resizable;
-import pize.files.FileHandle;
+import pize.files.Resource;
 
 import static org.lwjgl.opengl.GL33.*;
 
@@ -27,8 +27,8 @@ public class Texture extends GlTexture implements Resizable{
         this(PixmapIO.load(filepath));
     }
 
-    public Texture(FileHandle file){
-        this(PixmapIO.load(file));
+    public Texture(Resource res){
+        this(PixmapIO.load(res));
     }
 
     public Texture(Texture texture){

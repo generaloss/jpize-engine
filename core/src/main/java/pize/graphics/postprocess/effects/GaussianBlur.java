@@ -1,7 +1,7 @@
 package pize.graphics.postprocess.effects;
 
 import pize.Pize;
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.gl.Gl;
 import pize.graphics.postprocess.FrameBufferObject;
 import pize.graphics.postprocess.PostProcessEffect;
@@ -36,7 +36,7 @@ public class GaussianBlur implements PostProcessEffect{
         fbo2.create();
 
         // Shader (quad)
-        shader = new Shader(new FileHandle("shader/blur/blur.vert"), new FileHandle("shader/blur/blur.frag"));
+        shader = new Shader(new Resource("shader/blur/blur.vert"), new Resource("shader/blur/blur.frag"));
     }
 
 

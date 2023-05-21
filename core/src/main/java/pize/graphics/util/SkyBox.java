@@ -1,7 +1,7 @@
 package pize.graphics.util;
 
 import pize.context.Disposable;
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.camera.Camera;
 import pize.graphics.gl.Gl;
 import pize.graphics.gl.Type;
@@ -19,7 +19,7 @@ public class SkyBox implements Disposable{
     public SkyBox(String px, String nx, String py, String ny, String pz, String nz){
         cubeMap = new CubeMap(px, nx, py, ny, pz, nz);
 
-        shader = new Shader(new FileHandle("shader/skybox/skybox.vert"), new FileHandle("shader/skybox/skybox.frag"));
+        shader = new Shader(new Resource("shader/skybox/skybox.vert"), new Resource("shader/skybox/skybox.frag"));
 
         mesh = new Mesh(new VertexAttr(3, Type.FLOAT));
         mesh.setVertices(new float[]{

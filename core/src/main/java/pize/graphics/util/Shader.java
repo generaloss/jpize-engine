@@ -1,6 +1,6 @@
 package pize.graphics.util;
 
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.gl.GlObject;
 import pize.graphics.texture.CubeMap;
 import pize.graphics.texture.Texture;
@@ -43,8 +43,8 @@ public class Shader extends GlObject{
         detectUniforms(fragmentCode);
     }
 
-    public Shader(FileHandle vertexFile, FileHandle fragmentFile){
-        this(vertexFile.readString(), fragmentFile.readString());
+    public Shader(Resource resVertex, Resource resFragment){
+        this(resVertex.readString(), resFragment.readString());
     }
 
     public Shader(String vertexCode, String fragmentCode, String geometryCode){
@@ -74,8 +74,8 @@ public class Shader extends GlObject{
         detectUniforms(geometryCode);
     }
 
-    public Shader(FileHandle vertexFile, FileHandle fragmentFile, FileHandle geometryFile){
-        this(vertexFile.readString(), fragmentFile.readString(), geometryFile.readString());
+    public Shader(Resource resVertex, Resource resFragment, Resource resGeometry){
+        this(resVertex.readString(), resFragment.readString(), resGeometry.readString());
     }
 
 

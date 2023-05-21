@@ -1,6 +1,6 @@
 package pize.tests.minecraft.client.game.lang;
 
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.files.MapConfig;
 
 import java.util.HashMap;
@@ -17,21 +17,21 @@ public class LanguageManager{
 
 
     public void selectLanguage(String languageCode){
-        currentLanguage = ClientLanguage.loadFrom(new FileHandle("vanilla/lang/" + languageCode + ".txt"));
+        currentLanguage = ClientLanguage.loadFrom(new Resource("vanilla/lang/" + languageCode + ".txt"));
     }
 
 
     public void updateAvailableLanguages(){
         languages.clear();
 
-        FileHandle langDir = new FileHandle("vanilla/lang/", true);
+        Resource langDir = new Resource("vanilla/lang/");
 
-        FileHandle[] langList = langDir.list();
+        Resource[] langList = langDir.list();
         if(langList == null)
             return;
 
-        for(FileHandle langFile: langList){
-            MapConfig langMap = new MapConfig(langFile);
+        for(Resource resLang: langList){
+            MapConfig langMap = new MapConfig(resLang);
             langMap.load();
 
             String code = langMap.get("language.code");

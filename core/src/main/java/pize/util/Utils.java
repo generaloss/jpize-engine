@@ -55,6 +55,12 @@ public class Utils{
             socket.close();
         }catch(IOException ignored){ }
     }
+    
+    
+    public static void delayElapsed(long millis){
+        final long current = System.currentTimeMillis();
+        while(System.currentTimeMillis() - current < millis);
+    }
 
 
     public static void free(ByteBuffer buffer){

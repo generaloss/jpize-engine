@@ -1,7 +1,7 @@
 package pize.graphics.util.batch;
 
 import pize.Pize;
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.camera.Camera;
 import pize.graphics.gl.BufferUsage;
 import pize.graphics.gl.Type;
@@ -53,11 +53,11 @@ public class TextureBatchFast extends Batch{
 
         // Shader
 
-        String vs = new FileHandle("shader/batch/fast_batch.vert").readString().replace(
+        String vs = new Resource("shader/batch/fast_batch.vert").readString().replace(
             "POS_FUNC", roundPosition ? "vec4(round(pos.x), round(pos.y), 0, pos.w)" : "pos"
         );
 
-        String fs = new FileHandle("shader/batch/fast_batch.frag").readString().replace(
+        String fs = new Resource("shader/batch/fast_batch.frag").readString().replace(
             "TEX_SLOTS", Integer.toString(maxTextures)
         );
 

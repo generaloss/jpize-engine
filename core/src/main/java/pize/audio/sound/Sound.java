@@ -1,6 +1,6 @@
 package pize.audio.sound;
 
-import pize.files.FileHandle;
+import pize.files.Resource;
 
 import java.nio.ByteBuffer;
 
@@ -8,13 +8,13 @@ public class Sound extends AudioSource{
 
     private final AudioBuffer buffer;
 
-    public Sound(FileHandle file){
-        buffer = new AudioBuffer(file);
+    public Sound(Resource res){
+        buffer = new AudioBuffer(res);
         setBuffer(buffer);
     }
 
     public Sound(String filepath){
-        this(new FileHandle(filepath));
+        this(new Resource(filepath));
     }
 
     public Sound(ByteBuffer data, int bitsPerSample, int channels, int sampleRate){

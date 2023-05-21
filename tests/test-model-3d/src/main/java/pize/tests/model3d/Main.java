@@ -2,7 +2,7 @@ package pize.tests.model3d;
 
 import pize.Pize;
 import pize.context.ContextListener;
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.io.glfw.Key;
 import pize.math.vecmath.vector.Vec2f;
 import pize.math.vecmath.vector.Vec3f;
@@ -21,8 +21,8 @@ public class Main implements ContextListener{
     }
 
 
-    public void loadModel(FileHandle file){
-        FastReader reader = file.reader();
+    public void loadModel(Resource res){
+        FastReader reader = res.getReader();
 
         List<Vec3f> loadedVertices = new ArrayList<>();
         List<Vec3f> loadedNormals = new ArrayList<>();
@@ -92,7 +92,7 @@ public class Main implements ContextListener{
 
     @Override
     public void init(){
-        loadModel(new FileHandle("cube.obj"));
+        loadModel(new Resource("cube.obj"));
     }
 
     @Override

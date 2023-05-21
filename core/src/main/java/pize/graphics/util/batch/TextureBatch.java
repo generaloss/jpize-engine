@@ -1,7 +1,7 @@
 package pize.graphics.util.batch;
 
 import pize.Pize;
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.camera.Camera;
 import pize.graphics.gl.BufferUsage;
 import pize.graphics.gl.Type;
@@ -46,8 +46,8 @@ public class TextureBatch extends Batch{
 
         // Shader
         shader = new Shader(
-            new FileHandle("shader/batch/batch.vert").readString(),
-            new FileHandle("shader/batch/batch.frag").readString()
+            new Resource("shader/batch/batch.vert").readString(),
+            new Resource("shader/batch/batch.frag").readString()
         );
 
         { // Create VAO, VBO, EBO

@@ -17,11 +17,11 @@ public class ClientPlayerNetHandler{
     public void join(ServerAddress address){
         Logger.instance().info("Joining to server {}",address);
 
-        netClient = new TcpClient( packet->{
+        // netClient = new TcpClient( packet->{
             //if(packet.getClass() == Packet.getClass()){
             //    worldHolderOf.getWorld().getWorldInfo().getSpawnPosition().set(packet);
             //}
-        });
+        // });
 
         worldHolderOf.createWorldObject();
     }

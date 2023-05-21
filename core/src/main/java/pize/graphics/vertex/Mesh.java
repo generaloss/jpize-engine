@@ -3,7 +3,8 @@ package pize.graphics.vertex;
 import pize.context.Disposable;
 import pize.graphics.gl.BufferUsage;
 import pize.graphics.gl.Primitive;
-import pize.util.FastArrayList;
+
+import java.util.List;
 
 public class Mesh implements Disposable{
 
@@ -56,7 +57,7 @@ public class Mesh implements Disposable{
         vbo.setData(vertices, BufferUsage.DYNAMIC_DRAW);
     }
 
-    public boolean setVertices(FastArrayList<Float> verticesList){
+    public boolean setVertices(List<Float> verticesList){
         vertices = new float[verticesList.size()];
         for(int i = 0; i < vertices.length; i++){
             Float v = verticesList.get(i);

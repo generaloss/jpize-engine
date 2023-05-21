@@ -1,6 +1,6 @@
 package pize.tests.minecraft.client.game.lang;
 
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.files.MapConfig;
 
 import java.util.HashMap;
@@ -9,9 +9,9 @@ public class ClientLanguage{
 
     private HashMap<String, String> storage;
 
-    public static ClientLanguage loadFrom(FileHandle file){
+    public static ClientLanguage loadFrom(Resource res){
         ClientLanguage language = new ClientLanguage();
-        MapConfig map = new MapConfig(file);
+        MapConfig map = new MapConfig(res);
         map.load();
         language.storage = map.getMap();
 

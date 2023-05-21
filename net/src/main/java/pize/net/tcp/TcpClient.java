@@ -1,65 +1,72 @@
 package pize.net.tcp;
 
-import pize.net.NetListener;
+import pize.util.Utils;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class TcpClient{
 
-    private TcpConnection connection;
-    private Thread receiverThread;
-    private final NetListener<TcpPacket> listener;
-
-    public TcpClient(NetListener<TcpPacket> listener){
+    private TcpByteChannel channel;
+    private final TcpListener<byte[]> listener;
+    
+    public TcpClient(TcpListener<byte[]> listener){
         this.listener = listener;
     }
+    
 
-    public synchronized TcpClient connect(String ip, int port){
-        if(connection != null && !connection.isClosed())
+    public void connect(String address, int port){
+        if(channel != null && !channel.isClosed())
             throw new RuntimeException("Already connected");
-
+        
         try{
-            Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(InetAddress.getByName(ip), port));
+            final Socket socket = new Socket();
+            InetSocketAddress socketAddress = new InetSocketAddress(InetAddress.getByName(address), port);
+            socket.connect(socketAddress);
 
-            connection = new TcpConnection(socket);
-
-            receiverThread = new Thread(()->{
-                while(!Thread.interrupted()){
-                    if(connection.available() != 0)
-                        listener.received(connection.next());
-
-                    Thread.yield();
-                }
-            });
-
-            receiverThread.setDaemon(true);
-            receiverThread.setPriority(Thread.MIN_PRIORITY);
-            receiverThread.start();
-
-        }catch(Exception e){
-            throw new RuntimeException("TcpClient connection failed: " + e.getMessage());
+            channel = new TcpByteChannel(socket);
+            receivePackets();
+            listener.connected(channel);
+        }catch(IOException e){
+            System.err.println("TcpClient: " + e.getMessage());
         }
-
-        return this;
     }
-
-    public void send(TcpPacket packet){
-        connection.send(packet);
+    
+    
+    private void receivePackets(){
+        final Thread receiveThread = new Thread(()->{
+            while(!Thread.interrupted() && !channel.isClosed()){
+                if(channel.isAvailable())
+                    listener.received(channel.nextPacket(), channel);
+                
+                Thread.yield();
+            }
+            listener.disconnected(channel);
+        });
+        
+        receiveThread.setDaemon(true);
+        receiveThread.setPriority(Thread.MIN_PRIORITY);
+        receiveThread.start();
     }
-
+    
+    
+    public void send(byte[] packet){
+        channel.send(packet);
+    }
+    
     public void disconnect(){
-        if(connection != null && connection.isClosed())
+        if(channel == null || channel.isClosed())
             return;
 
-        receiverThread.interrupt();
-        connection.close();
+        channel.close();
+        listener.disconnected(channel);
     }
 
-    public TcpConnection getConnection(){
-        return connection;
+    
+    public TcpByteChannel getChannel(){
+        return channel;
     }
 
 }

@@ -1,6 +1,6 @@
 package pize.graphics.font;
 
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
@@ -28,7 +28,7 @@ public class FontLoader{
     public static BitmapFont loadFnt(String filepath){
         BitmapFont font = new BitmapFont();
 
-        FastReader reader = new FileHandle(filepath).reader();
+        FastReader reader = new Resource(filepath).getReader();
 
         while(reader.hasNext()){
             String[] tokens = reader.nextLine().trim().split("\\s+");
@@ -41,7 +41,7 @@ public class FontLoader{
 
                     String relativeTexturePath = getValue(tokens[2]).replace("\"", "");
 
-                    font.addPage(id, new Texture(new FileHandle(
+                    font.addPage(id, new Texture(new Resource(
                         Path.of(Path.of(filepath).getParent().toString() + "/" + relativeTexturePath).normalize().toString()
                     )));
                 }
@@ -99,7 +99,7 @@ public class FontLoader{
 
         ByteBuffer data;
         try{
-            byte[] bytes = new FileHandle(filepath).input().readAllBytes();
+            byte[] bytes = new Resource(filepath).inStream().readAllBytes();
             data = BufferUtils.createByteBuffer(bytes.length);
             data.put(bytes);
             data.flip();

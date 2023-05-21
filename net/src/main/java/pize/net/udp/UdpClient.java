@@ -1,16 +1,14 @@
 package pize.net.udp;
 
-import pize.net.NetListener;
-
 import java.net.*;
 
 public class UdpClient{
 
     private Thread receiverThread;
-    private final NetListener<DatagramPacket> listener;
-    private UdpConnection connection;
+    private final UdpListener listener;
+    private UdpChannel connection;
 
-    public UdpClient(NetListener<DatagramPacket> listener){
+    public UdpClient(UdpListener listener){
         this.listener = listener;
     }
 
@@ -21,12 +19,12 @@ public class UdpClient{
         try{
             DatagramSocket socket = new DatagramSocket();
             socket.connect(InetAddress.getByName(ip), port);
-            connection = new UdpConnection(socket);
+            connection = new UdpChannel(socket);
 
             receiverThread = new Thread(()->{
                 while(!Thread.interrupted()){
                     if(connection.available() != 0)
-                        listener.received(connection.next());
+                        listener.received(connection.nextPacket());
 
                     Thread.yield();
                 }
@@ -59,7 +57,7 @@ public class UdpClient{
         connection.close();
     }
 
-    public UdpConnection getConnection(){
+    public UdpChannel getConnection(){
         return connection;
     }
 

@@ -1,7 +1,7 @@
 package pize.tests.minecraft.client.game;
 
 import pize.Pize;
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.util.ScreenUtils;
 import pize.io.glfw.Key;
 import pize.tests.minecraft.client.auth.PlayerProfile;
@@ -204,10 +204,10 @@ public class Session implements Renderer{
 
         String date = dateTimeFormatter.format(ZonedDateTime.now());
 
-        FileHandle file = new FileHandle(Session.GAME_DIR_PATH + "screenshots/" + date + ".png");
-        file.mkDirs();
+        Resource resource = new Resource(Session.GAME_DIR_PATH + "screenshots/" + date + ".png");
+        resource.mkDirs();
 
-        ScreenUtils.saveScreenshot(file.getPath());
+        ScreenUtils.saveScreenshot(resource.getPath());
     }
 
 }

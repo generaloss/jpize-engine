@@ -1,7 +1,7 @@
 package pize.graphics.postprocess.effects;
 
 import pize.Pize;
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.gl.Gl;
 import pize.graphics.postprocess.FrameBufferObject;
 import pize.graphics.postprocess.PostProcessEffect;
@@ -44,11 +44,11 @@ public class Bloom implements PostProcessEffect{
         blurBuffer.create();
 
         // Shader
-        FileHandle vertexShader = new FileHandle("shader/bloom/bloom.vert");
+        Resource vertexShader = new Resource("shader/bloom/bloom.vert");
 
-        brightShader = new Shader(vertexShader, new FileHandle("shader/bloom/bloom_bright.frag"));
-        blurShader = new Shader(vertexShader, new FileHandle("shader/bloom/bloom_blur.frag"));
-        combineShader = new Shader(vertexShader, new FileHandle("shader/bloom/bloom_combine.frag"));
+        brightShader = new Shader(vertexShader, new Resource("shader/bloom/bloom_bright.frag"));
+        blurShader = new Shader(vertexShader, new Resource("shader/bloom/bloom_blur.frag"));
+        combineShader = new Shader(vertexShader, new Resource("shader/bloom/bloom_combine.frag"));
     }
 
 

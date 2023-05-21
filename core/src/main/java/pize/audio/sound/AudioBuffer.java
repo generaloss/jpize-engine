@@ -2,7 +2,7 @@ package pize.audio.sound;
 
 import pize.audio.util.AlUtils;
 import pize.context.Disposable;
-import pize.files.FileHandle;
+import pize.files.Resource;
 
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
@@ -17,13 +17,13 @@ public class AudioBuffer implements Disposable{
         id = alGenBuffers();
     }
 
-    public AudioBuffer(FileHandle file){
+    public AudioBuffer(Resource res){
         this();
-        AudioLoader.load(this, file);
+        AudioLoader.load(this, res);
     }
 
     public AudioBuffer(String filepath){
-        this(new FileHandle(filepath));
+        this(new Resource(filepath));
     }
 
 

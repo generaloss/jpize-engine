@@ -2,7 +2,7 @@ package pize.graphics.postprocess.effects;
 
 import pize.Pize;
 import pize.context.Disposable;
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.gl.*;
 import pize.graphics.postprocess.FrameBufferObject;
 import pize.graphics.texture.Texture;
@@ -49,7 +49,7 @@ public class ShadowMapping implements Disposable{
         fbo.create();
 
         // Shader
-        shader = new Shader(new FileHandle("shader/shadowMapping/shadow.vert"), new FileHandle("shader/shadowMapping/shadow.frag"));
+        shader = new Shader(new Resource("shader/shadowMapping/shadow.vert"), new Resource("shader/shadowMapping/shadow.frag"));
 
         projectionMatrix = new Matrix4f().toOrthographic(-size.x / 2, size.x / 2, size.y / 2, -size.y / 2, 1, size.z + 1);
         spaceMatrix = new Matrix4f();

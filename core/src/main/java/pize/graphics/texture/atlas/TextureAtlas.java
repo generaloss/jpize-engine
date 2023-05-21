@@ -1,6 +1,6 @@
 package pize.graphics.texture.atlas;
 
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.PixmapIO;
 import pize.graphics.texture.Region;
@@ -58,9 +58,9 @@ public class TextureAtlas{
         return id;
     }
     
-    public int put(FileHandle file){
+    public int put(Resource res){
         int id = images.size();
-        images.add(new AtlasImage(PixmapIO.load(file), id));
+        images.add(new AtlasImage(PixmapIO.load(res), id));
         return id;
     }
 

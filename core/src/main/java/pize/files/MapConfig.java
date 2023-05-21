@@ -7,25 +7,25 @@ import java.util.Map;
 
 public class MapConfig{
 
-    private FileHandle file;
+    private Resource resource;
     private final HashMap<String, String> map;
     private String separator;
 
-    public MapConfig(FileHandle file){
-        setFile(file);
+    public MapConfig(Resource resource){
+        setResource(resource);
         map = new HashMap<>();
         separator = " : ";
     }
 
     public MapConfig(File file){
-        this(new FileHandle(file));
+        this(new Resource(file));
     }
 
 
     public void load(){
         map.clear();
 
-        String[] lines = file.readString().split("\n");
+        String[] lines = resource.readString().split("\n");
         for(String line: lines){
             String[] entry = line.split(separator);
 
@@ -35,7 +35,7 @@ public class MapConfig{
     }
 
     public void save(){
-        PrintStream writer = file.writer();
+        PrintStream writer = resource.getWriter();
         for(Map.Entry<String, String> entry: map.entrySet())
             writer.println(entry.getKey() + separator + entry.getValue());
 
@@ -60,12 +60,12 @@ public class MapConfig{
         return map.getOrDefault(key, defaultValue);
     }
 
-    public void setFile(FileHandle file){
-        this.file = file;
+    public void setResource(Resource resource){
+        this.resource = resource;
     }
 
     public void setFile(File file){
-        this.file = new FileHandle(file);
+        this.resource = new Resource(file);
     }
 
     public String getSeparator(){

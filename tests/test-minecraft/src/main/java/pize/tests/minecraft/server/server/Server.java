@@ -5,7 +5,7 @@ import pize.io.glfw.Key;
 import pize.tests.minecraft.server.world.world.ServerWorld;
 import pize.tests.minecraft.utils.log.Logger;
 import pize.util.time.PizeRunnable;
-import pize.util.time.FpsCounter;
+import pize.util.time.PerSecCounter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ public abstract class Server{
     private final GameTime gameTime;
     private ServerStatus status;
     private Thread serverThread;
-    private final FpsCounter deltaTimeCounter;
+    private final PerSecCounter deltaTimeCounter;
 
     public Server(){
         worlds = new HashMap<>();
@@ -25,7 +25,7 @@ public abstract class Server{
         gameTime = new GameTime();
         status = ServerStatus.STOPPED;
 
-        deltaTimeCounter = new FpsCounter();
+        deltaTimeCounter = new PerSecCounter();
     }
 
 
@@ -41,7 +41,7 @@ public abstract class Server{
             PizeRunnable tickRunnable = new PizeRunnable(){
                 public void run(){
 
-                    deltaTimeCounter.update();
+                    deltaTimeCounter.count();
                     tick();
                 }
             };

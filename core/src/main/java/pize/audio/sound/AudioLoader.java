@@ -3,7 +3,7 @@ package pize.audio.sound;
 import pize.audio.io.OggInputStream;
 import pize.audio.io.WavInputStream;
 import pize.audio.util.AlUtils;
-import pize.files.FileHandle;
+import pize.files.Resource;
 import javazoom.jl.decoder.Bitstream;
 import javazoom.jl.decoder.Decoder;
 import javazoom.jl.decoder.Header;
@@ -19,12 +19,12 @@ import static org.lwjgl.openal.AL11.alBufferData;
 
 public class AudioLoader{
 
-    public static void loadWav(AudioBuffer audioBuffer, FileHandle file){
+    public static void loadWav(AudioBuffer audioBuffer, Resource res){
         if(audioBuffer == null)
             return;
 
         try{
-            WavInputStream input = new WavInputStream(file.input());
+            WavInputStream input = new WavInputStream(res.inStream());
             byte[] data = input.readAllBytes();
 
             ByteBuffer buffer = BufferUtils.createByteBuffer(data.length);
@@ -33,16 +33,16 @@ public class AudioLoader{
 
             input.close();
         }catch(Exception e){
-            throw new RuntimeException("Sound '" + file.getPath() + "' reading is failed: " + e.getMessage());
+            throw new RuntimeException("Sound '" + res.getPath() + "' reading is failed: " + e.getMessage());
         }
     }
 
-    public static void loadOgg(AudioBuffer audioBuffer, FileHandle file){
+    public static void loadOgg(AudioBuffer audioBuffer, Resource res){
         if(audioBuffer == null)
             return;
 
         try{
-            OggInputStream input = new OggInputStream(file.input());
+            OggInputStream input = new OggInputStream(res.inStream());
 
             ByteArrayOutputStream output = new ByteArrayOutputStream(4096);
             byte[] tempBuffer = new byte[2048];
@@ -63,16 +63,16 @@ public class AudioLoader{
 
             input.close();
         }catch(IOException e){
-            throw new RuntimeException("Sound '" + file.getPath() + "' reading is failed: " + e.getMessage());
+            throw new RuntimeException("Sound '" + res.getPath() + "' reading is failed: " + e.getMessage());
         }
     }
 
-    public static void loadMp3(AudioBuffer audioBuffer, FileHandle file){
+    public static void loadMp3(AudioBuffer audioBuffer, Resource res){
         if(audioBuffer == null)
             return;
 
         ByteArrayOutputStream output = new ByteArrayOutputStream(1024);
-        Bitstream bitstream = new Bitstream(file.input());
+        Bitstream bitstream = new Bitstream(res.inStream());
         Decoder decoder = new Decoder();
 
         int sampleRate = -1;
@@ -104,16 +104,16 @@ public class AudioLoader{
             byteBuffer.flip();
             audioBuffer.setData(byteBuffer.asShortBuffer(), channels, sampleRate);
         }catch(Throwable e){
-            throw new RuntimeException("Sound '" + file.getPath() + "' reading is failed: " + e.getMessage());
+            throw new RuntimeException("Sound '" + res.getPath() + "' reading is failed: " + e.getMessage());
         }
     }
 
-    public static void load(AudioBuffer audioBuffer, FileHandle file){
-        switch(file.extension().toLowerCase()){
-            case "ogg" -> loadOgg(audioBuffer, file);
-            case "wav" -> loadWav(audioBuffer, file);
-            case "mp3" -> loadMp3(audioBuffer, file);
-            default -> throw new Error("Sound format is not supported: " + file);
+    public static void load(AudioBuffer audioBuffer, Resource res){
+        switch(res.getExtension().toLowerCase()){
+            case "ogg" -> loadOgg(audioBuffer, res);
+            case "wav" -> loadWav(audioBuffer, res);
+            case "mp3" -> loadMp3(audioBuffer, res);
+            default -> throw new Error("Sound format is not supported: " + res);
         }
     }
 

@@ -1,7 +1,7 @@
 package pize.tests.minecraft.client.game.gui.screen.screens;
 
 import pize.Pize;
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.camera.PerspectiveCamera;
 import pize.graphics.postprocess.effects.GaussianBlur;
 import pize.graphics.texture.Texture;
@@ -32,7 +32,7 @@ public class MainMenuScreen extends Screen{
 
     private final Layout layout, layoutTexts;
 
-    private final FileHandle splashesFile;
+    private final Resource resSplashes;
     private final TextView splashTextView;
 
     public MainMenuScreen(Session session){
@@ -89,7 +89,7 @@ public class MainMenuScreen extends Screen{
         layout.put("edition", edition);
 
         // Splash
-        splashesFile = new FileHandle("vanilla/texts/splashes.txt");
+        resSplashes = new Resource("vanilla/texts/splashes.txt");
 
         splashTextView = new TextView(session, new Component().color(SPLASH_COLOR).style(StyleFormatting.ITALIC).formattedText("Splash!"));
         splashTextView.setSize(MConstraint.text(TEXT_HEIGHT * 2));

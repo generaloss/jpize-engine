@@ -1,16 +1,16 @@
 package pize.physic;
 
-import pize.math.vecmath.point.Point3f;
 import pize.math.vecmath.tuple.Tuple3f;
+import pize.math.vecmath.vector.Vec3f;
 
 public class BoxBody implements Cloneable{
 
     private final BoundingBox boundingBox;
-    private final Point3f position;
+    private final Vec3f position;
 
     public BoxBody(BoundingBox boundingBox){
         this.boundingBox = boundingBox;
-        position = new Point3f();
+        position = new Vec3f();
     }
 
     public BoxBody(BoxBody boxBody){
@@ -32,7 +32,7 @@ public class BoxBody implements Cloneable{
         return boundingBox;
     }
 
-    public Point3f getPosition(){
+    public Vec3f getPosition(){
         return position;
     }
 

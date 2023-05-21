@@ -1,6 +1,6 @@
 package pize.graphics.util;
 
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.texture.Texture;
 
 public class ScreenQuadShader{
@@ -10,7 +10,7 @@ public class ScreenQuadShader{
     private final Shader shader;
 
     public ScreenQuadShader(){
-        shader = new Shader(new FileHandle("shader/screen/screen.vert"), new FileHandle("shader/screen/screen.frag"));
+        shader = new Shader(new Resource("shader/screen/screen.vert"), new Resource("shader/screen/screen.frag"));
     }
 
     public static void use(Texture texture){

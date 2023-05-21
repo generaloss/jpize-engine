@@ -13,6 +13,7 @@
         <module name="test-terraria" />
         <module name="core" />
         <module name="test-project-vostok" />
+        <module name="test-net" />
         <module name="ui" />
         <module name="test-ui" />
         <module name="particle" />

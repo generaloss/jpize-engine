@@ -2,7 +2,7 @@ package pize.io;
 
 import pize.context.Disposable;
 import pize.context.Resizable;
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.PixmapIO;
 import org.lwjgl.glfw.GLFWImage;
@@ -147,7 +147,7 @@ public class Window implements Disposable, Resizable{
 
     public void setIcon(String filePath){
         try{
-            BufferedImage bufferedImage = ImageIO.read(new FileHandle(filePath).input());
+            BufferedImage bufferedImage = ImageIO.read(new Resource(filePath).inStream());
             Pixmap pixmap = PixmapIO.load(bufferedImage);
 
             GLFWImage image = GLFWImage.malloc();

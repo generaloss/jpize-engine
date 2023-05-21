@@ -1,6 +1,6 @@
 package pize.graphics.texture;
 
-import pize.files.FileHandle;
+import pize.files.Resource;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -40,21 +40,21 @@ public class PixmapIO{
     }
 
 
-    public static Pixmap load(FileHandle file, boolean invX, boolean invY){
+    public static Pixmap load(Resource res, boolean invX, boolean invY){
         try{
-            return load(ImageIO.read(file.input()), invX, invY);
+            return load(ImageIO.read(res.inStream()), invX, invY);
         }catch(IOException e){
-            throw new RuntimeException("Pixmap " + file.input().toString() + " does not exists");
+            throw new RuntimeException("Pixmap " + res.inStream().toString() + " does not exists");
         }
     }
 
-    public static Pixmap load(FileHandle file){
-        return load(file, false, false);
+    public static Pixmap load(Resource res){
+        return load(res, false, false);
     }
 
 
     public static Pixmap load(String filepath, boolean invX, boolean invY){
-        return load(new FileHandle(filepath), invX, invY);
+        return load(new Resource(filepath), invX, invY);
     }
 
     public static Pixmap load(String filepath){
@@ -84,10 +84,10 @@ public class PixmapIO{
     }
     
     public static void save(Pixmap pixmap, String path){
-        FileHandle file = new FileHandle(path, true);
-        file.mkParentDirs();
-        file.create();
-        save(pixmap, file.getFile());
+        Resource resource = new Resource(path, true);
+        resource.mkParentDirs();
+        resource.create();
+        save(pixmap, resource.getFile());
     }
     
 }

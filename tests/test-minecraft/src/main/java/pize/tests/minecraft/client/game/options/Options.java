@@ -2,7 +2,7 @@ package pize.tests.minecraft.client.game.options;
 
 import pize.Pize;
 import pize.audio.Audio;
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.io.glfw.Key;
 import pize.tests.minecraft.client.game.Session;
 import pize.tests.minecraft.client.game.gui.screen.screens.VideoSettingsScreen;
@@ -17,7 +17,7 @@ public class Options{
 
     private final Session session;
 
-    private final FileHandle optionsFile;
+    private final Resource resOptions;
 
     private final Map<SoundCategory, Float> soundVolumes;
     private final Map<KeyMapping, Key> keyMappings;
@@ -38,9 +38,9 @@ public class Options{
         soundVolumes = new HashMap<>();
         keyMappings = new HashMap<>();
 
-        optionsFile = new FileHandle(gameDirPath + "options.txt", true);
-        optionsFile.mkParentDirs();
-        optionsFile.create();
+        resOptions = new Resource(gameDirPath + "options.txt", true);
+        resOptions.mkParentDirs();
+        resOptions.create();
         
         init();
     }
@@ -63,7 +63,7 @@ public class Options{
 
 
     private void load(){
-        FastReader in = optionsFile.reader();
+        FastReader in = resOptions.getReader();
 
         while(in.hasNext()){
             String[] parts = in.nextLine().split(" : ");
@@ -117,7 +117,7 @@ public class Options{
     }
 
     public void save(){
-        PrintStream out = optionsFile.writer();
+        PrintStream out = resOptions.getWriter();
 
         out.println("language.code : " + language);
 

@@ -1,7 +1,7 @@
 package pize.graphics.util;
 
 import pize.Pize;
-import pize.files.FileHandle;
+import pize.files.Resource;
 import pize.graphics.gl.Format;
 import pize.graphics.gl.Type;
 
@@ -39,8 +39,8 @@ public class ScreenUtils{
     }
 
     public static void saveScreenshot(String filepath){
-        FileHandle file = new FileHandle(filepath);
-        saveScreenshot(file.getFile(), file.extension());
+        Resource resource = new Resource(filepath);
+        saveScreenshot(resource.getFile(), resource.getExtension());
     }
 
 }
