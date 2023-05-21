@@ -35,18 +35,18 @@ batch.draw(texture, x, y, width, height);
 batch.end();
 ```
 
-#### 2. Get Input:
+#### 2. Get Input & FPS:
 ``` java
 // mouse
-Pize.getX();
+Pize.getX(); // position
 Pize.getY();
 Pize.getCursorPos();
 
-Pize.isTouched();
+Pize.isTouched(); // touch
 Pize.isTouchDown();
 Pize.isTouchReleased();
 
-Pize.mouse().getScroll();
+Pize.mouse().getScroll(); // scroll
 
 // keyboard
 Pize.isPressed(Key.SPACE);
@@ -59,13 +59,24 @@ Pize.getHeight();
 Pize.getAspect();
 
 // monitor
+Pize.monitor().getWidth();
+Pize.monitor().getHeight();
 Pize.monitor().getAspect();
-```
 
-#### 3. Get FPS:
-``` java
+// fps
 Pize.getFPS();
 Pize.getDeltaTime();
+```
+
+#### 3. Load Audio:
+``` java
+Sound sound = new Sound("sound.mp3");
+
+sound.setVolume(0.5F);
+sound.setLooping(true);
+sound.setPitch(1.5F);
+
+sound.play();
 ```
 
 #### 4. Load Audio:
@@ -77,6 +88,33 @@ sound.setLooping(true);
 sound.setPitch(1.5F);
 
 sound.play();
+```
+
+#### 5. Resources:
+``` java
+// text
+Resource text = new Resource("file.txt");
+text.writeString("write text");
+text.appendString("append text");
+text.readString();
+
+// file
+Resource res = new Resource("file.ext");
+
+res.getExtension(); // returns 'ext'
+res.getSimpleName(); // returns 'file'
+res.getFile();
+
+res.inStream();
+res.outStream();
+
+res.getReader(); // returns FastReader
+res.getWriter();
+
+// image, sound, ...etc
+Resource res = new Resource( ... );
+new Texture(res);
+new Sound(res);
 ```
 
 ### Net:
