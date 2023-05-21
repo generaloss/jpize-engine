@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="test-audio" />
+        <module name="test-minecraft" />
+        <module name="test-model-3d" />
+        <module name="test-physic" />
+        <module name="test-terraria" />
+        <module name="core" />
+        <module name="test-project-vostok" />
+        <module name="test-net" />
+        <module name="ui" />
+        <module name="test-ui" />
+        <module name="particle" />
+        <module name="net" />
+        <module name="physic" />
+        <module name="test-particle" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="delta-core" target="17" />
+      <module name="delta-net" target="17" />
+      <module name="delta-particle" target="17" />
+      <module name="delta-physic" target="17" />
+      <module name="delta-security" target="17" />
+      <module name="delta-tests" target="17" />
+      <module name="delta-tilemap" target="17" />
+      <module name="delta-ui" target="17" />
+      <module name="security" target="17" />
+      <module name="sgl-core" target="17" />
+      <module name="test-android" target="1.6" />
+      <module name="tilemap" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Test - Audio" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="pize.tests.audio.Main" />
+    <module name="test-audio" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/test-audio/src/main/resources" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="delta.test.audio.GUIAudioPlayer" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

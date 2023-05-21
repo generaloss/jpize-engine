@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Test - Net (server)" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="pize.tests.net.ServerSide" />
+    <module name="test-net" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

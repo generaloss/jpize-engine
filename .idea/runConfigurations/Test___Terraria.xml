@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Test - Terraria" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="pize.tests.terraria.Main" />
+    <module name="test-terraria" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/test-terraria/src/main/resources" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

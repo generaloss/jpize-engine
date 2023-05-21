@@ -1,0 +1,14 @@
+/core/target/
+/net/target/
+/particle/target/
+/physic/target/
+/ui/target/
+/tests/test-audio/target/
+/tests/test-minecraft/target/
+/tests/test-model-3d/target/
+/tests/test-particle/target/
+/tests/test-physic/target/
+/tests/test-project-vostok/target/
+/tests/test-terraria/target/
+/tests/test-ui/target/
+/tests/test-net/target/

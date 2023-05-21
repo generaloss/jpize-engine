@@ -1,0 +1,49 @@
+language.code : ru_ru
+language.name : Русский
+language.region : Россия
+
+menu.singleplayer : Одиночная игра
+menu.multiplayer : Многопользовательская игра
+menu.mods : Моды
+menu.options : Настройки...
+menu.quit : Выйти
+
+options.title : Настройки
+options.videoSettings : Графика...
+options.audioSettings : Аудио...
+options.language : Язык...
+options.controls : Управление...
+options.resourcePacks : Ресурсы...
+
+audioSettings.title : Настройки аудио
+audioSettings.master : Общая громкость: %s%
+audioSettings.music : Музыка: %s%
+audioSettings.ambient : Окружение: %s%
+audioSettings.players : Игроки: %s%
+audioSettings.blocks : Блоки: %s%
+audioSettings.weather : Погода: %s%
+audioSettings.device : Устройство: %s
+
+videoSettings.title : Настройки графики
+videoSettings.fov : Поле зрения: %s
+videoSettings.maxFramerate : Частота кадров: %s
+videoSettings.renderDistance : Прорисовка: %s
+videoSettings.fullscreen : Полноэкранный режим: %s
+videoSettings.mipmapLevels : Уровни детализации: %s
+videoSettings.showFps : Показывать FPS: %s
+
+selectWorld.title : Выбор мира
+selectWorld.edit : Настроить
+selectWorld.delete : Удалить
+selectWorld.recreate : Пересоздать
+selectWorld.play : Играть в выбранном мире
+selectWorld.create : Создать новый мир
+
+gui.done : Готово
+gui.cancel : Отмена
+
+text.off : ВЫКЛ
+text.on : ВКЛ
+text.unlimited : Максимум
+text.vSync : V-Sync
+
