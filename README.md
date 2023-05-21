@@ -35,7 +35,40 @@ batch.draw(texture, x, y, width, height);
 batch.end();
 ```
 
-#### 2. Load Audio:
+#### 2. Get Input:
+``` java
+// mouse
+Pize.getX();
+Pize.getY();
+Pize.getCursorPos();
+
+Pize.isTouched();
+Pize.isTouchDown();
+Pize.isTouchReleased();
+
+Pize.mouse().getScroll();
+
+// keyboard
+Pize.isPressed(Key.SPACE);
+Pize.isDown(Key.ENTER);
+Pize.isReleased(Key.ESCAPE);
+
+// window
+Pize.getWidth();
+Pize.getHeight();
+Pize.getAspect();
+
+// monitor
+Pize.monitor().getAspect();
+```
+
+#### 3. Get FPS:
+``` java
+Pize.getFPS();
+Pize.getDeltaTime();
+```
+
+#### 4. Load Audio:
 ``` java
 Sound sound = new Sound("sound.mp3");
 
@@ -44,11 +77,6 @@ sound.setLooping(true);
 sound.setPitch(1.5F);
 
 sound.play();
-```
-
-#### 3. Math:
-``` java
-
 ```
 
 ### Net:
