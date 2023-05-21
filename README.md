@@ -26,7 +26,7 @@ Texture texture = new Texture("texture.png");
 
 batch.begin();
 
-// rotate, shift and scale for subsequent textures
+// rotate, shear and scale for subsequent textures
 batch.rotate(angle);
 batch.shear(angle_x, angle_y);
 batch.scale(scale);
