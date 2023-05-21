@@ -19,7 +19,7 @@ Modules:
 * Files (Resources: Internal / External)
 * Utils (FastReader, FpsCounter, Sync, Stopwatch, TickGenerator, ...etc)
 
-#### 2D Graphics:
+#### 1. 2D Graphics:
 ``` java
 TextureBatch batch = new TextureBatch(); // canvas for textures
 Texture texture = new Texture("texture.png");
@@ -36,7 +36,7 @@ batch.draw(texture, x, y, width, height);
 batch.end();
 ```
 
-#### Load Audio:
+#### 2. Load Audio:
 ``` java
 Sound sound = new Sound("sound.mp3");
 
@@ -51,10 +51,11 @@ sound.play();
 * Security Keys (AES, RSA)
 * TCP / UDP Client and Server
 
-#### Server-Client example:
+#### 1. Server-Client example:
 ``` java
 KeyAES key = new KeyAES(512); // generate key for connection encoding
 
+// server
 TcpServer server = new TcpServer(new TcpListener<byte[]>(){
     public void received(byte[] data, NetChannel<byte[]> sender){
         System.out.printf("received: %f\n", new String(data)); // 'received: Hello, World!'
@@ -64,19 +65,20 @@ TcpServer server = new TcpServer(new TcpListener<byte[]>(){
     }
     public void disconnected(NetChannel<byte[]> channel){ ... }
 });
-server.run("localhost", 5454);
+server.run("localhost", 8080);
 
+// client
 TcpClient client = new TcpClient(new TcpListener<byte[]>(){ ... });
-client.connect("localhost", 5454);
+client.connect("localhost", 8080);
 client.encode(key);
-client.send("Hello, World!".getBytes());
+client.send("Hello, World!".getBytes()); // send 'Hello, World!'
 ```
 
 ### Physics:
 * AABB Collider (2D, 3D)
 * Utils (Velocity, Body)
 
-#### Example:
+#### 1. Example:
 ``` java
 BoxBody body_1 = new BoxBody( new BoundingBox(-1,-1,-1,  1, 1, 1) ); // 2x2x2 box
 BoxBody body_2 = new BoxBody( new BoundingBox(-1,-1,-1,  1, 1, 1) ); // another box
@@ -93,6 +95,22 @@ body_1.getPosition().add( b1_velocity ); // box will move only 3 units
 * Constraint (pixel, relative, aspect) - used to determine the static or dynamic position and size of ui components.
 * Align (center, up, right, ...etc)
 * LayoutType (vertical / horizontal / none)
+
+#### 1. Example:
+``` java
+// init
+Layout layout = new Layout();
+layout.setLayoutType( LayoutType.HORIZONTAL );
+layout.alignItems( Align.CENTER );
+
+Image image = new Image(image_texture);
+layout.put("image_id", image);
+
+// render
+batch.begin();
+layout.render(batch);
+batch.end();
+```
 
 ## Bugs and Feedback
 For bugs, questions and discussions please use the [GitHub Issues](https://github.com/GeneralPashon/Pizza-Engine/issues).
