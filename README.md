@@ -92,6 +92,13 @@ sound.play();
 
 #### 5. Resources:
 ``` java
+// internal / external
+Resource res = new Resource(path, true); // external
+Resource res = new Resource(path); // internal
+
+res.isExternal();
+res.isInternal();
+
 // text
 Resource text = new Resource("file.txt");
 text.writeString("write text");
@@ -103,18 +110,25 @@ Resource res = new Resource("file.ext");
 
 res.getExtension(); // returns 'ext'
 res.getSimpleName(); // returns 'file'
+
 res.getFile();
+res.exists();
+res.mkDirsAndFile();
 
 res.inStream();
 res.outStream();
 
-res.getReader(); // returns FastReader
-res.getWriter();
+res.getReader(); // returns pize.util.io.FastReader
+res.getWriter(); // returns PrintStream
 
-// image, sound, ...etc
+// resource (image, sound, ...etc)
 Resource res = new Resource( ... );
+
 new Texture(res);
 new Sound(res);
+PixmapIO.load(res);
+new Shader(res_vert, res_frag);
+AudioLoader.load(new AudioBuffer(), res);
 ```
 
 ### Net:
