@@ -1,9 +1,8 @@
 # PIZE - Pizza Engine 
+The engine focuses on being clear, simple and productive
 
 ## Getting Started
 Repository contains examples in 'tests' module
-
-The engine focuses on being clear, simple and productive
 
 Modules:
 * Core
