@@ -124,7 +124,7 @@ AudioLoader.load(new AudioBuffer(), res);
 * Security Keys (AES, RSA)
 * TCP / UDP Client and Server
 
-#### 1. Server-Client example:
+#### 1. Server-Client Example:
 ``` java
 KeyAES key = new KeyAES(512); // generate key for connection encoding
 
@@ -151,7 +151,7 @@ client.send("Hello, World!".getBytes()); // send 'Hello, World!'
 * AABB Collider (2D, 3D)
 * Utils (Velocity, Body)
 
-#### 1. Example:
+#### 1. Collider Example:
 ``` java
 BoxBody body_1 = new BoxBody( new BoundingBox(-1,-1,-1,  1, 1, 1) ); // 2x2x2 box
 BoxBody body_2 = new BoxBody( new BoundingBox(-1,-1,-1,  1, 1, 1) ); // another box
@@ -169,7 +169,7 @@ body_1.getPosition().add( b1_velocity ); // box will move only 3 units
 * Align (center, up, right, ...etc)
 * LayoutType (vertical / horizontal / none)
 
-#### 1. Example:
+#### 1. UI Example:
 ``` java
 // init
 Layout layout = new Layout();
