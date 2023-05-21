@@ -68,7 +68,7 @@ Pize.getFPS();
 Pize.getDeltaTime();
 ```
 
-#### 3. Load Audio:
+#### 3. Audio:
 ``` java
 Sound sound = new Sound("sound.mp3");
 
