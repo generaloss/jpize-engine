@@ -37,25 +37,20 @@ public class TcpByteChannel extends NetChannel<byte[]>{
                         close();
                     }
                     
-                    if(inStream.available() < 1)
-                        continue;
-                    
                     int length = inStream.readInt();
                     if(length == -1){
                         System.out.println("len: -1");
                         close();
                     }
-                    else if(length != 0){
+                    else{
                         byte[] bytes = new byte[length];
                         
                         if(encodingKey != null)
                             bytes = encodingKey.decrypt(bytes);
                         
-                        System.out.println("reading " + length + " bytes");
+                        System.out.println("   reading " + length + " bytes");
                         inStream.readFully(bytes);
-                        System.out.println("read");
                         receivedQueue.add(bytes);
-                        System.out.println("TIME RX: " + System.nanoTime());
                     }
                 }
             }catch(IOException e){
@@ -109,7 +104,7 @@ public class TcpByteChannel extends NetChannel<byte[]>{
     
     private void setClosed(){
         closed = true;
-        System.out.println("Closed some channel");
+        System.out.println("   Closed channel");
     }
     
     @Override

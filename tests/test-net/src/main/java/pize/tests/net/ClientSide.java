@@ -1,8 +1,11 @@
 package pize.tests.net;
 
 import pize.net.NetChannel;
+import pize.net.tcp.TcpByteChannel;
 import pize.net.tcp.TcpClient;
 import pize.net.tcp.TcpListener;
+
+import java.io.IOException;
 
 public class ClientSide implements TcpListener<byte[]>{
     
@@ -22,7 +25,7 @@ public class ClientSide implements TcpListener<byte[]>{
     
     @Override
     public void received(byte[] data, NetChannel<byte[]> sender){
-        /*
+        
         try{
             PacketUtils.receive(data);
             switch(PacketUtils.packetTypeID){
@@ -39,10 +42,10 @@ public class ClientSide implements TcpListener<byte[]>{
                     
                     System.out.println("   ping: " + ((System.nanoTime() - packet.getTime()) / 1000000F) + " ms");
                     
-                    Utils.delayElapsed(1000);
+                    // Utils.delayElapsed(1000);
                     final PingPacket ping = new PingPacket(System.nanoTime());
                     ping.write((TcpByteChannel) sender);
-                    System.out.println("TIME TX: " + System.nanoTime());
+                    // System.out.println("TIME TX: " + System.nanoTime());
                 }
                 
                 default -> System.out.println("   received: ?Unknown Packet Type?");
@@ -51,7 +54,7 @@ public class ClientSide implements TcpListener<byte[]>{
         }catch(IOException e){
             e.printStackTrace();
         }
-        */
+        
     }
     
     @Override
@@ -64,7 +67,7 @@ public class ClientSide implements TcpListener<byte[]>{
     
     @Override
     public void disconnected(NetChannel<byte[]> channel){
-        System.out.println("? Disconnected");
+        System.out.println("   Client disconnected\n}");
     }
     
 }

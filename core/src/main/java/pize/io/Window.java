@@ -75,7 +75,7 @@ public class Window implements Disposable, Resizable{
             windowedLastY = y;
             windowedLastWidth = width;
             windowedLastHeight = height;
-            glfwSetWindowMonitor(ID, monitor.getId(), 0, 0, monitor.getWidth(), monitor.getHeight(), monitor.getRefreshRate());
+            glfwSetWindowMonitor(ID, monitor.getID(), 0, 0, monitor.getWidth(), monitor.getHeight(), monitor.getRefreshRate());
         }else
             glfwSetWindowMonitor(ID, 0, windowedLastX, windowedLastY, windowedLastWidth, windowedLastHeight, monitor.getRefreshRate());
     }

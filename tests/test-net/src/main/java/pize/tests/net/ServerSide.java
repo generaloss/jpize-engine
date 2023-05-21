@@ -6,6 +6,7 @@ import pize.net.tcp.TcpByteChannel;
 import pize.net.tcp.TcpListener;
 import pize.net.tcp.TcpServer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class ServerSide implements TcpListener<byte[]>{
     
     @Override
     public void received(byte[] data, NetChannel<byte[]> sender){
-        /*
+        
         try{
             
             PacketUtils.receive(data);
@@ -60,8 +61,8 @@ public class ServerSide implements TcpListener<byte[]>{
         }catch(IOException e){
             e.printStackTrace();
         }
-        */
-        server.disconnect((TcpByteChannel) sender);
+        
+        // server.disconnect((TcpByteChannel) sender);
     }
     
     @Override
@@ -74,7 +75,7 @@ public class ServerSide implements TcpListener<byte[]>{
     
     @Override
     public void disconnected(NetChannel<byte[]> channel){
-        System.out.println("} Client disconnected\n");
+        System.out.println("   Client disconnected\n}");
     }
     
 }

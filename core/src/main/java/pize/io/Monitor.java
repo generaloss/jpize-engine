@@ -27,6 +27,10 @@ public class Monitor{
     public int getHeight(){
         return videoMode.height();
     }
+    
+    public float getAspect(){
+        return (float) getWidth() / getHeight();
+    }
 
 
     public int getRedBits(){
@@ -51,7 +55,7 @@ public class Monitor{
     }
 
 
-    public long getId(){
+    public long getID(){
         return id;
     }
 
