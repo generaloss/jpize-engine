@@ -124,24 +124,24 @@ AudioLoader.load(new AudioBuffer(), res);
 * Security Keys (AES, RSA)
 * TCP / UDP Client and Server
 
-#### 1. Encrypted Server-Client Example:
+#### 1. (Low)Encrypted Server-Client Example:
 ``` java
 KeyAES key = new KeyAES(512); // generate key for connection encoding
 
 // server
-TcpServer server = new TcpServer(new TcpListener<byte[]>(){
-    public void received(byte[] data, NetChannel<byte[]> sender){
+TcpServer server = new TcpServer(new TcpListener(){
+    public void received(byte[] data, TcpByteChannel sender){
         System.out.printf("received: %f\n", new String(data)); // 'received: Hello, World!'
     }
-    public void connected(NetChannel<byte[]> channel){
+    public void connected(TcpByteChannel channel){
         channel.encrypt(key);
     }
-    public void disconnected(NetChannel<byte[]> channel){ ... }
+    public void disconnected(TcpByteChannel channel){ ... }
 });
 server.run("localhost", 8080);
 
 // client
-TcpClient client = new TcpClient(new TcpListener<byte[]>(){ ... });
+TcpClient client = new TcpClient(new TcpListener(){ ... });
 client.connect("localhost", 8080);
 client.encrypt(key);
 client.send("Hello, World!".getBytes()); // send 'Hello, World!'
