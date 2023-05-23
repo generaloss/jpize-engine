@@ -8,9 +8,9 @@ import java.net.Socket;
 public class TcpClient{
 
     private TcpByteChannel channel;
-    private final TcpListener<byte[]> listener;
+    private final TcpListener listener;
     
-    public TcpClient(TcpListener<byte[]> listener){
+    public TcpClient(TcpListener listener){
         this.listener = listener;
     }
     

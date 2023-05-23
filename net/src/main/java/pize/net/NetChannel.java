@@ -1,5 +1,7 @@
 package pize.net;
 
+import pize.net.security.KeyAES;
+
 import java.io.Closeable;
 
 public abstract class NetChannel<P> implements Closeable{
@@ -13,6 +15,8 @@ public abstract class NetChannel<P> implements Closeable{
     public abstract P nextPacket();
     
     public abstract void send(P p);
+    
+    public abstract void encode(KeyAES encryptKey);
     
     public abstract boolean isClosed();
     

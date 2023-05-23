@@ -4,6 +4,7 @@ import pize.net.NetChannel;
 import pize.net.security.KeyAES;
 import pize.util.Utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class TcpByteChannel extends NetChannel<byte[]>{
     private final DataOutputStream outStream;
     private final ConcurrentLinkedDeque<byte[]> receivedQueue;
     private boolean closed;
-    private KeyAES encodingKey = null;
+    private KeyAES encodeKey = null;
 
     public TcpByteChannel(Socket socket) throws IOException{
         this.socket = socket;
@@ -44,17 +45,17 @@ public class TcpByteChannel extends NetChannel<byte[]>{
                     }
                     else{
                         byte[] bytes = new byte[length];
-                        
-                        if(encodingKey != null)
-                            bytes = encodingKey.decrypt(bytes);
-                        
-                        System.out.println("   reading " + length + " bytes");
+                        // System.out.println("   reading " + length + " bytes");
                         inStream.readFully(bytes);
+                        
+                        if(encodeKey != null)
+                            bytes = encodeKey.decrypt(bytes);
+                        
                         receivedQueue.add(bytes);
                     }
                 }
             }catch(IOException e){
-                System.err.println("Socket closed");
+                // System.err.println("Socket closed");
                 setClosed();
             }
         });
@@ -63,15 +64,21 @@ public class TcpByteChannel extends NetChannel<byte[]>{
         receiveThread.setDaemon(true);
         receiveThread.start();
     }
-
+    
+    @Override
+    public int available(){
+        return receivedQueue.size();
+    }
+    
+    
     @Override
     public void send(byte[] packet){
         if(closed)
             return;
 
         try{
-            if(encodingKey != null)
-                packet = encodingKey.encrypt(packet);
+            if(encodeKey != null)
+                packet = encodeKey.encrypt(packet);
             
             outStream.writeInt(packet.length);
             outStream.write(packet);
@@ -80,31 +87,23 @@ public class TcpByteChannel extends NetChannel<byte[]>{
         }
     }
     
-    public DataOutputStream getOutputStream(){
-        return outStream;
+    
+    public void send(ByteArrayOutputStream stream){
+        if(closed)
+            return;
+        
+        send(stream.toByteArray());
     }
     
-    public Socket getSocket(){
-        return socket;
-    }
     
-    public void encode(KeyAES encodingKey){
-        this.encodingKey = encodingKey;
-    }
-    
-    @Override
-    public int available(){
-        return receivedQueue.size();
-    }
-
     @Override
     public byte[] nextPacket(){
         return receivedQueue.poll();
     }
     
-    private void setClosed(){
-        closed = true;
-        System.out.println("   Closed channel");
+    @Override
+    public void encode(KeyAES encodeKey){
+        this.encodeKey = encodeKey;
     }
     
     @Override
@@ -120,6 +119,11 @@ public class TcpByteChannel extends NetChannel<byte[]>{
         setClosed();
         receiveThread.interrupt();
         Utils.close(socket);
+    }
+    
+    private void setClosed(){
+        closed = true;
+        // System.out.println("   Closed channel");
     }
 
 }

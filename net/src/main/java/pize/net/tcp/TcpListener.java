@@ -1,13 +1,11 @@
 package pize.net.tcp;
 
-import pize.net.NetChannel;
-
-public interface TcpListener<P>{
+public interface TcpListener{
     
-    void received(P data, NetChannel<P> sender);
+    void received(byte[] data, TcpByteChannel sender);
 
-    void connected(NetChannel<P> channel);
+    void connected(TcpByteChannel channel);
 
-    void disconnected(NetChannel<P> channel);
+    void disconnected(TcpByteChannel channel);
 
 }

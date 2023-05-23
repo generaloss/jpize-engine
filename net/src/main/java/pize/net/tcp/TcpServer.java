@@ -14,10 +14,10 @@ public class TcpServer implements Closeable{
 
     private ServerSocket serverSocket;
     private CopyOnWriteArrayList<TcpByteChannel> channels;
-    private final TcpListener<byte[]> listener;
+    private final TcpListener listener;
     private boolean closed;
 
-    public TcpServer(TcpListener<byte[]> listener){
+    public TcpServer(TcpListener listener){
         this.listener = listener;
         closed = true;
     }

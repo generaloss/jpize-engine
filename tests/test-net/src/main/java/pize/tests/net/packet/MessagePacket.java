@@ -1,4 +1,4 @@
-package pize.tests.net;
+package pize.tests.net.packet;
 
 import java.io.*;
 

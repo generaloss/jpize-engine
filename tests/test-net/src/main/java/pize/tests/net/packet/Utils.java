@@ -1,9 +1,9 @@
-package pize.tests.net;
+package pize.tests.net.packet;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 
-public class PacketUtils{
+public class Utils{
     
     public static int packetTypeID;
     public static DataInputStream stream;

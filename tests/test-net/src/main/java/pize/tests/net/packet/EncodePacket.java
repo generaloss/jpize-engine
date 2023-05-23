@@ -1,36 +1,37 @@
-package pize.tests.net;
+package pize.tests.net.packet;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class PingPacket extends IPacket{
+public class EncodePacket extends IPacket{
     
-    public static final int PACKET_TYPE_ID = 18;
-    public PingPacket(){
+    public static final int PACKET_TYPE_ID = 83;
+    public EncodePacket(){
         super(PACKET_TYPE_ID);
     }
     
     
-    private long time;
+    private byte[] key;
     
-    public PingPacket(long time){
+    public EncodePacket(byte[] key){
         this();
-        this.time = time;
+        this.key = key;
     }
     
-    public long getTime(){
-        return time;
+    public byte[] getKey(){
+        return key;
     }
     
     
     @Override
     protected void write(DataOutputStream stream) throws IOException{
-        stream.writeLong(time);
+        stream.write(key);
     }
     
     @Override
     public void read(DataInputStream stream) throws IOException{
-        time = stream.readLong();
+        key = stream.readAllBytes();
     }
+    
 }

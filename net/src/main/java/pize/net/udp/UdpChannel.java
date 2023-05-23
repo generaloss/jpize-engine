@@ -1,9 +1,8 @@
 package pize.net.udp;
 
 import pize.net.NetChannel;
+import pize.net.security.KeyAES;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -73,6 +72,11 @@ public class UdpChannel extends NetChannel<DatagramPacket>{
         DatagramPacket packet = received.getLast();
         received.remove(packet);
         return packet;
+    }
+    
+    @Override
+    public void encode(KeyAES encodeKey){
+        throw new UnsupportedOperationException();
     }
 
     @Override
