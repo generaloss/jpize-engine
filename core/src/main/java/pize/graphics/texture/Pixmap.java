@@ -1,6 +1,6 @@
 package pize.graphics.texture;
 
-import pize.context.Resizable;
+import pize.activity.Resizable;
 import pize.graphics.gl.SizedFormat;
 import pize.graphics.util.color.Color;
 import pize.graphics.util.color.IColor;

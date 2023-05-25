@@ -16,8 +16,7 @@ public class UdpServer{
         if(connection != null && !connection.isClosed())
             throw new RuntimeException("Already enabled");
 
-        try{
-            DatagramSocket socket = new DatagramSocket(port, InetAddress.getByName(ip));
+        try(final DatagramSocket socket = new DatagramSocket(port, InetAddress.getByName(ip))){
             connection = new UdpChannel(socket);
 
             receiverThread = new Thread(()->{

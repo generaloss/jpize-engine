@@ -1,6 +1,6 @@
 package pize.audio;
 
-import pize.context.Disposable;
+import pize.activity.Disposable;
 
 import static org.lwjgl.openal.ALC11.*;
 

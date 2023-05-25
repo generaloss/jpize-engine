@@ -1,7 +1,7 @@
 package pize.tests.terraria;
 
 import pize.Pize;
-import pize.context.ContextListener;
+import pize.activity.ActivityListener;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.graphics.gl.Gl;
@@ -17,7 +17,7 @@ import pize.tests.terraria.map.MapTile;
 import static pize.tests.terraria.tile.TileType.AIR;
 import static pize.tests.terraria.tile.TileType.DIRT;
 
-public class Main implements ContextListener{
+public class Main implements ActivityListener{
 
     public static void main(String[] args){
         Pize.create("Terraria", 1280, 720);

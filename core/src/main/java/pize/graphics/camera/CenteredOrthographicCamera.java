@@ -1,7 +1,7 @@
 package pize.graphics.camera;
 
 import pize.Pize;
-import pize.context.Resizable;
+import pize.activity.Resizable;
 import pize.math.Maths;
 import pize.math.vecmath.matrix.Matrix4f;
 

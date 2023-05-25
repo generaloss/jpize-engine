@@ -27,8 +27,7 @@ public class TcpByteChannel extends NetChannel<byte[]>{
         outStream = new DataOutputStream(socket.getOutputStream());
 
         receiveThread = new Thread(()->{
-            try{
-                final DataInputStream inStream = new DataInputStream(socket.getInputStream());
+            try(final DataInputStream inStream = new DataInputStream(socket.getInputStream())){
                 
                 while(!Thread.interrupted() && !closed){
                     Thread.yield();

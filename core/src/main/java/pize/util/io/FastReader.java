@@ -83,7 +83,7 @@ public class FastReader{
     }
 
     private void doubleCharBufferSize(){
-        char[] newBuffer = new char[charBuffer.length << 1];
+        final char[] newBuffer = new char[charBuffer.length << 1];
         System.arraycopy(charBuffer, 0, newBuffer, 0, charBuffer.length);
         charBuffer = newBuffer;
     }
@@ -172,8 +172,7 @@ public class FastReader{
     }
 
     public void waitNext(){
-        while(!hasNext())
-            ;
+        while(!hasNext());
     }
 
     public void close(){

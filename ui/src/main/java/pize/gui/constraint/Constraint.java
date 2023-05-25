@@ -4,60 +4,101 @@ import pize.Pize;
 
 import java.util.function.DoubleSupplier;
 
-public interface Constraint{
-
-    PixelConstraint zero = pixel(0);
-    PixelConstraint scr_width = pixel(Pize::getWidth);
-    PixelConstraint scr_height = pixel(Pize::getHeight);
-    RelativeConstraint match_parent = relative(1);
-
-
-    static PixelConstraint pixel(double pixels){
-        return new PixelConstraint(pixels);
+public abstract class Constraint{
+    
+    public static PixelConstraint zero(){
+        return pixel(0);
     }
-
-    static PixelConstraint pixel(DoubleSupplier pixelsSupplier){
-        return new PixelConstraint(pixelsSupplier);
+    
+    public static PixelConstraint scrWidth(){
+        return pixel(Pize::getWidth);
     }
-
-
-    static AspectConstraint aspect(double aspect){
-        return new AspectConstraint(aspect);
+    
+    public static PixelConstraint scrHeight(){
+        return pixel(Pize::getHeight);
     }
-
-    static AspectConstraint aspect(DoubleSupplier aspectSupplier){
-        return new AspectConstraint(aspectSupplier);
+    
+    public static RelativeConstraint matchParent(){
+        return relative(1);
     }
 
 
-    static RelativeConstraint relative(double percentage){
-        return new RelativeConstraint(percentage, RelativeConstraint.RelativeTo.AUTO);
+    public static PixelConstraint pixel(double pixels){
+        return new PixelConstraint()
+            .setValue(pixels);
+    }
+    
+    public static PixelConstraint pixel(DoubleSupplier pixelsSupplier){
+        return new PixelConstraint()
+            .setValue(pixelsSupplier);
+    }
+    
+    
+    public static AspectConstraint aspect(double aspect){
+        return new AspectConstraint()
+            .setValue(aspect);
+    }
+    
+    public static AspectConstraint aspect(DoubleSupplier aspectSupplier){
+        return new AspectConstraint()
+            .setValue(aspectSupplier);
+    }
+    
+    
+    public static RelativeConstraint relative(double percentage){
+        return new RelativeConstraint()
+            .setValue(percentage)
+            .setRelativeTo(RelativeConstraint.RelativeTo.AUTO);
+    }
+    
+    public static RelativeConstraint relativeToWidth(double percentage){
+        return new RelativeConstraint()
+            .setValue(percentage)
+            .setRelativeTo(RelativeConstraint.RelativeTo.WIDTH);
+    }
+    
+    public static RelativeConstraint relativeToHeight(double percentage){
+        return new RelativeConstraint()
+            .setValue(percentage)
+            .setRelativeTo(RelativeConstraint.RelativeTo.HEIGHT);
+    }
+    
+    
+    public static RelativeConstraint relative(DoubleSupplier percentageSupplier){
+        return new RelativeConstraint()
+            .setValue(percentageSupplier)
+            .setRelativeTo(RelativeConstraint.RelativeTo.AUTO);
+    }
+    
+    public static RelativeConstraint relativeToWidth(DoubleSupplier percentageSupplier){
+        return new RelativeConstraint()
+            .setValue(percentageSupplier)
+            .setRelativeTo(RelativeConstraint.RelativeTo.WIDTH);
+    }
+    
+    public static RelativeConstraint relativeToHeight(DoubleSupplier percentageSupplier){
+        return new RelativeConstraint()
+            .setValue(percentageSupplier)
+            .setRelativeTo(RelativeConstraint.RelativeTo.HEIGHT);
     }
 
-    static RelativeConstraint relativeToWidth(double percentage){
-        return new RelativeConstraint(percentage, RelativeConstraint.RelativeTo.WIDTH);
+
+    protected DoubleSupplier supplier;
+    
+    public float getValue(){
+        return (float) supplier.getAsDouble();
     }
-
-    static RelativeConstraint relativeToHeight(double percentage){
-        return new RelativeConstraint(percentage, RelativeConstraint.RelativeTo.HEIGHT);
+    
+    public Constraint setValue(DoubleSupplier valueSupplier){
+        supplier = valueSupplier;
+        return this;
     }
-
-
-    static RelativeConstraint relative(DoubleSupplier percentageSupplier){
-        return new RelativeConstraint(percentageSupplier, RelativeConstraint.RelativeTo.AUTO);
+    
+    public Constraint setValue(double value){
+        supplier = ()->value;
+        return this;
     }
-
-    static RelativeConstraint relativeToWidth(DoubleSupplier percentageSupplier){
-        return new RelativeConstraint(percentageSupplier, RelativeConstraint.RelativeTo.WIDTH);
-    }
-
-    static RelativeConstraint relativeToHeight(DoubleSupplier percentageSupplier){
-        return new RelativeConstraint(percentageSupplier, RelativeConstraint.RelativeTo.HEIGHT);
-    }
-
-
-    Number getValue();
-
-    ConstraintType getType();
+    
+    public abstract ConstraintType getType();
 
 }

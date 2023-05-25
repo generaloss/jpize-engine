@@ -19,8 +19,7 @@ public class TcpClient{
         if(channel != null && !channel.isClosed())
             throw new RuntimeException("Already connected");
         
-        try{
-            final Socket socket = new Socket();
+        try(final Socket socket = new Socket()){
             InetSocketAddress socketAddress = new InetSocketAddress(InetAddress.getByName(address), port);
             socket.connect(socketAddress);
 

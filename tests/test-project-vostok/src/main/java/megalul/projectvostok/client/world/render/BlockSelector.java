@@ -2,7 +2,7 @@ package megalul.projectvostok.client.world.render;
 
 import megalul.projectvostok.client.control.GameCamera;
 import megalul.projectvostok.client.control.RayCast;
-import pize.context.Disposable;
+import pize.activity.Disposable;
 import pize.graphics.gl.Primitive;
 import pize.graphics.gl.Type;
 import pize.graphics.vertex.Mesh;

@@ -1,6 +1,6 @@
 package pize.graphics.util;
 
-import pize.context.Disposable;
+import pize.activity.Disposable;
 import pize.files.Resource;
 import pize.graphics.camera.Camera;
 import pize.graphics.gl.Gl;

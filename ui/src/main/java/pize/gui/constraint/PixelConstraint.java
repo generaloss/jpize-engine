@@ -2,30 +2,20 @@ package pize.gui.constraint;
 
 import java.util.function.DoubleSupplier;
 
-public class PixelConstraint implements Constraint{
-
-    private final DoubleSupplier supplier;
-
-    protected PixelConstraint(DoubleSupplier pixelsSupplier){
-        supplier = pixelsSupplier;
+public class PixelConstraint extends Constraint{
+    
+    public PixelConstraint setValue(DoubleSupplier valueSupplier){
+        supplier = valueSupplier;
+        return this;
     }
-
-    protected PixelConstraint(double pixels){
-        this(()->pixels);
+    
+    public PixelConstraint setValue(double value){
+        supplier = ()->value;
+        return this;
     }
-
-
-    public float pixels(){
-        return (float) supplier.getAsDouble();
-    }
-
+    
     public ConstraintType getType(){
         return ConstraintType.PIXEL;
     }
-
-    @Override
-    public Number getValue(){
-        return supplier.getAsDouble();
-    }
-
+    
 }

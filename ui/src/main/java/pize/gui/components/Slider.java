@@ -1,35 +1,35 @@
 package pize.gui.components;
 
 import pize.Pize;
-import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.Batch;
 import pize.gui.UIComponent;
 import pize.gui.constraint.Constraint;
 import pize.math.Maths;
 
 public class Slider extends UIComponent<Batch>{
-
-    private final Texture handleTexture;
-    private final UIComponent<Batch> background;
+    
+    private final UIComponent<Batch> background, handle;
     private float value, prevValue, divisions;
     private boolean drag;
 
-    public Slider(UIComponent<Batch> background,Texture handleTexture){
+    public Slider(UIComponent<Batch> background, UIComponent<Batch> handle){
         this.background = background;
-        this.handleTexture = handleTexture;
-
-        super.setAsParentFor(background);
-        background.setSize(Constraint.match_parent);
+        this.handle = handle;
+        
+        super.setAsParentFor(background, handle);
+        background.setSize(Constraint.matchParent());
+        handle.setPosition(Constraint.relative(0));
     }
 
 
     @Override
     public void render(Batch batch, float x, float y, float width, float height){
         background.render(batch);
-
-        float sliderWidthT = height * handleTexture.aspect();
-
-        batch.draw(handleTexture, x + value * ( width - sliderWidthT ), y, sliderWidthT, height);
+        
+        float handleWidth = handle.getWidth();
+        
+        handle.getXConstraint().setValue(value * (width - handleWidth));
+        handle.render(batch);
 
         if(isTouchDown())
             drag = true;
@@ -42,7 +42,7 @@ public class Slider extends UIComponent<Batch>{
         prevValue = value;
 
         float mouseX = Pize.getX();
-        value = Maths.clamp(( mouseX - x - sliderWidthT / 2 ) / ( width - sliderWidthT ),0,1);
+        value = Maths.clamp(( mouseX - x - handleWidth / 2 ) / ( width - handleWidth ),0,1);
 
         if(divisions > 0)
             value = Maths.round(value * divisions) / divisions;
@@ -54,6 +54,9 @@ public class Slider extends UIComponent<Batch>{
     }
 
     public Slider setValue(double value){
+        if(value > 1 || value < 0)
+            return this;
+        
         this.value = (float) value;
         return this;
     }

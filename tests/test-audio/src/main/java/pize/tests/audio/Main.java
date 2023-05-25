@@ -4,11 +4,11 @@ import pize.Pize;
 import pize.audio.io.WavFile;
 import pize.audio.sound.Sound;
 import pize.audio.util.SoundGenerator;
-import pize.context.ContextListener;
+import pize.activity.ActivityListener;
 import pize.files.Resource;
 import pize.io.glfw.Key;
 
-public class Main implements ContextListener{
+public class Main implements ActivityListener{
 
     public static void main(String[] args){
         Pize.create("Audio", 700, 150);
@@ -19,7 +19,7 @@ public class Main implements ContextListener{
 
     private Sound sound;
     private AudioPlayerUI AudioPlayerUI;
-
+    
     @Override
     public void init(){
         Resource resource = new Resource("Generated.wav", true);
@@ -54,7 +54,7 @@ public class Main implements ContextListener{
         if(Pize.isDown(Key.ESCAPE))
             Pize.exit();
 
-        AudioPlayerUI.renderUI();
+        AudioPlayerUI.update();
     }
 
     @Override

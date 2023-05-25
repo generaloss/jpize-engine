@@ -1,7 +1,7 @@
 package pize.audio.sound;
 
 import pize.audio.util.AlUtils;
-import pize.context.Disposable;
+import pize.activity.Disposable;
 import pize.files.Resource;
 
 import java.nio.ByteBuffer;

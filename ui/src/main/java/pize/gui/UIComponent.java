@@ -12,7 +12,7 @@ public abstract class UIComponent<C> implements Cloneable{
 
     private Constraint constraintX, constraintY, constraintWidth, constraintHeight;
     protected float x, y, width, height;
-    private boolean show;
+    private boolean show, hover, grab;
     private Align align;
 
     private LayoutType layoutType;
@@ -39,7 +39,7 @@ public abstract class UIComponent<C> implements Cloneable{
     }
 
     public UIComponent(){
-        this(Constraint.zero, Constraint.zero, Constraint.match_parent, Constraint.match_parent);
+        this(Constraint.zero(), Constraint.zero(), Constraint.matchParent(), Constraint.matchParent());
     }
 
     public UIComponent(UIComponent<C> component){
@@ -48,31 +48,28 @@ public abstract class UIComponent<C> implements Cloneable{
 
 
     public void render(C canvas){
-        if(constraintWidth.getType() == ConstraintType.ASPECT)
-            height = calcConstraintY(constraintHeight);
+        correctConstraints();
+        calculateSize();
+        correctSize();
+        calculatePos();
+        correctPos();
 
-        width = calcConstraintX(constraintWidth);
-
-        if(constraintWidth.getType() != ConstraintType.ASPECT)
-            height = calcConstraintY(constraintHeight);
-
-        update();
-
-        x = getParentX() + getConstraintX();
-        y = getParentY() + getConstraintY();
-        if(align == null){
-            x += shiftX + getParentAlignOffsetX();
-            y += shiftY + getParentAlignOffsetY();
-        }else{
-            x += getAlignOffsetX(align);
-            y += getAlignOffsetY(align);
-        }
-
+        // render element
         if(show)
             render(canvas, x, y, width, height);
         else
             return;
-
+        
+        // touch
+        hover = checkIsHover();
+        
+        if(this.isTouchDown())
+            grab = true;
+        else if(Pize.isTouchReleased())
+            grab = false;
+        
+        
+        // render children
         if(sortedChildList.size() == 0)
             return;
 
@@ -104,11 +101,30 @@ public abstract class UIComponent<C> implements Cloneable{
             }
         }
     }
-
-    protected void update(){ }
+    
+    
+    protected void correctConstraints(){ }
+    
+    protected void correctSize(){ }
+    
+    protected void correctPos(){ }
 
     protected abstract void render(C canvas, float x, float y, float width, float height);
-
+    
+    
+    public boolean isTouchDown(){
+        return Pize.isTouchDown() && isHover();
+    }
+    
+    public boolean isTouched(){
+        return Pize.isTouched() && isHover();
+    }
+    
+    public boolean isTouchReleased(){
+        return Pize.isTouchReleased() && grab;
+    }
+    
+    
     public boolean isShow(){
         return show;
     }
@@ -172,25 +188,30 @@ public abstract class UIComponent<C> implements Cloneable{
 
     public void setWidth(Constraint constraint){
         constraintWidth = constraint;
+        calculateSize();
     }
 
     public void setHeight(Constraint constraint){
         constraintHeight = constraint;
+        calculateSize();
     }
 
     public void setSize(Constraint width, Constraint height){
         constraintWidth = width;
         constraintHeight = height;
+        calculateSize();
     }
 
     public void setSize(Constraint widthHeight){
         constraintWidth = widthHeight;
         constraintHeight = widthHeight;
+        calculateSize();
     }
 
     public void setSize(UIComponent<?> component){
         constraintWidth = component.constraintWidth;
         constraintHeight = component.constraintHeight;
+        calculateSize();
     }
 
     public float aspect(){
@@ -237,73 +258,92 @@ public abstract class UIComponent<C> implements Cloneable{
     public void alignSelf(Align align){
         this.align = align;
     }
-
-
+    
+    
+    public boolean isGrab(){
+        return grab;
+    }
+    
     public boolean isHover(){
+        return hover;
+    }
+    
+    private boolean checkIsHover(){
         float mouseX = Pize.getX();
         float mouseY = Pize.getY();
-
+        
         if(!Pize.window().isFocused() || mouseX < 0 || mouseX >= Pize.getWidth() || mouseY < 0 || mouseY >= Pize.getHeight())
             return false;
-
+        
         boolean hover = !( mouseX < x || mouseY < y || mouseX > x + width || mouseY > y + height);
         hover &= isChildHover(childList.values());
-
+        
         if(parent != null)
             for(int i = parent.sortedChildList.size() - 1; i >= 0; i--){
                 UIComponent<C> child = parent.sortedChildList.get(i);
                 if(child == this)
                     break;
-
+                
                 if(!child.show)
                     continue;
-
+                
                 hover &= (mouseX < child.x || mouseY < child.y || mouseX > child.x + child.width || mouseY > child.y + child.height);
             }
-
+        
         return hover;
     }
-
+    
     private boolean isChildHover(Collection<UIComponent<C>> childList){
         float mouseX = Pize.getX();
         float mouseY = Pize.getY();
-
+        
         boolean hover = true;
-
+        
         for(UIComponent<C> child: childList){
             hover &= !child.show || mouseX < child.x || mouseY < child.y || mouseX > child.x + child.width || mouseY > child.y + child.height;
             if(hover)
                 hover = isChildHover(child.childList.values());
         }
-
+        
         return hover;
     }
 
-    public boolean isTouchDown(){
-        return Pize.isTouchDown() && isHover();
+    
+    private void calculateSize(){
+        if(constraintWidth.getType() == ConstraintType.ASPECT)
+            height = calcConstraintY(constraintHeight);
+        
+        width = calcConstraintX(constraintWidth);
+        
+        if(constraintWidth.getType() != ConstraintType.ASPECT)
+            height = calcConstraintY(constraintHeight);
     }
-
-    public boolean isTouched(){
-        return Pize.isTouched() && isHover();
+    
+    private void calculatePos(){
+        x = getParentX() + getConstraintX();
+        y = getParentY() + getConstraintY();
+        if(align == null){
+            x += shiftX + getParentAlignOffsetX();
+            y += shiftY + getParentAlignOffsetY();
+        }else{
+            x += getAlignOffsetX(align);
+            y += getAlignOffsetY(align);
+        }
     }
-
-    public boolean isTouchReleased(){
-        return Pize.isTouchReleased() && isHover();
-    }
-
+    
 
     protected float calcConstraintX(Constraint x){
         return switch(x.getType()){
-            case PIXEL -> ( (PixelConstraint) x ).pixels();
-            case ASPECT -> ( (AspectConstraint) x ).aspect() * height;
+            case PIXEL -> x.getValue();
+            case ASPECT -> x.getValue() * height;
             case RELATIVE -> getRelativeWidth((RelativeConstraint) x);
         };
     }
 
     protected float calcConstraintY(Constraint y){
         return switch(y.getType()){
-            case PIXEL -> ( (PixelConstraint) y ).pixels();
-            case ASPECT -> ( (AspectConstraint) y ).aspect() * width;
+            case PIXEL -> y.getValue();
+            case ASPECT -> y.getValue() * width;
             case RELATIVE -> getRelativeHeight((RelativeConstraint) y);
         };
     }
@@ -331,14 +371,14 @@ public abstract class UIComponent<C> implements Cloneable{
     }
 
     private float getRelativeWidth(RelativeConstraint constraint){
-        return constraint.percentage() * switch(constraint.relativeTo()){
+        return constraint.getValue() * switch(constraint.getRelativeTo()){
             case AUTO, WIDTH -> getParentWidth();
             case HEIGHT -> getParentHeight();
         };
     }
 
     private float getRelativeHeight(RelativeConstraint constraint){
-        return constraint.percentage() * switch(constraint.relativeTo()){
+        return constraint.getValue() * switch(constraint.getRelativeTo()){
             case AUTO, HEIGHT -> getParentHeight();
             case WIDTH -> getParentWidth();
         };

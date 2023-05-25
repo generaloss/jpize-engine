@@ -10,13 +10,13 @@ import java.nio.ByteBuffer;
 public class PixmapIO{
 
     public static Pixmap load(BufferedImage bufferedImage, boolean invX, boolean invY){
-        int width = bufferedImage.getWidth();
-        int height = bufferedImage.getHeight();
-
-        Pixmap pixmap = new Pixmap(width, height);
-        ByteBuffer buffer = pixmap.getBuffer();
-
-        int[] pixels = new int[width * height];
+        final int width = bufferedImage.getWidth();
+        final int height = bufferedImage.getHeight();
+        
+        final Pixmap pixmap = new Pixmap(width, height);
+        final ByteBuffer buffer = pixmap.getBuffer();
+        
+        final int[] pixels = new int[width * height];
         bufferedImage.getRGB(0, 0, width, height, pixels, 0, width);
 
         for(int y = 0; y < height; y++){
@@ -63,7 +63,7 @@ public class PixmapIO{
     
     
     public static void save(Pixmap pixmap, OutputStream output){
-        BufferedImage bufferedImage = new BufferedImage(pixmap.width, pixmap.height, BufferedImage.TYPE_INT_ARGB);
+        final BufferedImage bufferedImage = new BufferedImage(pixmap.width, pixmap.height, BufferedImage.TYPE_INT_ARGB);
         for(int x = 0; x < pixmap.width; x++)
             for(int y = 0; y < pixmap.height; y++)
                 bufferedImage.setRGB(x, y, pixmap.getPixelBGRA(x, y));
@@ -84,7 +84,7 @@ public class PixmapIO{
     }
     
     public static void save(Pixmap pixmap, String path){
-        Resource resource = new Resource(path, true);
+        final Resource resource = new Resource(path, true);
         resource.mkParentDirs();
         resource.create();
         save(pixmap, resource.getFile());

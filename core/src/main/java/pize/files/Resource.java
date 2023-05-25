@@ -67,14 +67,12 @@ public class Resource{
     }
     
     
-    
-    
     public InputStream inStream(){
         try{
             if(external)
                 return new FileInputStream(file);
             else{
-                InputStream inputStream = getClass().getResourceAsStream(getPath());
+                final InputStream inputStream = getClass().getResourceAsStream(getPath());
                 if(inputStream == null)
                     throw new FileNotFoundException("Internal file does not exists: " + getPath());
                 
@@ -107,23 +105,17 @@ public class Resource{
     }
     
     public String readString(){
-        try{
-            InputStream in = inStream();
-            String string = new String(in.readAllBytes());
-            in.close();
-            
-            return string;
+        try(final InputStream in = inStream()){
+            return new String(in.readAllBytes());
         }catch(IOException e){
             throw new RuntimeException(e);
         }
     }
     
     public void writeString(String string){
-        try{
-            FileOutputStream out = outStream();
+        try(final FileOutputStream out = outStream()){
             out.write(string.getBytes());
             out.flush();
-            out.close();
         }catch(IOException e){
             throw new RuntimeException(e);
         }
@@ -139,23 +131,23 @@ public class Resource{
     }
     
     public String getExtension(){
-        String name = getName();
-        int dotIndex = name.lastIndexOf(".");
+        final String name = getName();
+        final int dotIndex = name.lastIndexOf(".");
         return (dotIndex == -1) ? "" : name.substring(dotIndex + 1);
     }
     
     public String getSimpleName(){
-        String name = getName();
-        int dotIndex = name.lastIndexOf('.');
+        final String name = getName();
+        final int dotIndex = name.lastIndexOf('.');
         return (dotIndex == -1) ? name : name.substring(0, dotIndex);
     }
     
     public Resource[] list(){
-        String[] relativePaths = file.list();
+        final String[] relativePaths = file.list();
         if(relativePaths == null)
             return new Resource[0];
         
-        Resource[] resources = new Resource[relativePaths.length];
+        final Resource[] resources = new Resource[relativePaths.length];
         for(int i = 0; i < relativePaths.length; i++)
             resources[i] = getChild(relativePaths[i]);
         

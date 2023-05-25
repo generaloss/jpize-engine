@@ -25,21 +25,19 @@ public class UdpChannel extends NetChannel<DatagramPacket>{
         thread = new Thread(()->{
             try{
                 while(!Thread.interrupted()){
-
-                    DatagramPacket sizePacket = new DatagramPacket(new byte[4], 4);
+                    final DatagramPacket sizePacket = new DatagramPacket(new byte[4], 4);
                     socket.receive(sizePacket);
 
                     int length = ByteBuffer.wrap(sizePacket.getData()).getInt();
-
-                    DatagramPacket packet = new DatagramPacket(new byte[length], length);
+                    
+                    final DatagramPacket packet = new DatagramPacket(new byte[length], length);
                     socket.receive(packet);
 
                     received.add(packet);
 
                     Thread.yield();
                 }
-            }catch(Exception ignored){
-            }
+            }catch(Exception ignored){ }
         });
 
         thread.setPriority(Thread.MIN_PRIORITY);
@@ -53,13 +51,12 @@ public class UdpChannel extends NetChannel<DatagramPacket>{
             return;
 
         try{
-            byte[] length = ByteBuffer.allocate(4).putInt(packet.getLength()).array();
-            DatagramPacket sizePacket = new DatagramPacket(length, 4, packet.getSocketAddress());
+            final byte[] length = ByteBuffer.allocate(4).putInt(packet.getLength()).array();
+            final DatagramPacket sizePacket = new DatagramPacket(length, 4, packet.getSocketAddress());
             socket.send(sizePacket);
 
             socket.send(packet);
-        }catch(IOException ignored){
-        }
+        }catch(IOException ignored){ }
     }
     
     @Override
@@ -69,7 +66,7 @@ public class UdpChannel extends NetChannel<DatagramPacket>{
 
     @Override
     public DatagramPacket nextPacket(){
-        DatagramPacket packet = received.getLast();
+        final DatagramPacket packet = received.getLast();
         received.remove(packet);
         return packet;
     }

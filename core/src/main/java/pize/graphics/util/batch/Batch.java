@@ -1,6 +1,6 @@
 package pize.graphics.util.batch;
 
-import pize.context.Disposable;
+import pize.activity.Disposable;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;

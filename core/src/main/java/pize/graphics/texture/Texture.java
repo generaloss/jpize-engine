@@ -1,6 +1,6 @@
 package pize.graphics.texture;
 
-import pize.context.Resizable;
+import pize.activity.Resizable;
 import pize.files.Resource;
 
 import static org.lwjgl.opengl.GL33.*;

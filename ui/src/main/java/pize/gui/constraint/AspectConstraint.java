@@ -2,30 +2,21 @@ package pize.gui.constraint;
 
 import java.util.function.DoubleSupplier;
 
-public class AspectConstraint implements Constraint{
-
-    private final DoubleSupplier supplier;
-
-    protected AspectConstraint(DoubleSupplier aspectSupplier){
-        supplier = aspectSupplier;
+public class AspectConstraint extends Constraint{
+    
+    public AspectConstraint setValue(DoubleSupplier valueSupplier){
+        supplier = valueSupplier;
+        return this;
     }
-
-    protected AspectConstraint(double aspect){
-        this(()->aspect);
+    
+    public AspectConstraint setValue(double value){
+        supplier = ()->value;
+        return this;
     }
-
-
-    public float aspect(){
-        return (float) supplier.getAsDouble();
-    }
-
+    
+    @Override
     public ConstraintType getType(){
         return ConstraintType.ASPECT;
-    }
-
-    @Override
-    public Number getValue(){
-        return supplier.getAsDouble();
     }
 
 }

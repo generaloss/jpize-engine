@@ -23,9 +23,9 @@ public abstract class IPacket{
     public void write(TcpByteChannel channel){
         try{
             final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-            final DataOutputStream dataStream = new DataOutputStream(byteStream);
             
             // write packet
+            final DataOutputStream dataStream = new DataOutputStream(byteStream);
             dataStream.writeByte(packetTypeID);
             write(dataStream);
             

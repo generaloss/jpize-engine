@@ -94,7 +94,7 @@ public class Utils{
 
     public static void invokeStatic(Class<?> targetClass, String name, Object... args){
         try{
-            Method method = targetClass.getDeclaredMethod(name);
+            final Method method = targetClass.getDeclaredMethod(name);
 
             method.setAccessible(true);
             method.invoke(null, args);

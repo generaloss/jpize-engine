@@ -1,6 +1,6 @@
 package pize.graphics.vertex;
 
-import pize.context.Disposable;
+import pize.activity.Disposable;
 import pize.graphics.gl.BufferUsage;
 import pize.graphics.gl.Primitive;
 

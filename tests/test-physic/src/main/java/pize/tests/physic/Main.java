@@ -1,7 +1,7 @@
 package pize.tests.physic;
 
 import pize.Pize;
-import pize.context.ContextListener;
+import pize.activity.ActivityListener;
 import pize.graphics.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
 import pize.graphics.util.TextureUtils;
@@ -10,7 +10,7 @@ import pize.math.vecmath.vector.Vec2d;
 import pize.physic.BoundingRect;
 import pize.physic.Collider2D;
 
-public class Main implements ContextListener{
+public class Main implements ActivityListener{
 
     public static void main(String[] args){
         Pize.create("Physics",1280,720);

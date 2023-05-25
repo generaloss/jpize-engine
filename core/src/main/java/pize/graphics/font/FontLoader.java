@@ -12,6 +12,7 @@ import org.lwjgl.stb.STBTTFontinfo;
 import org.lwjgl.system.MemoryStack;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -91,15 +92,15 @@ public class FontLoader{
 
 
     public static BitmapFont loadTrueType(String filepath, int size, FontCharset charset){
-        BitmapFont font = new BitmapFont();
+        final BitmapFont font = new BitmapFont();
         font.setLineHeight(size);
 
         int width = size * charset.size();
         int height = size * 3;
-
-        ByteBuffer data;
-        try{
-            byte[] bytes = new Resource(filepath).inStream().readAllBytes();
+        
+        final ByteBuffer data;
+        try(final InputStream inStream = new Resource(filepath).inStream()){
+            byte[] bytes = inStream.readAllBytes();
             data = BufferUtils.createByteBuffer(bytes.length);
             data.put(bytes);
             data.flip();
@@ -107,11 +108,11 @@ public class FontLoader{
             throw new Error("Failed to load " + filepath + " (" + e + ")");
         }
 
-        ByteBuffer bitmap = BufferUtils.createByteBuffer(width * height);
+        final ByteBuffer bitmap = BufferUtils.createByteBuffer(width * height);
         STBTTBakedChar.Buffer charData = STBTTBakedChar.malloc(charset.getLastChar() + 1);
         stbtt_BakeFontBitmap(data, size, bitmap, width, height, charset.getFirstChar(), charData);
 
-        ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
+        final ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
         for(int i = 0; i < buffer.capacity(); i += 4){
             buffer.put((byte) 255);
             buffer.put((byte) 255);
@@ -120,33 +121,33 @@ public class FontLoader{
         }
         buffer.flip();
 
-        Texture texture = new Texture(new Pixmap(buffer, width, height));
+        final Texture texture = new Texture(new Pixmap(buffer, width, height));
         font.addPage(0, texture);
 
         // STB
-        try(MemoryStack stack = stackPush()){
+        try(final MemoryStack stack = stackPush()){
             // Creating font
-            STBTTFontinfo fontInfo = STBTTFontinfo.create();
+            final STBTTFontinfo fontInfo = STBTTFontinfo.create();
             stbtt_InitFont(fontInfo, data);
 
             // Getting descent
-            IntBuffer descentBuffer = stack.mallocInt(1);
+            final IntBuffer descentBuffer = stack.mallocInt(1);
             stbtt_GetFontVMetrics(fontInfo, null, descentBuffer, null);
             float descent = descentBuffer.get() * stbtt_ScaleForPixelHeight(fontInfo, size);
-
-            STBTTAlignedQuad quad = STBTTAlignedQuad.malloc(stack);
+            
+            final STBTTAlignedQuad quad = STBTTAlignedQuad.malloc(stack);
 
             for(int i = 0; i < charset.size(); i++){
                 int id = charset.charAt(i);
 
                 // Getting advanceX
-                FloatBuffer advanceXBuffer = stack.floats(0);
-                FloatBuffer advanceYBuffer = stack.floats(0);
+                final FloatBuffer advanceXBuffer = stack.floats(0);
+                final FloatBuffer advanceYBuffer = stack.floats(0);
                 stbtt_GetBakedQuad(charData, width, height, id - charset.getFirstChar(), advanceXBuffer, advanceYBuffer, quad, false);
                 float advanceX = advanceXBuffer.get();
 
                 // Calculating glyph Region on the texture & glyph Width and Height
-                Region regionOnTexture = new Region(quad.s0(), quad.t0(), quad.s1(), quad.t1());
+                final Region regionOnTexture = new Region(quad.s0(), quad.t0(), quad.s1(), quad.t1());
                 float glyphHeight = quad.y1() - quad.y0();
                 float glyphWidth = quad.x1() - quad.x0();
 

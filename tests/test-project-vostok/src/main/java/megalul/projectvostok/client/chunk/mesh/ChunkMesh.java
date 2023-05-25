@@ -1,6 +1,6 @@
 package megalul.projectvostok.client.chunk.mesh;
 
-import pize.context.Disposable;
+import pize.activity.Disposable;
 import pize.graphics.gl.BufferUsage;
 import pize.graphics.gl.Type;
 import pize.graphics.vertex.VertexArray;

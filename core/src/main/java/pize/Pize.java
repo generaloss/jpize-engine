@@ -1,9 +1,9 @@
 package pize;
 
 import pize.audio.Audio;
-import pize.context.Context;
-import pize.context.ContextListener;
-import pize.context.Screen;
+import pize.activity.Context;
+import pize.activity.ActivityListener;
+import pize.activity.Screen;
 import pize.graphics.gl.BlendFactor;
 import pize.graphics.gl.Gl;
 import pize.graphics.gl.Target;
@@ -32,7 +32,7 @@ public class Pize{
         create(title, width, height, true, true, 0);
     }
 
-    public static void run(ContextListener listener){
+    public static void run(ActivityListener listener){
         context.begin(listener);
     }
 

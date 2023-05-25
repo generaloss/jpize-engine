@@ -52,12 +52,8 @@ public class PrivateRSA{
     }
     
     public static PrivateRSA load(Resource resource){
-        try{
-            InputStream inStream = resource.inStream();
-            byte[] bytes = inStream.readAllBytes();
-            inStream.close();
-            
-            return new PrivateRSA(bytes);
+        try(final InputStream inStream = resource.inStream()){
+            return new PrivateRSA(inStream.readAllBytes());
         }catch(Exception e){
             throw new RuntimeException(e);
         }

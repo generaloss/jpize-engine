@@ -1,7 +1,7 @@
 package pize.io;
 
-import pize.context.Disposable;
-import pize.context.Resizable;
+import pize.activity.Disposable;
+import pize.activity.Resizable;
 import pize.files.Resource;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.PixmapIO;
@@ -40,8 +40,8 @@ public class Window implements Disposable, Resizable{
         ID = glfwCreateWindow(width, height, title, 0, 0);
         if(ID == 0)
             throw new Error("Failed to create the GLFW Window");
-
-        Monitor monitor = MonitorManager.getPrimary();
+        
+        final Monitor monitor = MonitorManager.getPrimary();
         glfwSetWindowPos(ID, monitor.getWidth() / 2 - width / 2, monitor.getHeight() / 2 - height / 2);
 
         glfwMakeContextCurrent(ID);
@@ -68,8 +68,8 @@ public class Window implements Disposable, Resizable{
         if(flag == fullscreen)
             return;
         fullscreen = flag;
-
-        Monitor monitor = MonitorManager.getPrimary();
+        
+        final Monitor monitor = MonitorManager.getPrimary();
         if(flag){
             windowedLastX = x;
             windowedLastY = y;
@@ -147,11 +147,11 @@ public class Window implements Disposable, Resizable{
 
     public void setIcon(String filePath){
         try{
-            BufferedImage bufferedImage = ImageIO.read(new Resource(filePath).inStream());
-            Pixmap pixmap = PixmapIO.load(bufferedImage);
-
-            GLFWImage image = GLFWImage.malloc();
-            GLFWImage.Buffer iconBuffer = GLFWImage.malloc(1);
+            final BufferedImage bufferedImage = ImageIO.read(new Resource(filePath).inStream());
+            final Pixmap pixmap = PixmapIO.load(bufferedImage);
+            
+            final GLFWImage image = GLFWImage.malloc();
+            final GLFWImage.Buffer iconBuffer = GLFWImage.malloc(1);
             image.set(pixmap.getWidth(), pixmap.getHeight(), pixmap.getBuffer());
 
             iconBuffer.put(0, image);

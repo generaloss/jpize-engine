@@ -2,12 +2,12 @@ package megalul.projectvostok.client;
 
 import megalul.projectvostok.Main;
 import megalul.projectvostok.client.world.render.WorldRenderer;
-import pize.context.ContextListener;
+import pize.activity.ActivityListener;
 import pize.graphics.gl.DepthFunc;
 import pize.graphics.gl.Gl;
 import pize.graphics.gl.Target;
 
-public class ClientGameRenderer implements ContextListener{
+public class ClientGameRenderer implements ActivityListener{
     
     private final Main sessionOF;
     private final WorldRenderer worldRenderer;

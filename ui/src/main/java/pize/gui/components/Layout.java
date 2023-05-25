@@ -7,7 +7,7 @@ import pize.gui.constraint.Constraint;
 public class Layout extends UIComponent<Batch>{
 
     public Layout(){
-        super.setSize(Constraint.match_parent, Constraint.match_parent);
+        super.setSize(Constraint.matchParent(), Constraint.matchParent());
     }
 
     @Override

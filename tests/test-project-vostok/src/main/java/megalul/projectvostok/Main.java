@@ -12,12 +12,12 @@ import megalul.projectvostok.clientserver.Version;
 import megalul.projectvostok.clientserver.net.PlayerProfile;
 import megalul.projectvostok.server.LocalServer;
 import pize.Pize;
-import pize.context.ContextListener;
+import pize.activity.ActivityListener;
 import pize.files.Resource;
 import pize.graphics.gl.Gl;
 import pize.util.time.Sync;
 
-public class Main implements ContextListener{
+public class Main implements ActivityListener{
     
     public static void main(String[] args){
         Pize.create("Project Vostok", 1280, 720);

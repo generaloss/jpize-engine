@@ -27,9 +27,8 @@ public class WavFile{
 
 
     public void save(){
-        try{
-            DataOutputStream out = new DataOutputStream(new FileOutputStream(file));
-
+        try(final DataOutputStream out = new DataOutputStream(new FileOutputStream(file))){
+            
             { // Chunk Descriptor
                 out.writeBytes("RIFF");                                                          // ID
                 out.writeInt(Integer.reverseBytes(20 + 16 + Integer.reverseBytes(data.length))); // Size (Не обязательно)

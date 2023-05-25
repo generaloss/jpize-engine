@@ -1,6 +1,6 @@
 package pize.io;
 
-import pize.context.Disposable;
+import pize.activity.Disposable;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.PixmapIO;
 import pize.graphics.texture.Texture;

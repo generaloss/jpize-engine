@@ -11,7 +11,7 @@ import megalul.projectvostok.client.world.ClientWorld;
 import megalul.projectvostok.server.world.ServerWorld;
 import megalul.projectvostok.server.world.light.WorldLight;
 import pize.Pize;
-import pize.context.Disposable;
+import pize.activity.Disposable;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.graphics.util.batch.TextureBatch;
