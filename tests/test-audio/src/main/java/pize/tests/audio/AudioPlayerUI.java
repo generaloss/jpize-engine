@@ -33,18 +33,21 @@ public class AudioPlayerUI implements Disposable{
     }
     
     private void createUI(){
-        // Background for Sliders
-        RegionMesh sliderTextureMesh = new RegionMesh(0, 0, 3, 4, 93, 20, 96, 24);
-        NinePatchImage sliderBackground = new NinePatchImage(sliderBarTexture, sliderTextureMesh);
+        // Background and Handle for Sliders
+        RegionMesh sliderBackgroundTextureMesh = new RegionMesh(0, 0, 3, 4, 93, 20, 96, 24);
+        NinePatchImage sliderBackground = new NinePatchImage(sliderBarTexture, sliderBackgroundTextureMesh);
         sliderBackground.setExpandType(ExpandType.HORIZONTAL);
         
+        Image sliderHandle = new Image(sliderHandleTexture);
+        sliderHandle.setSize(Constraint.aspect(sliderHandleTexture.aspect()), Constraint.relative(1));
+        
         // Slider Position
-        Slider positionSlider = new Slider(sliderBackground, sliderHandleTexture);
+        Slider positionSlider = new Slider(sliderBackground, sliderHandle);
         positionSlider.setSize(Constraint.relative(1), Constraint.relative(0.5));
         layout.put("position", positionSlider);
         
         // Slider Pitch
-        Slider pitchSlider = new Slider(sliderBackground.clone(), sliderHandleTexture);
+        Slider pitchSlider = new Slider(sliderBackground.clone(), sliderHandle.clone());
         pitchSlider.setSize(Constraint.relative(1), Constraint.relative(0.5));
         pitchSlider.setValue(1 / 2F);
         layout.put("pitch", pitchSlider);

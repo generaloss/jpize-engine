@@ -18,7 +18,7 @@ public class Slider extends UIComponent<Batch>{
         
         super.setAsParentFor(background, handle);
         background.setSize(Constraint.matchParent());
-        handle.setPosition(Constraint.relative(0));
+        handle.setPosition(Constraint.zero(), Constraint.zero());
     }
 
 
