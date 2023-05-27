@@ -73,6 +73,7 @@ public class VideoSettingsScreen extends IOptionsScreen{
         maxFramerateSlider.setSize(Constraint.pixel(155), Constraint.relative(1));
         maxFramerateSlider.setText(new Component().translation("videoSettings.maxFramerate", setMaxFramerateComponent(new Component(), getOptions().getMaxFramerate())) );
         maxFramerateSlider.setValue((float) getOptions().getMaxFramerate() / MAX_SETTING_FRAMERATE);
+        maxFramerateSlider.setDivisions(MAX_SETTING_FRAMERATE / FRAMERATE_SETTING_INTERVAL);
         layoutLine2.put("maxFramerate", maxFramerateSlider);
         // Show FPS
         Button showFpsButton = new Button(session, new Component().translation("videoSettings.showFps", setBooleanComponent(new Component(), getOptions().isShowFps())));
