@@ -71,7 +71,7 @@ public class Component{
     }
 
     public Component translation(String translationKey, Component... args){
-        components.add(new TranslatableComponent(this, translationKey, args));
+        components.add(new TranslationComponent(this, translationKey, args));
 
         return this;
     }
@@ -123,6 +123,14 @@ public class Component{
     public Component getComponent(int index){
         return components.get(index);
     }
+    
+    public TextComponent getComponentAsTest(int index){
+        return (TextComponent) components.get(index);
+    }
+    
+    public TranslationComponent getComponentAsTranslation(int index){
+        return (TranslationComponent) components.get(index);
+    }
 
     public int size(){
         return components.size();
@@ -136,10 +144,10 @@ public class Component{
             builder.append(
                 switch(component.getClass().getSimpleName()){
                     case "TextComponent" -> ((TextComponent) component).getText();
-                    case "TranslatableComponent" ->{
-                        TranslatableComponent translatableComponent = ((TranslatableComponent) component);
-                        translatableComponent.update(session);
-                        yield translatableComponent.getAllText(session);
+                    case "TranslationComponent" ->{
+                        TranslationComponent translationComponent = ((TranslationComponent) component);
+                        translationComponent.update(session);
+                        yield translationComponent.getAllText(session);
                     }
                     default -> component.getAllText(session);
                 }
@@ -159,10 +167,10 @@ public class Component{
     private void getAllComponents(Session session, List<TextComponent> allComponents, Component currentComponent){
         for(Component component: currentComponent.components){
             if(component.size() == 0){
-                if(component.getClass() == TranslatableComponent.class){
-                    TranslatableComponent translatableComponent = ((TranslatableComponent) component);
-                    translatableComponent.update(session);
-                    getAllComponents(session, allComponents, translatableComponent);
+                if(component.getClass() == TranslationComponent.class){
+                    TranslationComponent translationComponent = ((TranslationComponent) component);
+                    translationComponent.update(session);
+                    getAllComponents(session, allComponents, translationComponent);
                 }else
                     allComponents.add((TextComponent) component);
             }else

@@ -10,6 +10,7 @@ import pize.gui.components.RegionMesh;
 import pize.gui.constraint.Constraint;
 import pize.math.Maths;
 import pize.tests.minecraft.game.Session;
+import pize.tests.minecraft.game.audio.Sound;
 import pize.tests.minecraft.game.gui.text.Component;
 
 public class Slider extends MComponent{
@@ -49,6 +50,9 @@ public class Slider extends MComponent{
     
     @Override
     public void render(Batch batch, float x, float y, float width, float height){
+        if(super.isTouchReleased())
+            session.getAudioManager().play(Sound.CLICK, 1, 1);
+        
         float handleWidth = handle.getWidth();
         handle.getXConstraint().setValue(value * (width - handleWidth));
         if(isHover())
@@ -65,10 +69,10 @@ public class Slider extends MComponent{
         else if(Pize.isTouchReleased())
             drag = false;
         
+        prevValue = value;
+        
         if(!drag)
             return;
-        
-        prevValue = value;
         
         float mouseX = Pize.getX();
         value = Maths.clamp(( mouseX - x - handleWidth / 2 ) / ( width - handleWidth ),0,1);

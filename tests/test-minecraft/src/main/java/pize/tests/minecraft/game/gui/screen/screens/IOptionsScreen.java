@@ -2,6 +2,7 @@ package pize.tests.minecraft.game.gui.screen.screens;
 
 import pize.tests.minecraft.game.Session;
 import pize.tests.minecraft.game.gui.screen.Screen;
+import pize.tests.minecraft.game.options.Options;
 
 public abstract class IOptionsScreen extends Screen{
 
@@ -25,6 +26,10 @@ public abstract class IOptionsScreen extends Screen{
 
     public void saveOptions(){
         session.getOptions().save();
+    }
+    
+    public Options getOptions(){
+        return session.getOptions();
     }
 
 }

@@ -142,7 +142,7 @@ public class Resource{
         return (dotIndex == -1) ? name : name.substring(0, dotIndex);
     }
     
-    public Resource[] list(){
+    public Resource[] listResources(){
         final String[] relativePaths = file.list();
         if(relativePaths == null)
             return new Resource[0];

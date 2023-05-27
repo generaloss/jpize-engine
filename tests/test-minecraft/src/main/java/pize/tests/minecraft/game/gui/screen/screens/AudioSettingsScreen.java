@@ -29,7 +29,7 @@ public class AudioSettingsScreen extends IOptionsScreen{
         // <----------TEXTS---------->
         // < Title >
         TextView titleTextView = new TextView(session, new Component().translation("audioSettings.title"));
-        titleTextView.setY(GapConstraint.gap(108));
+        titleTextView.setY(GapConstraint.gap(71));
         layout.put("title", titleTextView);
         // Title
 
@@ -47,17 +47,17 @@ public class AudioSettingsScreen extends IOptionsScreen{
         // 2 Line Layout
         Layout layoutLine2 = new Layout();
         layoutLine2.setLayoutType(LayoutType.HORIZONTAL);
-        layoutLine2.setY(GapConstraint.gap(3));
+        layoutLine2.setY(GapConstraint.gap(4));
         layoutLine2.setSize(Constraint.aspect(16), Constraint.pixel(20));
         layout.put("line2layout", layoutLine2);
         // Music
         musicVolume = new VolumeSlider(session, SoundCategory.MUSIC);
-        musicVolume.setSize(Constraint.pixel(157), Constraint.relative(1));
+        musicVolume.setSize(Constraint.pixel(155), Constraint.relative(1));
         layoutLine2.put("music", musicVolume);
         // Ambient
         ambientVolume = new VolumeSlider(session, SoundCategory.AMBIENT);
         ambientVolume.alignSelf(Align.RIGHT);
-        ambientVolume.setSize(Constraint.pixel(157), Constraint.relative(1));
+        ambientVolume.setSize(Constraint.pixel(155), Constraint.relative(1));
         layoutLine2.put("ambient", ambientVolume);
         // <----------LINE 3---------->
         // [ Players ] [ Blocks ]
@@ -65,17 +65,17 @@ public class AudioSettingsScreen extends IOptionsScreen{
         // 3 Line Layout
         Layout layoutLine3 = new Layout();
         layoutLine3.setLayoutType(LayoutType.HORIZONTAL);
-        layoutLine3.setY(GapConstraint.gap(3));
+        layoutLine3.setY(GapConstraint.gap(4));
         layoutLine3.setSize(Constraint.aspect(16), Constraint.pixel(20));
         layout.put("line3layout", layoutLine3);
         // Players
         playersVolume = new VolumeSlider(session, SoundCategory.PLAYERS);
-        playersVolume.setSize(Constraint.pixel(157), Constraint.relative(1));
+        playersVolume.setSize(Constraint.pixel(155), Constraint.relative(1));
         layoutLine3.put("players", playersVolume);
         // Blocks
         blocksVolume = new VolumeSlider(session, SoundCategory.BLOCKS);
         blocksVolume.alignSelf(Align.RIGHT);
-        blocksVolume.setSize(Constraint.pixel(157), Constraint.relative(1));
+        blocksVolume.setSize(Constraint.pixel(155), Constraint.relative(1));
         layoutLine3.put("blocks", blocksVolume);
         // <----------LINE 4---------->
         // [ Wather ]
@@ -83,19 +83,19 @@ public class AudioSettingsScreen extends IOptionsScreen{
         // 4 Line Layout
         Layout layoutLine4 = new Layout();
         layoutLine4.setLayoutType(LayoutType.HORIZONTAL);
-        layoutLine4.setY(GapConstraint.gap(3));
+        layoutLine4.setY(GapConstraint.gap(4));
         layoutLine4.setSize(Constraint.aspect(16), Constraint.pixel(20));
         layout.put("line4layout", layoutLine4);
         // Weather
         weatherVolume = new VolumeSlider(session, SoundCategory.WEATHER);
-        weatherVolume.setSize(Constraint.pixel(157), Constraint.relative(1));
+        weatherVolume.setSize(Constraint.pixel(155), Constraint.relative(1));
         layoutLine4.put("weather", weatherVolume);
         // <----------LINE 5---------->
         // [ Device ]
 
         // Device
         Button deviceButton = new Button(session, new Component().translation("audioSettings.device", new Component().formattedText(session.getOptions().getAudioDevice())));
-        deviceButton.setY(GapConstraint.gap(3));
+        deviceButton.setY(GapConstraint.gap(4));
         deviceButton.setSize(Constraint.aspect(16), Constraint.pixel(20));
         layout.put("device", deviceButton);
 
@@ -104,7 +104,7 @@ public class AudioSettingsScreen extends IOptionsScreen{
         
         // Done
         Button doneButton = new Button(session, new Component().translation("gui.done"));
-        doneButton.setY(GapConstraint.gap(3));
+        doneButton.setY(GapConstraint.gap(4));
         doneButton.setSize(Constraint.aspect(10), Constraint.pixel(20));
         doneButton.setClickListener(this::close);
         layout.put("done", doneButton);

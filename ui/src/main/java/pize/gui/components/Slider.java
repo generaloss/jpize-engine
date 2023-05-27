@@ -36,10 +36,10 @@ public class Slider extends UIComponent<Batch>{
         else if(Pize.isTouchReleased())
             drag = false;
 
+        prevValue = value;
+        
         if(!drag)
             return;
-
-        prevValue = value;
 
         float mouseX = Pize.getX();
         value = Maths.clamp(( mouseX - x - handleWidth / 2 ) / ( width - handleWidth ),0,1);

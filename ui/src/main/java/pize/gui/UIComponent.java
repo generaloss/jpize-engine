@@ -12,7 +12,7 @@ public abstract class UIComponent<C> implements Cloneable{
 
     private Constraint constraintX, constraintY, constraintWidth, constraintHeight;
     protected float x, y, width, height;
-    private boolean show, hover, grab;
+    private boolean show, hover, preGrab, grab;
     private Align align;
 
     private LayoutType layoutType;
@@ -63,10 +63,12 @@ public abstract class UIComponent<C> implements Cloneable{
         // touch
         hover = checkIsHover();
         
+        grab = preGrab;
+        
         if(this.isTouchDown())
-            grab = true;
+            preGrab = true;
         else if(Pize.isTouchReleased())
-            grab = false;
+            preGrab = false;
         
         
         // render children

@@ -48,13 +48,13 @@ public class OptionsScreen extends IOptionsScreen{
         // Video Settings
         Button videoSettingsButton = new Button(session, new Component().translation("options.videoSettings"));
         videoSettingsButton.setClickListener(()->toScreen("video_settings"));
-        videoSettingsButton.setSize(Constraint.aspect(7.7), Constraint.relative(1));
+        videoSettingsButton.setSize(Constraint.pixel(155), Constraint.relative(1));
         layoutLine1.put("video_settings", videoSettingsButton);
 
         // Music & Sounds
         Button audioSettingsButton = new Button(session, new Component().translation("options.audioSettings"));
         audioSettingsButton.setClickListener(()->toScreen("audio_settings"));
-        audioSettingsButton.setSize(Constraint.aspect(7.7), Constraint.relative(1));
+        audioSettingsButton.setSize(Constraint.pixel(155), Constraint.relative(1));
         audioSettingsButton.alignSelf(Align.RIGHT);
         layoutLine1.put("audio_settings", audioSettingsButton);
 
@@ -70,13 +70,13 @@ public class OptionsScreen extends IOptionsScreen{
 
         // Language
         Button languageButton = new Button(session, new Component().translation("options.language"));
-        languageButton.setSize(Constraint.aspect(7.7), Constraint.relative(1));
+        languageButton.setSize(Constraint.pixel(155), Constraint.relative(1));
         layoutLine2.put("language", languageButton);
 
         // Controls
         Button controlsButton = new Button(session, new Component().translation("options.controls"));
         controlsButton.setClickListener(()->System.out.println("Controls"));
-        controlsButton.setSize(Constraint.aspect(7.7), Constraint.relative(1));
+        controlsButton.setSize(Constraint.pixel(155), Constraint.relative(1));
         controlsButton.alignSelf(Align.RIGHT);
         layoutLine2.put("controls", controlsButton);
 
@@ -93,7 +93,7 @@ public class OptionsScreen extends IOptionsScreen{
         // Resource Packs
         Button resourcePacksButton = new Button(session, new Component().translation("options.resourcePacks"));
         resourcePacksButton.setClickListener(()->System.out.println("Resource Packs"));
-        resourcePacksButton.setSize(Constraint.aspect(7.7), Constraint.relative(1));
+        resourcePacksButton.setSize(Constraint.pixel(155), Constraint.relative(1));
         layoutLine3.put("resource_packs", resourcePacksButton);
 
         // <----------DONE---------->

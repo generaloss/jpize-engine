@@ -2,9 +2,11 @@ package pize.tests.minecraft.game.lang;
 
 import pize.files.Resource;
 import pize.files.MapConfig;
+import pize.tests.minecraft.utils.log.Logger;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class LanguageManager{
 
@@ -24,9 +26,9 @@ public class LanguageManager{
     public void updateAvailableLanguages(){
         languages.clear();
 
-        Resource langDir = new Resource("vanilla/lang/");
+        Resource langDir = new Resource("vanilla/lang/", true);
 
-        Resource[] langList = langDir.list();
+        Resource[] langList = langDir.listResources();
         if(langList == null)
             return;
 
@@ -44,6 +46,11 @@ public class LanguageManager{
 
             langMap.clear();
         }
+        
+        StringJoiner joiner = new StringJoiner(", ");
+        for(LanguageInfo languageInfo: languages.values())
+            joiner.add(languageInfo.getName());
+        Logger.instance().info("Loaded Languages: " + joiner);
     }
 
     public List<LanguageInfo> getAvailableLanguages(){

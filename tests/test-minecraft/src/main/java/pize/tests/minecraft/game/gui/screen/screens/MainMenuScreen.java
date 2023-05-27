@@ -133,14 +133,14 @@ public class MainMenuScreen extends Screen{
         // Options...
         Button optionsButton = new Button(session, new Component().translation("menu.options"));
         optionsButton.setClickListener(()->toScreen("options"));
-        optionsButton.setSize(Constraint.pixel(98), Constraint.relative(1));
+        optionsButton.setSize(Constraint.pixel(97), Constraint.relative(1));
         horizontalLayout.put("options", optionsButton);
 
         // Quit Game
         Button quitButton = new Button(session, new Component().translation("menu.quit"));
         quitButton.setClickListener(this::close);
         quitButton.alignSelf(Align.RIGHT);
-        quitButton.setSize(Constraint.pixel(98), Constraint.relative(1));
+        quitButton.setSize(Constraint.pixel(97), Constraint.relative(1));
         horizontalLayout.put("quit", quitButton);
 
         // <----------TEXTS---------->
