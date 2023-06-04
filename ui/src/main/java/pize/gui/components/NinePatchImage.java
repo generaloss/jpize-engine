@@ -4,13 +4,14 @@ import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
 import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 import pize.gui.UIComponent;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec2f;
 
 import static pize.gui.components.ExpandType.*;
 
-public class NinePatchImage extends UIComponent<Batch>{
+public class NinePatchImage extends UIComponent<TextureBatch>{
 
     private final TextureRegion[] regions;
     private TextureRegion texture;
@@ -75,7 +76,7 @@ public class NinePatchImage extends UIComponent<Batch>{
 
 
     @Override
-    protected void render(Batch batch, float x, float y, float width, float height){
+    protected void render(TextureBatch batch, float x, float y, float width, float height){
         // Calc Render Info
 
         if(type == HORIZONTAL)

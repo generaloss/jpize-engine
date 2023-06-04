@@ -41,9 +41,12 @@ public class FontLoader{
                     int id = Integer.parseInt(getValue(tokens[1]));
 
                     String relativeTexturePath = getValue(tokens[2]).replace("\"", "");
-
+                    
+                    Path path = Path.of(filepath);
                     font.addPage(id, new Texture(new Resource(
-                        Path.of(Path.of(filepath).getParent().toString() + "/" + relativeTexturePath).normalize().toString()
+                        path.getParent() == null ?
+                            relativeTexturePath :
+                            Path.of(path.getParent() + "/" + relativeTexturePath).normalize().toString()
                     )));
                 }
                 case "char" -> {
@@ -178,7 +181,7 @@ public class FontLoader{
 
     public static BitmapFont getDefault(){
         if(defaultFont == null)
-            defaultFont = loadTrueType("font/notosans-bold.ttf", 32);
+            defaultFont = loadTrueType("font/OpenSans-Regular.ttf", 32);
         return defaultFont;
     }
 

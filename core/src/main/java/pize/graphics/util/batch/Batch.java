@@ -37,7 +37,7 @@ public abstract class Batch implements Disposable{
         this.color.set(color);
     }
 
-    public void setColor(float r, float g, float b, float a){
+    public void setColor(double r, double g, double b, double a){
         color.set(r, g, b, a);
     }
 

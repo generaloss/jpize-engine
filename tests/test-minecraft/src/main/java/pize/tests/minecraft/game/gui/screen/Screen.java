@@ -3,7 +3,7 @@ package pize.tests.minecraft.game.gui.screen;
 import pize.Pize;
 import pize.activity.Disposable;
 import pize.activity.Resizable;
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 import pize.io.glfw.Key;
 import pize.tests.minecraft.game.Session;
 import pize.tests.minecraft.game.gui.components.DirtBackground;
@@ -24,7 +24,7 @@ public abstract class Screen implements Resizable, Disposable{
         options_background = new DirtBackground(session);
     }
 
-    public void update(Batch batch){
+    public void update(TextureBatch batch){
         if(shouldCloseOnEsc() && Pize.isDown(Key.ESCAPE))
             close();
 
@@ -38,7 +38,7 @@ public abstract class Screen implements Resizable, Disposable{
     }
 
 
-    public abstract void render(Batch batch);
+    public abstract void render(TextureBatch batch);
 
     public abstract void onShow();
 

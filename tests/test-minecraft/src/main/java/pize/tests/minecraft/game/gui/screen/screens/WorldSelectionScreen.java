@@ -1,6 +1,6 @@
 package pize.tests.minecraft.game.gui.screen.screens;
 
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 import pize.tests.minecraft.game.Session;
 import pize.tests.minecraft.game.gui.screen.Screen;
 
@@ -44,7 +44,7 @@ public class WorldSelectionScreen extends Screen{
     }
 
     @Override
-    public void render(Batch batch){
+    public void render(TextureBatch batch){
 
     }
 

@@ -33,7 +33,7 @@ public class FontCharset{
 
 
     public boolean contains(char character){
-        return charset.contains("" + character);
+        return charset.contains(String.valueOf(character));
     }
 
     public char charAt(int index){

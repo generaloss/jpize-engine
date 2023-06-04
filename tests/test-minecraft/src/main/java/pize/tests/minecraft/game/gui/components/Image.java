@@ -2,7 +2,7 @@ package pize.tests.minecraft.game.gui.components;
 
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 
 public class Image extends MComponent{
     
@@ -17,7 +17,7 @@ public class Image extends MComponent{
     }
     
     @Override
-    protected void render(Batch batch, float x, float y, float width, float height){
+    protected void render(TextureBatch batch, float x, float y, float width, float height){
         batch.draw(texture, x, y, width, height);
     }
     

@@ -1,7 +1,9 @@
 package pize.gui;
 
 import pize.Pize;
-import pize.gui.constraint.*;
+import pize.gui.constraint.Constraint;
+import pize.gui.constraint.ConstraintType;
+import pize.gui.constraint.RelativeConstraint;
 
 import java.util.*;
 
@@ -18,7 +20,7 @@ public abstract class UIComponent<C> implements Cloneable{
     private LayoutType layoutType;
     private Align alignComponents;
 
-    private float shiftX, shiftY;
+    private float shiftX, shiftY, childShiftX, childShiftY;
     private UIComponent<C> parent;
     private final Map<String, UIComponent<C>> childList;
     private List<UIComponent<C>> sortedChildList;
@@ -79,8 +81,8 @@ public abstract class UIComponent<C> implements Cloneable{
         float shiftY = 0;
 
         for(UIComponent<C> child: sortedChildList){
-            child.shiftX = shiftX;
-            child.shiftY = shiftY;
+            child.shiftX = shiftX + childShiftX;
+            child.shiftY = shiftY + childShiftY;
 
             child.render(canvas);
 
@@ -102,6 +104,8 @@ public abstract class UIComponent<C> implements Cloneable{
                         ) + child.getConstraintY();
             }
         }
+        
+        renderEnd(canvas);
     }
     
     
@@ -112,6 +116,8 @@ public abstract class UIComponent<C> implements Cloneable{
     protected void correctPos(){ }
 
     protected abstract void render(C canvas, float x, float y, float width, float height);
+    
+    protected void renderEnd(C batch){ }
     
     
     public boolean isTouchDown(){
@@ -186,6 +192,12 @@ public abstract class UIComponent<C> implements Cloneable{
         constraintX = xy;
         constraintY = xy;
     }
+    
+    
+    public void setChildShift(float x, float y){
+        childShiftX = x;
+        childShiftY = y;
+    }
 
 
     public void setWidth(Constraint constraint){
@@ -232,6 +244,10 @@ public abstract class UIComponent<C> implements Cloneable{
             .toList();
     }
 
+    public UIComponent getParent(){
+        return parent;
+    }
+    
     protected void setParent(UIComponent<C> component){
         parent = component;
     }

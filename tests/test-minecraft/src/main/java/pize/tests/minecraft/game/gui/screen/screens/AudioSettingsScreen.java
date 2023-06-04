@@ -1,7 +1,7 @@
 package pize.tests.minecraft.game.gui.screen.screens;
 
 import pize.audio.Audio;
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 import pize.gui.Align;
 import pize.gui.LayoutType;
 import pize.gui.constraint.Constraint;
@@ -32,13 +32,21 @@ public class AudioSettingsScreen extends IOptionsScreen{
         titleTextView.setY(GapConstraint.gap(71));
         layout.put("title", titleTextView);
         // Title
-
+        
+        ListView list = new ListView();
+        list.setLayoutType(LayoutType.VERTICAL);
+        list.alignItems(Align.UP);
+        list.setSize(Constraint.relative(0.8), Constraint.relative(0.3));
+        list.setY(GapConstraint.gap(3));
+        layout.put("list", list);
+        
+        
         // <----------LINE 1---------->
         // [ Master Volume ]
         masterVolume = new VolumeSlider(session, SoundCategory.MASTER);
         masterVolume.setY(GapConstraint.gap(15));
         masterVolume.setSize(Constraint.aspect(16), Constraint.pixel(20));
-        layout.put("master", masterVolume);
+        list.put("master", masterVolume);
         // Master Volume
 
         // <----------LINE 2---------->
@@ -49,7 +57,7 @@ public class AudioSettingsScreen extends IOptionsScreen{
         layoutLine2.setLayoutType(LayoutType.HORIZONTAL);
         layoutLine2.setY(GapConstraint.gap(4));
         layoutLine2.setSize(Constraint.aspect(16), Constraint.pixel(20));
-        layout.put("line2layout", layoutLine2);
+        list.put("line2layout", layoutLine2);
         // Music
         musicVolume = new VolumeSlider(session, SoundCategory.MUSIC);
         musicVolume.setSize(Constraint.pixel(155), Constraint.relative(1));
@@ -67,7 +75,7 @@ public class AudioSettingsScreen extends IOptionsScreen{
         layoutLine3.setLayoutType(LayoutType.HORIZONTAL);
         layoutLine3.setY(GapConstraint.gap(4));
         layoutLine3.setSize(Constraint.aspect(16), Constraint.pixel(20));
-        layout.put("line3layout", layoutLine3);
+        list.put("line3layout", layoutLine3);
         // Players
         playersVolume = new VolumeSlider(session, SoundCategory.PLAYERS);
         playersVolume.setSize(Constraint.pixel(155), Constraint.relative(1));
@@ -85,7 +93,7 @@ public class AudioSettingsScreen extends IOptionsScreen{
         layoutLine4.setLayoutType(LayoutType.HORIZONTAL);
         layoutLine4.setY(GapConstraint.gap(4));
         layoutLine4.setSize(Constraint.aspect(16), Constraint.pixel(20));
-        layout.put("line4layout", layoutLine4);
+        list.put("line4layout", layoutLine4);
         // Weather
         weatherVolume = new VolumeSlider(session, SoundCategory.WEATHER);
         weatherVolume.setSize(Constraint.pixel(155), Constraint.relative(1));
@@ -97,7 +105,7 @@ public class AudioSettingsScreen extends IOptionsScreen{
         Button deviceButton = new Button(session, new Component().translation("audioSettings.device", new Component().formattedText(session.getOptions().getAudioDevice())));
         deviceButton.setY(GapConstraint.gap(4));
         deviceButton.setSize(Constraint.aspect(16), Constraint.pixel(20));
-        layout.put("device", deviceButton);
+        list.put("device", deviceButton);
 
         // <----------DONE---------->
         // [ Done ]
@@ -135,7 +143,7 @@ public class AudioSettingsScreen extends IOptionsScreen{
     }
 
     @Override
-    public void render(Batch batch){
+    public void render(TextureBatch batch){
         masterVolume.updateVolume();
         musicVolume.updateVolume();
         ambientVolume.updateVolume();

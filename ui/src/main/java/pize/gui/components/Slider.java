@@ -1,18 +1,18 @@
 package pize.gui.components;
 
 import pize.Pize;
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 import pize.gui.UIComponent;
 import pize.gui.constraint.Constraint;
 import pize.math.Maths;
 
-public class Slider extends UIComponent<Batch>{
+public class Slider extends UIComponent<TextureBatch>{
     
-    private final UIComponent<Batch> background, handle;
+    private final UIComponent<TextureBatch> background, handle;
     private float value, prevValue, divisions;
     private boolean drag;
 
-    public Slider(UIComponent<Batch> background, UIComponent<Batch> handle){
+    public Slider(UIComponent<TextureBatch> background, UIComponent<TextureBatch> handle){
         this.background = background;
         this.handle = handle;
         
@@ -23,7 +23,7 @@ public class Slider extends UIComponent<Batch>{
 
 
     @Override
-    public void render(Batch batch, float x, float y, float width, float height){
+    public void render(TextureBatch batch, float x, float y, float width, float height){
         background.render(batch);
         
         float handleWidth = handle.getWidth();

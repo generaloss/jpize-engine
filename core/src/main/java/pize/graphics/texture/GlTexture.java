@@ -12,11 +12,15 @@ public abstract class GlTexture extends GlObject{
     protected final TextureParameters parameters;
     protected final int TEXTURE_TYPE;
     
-    public GlTexture(int TEXTURE_TYPE){
+    public GlTexture(int TEXTURE_TYPE, TextureParameters parameters){
         super(glGenTextures());
         this.TEXTURE_TYPE = TEXTURE_TYPE;
         
-        parameters = new TextureParameters();
+        this.parameters = parameters;
+    }
+    
+    public GlTexture(int TEXTURE_TYPE){
+        this(TEXTURE_TYPE, new TextureParameters());
     }
     
     

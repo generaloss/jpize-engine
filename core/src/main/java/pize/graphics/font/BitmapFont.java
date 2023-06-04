@@ -7,6 +7,7 @@ import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.tuple.Tuple2f;
 import pize.math.vecmath.vector.Vec2f;
+import pize.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -84,92 +85,89 @@ public class BitmapFont implements Disposable{
     }
 
 
-    public Tuple2f getBounds(CharSequence text){
-        int advanceX = 0;
-        int advanceY = lineHeight;
-
-        int maxX = 0;
-
+    public Tuple2f getBounds(String text){
+        float maxAdvanceX = 0;
+        float advanceX = 0;
+        float advanceY = lineHeight;
+        
         for(int i = 0; i < text.length(); i++){
-            int code = Character.codePointAt(text, i);
+            final int code = Character.codePointAt(text, i);
 
             if(code == 10){
-                advanceY += lineHeight;
+                maxAdvanceX = Math.max(maxAdvanceX, advanceX);
                 advanceX = 0;
+                advanceY += lineHeight;
                 continue;
             }
-
-            Glyph glyph = glyphs.get(code);
+            
+            final Glyph glyph = glyphs.get(code);
             if(glyph == null)
                 continue;
 
             advanceX += glyph.advanceX;
-
-            maxX = Math.max(maxX, advanceX);
         }
 
-        return new Vec2f(maxX, advanceY).mul(scale);
+        return new Vec2f(Math.max(advanceX, maxAdvanceX), advanceY).mul(scale);
     }
 
-    public Tuple2f getAdvance(String text){
+    public float getLineWidth(String line){
         float advanceX = 0;
-        float advanceY = lineHeight * (text.split("\n").length - 1);
-
-        for(int i = 0; i < text.length(); i++){
-            int code = Character.codePointAt(text, i);
-            if(code == 10){
-                advanceY -= lineHeight;
-                advanceX = 0;
+        
+        for(int i = 0; i < line.length(); i++){
+            final int code = Character.codePointAt(line, i);
+            if(code == 10)
                 continue;
-            }
-
-            Glyph glyph = glyphs.get(code);
+            
+            final Glyph glyph = glyphs.get(code);
             if(glyph == null)
                 continue;
-
+            
             advanceX += glyph.advanceX;
-            advanceY += glyph.advanceX * Mathc.sin(rotation * Maths.toRad);
         }
-
-        return new Vec2f(advanceX, advanceY).mul(scale);
+        
+        return advanceX * scale;
     }
 
     public void drawText(TextureBatch batch, String text, float x, float y){
+        if(text == null)
+            return;
+        
         float advanceX = 0;
-        float advanceY = lineHeight * (text.split("\n").length - 1);
+        float advanceY = lineHeight * StringUtils.count(text, "\n");
 
         batch.setTransformOrigin(0, 0);
         batch.rotate(rotation);
         batch.shear(italic ? ITALIC_ANGLE : 0, 0);
 
         // Calculate centering offset
-        Tuple2f bounds = getBounds(text);
-        double angle = rotation * Maths.toRad + Math.atan(bounds.y / bounds.x);
-        float boundsCenter = Mathc.hypot(bounds.x / 2, bounds.y / 2);
-        float centeringOffsetX = boundsCenter * Mathc.cos(angle) - bounds.x / 2;
-        float centeringOffsetY = boundsCenter * Mathc.sin(angle) - bounds.y / 2;
+        final Tuple2f bounds = getBounds(text);
+        final double angle = rotation * Maths.toRad + Math.atan(bounds.y / bounds.x);
+        final float boundsCenter = Mathc.hypot(bounds.x / 2, bounds.y / 2);
+        final float centeringOffsetX = boundsCenter * Mathc.cos(angle) - bounds.x / 2;
+        final float centeringOffsetY = boundsCenter * Mathc.sin(angle) - bounds.y / 2;
 
         // Rotation
-        float cos = Mathc.cos(rotation * Maths.toRad);
-        float sin = Mathc.sin(rotation * Maths.toRad);
+        final float cos = Mathc.cos(rotation * Maths.toRad);
+        final float sin = Mathc.sin(rotation * Maths.toRad);
 
         for(int i = 0; i < text.length(); i++){
-            int code = Character.codePointAt(text, i);
+            final int code = Character.codePointAt(text, i);
+            
             if(code == 10){
                 advanceY -= lineHeight;
                 advanceX = 0;
                 continue;
             }
 
-            Glyph glyph = glyphs.get(code);
+            final Glyph glyph = glyphs.get(code);
             if(glyph == null)
                 continue;
 
-            float xOffset = (advanceX + glyph.offsetX) * scale;
-            float yOffset = (advanceY + glyph.offsetY) * scale;
+            final float xOffset = (advanceX + glyph.offsetX) * scale;
+            final float yOffset = (advanceY + glyph.offsetY) * scale;
 
-            float renderX = x + xOffset * cos - yOffset * sin - centeringOffsetX;
-            float renderY = y + yOffset * cos + xOffset * sin - centeringOffsetY;
+            final float renderX = x + xOffset * cos - yOffset * sin - centeringOffsetX;
+            final float renderY = y + yOffset * cos + xOffset * sin - centeringOffsetY;
 
             glyph.render(batch, renderX, renderY);
 

@@ -36,8 +36,12 @@
     <file url="file://$PROJECT_DIR$/tests/test-project-vostok/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-terraria/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-terraria/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-text-editor/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-text-editor/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-ui/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-ui/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-window/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-window/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tilemap/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tilemap/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ui/src/main/java" charset="UTF-8" />

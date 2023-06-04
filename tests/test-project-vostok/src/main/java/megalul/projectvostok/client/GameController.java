@@ -54,11 +54,11 @@ public class GameController{
         
         // RENDER MODE
         if(Pize.isDown(Key.NUM_1))
-            Gl.setPolygonMode(Face.FRONT, PolygonMode.FILL);
+            Gl.polygonMode(Face.FRONT, PolygonMode.FILL);
         if(Pize.isDown(Key.NUM_2))
-            Gl.setPolygonMode(Face.FRONT, PolygonMode.LINE);
+            Gl.polygonMode(Face.FRONT, PolygonMode.LINE);
         if(Pize.isDown(Key.NUM_3))
-            Gl.setPolygonMode(Face.FRONT, PolygonMode.POINT);
+            Gl.polygonMode(Face.FRONT, PolygonMode.POINT);
         
         // MOUSE SET BLOCK
         if(Pize.isTouched() && rayCast.isSelected()){

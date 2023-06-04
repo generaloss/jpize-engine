@@ -10,6 +10,18 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL46.*;
 
 public class TextureParameters{
+    
+    public static Filter DEFAULT_MIN_FILTER = Filter.NEAREST;
+    public static Filter DEFAULT_MAG_FILTER = Filter.NEAREST;
+    public static Wrap DEFAULT_WRAP_S = Wrap.CLAMP_TO_EDGE;
+    public static Wrap DEFAULT_WRAP_T = Wrap.CLAMP_TO_EDGE;
+    public static Wrap DEFAULT_WRAP_R = Wrap.CLAMP_TO_EDGE;
+    public static SizedFormat DEFAULT_FORMAT = SizedFormat.RGBA8;
+    public static Type DEFAULT_TYPE = Type.UNSIGNED_BYTE;
+    public static int DEFAULT_MIPMAP_LEVELS = 4;
+    public static float DEFAULT_LOD_BIAS = -glGetFloat(GL_MAX_TEXTURE_LOD_BIAS);
+    public static float DEFAULT_ANISOTROPY_LEVELS = 0;
+    
 
     private Filter minFilter, magFilter;
     private Wrap wrapS, wrapT, wrapR;
@@ -23,20 +35,20 @@ public class TextureParameters{
 
     
     public TextureParameters(){
-        minFilter = Filter.NEAREST;
-        magFilter = Filter.NEAREST;
+        minFilter = DEFAULT_MIN_FILTER;
+        magFilter = DEFAULT_MAG_FILTER;
         
-        wrapS = Wrap.CLAMP_TO_EDGE;
-        wrapT = Wrap.CLAMP_TO_EDGE;
-        wrapR = Wrap.CLAMP_TO_EDGE;
+        wrapS = DEFAULT_WRAP_S;
+        wrapT = DEFAULT_WRAP_T;
+        wrapR = DEFAULT_WRAP_R;
         
-        format = SizedFormat.RGBA8;
-        type = Type.UNSIGNED_BYTE;
+        format = DEFAULT_FORMAT;
+        type = DEFAULT_TYPE;
         borderColor = new Color(0, 0, 0, 0F);
     
-        mipmapLevels = 4;
-        lodBias = -glGetFloat(GL_MAX_TEXTURE_LOD_BIAS);
-        anisotropyLevels = 0;
+        mipmapLevels = DEFAULT_MIPMAP_LEVELS;
+        lodBias = DEFAULT_LOD_BIAS;
+        anisotropyLevels = DEFAULT_ANISOTROPY_LEVELS;
     }
     
     

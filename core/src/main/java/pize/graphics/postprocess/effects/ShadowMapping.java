@@ -58,7 +58,7 @@ public class ShadowMapping implements Disposable{
 
 
     public void begin(){
-        Gl.setViewport(width, height);
+        Gl.viewport(width, height);
         fbo.bind();
         glClear(GL_DEPTH_BUFFER_BIT);
         
@@ -69,7 +69,7 @@ public class ShadowMapping implements Disposable{
 
     public void end(){
         fbo.unbind();
-        Gl.setViewport(Pize.getWidth(), Pize.getHeight());
+        Gl.viewport(Pize.getWidth(), Pize.getHeight());
     }
 
     public Texture getShadowMap(){

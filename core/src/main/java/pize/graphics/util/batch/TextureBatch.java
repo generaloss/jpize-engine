@@ -8,11 +8,13 @@ import pize.graphics.gl.Type;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
+import pize.graphics.util.Scissors;
 import pize.graphics.util.Shader;
 import pize.graphics.vertex.ElementBuffer;
 import pize.graphics.vertex.VertexArray;
 import pize.graphics.vertex.VertexAttr;
 import pize.graphics.vertex.VertexBuffer;
+import pize.math.Maths;
 import pize.math.vecmath.matrix.Matrix3f;
 import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.point.Point2f;
@@ -36,6 +38,8 @@ public class TextureBatch extends Batch{
     private Texture lastTexture;
     private Matrix4f projectionMatrix, viewMatrix;
     private Shader customShader;
+    
+    private final Scissors scissors = new Scissors(this);
 
     public TextureBatch(){
         this(256);
@@ -103,8 +107,8 @@ public class TextureBatch extends Batch{
     public void draw(TextureRegion texReg, float x, float y, float width, float height){
         if(size + 1 >= batchSize)
             end();
-
-        Texture texture = texReg.getTexture();
+        
+        final Texture texture = texReg.getTexture();
         if(texture != lastTexture){
             end();
             lastTexture = texture;
@@ -133,13 +137,13 @@ public class TextureBatch extends Batch{
         if(size + 1 >= batchSize)
             end();
 
-        Texture texture = texReg.getTexture();
+        final Texture texture = texReg.getTexture();
         if(texture != lastTexture){
             end();
             lastTexture = texture;
         }
-
-        Region regionInRegion = Region.calcRegionInRegion(texReg, region);
+        
+        final Region regionInRegion = Region.calcRegionInRegion(texReg, region);
 
         addTexturedQuad(
             x, y, width, height,
@@ -174,7 +178,7 @@ public class TextureBatch extends Batch{
         if(lastTexture == null || size == 0)
             return -1;
 
-        Shader usedShader = customShader == null ? shader : customShader;
+        final Shader usedShader = customShader == null ? shader : customShader;
 
         usedShader.bind();
         usedShader.setUniform("u_projection", projectionMatrix);
@@ -185,12 +189,27 @@ public class TextureBatch extends Batch{
         vao.drawElements(size * QUAD_INDICES);
         
         // Reset
-        int sizeResult = size;
+        final int sizeResult = size;
         
         size = 0;
         vertexOffset = 0;
     
         return sizeResult;
+    }
+    
+    
+    public void beginScissor(int x, int y, int width, int height){
+        end();
+        scissors.begin(x, y, width, height);
+    }
+    
+    public void beginScissor(double x, double y, double width, double height){
+        beginScissor(Maths.round(x), Maths.round(y), Maths.round(width), Maths.round(height));
+    }
+    
+    public void endScissor(){
+        end();
+        scissors.end();
     }
     
     
@@ -201,14 +220,14 @@ public class TextureBatch extends Batch{
     
 
     private void addTexturedQuad(float x, float y, float width, float height, float u1, float v1, float u2, float v2){
-        Vec2f origin = new Vec2f(width * transformOrigin.x, height * transformOrigin.y);
+        final Vec2f origin = new Vec2f(width * transformOrigin.x, height * transformOrigin.y);
 
         transformMatrix.set( rotationMatrix.getMul(scaleMatrix.getMul(shearMatrix.getMul(flipMatrix))) );
 
-        Tuple2f vertex1 = new Point2f(0,     0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
-        Tuple2f vertex2 = new Point2f(width, 0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
-        Tuple2f vertex3 = new Point2f(width, height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
-        Tuple2f vertex4 = new Point2f(0,     height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
+        final Tuple2f vertex1 = new Point2f(0,     0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
+        final Tuple2f vertex2 = new Point2f(width, 0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
+        final Tuple2f vertex3 = new Point2f(width, height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
+        final Tuple2f vertex4 = new Point2f(0,     height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
 
         addVertex(vertex1.x, vertex1.y, u1, v2);
         addVertex(vertex2.x, vertex2.y, u2, v2);

@@ -1,14 +1,14 @@
 package pize.tests.minecraft.game.gui.components;
 
 import pize.Pize;
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 import pize.gui.UIComponent;
 import pize.gui.constraint.Constraint;
 import pize.gui.constraint.PixelConstraint;
 import pize.math.Maths;
 import pize.tests.minecraft.game.gui.constraints.GapConstraint;
 
-public abstract class MComponent extends UIComponent<Batch>{
+public abstract class MComponent extends UIComponent<TextureBatch>{
 
     public static final int INTERFACE_SCALE = 3;
     

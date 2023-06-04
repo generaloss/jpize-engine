@@ -30,7 +30,7 @@ public class Minecraft implements ActivityListener{
 
     @Override
     public void render(){
-        Gl.clearBuffers(true);
+        Gl.clearCDBuffers();
         session.render();
     }
 

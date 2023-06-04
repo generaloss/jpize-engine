@@ -1,14 +1,11 @@
 package pize.tests.minecraft.game.gui.screen.screens;
 
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 import pize.gui.Align;
 import pize.gui.LayoutType;
 import pize.gui.constraint.Constraint;
 import pize.tests.minecraft.game.Session;
-import pize.tests.minecraft.game.gui.components.BaseLayout;
-import pize.tests.minecraft.game.gui.components.Layout;
-import pize.tests.minecraft.game.gui.components.Button;
-import pize.tests.minecraft.game.gui.components.TextView;
+import pize.tests.minecraft.game.gui.components.*;
 import pize.tests.minecraft.game.gui.constraints.GapConstraint;
 import pize.tests.minecraft.game.gui.text.Component;
 import pize.tests.minecraft.game.lang.LanguageInfo;
@@ -34,7 +31,7 @@ public class OptionsScreen extends IOptionsScreen{
         TextView titleTextView = new TextView(session, new Component().translation("options.title"));
         titleTextView.setY(GapConstraint.gap(108));
         layout.put("title", titleTextView);
-
+        
         // <----------LINE 1---------->
         // [ Video Settings ] [ Music & Sounds ]
 
@@ -132,7 +129,7 @@ public class OptionsScreen extends IOptionsScreen{
     }
 
     @Override
-    public void render(Batch batch){
+    public void render(TextureBatch batch){
         layout.render(batch);
     }
 

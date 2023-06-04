@@ -6,7 +6,7 @@ import pize.graphics.camera.PerspectiveCamera;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
 import pize.graphics.util.SkyBox;
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 import pize.graphics.util.color.ImmutableColor;
 import pize.gui.Align;
 import pize.gui.LayoutType;
@@ -163,7 +163,7 @@ public class MainMenuScreen extends Screen{
     }
 
     @Override
-    public void render(Batch batch){
+    public void render(TextureBatch batch){
         // Panorama
         camera.getRot().yaw -= Pize.getDeltaTime() * 2;
         camera.update();

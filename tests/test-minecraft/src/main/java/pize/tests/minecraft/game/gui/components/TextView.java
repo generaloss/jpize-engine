@@ -1,10 +1,12 @@
 package pize.tests.minecraft.game.gui.components;
 
+import pize.Pize;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.Glyph;
 import pize.graphics.util.TextureUtils;
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 import pize.graphics.util.color.Color;
+import pize.gui.UIComponent;
 import pize.gui.constraint.Constraint;
 import pize.math.Mathc;
 import pize.math.Maths;
@@ -34,10 +36,14 @@ public class TextView extends MComponent{
     private boolean blocked;
     private boolean disableShadow;
 
+    private boolean scissor;
     private List<TextComponent> components;
     private final List<String> textList;
     private Tuple2f bounds;
-
+    
+    private boolean scrollDir;
+    private float scrollShiftX;
+    
     public TextView(Session session, Component text){
         this.session = session;
 
@@ -62,9 +68,41 @@ public class TextView extends MComponent{
         width = bounds.x;
         height = bounds.y;
     }
+    
+    @Override
+    public void correctPos(){
+        // Scroll
+        
+        final UIComponent<?> parent = getParent();
+        final float widthDifference;
+        
+        if(scissor && parent != null && (widthDifference = width - parent.getWidth()) > 0){
+            final float xDifference = this.x - parent.getX();
+            final float relativeX = xDifference + scrollShiftX;
+            final float increment = Pize.getDeltaTime() * parent.getWidth() * widthDifference / 5000;
+            final int scissorOffset = Math.round(parent.getHeight() / 20) * 2;
+            
+            if(scrollDir){
+                if(relativeX + scissorOffset <= -widthDifference){
+                    scrollShiftX = -widthDifference - xDifference - scissorOffset;
+                    scrollDir = false;
+                }else
+                    scrollShiftX -= increment;
+            }else{
+                if(relativeX - scissorOffset >= 0){
+                    scrollShiftX = 0 - xDifference + scissorOffset;
+                    scrollDir = true;
+                }else
+                    scrollShiftX += increment;
+            }
+        }else
+            scrollShiftX = 0;
+        
+        super.correctPos();
+    }
 
     @Override
-    public void render(Batch batch, float x, float y, float width, float height){
+    public void render(TextureBatch batch, float x, float y, float width, float height){
         if(font == null || components.size() == 0)
             return;
         
@@ -72,75 +110,83 @@ public class TextView extends MComponent{
 
         batch.setTransformOrigin(0, 0);
         batch.rotate(rotation);
-
+        
         // Init
-
-        int lineHeight = font.getLineHeight();
-        float scale = font.getScale();
+        
+        final int lineHeight = font.getLineHeight();
+        final float scale = font.getScale();
 
         float advanceX = 0;
         float advanceY = lineHeight * (text.getAllText(session).split("\n").length - 1);
 
         // Calculate centering offset
-
-
-        double angle = rotation * Maths.toRad + Math.atan(bounds.y / bounds.x);
-        float boundsCenter = Mathc.hypot(bounds.x / 2, bounds.y / 2);
-        float centeringOffsetX = boundsCenter * Mathc.cos(angle) - bounds.x / 2;
-        float centeringOffsetY = boundsCenter * Mathc.sin(angle) - bounds.y / 2;
+        
+        final double angle = rotation * Maths.toRad + Math.atan(bounds.y / bounds.x);
+        final float boundsCenter = Mathc.hypot(bounds.x / 2, bounds.y / 2);
+        final float centeringOffsetX = boundsCenter * Mathc.cos(angle) - bounds.x / 2;
+        final float centeringOffsetY = boundsCenter * Mathc.sin(angle) - bounds.y / 2;
 
         // Rotation
 
-        float cos = Mathc.cos(rotation * Maths.toRad);
-        float sin = Mathc.sin(rotation * Maths.toRad);
+        final float cos = Mathc.cos(rotation * Maths.toRad);
+        final float sin = Mathc.sin(rotation * Maths.toRad);
 
         // Calc shadow offset
 
-        float shadowOffsetX = (cos + sin) * scale * SHADOW_OFFSET;
-        float shadowOffsetY = (sin - cos) * scale * SHADOW_OFFSET;
+        final float shadowOffsetX = (cos + sin) * scale * SHADOW_OFFSET;
+        final float shadowOffsetY = (sin - cos) * scale * SHADOW_OFFSET;
 
+        // Begin scissor
+        
+        final UIComponent<?> parent = getParent();
+        if(scissor && parent != null){
+            float offset = parent.getHeight() / 20 * 2;
+            
+            batch.beginScissor(parent.getX() + offset, parent.getY() + offset,
+                parent.getWidth() - offset * 2, parent.getHeight() - offset * 2);
+        }
         // Text cycle
-
+        
         int textIndex = 0;
         for(TextComponent textComponent: components){
             String text = textList.get(textIndex++);
             Style style = textComponent.getStyle();
 
-            boolean italic = style.italic;
-            boolean bold = style.bold;
-            boolean underline = style.underline;
-            boolean strikethrough = style.strikethrough;
+            final boolean italic = style.italic;
+            final boolean bold = style.bold;
+            final boolean underline = style.underline;
+            final boolean strikethrough = style.strikethrough;
 
-            float lineBeginX = advanceX * scale;
-            float lineBeginY = advanceY * scale;
+            final float lineBeginX = advanceX * scale;
+            final float lineBeginY = advanceY * scale;
             float lineWidth = 0;
-
-            Color color = new Color(style.color);
+            
+            final Color color = new Color(style.color);
             if(blocked)
                 color.mul(0.6F, 0.6F, 0.6F, 1);
 
             for(int i = 0; i < text.length(); i++){
                 // Getting glyph
-
-                int code = Character.codePointAt(text, i);
+                
+                final int code = Character.codePointAt(text, i);
 
                 if(code == 10){
                     advanceY -= lineHeight;
                     advanceX = 0;
                     continue;
                 }
-
-                Glyph glyph = font.getGlyph(code);
+                
+                final Glyph glyph = font.getGlyph(code);
                 if(glyph == null)
                     continue;
 
                 // Calculate glyph render position
 
-                float xOffset = (advanceX + glyph.offsetX) * scale;
-                float yOffset = (advanceY + glyph.offsetY) * scale;
+                final float xOffset = (advanceX + glyph.offsetX) * scale + scrollShiftX;
+                final float yOffset = (advanceY + glyph.offsetY) * scale;
 
-                float renderX = x + xOffset * cos - yOffset * sin - centeringOffsetX;
-                float renderY = y + yOffset * cos + xOffset * sin - centeringOffsetY;
+                final float renderX = x + xOffset * cos - yOffset * sin - centeringOffsetX;
+                final float renderY = y + yOffset * cos + xOffset * sin - centeringOffsetY;
 
                 // Render shadow
 
@@ -167,8 +213,8 @@ public class TextView extends MComponent{
                     glyph.render(batch, renderX + cos * scale, renderY + sin * scale);
 
                 // AdvanceX increase num
-
-                float advanceXIncrease = glyph.advanceX + (bold ? BOLD_OFFSET : 0);
+                
+                final float advanceXIncrease = glyph.advanceX + (bold ? BOLD_OFFSET : 0);
 
                 // Strikethrough & Underline
 
@@ -198,6 +244,11 @@ public class TextView extends MComponent{
             }
         }
 
+        // End scissor
+        
+        if(scissor && parent != null)
+            batch.endScissor();
+        
         // End
 
         font.setRotation(0);
@@ -260,6 +311,14 @@ public class TextView extends MComponent{
         size = lineHeight;
     }
 
+    
+    public boolean isScissor(){
+        return scissor;
+    }
+    
+    public void setScissor(boolean scissor){
+        this.scissor = scissor;
+    }
 
     public BitmapFont getFont(){
         return font;

@@ -12,3 +12,5 @@
 /tests/test-terraria/target/
 /tests/test-ui/target/
 /tests/test-net/target/
+/tests/test-text-editor/target/
+/tests/test-window/target/

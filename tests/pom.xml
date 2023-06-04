@@ -22,6 +22,8 @@
         <module>test-model-3d</module>
         <module>test-particle</module>
         <module>test-project-vostok</module>
+        <module>test-text-editor</module>
+        <module>test-window</module>
     </modules>
     
     <dependencies>

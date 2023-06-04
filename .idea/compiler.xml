@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <excludeFromCompile>
+      <directory url="file://$PROJECT_DIR$/tests/test-text-editor/src/main/resources/archetype-resources" includeSubdirectories="true" />
+    </excludeFromCompile>
     <annotationProcessing>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -10,6 +13,8 @@
         <module name="test-minecraft" />
         <module name="test-model-3d" />
         <module name="test-physic" />
+        <module name="test-text-editor" />
+        <module name="test-window" />
         <module name="test-terraria" />
         <module name="core" />
         <module name="test-project-vostok" />

@@ -12,7 +12,6 @@ public enum Key{
     MOUSE_BUTTON_6 (5),
     MOUSE_BUTTON_7 (6),
     MOUSE_BUTTON_8 (7),
-
     SPACE          (32),
     APOSTROPHE     (39),
     COMMA          (44),
@@ -63,7 +62,6 @@ public enum Key{
     GRAVE_ACCENT   (96),
     WORLD_1        (161),
     WORLD_2        (162),
-
     ESCAPE         (256),
     ENTER          (257),
     TAB            (258),

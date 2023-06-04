@@ -1,7 +1,7 @@
 package pize.tests.minecraft.game.gui.screen.screens;
 
 import pize.Pize;
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 import pize.gui.Align;
 import pize.gui.LayoutType;
 import pize.gui.components.Layout;
@@ -34,7 +34,7 @@ public class IngameGUI extends Screen{
 
 
     @Override
-    public void render(Batch batch){
+    public void render(TextureBatch batch){
         ((TextComponent) ((TextView) layout.get("fps")).getText().getComponent(0)) .setText(Pize.getFPS() + " FPS");
 
         layout.render(batch);

@@ -2,7 +2,7 @@ package pize.tests.minecraft.game.gui.screen;
 
 import pize.activity.Disposable;
 import pize.activity.Resizable;
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ public class ScreenManager implements Resizable, Disposable{
         screens.put(id, screen);
     }
 
-    public void render(Batch batch){
+    public void render(TextureBatch batch){
         Screen screen = screens.get(current);
         if(screen != null){
             screen.update(batch);

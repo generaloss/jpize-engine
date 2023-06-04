@@ -1,6 +1,6 @@
 package pize.tests.minecraft.game.gui.screen.screens;
 
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 import pize.gui.Align;
 import pize.gui.LayoutType;
 import pize.gui.constraint.Constraint;
@@ -122,7 +122,7 @@ public class VideoSettingsScreen extends IOptionsScreen{
     }
 
     @Override
-    public void render(Batch batch){
+    public void render(TextureBatch batch){
         layout.render(batch);
         
         if(fovSlider.isChanged()){

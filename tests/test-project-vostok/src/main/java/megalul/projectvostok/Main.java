@@ -82,7 +82,7 @@ public class Main implements ActivityListener{
         rayCast.update();
         netClientGame.getWorld().getChunkManager().updateMeshes();
         
-        Gl.clearBuffers(true);
+        Gl.clearCDBuffers();
         clientRenderer.render();
     }
     

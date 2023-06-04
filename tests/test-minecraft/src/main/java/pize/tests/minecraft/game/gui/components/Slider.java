@@ -2,7 +2,7 @@ package pize.tests.minecraft.game.gui.components;
 
 import pize.Pize;
 import pize.graphics.texture.TextureRegion;
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 import pize.gui.Align;
 import pize.gui.components.ExpandType;
 import pize.gui.components.NinePatchImage;
@@ -44,12 +44,13 @@ public class Slider extends MComponent{
         
         textView = new TextView(session, null);
         textView.alignSelf(Align.CENTER);
+        textView.setScissor(true);
         super.setAsParentFor(textView);
     }
     
     
     @Override
-    public void render(Batch batch, float x, float y, float width, float height){
+    public void render(TextureBatch batch, float x, float y, float width, float height){
         if(super.isTouchReleased())
             session.getAudioManager().play(Sound.CLICK, 1, 1);
         

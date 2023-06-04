@@ -12,9 +12,9 @@ import pize.graphics.util.TextureUtils;
 import pize.graphics.vertex.ElementBuffer;
 import pize.graphics.vertex.VertexArray;
 import pize.graphics.vertex.VertexBuffer;
-import pize.io.Keyboard;
-import pize.io.Mouse;
-import pize.io.Window;
+import pize.io.keyboard.Keyboard;
+import pize.io.mouse.Mouse;
+import pize.io.window.Window;
 import pize.util.Utils;
 import pize.util.time.DeltaTimeCounter;
 import pize.util.time.PerSecCounter;
@@ -34,7 +34,6 @@ public class Context{
 
     private Screen screen;
 
-    private int lastWidth, lastHeight;
     private boolean exitRequest;
 
     public Context(Window window, Keyboard keyboard, Mouse mouse){
@@ -54,31 +53,14 @@ public class Context{
         listener.init();
 
         window.show();
+        
+        window.addSizeCallback((int width, int height)->{
+            listener.resize(width, height);
+            Gl.viewport(width, height);
+        });
 
-        while(!window.closeRequest() && !exitRequest){
-            int width = window.getWidth();
-            int height = window.getHeight();
-            if(lastWidth != width || lastHeight != height){
-                lastWidth = width;
-                lastHeight = height;
-
-                Gl.setViewport(width, height);
-                listener.resize(width, height);
-            }
-
-            fpsCounter.count();
-            deltaTimeCounter.update();
-
-            glfwPollEvents();
-
-            if(screen != null)
-                screen.render();
-            listener.render();
-
-            mouse.reset();
-            keyboard.reset();
-            window.swapBuffers();
-        }
+        while(!window.closeRequest() && !exitRequest)
+            draw(listener);
     
         Shader.unbind();
         VertexArray.unbind();
@@ -98,6 +80,22 @@ public class Context{
 
         glfwTerminate();
     }
+    
+    private void draw(ActivityListener listener){
+        fpsCounter.count();
+        deltaTimeCounter.update();
+        
+        glfwPollEvents();
+        
+        if(screen != null)
+            screen.render();
+        listener.render();
+        
+        mouse.reset();
+        keyboard.reset();
+        window.swapBuffers();
+    }
+    
 
     public void setScreen(Screen screen){
         this.screen.hide();

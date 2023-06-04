@@ -1,7 +1,7 @@
 package pize.tests.minecraft.game.gui.components;
 
 import pize.graphics.texture.TextureRegion;
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 import pize.gui.Align;
 import pize.gui.components.ExpandType;
 import pize.gui.components.NinePatchImage;
@@ -35,6 +35,7 @@ public class Button extends MComponent{
 
         textView = new TextView(session, text);
         textView.setSize(Constraint.relative(Screen.TEXT_HEIGHT / Screen.BUTTON_HEIGHT));
+        textView.setScissor(true);
         super.setAsParentFor(textView);
         super.alignItems(Align.CENTER);
     }
@@ -61,7 +62,7 @@ public class Button extends MComponent{
     }
 
     @Override
-    protected void render(Batch batch, float x, float y, float width, float height){
+    protected void render(TextureBatch batch, float x, float y, float width, float height){
         if(super.isTouchDown()){
             session.getAudioManager().play(Sound.CLICK, 1, 1);
             if(listener != null)

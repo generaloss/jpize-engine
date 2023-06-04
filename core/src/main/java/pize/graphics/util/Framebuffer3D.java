@@ -27,7 +27,7 @@ public class Framebuffer3D implements Resizable, Disposable{
     public void begin(){
         fbo.bind();
         rbo.bind();
-        Gl.clearBuffers(true);
+        Gl.clearCDBuffers();
     }
     
     public void end(){

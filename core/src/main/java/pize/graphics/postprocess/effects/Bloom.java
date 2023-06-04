@@ -78,7 +78,7 @@ public class Bloom implements PostProcessEffect{
 
         depthBuffer.bind();
         colorBuffer.bind();
-        Gl.clearBuffers(true);
+        Gl.clearCDBuffers();
     }
 
     @Override
