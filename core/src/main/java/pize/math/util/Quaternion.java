@@ -37,10 +37,6 @@ public class Quaternion{
         return this.w;
     }
 
-    public static float len(float x, float y, float z, float w){
-        return (float) Math.sqrt(x * x + y * y + z * z + w * w);
-    }
-
     public float len(){
         return (float) Math.sqrt(x * x + y * y + z * z + w * w);
     }
@@ -50,19 +46,19 @@ public class Quaternion{
     }
 
     public Quaternion setEulerAnglesRad(double yaw, double pitch, double roll){
-        double hr = roll * 0.5F;
-        float shr = (float) Math.sin(hr);
-        float chr = (float) Math.cos(hr);
-        double hp = pitch * 0.5F;
-        float shp = (float) Math.sin(hp);
-        float chp = (float) Math.cos(hp);
-        double hy = yaw * 0.5F;
-        float shy = (float) Math.sin(hy);
-        float chy = (float) Math.cos(hy);
-        float chy_shp = chy * shp;
-        float shy_chp = shy * chp;
-        float chy_chp = chy * chp;
-        float shy_shp = shy * shp;
+        final double hr = roll * 0.5F;
+        final float shr = (float) Math.sin(hr);
+        final float chr = (float) Math.cos(hr);
+        final double hp = pitch * 0.5F;
+        final float shp = (float) Math.sin(hp);
+        final float chp = (float) Math.cos(hp);
+        final double hy = yaw * 0.5F;
+        final float shy = (float) Math.sin(hy);
+        final float chy = (float) Math.cos(hy);
+        final float chy_shp = chy * shp;
+        final float shy_chp = shy * chp;
+        final float chy_chp = chy * chp;
+        final float shy_shp = shy * shp;
 
         x = (chy_shp * chr) + (shy_chp * shr); // cos(yaw/2) * sin(pitch/2) * cos(roll/2) + sin(yaw/2) * cos(pitch/2) * sin(roll/2)
         y = (shy_chp * chr) - (chy_shp * shr); // sin(yaw/2) * cos(pitch/2) * cos(roll/2) - cos(yaw/2) * sin(pitch/2) * sin(roll/2)
@@ -180,7 +176,7 @@ public class Quaternion{
         final float zz = z * z;
         final float zw = z * w;
 
-        Matrix4f result = new Matrix4f();
+        final Matrix4f result = new Matrix4f();
 
         result.val[Matrix4f.m00] = 1 - 2 * (yy + zz);
         result.val[Matrix4f.m01] = 2 * (xy - zw);

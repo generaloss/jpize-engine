@@ -5,9 +5,9 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-public class TcpClient{
+public class TcpClient extends TcpDisconnector{
 
-    private TcpByteChannel channel;
+    private TcpChannel channel;
     private final TcpListener listener;
     
     public TcpClient(TcpListener listener){
@@ -19,12 +19,12 @@ public class TcpClient{
         if(channel != null && !channel.isClosed())
             throw new RuntimeException("Already connected");
         
-        try(final Socket socket = new Socket()){
-            InetSocketAddress socketAddress = new InetSocketAddress(InetAddress.getByName(address), port);
+        try{
+            final Socket socket = new Socket();
+            final InetSocketAddress socketAddress = new InetSocketAddress(InetAddress.getByName(address), port);
             socket.connect(socketAddress);
 
-            channel = new TcpByteChannel(socket);
-            receivePackets();
+            channel = new TcpChannel(socket, listener, this);
             listener.connected(channel);
         }catch(IOException e){
             System.err.println("TcpClient: " + e.getMessage());
@@ -32,37 +32,25 @@ public class TcpClient{
     }
     
     
-    private void receivePackets(){
-        final Thread receiveThread = new Thread(()->{
-            while(!Thread.interrupted() && !channel.isClosed()){
-                Thread.yield();
-                
-                if(channel.isAvailable())
-                    listener.received(channel.nextPacket(), channel);
-            }
-            listener.disconnected(channel);
-        });
-        
-        receiveThread.setDaemon(true);
-        receiveThread.setPriority(Thread.MIN_PRIORITY);
-        receiveThread.start();
-    }
-    
-    
     public void send(byte[] packet){
         channel.send(packet);
     }
     
-    public void disconnect(){
+    synchronized public void disconnect(){
         if(channel == null || channel.isClosed())
             return;
 
         channel.close();
         listener.disconnected(channel);
     }
+    
+    @Override
+    protected void disconnected(TcpChannel channel){
+        listener.disconnected(channel);
+    }
 
     
-    public TcpByteChannel getChannel(){
+    public TcpChannel getChannel(){
         return channel;
     }
 

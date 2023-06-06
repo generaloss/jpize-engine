@@ -56,9 +56,9 @@ public class Player extends Entity{
 
         float delta = Pize.getDeltaTime();
 
-        if(Pize.isPressed(Key.A))
+        if(Key.A.isPressed())
             getVelocity().x -= 0.7;
-        if(Pize.isPressed(Key.D))
+        if(Key.D.isPressed())
             getVelocity().x += 0.7;
 
         // Auto jump
@@ -81,7 +81,7 @@ public class Player extends Entity{
 
         getVelocity().y -= 2;
 
-        if(Pize.isPressed(Key.SPACE) && isCollideDown)
+        if(Key.SPACE.isPressed() && isCollideDown)
             getVelocity().y = 50;
 
         // Process collisions

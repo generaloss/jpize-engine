@@ -1,26 +1,20 @@
 package pize.net.udp;
 
-import pize.net.NetChannel;
-import pize.net.security.KeyAES;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.nio.ByteBuffer;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
-public class UdpChannel extends NetChannel<DatagramPacket>{
+public class UdpChannel{
 
     private final DatagramSocket socket;
-    private final ConcurrentLinkedDeque<DatagramPacket> received;
     private final Thread thread;
     private boolean closed;
 
-    public UdpChannel(DatagramSocket socket){
+    public UdpChannel(DatagramSocket socket, UdpListener listener){
         this.socket = socket;
 
         closed = false;
-        received = new ConcurrentLinkedDeque<>();
 
         thread = new Thread(()->{
             try{
@@ -32,8 +26,8 @@ public class UdpChannel extends NetChannel<DatagramPacket>{
                     
                     final DatagramPacket packet = new DatagramPacket(new byte[length], length);
                     socket.receive(packet);
-
-                    received.add(packet);
+                    
+                    listener.received(packet);
 
                     Thread.yield();
                 }
@@ -45,7 +39,6 @@ public class UdpChannel extends NetChannel<DatagramPacket>{
         thread.start();
     }
 
-    @Override
     public void send(DatagramPacket packet){
         if(closed)
             return;
@@ -58,30 +51,11 @@ public class UdpChannel extends NetChannel<DatagramPacket>{
             socket.send(packet);
         }catch(IOException ignored){ }
     }
-    
-    @Override
-    public int available(){
-        return received.size();
-    }
 
-    @Override
-    public DatagramPacket nextPacket(){
-        final DatagramPacket packet = received.getLast();
-        received.remove(packet);
-        return packet;
-    }
-    
-    @Override
-    public void encode(KeyAES encodeKey){
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean isClosed(){
         return closed;
     }
 
-    @Override
     public void close(){
         thread.interrupt();
         socket.close();

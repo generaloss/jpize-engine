@@ -10,10 +10,10 @@ import java.net.ServerSocket;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class TcpServer implements Closeable{
+public class TcpServer extends TcpDisconnector implements Closeable{
 
     private ServerSocket serverSocket;
-    private CopyOnWriteArrayList<TcpByteChannel> channels;
+    private CopyOnWriteArrayList<TcpChannel> channels;
     private final TcpListener listener;
     private boolean closed;
 
@@ -22,19 +22,19 @@ public class TcpServer implements Closeable{
         closed = true;
     }
 
-    public synchronized void run(String address, int port){
+    
+    public void run(String address, int port){
         if(!closed)
             throw new RuntimeException("Server already running");
 
         try{
             serverSocket = new ServerSocket();
             serverSocket.bind(new InetSocketAddress(InetAddress.getByName(address), port));
-            serverSocket.setPerformancePreferences(0, 2, 1);
-            closed = false;
-
+            
             channels = new CopyOnWriteArrayList<>();
             waitConnections();
-            receivePackets();
+            closed = false;
+            
         }catch(IOException e){
             System.err.println("TcpServer (run error): " + e.getMessage());
         }
@@ -44,9 +44,9 @@ public class TcpServer implements Closeable{
         final Thread connectorThread = new Thread(()->{
             try{
                 while(!Thread.interrupted() && !closed){
-                    TcpByteChannel channel = new TcpByteChannel(serverSocket.accept());
-                    channels.add(channel);
+                    final TcpChannel channel = new TcpChannel(serverSocket.accept(), listener, this);
                     listener.connected(channel);
+                    channels.add(channel);
                     
                     Thread.yield();
                 }
@@ -55,46 +55,26 @@ public class TcpServer implements Closeable{
             }
         });
         
-        connectorThread.setDaemon(true);
         connectorThread.setPriority(Thread.MIN_PRIORITY);
+        connectorThread.setDaemon(true);
         connectorThread.start();
-    }
-
-    private void receivePackets(){
-        final Thread receiveThread = new Thread(()->{
-            while(!Thread.interrupted() && !closed){
-                for(int i = 0; i < channels.size(); i++){
-                    final TcpByteChannel channel = channels.get(i);
-                    if(channel.isAvailable())
-                        listener.received(channel.nextPacket(), channel);
-                    
-                    else if(channel.isClosed())
-                        disconnect(channel);
-                }
-                
-                Thread.yield();
-            }
-        });
-        
-        receiveThread.setDaemon(true);
-        receiveThread.setPriority(Thread.MIN_PRIORITY);
-        receiveThread.start();
     }
     
     
     public void broadcast(byte[] packet){
-        for(TcpByteChannel channel: channels)
+        for(TcpChannel channel: channels)
             channel.send(packet);
     }
     
-    public void disconnect(TcpByteChannel channel){
-        channels.remove(channel);
+    @Override
+    synchronized public void disconnected(TcpChannel channel){
         listener.disconnected(channel);
+        channels.remove(channel);
         channel.close();
     }
     
 
-    public Collection<TcpByteChannel> getAllChannels(){
+    public Collection<TcpChannel> getAllChannels(){
         return channels;
     }
     
@@ -108,12 +88,12 @@ public class TcpServer implements Closeable{
         if(closed)
             return;
         
-        for(TcpByteChannel connection: channels)
+        for(TcpChannel connection: channels)
             connection.close();
         channels.clear();
+        
         closed = true;
-
         Utils.close(serverSocket);
     }
-
+    
 }

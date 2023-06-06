@@ -1,21 +1,20 @@
 package pize;
 
-import pize.audio.Audio;
-import pize.activity.Context;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWErrorCallback;
 import pize.activity.ActivityListener;
+import pize.activity.Context;
 import pize.activity.Screen;
+import pize.audio.Audio;
 import pize.graphics.gl.BlendFactor;
 import pize.graphics.gl.Gl;
 import pize.graphics.gl.Target;
-import pize.io.glfw.Key;
 import pize.io.keyboard.Keyboard;
 import pize.io.monitor.Monitor;
 import pize.io.monitor.MonitorManager;
 import pize.io.mouse.Mouse;
 import pize.io.window.Window;
 import pize.math.vecmath.point.Point2f;
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWErrorCallback;
 
 public class Pize{
 
@@ -69,46 +68,7 @@ public class Pize{
         return context.getAudio();
     }
 
-
-    public static boolean isDown(Key key){
-        return keyboard().isDown(key);
-    }
-
-    public static boolean isPressed(Key key){
-        return keyboard().isPressed(key);
-    }
-
-    public static boolean isReleased(Key key){
-        return keyboard().isReleased(key);
-    }
-
-
-    public static boolean isDown(Key... keys){
-        return keyboard().isDown(keys);
-    }
-
-    public static boolean isPressed(Key... keys){
-        return keyboard().isPressed(keys);
-    }
-
-    public static boolean isReleased(Key... keys){
-        return keyboard().isReleased(keys);
-    }
-
-
-    public static boolean isDownAll(Key... keys){
-        return keyboard().isDownAll(keys);
-    }
-
-    public static boolean isPressedAll(Key... keys){
-        return keyboard().isPressedAll(keys);
-    }
-
-    public static boolean isReleasedAll(Key... keys){
-        return keyboard().isReleasedAll(keys);
-    }
-
-
+    
     public static boolean isTouchDown(){
         return mouse().isLeftDown() || mouse().isRightDown();
     }

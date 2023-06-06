@@ -17,23 +17,10 @@ public class UdpClient{
             throw new RuntimeException("Already enabled");
 
         try{
-            DatagramSocket socket = new DatagramSocket();
+            final DatagramSocket socket = new DatagramSocket();
             socket.connect(InetAddress.getByName(ip), port);
-            connection = new UdpChannel(socket);
-
-            receiverThread = new Thread(()->{
-                while(!Thread.interrupted()){
-                    if(connection.available() != 0)
-                        listener.received(connection.nextPacket());
-
-                    Thread.yield();
-                }
-            });
-
-            receiverThread.setDaemon(true);
-            receiverThread.setPriority(Thread.MIN_PRIORITY);
-            receiverThread.start();
-
+            connection = new UdpChannel(socket, listener);
+            
         }catch(Exception e){
             throw new RuntimeException("UdpClient startup error: " + e.getMessage());
         }

@@ -52,7 +52,7 @@ public class Main implements ActivityListener{
 
     @Override
     public void render(){
-        if(Pize.isDown(Key.ESCAPE))
+        if(Key.ESCAPE.isDown())
             Pize.exit();
         Gl.clearColorBuffer();
         Gl.clearColor(0.08, 0.11, 0.15, 1);

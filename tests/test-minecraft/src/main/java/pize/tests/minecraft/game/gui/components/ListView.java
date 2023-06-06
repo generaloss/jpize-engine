@@ -10,21 +10,16 @@ public class ListView extends MComponent{
     
     @Override
     protected void render(TextureBatch batch, float x, float y, float width, float height){
-        float tx = 0;// Pize.getX();
-        float ty = 0;// Pize.getY();
-        float sw = 0;// Pize.getWidth() / 2F;
-        float sh = 0;// Pize.getHeight() / 2F;
-        
-        batch.beginScissor(x - sw + tx, y - sh + tx, width - sw + ty, height - sh + ty);
+        batch.getScissor().begin(228, x, y, width, height);
         
         scrollX = Maths.clamp(scrollX + Pize.mouse().getScrollX(Pize.keyboard()) * 50, -1000, 1000);
-        scrollY = Maths.clamp(scrollY + Pize.mouse().getScrollY(Pize.keyboard()) * 50, -1000, 1000);
+        scrollY = Maths.clamp(scrollY + Pize.mouse().getScrollY(Pize.keyboard()) * 50, -200, 0);
         setChildShift(scrollX, -scrollY);
     }
     
     @Override
     protected void renderEnd(TextureBatch batch){
-        batch.endScissor();
+        batch.getScissor().end(228);
     }
     
     

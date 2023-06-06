@@ -1,10 +1,13 @@
 package pize.tests.net.packet;
 
+import pize.net.tcp.packet.IPacket;
+
 import java.io.*;
 
 public class MessagePacket extends IPacket{
     
     public static final int PACKET_TYPE_ID = 54;
+    
     public MessagePacket(){
         super(PACKET_TYPE_ID);
     }

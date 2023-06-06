@@ -3,8 +3,7 @@ package pize.net.udp;
 import java.net.*;
 
 public class UdpServer{
-
-    private Thread receiverThread;
+    
     private final UdpListener listener;
     private UdpChannel connection;
 
@@ -16,22 +15,9 @@ public class UdpServer{
         if(connection != null && !connection.isClosed())
             throw new RuntimeException("Already enabled");
 
-        try(final DatagramSocket socket = new DatagramSocket(port, InetAddress.getByName(ip))){
-            connection = new UdpChannel(socket);
-
-            receiverThread = new Thread(()->{
-                while(!Thread.interrupted()){
-                    if(connection.available() != 0)
-                        listener.received(connection.nextPacket());
-
-                    Thread.yield();
-                }
-            });
-
-            receiverThread.setDaemon(true);
-            receiverThread.setPriority(Thread.MIN_PRIORITY);
-            receiverThread.start();
-
+        try{
+            final DatagramSocket socket = new DatagramSocket(port, InetAddress.getByName(ip));
+            connection = new UdpChannel(socket, listener);
         }catch(Exception e){
             throw new RuntimeException("UdpServer startup error: " + e.getMessage());
         }
@@ -48,11 +34,8 @@ public class UdpServer{
     }
 
     public void close(){
-        if(connection.isClosed())
-            return;
-
-        receiverThread.interrupt();
-        connection.close();
+        if(!connection.isClosed())
+            connection.close();
     }
 
     public UdpChannel getConnection(){

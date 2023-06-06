@@ -2,10 +2,10 @@ package pize.net.tcp;
 
 public interface TcpListener{
     
-    void received(byte[] data, TcpByteChannel sender);
+    void received(byte[] bytes, TcpChannel sender);
 
-    void connected(TcpByteChannel channel);
+    void connected(TcpChannel channel);
 
-    void disconnected(TcpByteChannel channel);
+    void disconnected(TcpChannel channel);
 
 }

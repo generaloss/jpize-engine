@@ -8,13 +8,12 @@ import pize.graphics.gl.Type;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
-import pize.graphics.util.Scissors;
 import pize.graphics.util.Shader;
+import pize.graphics.util.batch.scissor.Scissor;
 import pize.graphics.vertex.ElementBuffer;
 import pize.graphics.vertex.VertexArray;
 import pize.graphics.vertex.VertexAttr;
 import pize.graphics.vertex.VertexBuffer;
-import pize.math.Maths;
 import pize.math.vecmath.matrix.Matrix3f;
 import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.point.Point2f;
@@ -39,7 +38,7 @@ public class TextureBatch extends Batch{
     private Matrix4f projectionMatrix, viewMatrix;
     private Shader customShader;
     
-    private final Scissors scissors = new Scissors(this);
+    private final Scissor scissor = new Scissor(this);
 
     public TextureBatch(){
         this(256);
@@ -197,23 +196,6 @@ public class TextureBatch extends Batch{
         return sizeResult;
     }
     
-    
-    public void beginScissor(int x, int y, int width, int height){
-        end();
-        scissors.begin(x, y, width, height);
-    }
-    
-    public void beginScissor(double x, double y, double width, double height){
-        beginScissor(Maths.round(x), Maths.round(y), Maths.round(width), Maths.round(height));
-    }
-    
-    public void endScissor(){
-        end();
-        scissors.end();
-    }
-    
-    
-    
     public void useShader(Shader shader){
         customShader = shader;
     }
@@ -248,6 +230,11 @@ public class TextureBatch extends Batch{
         vertices[vertexOffset + 7] = color.a();
 
         vertexOffset += vbo.getVertexSize();
+    }
+    
+    
+    public Scissor getScissor(){
+        return scissor;
     }
 
 

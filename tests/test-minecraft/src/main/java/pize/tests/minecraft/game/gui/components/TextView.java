@@ -142,8 +142,12 @@ public class TextView extends MComponent{
         if(scissor && parent != null){
             float offset = parent.getHeight() / 20 * 2;
             
-            batch.beginScissor(parent.getX() + offset, parent.getY() + offset,
-                parent.getWidth() - offset * 2, parent.getHeight() - offset * 2);
+            batch.getScissor().begin(
+                54,
+                parent.getX() + offset, parent.getY() + offset,
+                parent.getWidth() - offset * 2, parent.getHeight() - offset * 2,
+                228
+            );
         }
         // Text cycle
         
@@ -247,7 +251,7 @@ public class TextView extends MComponent{
         // End scissor
         
         if(scissor && parent != null)
-            batch.endScissor();
+            batch.getScissor().end(54);
         
         // End
 

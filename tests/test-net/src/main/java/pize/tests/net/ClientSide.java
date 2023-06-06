@@ -11,13 +11,12 @@ import pize.io.glfw.Key;
 import pize.math.vecmath.tuple.Tuple2f;
 import pize.net.security.KeyAES;
 import pize.net.security.PublicRSA;
-import pize.net.tcp.TcpByteChannel;
+import pize.net.tcp.TcpChannel;
 import pize.net.tcp.TcpClient;
 import pize.net.tcp.TcpListener;
-import pize.tests.net.packet.EncodePacket;
-import pize.tests.net.packet.MessagePacket;
-import pize.tests.net.packet.PingPacket;
-import pize.tests.net.packet.Utils;
+import pize.net.tcp.packet.PacketInfo;
+import pize.net.tcp.packet.Packets;
+import pize.tests.net.packet.*;
 import pize.util.io.TextProcessor;
 
 import java.io.IOException;
@@ -42,17 +41,24 @@ public class ClientSide implements TcpListener, ActivityListener{
         batch = new TextureBatch();
         font = FontLoader.loadFnt("default.fnt");
         font.setScale(3);
-        text = new TextProcessor(true);
+        text = new TextProcessor(false);
         
         key = new KeyAES(256);
         client = new TcpClient(this);
         client.connect("localhost", 5454);
+        
+        client.getChannel().setTcpNoDelay(true);
     }
     
     @Override
     public void render(){
-        if(Key.LEFT_CONTROL.isPressed() && Key.Y.isDown())
+        if(Key.ENTER.isDown()){
+            new MessagePacket(text.toString()).write(client.getChannel());
             text.removeLine();
+        }
+        
+        if(Key.LEFT_CONTROL.isPressed() && Key.P.isDown())
+            new PingPacket(System.nanoTime()).write(client.getChannel());
         
         Gl.clearColorBuffer();
         Gl.clearColor(0.2, 0.2, 0.2, 1);
@@ -100,33 +106,27 @@ public class ClientSide implements TcpListener, ActivityListener{
     
     
     @Override
-    public void received(byte[] data, TcpByteChannel sender){
-        
+    public void received(byte[] bytes, TcpChannel sender){
         try{
-            Utils.receive(data);
-            switch(Utils.packetTypeID){
-                
+            final PacketInfo packetInfo = Packets.getPacketInfo(bytes);
+            if(packetInfo == null){
+                System.out.println("   received not packet");
+                return;
+            }
+            
+            switch(packetInfo.getPacketID()){
                 case MessagePacket.PACKET_TYPE_ID -> {
-                    final MessagePacket packet = new MessagePacket();
-                    packet.read(Utils.stream);
+                    final MessagePacket packet = packetInfo.readPacket(new MessagePacket());
                     System.out.println("   message: " + packet.getMessage());
                 }
                 
                 case PingPacket.PACKET_TYPE_ID -> {
-                    final PingPacket packet = new PingPacket();
-                    packet.read(Utils.stream);
-                    
+                    final PingPacket packet = packetInfo.readPacket(new PingPacket());
                     System.out.println("   ping: " + ((System.nanoTime() - packet.getTime()) / 1000000F) + " ms");
-                    
-                    pize.util.Utils.delayElapsed(1000);
-                    final PingPacket ping = new PingPacket(System.nanoTime());
-                    ping.write(sender);
-                    System.out.println("   1 time: " + String.valueOf(System.currentTimeMillis()).substring(9) );
                 }
                 
                 case EncodePacket.PACKET_TYPE_ID -> {
-                    final EncodePacket packet = new EncodePacket();
-                    packet.read(Utils.stream);
+                    final EncodePacket packet = packetInfo.readPacket(new EncodePacket());
                     
                     final PublicRSA serverKey = new PublicRSA(packet.getKey());
                     System.out.println("   server's public key received");
@@ -137,26 +137,23 @@ public class ClientSide implements TcpListener, ActivityListener{
                     sender.encode(key);
                     System.out.println("   encoded with key (hash): " + key.getKey().hashCode());
                     
-                    pize.util.Utils.delayElapsed(100);
                     new PingPacket(System.nanoTime()).write(client.getChannel());
                 }
-                
-                default -> System.out.println("   received: ?Unknown Packet Type? (" + Utils.packetTypeID + ")");
             }
             
         }catch(IOException e){
             e.printStackTrace();
         }
-        
     }
     
     @Override
-    public void connected(TcpByteChannel channel){
+    public void connected(TcpChannel channel){
         System.out.println("Connected {");
     }
     
     @Override
-    public void disconnected(TcpByteChannel channel){
+    public void disconnected(TcpChannel channel){
         System.out.println("   Client disconnected\n}");
     }
+    
 }

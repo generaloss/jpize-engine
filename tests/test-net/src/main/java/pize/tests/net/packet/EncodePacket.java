@@ -1,5 +1,7 @@
 package pize.tests.net.packet;
 
+import pize.net.tcp.packet.IPacket;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.io.IOException;
 public class EncodePacket extends IPacket{
     
     public static final int PACKET_TYPE_ID = 83;
+    
     public EncodePacket(){
         super(PACKET_TYPE_ID);
     }

@@ -61,11 +61,11 @@ public class Main implements ActivityListener{
         font.drawText(batch, "fps: " + Pize.getFPS(), 10, 10);
         batch.end();
 
-        if(Pize.isDown(Key.ESCAPE))
+        if(Key.ESCAPE.isDown())
             Pize.exit();
-        if(Pize.isDown(Key.F11))
+        if(Key.F11.isDown())
             Pize.window().toggleFullscreen();
-        if(Pize.isDown(Key.V))
+        if(Key.V.isDown())
             Pize.window().toggleVsync();
     }
 

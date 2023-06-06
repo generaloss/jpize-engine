@@ -2,7 +2,7 @@ package megalul.projectvostok.server.net;
 
 import megalul.projectvostok.server.Server;
 import pize.net.security.KeyRSA;
-import pize.net.tcp.TcpByteChannel;
+import pize.net.tcp.TcpChannel;
 import pize.net.tcp.TcpListener;
 
 public class ServerPacketHandler implements TcpListener{
@@ -22,7 +22,7 @@ public class ServerPacketHandler implements TcpListener{
     
     
     @Override
-    public void received(byte[] data, TcpByteChannel sender){
+    public void received(byte[] data, TcpChannel sender){
         /*
         PlayerList playerList = serverOF.getPlayerList();
         
@@ -94,9 +94,9 @@ public class ServerPacketHandler implements TcpListener{
     }
     
     @Override
-    public void connected(TcpByteChannel channel){ }
+    public void connected(TcpChannel channel){ }
     
     @Override
-    public void disconnected(TcpByteChannel channel){ }
+    public void disconnected(TcpChannel channel){ }
     
 }

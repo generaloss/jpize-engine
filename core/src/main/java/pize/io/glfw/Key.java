@@ -142,15 +142,15 @@ public enum Key{
 
 
     public boolean isDown(){
-        return Pize.isDown(this);
+        return Pize.keyboard().isDown(this);
     }
 
     public boolean isPressed(){
-        return Pize.isPressed(this);
+        return Pize.keyboard().isPressed(this);
     }
 
     public boolean isReleased(){
-        return Pize.isReleased(this);
+        return Pize.keyboard().isReleased(this);
     }
 
 }

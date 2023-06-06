@@ -128,12 +128,13 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     
     public void removeLine(){
         if(lines.size() == 1)
-            return;
-        
-        lines.remove(cursorY);
-        
-        if(cursorY >= lines.size())
-            cursorY--;
+            lines.set(0, "");
+        else{
+            lines.remove(cursorY);
+            
+            if(cursorY >= lines.size())
+                cursorY--;
+        }
         
         updateCurrentLineLength();
         moveCursorEnd();

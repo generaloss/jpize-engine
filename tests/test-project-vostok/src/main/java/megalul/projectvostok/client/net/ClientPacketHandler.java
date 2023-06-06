@@ -1,7 +1,7 @@
 package megalul.projectvostok.client.net;
 
 import megalul.projectvostok.client.NetClientGame;
-import pize.net.tcp.TcpByteChannel;
+import pize.net.tcp.TcpChannel;
 import pize.net.tcp.TcpListener;
 
 public class ClientPacketHandler implements TcpListener{ //} implements NetListener<byte[]>{
@@ -18,7 +18,7 @@ public class ClientPacketHandler implements TcpListener{ //} implements NetListe
     
     
     @Override
-    public void received(byte[] data, TcpByteChannel sender){
+    public void received(byte[] data, TcpChannel sender){
         /*
         PlayerProfile profile = gameOF.getSessionOf().getProfile();
         
@@ -55,12 +55,12 @@ public class ClientPacketHandler implements TcpListener{ //} implements NetListe
     }
     
     @Override
-    public void connected(TcpByteChannel channel){
+    public void connected(TcpChannel channel){
     
     }
     
     @Override
-    public void disconnected(TcpByteChannel channel){
+    public void disconnected(TcpChannel channel){
     
     }
     
