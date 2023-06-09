@@ -11,14 +11,22 @@ import java.io.InputStream;
 public class KeyAES{
 
     private final SecretKey key;
-
+    private Cipher decryptCipher, encryptCipher;
+    
+    
     public KeyAES(SecretKey key){
-        this.key = key;
+        try{
+            this.key = key;
+            initCiphers();
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
     }
     
     public KeyAES(byte[] bytes){
         try{
             key = new SecretKeySpec(bytes, "AES");
+            initCiphers();
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -29,18 +37,26 @@ public class KeyAES{
             final KeyGenerator generator = KeyGenerator.getInstance("AES");
             generator.init(size);
             key = generator.generateKey();
+            
+            initCiphers();
         }catch(Exception e){
             throw new RuntimeException(e);
         }
     }
     
+    
+    private void initCiphers() throws Exception{
+        decryptCipher = Cipher.getInstance("AES");
+        decryptCipher.init(Cipher.DECRYPT_MODE, key);
+        
+        encryptCipher = Cipher.getInstance("AES");
+        encryptCipher.init(Cipher.ENCRYPT_MODE, key);
+    }
+    
 
     public byte[] encrypt(byte[] bytes){
         try{
-            final Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            return cipher.doFinal(bytes);
-
+            return encryptCipher.doFinal(bytes);
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -48,10 +64,7 @@ public class KeyAES{
 
     public byte[] decrypt(byte[] bytes){
         try{
-            final Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.DECRYPT_MODE, key);
-            return cipher.doFinal(bytes);
-            
+            return decryptCipher.doFinal(bytes);
         }catch(Exception e){
             throw new RuntimeException(e);
         }

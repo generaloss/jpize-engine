@@ -30,11 +30,11 @@ public class BiomeGeneratorTest implements ActivityListener{
     public void render(){
         Pize.window().setTitle("Minecraft (fps: " + Pize.getFPS() + ")");
 
-        if(Pize.isDown(Key.ESCAPE))
+        if(Key.ESCAPE.isDown())
             Pize.exit();
-        if(Pize.isDown(Key.F11))
+        if(Key.F11.isDown())
             Pize.window().toggleFullscreen();
-        if(Pize.isDown(Key.V))
+        if(Key.V.isDown())
             Pize.window().toggleVsync();
 
         Gl.clearColorBuffer();

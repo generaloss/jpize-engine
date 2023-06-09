@@ -11,28 +11,37 @@ import java.security.spec.PKCS8EncodedKeySpec;
 public class PrivateRSA{
 
     private final PrivateKey key;
+    private Cipher cipher;
 
     public PrivateRSA(PrivateKey key){
-        this.key = key;
-    }
-
-    public PrivateRSA(byte[] bytes){
         try{
-            key = KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(bytes));
+            this.key = key;
+            initCipher();
         }catch(Exception e){
             throw new RuntimeException(e);
         }
     }
 
+    public PrivateRSA(byte[] bytes){
+        try{
+            key = KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(bytes));
+            initCipher();
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    
+    
+    private void initCipher() throws Exception{
+        cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.DECRYPT_MODE, key);
+    }
+
     
     public byte[] decrypt(byte[] data){
         try{
-            Cipher cipher = Cipher.getInstance("RSA");
-            cipher.init(Cipher.DECRYPT_MODE, key);
             return cipher.doFinal(data);
-
         }catch(Exception e){
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -47,7 +56,7 @@ public class PrivateRSA{
             resource.mkDirsAndFile();
             resource.getWriter().write(key.getEncoded());
         }catch(Exception e){
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
     

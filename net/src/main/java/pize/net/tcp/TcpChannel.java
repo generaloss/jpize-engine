@@ -1,6 +1,7 @@
 package pize.net.tcp;
 
 import pize.net.security.KeyAES;
+import pize.net.tcp.packet.PacketOutputStream;
 import pize.util.Utils;
 
 import java.io.*;
@@ -26,8 +27,7 @@ public class TcpChannel{
             try(final DataInputStream inStream = new DataInputStream(socket.getInputStream())){
                 
                 while(!Thread.interrupted() && !closed){
-                    final int length = inStream.readInt();
-                    byte[] bytes = inStream.readNBytes(length);
+                    byte[] bytes = inStream.readNBytes(inStream.readInt());
                     
                     if(encodeKey != null)
                         bytes = encodeKey.decrypt(bytes);
@@ -61,14 +61,12 @@ public class TcpChannel{
         send(stream.toByteArray());
     }
     
-    private final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-    private final DataOutputStream dataStream = new DataOutputStream(byteStream);
-    
-    public void send(DataWriter data){
+    public void send(PacketWriter data){
+        final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        final PacketOutputStream dataStream = new PacketOutputStream(byteStream);
+        
         data.write(dataStream);
         send(byteStream);
-        
-        byteStream.reset();
     }
     
     

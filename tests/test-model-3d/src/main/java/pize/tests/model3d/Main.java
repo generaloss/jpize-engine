@@ -97,7 +97,7 @@ public class Main implements ActivityListener{
 
     @Override
     public void render(){
-        if(Pize.isDown(Key.ESCAPE))
+        if(Key.ESCAPE.isDown())
             Pize.exit();
     }
 

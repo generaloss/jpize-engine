@@ -117,18 +117,18 @@ public class GreedyMeshTest implements ActivityListener{
     public void render(){
         Pize.window().setTitle("Minecraft (fps: " + Pize.getFPS() + ")");
 
-        if(Pize.isDown(Key.ESCAPE))
+        if(Key.ESCAPE.isDown())
             Pize.exit();
-        if(Pize.isDown(Key.F11))
+        if(Key.F11.isDown())
             Pize.window().toggleFullscreen();
-        if(Pize.isDown(Key.V))
+        if(Key.V.isDown())
             Pize.window().toggleVsync();
 
         Gl.clearColorBuffer();
         Gl.clearColor(0.4, 0.6, 1);
         batch.begin();
 
-        if(Pize.isPressed(Key.S))
+        if(Key.S.isPressed())
             for(int i = 0; i < WIDTH; i++)
                 for(int j = 0; j < HEIGHT; j++){
                     batch.setColor(colors[map[i][j]]);
@@ -141,7 +141,7 @@ public class GreedyMeshTest implements ActivityListener{
             }
         }
 
-        if(Pize.isDown(Key.S) || Pize.isReleased(Key.S))
+        if(Key.S.isDown() || Key.S.isReleased())
             System.out.println(batch.size());
 
         if(Pize.isTouched()){

@@ -1,0 +1,85 @@
+
+
+# Аутентификация
+
+1.[Client]: {
+    * подключение к серверу *
+    pout >> LOGIN();
+}
+
+2.[Server]: LOGIN>>{
+    if !checkVersion(LOGIN.clientVersion)
+        pout >> DISCONNECT("Сервер не доступен на данной версии")
+
+    if checkProfileName(LOGIN.profileName)
+        pout >> DISCONNECT("Недопустимое имя")
+
+    if playerList.contains(LOGIN.profileName)
+        pout >> DISCONNECT("Этот игрок уже играет на сервере")
+
+    player = new OnlinePlayer(LOGIN.profileName);
+    playerList.add(player);
+
+    pout >> ENCRYPT_START(serverSymmetricKey.getPublicKey());
+}
+
+3.[Client]: ENCRYPT_START>>{
+    * генерация ассиметричного ключа clientKey *
+    * шифрование clientKey при помощи ENCRYPT_START.publicServerKey *
+    pout >> ENCRYPT_END(encryptedClientKey);
+
+    * шифруем канал *
+
+    pout >> AUTH(accountSessionToken);
+}
+
+4.[Server]: ENCRYPT_END>>{
+    * расшифровка ENCRYPT_END.encryptedClientKey с помощью serverSymmetricKey.getPrivateKey() в decryptedClientKey *
+
+    OnlinePlayer player = playerList.get(ENCRYPT_END.profileName);
+    player.setKey(decryptedClientKey);
+
+    * шифруем канал клиента на сервере *
+
+    * включить режим ожидания аутентификации для данного клиента *
+}
+
+6.[Server]: AUTH>>{
+    if !SERVICE.checkToken(AUTH.profileName, AUTH.accountSessionToken)
+        pout >> DISCONNECT("Недействительная сессия")
+
+    * выключить режим ожидания аутентификации для данного клиента *
+}
+
+
+# ПАКЕТЫ
+
+
+
+LOGIN(
+    Int clientVersion
+    String profileName
+);
+
+ENCRYPT_START(
+    String publicServerKey
+);
+
+ENCRYPT_END(
+    String profileName
+    String encryptedClientKey
+);
+
+AUTH(
+    String profileName
+    String accountSessionToken
+)
+
+DISCONNECT(
+    String reasonComponent
+);
+
+
+PING(
+    Int timeMillis
+);

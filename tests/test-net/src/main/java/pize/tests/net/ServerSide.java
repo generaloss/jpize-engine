@@ -7,9 +7,9 @@ import pize.net.tcp.TcpListener;
 import pize.net.tcp.TcpServer;
 import pize.net.tcp.packet.PacketInfo;
 import pize.net.tcp.packet.Packets;
-import pize.tests.net.packet.*;
-
-import java.io.IOException;
+import pize.tests.net.packet.EncodePacket;
+import pize.tests.net.packet.MessagePacket;
+import pize.tests.net.packet.PingPacket;
 
 public class ServerSide implements TcpListener{
     
@@ -64,7 +64,7 @@ public class ServerSide implements TcpListener{
                 }
             }
             
-        }catch(IOException e){
+        }catch(Exception e){
             e.printStackTrace();
         }
     }

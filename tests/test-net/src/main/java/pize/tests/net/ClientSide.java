@@ -16,10 +16,11 @@ import pize.net.tcp.TcpClient;
 import pize.net.tcp.TcpListener;
 import pize.net.tcp.packet.PacketInfo;
 import pize.net.tcp.packet.Packets;
-import pize.tests.net.packet.*;
+import pize.tests.net.packet.EncodePacket;
+import pize.tests.net.packet.MessagePacket;
+import pize.tests.net.packet.PingPacket;
 import pize.util.io.TextProcessor;
 
-import java.io.IOException;
 import java.util.StringJoiner;
 
 public class ClientSide implements TcpListener, ActivityListener{
@@ -59,6 +60,9 @@ public class ClientSide implements TcpListener, ActivityListener{
         
         if(Key.LEFT_CONTROL.isPressed() && Key.P.isDown())
             new PingPacket(System.nanoTime()).write(client.getChannel());
+        
+        if(Key.ESCAPE.isDown())
+            Pize.exit();
         
         Gl.clearColorBuffer();
         Gl.clearColor(0.2, 0.2, 0.2, 1);
@@ -141,7 +145,7 @@ public class ClientSide implements TcpListener, ActivityListener{
                 }
             }
             
-        }catch(IOException e){
+        }catch(Exception e){
             e.printStackTrace();
         }
     }

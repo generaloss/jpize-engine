@@ -2,37 +2,36 @@ package pize.net.tcp.packet;
 
 import pize.net.tcp.TcpChannel;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public abstract class IPacket{
     
-    private final byte packetTypeID;
+    private final byte packetID;
     
-    public IPacket(int packetTypeID){
-        this.packetTypeID = (byte) packetTypeID;
+    public IPacket(int packetID){
+        this.packetID = (byte) packetID;
     }
     
     
     public byte getTypeID(){
-        return packetTypeID;
+        return packetID;
     }
     
-    public void write(TcpChannel channel){
+    public synchronized void write(TcpChannel channel){
         channel.send(dataStream->{
             try{
-                dataStream.writeByte(packetTypeID);
+                dataStream.writeByte(packetID);
                 write(dataStream);
+                // System.out.println("packet " + packetID + " size: " + dataStream.size());
             }catch(IOException e){
                 e.printStackTrace();
             }
         });
     }
     
-    abstract protected void write(DataOutputStream stream) throws IOException; // For a sender
+    abstract protected void write(PacketOutputStream stream) throws IOException; // For a sender
     
     
-    abstract public void read(DataInputStream stream) throws IOException; // For a receiver
+    abstract public void read(PacketInputStream stream) throws IOException; // For a receiver
     
 }

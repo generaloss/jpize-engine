@@ -11,26 +11,36 @@ import java.security.spec.X509EncodedKeySpec;
 public class PublicRSA{
 
     private final PublicKey key;
+    private Cipher cipher;
 
     public PublicRSA(PublicKey key){
-        this.key = key;
+        try{
+            this.key = key;
+            initCipher();
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     public PublicRSA(byte[] bytes){
         try{
             key = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(bytes));
+            initCipher();
         }catch(Exception e){
             throw new RuntimeException(e);
         }
     }
     
+    
+    private void initCipher() throws Exception{
+        cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+    }
+    
 
     public byte[] encrypt(byte[] data){
         try{
-            Cipher cipher = Cipher.getInstance("RSA");
-            cipher.init(Cipher.ENCRYPT_MODE, key);
             return cipher.doFinal(data);
-
         }catch(Exception e){
             throw new RuntimeException(e);
         }
@@ -46,7 +56,7 @@ public class PublicRSA{
             resource.mkDirsAndFile();
             resource.getWriter().write(key.getEncoded());
         }catch(Exception e){
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
     

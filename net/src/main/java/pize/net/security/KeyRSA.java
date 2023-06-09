@@ -11,9 +11,9 @@ public class KeyRSA{
 
     public KeyRSA(int size){
         try{
-            KeyPairGenerator pairGenerator = KeyPairGenerator.getInstance("RSA");
+            final KeyPairGenerator pairGenerator = KeyPairGenerator.getInstance("RSA");
             pairGenerator.initialize(size);
-            KeyPair pair = pairGenerator.generateKeyPair();
+            final KeyPair pair = pairGenerator.generateKeyPair();
             
             publicKey = new PublicRSA(pair.getPublic());
             privateKey = new PrivateRSA(pair.getPrivate());

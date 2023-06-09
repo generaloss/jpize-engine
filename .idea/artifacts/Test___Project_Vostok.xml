@@ -3,9 +3,9 @@
     <output-path>$PROJECT_DIR$/out</output-path>
     <root id="archive" name="test-project-vostok.jar">
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/tests/test-project-vostok/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/tests/test-voxel-game/META-INF/MANIFEST.MF" />
       </element>
-      <element id="module-output" name="test-project-vostok" />
+      <element id="module-output" name="test-voxel-game" />
       <element id="module-output" name="core" />
       <element id="module-output" name="net" />
       <element id="module-output" name="particle" />

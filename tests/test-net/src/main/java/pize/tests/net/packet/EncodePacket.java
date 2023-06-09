@@ -1,9 +1,9 @@
 package pize.tests.net.packet;
 
 import pize.net.tcp.packet.IPacket;
+import pize.net.tcp.packet.PacketInputStream;
+import pize.net.tcp.packet.PacketOutputStream;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class EncodePacket extends IPacket{
@@ -28,13 +28,13 @@ public class EncodePacket extends IPacket{
     
     
     @Override
-    protected void write(DataOutputStream stream) throws IOException{
-        stream.write(key);
+    protected void write(PacketOutputStream stream) throws IOException{
+        stream.writeByteArray(key);
     }
     
     @Override
-    public void read(DataInputStream stream) throws IOException{
-        key = stream.readAllBytes();
+    public void read(PacketInputStream stream) throws IOException{
+        key = stream.readByteArray();
     }
     
 }

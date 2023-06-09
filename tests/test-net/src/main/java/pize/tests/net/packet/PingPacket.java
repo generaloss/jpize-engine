@@ -1,9 +1,9 @@
 package pize.tests.net.packet;
 
 import pize.net.tcp.packet.IPacket;
+import pize.net.tcp.packet.PacketInputStream;
+import pize.net.tcp.packet.PacketOutputStream;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class PingPacket extends IPacket{
@@ -28,12 +28,12 @@ public class PingPacket extends IPacket{
     
     
     @Override
-    protected void write(DataOutputStream stream) throws IOException{
+    protected void write(PacketOutputStream stream) throws IOException{
         stream.writeLong(time);
     }
     
     @Override
-    public void read(DataInputStream stream) throws IOException{
+    public void read(PacketInputStream stream) throws IOException{
         time = stream.readLong();
     }
     

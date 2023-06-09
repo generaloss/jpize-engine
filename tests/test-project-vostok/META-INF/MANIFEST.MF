@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-pize.tests.editor.Main-Class: megalul.projectvostok.pize.tests.editor.Main
-

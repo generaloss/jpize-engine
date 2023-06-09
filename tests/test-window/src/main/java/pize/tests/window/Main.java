@@ -8,8 +8,17 @@ import pize.graphics.util.batch.TextureBatch;
 public class Main implements ActivityListener{
     
     public static void main(String[] args){
-        Pize.create("Window", 1080, 640);
-        Pize.run(new Main());
+        // Pize.create("Window", 1080, 640);
+        // Pize.run(new Main());
+        
+        short s1 = (short) 0b1000000000000001;
+        
+        byte b1 = (byte) (s1 >> 8);
+        byte b2 = (byte) s1;
+        
+        short s2 = (short) ((short) b1 << 8 | b2);
+        
+        System.out.println(s1 + ", " + s2 + " (" + b1 + ", " + b2 + ")");
     }
     
     private TextureBatch batch;

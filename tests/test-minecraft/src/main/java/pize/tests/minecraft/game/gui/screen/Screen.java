@@ -1,6 +1,5 @@
 package pize.tests.minecraft.game.gui.screen;
 
-import pize.Pize;
 import pize.activity.Disposable;
 import pize.activity.Resizable;
 import pize.graphics.util.batch.TextureBatch;
@@ -25,7 +24,7 @@ public abstract class Screen implements Resizable, Disposable{
     }
 
     public void update(TextureBatch batch){
-        if(shouldCloseOnEsc() && Pize.isDown(Key.ESCAPE))
+        if(shouldCloseOnEsc() && Key.ESCAPE.isDown())
             close();
 
         if(renderDirtBackground()){

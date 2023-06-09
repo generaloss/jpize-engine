@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Test - Project Vostok" type="Application" factoryName="Application">
+  <configuration default="false" name="Test - Project Vostok" type="Application" factoryName="Application" singleton="false">
     <option name="ALTERNATIVE_JRE_PATH" value="17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="megalul.projectvostok.Main" />
-    <module name="test-project-vostok" />
+    <module name="test-voxel-game" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/test-project-vostok/" />
     <method v="2">
       <option name="Make" enabled="true" />

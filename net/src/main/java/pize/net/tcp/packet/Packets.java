@@ -11,7 +11,7 @@ public class Packets{
             if(data.length < 2)
                 return null;
             
-            final DataInputStream stream = new DataInputStream(new ByteArrayInputStream(data));
+            final PacketInputStream stream = new PacketInputStream(new ByteArrayInputStream(data));
             int packetID = stream.readByte();
             
             return new PacketInfo(packetID, stream);

@@ -43,7 +43,7 @@ public class Main implements ActivityListener{
         canvas.render();
         
         Pize.window().setTitle("Noise [fps: " + Pize.getFPS() + "]");
-        if(Pize.isDown(Key.ESCAPE))
+        if(Key.ESCAPE.isDown())
             Pize.exit();
     }
 

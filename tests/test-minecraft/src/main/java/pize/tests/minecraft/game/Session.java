@@ -112,13 +112,13 @@ public class Session implements Renderer{
 
         gameRenderer.render();
 
-        if(Pize.isDown(Key.R))
+        if(Key.R.isDown())
             resourceManager.reload();
 
-        if(Pize.isDown(options.getKey(KeyMapping.FULLSCREEN)))
+        if(options.getKey(KeyMapping.FULLSCREEN).isDown())
             Pize.window().toggleFullscreen();
 
-        if(Pize.isDown(options.getKey(KeyMapping.SCREENSHOT)))
+        if(options.getKey(KeyMapping.SCREENSHOT).isDown())
             takeScreenshot();
     }
 
