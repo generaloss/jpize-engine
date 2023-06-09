@@ -49,9 +49,9 @@ Pize.isTouchReleased();
 Pize.mouse().getScroll(); // scroll
 
 // keyboard
-Pize.isPressed(Key.SPACE);
-Pize.isDown(Key.ENTER);
-Pize.isReleased(Key.ESCAPE);
+Key.SPACE.isPressed();
+Key.ENTER.isDown();
+Key.ESCAPE.isReleased();
 
 // window
 Pize.getWidth();
@@ -130,13 +130,13 @@ KeyAES key = new KeyAES(512); // generate key for connection encoding
 
 // server
 TcpServer server = new TcpServer(new TcpListener(){
-    public void received(byte[] data, TcpByteChannel sender){
+    public void received(byte[] bytes, TcpByteChannel sender){
         System.out.printf("received: %f\n", new String(data)); // 'received: Hello, World!'
     }
-    public void connected(TcpByteChannel channel){
+    public void connected(TcpChannel channel){
         channel.encrypt(key);
     }
-    public void disconnected(TcpByteChannel channel){ ... }
+    public void disconnected(TcpChannel channel){ ... }
 });
 server.run("localhost", 8080);
 
