@@ -8,6 +8,7 @@ import pize.tests.voxelgame.server.player.OnlinePlayer;
 import pize.util.time.PerSecCounter;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,6 +21,7 @@ public class ServerChunkManager extends ChunkManager{
     
     private final ServerWorld worldOF;
     
+    private final Map<ChunkPos, OnlinePlayer> requestedChunks;
     private final CopyOnWriteArrayList<ChunkPos> newFrontiers, frontiers;
     private final Map<ChunkPos, ServerChunk> allChunks;
     private final List<ChunkPos> loadQueue;
@@ -29,6 +31,7 @@ public class ServerChunkManager extends ChunkManager{
     public ServerChunkManager(ServerWorld worldOF){
         this.worldOF = worldOF;
         
+        requestedChunks = new HashMap<>();
         frontiers = new CopyOnWriteArrayList<>();
         newFrontiers = new CopyOnWriteArrayList<>();
         allChunks = new ConcurrentHashMap<>();
@@ -107,24 +110,36 @@ public class ServerChunkManager extends ChunkManager{
     }
 
     public void checkChunks(){
-        for(ServerChunk chunk: allChunks.values()){
+        for(ServerChunk chunk: allChunks.values())
             if(isOffTheGrid(chunk.getPosition()))
                 unloadChunk(chunk);
-        }
     }
     
     public void loadChunk(ChunkPos chunkPos){
-        ServerChunk chunk = new ServerChunk(this, chunkPos);
+        final ServerChunk chunk = new ServerChunk(this, chunkPos);
         allChunks.put(chunkPos, chunk);
         DefaultGenerator.getInstance().generate(chunk);
-        worldOF.getLight().updateChunkSkyLight(chunk);
         
         updateNeighborChunksEdgesAndSelf(chunk, true);
+        
+        if(requestedChunks.containsKey(chunkPos)){
+            requestedChunks.get(chunkPos).sendPacket(chunk.getStorage().getPacket());
+            requestedChunks.remove(chunkPos);
+        }
     }
 
     public void unloadChunk(ServerChunk chunk){
         allChunks.remove(chunk.getPosition());
         updateNeighborChunksEdgesAndSelf(chunk, false);
+    }
+    
+    
+    public void requestedChunk(OnlinePlayer player, ChunkPos chunkPos){
+        final ServerChunk chunk = getChunk(chunkPos);
+        if(chunk != null)
+            player.sendPacket(chunk.getStorage().getPacket());
+        else
+            requestedChunks.put(chunkPos, player);
     }
     
     

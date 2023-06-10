@@ -54,7 +54,7 @@ public class KeyAES{
     }
     
 
-    public byte[] encrypt(byte[] bytes){
+    public synchronized byte[] encrypt(byte[] bytes){
         try{
             return encryptCipher.doFinal(bytes);
         }catch(Exception e){
@@ -62,7 +62,7 @@ public class KeyAES{
         }
     }
 
-    public byte[] decrypt(byte[] bytes){
+    public synchronized byte[] decrypt(byte[] bytes){
         try{
             return decryptCipher.doFinal(bytes);
         }catch(Exception e){
@@ -80,7 +80,7 @@ public class KeyAES{
             resource.mkDirsAndFile();
             resource.getWriter().write(key.getEncoded());
         }catch(Exception e){
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
     

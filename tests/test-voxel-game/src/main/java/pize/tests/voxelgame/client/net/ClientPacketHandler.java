@@ -2,7 +2,6 @@ package pize.tests.voxelgame.client.net;
 
 import pize.tests.voxelgame.client.NetClientGame;
 import pize.tests.voxelgame.clientserver.net.PlayerProfile;
-import megalul.projectvostok.clientserver.net.packet.*;
 import pize.net.tcp.TcpChannel;
 import pize.net.tcp.TcpListener;
 import pize.net.tcp.packet.PacketInfo;
@@ -31,6 +30,14 @@ public class ClientPacketHandler implements TcpListener{ //} implements NetListe
             return;
         switch(packetInfo.getPacketID()){
             
+            case PacketPlayerSpawnInfo.PACKET_ID ->{
+                final PacketPlayerSpawnInfo packet = packetInfo.readPacket(new PacketPlayerSpawnInfo());
+                
+                gameOF.createNetClientWorld(packet.worldName);
+                gameOF.spawnPlayer(packet.position);
+                gameOF.getWorld().getChunkManager().start();
+            }
+            
             case PacketBlockUpdate.PACKET_ID ->{
                 final PacketBlockUpdate packet = packetInfo.readPacket(new PacketBlockUpdate());
                 gameOF.getWorld().setBlock(packet.x, packet.y, packet.z, packet.state, true);
@@ -38,7 +45,7 @@ public class ClientPacketHandler implements TcpListener{ //} implements NetListe
             
             case PacketChunk.PACKET_ID ->{
                 final PacketChunk packet = packetInfo.readPacket(new PacketChunk());
-                gameOF.getWorld().getChunkManager().loadChunk(packet);
+                gameOF.getWorld().getChunkManager().receivedChunk(packet);
             }
             
             case PacketDisconnect.PACKET_ID ->{
@@ -58,8 +65,6 @@ public class ClientPacketHandler implements TcpListener{ //} implements NetListe
                 sender.setTcpNoDelay(false);
                 
                 new PacketAuth(profile.getName(), gameOF.getSessionOf().getSessionToken()).write(sender);
-                
-                getGameOf().getWorld().getChunkManager().start();
             }
             
             case PacketPing.PACKET_ID -> {

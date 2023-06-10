@@ -1,5 +1,8 @@
 package pize.tests.voxelgame.clientserver.chunk;
 
+import pize.tests.voxelgame.client.chunk.ClientChunk;
+import pize.tests.voxelgame.server.chunk.ServerChunk;
+
 public class ChunkUtils{
 
     public static final int SIZE_SHIFT = 4; //? Степень двойки
@@ -57,8 +60,12 @@ public class ChunkUtils{
         return xOrZ >> SIZE_SHIFT;
     }
     
-    public static Chunk getNeighborChunk(Chunk chunk, int x, int z){
-        return chunk.getChunkManagerOf().getChunk(chunk.getPosition().getNeighbor(x, z));
+    public static ClientChunk getNeighborChunk(ClientChunk chunk, int x, int z){
+        return chunk.getManagerOf().getChunk(chunk.getPosition().getNeighbor(x, z));
+    }
+    
+    public static ServerChunk getNeighborChunk(ServerChunk chunk, int x, int z){
+        return chunk.getManagerOf().getChunk(chunk.getPosition().getNeighbor(x, z));
     }
 
 }

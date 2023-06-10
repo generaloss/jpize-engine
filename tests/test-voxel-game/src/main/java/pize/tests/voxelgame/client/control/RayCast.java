@@ -85,7 +85,7 @@ public class RayCast{
             if(selectedBlock.y < 0 || selectedBlock.y > HEIGHT_IDX)
                 break;
             
-            byte block = BlockState.getID(sessionOF.getNet().getWorld().getBlock(selectedBlock.x, selectedBlock.y, selectedBlock.z));
+            byte block = BlockState.getID(sessionOF.getGame().getWorld().getBlock(selectedBlock.x, selectedBlock.y, selectedBlock.z));
             if(block != Block.AIR.ID){
                 selectedFace = BlockFace.fromNormal(faceNormal.x, faceNormal.y, faceNormal.z);
                 imaginarySelectedBlock.set(selectedBlock).add(selectedFace.x, selectedFace.y, selectedFace.z);

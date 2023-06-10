@@ -4,8 +4,6 @@ import pize.tests.voxelgame.client.block.BlockState;
 import pize.tests.voxelgame.clientserver.chunk.Chunk;
 import pize.tests.voxelgame.clientserver.net.packet.PacketChunk;
 
-import java.util.Arrays;
-
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.*;
 
 public class ChunkStorage{
@@ -14,8 +12,6 @@ public class ChunkStorage{
     
     protected final short[] blocks;
     protected final short[] heightMap;
-    protected final byte[] skyLight;
-    protected final byte[] blockLight;
     protected short maxY;
     protected short blockCount;
     
@@ -24,10 +20,7 @@ public class ChunkStorage{
         
         blocks = new short[C_VOLUME];
         heightMap = new short[AREA];
-        skyLight = new byte[C_VOLUME];
-        blockLight = new byte[C_VOLUME];
         
-        Arrays.fill(skyLight, (byte) 7);
     }
     
     public ChunkStorage(Chunk chunkOF, PacketChunk packet){
@@ -35,8 +28,6 @@ public class ChunkStorage{
         
         blocks = packet.blocks;
         heightMap = packet.heightMap;
-        skyLight = packet.skyLight;
-        blockLight = packet.blockLight;
         maxY = packet.maxY;
         blockCount = packet.blockCount;
     }
@@ -82,16 +73,6 @@ public class ChunkStorage{
     }
     
     /**
-     * @param x локальная координата по оси X
-     * @param y локальная координата по оси Y
-     * @param z локальная координата по оси Z
-     * @return айди блока
-     */
-    public byte getBlockID(int x, int y, int z){
-        return BlockState.getID(getBlock(x, y, z));
-    }
-    
-    /**
      * Устанавливает блок
      * @param x локальная координата по оси X
      * @param y локальная координата по оси Y
@@ -100,7 +81,7 @@ public class ChunkStorage{
      * @return айди блока, который был до установки
      */
     public byte setBlock(int x, int y, int z, short state){
-        final byte currentID = getBlockID(x, y, z);
+        final byte currentID = BlockState.getID(getBlock(x, y, z));
         final byte targetID = BlockState.getID(state);
         
         if(currentID != targetID){
@@ -116,31 +97,12 @@ public class ChunkStorage{
     }
     
     
-    public void setSkyLight(int x, int y, int z, int level){
-        skyLight[getIndexC(x, y, z)] = (byte) level;
+    public short getBlockCount(){
+        return blockCount;
     }
-    
-    public byte getSkyLight(int x, int y, int z){
-        return skyLight[getIndexC(x, y, z)];
-    }
-    
-    
-    public void setBlockLight(int x, int y, int z, int level){
-        blockLight[getIndexC(x, y, z)] = (byte) level;
-    }
-    
-    public byte getBlockLight(int x, int y, int z){
-        return blockLight[getIndexC(x, y, z)];
-    }
-    
     
     public boolean isEmpty(){
         return blockCount == 0;
-    }
-    
-    
-    public short getBlockCount(){
-        return blockCount;
     }
     
     
@@ -150,8 +112,6 @@ public class ChunkStorage{
             chunkOF.getPosition().z,
             blocks,
             heightMap,
-            skyLight,
-            blockLight,
             maxY,
             blockCount
         );

@@ -10,7 +10,7 @@
     <artifactId>test-voxel-game</artifactId>
     <packaging>jar</packaging>
     
-    <name>test-project-vostok</name>
+    <name>test-voxel-game</name>
     <url>http://maven.apache.org</url>
     
     <properties>

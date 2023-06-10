@@ -1,46 +1,43 @@
 package pize.tests.voxelgame;
 
-import pize.tests.voxelgame.client.ClientGameRenderer;
-import pize.tests.voxelgame.client.GameController;
-import pize.tests.voxelgame.client.NetClientGame;
-import pize.tests.voxelgame.client.control.FirstPersonPlayerCameraTarget;
-import pize.tests.voxelgame.client.control.GameCamera;
-import pize.tests.voxelgame.client.control.RayCast;
-import pize.tests.voxelgame.client.entity.ClientPlayer;
-import pize.tests.voxelgame.client.options.Options;
-import pize.tests.voxelgame.clientserver.Version;
-import pize.tests.voxelgame.clientserver.net.PlayerProfile;
-import pize.tests.voxelgame.server.LocalServer;
 import pize.Pize;
 import pize.activity.ActivityListener;
 import pize.files.Resource;
 import pize.graphics.gl.Gl;
 import pize.math.Maths;
-import pize.util.Utils;
+import pize.tests.voxelgame.client.ClientGameRenderer;
+import pize.tests.voxelgame.client.GameController;
+import pize.tests.voxelgame.client.NetClientGame;
+import pize.tests.voxelgame.client.control.GameCamera;
+import pize.tests.voxelgame.client.control.RayCast;
+import pize.tests.voxelgame.client.options.Options;
+import pize.tests.voxelgame.clientserver.Version;
+import pize.tests.voxelgame.clientserver.net.PlayerProfile;
+import pize.tests.voxelgame.server.LocalServer;
 import pize.util.time.Sync;
 
 public class Main implements ActivityListener{
     
     public static void main(String[] args){
-        Pize.create("Project Vostok", 1280, 720);
+        Pize.create("Voxel Game", 1280, 720);
         Pize.run(new Main());
     }
+    
+    private static final String playerName = "Makcum-20" + Maths.randomSeed(2);
+    private static final String sessionToken = "54_54-iWantPizza-54_54";
 
     private final Options options;
-    private final ClientPlayer clientPlayer;
     private final GameCamera camera;
     private final RayCast rayCast;
     private final Sync fpsSync;
     private final Version version;
     public SessionStatus status;
     private final PlayerProfile profile;
+    private final GameController gameController;
     
-    public final String playerName = "Makcum-" + Maths.randomSeed(3);
-    public final String sessionToken = "54_54-iWantPizza-54_54";
     private final ClientGameRenderer clientRenderer;
     private final LocalServer localServer;
     private final NetClientGame netClientGame;
-    private final GameController gameController;
     
 
     public Main(){
@@ -52,18 +49,15 @@ public class Main implements ActivityListener{
         camera = new GameCamera(0.1, 1000, 110);
         fpsSync = new Sync(0);
         
-        clientPlayer = new ClientPlayer();
-        
         rayCast = new RayCast(this, 2000);
         
         localServer = new LocalServer();
         localServer.run();
         
-        Utils.delayElapsed(500);
-        
         clientRenderer = new ClientGameRenderer(this);
         netClientGame = new NetClientGame(this);
         netClientGame.connect(localServer.getConfiguration().getAddress(), localServer.getConfiguration().getPort());
+        
         gameController = new GameController(this);
     }
     
@@ -73,18 +67,15 @@ public class Main implements ActivityListener{
         new Resource(SharedConstants.GAME_DIR_PATH).mkDirs();
         options.load();
         
-        camera.setTarget(new FirstPersonPlayerCameraTarget(clientPlayer));
-        clientPlayer.getPosition().y = 16 + 128 + 1;
-        
         status = SessionStatus.MULTIPLAYER;
     }
     
     @Override
     public void render(){
-        gameController.update();
         camera.update();
-        rayCast.update();
-        netClientGame.getWorld().getChunkManager().updateMeshes();
+        
+        gameController.update();
+        netClientGame.update();
         
         Gl.clearCDBuffers();
         clientRenderer.render();
@@ -115,10 +106,6 @@ public class Main implements ActivityListener{
         return fpsSync;
     }
     
-    public final ClientPlayer getClientPlayer(){
-        return clientPlayer;
-    }
-    
     public final RayCast getRayCast(){
         return rayCast;
     }
@@ -143,7 +130,7 @@ public class Main implements ActivityListener{
         return localServer;
     }
     
-    public final NetClientGame getNet(){
+    public final NetClientGame getGame(){
         return netClientGame;
     }
     

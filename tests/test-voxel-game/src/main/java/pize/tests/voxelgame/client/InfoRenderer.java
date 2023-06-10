@@ -1,7 +1,11 @@
 package pize.tests.voxelgame.client;
 
+import pize.Pize;
+import pize.activity.Disposable;
+import pize.graphics.font.BitmapFont;
+import pize.graphics.font.FontLoader;
+import pize.graphics.util.batch.TextureBatch;
 import pize.tests.voxelgame.Main;
-import pize.tests.voxelgame.SessionStatus;
 import pize.tests.voxelgame.client.chunk.mesh.ChunkBuilder;
 import pize.tests.voxelgame.client.control.GameCamera;
 import pize.tests.voxelgame.client.control.RayCast;
@@ -9,12 +13,6 @@ import pize.tests.voxelgame.client.options.KeyMapping;
 import pize.tests.voxelgame.client.options.Options;
 import pize.tests.voxelgame.client.world.ClientWorld;
 import pize.tests.voxelgame.server.world.ServerWorld;
-import pize.tests.voxelgame.server.world.light.WorldLight;
-import pize.Pize;
-import pize.activity.Disposable;
-import pize.graphics.font.BitmapFont;
-import pize.graphics.font.FontLoader;
-import pize.graphics.util.batch.TextureBatch;
 
 public class InfoRenderer implements Disposable{
     
@@ -40,7 +38,7 @@ public class InfoRenderer implements Disposable{
     }
     
     private void renderInfo(){
-        if(sessionOF.status == SessionStatus.MENU)
+        if(sessionOF.getGame().getWorld() == null)
             return;
         
         Options options = sessionOF.getOptions();
@@ -49,7 +47,7 @@ public class InfoRenderer implements Disposable{
         
         GameCamera camera = sessionOF.getCamera();
         RayCast rayCast = sessionOF.getRayCast();
-        ClientWorld clientWorld = sessionOF.getNet().getWorld();
+        ClientWorld clientWorld = sessionOF.getGame().getWorld();
         ServerWorld serverWorld = sessionOF.getLocalServer().getDefaultWorld();
         
         infoLineNum = 0;
@@ -70,8 +68,8 @@ public class InfoRenderer implements Disposable{
         info("chunk check tps: " + clientWorld.getChunkManager().checkTps.get());
         info("meshes: " + clientWorld.getChunkManager().getMeshes().size());
         info("render chunks: " + clientWorld.getChunkManager().getChunks().stream().filter(camera::isChunkSeen).count());
-        info("Light time (I/D): " + WorldLight.increaseTime + " ms, " + WorldLight.decreaseTime + " ms");
         info("Chunk build time (T/V): " + ChunkBuilder.buildTime + " ms, " + ChunkBuilder.vertexCount + " vertices");
+        // info("Light time (I/D): " + WorldLight.increaseTime + " ms, " + WorldLight.decreaseTime + " ms");
         // Vec3i imaginaryPos = rayCast.getImaginaryBlockPosition();
         // Vec3i selectedPos = rayCast.getSelectedBlockPosition();
         // info("Selected light level (F/B): " + clientWorld.getLight(imaginaryPos.x, imaginaryPos.y, imaginaryPos.z) + ", " + clientWorld.getLight(selectedPos.x, selectedPos.y, selectedPos.z));

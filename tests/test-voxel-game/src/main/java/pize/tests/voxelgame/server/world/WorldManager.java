@@ -30,7 +30,7 @@ public class WorldManager{
         if(worldName == null || loadedWorlds.containsKey(worldName) || isWorldExists(worldName))
             return;
         
-        ServerWorld world = new ServerWorld(serverOF);
+        ServerWorld world = new ServerWorld(serverOF, worldName);
         world.getConfiguration().load(worldName, DefaultGenerator.getInstance(), true);
         
         loadedWorlds.put(worldName, world);

@@ -10,13 +10,12 @@ public class PlayerController{
     
     private final Main sessionOF;
     
-    private final ClientPlayer targetPlayer;
+    private ClientPlayer targetPlayer;
     private final CameraRotationController rotationController;
     private final Vec3f up = new Vec3f(0, 1, 0);
     
-    public PlayerController(Main sessionOF, ClientPlayer targetPlayer){
+    public PlayerController(Main sessionOF){
         this.sessionOF = sessionOF;
-        this.targetPlayer = targetPlayer;
         rotationController = new CameraRotationController();
     }
     
@@ -25,6 +24,9 @@ public class PlayerController{
     }
     
     public void update(){
+        if(targetPlayer == null)
+            return;
+        
         rotationController.update();
         targetPlayer.getDirection().set(rotationController.getRotation());
         
@@ -57,6 +59,11 @@ public class PlayerController{
     
     private boolean isPressed(KeyMapping key){
         return sessionOF.getOptions().getKey(key).isPressed();
+    }
+    
+    
+    public void setTargetPlayer(ClientPlayer targetPlayer){
+        this.targetPlayer = targetPlayer;
     }
     
     

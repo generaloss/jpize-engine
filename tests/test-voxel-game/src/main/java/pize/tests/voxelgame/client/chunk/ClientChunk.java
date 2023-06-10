@@ -18,14 +18,12 @@ public class ClientChunk extends Chunk{
     private final ClientChunkManager chunkManagerOf;
     
     public ClientChunk(ClientChunkManager chunkManagerOf, ChunkPos position){
-        super(chunkManagerOf, position);
-        
+        super(position);
         this.chunkManagerOf = chunkManagerOf;
     }
     
     public ClientChunk(ClientChunkManager chunkManagerOf, PacketChunk packet){
-        super(chunkManagerOf, packet);
-        
+        super(packet);
         this.chunkManagerOf = chunkManagerOf;
     }
     
@@ -59,7 +57,7 @@ public class ClientChunk extends Chunk{
             return;
         
         if(!net)
-            chunkManagerOf.getWorldOf().getSessionOf().getNet().sendPacket(
+            chunkManagerOf.getWorldOf().getSessionOf().getGame().sendPacket(
                 new PacketPlayerBlockSet(chunkManagerOf.getWorldOf().getSessionOf().getProfile().getName(), position.x * SIZE + x, y, position.z * SIZE + z, state)
             );
         
@@ -74,13 +72,5 @@ public class ClientChunk extends Chunk{
             ChunkBlockUtils.updateNeighborChunksEdges(this, x, y, z, state);
     }
     
-    
-    public void setSkyLight(int x, int y, int z, int level){
-        storage.setSkyLight(x, y, z, level);
-    }
-    
-    public void setBlockLight(int x, int y, int z, int level){
-        storage.setBlockLight(x, y, z, level);
-    }
     
 }

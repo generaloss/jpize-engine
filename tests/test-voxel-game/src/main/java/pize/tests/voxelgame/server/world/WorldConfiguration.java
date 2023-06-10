@@ -14,7 +14,7 @@ public class WorldConfiguration{
         this.name = name;
         this.generator = generator;
         this.skyLight = skyLight;
-        this.spawn = new Vec2f();
+        this.spawn = new Vec2f(0.5, 0.5);
     }
     
     

@@ -130,8 +130,11 @@ public class WorldRenderer implements Disposable, Resizable{
     }
     
     private void renderAllChunkMeshes(){
+        if(sessionOF.getGame().getWorld() == null)
+            return;
+        
         final GameCamera camera = sessionOF.getCamera();
-        final Map<ClientChunk, ChunkMesh> meshes = sessionOF.getNet().getWorld().getChunkManager().getMeshes();
+        final Map<ClientChunk, ChunkMesh> meshes = sessionOF.getGame().getWorld().getChunkManager().getMeshes();
         
         for(ClientChunk chunk: meshes.keySet()){
             if(!camera.isChunkSeen(chunk))

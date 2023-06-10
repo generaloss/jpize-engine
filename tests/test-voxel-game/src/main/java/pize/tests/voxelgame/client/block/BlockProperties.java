@@ -58,7 +58,7 @@ public abstract class BlockProperties{
         if(object == null || getClass() != object.getClass())
             return false;
         
-        BlockProperties blockProperties = (BlockProperties) object;
+        final BlockProperties blockProperties = (BlockProperties) object;
         return id == blockProperties.id;
     }
     

@@ -1,5 +1,11 @@
 package pize.tests.voxelgame.client;
 
+import pize.Pize;
+import pize.graphics.gl.Face;
+import pize.graphics.gl.Gl;
+import pize.graphics.gl.PolygonMode;
+import pize.io.glfw.Key;
+import pize.math.vecmath.vector.Vec3i;
 import pize.tests.voxelgame.Main;
 import pize.tests.voxelgame.client.block.blocks.Block;
 import pize.tests.voxelgame.client.control.GameCamera;
@@ -9,12 +15,6 @@ import pize.tests.voxelgame.client.options.KeyMapping;
 import pize.tests.voxelgame.client.options.Options;
 import pize.tests.voxelgame.client.world.ClientWorld;
 import pize.tests.voxelgame.clientserver.net.packet.PacketPing;
-import pize.Pize;
-import pize.graphics.gl.Face;
-import pize.graphics.gl.Gl;
-import pize.graphics.gl.PolygonMode;
-import pize.io.glfw.Key;
-import pize.math.vecmath.vector.Vec3i;
 
 public class GameController{
     
@@ -24,7 +24,7 @@ public class GameController{
     
     public GameController(Main sessionOF){
         this.sessionOF = sessionOF;
-        playerController = new PlayerController(sessionOF, sessionOF.getClientPlayer());
+        playerController = new PlayerController(sessionOF);
     }
     
     public Main getSessionOf(){
@@ -38,10 +38,10 @@ public class GameController{
     }
     
     private void debugControl(){
-        Options options = sessionOF.getOptions();
-        GameCamera camera = sessionOF.getCamera();
-        RayCast rayCast = sessionOF.getRayCast();
-        ClientWorld world = sessionOF.getNet().getWorld();
+        final Options options = sessionOF.getOptions();
+        final GameCamera camera = sessionOF.getCamera();
+        final RayCast rayCast = sessionOF.getRayCast();
+        final ClientWorld world = sessionOF.getGame().getWorld();
         
         // EXIT
         if(Key.ESCAPE.isDown())
@@ -107,7 +107,7 @@ public class GameController{
         
         // PING SERVER
         if(Key.P.isDown())
-            sessionOF.getNet().sendPacket(new PacketPing(System.currentTimeMillis()));
+            sessionOF.getGame().sendPacket(new PacketPing(System.currentTimeMillis()));
     }
     
     

@@ -1,17 +1,21 @@
 package pize.tests.voxelgame.server.net;
 
-import pize.tests.voxelgame.clientserver.net.PlayerProfile;
-import megalul.projectvostok.clientserver.net.packet.*;
-import pize.tests.voxelgame.clientserver.net.packet.*;
-import pize.tests.voxelgame.server.Server;
-import pize.tests.voxelgame.server.chunk.ServerChunk;
-import pize.tests.voxelgame.server.player.PlayerList;
+import pize.math.Maths;
+import pize.math.vecmath.vector.Vec2f;
+import pize.math.vecmath.vector.Vec3f;
 import pize.net.security.KeyAES;
 import pize.net.security.KeyRSA;
 import pize.net.tcp.TcpChannel;
 import pize.net.tcp.TcpListener;
 import pize.net.tcp.packet.PacketInfo;
 import pize.net.tcp.packet.Packets;
+import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
+import pize.tests.voxelgame.clientserver.net.PlayerProfile;
+import pize.tests.voxelgame.clientserver.net.packet.*;
+import pize.tests.voxelgame.server.Server;
+import pize.tests.voxelgame.server.player.OfflinePlayer;
+import pize.tests.voxelgame.server.player.PlayerList;
+import pize.tests.voxelgame.server.world.ServerWorld;
 
 public class ServerPacketHandler implements TcpListener{
     
@@ -41,14 +45,13 @@ public class ServerPacketHandler implements TcpListener{
             case PacketChunkRequest.PACKET_ID ->{
                 final PacketChunkRequest packet = packetInfo.readPacket(new PacketChunkRequest());
                 
-                final ServerChunk chunk = getServerOf().getWorldManager().getWorld(
+                getServerOf().getWorldManager().getWorld(
                     getServerOf().getPlayerList().getOnlinePlayer(packet.playerName).getWorldName()
-                ).getChunkProvider().getChunk(packet.chunkX, packet.chunkZ);
-                
-                if(chunk == null)
-                    return;
-                
-                chunk.getStorage().getPacket().write(sender);
+                ).getChunkProvider()
+                    .requestedChunk(
+                        serverOF.getPlayerList().getOnlinePlayer(packet.playerName),
+                        new ChunkPos(packet.chunkX, packet.chunkZ)
+                    );
             }
             
             case PacketPlayerBlockSet.PACKET_ID ->{
@@ -69,6 +72,20 @@ public class ServerPacketHandler implements TcpListener{
                 System.out.println("[SERVER]: Player '" + packet.profileName + "' is licensed");
                 
                 //     * выключить режим ожидания аутентификации для данного клиента *
+                
+                final OfflinePlayer offlinePlayer = serverOF.getPlayerList().getOfflinePlayer(packet.profileName);
+                if(offlinePlayer != null)
+                    new PacketPlayerSpawnInfo(offlinePlayer.getWorldName(), offlinePlayer.getPosition()).write(sender);
+                
+                else{
+                    final ServerWorld defaultWorld = serverOF.getDefaultWorld();
+                    final Vec2f spawnPos = defaultWorld.getConfiguration().getSpawn();
+                    
+                    new PacketPlayerSpawnInfo(
+                        defaultWorld.getName(),
+                        new Vec3f(spawnPos.x, defaultWorld.getHeight(Maths.floor(spawnPos.x), Maths.floor(spawnPos.y)) + 2.5, spawnPos.y)
+                    ).write(sender);
+                }
             }
             
             case PacketEncryptEnd.PACKET_ID ->{

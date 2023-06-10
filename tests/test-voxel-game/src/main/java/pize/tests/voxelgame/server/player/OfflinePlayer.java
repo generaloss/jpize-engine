@@ -1,13 +1,17 @@
 package pize.tests.voxelgame.server.player;
 
+import pize.math.vecmath.vector.Vec3f;
+
 public class OfflinePlayer{
     
     private final String name;
-    private final String worldIN;
+    private final String worldName;
+    private final Vec3f position;
     
-    public OfflinePlayer(String name, String worldIN){
+    public OfflinePlayer(String name, String worldName, Vec3f position){
         this.name = name;
-        this.worldIN = worldIN;
+        this.worldName = worldName;
+        this.position = position;
     }
     
     
@@ -15,8 +19,12 @@ public class OfflinePlayer{
         return name;
     }
     
-    public String getWorldIn(){
-        return worldIN;
+    public String getWorldName(){
+        return worldName;
+    }
+    
+    public Vec3f getPosition(){
+        return position;
     }
     
 }

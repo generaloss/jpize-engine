@@ -47,7 +47,7 @@ public class PlayerList{
         list.put(name, onlinePlayer);
         
         OfflinePlayer offlinePlayer = getOfflinePlayer(name);
-        String worldInName = offlinePlayer == null ? serverOF.getConfiguration().getDefaultWorldName() : offlinePlayer.getWorldIn();
+        String worldInName = offlinePlayer == null ? serverOF.getConfiguration().getDefaultWorldName() : offlinePlayer.getWorldName();
         
         onlinePlayer.setWorldIn(worldInName);
         serverOF.getWorldManager().loadWorld(worldInName);

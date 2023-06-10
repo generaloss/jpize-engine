@@ -4,20 +4,21 @@ import pize.tests.voxelgame.Main;
 import pize.tests.voxelgame.client.block.blocks.Block;
 import pize.tests.voxelgame.client.chunk.ClientChunk;
 import pize.tests.voxelgame.clientserver.entity.Entity;
-import pize.tests.voxelgame.clientserver.world.World;
 
 import java.util.Collection;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.getChunkPos;
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.getLocalPos;
 
-public class ClientWorld implements World{
+public class ClientWorld{
     
     private final Main sessionOF;
     private final ClientChunkManager chunkManager;
+    private final String name;
     
-    public ClientWorld(Main sessionOF){
+    public ClientWorld(Main sessionOF, String name){
         this.sessionOF = sessionOF;
+        this.name = name;
         chunkManager = new ClientChunkManager(this);
     }
     
@@ -25,8 +26,11 @@ public class ClientWorld implements World{
         return sessionOF;
     }
     
+    public String getName(){
+        return name;
+    }
     
-    @Override
+    
     public short getBlock(int x, int y, int z){
         ClientChunk targetChunk = getChunk(x, z);
         if(targetChunk != null)
@@ -35,32 +39,13 @@ public class ClientWorld implements World{
         return Block.AIR.getState();
     }
     
-    @Override
-    public byte getBlockID(int x, int y, int z){
-        ClientChunk targetChunk = getChunk(x, z);
-        if(targetChunk != null)
-            return targetChunk.getBlockID(getLocalPos(x), y, getLocalPos(z));
-        
-        return 0;
-    }
-    
-    @Override
     public void setBlock(int x, int y, int z, short block, boolean net){
         ClientChunk targetChunk = getChunk(x, z);
         if(targetChunk != null)
             targetChunk.setBlock(getLocalPos(x), y, getLocalPos(z), block, net);
     }
     
-    @Override
-    public int getLight(int x, int y, int z){
-        ClientChunk targetChunk = getChunk(x, z);
-        if(targetChunk != null)
-            return targetChunk.getLight(getLocalPos(x), y, getLocalPos(z));
-        
-        return 0;
-    }
     
-    @Override
     public Collection<Entity> getEntities(){
         return null;
     }

@@ -1,14 +1,16 @@
 package pize.tests.voxelgame.client;
 
+import pize.math.vecmath.vector.Vec3f;
+import pize.net.security.KeyAES;
+import pize.net.tcp.TcpClient;
+import pize.net.tcp.packet.IPacket;
 import pize.tests.voxelgame.Main;
+import pize.tests.voxelgame.client.control.FirstPersonPlayerCameraTarget;
 import pize.tests.voxelgame.client.entity.ClientPlayer;
 import pize.tests.voxelgame.client.net.ClientPacketHandler;
 import pize.tests.voxelgame.client.world.ClientWorld;
 import pize.tests.voxelgame.clientserver.net.packet.PacketLogin;
 import pize.tests.voxelgame.clientserver.net.packet.PacketMove;
-import pize.net.security.KeyAES;
-import pize.net.tcp.TcpClient;
-import pize.net.tcp.packet.IPacket;
 import pize.util.time.TickGenerator;
 
 public class NetClientGame{
@@ -16,7 +18,8 @@ public class NetClientGame{
     private final Main sessionOF;
     private final TcpClient client;
     private final KeyAES encryptKey;
-    private ClientWorld clientWorld;
+    private ClientWorld world;
+    private ClientPlayer player;
     
     public NetClientGame(Main sessionOF){
         this.sessionOF = sessionOF;
@@ -41,14 +44,30 @@ public class NetClientGame{
         System.out.println("[CLIENT]: Connect");
         client.connect(address, port);
         sendPacket( new PacketLogin(sessionOF.getVersion().getID(), sessionOF.getProfile().getName()) );
-        
-        clientWorld = new ClientWorld(sessionOF);
     }
     
     private void tick(){
-        final ClientPlayer player = sessionOF.getClientPlayer();
-        if(player.checkPosition())
+        if(player != null && player.checkPosition())
             sendPacket(new PacketMove(sessionOF.getProfile().getName(), player.getPosition()));
+    }
+    
+    public void update(){
+        if(world == null || player == null)
+            return;
+        
+        world.getChunkManager().updateMeshes();
+        sessionOF.getRayCast().update();
+    }
+    
+    public void createNetClientWorld(String worldName){
+        world = new ClientWorld(sessionOF, worldName);
+    }
+    
+    public void spawnPlayer(Vec3f position){
+        player = new ClientPlayer();
+        player.getPosition().set(position);
+        sessionOF.getCamera().setTarget(new FirstPersonPlayerCameraTarget(player));
+        sessionOF.getController().getPlayerController().setTargetPlayer(player);
     }
     
     
@@ -66,7 +85,11 @@ public class NetClientGame{
     }
     
     public ClientWorld getWorld(){
-        return clientWorld;
+        return world;
+    }
+    
+    public final ClientPlayer getPlayer(){
+        return player;
     }
     
 }

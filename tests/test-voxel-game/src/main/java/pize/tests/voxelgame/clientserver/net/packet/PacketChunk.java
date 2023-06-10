@@ -17,19 +17,16 @@ public class PacketChunk extends IPacket{
     public int chunkX, chunkZ;
     public short[] blocks;
     public short[] heightMap;
-    public byte[] skyLight, blockLight;
     public short maxY;
     public short blockCount;
     
-    public PacketChunk(int chunkX, int chunkZ, short[] blocks, short[] heightMap, byte[] skyLight, byte[] blockLight, short maxY, short blockCount){
+    public PacketChunk(int chunkX, int chunkZ, short[] blocks, short[] heightMap, short maxY, short blockCount){
         this();
         
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.blocks = blocks;
         this.heightMap = heightMap;
-        this.skyLight = skyLight;
-        this.blockLight = blockLight;
         this.maxY = maxY;
         this.blockCount = blockCount;
     }
@@ -41,8 +38,6 @@ public class PacketChunk extends IPacket{
         stream.writeInt(chunkZ);
         stream.writeShortArray(blocks);
         stream.writeShortArray(heightMap);
-        stream.writeByteArray(skyLight);
-        stream.writeByteArray(blockLight);
         stream.writeShort(maxY);
         stream.writeShort(blockCount);
     }
@@ -53,8 +48,6 @@ public class PacketChunk extends IPacket{
         chunkZ = stream.readInt();
         blocks = stream.readShortArray();
         heightMap = stream.readShortArray();
-        skyLight = stream.readByteArray();
-        blockLight = stream.readByteArray();
         maxY = stream.readShort();
         blockCount = stream.readShort();
     }

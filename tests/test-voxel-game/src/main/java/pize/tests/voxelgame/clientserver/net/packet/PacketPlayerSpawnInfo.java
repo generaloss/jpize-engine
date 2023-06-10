@@ -7,31 +7,35 @@ import pize.net.tcp.packet.PacketOutputStream;
 
 import java.io.IOException;
 
-public class PacketOfflinePlayerState extends IPacket{ // Server->Client
+public class PacketPlayerSpawnInfo extends IPacket{
     
     public static final int PACKET_ID = 13;
     
-    public PacketOfflinePlayerState(){
+    public PacketPlayerSpawnInfo(){
         super(PACKET_ID);
     }
     
     
+    public String worldName;
     public Vec3f position;
     
-    public PacketOfflinePlayerState(Vec3f position){
+    public PacketPlayerSpawnInfo(String worldName, Vec3f position){
         this();
         
+        this.worldName = worldName;
         this.position = position;
     }
     
     
     @Override
     protected void write(PacketOutputStream stream) throws IOException{
+        stream.writeUTF(worldName);
         stream.writeVec3f(position);
     }
     
     @Override
     public void read(PacketInputStream stream) throws IOException{
+        worldName = stream.readUTF();
         position = stream.readVec3f();
     }
     

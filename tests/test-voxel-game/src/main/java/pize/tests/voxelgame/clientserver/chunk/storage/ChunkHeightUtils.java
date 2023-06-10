@@ -1,5 +1,6 @@
 package pize.tests.voxelgame.clientserver.chunk.storage;
 
+import pize.tests.voxelgame.client.block.BlockState;
 import pize.tests.voxelgame.clientserver.chunk.ChunkUtils;
 import pize.math.Mathc;
 import pize.tests.voxelgame.client.block.blocks.Block;
@@ -10,7 +11,7 @@ public class ChunkHeightUtils{
         int height = storage.getHeight(x, z);
         
         if(y == height && !placed)
-            for(height--; storage.getBlockID(x, height, z) == Block.AIR.ID && height > 0; height--);
+            for(height--; BlockState.getID(storage.getBlock(x, height, z)) == Block.AIR.ID && height > 0; height--);
         else if(y > height && placed)
             height = y;
         
@@ -22,7 +23,7 @@ public class ChunkHeightUtils{
         for(int x = 0; x < ChunkUtils.SIZE; x++)
             for(int z = 0; z < ChunkUtils.SIZE; z++)
                 for(int y = ChunkUtils.HEIGHT_IDX; y >= 0; y--)
-                    if(storage.getBlockID(x, y, z) != Block.AIR.ID){
+                    if(BlockState.getID(storage.getBlock(x, y, z)) != Block.AIR.ID){
                         storage.setHeight(x, z, y);
                         break;
                     }
