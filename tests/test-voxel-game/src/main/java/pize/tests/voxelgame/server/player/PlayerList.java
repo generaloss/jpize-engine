@@ -1,6 +1,7 @@
 package pize.tests.voxelgame.server.player;
 
 import pize.tests.voxelgame.clientserver.net.PlayerProfile;
+import pize.tests.voxelgame.clientserver.net.packet.PacketSpawnPlayer;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.world.ServerWorld;
 import pize.net.tcp.TcpChannel;
@@ -47,15 +48,18 @@ public class PlayerList{
     public void connectOnlinePlayer(String name, TcpChannel channel){
         final OnlinePlayer onlinePlayer = addOnlinePlayer(name, channel);
         
-        OfflinePlayer offlinePlayer = getOfflinePlayer(name);
-        String worldInName = offlinePlayer == null ? serverOF.getConfiguration().getDefaultWorldName() : offlinePlayer.getWorldName();
+        final OfflinePlayer offlinePlayer = getOfflinePlayer(name);
+        final String worldInName = offlinePlayer == null ? serverOF.getConfiguration().getDefaultWorldName() : offlinePlayer.getWorldName();
         
         onlinePlayer.setWorldIn(worldInName);
         serverOF.getWorldManager().loadWorld(worldInName);
         
-        ServerWorld worldIn = serverOF.getWorldManager().getWorld(worldInName);
+        final ServerWorld worldIn = serverOF.getWorldManager().getWorld(worldInName);
         worldIn.getPlayersIn().add(onlinePlayer);
         worldIn.getChunkManager().loadInitChunkForPlayer(onlinePlayer);
+
+        broadcastPacket(new PacketSpawnPlayer(onlinePlayer), onlinePlayer);
+        System.out.println("[SERVER]: кароче чел присоеденисля к серверу и надо челам на сервере по такому поводу отправить весточку");
     }
     
     public void disconnectOnlinePlayer(TcpChannel channel){
@@ -89,6 +93,12 @@ public class PlayerList{
     public void broadcastPacket(IPacket packet){
         for(OnlinePlayer player: playerNameMap.values())
             player.sendPacket(packet);
+    }
+
+    public void broadcastPacket(IPacket packet, OnlinePlayer except){
+        for(OnlinePlayer player: playerNameMap.values())
+            if(player != except)
+                player.sendPacket(packet);
     }
     
 }

@@ -1,7 +1,7 @@
 package pize.tests.voxelgame.clientserver.entity;
 
 import pize.math.Maths;
-import pize.math.util.EulerAngle;
+import pize.math.util.EulerAngles;
 import pize.math.vecmath.vector.Vec3d;
 import pize.math.vecmath.vector.Vec3f;
 import pize.physic.BoundingBox;
@@ -12,6 +12,7 @@ import pize.tests.voxelgame.client.block.BlockProperties;
 import pize.tests.voxelgame.client.block.BlockState;
 import pize.tests.voxelgame.client.block.model.BlockFace;
 import pize.tests.voxelgame.client.block.model.BlockShape;
+import pize.tests.voxelgame.client.entity.model.PlayerModel;
 import pize.tests.voxelgame.clientserver.chunk.ChunkUtils;
 import pize.tests.voxelgame.clientserver.world.World;
 
@@ -22,23 +23,28 @@ public abstract class Entity extends BoxBody{
     private final World worldOF;
     
     protected final Motion3D motion;
-    protected final EulerAngle rotation;
+    protected final EulerAngles rotation;
     
     private BoxBody[] blockBoxes;
     protected boolean onGround;
+
+    private final Vec3f oldPosition;
     
     public Entity(BoundingBox boundingBox, World worldOF){
         super(boundingBox);
         this.worldOF = worldOF;
         
         motion = new Motion3D();
-        rotation = new EulerAngle();
+        rotation = new EulerAngles();
+
+        oldPosition = new Vec3f();
     }
     
     public World getWorldOf(){
         return worldOF;
     }
-    
+
+
     public void update(){
         // Check is chunk loaded
         final Vec3f pos = getPosition();
@@ -52,18 +58,27 @@ public abstract class Entity extends BoxBody{
         
         onLivingUpdate();
     }
+
+
+    public boolean checkPositionChange(){
+        if(!oldPosition.equals(getPosition())){
+            oldPosition.set(getPosition());
+            return true;
+        }
+        return false;
+    }
     
     
     public abstract void onLivingUpdate();
     
     public abstract float getEyes();
-    
-    
+
+
     public Motion3D getMotion(){
         return motion;
     }
     
-    public EulerAngle getRotation(){
+    public EulerAngles getRotation(){
         return rotation;
     }
     

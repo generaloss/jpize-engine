@@ -1,6 +1,8 @@
 package pize.net.tcp.packet;
 
-import pize.math.vecmath.vector.Vec3f;
+import pize.math.util.EulerAngles;
+import pize.math.vecmath.tuple.Tuple3d;
+import pize.math.vecmath.tuple.Tuple3f;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -28,10 +30,22 @@ public class PacketOutputStream extends DataOutputStream{
         write(byteArray);
     }
     
-    public void writeVec3f(Vec3f vector) throws IOException{
+    public void writeTuple3f(Tuple3f vector) throws IOException{
         writeFloat(vector.x);
         writeFloat(vector.y);
         writeFloat(vector.z);
+    }
+
+    public void writeTuple3d(Tuple3d vector) throws IOException{
+        writeDouble(vector.x);
+        writeDouble(vector.y);
+        writeDouble(vector.z);
+    }
+
+    public void writeEulerAngles(EulerAngles vector) throws IOException{
+        writeDouble(vector.yaw);
+        writeDouble(vector.pitch);
+        writeDouble(vector.roll);
     }
     
 }

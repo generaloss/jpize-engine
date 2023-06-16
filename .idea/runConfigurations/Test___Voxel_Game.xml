@@ -8,7 +8,7 @@
     <method v="2">
       <option name="Make" enabled="true" />
       <option name="BuildArtifacts" enabled="true">
-        <artifact name="Test - Project Vostok" />
+        <artifact name="Test - Voxel Game" />
       </option>
     </method>
   </configuration>

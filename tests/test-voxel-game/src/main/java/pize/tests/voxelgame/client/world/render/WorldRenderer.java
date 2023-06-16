@@ -15,8 +15,10 @@ import pize.tests.voxelgame.client.chunk.ClientChunk;
 import pize.tests.voxelgame.client.chunk.mesh.ChunkMesh;
 import pize.tests.voxelgame.client.control.GameCamera;
 import pize.tests.voxelgame.client.control.PerspectiveType;
+import pize.tests.voxelgame.client.entity.RemotePlayer;
 import pize.tests.voxelgame.client.entity.model.PlayerModel;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
+import pize.tests.voxelgame.clientserver.entity.Entity;
 
 import java.util.Map;
 
@@ -45,8 +47,7 @@ public class WorldRenderer implements Disposable, Resizable{
         batchFramebuffer = new Framebuffer2D();
         
         // Sky
-        skyBox = new SkyBox("texture/skybox/skybox_positive_x.png", "texture/skybox/skybox_negative_x.png", "texture/skybox/skybox_positive_y.png", "texture/skybox/skybox_negative_y.png", "texture/skybox/skybox_positive_z.png", "texture/skybox/skybox_negative_z.png"
-        );
+        skyBox = new SkyBox("texture/skybox/skybox_positive_x.png", "texture/skybox/skybox_negative_x.png", "texture/skybox/skybox_positive_y.png", "texture/skybox/skybox_negative_y.png", "texture/skybox/skybox_positive_z.png", "texture/skybox/skybox_negative_z.png");
         skyViewMatrix = new Matrix4f();
         
         // Chunk
@@ -108,6 +109,19 @@ public class WorldRenderer implements Disposable, Resizable{
                 playerModel.animate();
                 if(camera.getPerspective() != PerspectiveType.FIRST_PERSON)
                     playerModel.render(camera);
+            }
+
+            // Entityes
+            for(Entity entity : sessionOF.getGame().getWorld().getEntities()){
+                if(entity.getClass() == RemotePlayer.class){
+                    final RemotePlayer remotePlayer = (RemotePlayer) entity;
+                    final PlayerModel model = remotePlayer.getModel();
+                    if(model != null){
+                        model.animate();
+                        model.render(camera);
+                    }
+                }
+
             }
             
             // Block Selector and Chunk Border

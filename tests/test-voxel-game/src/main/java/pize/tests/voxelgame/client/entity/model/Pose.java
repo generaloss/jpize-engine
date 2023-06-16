@@ -1,6 +1,6 @@
 package pize.tests.voxelgame.client.entity.model;
 
-import pize.math.util.EulerAngle;
+import pize.math.util.EulerAngles;
 import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.voxelgame.client.control.GameCamera;
@@ -8,13 +8,13 @@ import pize.tests.voxelgame.client.control.GameCamera;
 public class Pose{
     
     private final Vec3f position;
-    private final EulerAngle rotation;
+    private final EulerAngles rotation;
     
     private final Matrix4f translateMatrix, rotationMatrix, modelMatrix;
     
     public Pose(){
         position = new Vec3f();
-        rotation = new EulerAngle();
+        rotation = new EulerAngles();
         
         translateMatrix = new Matrix4f();
         rotationMatrix = new Matrix4f();
@@ -43,7 +43,7 @@ public class Pose{
     }
     
     
-    public void set(Vec3f position, EulerAngle rotation){
+    public void set(Vec3f position, EulerAngles rotation){
         this.position.set(position);
         this.rotation.set(rotation);
     }
@@ -61,7 +61,7 @@ public class Pose{
         return position;
     }
     
-    public EulerAngle getRotation(){
+    public EulerAngles getRotation(){
         return rotation;
     }
     

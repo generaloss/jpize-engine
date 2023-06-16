@@ -39,6 +39,7 @@
       <module name="security" target="17" />
       <module name="sgl-core" target="17" />
       <module name="test-android" target="1.6" />
+      <module name="test-project-vostok" target="17" />
       <module name="tilemap" target="17" />
     </bytecodeTargetLevel>
   </component>

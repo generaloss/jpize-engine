@@ -3,6 +3,7 @@ package pize.tests.voxelgame.server.world;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.chunk.gen.DefaultGenerator;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +38,11 @@ public class WorldManager{
         
         System.out.println("[SERVER]: Loaded world '" + worldName + "'");
     }
-    
+
+    public Collection<ServerWorld> getWorlds(){
+        return loadedWorlds.values();
+    }
+
     public ServerWorld getWorld(String worldName){
         return loadedWorlds.get(worldName);
     }

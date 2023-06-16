@@ -30,13 +30,13 @@ public class PacketPlayerSpawnInfo extends IPacket{
     @Override
     protected void write(PacketOutputStream stream) throws IOException{
         stream.writeUTF(worldName);
-        stream.writeVec3f(position);
+        stream.writeTuple3f(position);
     }
     
     @Override
     public void read(PacketInputStream stream) throws IOException{
         worldName = stream.readUTF();
-        position = stream.readVec3f();
+        position = (Vec3f) stream.readTuple3f();
     }
     
 }

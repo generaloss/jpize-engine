@@ -1,5 +1,7 @@
 package pize.tests.voxelgame.server.player;
 
+import pize.math.util.EulerAngles;
+import pize.physic.Motion3D;
 import pize.tests.voxelgame.clientserver.net.PlayerProfile;
 import pize.tests.voxelgame.server.Server;
 import pize.math.vecmath.vector.Vec3f;
@@ -10,15 +12,20 @@ public class OnlinePlayer{
     
     private final PlayerProfile profile;
     private final TcpChannel channel;
-    private final Vec3f position;
-    private String worldName;
     private int renderDistance;
-    
+    private String worldName;
+
+    private final Vec3f position;
+    private final EulerAngles rotation;
+    private final Motion3D motion;
+
     public OnlinePlayer(Server serverOF, PlayerProfile profile, TcpChannel channel){
         this.profile = profile;
         this.channel = channel;
         
         position = new Vec3f();
+        rotation = new EulerAngles();
+        motion = new Motion3D();
         renderDistance = serverOF.getConfiguration().getMaxRenderDistance();//: 0 //! 0
     }
     
@@ -51,6 +58,14 @@ public class OnlinePlayer{
     
     public Vec3f getPosition(){
         return position;
+    }
+
+    public EulerAngles getRotation(){
+        return rotation;
+    }
+
+    public Motion3D getMotion(){
+        return motion;
     }
     
     public String getWorldName(){

@@ -1,5 +1,9 @@
 package pize.net.tcp.packet;
 
+import pize.math.util.EulerAngles;
+import pize.math.vecmath.tuple.Tuple3d;
+import pize.math.vecmath.tuple.Tuple3f;
+import pize.math.vecmath.vector.Vec3d;
 import pize.math.vecmath.vector.Vec3f;
 
 import java.io.DataInputStream;
@@ -27,11 +31,27 @@ public class PacketInputStream extends DataInputStream{
         return readNBytes(readInt());
     }
     
-    public Vec3f readVec3f() throws IOException{
+    public Tuple3f readTuple3f() throws IOException{
         return new Vec3f(
             readFloat(),
             readFloat(),
             readFloat()
+        );
+    }
+
+    public Tuple3d readTuple3d() throws IOException{
+        return new Vec3d(
+            readDouble(),
+            readDouble(),
+            readDouble()
+        );
+    }
+
+    public EulerAngles readEulerAngles() throws IOException{
+        return new EulerAngles(
+            readDouble(),
+            readDouble(),
+            readDouble()
         );
     }
     

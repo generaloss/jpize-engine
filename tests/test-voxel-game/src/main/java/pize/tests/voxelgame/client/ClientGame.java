@@ -49,7 +49,7 @@ public class ClientGame{
             return;
         
         if(player.checkPositionChange())
-            sendPacket(new PacketMove(player.getPosition()));
+            sendPacket(new PacketMove(player));
     }
     
     public void update(){
@@ -58,8 +58,10 @@ public class ClientGame{
         
         world.getChunkManager().updateMeshes();
         rayCast.update();
-        player.update();
         camera.update();
+
+        player.update();
+        world.tick();
     }
     
     public void createNetClientWorld(String worldName){

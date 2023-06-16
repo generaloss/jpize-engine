@@ -19,7 +19,7 @@ public class ServerWorld extends World{
     
     private final WorldConfiguration configuration;
     private final ServerChunkManager chunkManager;
-    private final List<Entity> entities;
+    private final List<Entity> entityList;
     private final List<OnlinePlayer> playersIn;
 
     public ServerWorld(Server serverOF, String name){
@@ -28,7 +28,7 @@ public class ServerWorld extends World{
         
         configuration = new WorldConfiguration();
         chunkManager = new ServerChunkManager(this);
-        entities = new ArrayList<>();
+        entityList = new ArrayList<>();
         playersIn = new ArrayList<>();
     }
     
@@ -61,7 +61,11 @@ public class ServerWorld extends World{
         
         return 0;
     }
-    
+
+
+    public void tick(){
+
+    }
     
     public WorldConfiguration getConfiguration(){
         return configuration;

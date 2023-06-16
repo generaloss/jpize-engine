@@ -18,9 +18,8 @@ public class LocalPlayer extends Entity{
     public static final float PLAYER_JUMP_HEIGHT = 1.25F;
     
     public static float speed;
-    
-    
-    private final Vec3f oldPosition;
+
+
     private float gravity, timeToMaxJumpY, jumpMotion;
     private final Vec2f playerMoving;
     private boolean sprinting, sneaking;
@@ -31,8 +30,7 @@ public class LocalPlayer extends Entity{
             -PLAYER_WIDTH / 2, 0            , -PLAYER_WIDTH / 2,
              PLAYER_WIDTH / 2, PLAYER_HEIGHT,  PLAYER_WIDTH / 2
         ), worldOF);
-        
-        oldPosition = new Vec3f();
+
         playerMoving = new Vec2f();
         setJumpHeight(PLAYER_JUMP_HEIGHT);
     }
@@ -126,15 +124,6 @@ public class LocalPlayer extends Entity{
         
         gravity = -2 * height / (timeToMaxJumpY * timeToMaxJumpY);
         jumpMotion = 2 * height / timeToMaxJumpY;
-    }
-    
-    
-    public boolean checkPositionChange(){
-        if(!oldPosition.equals(getPosition())){
-            oldPosition.set(getPosition());
-            return true;
-        }
-        return false;
     }
     
     

@@ -1,6 +1,9 @@
 package pize.tests.voxelgame.client.net;
 
 import pize.tests.voxelgame.client.ClientGame;
+import pize.tests.voxelgame.client.entity.LocalPlayer;
+import pize.tests.voxelgame.client.entity.RemotePlayer;
+import pize.tests.voxelgame.clientserver.entity.Entity;
 import pize.tests.voxelgame.clientserver.net.PlayerProfile;
 import pize.net.tcp.TcpChannel;
 import pize.net.tcp.TcpListener;
@@ -29,7 +32,27 @@ public class ClientPacketHandler implements TcpListener{ //} implements NetListe
         if(packetInfo == null)
             return;
         switch(packetInfo.getPacketID()){
-            
+
+            case PacketEntityMove.PACKET_ID ->{
+                final PacketEntityMove packet = packetInfo.readPacket(new PacketEntityMove());
+
+                final Entity targetEntity = gameOF.getWorld().getEntity(packet.playerName);
+                targetEntity.getPosition().set(packet.position);
+                targetEntity.getRotation().set(packet.rotation);
+                targetEntity.getMotion().set(packet.motion);
+            }
+
+            case PacketSpawnPlayer.PACKET_ID ->{
+                final PacketSpawnPlayer packet = packetInfo.readPacket(new PacketSpawnPlayer());
+
+                final RemotePlayer remotePlayer = new RemotePlayer(gameOF.getWorld(), packet.playerName);
+                remotePlayer.getPosition().set(packet.position);
+                remotePlayer.getRotation().set(packet.rotation);
+
+                gameOF.getWorld().addEntity(remotePlayer);
+                System.out.println("воооооооооооооо чел тут уже (должен) былы итыт крч ну то что инитиал циалаллизирует и вот да");
+            }
+
             case PacketPlayerSpawnInfo.PACKET_ID ->{
                 final PacketPlayerSpawnInfo packet = packetInfo.readPacket(new PacketPlayerSpawnInfo());
                 

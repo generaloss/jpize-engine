@@ -37,8 +37,8 @@ public class Main extends AppAdapter{
     }
     
     @Override
-    public void update(float deltaTime){
-        System.out.println("Async update delta time: " + deltaTime);
+    public void update(){
+        System.out.println("Async updatу");
     }
     
     @Override

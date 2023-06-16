@@ -45,7 +45,7 @@ public class Quaternion{
         return setEulerAnglesRad(Maths.toRad * yaw, Maths.toRad * pitch, Maths.toRad * roll);
     }
     
-    public Quaternion setEulerAngles(EulerAngle eulerAngles){
+    public Quaternion setEulerAngles(EulerAngles eulerAngles){
         return setEulerAngles(eulerAngles.yaw, eulerAngles.pitch, eulerAngles.roll);
     }
 

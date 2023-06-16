@@ -126,12 +126,12 @@ public class PlayerModel{
         head.getRotation().yaw = -entityOF.getRotation().yaw;
         head.getRotation().pitch = entityOF.getRotation().pitch;
         
-        final LocalPlayer player = (LocalPlayer) entityOF;
-        if(player.isSneaking())
-            torso.getPosition().y -= 1 * w;
+        //final LocalPlayer player = (LocalPlayer) entityOF;
+        //if(player.isSneaking())
+        //    torso.getPosition().y -= 1 * w;
         
         
-        final Vec3d motion = player.getMotion();
+        final Vec3d motion = entityOF.getMotion();
         if(motion.len2() > 10E-5){
             time += Pize.getDt();
             final double animationSpeed = 5;

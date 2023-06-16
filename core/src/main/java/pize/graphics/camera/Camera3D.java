@@ -1,19 +1,19 @@
 package pize.graphics.camera;
 
-import pize.math.util.EulerAngle;
+import pize.math.util.EulerAngles;
 import pize.math.vecmath.vector.Vec3f;
 
 public abstract class Camera3D extends Camera{
 
     protected final Vec3f position;
-    protected final EulerAngle rotation;
+    protected final EulerAngles rotation;
 
 
     public Camera3D(int width, int height){
         super(width, height);
         
         position = new Vec3f();
-        rotation = new EulerAngle();
+        rotation = new EulerAngles();
     }
 
 
@@ -33,7 +33,7 @@ public abstract class Camera3D extends Camera{
         return position;
     }
 
-    public EulerAngle getRot(){
+    public EulerAngles getRot(){
         return rotation;
     }
 

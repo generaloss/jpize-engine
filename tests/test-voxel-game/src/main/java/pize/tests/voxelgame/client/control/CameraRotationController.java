@@ -1,17 +1,17 @@
 package pize.tests.voxelgame.client.control;
 
 import pize.Pize;
-import pize.math.util.EulerAngle;
+import pize.math.util.EulerAngles;
 
 public class CameraRotationController{
     
-    private final EulerAngle rotation;
+    private final EulerAngles rotation;
     private float mouseSensitivity;
     private boolean showMouse, nextFrameRotationLock;
     private float dAngX, dAngY;
     
     public CameraRotationController(){
-        rotation = new EulerAngle();
+        rotation = new EulerAngles();
         mouseSensitivity = 1;
         
         nextFrameRotationLock = true;
@@ -65,7 +65,7 @@ public class CameraRotationController{
         nextFrameRotationLock = true;
     }
     
-    public EulerAngle getRotation(){
+    public EulerAngles getRotation(){
         return rotation;
     }
     

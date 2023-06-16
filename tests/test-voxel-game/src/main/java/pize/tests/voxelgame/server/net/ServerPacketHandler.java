@@ -70,8 +70,10 @@ public class ServerPacketHandler implements TcpListener{
                     new PacketDisconnect("Недействительная сессия").write(sender);
                     return;
                 }
-                
-                System.out.println("[SERVER]: Player '" + playerList.getOnlinePlayer(sender) + "' is licensed");
+
+                final OnlinePlayer onlinePlayer = playerList.getOnlinePlayer(sender);
+
+                System.out.println("[SERVER]: Player '" + onlinePlayer.getName() + "' is licensed");
                 
                 //     * выключить режим ожидания аутентификации для данного клиента *
                 
@@ -88,6 +90,12 @@ public class ServerPacketHandler implements TcpListener{
                         new Vec3f(spawnPos.x, defaultWorld.getHeight(Maths.floor(spawnPos.x), Maths.floor(spawnPos.y)) + 2.5, spawnPos.y)
                     ).write(sender);
                 }
+
+                for(OnlinePlayer player : playerList.getOnlinePlayers())
+                    if(player != onlinePlayer){
+                        new PacketSpawnPlayer(player).write(sender);
+                        System.out.println("[SERVER]: крч это. ну ээээ, э . ааааааааааааа, чел присоеденился и а чое, а а аааааааа игрок отправил весть что он авашбета присоеденися и надо это всмем разосласть всем 10 друзьямн на сервере\n все не то, он присоеден иялся и надо ему отослать кто сейчас есть ну крч сех на сервере ему крч инитьл инициализовафваыыва шиза");
+                    }
             }
             
             case PacketEncryptEnd.PACKET_ID ->{
@@ -128,7 +136,12 @@ public class ServerPacketHandler implements TcpListener{
             
             case PacketMove.PACKET_ID ->{
                 final PacketMove packet = packetInfo.readPacket(new PacketMove());
-                playerList.getOnlinePlayer(sender).getPosition().set(packet.position);
+                final OnlinePlayer onlinePlayer = playerList.getOnlinePlayer(sender);
+
+                onlinePlayer.getPosition().set(packet.position);
+                onlinePlayer.getRotation().set(packet.rotation);
+                onlinePlayer.getMotion().set(packet.motion);
+                serverOF.getPlayerList().broadcastPacket(new PacketEntityMove(onlinePlayer), onlinePlayer);
             }
             
             case PacketPing.PACKET_ID -> packetInfo.readPacket(new PacketPing()).write(sender);

@@ -2,7 +2,7 @@ package pize.tests.voxelgame.client.entity.model;
 
 import pize.graphics.util.Shader;
 import pize.graphics.vertex.Mesh;
-import pize.math.util.EulerAngle;
+import pize.math.util.EulerAngles;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.voxelgame.client.control.GameCamera;
 
@@ -54,7 +54,7 @@ public class ModelPart{
         initialPose.getRotation().set(yaw, pitch, roll);
     }
     
-    public void setInitialPose(Vec3f position, EulerAngle rotation){
+    public void setInitialPose(Vec3f position, EulerAngles rotation){
         setInitialPose(position.x, position.y, position.z, rotation.yaw, rotation.pitch, rotation.roll);
     }
     
@@ -70,7 +70,7 @@ public class ModelPart{
         return pose.getPosition();
     }
     
-    public EulerAngle getRotation(){
+    public EulerAngles getRotation(){
         return pose.getRotation();
     }
     

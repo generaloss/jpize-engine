@@ -1,6 +1,6 @@
 package pize.tests.voxelgame.client.control;
 
-import pize.math.util.EulerAngle;
+import pize.math.util.EulerAngles;
 import pize.math.vecmath.tuple.Tuple3f;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
@@ -9,12 +9,12 @@ public class ThirdPersonBackCameraTarget implements CameraTarget{
     
     private final LocalPlayer targetPlayer;
     private final Vec3f position;
-    private final EulerAngle direction;
+    private final EulerAngles direction;
     
     public ThirdPersonBackCameraTarget(LocalPlayer targetPlayer){
         this.targetPlayer = targetPlayer;
         position = new Vec3f();
-        direction = new EulerAngle();
+        direction = new EulerAngles();
     }
     
     @Override
@@ -26,7 +26,7 @@ public class ThirdPersonBackCameraTarget implements CameraTarget{
     }
     
     @Override
-    public EulerAngle getRotation(){
+    public EulerAngles getRotation(){
         direction.set(targetPlayer.getRotation());
         direction.pitch += Math.max(0, Math.min(10, targetPlayer.getMotion().y));
         return direction;

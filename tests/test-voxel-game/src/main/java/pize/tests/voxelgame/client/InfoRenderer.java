@@ -66,8 +66,8 @@ public class InfoRenderer implements Disposable{
         info("position: " + player.getPosition().x + ", " + player.getPosition().y + ", " + player.getPosition().z);
         info("chunk: " + camera.chunkX() + ", " + camera.chunkZ());
         info("Threads:");
-        info("chunk find tps: " + serverWorld.getChunkManager().findTps.get());
-        info("chunk load tps: " + serverWorld.getChunkManager().loadTps.get());
+        if(serverWorld != null) info("chunk find tps: " + serverWorld.getChunkManager().findTps.get());
+        if(serverWorld != null) info("chunk load tps: " + serverWorld.getChunkManager().loadTps.get());
         info("chunk build tps: " + clientWorld.getChunkManager().buildTps.get());
         info("chunk check tps: " + clientWorld.getChunkManager().checkTps.get());
         info("meshes: " + clientWorld.getChunkManager().getMeshes().size());
