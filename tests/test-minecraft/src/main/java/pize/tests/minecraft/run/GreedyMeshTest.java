@@ -1,7 +1,7 @@
 package pize.tests.minecraft.run;
 
 import pize.Pize;
-import pize.activity.ActivityListener;
+import pize.app.AppAdapter;
 import pize.graphics.gl.Gl;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.Texture;
@@ -14,7 +14,7 @@ import pize.math.vecmath.vector.Vec2i;
 
 import java.util.ArrayList;
 
-public class GreedyMeshTest implements ActivityListener{
+public class GreedyMeshTest extends AppAdapter{
 
     private TextureBatch batch;
     private Texture voxelTexture;
@@ -158,10 +158,7 @@ public class GreedyMeshTest implements ActivityListener{
 
         batch.end();
     }
-
-    @Override
-    public void resize(int w, int h){ }
-
+    
     @Override
     public void dispose(){
         voxelTexture.dispose();

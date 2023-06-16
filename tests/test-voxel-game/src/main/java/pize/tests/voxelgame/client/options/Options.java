@@ -3,6 +3,7 @@ package pize.tests.voxelgame.client.options;
 import pize.Pize;
 import pize.files.Resource;
 import pize.io.glfw.Key;
+import pize.tests.voxelgame.client.control.GameCamera;
 import pize.util.io.FastReader;
 import pize.tests.voxelgame.Main;
 
@@ -119,7 +120,10 @@ public class Options{
 
     public void setFOV(int fov){
         this.fov = fov;
-        sessionOF.getCamera().setFov(fov);
+        
+        final GameCamera camera = sessionOF.getGame().getCamera();
+        if(camera != null)
+            camera.setFov(fov);
     }
 
 
@@ -129,7 +133,10 @@ public class Options{
 
     public void setRenderDistance(int renderDistance){
         this.renderDistance = renderDistance;
-        sessionOF.getCamera().setDistance(renderDistance);
+        
+        final GameCamera camera = sessionOF.getGame().getCamera();
+        if(camera != null)
+            camera.setDistance(renderDistance);
     }
 
 

@@ -1,7 +1,7 @@
 package pize.tests.editor;
 
 import pize.Pize;
-import pize.activity.ActivityListener;
+import pize.app.AppAdapter;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.graphics.gl.Gl;
@@ -13,7 +13,7 @@ import pize.util.io.TextProcessor;
 
 import java.util.StringJoiner;
 
-public class Main implements ActivityListener{
+public class Main extends AppAdapter{
     
     public static void main(String[] args){
         Pize.create("Editor", 1280, 720);
@@ -43,9 +43,9 @@ public class Main implements ActivityListener{
         
         // Draw background
         Tuple2f bounds = font.getBounds(text.toString());
-        batch.setColor(0.1F, 0.15F, 0.2F, 1);
+        batch.setColor(0.1, 0.15, 0.2, 1);
         batch.draw(TextureUtils.quadTexture(), 50, 10, bounds.x, bounds.y);
-        batch.setColor(0.3F, 0.45F, 0.5F, 1);
+        batch.setColor(0.3, 0.45, 0.5, 1);
         batch.draw(TextureUtils.quadTexture(), 0, 10, 50, bounds.y);
         batch.resetColor();
         
@@ -68,9 +68,6 @@ public class Main implements ActivityListener{
         
         batch.end();
     }
-    
-    @Override
-    public void resize(int width, int height){ }
     
     @Override
     public void dispose(){

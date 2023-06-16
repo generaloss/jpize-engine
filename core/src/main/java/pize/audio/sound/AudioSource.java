@@ -1,6 +1,6 @@
 package pize.audio.sound;
 
-import pize.activity.Disposable;
+import pize.app.Disposable;
 import pize.math.Mathc;
 import pize.math.vecmath.tuple.Tuple3f;
 

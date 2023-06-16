@@ -2,7 +2,7 @@ package pize.tests.minecraft.game.audio;
 
 import pize.Pize;
 import pize.audio.sound.AudioSource;
-import pize.activity.Disposable;
+import pize.app.Disposable;
 import pize.tests.minecraft.game.Session;
 import pize.tests.minecraft.game.options.SoundCategory;
 

@@ -12,7 +12,7 @@ public class Mouse{
 
     private final long windowId;
     private boolean inWindow, visible;
-    private int scroll, grabX, grabY;
+    private int scroll, touchDownX, touchDownY;
     private final boolean[] down, pressed, released;
 
     public Mouse(Window window){
@@ -36,8 +36,8 @@ public class Mouse{
                 down[button] = true;
                 pressed[button] = true;
 
-                grabX = getX();
-                grabY = getY();
+                touchDownX = getX();
+                touchDownY = getY();
             }else if(action == GLFW_RELEASE){
                 released[button] = true;
                 pressed[button] = false;
@@ -107,12 +107,12 @@ public class Mouse{
         return (int) y[0];
     }
 
-    public int getGrabX(){
-        return grabX;
+    public int getTouchDownX(){
+        return touchDownX;
     }
 
-    public int getGrabY(){
-        return grabY;
+    public int getTouchDownY(){
+        return touchDownY;
     }
 
     public boolean isLeftDown(){

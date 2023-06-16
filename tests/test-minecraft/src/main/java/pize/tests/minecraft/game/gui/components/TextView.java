@@ -79,7 +79,7 @@ public class TextView extends MComponent{
         if(scissor && parent != null && (widthDifference = width - parent.getWidth()) > 0){
             final float xDifference = this.x - parent.getX();
             final float relativeX = xDifference + scrollShiftX;
-            final float increment = Pize.getDeltaTime() * parent.getWidth() * widthDifference / 5000;
+            final float increment = Pize.getDt() * parent.getWidth() * widthDifference / 5000;
             final int scissorOffset = Math.round(parent.getHeight() / 20) * 2;
             
             if(scrollDir){
@@ -198,7 +198,7 @@ public class TextView extends MComponent{
                 batch.setColor(color);
 
                 if(!disableShadow && !blocked){
-                    batch.setColor(color.r() * 0.25F, color.g() * 0.25F, color.b() * 0.25F, color.a());
+                    batch.setColor(color.r() * 0.25, color.g() * 0.25, color.b() * 0.25, color.a());
                     glyph.render(batch, (renderX + shadowOffsetX), (renderY + shadowOffsetY));
 
                     if(bold)

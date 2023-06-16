@@ -1,24 +1,17 @@
 package pize.tests.window;
 
 import pize.Pize;
-import pize.activity.ActivityListener;
+import pize.app.AppAdapter;
+import pize.graphics.gl.Gl;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
+import pize.io.glfw.Key;
 
-public class Main implements ActivityListener{
+public class Main extends AppAdapter{
     
     public static void main(String[] args){
-        // Pize.create("Window", 1080, 640);
-        // Pize.run(new Main());
-        
-        short s1 = (short) 0b1000000000000001;
-        
-        byte b1 = (byte) (s1 >> 8);
-        byte b2 = (byte) s1;
-        
-        short s2 = (short) ((short) b1 << 8 | b2);
-        
-        System.out.println(s1 + ", " + s2 + " (" + b1 + ", " + b2 + ")");
+        Pize.create("Hello, Window!", 1080, 640);
+        Pize.run(new Main());
     }
     
     private TextureBatch batch;
@@ -28,17 +21,25 @@ public class Main implements ActivityListener{
     public void init(){
         batch = new TextureBatch();
         texture = new Texture("wallpaper-19.jpg");
+        
+        Pize.setUpdateTPS(1);
     }
     
     @Override
     public void render(){
+        Gl.clearColorBuffer();
         batch.begin();
         batch.draw(texture, 0, 0, Pize.getWidth(), Pize.getHeight());
         batch.end();
+        
+        if(Key.ESCAPE.isPressed())
+            Pize.exit();
     }
     
     @Override
-    public void resize(int width, int height){ }
+    public void update(float deltaTime){
+        System.out.println("Async update delta time: " + deltaTime);
+    }
     
     @Override
     public void dispose(){

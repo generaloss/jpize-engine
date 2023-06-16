@@ -16,6 +16,7 @@ public enum KeyMapping implements Option<Key>{
     ZOOM      (Key.C),
 
     FULLSCREEN(Key.F11),
+    TOGGLE_PERSPECTIVE(Key.F5),
     SCREENSHOT(Key.F2);
 
 

@@ -1,18 +1,16 @@
 package pize.tests.voxelgame.client.control;
 
-import pize.Pize;
-import pize.math.vecmath.vector.Vec3f;
 import pize.tests.voxelgame.Main;
-import pize.tests.voxelgame.client.entity.ClientPlayer;
+import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.options.KeyMapping;
+import pize.tests.voxelgame.client.options.Options;
 
 public class PlayerController{
     
     private final Main sessionOF;
     
-    private ClientPlayer targetPlayer;
+    private LocalPlayer player;
     private final CameraRotationController rotationController;
-    private final Vec3f up = new Vec3f(0, 1, 0);
     
     public PlayerController(Main sessionOF){
         this.sessionOF = sessionOF;
@@ -24,46 +22,40 @@ public class PlayerController{
     }
     
     public void update(){
-        if(targetPlayer == null)
+        if(player == null)
             return;
         
         rotationController.update();
-        targetPlayer.getDirection().set(rotationController.getRotation());
+        player.getRotation().set(rotationController.getRotation());
         
-        float speed = Pize.getDeltaTime() * 7;
-        if(isPressed(KeyMapping.SPRINT))
-            speed *= 13;
-    
-        Vec3f dir = rotationController.getRotation().direction();
-        Vec3f acceleration = dir.clone();
-        acceleration.y = 0;
-        acceleration.nor().mul(speed);
-    
-        if(isPressed(KeyMapping.FORWARD))
-            targetPlayer.getPosition().add(acceleration);
-        if(isPressed(KeyMapping.BACK))
-            targetPlayer.getPosition().sub(acceleration);
-    
-        Vec3f dirXZ = dir.clone();
-        dirXZ.y = 0;
-        Vec3f sideMove = Vec3f.crs(up, dirXZ.nor()).mul(speed);
-        if(isPressed(KeyMapping.RIGHT))
-            targetPlayer.getPosition().add(sideMove);
-        if(isPressed(KeyMapping.LEFT))
-            targetPlayer.getPosition().sub(sideMove);
-        if(isPressed(KeyMapping.JUMP))
-            targetPlayer.getPosition().y += speed;
-        if(isPressed(KeyMapping.SNEAK))
-            targetPlayer.getPosition().y -= speed;
-    }
-    
-    private boolean isPressed(KeyMapping key){
-        return sessionOF.getOptions().getKey(key).isPressed();
+        final Options options = sessionOF.getOptions();
+        float forward = 0;
+        float strafe = 0;
+        
+        if(options.getKey(KeyMapping.FORWARD).isPressed())
+            forward++;
+        if(options.getKey(KeyMapping.BACK).isPressed())
+            forward--;
+        if(options.getKey(KeyMapping.RIGHT).isPressed())
+            strafe--;
+        if(options.getKey(KeyMapping.LEFT).isPressed())
+            strafe++;
+        
+        player.setMoving(forward, strafe);
+        
+        if(options.getKey(KeyMapping.JUMP).isPressed())
+            player.jump();
+        if(options.getKey(KeyMapping.SPRINT).isDown())
+            player.sprint();
+        if(options.getKey(KeyMapping.SNEAK).isDown())
+            player.setSneaking(true);
+        else if(options.getKey(KeyMapping.SNEAK).isReleased())
+            player.setSneaking(false);
     }
     
     
-    public void setTargetPlayer(ClientPlayer targetPlayer){
-        this.targetPlayer = targetPlayer;
+    public void setTargetPlayer(LocalPlayer player){
+        this.player = player;
     }
     
     

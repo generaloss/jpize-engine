@@ -1,12 +1,11 @@
 package pize.physic;
 
-import pize.math.vecmath.tuple.Tuple3f;
 import pize.math.vecmath.vector.Vec3f;
 
 public class BoxBody implements Cloneable{
 
     private final BoundingBox boundingBox;
-    private final Vec3f position;
+    protected final Vec3f position;
 
     public BoxBody(BoundingBox boundingBox){
         this.boundingBox = boundingBox;
@@ -19,11 +18,11 @@ public class BoxBody implements Cloneable{
     }
 
 
-    public Tuple3f getMin(){
+    public Vec3f getMin(){
         return position.clone().add(boundingBox.getMin());
     }
 
-    public Tuple3f getMax(){
+    public Vec3f getMax(){
         return position.clone().add(boundingBox.getMax());
     }
 

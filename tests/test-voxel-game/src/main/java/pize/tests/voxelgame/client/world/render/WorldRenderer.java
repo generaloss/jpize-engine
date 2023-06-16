@@ -1,13 +1,8 @@
 package pize.tests.voxelgame.client.world.render;
 
-import pize.tests.voxelgame.Main;
-import pize.tests.voxelgame.client.chunk.ClientChunk;
-import pize.tests.voxelgame.client.chunk.mesh.ChunkMesh;
-import pize.tests.voxelgame.client.control.GameCamera;
-import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
 import pize.Pize;
-import pize.activity.Disposable;
-import pize.activity.Resizable;
+import pize.app.Disposable;
+import pize.app.Resizable;
 import pize.files.Resource;
 import pize.graphics.gl.Gl;
 import pize.graphics.gl.Target;
@@ -15,6 +10,13 @@ import pize.graphics.texture.Texture;
 import pize.graphics.util.*;
 import pize.graphics.util.batch.TextureBatch;
 import pize.math.vecmath.matrix.Matrix4f;
+import pize.tests.voxelgame.Main;
+import pize.tests.voxelgame.client.chunk.ClientChunk;
+import pize.tests.voxelgame.client.chunk.mesh.ChunkMesh;
+import pize.tests.voxelgame.client.control.GameCamera;
+import pize.tests.voxelgame.client.control.PerspectiveType;
+import pize.tests.voxelgame.client.entity.model.PlayerModel;
+import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
 
 import java.util.Map;
 
@@ -31,6 +33,7 @@ public class WorldRenderer implements Disposable, Resizable{
     private final BlockSelector blockSelector;
     private final ChunkBorder chunkBorder;
     private boolean showChunkBorder;
+    private PlayerModel playerModel;
     
     private final Framebuffer3D framebuffer;
     private final Framebuffer2D batchFramebuffer;
@@ -42,15 +45,12 @@ public class WorldRenderer implements Disposable, Resizable{
         batchFramebuffer = new Framebuffer2D();
         
         // Sky
-        skyBox = new SkyBox(
-            "texture/skybox_positive_x.png", "texture/skybox_negative_x.png",
-            "texture/skybox_positive_y.png", "texture/skybox_negative_y.png",
-            "texture/skybox_positive_z.png", "texture/skybox_negative_z.png"
+        skyBox = new SkyBox("texture/skybox/skybox_positive_x.png", "texture/skybox/skybox_negative_x.png", "texture/skybox/skybox_positive_y.png", "texture/skybox/skybox_negative_y.png", "texture/skybox/skybox_positive_z.png", "texture/skybox/skybox_negative_z.png"
         );
         skyViewMatrix = new Matrix4f();
         
         // Chunk
-        atlasTexture = new Texture("texture/minecraft.png");
+        atlasTexture = new Texture("texture/block/minecraft.png");
         chunkShader = new Shader(new Resource("shader/chunk.vert"), new Resource("shader/chunk.frag"));
         chunkMatrix = new Matrix4f();
         
@@ -78,7 +78,9 @@ public class WorldRenderer implements Disposable, Resizable{
     
     
     public void render(){
-        final GameCamera camera = sessionOF.getCamera();
+        final GameCamera camera = sessionOF.getGame().getCamera();
+        if(camera == null)
+            return;
         
         framebuffer.begin();
         {
@@ -97,6 +99,16 @@ public class WorldRenderer implements Disposable, Resizable{
             chunkShader.setUniform("u_brightness", sessionOF.getOptions().getBrightness());
             renderAllChunkMeshes();
             Gl.disable(Target.POLYGON_OFFSET_FILL);
+            
+            // Player
+            if(playerModel == null && sessionOF.getGame().getPlayer() != null)
+                playerModel = new PlayerModel(sessionOF.getGame().getPlayer());
+            
+            if(playerModel != null){
+                playerModel.animate();
+                if(camera.getPerspective() != PerspectiveType.FIRST_PERSON)
+                    playerModel.render(camera);
+            }
             
             // Block Selector and Chunk Border
             lineShader.bind();
@@ -133,7 +145,7 @@ public class WorldRenderer implements Disposable, Resizable{
         if(sessionOF.getGame().getWorld() == null)
             return;
         
-        final GameCamera camera = sessionOF.getCamera();
+        final GameCamera camera = sessionOF.getGame().getCamera();
         final Map<ClientChunk, ChunkMesh> meshes = sessionOF.getGame().getWorld().getChunkManager().getMeshes();
         
         for(ClientChunk chunk: meshes.keySet()){
@@ -167,6 +179,10 @@ public class WorldRenderer implements Disposable, Resizable{
         showChunkBorder(!showChunkBorder);
     }
     
+    public BlockSelector getBlockSelector(){
+        return blockSelector;
+    }
+    
     
     @Override
     public void resize(int width, int height){
@@ -184,6 +200,7 @@ public class WorldRenderer implements Disposable, Resizable{
         blockSelector.dispose();
         framebuffer.dispose();
         batchFramebuffer.dispose();
+        playerModel.dispose();
     }
 
 }

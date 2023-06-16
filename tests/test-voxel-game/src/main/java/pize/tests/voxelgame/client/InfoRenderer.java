@@ -1,14 +1,16 @@
 package pize.tests.voxelgame.client;
 
 import pize.Pize;
-import pize.activity.Disposable;
+import pize.app.Disposable;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.graphics.util.batch.TextureBatch;
+import pize.math.Maths;
 import pize.tests.voxelgame.Main;
 import pize.tests.voxelgame.client.chunk.mesh.ChunkBuilder;
 import pize.tests.voxelgame.client.control.GameCamera;
 import pize.tests.voxelgame.client.control.RayCast;
+import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.options.KeyMapping;
 import pize.tests.voxelgame.client.options.Options;
 import pize.tests.voxelgame.client.world.ClientWorld;
@@ -26,7 +28,8 @@ public class InfoRenderer implements Disposable{
         this.sessionOF = sessionOF;
         
         batch = new TextureBatch(200);
-        font = FontLoader.getDefault();
+        font = FontLoader.loadFnt("font/default.fnt");
+        font.setScale(2);
     }
     
     public Main getSessionOf(){
@@ -38,37 +41,40 @@ public class InfoRenderer implements Disposable{
     }
     
     private void renderInfo(){
-        if(sessionOF.getGame().getWorld() == null)
+        if(sessionOF.getGame().getCamera() == null)
             return;
         
         Options options = sessionOF.getOptions();
         if(!options.isShowFPS())
             return;
         
-        GameCamera camera = sessionOF.getCamera();
-        RayCast rayCast = sessionOF.getRayCast();
+        GameCamera camera = sessionOF.getGame().getCamera();
+        RayCast rayCast = sessionOF.getGame().getRayCast();
         ClientWorld clientWorld = sessionOF.getGame().getWorld();
         ServerWorld serverWorld = sessionOF.getLocalServer().getDefaultWorld();
+        LocalPlayer player = sessionOF.getGame().getPlayer();
         
         infoLineNum = 0;
         hintLineNum = 0;
         
-        batch.setColor(0.5F, 0.4F, 0.1F, 1);
+        font.setScale(Maths.round(Pize.getHeight() / 300F));
         batch.begin();
         
         // INFO
         info("fps: " + Pize.getFPS());
         
-        info("position: " + camera.getX() + ", " + camera.getY() + ", " + camera.getZ());
+        info("position: " + player.getPosition().x + ", " + player.getPosition().y + ", " + player.getPosition().z);
         info("chunk: " + camera.chunkX() + ", " + camera.chunkZ());
         info("Threads:");
-        if(serverWorld != null) info("chunk find tps: " + serverWorld.getChunkProvider().findTps.get());
-        if(serverWorld != null) info("chunk load tps: " + serverWorld.getChunkProvider().loadTps.get());
+        info("chunk find tps: " + serverWorld.getChunkManager().findTps.get());
+        info("chunk load tps: " + serverWorld.getChunkManager().loadTps.get());
         info("chunk build tps: " + clientWorld.getChunkManager().buildTps.get());
         info("chunk check tps: " + clientWorld.getChunkManager().checkTps.get());
         info("meshes: " + clientWorld.getChunkManager().getMeshes().size());
         info("render chunks: " + clientWorld.getChunkManager().getChunks().stream().filter(camera::isChunkSeen).count());
         info("Chunk build time (T/V): " + ChunkBuilder.buildTime + " ms, " + ChunkBuilder.vertexCount + " vertices");
+        info("Player speed: " + LocalPlayer.speed);
+        
         // info("Light time (I/D): " + WorldLight.increaseTime + " ms, " + WorldLight.decreaseTime + " ms");
         // Vec3i imaginaryPos = rayCast.getImaginaryBlockPosition();
         // Vec3i selectedPos = rayCast.getSelectedBlockPosition();
@@ -76,21 +82,32 @@ public class InfoRenderer implements Disposable{
         
         // CTRL HINT
         hint("1, 2, 3 - set render mode");
-        hint("R - show mouse");
+        hint("L - show mouse");
         hint("F3 + G - show chunk border");
         hint(options.getKey(KeyMapping.ZOOM) + " + Mouse Wheel - zoom");
-        hint("L - stop loading chunks");
         
         batch.end();
     }
     
     private void info(String text){
         infoLineNum++;
+        
+        final float scale = font.getScale();
+        batch.setColor(0, 0, 0, 1);
+        font.drawText(batch, text, 25 + scale, Pize.getHeight() - 25 - font.getScaledLineHeight() * infoLineNum - scale);
+        
+        batch.setColor(1, 1, 1, 1);
         font.drawText(batch, text, 25, Pize.getHeight() - 25 - font.getScaledLineHeight() * infoLineNum);
     }
     
     private void hint(String text){
         hintLineNum++;
+        
+        final float scale = font.getScale();
+        batch.setColor(0, 0, 0, 1);
+        font.drawText(batch, text, 25 + scale, 25 - scale + font.getScaledLineHeight() * hintLineNum);
+        
+        batch.setColor(1, 1, 1, 1);
         font.drawText(batch, text, 25, 25 + font.getScaledLineHeight() * hintLineNum);
     }
     

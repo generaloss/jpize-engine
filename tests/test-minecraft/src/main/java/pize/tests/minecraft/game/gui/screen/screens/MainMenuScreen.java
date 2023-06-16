@@ -165,7 +165,7 @@ public class MainMenuScreen extends Screen{
     @Override
     public void render(TextureBatch batch){
         // Panorama
-        camera.getRot().yaw -= Pize.getDeltaTime() * 2;
+        camera.getRot().yaw -= Pize.getDt() * 2;
         camera.update();
         skyBox.render(camera);
         // Panorama Overlay

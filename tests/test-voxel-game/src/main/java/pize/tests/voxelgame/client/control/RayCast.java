@@ -1,6 +1,5 @@
 package pize.tests.voxelgame.client.control;
 
-import pize.graphics.camera.Camera3D;
 import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
@@ -9,6 +8,8 @@ import pize.tests.voxelgame.Main;
 import pize.tests.voxelgame.client.block.BlockState;
 import pize.tests.voxelgame.client.block.blocks.Block;
 import pize.tests.voxelgame.client.block.model.BlockFace;
+import pize.tests.voxelgame.client.entity.LocalPlayer;
+import pize.tests.voxelgame.client.world.ClientWorld;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.HEIGHT_IDX;
 
@@ -20,6 +21,7 @@ public class RayCast{
     private final Vec3i selectedBlock, imaginarySelectedBlock;
     private BlockFace selectedFace;
     private boolean selected;
+    private ClientWorld world;
     
     public RayCast(Main sessionOF, float length){
         this.sessionOF = sessionOF;
@@ -33,29 +35,38 @@ public class RayCast{
         return sessionOF;
     }
     
+    
+    public void setWorld(ClientWorld world){
+        this.world = world;
+    }
+    
+    
     public void update(){
-        Camera3D cam = sessionOF.getCamera();
-        Vec3f start = cam.getPos();
-        Vec3f dir = cam.getRot().direction();
+        if(world == null)
+            return;
         
-        Vec3i step = new Vec3i(
+        final LocalPlayer player = sessionOF.getGame().getPlayer();
+        final Vec3f start = player.getPosition().clone().add(0, player.getEyes(), 0);
+        final Vec3f dir = player.getRotation().direction();
+        
+        final Vec3i step = new Vec3i(
             Mathc.signum(dir.x),
             Mathc.signum(dir.y),
             Mathc.signum(dir.z)
         );
-        Vec3f delta = new Vec3f(
+        final Vec3f delta = new Vec3f(
             step.x / dir.x,
             step.y / dir.y,
             step.z / dir.z
         );
-        Vec3f tMax = new Vec3f(
+        final Vec3f tMax = new Vec3f(
             Math.min(rayLength / 2, Maths.abs((Maths.frac(start.x) + Math.max(step.x, 0)) / dir.x)),
             Math.min(rayLength / 2, Maths.abs((Maths.frac(start.y) + Math.max(step.y, 0)) / dir.y)),
             Math.min(rayLength / 2, Maths.abs((Maths.frac(start.z) + Math.max(step.z, 0)) / dir.z))
         );
         
         selectedBlock.set(start.xf(), start.yf(), start.zf());
-        Vec3i faceNormal = new Vec3i();
+        final Vec3i faceNormal = new Vec3i();
         
         selected = false;
         while(tMax.len() < rayLength){
@@ -85,7 +96,7 @@ public class RayCast{
             if(selectedBlock.y < 0 || selectedBlock.y > HEIGHT_IDX)
                 break;
             
-            byte block = BlockState.getID(sessionOF.getGame().getWorld().getBlock(selectedBlock.x, selectedBlock.y, selectedBlock.z));
+            final byte block = BlockState.getID(world.getBlock(selectedBlock.x, selectedBlock.y, selectedBlock.z));
             if(block != Block.AIR.ID){
                 selectedFace = BlockFace.fromNormal(faceNormal.x, faceNormal.y, faceNormal.z);
                 imaginarySelectedBlock.set(selectedBlock).add(selectedFace.x, selectedFace.y, selectedFace.z);

@@ -1,6 +1,7 @@
 package pize.tests.voxelgame.client.block.blocks;
 
 import pize.tests.voxelgame.client.block.BlockProperties;
+import pize.tests.voxelgame.client.block.model.BlockShape;
 import pize.tests.voxelgame.client.block.model.BlockTextureRegion;
 
 public class Air extends BlockProperties{
@@ -28,5 +29,10 @@ public class Air extends BlockProperties{
     public final int getOpacity(){
         return 0;
     }
-
+    
+    @Override
+    public BlockShape getShape(){
+        return new BlockShape();
+    }
+    
 }

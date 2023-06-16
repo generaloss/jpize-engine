@@ -1,7 +1,7 @@
 package pize.tests.minecraft.game;
 
-import pize.activity.Disposable;
-import pize.activity.Resizable;
+import pize.app.Disposable;
+import pize.app.Resizable;
 
 public interface Renderer extends Disposable, Resizable{
 

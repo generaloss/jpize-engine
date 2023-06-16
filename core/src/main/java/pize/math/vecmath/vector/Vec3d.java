@@ -1,5 +1,6 @@
 package pize.math.vecmath.vector;
 
+import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.tuple.*;
 
@@ -57,8 +58,12 @@ public class Vec3d extends Tuple3d implements Cloneable{
     }
 
 
-    public double len(){
-        return Math.sqrt(x * x + y * y + z * z);
+    public double len2(){
+        return x * x + y * y + z * z;
+    }
+    
+    public float len(){
+        return Mathc.sqrt(len2());
     }
 
     public Vec3d nor(){

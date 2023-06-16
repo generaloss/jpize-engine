@@ -1,6 +1,6 @@
 package pize.graphics.vertex;
 
-import pize.activity.Disposable;
+import pize.app.Disposable;
 import pize.graphics.gl.BufferUsage;
 import pize.graphics.gl.Primitive;
 
@@ -73,6 +73,15 @@ public class Mesh implements Disposable{
     public void setIndices(int[] indices){
         this.indices = indices;
         ebo.setData(indices, BufferUsage.DYNAMIC_DRAW);
+    }
+    
+    
+    public VertexBuffer getVBO(){
+        return vbo;
+    }
+    
+    public VertexArray getVAO(){
+        return vao;
     }
 
 

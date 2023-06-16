@@ -2,7 +2,7 @@ package pize.tests.audio;
 
 import pize.Pize;
 import pize.audio.sound.Sound;
-import pize.activity.Disposable;
+import pize.app.Disposable;
 import pize.graphics.texture.Texture;
 import pize.graphics.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
@@ -86,7 +86,7 @@ public class AudioPlayerUI implements Disposable{
                 sound.setPosition(sliderPosition * sound.getDuration());
             
             // Increase slider position
-            currentPosition = positionSlider.getValue() + 1F / sound.getDuration() * Pize.getDeltaTime() * sound.getPitch();
+            currentPosition = positionSlider.getValue() + 1F / sound.getDuration() * Pize.getDt() * sound.getPitch();
             positionSlider.setValue(currentPosition);
         }
         

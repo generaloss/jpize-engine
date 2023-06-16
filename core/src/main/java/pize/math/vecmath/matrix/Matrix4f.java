@@ -256,13 +256,13 @@ public class Matrix4f implements Matrix4{
         identity();
 
         val[m00] = leftX;
-        val[m10] = upX;
-        val[m20] = forwardX;
         val[m01] = leftY;
-        val[m11] = upY;
-        val[m21] = forwardY;
         val[m02] = leftZ;
+        val[m10] = upX;
+        val[m11] = upY;
         val[m12] = upZ;
+        val[m20] = forwardX;
+        val[m21] = forwardY;
         val[m22] = forwardZ;
 
         mul(new Matrix4f().toTranslated(-posX, -posY, -posZ));

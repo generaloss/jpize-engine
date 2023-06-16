@@ -44,26 +44,33 @@ public class Quaternion{
     public Quaternion setEulerAngles(double yaw, double pitch, double roll){
         return setEulerAnglesRad(Maths.toRad * yaw, Maths.toRad * pitch, Maths.toRad * roll);
     }
+    
+    public Quaternion setEulerAngles(EulerAngle eulerAngles){
+        return setEulerAngles(eulerAngles.yaw, eulerAngles.pitch, eulerAngles.roll);
+    }
 
     public Quaternion setEulerAnglesRad(double yaw, double pitch, double roll){
-        final double hr = roll * 0.5F;
-        final float shr = (float) Math.sin(hr);
-        final float chr = (float) Math.cos(hr);
-        final double hp = pitch * 0.5F;
-        final float shp = (float) Math.sin(hp);
-        final float chp = (float) Math.cos(hp);
-        final double hy = yaw * 0.5F;
-        final float shy = (float) Math.sin(hy);
-        final float chy = (float) Math.cos(hy);
-        final float chy_shp = chy * shp;
-        final float shy_chp = shy * chp;
-        final float chy_chp = chy * chp;
-        final float shy_shp = shy * shp;
+        final double hYaw = yaw * 0.5F;
+        final float hYawSin = (float) Math.sin(hYaw);
+        final float hYawCos = (float) Math.cos(hYaw);
+        
+        final double hPitch = pitch * 0.5F;
+        final float hPitchSin = (float) Math.sin(hPitch);
+        final float hPitchCos = (float) Math.cos(hPitch);
+        
+        final double hRoll = roll * 0.5F;
+        final float hRollSin = (float) Math.sin(hRoll);
+        final float hRollCos = (float) Math.cos(hRoll);
+        
+        final float chy_shp = hYawCos * hPitchSin;
+        final float shy_chp = hYawSin * hPitchCos;
+        final float chy_chp = hYawCos * hPitchCos;
+        final float shy_shp = hYawSin * hPitchSin;
 
-        x = (chy_shp * chr) + (shy_chp * shr); // cos(yaw/2) * sin(pitch/2) * cos(roll/2) + sin(yaw/2) * cos(pitch/2) * sin(roll/2)
-        y = (shy_chp * chr) - (chy_shp * shr); // sin(yaw/2) * cos(pitch/2) * cos(roll/2) - cos(yaw/2) * sin(pitch/2) * sin(roll/2)
-        z = (chy_chp * shr) - (shy_shp * chr); // cos(yaw/2) * cos(pitch/2) * sin(roll/2) - sin(yaw/2) * sin(pitch/2) * cos(roll/2)
-        w = (chy_chp * chr) + (shy_shp * shr); // cos(yaw/2) * cos(pitch/2) * cos(roll/2) + sin(yaw/2) * sin(pitch/2) * sin(roll/2)
+        x = (chy_shp * hRollCos) + (shy_chp * hRollSin); // cos(yaw/2) * sin(pitch/2) * cos(roll/2) + sin(yaw/2) * cos(pitch/2) * sin(roll/2)
+        y = (shy_chp * hRollCos) - (chy_shp * hRollSin); // sin(yaw/2) * cos(pitch/2) * cos(roll/2) - cos(yaw/2) * sin(pitch/2) * sin(roll/2)
+        z = (chy_chp * hRollSin) - (shy_shp * hRollCos); // cos(yaw/2) * cos(pitch/2) * sin(roll/2) - sin(yaw/2) * sin(pitch/2) * cos(roll/2)
+        w = (chy_chp * hRollCos) + (shy_shp * hRollSin); // cos(yaw/2) * cos(pitch/2) * cos(roll/2) + sin(yaw/2) * sin(pitch/2) * sin(roll/2)
         return this;
     }
 

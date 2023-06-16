@@ -9,6 +9,7 @@ import pize.math.vecmath.vector.Vec3i;
 import pize.tests.voxelgame.Main;
 import pize.tests.voxelgame.client.block.blocks.Block;
 import pize.tests.voxelgame.client.control.GameCamera;
+import pize.tests.voxelgame.client.control.PerspectiveType;
 import pize.tests.voxelgame.client.control.PlayerController;
 import pize.tests.voxelgame.client.control.RayCast;
 import pize.tests.voxelgame.client.options.KeyMapping;
@@ -21,6 +22,7 @@ public class GameController{
     private final Main sessionOF;
     private final PlayerController playerController;
     private float zoomFOV;
+    private boolean f3Plus;
     
     public GameController(Main sessionOF){
         this.sessionOF = sessionOF;
@@ -39,8 +41,8 @@ public class GameController{
     
     private void debugControl(){
         final Options options = sessionOF.getOptions();
-        final GameCamera camera = sessionOF.getCamera();
-        final RayCast rayCast = sessionOF.getRayCast();
+        final GameCamera camera = sessionOF.getGame().getCamera();
+        final RayCast rayCast = sessionOF.getGame().getRayCast();
         final ClientWorld world = sessionOF.getGame().getWorld();
         
         // EXIT
@@ -86,12 +88,22 @@ public class GameController{
         }
         
         // SHOW MOUSE
-        if(Key.R.isDown())
+        if(Key.L.isDown())
             playerController.getRotationController().switchShowMouse();
         
         // CHUNK BORDER
-        if(Key.F3.isPressed() && Key.G.isDown())
+        if(Key.F3.isPressed() && Key.G.isDown()){
             sessionOF.getRenderer().getWorldRenderer().toggleShowChunkBorder();
+            f3Plus = true;
+        }
+        
+        // INFO
+        if(Key.F3.isReleased()){
+            if(!f3Plus)
+                options.setShowFPS(!options.isShowFPS());
+            
+            f3Plus = false;
+        }
         
         // ZOOM
         if(options.getKey(KeyMapping.ZOOM).isDown())
@@ -108,6 +120,15 @@ public class GameController{
         // PING SERVER
         if(Key.P.isDown())
             sessionOF.getGame().sendPacket(new PacketPing(System.currentTimeMillis()));
+        
+        // TOGGLE PERSPECTIVE
+        if(options.getKey(KeyMapping.TOGGLE_PERSPECTIVE).isDown()){
+            switch(camera.getPerspective()){
+                case FIRST_PERSON -> camera.setPerspective(PerspectiveType.THIRD_PERSON_BACK);
+                case THIRD_PERSON_BACK -> camera.setPerspective(PerspectiveType.THIRD_PERSON_FRONT);
+                case THIRD_PERSON_FRONT -> camera.setPerspective(PerspectiveType.FIRST_PERSON);
+            }
+        }
     }
     
     

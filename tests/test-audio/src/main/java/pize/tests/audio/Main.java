@@ -4,11 +4,11 @@ import pize.Pize;
 import pize.audio.io.WavFile;
 import pize.audio.sound.Sound;
 import pize.audio.util.SoundGenerator;
-import pize.activity.ActivityListener;
+import pize.app.AppAdapter;
 import pize.files.Resource;
 import pize.io.glfw.Key;
 
-public class Main implements ActivityListener{
+public class Main extends AppAdapter{
 
     public static void main(String[] args){
         Pize.create("Audio", 700, 150);
@@ -56,10 +56,7 @@ public class Main implements ActivityListener{
 
         AudioPlayerUI.update();
     }
-
-    @Override
-    public void resize(int width, int height){ }
-
+    
     @Override
     public void dispose(){
         sound.dispose();

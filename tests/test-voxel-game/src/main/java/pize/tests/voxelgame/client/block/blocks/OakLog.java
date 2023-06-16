@@ -1,7 +1,9 @@
 package pize.tests.voxelgame.client.block.blocks;
 
 import pize.graphics.texture.Region;
+import pize.physic.BoundingBox;
 import pize.tests.voxelgame.client.block.BlockProperties;
+import pize.tests.voxelgame.client.block.model.BlockShape;
 import pize.tests.voxelgame.client.block.model.BlockTextureRegion;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.MAX_LIGHT_LEVEL;
@@ -37,6 +39,11 @@ public class OakLog extends BlockProperties{
     @Override
     public final int getOpacity(){
         return MAX_LIGHT_LEVEL;
+    }
+    
+    @Override
+    public BlockShape getShape(){
+        return new BlockShape(new BoundingBox(0, 0, 0, 1, 1, 1));
     }
     
 }

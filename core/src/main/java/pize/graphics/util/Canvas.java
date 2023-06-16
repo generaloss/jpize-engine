@@ -1,7 +1,7 @@
 package pize.graphics.util;
 
 import pize.Pize;
-import pize.activity.Disposable;
+import pize.app.Disposable;
 import pize.graphics.camera.OrthographicCamera;
 import pize.graphics.gl.Gl;
 import pize.graphics.gl.Target;

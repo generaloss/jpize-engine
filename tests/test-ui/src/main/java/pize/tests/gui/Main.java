@@ -1,7 +1,7 @@
 package pize.tests.gui;
 
 import pize.Pize;
-import pize.activity.ActivityListener;
+import pize.app.AppAdapter;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
 import pize.graphics.gl.Gl;
@@ -15,7 +15,7 @@ import pize.gui.components.RegionMesh;
 import pize.gui.constraint.Constraint;
 import pize.io.glfw.Key;
 
-public class Main implements ActivityListener{
+public class Main extends AppAdapter{
 
     public static void main(String[] args){
         Pize.create("GUI", 480, 360);
@@ -61,10 +61,7 @@ public class Main implements ActivityListener{
         layout.render(batch);
         batch.end();
     }
-
-    @Override
-    public void resize(int w,int h){ }
-
+    
     @Override
     public void dispose(){
         batch.dispose();

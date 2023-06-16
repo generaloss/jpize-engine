@@ -1,6 +1,6 @@
 package pize.graphics.gl;
 
-import pize.activity.Disposable;
+import pize.app.Disposable;
 
 public abstract class GlObject implements Disposable{
     

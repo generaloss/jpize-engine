@@ -2,9 +2,7 @@ package pize.net.security;
 
 import pize.files.Resource;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.InputStream;
 
@@ -54,19 +52,19 @@ public class KeyAES{
     }
     
 
-    public synchronized byte[] encrypt(byte[] bytes){
+    public byte[] encrypt(byte[] bytes){
         try{
             return encryptCipher.doFinal(bytes);
-        }catch(Exception e){
+        }catch(IllegalBlockSizeException | BadPaddingException e){
             throw new RuntimeException(e);
         }
     }
 
-    public synchronized byte[] decrypt(byte[] bytes){
+    public byte[] decrypt(byte[] bytes){
         try{
             return decryptCipher.doFinal(bytes);
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(Exception ignored){
+            return null;
         }
     }
     

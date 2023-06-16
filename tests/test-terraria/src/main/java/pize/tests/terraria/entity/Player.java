@@ -26,7 +26,7 @@ public class Player extends Entity{
     public Player(){
         super(new BoundingRect(0, 0, 2, 3));
         rectList = new ArrayList<>();
-        getVelocity().setMax(50);
+        getMotion().setMax(50);
     }
 
 
@@ -54,12 +54,12 @@ public class Player extends Entity{
 
         // Moving
 
-        float delta = Pize.getDeltaTime();
+        float delta = Pize.getDt();
 
         if(Key.A.isPressed())
-            getVelocity().x -= 0.7;
+            getMotion().x -= 0.7;
         if(Key.D.isPressed())
-            getVelocity().x += 0.7;
+            getMotion().x += 0.7;
 
         // Auto jump
 
@@ -68,37 +68,37 @@ public class Player extends Entity{
             rectBody.pos().y++;
 
             if(
-                (getVelocity().x > 0 && isCollideRight
-                && !Collider2D.getCollidedMove(rectBody, new Vec2d(Float.MIN_VALUE, 0), rects).isZero())
+                (getMotion().x > 0 && isCollideRight
+                && !Collider2D.getCollidedMotion(rectBody, new Vec2d(Float.MIN_VALUE, 0), rects).isZero())
             ||
-                (getVelocity().x < 0 && isCollideLeft
-                && !Collider2D.getCollidedMove(rectBody, new Vec2d(-Float.MIN_VALUE, 0), rects).isZero()
+                (getMotion().x < 0 && isCollideLeft
+                && !Collider2D.getCollidedMotion(rectBody, new Vec2d(-Float.MIN_VALUE, 0), rects).isZero()
             ))
-                getVelocity().y = 21;
+                getMotion().y = 21;
         }
 
         // Gravity & Jump
 
-        getVelocity().y -= 2;
+        getMotion().y -= 2;
 
         if(Key.SPACE.isPressed() && isCollideDown)
-            getVelocity().y = 50;
+            getMotion().y = 50;
 
         // Process collisions
 
-        Vec2d velocity = getVelocity().clone().mul(delta);
-        rects = getRects(tileMap, velocity, 0);
-        Vec2d collidedVel = Collider2D.getCollidedMove(this, velocity, rects);
+        Vec2d motion = getMotion().clone().mul(delta);
+        rects = getRects(tileMap, motion, 0);
+        Vec2d collidedVel = Collider2D.getCollidedMotion(this, motion, rects);
 
-        getVelocity().reduce(0.5);
-        getVelocity().collidedAxesToZero(collidedVel);
-        getVelocity().clampToMax();
+        getMotion().reduce(0.5);
+        getMotion().collidedAxesToZero(collidedVel);
+        getMotion().clampToMax();
 
         pos().add(collidedVel);
     }
 
     public boolean isCollide(float x, float y, RectBody[] rects){
-        return Collider2D.getCollidedMove(this, new Vec2d(x, y), rects).isZero();
+        return Collider2D.getCollidedMotion(this, new Vec2d(x, y), rects).isZero();
     }
 
     public RectBody[] getRects(WorldMap map, Tuple2d vel, float padding){

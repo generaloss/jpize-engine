@@ -44,7 +44,7 @@ public class Bloom implements PostProcessEffect{
         blurBuffer.create();
 
         // Shader
-        Resource vertexShader = new Resource("shader/bloom/bloom.vert");
+        final Resource vertexShader = new Resource("shader/bloom/bloom.vert");
 
         brightShader = new Shader(vertexShader, new Resource("shader/bloom/bloom_bright.frag"));
         blurShader = new Shader(vertexShader, new Resource("shader/bloom/bloom_blur.frag"));
@@ -78,7 +78,7 @@ public class Bloom implements PostProcessEffect{
 
         depthBuffer.bind();
         colorBuffer.bind();
-        Gl.clearCDBuffers();
+        Gl.clearColorDepthBuffers();
     }
 
     @Override

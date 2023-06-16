@@ -13,11 +13,13 @@ import java.util.Map;
 public class PlayerList{
     
     private final Server serverOF;
-    private final Map<String, OnlinePlayer> list;
+    private final Map<String, OnlinePlayer> playerNameMap;
+    private final Map<TcpChannel, OnlinePlayer> playerChannelMap;
     
     public PlayerList(Server serverOF){
         this.serverOF = serverOF;
-        list = new HashMap<>();
+        playerNameMap = new HashMap<>();
+        playerChannelMap = new HashMap<>();
     }
     
     public Server getServerOf(){
@@ -26,25 +28,24 @@ public class PlayerList{
     
     
     public Collection<OnlinePlayer> getOnlinePlayers(){
-        return list.values();
+        return playerNameMap.values();
     }
     
     public OnlinePlayer getOnlinePlayer(String name){
-        return list.get(name);
+        return playerNameMap.get(name);
+    }
+    
+    public OnlinePlayer getOnlinePlayer(TcpChannel channel){
+        return playerChannelMap.get(channel);
     }
     
     public boolean isPlayerOnline(String name){
-        return list.containsKey(name);
-    }
-    
-    public OfflinePlayer getOfflinePlayer(String name){ //: NICHE TAK, HARAM
-        return null;
+        return playerNameMap.containsKey(name);
     }
     
     
-    public void connectOnlinePlayer(String name, TcpChannel netChannel){
-        OnlinePlayer onlinePlayer = new OnlinePlayer(serverOF, new PlayerProfile(name), netChannel);
-        list.put(name, onlinePlayer);
+    public void connectOnlinePlayer(String name, TcpChannel channel){
+        final OnlinePlayer onlinePlayer = addOnlinePlayer(name, channel);
         
         OfflinePlayer offlinePlayer = getOfflinePlayer(name);
         String worldInName = offlinePlayer == null ? serverOF.getConfiguration().getDefaultWorldName() : offlinePlayer.getWorldName();
@@ -54,18 +55,39 @@ public class PlayerList{
         
         ServerWorld worldIn = serverOF.getWorldManager().getWorld(worldInName);
         worldIn.getPlayersIn().add(onlinePlayer);
-        worldIn.getChunkProvider().loadInitChunkForPlayer(onlinePlayer);
+        worldIn.getChunkManager().loadInitChunkForPlayer(onlinePlayer);
     }
     
-    public void disconnectOnlinePlayer(OnlinePlayer player){
-        list.remove(player.getProfile().getName());
+    public void disconnectOnlinePlayer(TcpChannel channel){
+        OnlinePlayer onlinePlayer = getOnlinePlayer(channel);
+        PlayerIO.save(onlinePlayer);
         
-        PlayerIO.save(player);
+        removeOnlinePlayer(onlinePlayer);
+    }
+    
+    
+    private OnlinePlayer addOnlinePlayer(String name, TcpChannel channel){
+        final OnlinePlayer onlinePlayer = new OnlinePlayer(serverOF, new PlayerProfile(name), channel);
+        
+        playerNameMap.put(name, onlinePlayer);
+        playerChannelMap.put(channel, onlinePlayer);
+        
+        return onlinePlayer;
+    }
+    
+    private void removeOnlinePlayer(OnlinePlayer player){
+        playerNameMap.remove(player.getProfile().getName());
+        playerChannelMap.remove(player.getChannel());
+    }
+    
+    
+    public OfflinePlayer getOfflinePlayer(String name){ //: NICHE TAK, HARAM
+        return null;
     }
     
     
     public void broadcastPacket(IPacket packet){
-        for(OnlinePlayer player: list.values())
+        for(OnlinePlayer player: playerNameMap.values())
             player.sendPacket(packet);
     }
     

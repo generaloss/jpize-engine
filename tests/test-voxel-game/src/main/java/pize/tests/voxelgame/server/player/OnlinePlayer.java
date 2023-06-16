@@ -9,14 +9,14 @@ import pize.net.tcp.packet.IPacket;
 public class OnlinePlayer{
     
     private final PlayerProfile profile;
-    private final TcpChannel netChannel;
+    private final TcpChannel channel;
     private final Vec3f position;
     private String worldName;
     private int renderDistance;
     
-    public OnlinePlayer(Server serverOF, PlayerProfile profile, TcpChannel netChannel){
+    public OnlinePlayer(Server serverOF, PlayerProfile profile, TcpChannel channel){
         this.profile = profile;
-        this.netChannel = netChannel;
+        this.channel = channel;
         
         position = new Vec3f();
         renderDistance = serverOF.getConfiguration().getMaxRenderDistance();//: 0 //! 0
@@ -24,7 +24,7 @@ public class OnlinePlayer{
     
     
     public void sendPacket(IPacket packet){
-        packet.write(netChannel);
+        packet.write(channel);
     }
     
     
@@ -39,6 +39,14 @@ public class OnlinePlayer{
     
     public PlayerProfile getProfile(){
         return profile;
+    }
+    
+    public String getName(){
+        return profile.getName();
+    }
+    
+    public TcpChannel getChannel(){
+        return channel;
     }
     
     public Vec3f getPosition(){

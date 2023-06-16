@@ -157,7 +157,7 @@ public class Vec2d extends Tuple2d implements Cloneable{
         return Math.acos(Maths.clamp(cos, -1, 1));
     }
 
-    public Vec2d rotDeg(float deg){
+    public Vec2d rotDeg(double deg){
         return rotRad(deg * Maths.toRad);
     }
 

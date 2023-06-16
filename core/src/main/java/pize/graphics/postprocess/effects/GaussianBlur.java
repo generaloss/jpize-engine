@@ -50,7 +50,7 @@ public class GaussianBlur implements PostProcessEffect{
 
         rbo.bind();
         fbo1.bind();
-        Gl.clearCDBuffers();
+        Gl.clearColorDepthBuffers();
     }
 
     @Override

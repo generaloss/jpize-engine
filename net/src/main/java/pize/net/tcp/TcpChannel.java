@@ -21,16 +21,24 @@ public class TcpChannel{
         this.socket = socket;
         this.disconnector = disconnector;
         
-        outStream = new DataOutputStream(socket.getOutputStream());
+        outStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 
         receiveThread = new Thread(()->{
-            try(final DataInputStream inStream = new DataInputStream(socket.getInputStream())){
+            try(final DataInputStream inStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()))){
                 
                 while(!Thread.interrupted() && !closed){
-                    byte[] bytes = inStream.readNBytes(inStream.readInt());
+                    final int length = inStream.readInt();
+                    if(length < 1){
+                        System.out.print("?");
+                        continue;
+                    }
+                    byte[] bytes = inStream.readNBytes(length);
                     
-                    if(encodeKey != null)
+                    if(encodeKey != null){
                         bytes = encodeKey.decrypt(bytes);
+                        if(bytes == null)
+                            continue;
+                    }
                     
                     listener.received(bytes, this);
                 }
@@ -45,7 +53,7 @@ public class TcpChannel{
     }
     
     public void send(byte[] bytes){
-        if(socket.isOutputShutdown())
+        if(closed)
             return;
 
         try{
@@ -54,6 +62,7 @@ public class TcpChannel{
             
             outStream.writeInt(bytes.length);
             outStream.write(bytes);
+            outStream.flush();
         }catch(IOException ignored){ }
     }
     

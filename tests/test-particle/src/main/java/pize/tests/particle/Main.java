@@ -1,12 +1,12 @@
 package pize.tests.particle;
 
 import pize.Pize;
-import pize.activity.ActivityListener;
+import pize.app.AppAdapter;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.util.Canvas;
 import pize.io.glfw.Key;
 
-public class Main implements ActivityListener{
+public class Main extends AppAdapter{
 
     public static void main(String[] args){
         Pize.create("Noise", 1280, 720);

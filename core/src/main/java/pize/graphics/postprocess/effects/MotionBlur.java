@@ -52,7 +52,7 @@ public class MotionBlur implements PostProcessEffect{
 
         fbo1.bind();
         rbo1.bind();
-        Gl.clearCDBuffers();
+        Gl.clearColorDepthBuffers();
     }
 
     @Override
@@ -64,7 +64,7 @@ public class MotionBlur implements PostProcessEffect{
 
         fbo2.bind();
         rbo2.bind();
-        Gl.clearCDBuffers();
+        Gl.clearColorDepthBuffers();
         {
             shader.bind();
             shader.setUniform("u_frame", fbo1.getTexture());
@@ -95,7 +95,7 @@ public class MotionBlur implements PostProcessEffect{
 
         fbo2.bind();
         rbo2.bind();
-        Gl.clearCDBuffers();
+        Gl.clearColorDepthBuffers();
         {
             shader.bind();
             shader.setUniform("u_frame", fbo1.getTexture());

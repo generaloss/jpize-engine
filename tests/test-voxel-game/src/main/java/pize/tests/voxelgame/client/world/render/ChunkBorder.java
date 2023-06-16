@@ -2,7 +2,7 @@ package pize.tests.voxelgame.client.world.render;
 
 import pize.tests.voxelgame.client.control.GameCamera;
 import pize.tests.voxelgame.client.control.RayCast;
-import pize.activity.Disposable;
+import pize.app.Disposable;
 import pize.graphics.gl.Primitive;
 import pize.graphics.gl.Type;
 import pize.graphics.vertex.Mesh;
@@ -53,11 +53,11 @@ public class ChunkBorder implements Disposable{
     
     
     public void render(){
-        final RayCast rayCast = rendererOF.getSessionOf().getRayCast();
+        final RayCast rayCast = rendererOF.getSessionOf().getGame().getRayCast();
         if(!rayCast.isSelected())
             return;
         
-        final GameCamera camera = rendererOF.getSessionOf().getCamera();
+        final GameCamera camera = rendererOF.getSessionOf().getGame().getCamera();
         Vec3f position = new Vec3f(camera.chunkX() * SIZE, 0, camera.chunkZ() * SIZE).sub(camera.getX(), 0, camera.getZ());
         translationMatrix.toTranslated(position);
         

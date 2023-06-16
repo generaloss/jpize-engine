@@ -3,7 +3,7 @@ package pize.tests.voxelgame.client.world;
 import pize.tests.voxelgame.client.chunk.ClientChunk;
 import pize.tests.voxelgame.client.chunk.mesh.ChunkBuilder;
 import pize.tests.voxelgame.client.chunk.mesh.ChunkMesh;
-import pize.tests.voxelgame.client.entity.ClientPlayer;
+import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
 import pize.tests.voxelgame.clientserver.net.packet.PacketChunk;
 import pize.tests.voxelgame.clientserver.net.packet.PacketChunkRequest;
@@ -24,7 +24,7 @@ public class ClientChunkManager extends ChunkManager{
     
     public final PerSecCounter findTps, buildTps, checkTps;
     
-    private final CopyOnWriteArrayList<ChunkPos> requestedChunks;
+    private final ConcurrentHashMap<ChunkPos, Long> requestedChunks;
     private final CopyOnWriteArrayList<ChunkPos> frontiers;
     private final ConcurrentHashMap<ChunkPos, ClientChunk> allChunks;
     private final LinkedList<ClientChunk> toBuildQueue;
@@ -35,7 +35,7 @@ public class ClientChunkManager extends ChunkManager{
     public ClientChunkManager(ClientWorld worldOF){
         this.worldOF = worldOF;
         
-        requestedChunks = new CopyOnWriteArrayList<>();
+        requestedChunks = new ConcurrentHashMap<>();
         frontiers = new CopyOnWriteArrayList<>();
         allChunks = new ConcurrentHashMap<>();
         toBuildQueue = new LinkedList<>();
@@ -83,14 +83,11 @@ public class ClientChunkManager extends ChunkManager{
             ensureFrontier(frontierPos.getNeighbor(0, -1));
             ensureFrontier(frontierPos.getNeighbor(0, 1));
             
-            if(!allChunks.containsKey(frontierPos) && !requestedChunks.contains(frontierPos)){
+            if(!allChunks.containsKey(frontierPos) && !requestedChunks.containsKey(frontierPos)){
                 getWorldOf().getSessionOf().getGame().sendPacket(
-                    new PacketChunkRequest(
-                        getWorldOf().getSessionOf().getProfile().getName(),
-                        frontierPos.x, frontierPos.z
-                    )
+                    new PacketChunkRequest(frontierPos.x, frontierPos.z)
                 );
-                requestedChunks.add(frontierPos);
+                requestedChunks.put(frontierPos, System.currentTimeMillis());
             }
         }
         
@@ -130,11 +127,17 @@ public class ClientChunkManager extends ChunkManager{
                 allMeshes.remove(chunk);
                 toDispose.add(allMeshes.get(chunk));
             }
+        
+        for(Map.Entry<ChunkPos, Long> entry: requestedChunks.entrySet())
+            if(System.currentTimeMillis() - entry.getValue() > 1000)
+                requestedChunks.remove(entry.getKey());
     }
+    
     
     public void updateMeshes(){
         for(Map.Entry<ClientChunk, float[]> entry: built.entrySet()){
             updateMesh(entry.getKey(), entry.getValue());
+            
             built.remove(entry.getKey());
         }
         
@@ -143,6 +146,16 @@ public class ClientChunkManager extends ChunkManager{
             if(mesh != null)
                 mesh.dispose();
         }
+    }
+    
+    public void updateMesh(ClientChunk chunk, float[] vertices){
+        ChunkMesh mesh = allMeshes.get(chunk);
+        if(mesh == null)
+            mesh = new ChunkMesh();
+        
+        mesh.setVertices(vertices);
+        
+        allMeshes.put(chunk, mesh);
     }
     
     
@@ -158,15 +171,6 @@ public class ClientChunkManager extends ChunkManager{
     public void unloadChunk(ClientChunk chunk){
         allChunks.remove(chunk.getPosition());
         updateNeighborChunksEdgesAndSelf(chunk, false);
-    }
-    
-    public void updateMesh(ClientChunk chunk, float[] vertices){
-        ChunkMesh mesh = allMeshes.get(chunk);
-        if(mesh == null)
-            mesh = new ChunkMesh();
-        
-        mesh.setVertices(vertices);
-        allMeshes.put(chunk, mesh);
     }
     
     public void rebuildChunk(ClientChunk chunk, boolean important){
@@ -204,7 +208,7 @@ public class ClientChunkManager extends ChunkManager{
     
     
     private boolean isOffTheGrid(ChunkPos chunkPos){
-        final ClientPlayer player = worldOF.getSessionOf().getGame().getPlayer();
+        final LocalPlayer player = worldOF.getSessionOf().getGame().getPlayer();
         if(player == null)
             return true;
         

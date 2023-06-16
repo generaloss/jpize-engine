@@ -58,7 +58,7 @@ public class ClientChunk extends Chunk{
         
         if(!net)
             chunkManagerOf.getWorldOf().getSessionOf().getGame().sendPacket(
-                new PacketPlayerBlockSet(chunkManagerOf.getWorldOf().getSessionOf().getProfile().getName(), position.x * SIZE + x, y, position.z * SIZE + z, state)
+                new PacketPlayerBlockSet(position.x * SIZE + x, y, position.z * SIZE + z, state)
             );
         
         ChunkBlockUtils.updateNeighborChunksEdges(this, x, y, z, state);

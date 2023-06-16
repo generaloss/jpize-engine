@@ -1,14 +1,14 @@
 package pize.tests.minecraft.run;
 
 import pize.Pize;
-import pize.activity.ActivityListener;
+import pize.app.AppAdapter;
 import pize.graphics.gl.DepthFunc;
 import pize.graphics.gl.Gl;
 import pize.graphics.gl.Target;
 import pize.tests.minecraft.game.Session;
 import pize.tests.minecraft.utils.log.Logger;
 
-public class Minecraft implements ActivityListener{
+public class Minecraft extends AppAdapter{
 
     public static void main(String[] args){
         Pize.create("Minecraft", 925, 640);
@@ -30,7 +30,7 @@ public class Minecraft implements ActivityListener{
 
     @Override
     public void render(){
-        Gl.clearCDBuffers();
+        Gl.clearColorDepthBuffers();
         session.render();
     }
 

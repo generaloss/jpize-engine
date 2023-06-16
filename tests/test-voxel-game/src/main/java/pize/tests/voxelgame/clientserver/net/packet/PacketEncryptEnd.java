@@ -15,26 +15,22 @@ public class PacketEncryptEnd extends IPacket{
     }
     
     
-    public String profileName;
     public byte[] encryptedClientKey;
     
-    public PacketEncryptEnd(String profileName, byte[] encryptedClientKey){
+    public PacketEncryptEnd(byte[] encryptedClientKey){
         this();
-        this.profileName = profileName;
         this.encryptedClientKey = encryptedClientKey;
     }
     
     
     @Override
     protected void write(PacketOutputStream stream) throws IOException{
-        stream.writeUTF(profileName);
-        stream.write(encryptedClientKey);
+        stream.writeByteArray(encryptedClientKey);
     }
     
     @Override
     public void read(PacketInputStream stream) throws IOException{
-        profileName = stream.readUTF();
-        encryptedClientKey = stream.readAllBytes();
+        encryptedClientKey = stream.readByteArray();
     }
     
 }

@@ -2,7 +2,7 @@ package pize.tests.minecraft.game.resources;
 
 import pize.audio.sound.AudioBuffer;
 import pize.audio.sound.Sound;
-import pize.activity.Disposable;
+import pize.app.Disposable;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontCharset;
 import pize.graphics.texture.Pixmap;

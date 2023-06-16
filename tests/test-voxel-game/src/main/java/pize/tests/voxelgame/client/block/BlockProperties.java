@@ -1,6 +1,7 @@
 package pize.tests.voxelgame.client.block;
 
 import pize.tests.voxelgame.client.block.blocks.Block;
+import pize.tests.voxelgame.client.block.model.BlockShape;
 import pize.tests.voxelgame.client.block.model.BlockTextureRegion;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.*;
@@ -48,6 +49,9 @@ public abstract class BlockProperties{
      * (например: 0 - стекло, 15 - камень)
      */
     public abstract int getOpacity();
+    
+    /** Возвращает форму блока для коллизии */
+    public abstract BlockShape getShape();
     
     
     @Override

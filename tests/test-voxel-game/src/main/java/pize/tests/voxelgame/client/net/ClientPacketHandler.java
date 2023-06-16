@@ -1,6 +1,6 @@
 package pize.tests.voxelgame.client.net;
 
-import pize.tests.voxelgame.client.NetClientGame;
+import pize.tests.voxelgame.client.ClientGame;
 import pize.tests.voxelgame.clientserver.net.PlayerProfile;
 import pize.net.tcp.TcpChannel;
 import pize.net.tcp.TcpListener;
@@ -10,13 +10,13 @@ import pize.tests.voxelgame.clientserver.net.packet.*;
 
 public class ClientPacketHandler implements TcpListener{ //} implements NetListener<byte[]>{
     
-    private final NetClientGame gameOF;
+    private final ClientGame gameOF;
     
-    public ClientPacketHandler(NetClientGame gameOF){
+    public ClientPacketHandler(ClientGame gameOF){
         this.gameOF = gameOF;
     }
     
-    public NetClientGame getGameOf(){
+    public ClientGame getGameOf(){
         return gameOF;
     }
     
@@ -59,12 +59,12 @@ public class ClientPacketHandler implements TcpListener{ //} implements NetListe
                 final PacketEncryptStart packet = packetInfo.readPacket(new PacketEncryptStart());
                 
                 byte[] encryptedClientKey = packet.publicServerKey.encrypt(gameOF.getEncryptKey().getKey().getEncoded());
-                new PacketEncryptEnd(profile.getName(), encryptedClientKey).write(sender);
+                new PacketEncryptEnd(encryptedClientKey).write(sender);
                 
                 sender.encode(gameOF.getEncryptKey());// * шифрование *
                 sender.setTcpNoDelay(false);
                 
-                new PacketAuth(profile.getName(), gameOF.getSessionOf().getSessionToken()).write(sender);
+                new PacketAuth(gameOF.getSessionOf().getProfile().getName(), gameOF.getSessionOf().getSessionToken()).write(sender);
             }
             
             case PacketPing.PACKET_ID -> {

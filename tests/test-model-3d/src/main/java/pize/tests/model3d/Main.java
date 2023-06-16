@@ -1,7 +1,7 @@
 package pize.tests.model3d;
 
 import pize.Pize;
-import pize.activity.ActivityListener;
+import pize.app.AppAdapter;
 import pize.files.Resource;
 import pize.io.glfw.Key;
 import pize.math.vecmath.vector.Vec2f;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class Main implements ActivityListener{
+public class Main extends AppAdapter{
 
     public static void main(String[] args){
         Pize.create("Model 3D", 1280, 720);
@@ -99,16 +99,6 @@ public class Main implements ActivityListener{
     public void render(){
         if(Key.ESCAPE.isDown())
             Pize.exit();
-    }
-
-    @Override
-    public void resize(int width, int height){
-
-    }
-
-    @Override
-    public void dispose(){
-
     }
 
 }

@@ -1,4 +1,4 @@
-package pize.activity;
+package pize.app;
 
 public interface Screen{
 

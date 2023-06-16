@@ -1,6 +1,6 @@
 package pize.tests.minecraft.game.resources;
 
-import pize.activity.Disposable;
+import pize.app.Disposable;
 
 public abstract class Resource<T> implements Disposable{
 

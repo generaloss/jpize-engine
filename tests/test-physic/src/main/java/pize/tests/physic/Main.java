@@ -1,7 +1,7 @@
 package pize.tests.physic;
 
 import pize.Pize;
-import pize.activity.ActivityListener;
+import pize.app.AppAdapter;
 import pize.graphics.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
 import pize.graphics.util.TextureUtils;
@@ -10,7 +10,7 @@ import pize.math.vecmath.vector.Vec2d;
 import pize.physic.BoundingRect;
 import pize.physic.Collider2D;
 
-public class Main implements ActivityListener{
+public class Main extends AppAdapter{
 
     public static void main(String[] args){
         Pize.create("Physics",1280,720);
@@ -26,7 +26,7 @@ public class Main implements ActivityListener{
         batch = new TextureBatch();
 
         rect1 = new DynamicRect(new BoundingRect(-25, -25, 25, 25));
-        rect1.vel().setMax(50);
+        rect1.motion().setMax(50);
 
         rect2 = new DynamicRect(new BoundingRect(-100, -100, 100, 100));
         rect2.pos().add(600, 400);
@@ -44,24 +44,21 @@ public class Main implements ActivityListener{
             Pize.window().toggleVsync();
 
         if(Pize.isTouched())
-            rect1.vel().add(new Vec2d(Pize.getCursorPos().sub(rect1.pos())).nor());
-        Vec2d move = Collider2D.getCollidedMove(rect1, rect1.vel(), rect2);
-        rect1.pos().add(move);
-        rect1.vel().clampToMax().reduce(0.3).collidedAxesToZero(move);
+            rect1.motion().add(new Vec2d(Pize.getCursorPos().sub(rect1.pos())).nor());
+        final Vec2d collidedMotion = Collider2D.getCollidedMotion(rect1, rect1.motion(), rect2);
+        rect1.pos().add(collidedMotion);
+        rect1.motion().clampToMax().reduce(0.3).collidedAxesToZero(collidedMotion);
 
         Gl.clearColorBuffer();
         Gl.clearColor(0.2, 0.1, 0.3);
         batch.begin();
         batch.setColor(1, 1, 0, 1);
         batch.draw(TextureUtils.quadTexture(), rect1.getMin().x, rect1.getMin().y, rect1.rect().getWidth(), rect1.rect().getHeight());
-        batch.setColor(0.5F, 0.2F, 0.2F, 1);
+        batch.setColor(0.5, 0.2, 0.2, 1);
         batch.draw(TextureUtils.quadTexture(), rect2.getMin().x, rect2.getMin().y, rect2.rect().getWidth(), rect2.rect().getHeight());
         batch.end();
     }
-
-    @Override
-    public void resize(int w, int h){}
-
+    
     @Override
     public void dispose(){
         batch.dispose();

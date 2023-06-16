@@ -1,7 +1,7 @@
 package pize.graphics.postprocess;
 
-import pize.activity.Disposable;
-import pize.activity.Resizable;
+import pize.app.Disposable;
+import pize.app.Resizable;
 
 public interface PostProcessEffect extends Disposable, Resizable{
 

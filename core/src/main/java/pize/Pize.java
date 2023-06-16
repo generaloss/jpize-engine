@@ -2,9 +2,9 @@ package pize;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import pize.activity.ActivityListener;
-import pize.activity.Context;
-import pize.activity.Screen;
+import pize.app.AppAdapter;
+import pize.app.Context;
+import pize.app.Screen;
 import pize.audio.Audio;
 import pize.graphics.gl.BlendFactor;
 import pize.graphics.gl.Gl;
@@ -35,7 +35,7 @@ public class Pize{
         create(title, width, height, true, true, 0);
     }
 
-    public static void run(ActivityListener listener){
+    public static void run(AppAdapter listener){
         context.begin(listener);
     }
 
@@ -111,9 +111,17 @@ public class Pize{
     public static int getFPS(){
         return context.getFps();
     }
-
-    public static float getDeltaTime(){
-        return context.getDeltaTime().get();
+    
+    public static float getDt(){
+        return context.getRenderDeltaTime();
+    }
+    
+    public static float getUpdateDt(){
+        return context.getUpdateDeltaTime();
+    }
+    
+    public static void setUpdateTPS(float updateTPS){
+        context.setUpdateTPS(updateTPS);
     }
 
 

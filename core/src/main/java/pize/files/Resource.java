@@ -3,8 +3,6 @@ package pize.files;
 import pize.util.io.FastReader;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class Resource{
     
@@ -162,15 +160,6 @@ public class Resource{
     }
     
     
-    public static String readString(String path){
-        try{
-            return new String(Files.readAllBytes(Paths.get(path)));
-        }catch(IOException e){
-            throw new RuntimeException(e);
-        }
-    }
-    
-    
     public boolean exists(){
         return file.exists();
     }
@@ -201,6 +190,15 @@ public class Resource{
     @Override
     public String toString(){
         return getAbsolutePath();
+    }
+    
+    
+    public static String readString(String filepath, boolean external){
+        return new Resource(filepath, external).readString();
+    }
+    
+    public static String readString(String filepath){
+        return readString(filepath, false);
     }
     
 }

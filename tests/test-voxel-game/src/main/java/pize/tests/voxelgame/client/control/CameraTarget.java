@@ -7,6 +7,6 @@ public interface CameraTarget{
     
     Tuple3f getPosition();
     
-    EulerAngle getDirection();
+    EulerAngle getRotation();
     
 }

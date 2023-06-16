@@ -4,7 +4,7 @@ import pize.math.vecmath.vector.Vec3d;
 
 public class Collider3D{
 
-    public static Vec3d getCollidedMove(BoxBody body, Vec3d move, BoxBody... boxes){
+    public static Vec3d getCollidedMotion(BoxBody body, Vec3d move, BoxBody... boxes){
         if(move.isZero())
             return move;
 
@@ -13,26 +13,26 @@ public class Collider3D{
         double x = move.x;
         for(BoxBody box: boxes)
             if(x != 0)
-                x = offsetX(x, body, box);
+                x = distX(x, body, box);
         body.getPosition().x += x;
 
         double y = move.y;
         for(BoxBody box: boxes)
             if(y != 0)
-                y = offsetY(y, body, box);
+                y = distY(y, body, box);
         body.getPosition().y += y;
 
         double z = move.z;
         for(BoxBody box: boxes)
             if(z != 0)
-                z = offsetZ(z, body, box);
+                z = distZ(z, body, box);
         body.getPosition().z += z;
 
         return new Vec3d(x, y, z);
     }
 
 
-    public static double offsetX(double move, BoxBody body, BoxBody box){
+    private static double distX(double move, BoxBody body, BoxBody box){
         if(move == 0)
             return 0;
         if(box.getMax().y > body.getMin().y && box.getMin().y < body.getMax().y && box.getMax().z > body.getMin().z && box.getMin().z < body.getMax().z)
@@ -51,8 +51,8 @@ public class Collider3D{
             }
         return move;
     }
-
-    public static double offsetY(double move, BoxBody body, BoxBody box){
+    
+    private static double distY(double move, BoxBody body, BoxBody box){
         if(move == 0)
             return 0;
         if(box.getMax().x > body.getMin().x && box.getMin().x < body.getMax().x && box.getMax().z > body.getMin().z && box.getMin().z < body.getMax().z)
@@ -71,8 +71,8 @@ public class Collider3D{
             }
         return move;
     }
-
-    public static double offsetZ(double move, BoxBody body, BoxBody box){
+    
+    private static double distZ(double move, BoxBody body, BoxBody box){
         if(move == 0)
             return 0;
         if(box.getMax().x > body.getMin().x && box.getMin().x < body.getMax().x && box.getMax().y > body.getMin().y && box.getMin().y < body.getMax().y)

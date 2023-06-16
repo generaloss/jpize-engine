@@ -1,6 +1,6 @@
 package pize.graphics.camera;
 
-import pize.activity.Resizable;
+import pize.app.Resizable;
 import pize.graphics.texture.Sizable;
 import pize.math.vecmath.matrix.Matrix4f;
 

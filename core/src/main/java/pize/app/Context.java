@@ -1,4 +1,4 @@
-package pize.activity;
+package pize.app;
 
 import pize.audio.Audio;
 import pize.graphics.gl.Gl;
@@ -18,6 +18,7 @@ import pize.io.window.Window;
 import pize.util.Utils;
 import pize.util.time.DeltaTimeCounter;
 import pize.util.time.PerSecCounter;
+import pize.util.time.TickGenerator;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
@@ -30,7 +31,9 @@ public class Context{
     private final Mouse mouse;
 
     private final PerSecCounter fpsCounter;
-    private final DeltaTimeCounter deltaTimeCounter;
+    private final DeltaTimeCounter renderDeltaTime, updateDeltaTime;
+    private TickGenerator updateTickGen;
+    private float initialUpdateTPS;
 
     private Screen screen;
 
@@ -44,12 +47,13 @@ public class Context{
 
         fpsCounter = new PerSecCounter();
         fpsCounter.count();
-        deltaTimeCounter = new DeltaTimeCounter();
-        deltaTimeCounter.update();
+        renderDeltaTime = new DeltaTimeCounter();
+        renderDeltaTime.update();
+        updateDeltaTime = new DeltaTimeCounter();
     }
 
 
-    public void begin(ActivityListener listener){
+    public void begin(AppAdapter listener){
         listener.init();
 
         window.show();
@@ -58,9 +62,23 @@ public class Context{
             listener.resize(width, height);
             Gl.viewport(width, height);
         });
+        
+        if(initialUpdateTPS != 0){
+            updateTickGen = new TickGenerator(initialUpdateTPS){
+                @Override
+                public void run(){
+                    updateDeltaTime.update();
+                    listener.update();
+                }
+            };
+            updateTickGen.startAsync();
+        }
 
         while(!window.closeRequest() && !exitRequest)
             draw(listener);
+        
+        if(updateTickGen != null)
+            updateTickGen.stop();
     
         Shader.unbind();
         VertexArray.unbind();
@@ -81,14 +99,14 @@ public class Context{
         glfwTerminate();
     }
     
-    private void draw(ActivityListener listener){
-        fpsCounter.count();
-        deltaTimeCounter.update();
-        
+    private void draw(AppAdapter listener){
         glfwPollEvents();
         
         if(screen != null)
             screen.render();
+        
+        fpsCounter.count();
+        renderDeltaTime.update();
         listener.render();
         
         mouse.reset();
@@ -108,10 +126,21 @@ public class Context{
         return fpsCounter.get();
     }
 
-    public DeltaTimeCounter getDeltaTime(){
-        return deltaTimeCounter;
+    public float getRenderDeltaTime(){
+        return renderDeltaTime.get();
     }
-
+    
+    public float getUpdateDeltaTime(){
+        return updateDeltaTime.get();
+    }
+    
+    public void setUpdateTPS(float updateTPS){
+        if(updateTickGen != null)
+            updateTickGen.setTPS(updateTPS);
+        else
+            initialUpdateTPS = updateTPS;
+    }
+    
 
     public Audio getAudio(){
         return audio;

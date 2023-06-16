@@ -5,34 +5,32 @@ import pize.net.security.KeyAES;
 import pize.net.tcp.TcpClient;
 import pize.net.tcp.packet.IPacket;
 import pize.tests.voxelgame.Main;
-import pize.tests.voxelgame.client.control.FirstPersonPlayerCameraTarget;
-import pize.tests.voxelgame.client.entity.ClientPlayer;
+import pize.tests.voxelgame.client.control.GameCamera;
+import pize.tests.voxelgame.client.control.RayCast;
+import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.net.ClientPacketHandler;
 import pize.tests.voxelgame.client.world.ClientWorld;
 import pize.tests.voxelgame.clientserver.net.packet.PacketLogin;
 import pize.tests.voxelgame.clientserver.net.packet.PacketMove;
-import pize.util.time.TickGenerator;
 
-public class NetClientGame{
+public class ClientGame{
     
     private final Main sessionOF;
     private final TcpClient client;
     private final KeyAES encryptKey;
     private ClientWorld world;
-    private ClientPlayer player;
+    private final RayCast rayCast;
+    private LocalPlayer player;
+    private GameCamera camera;
     
-    public NetClientGame(Main sessionOF){
+    
+    public ClientGame(Main sessionOF){
         this.sessionOF = sessionOF;
         
         client = new TcpClient(new ClientPacketHandler(this));
-        
         encryptKey = new KeyAES(256);
         
-        new TickGenerator(20){
-            public void run(){
-                tick();
-            }
-        }.startAsync();
+        rayCast = new RayCast(sessionOF, 2000);
     }
     
     public Main getSessionOf(){
@@ -46,27 +44,39 @@ public class NetClientGame{
         sendPacket( new PacketLogin(sessionOF.getVersion().getID(), sessionOF.getProfile().getName()) );
     }
     
-    private void tick(){
-        if(player != null && player.checkPosition())
-            sendPacket(new PacketMove(sessionOF.getProfile().getName(), player.getPosition()));
-    }
-    
-    public void update(){
+    public void tick(){
         if(world == null || player == null)
             return;
         
+        if(player.checkPositionChange())
+            sendPacket(new PacketMove(player.getPosition()));
+    }
+    
+    public void update(){
+        if(camera == null)
+            return;
+        
         world.getChunkManager().updateMeshes();
-        sessionOF.getRayCast().update();
+        rayCast.update();
+        player.update();
+        camera.update();
     }
     
     public void createNetClientWorld(String worldName){
         world = new ClientWorld(sessionOF, worldName);
+        rayCast.setWorld(world);
     }
     
     public void spawnPlayer(Vec3f position){
-        player = new ClientPlayer();
+        if(world == null)
+            return;
+        
+        player = new LocalPlayer(world);
         player.getPosition().set(position);
-        sessionOF.getCamera().setTarget(new FirstPersonPlayerCameraTarget(player));
+        
+        camera = new GameCamera(player, 0.1, 1000, sessionOF.getOptions().getFOV());
+        camera.setDistance(sessionOF.getOptions().getRenderDistance());
+        
         sessionOF.getController().getPlayerController().setTargetPlayer(player);
     }
     
@@ -88,8 +98,16 @@ public class NetClientGame{
         return world;
     }
     
-    public final ClientPlayer getPlayer(){
+    public final LocalPlayer getPlayer(){
         return player;
+    }
+    
+    public final GameCamera getCamera(){
+        return camera;
+    }
+    
+    public final RayCast getRayCast(){
+        return rayCast;
     }
     
 }

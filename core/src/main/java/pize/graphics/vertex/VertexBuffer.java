@@ -24,8 +24,8 @@ public class VertexBuffer extends GlObject{
 
         int pointer = 0;
         for(byte i = 0; i < attributes.length; i++){
-            VertexAttr attribute = attributes[i];
-            int typeSize = attribute.getType().getSize();
+            final VertexAttr attribute = attributes[i];
+            final int typeSize = attribute.getType().getSize();
 
             glVertexAttribPointer(i, attribute.getCount(), attribute.getType().GL, attribute.isNormalize(), vertexSize * typeSize, pointer);
             glEnableVertexAttribArray(i);

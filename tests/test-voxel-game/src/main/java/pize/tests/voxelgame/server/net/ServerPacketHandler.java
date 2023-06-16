@@ -14,6 +14,7 @@ import pize.tests.voxelgame.clientserver.net.PlayerProfile;
 import pize.tests.voxelgame.clientserver.net.packet.*;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.player.OfflinePlayer;
+import pize.tests.voxelgame.server.player.OnlinePlayer;
 import pize.tests.voxelgame.server.player.PlayerList;
 import pize.tests.voxelgame.server.world.ServerWorld;
 
@@ -40,24 +41,25 @@ public class ServerPacketHandler implements TcpListener{
         final PacketInfo packetInfo = Packets.getPacketInfo(bytes);
         if(packetInfo == null)
             return;
+        
+        // System.out.println("RECEIVED PACKET " + packetInfo.getPacketID());
         switch(packetInfo.getPacketID()){
             
             case PacketChunkRequest.PACKET_ID ->{
                 final PacketChunkRequest packet = packetInfo.readPacket(new PacketChunkRequest());
                 
-                getServerOf().getWorldManager().getWorld(
-                    getServerOf().getPlayerList().getOnlinePlayer(packet.playerName).getWorldName()
-                ).getChunkProvider()
-                    .requestedChunk(
-                        serverOF.getPlayerList().getOnlinePlayer(packet.playerName),
-                        new ChunkPos(packet.chunkX, packet.chunkZ)
-                    );
+                final OnlinePlayer player = playerList.getOnlinePlayer(sender);
+                
+                getServerOf().getWorldManager().getWorld(player.getWorldName()).getChunkManager().requestedChunk(
+                    player,
+                    new ChunkPos(packet.chunkX, packet.chunkZ)
+                );
             }
             
             case PacketPlayerBlockSet.PACKET_ID ->{
                 final PacketPlayerBlockSet packet = packetInfo.readPacket(new PacketPlayerBlockSet());
                 serverOF.getWorldManager().getWorld(
-                    serverOF.getPlayerList().getOnlinePlayer(packet.playerName).getWorldName()
+                    playerList.getOnlinePlayer(sender).getWorldName()
                 ).setBlock(packet.x, packet.y, packet.z, packet.state, false);
             }
             
@@ -69,11 +71,11 @@ public class ServerPacketHandler implements TcpListener{
                     return;
                 }
                 
-                System.out.println("[SERVER]: Player '" + packet.profileName + "' is licensed");
+                System.out.println("[SERVER]: Player '" + playerList.getOnlinePlayer(sender) + "' is licensed");
                 
                 //     * выключить режим ожидания аутентификации для данного клиента *
                 
-                final OfflinePlayer offlinePlayer = serverOF.getPlayerList().getOfflinePlayer(packet.profileName);
+                final OfflinePlayer offlinePlayer = playerList.getOfflinePlayer(packet.profileName);
                 if(offlinePlayer != null)
                     new PacketPlayerSpawnInfo(offlinePlayer.getWorldName(), offlinePlayer.getPosition()).write(sender);
                 
@@ -91,12 +93,12 @@ public class ServerPacketHandler implements TcpListener{
             case PacketEncryptEnd.PACKET_ID ->{
                 final PacketEncryptEnd packet = packetInfo.readPacket(new PacketEncryptEnd());
                 
-                KeyAES decryptedClientKey = new KeyAES(encryptInitKey.decrypt(packet.encryptedClientKey));
+                final KeyAES decryptedClientKey = new KeyAES(encryptInitKey.decrypt(packet.encryptedClientKey));
                 sender.encode(decryptedClientKey);// * шифрование *
                 
                 // * включить режим ожидания аутентификации для данного клиента *
                 
-                System.out.println("[SERVER]: Player '" + packet.profileName + "' encrypted");
+                System.out.println("[SERVER]: Player '" + playerList.getOnlinePlayer(sender).getProfile().getName() + "' encrypted");
             }
             
             case PacketLogin.PACKET_ID ->{
@@ -126,23 +128,27 @@ public class ServerPacketHandler implements TcpListener{
             
             case PacketMove.PACKET_ID ->{
                 final PacketMove packet = packetInfo.readPacket(new PacketMove());
-                playerList.getOnlinePlayer(packet.playerName).getPosition().set(packet.position);
+                playerList.getOnlinePlayer(sender).getPosition().set(packet.position);
             }
             
             case PacketPing.PACKET_ID -> packetInfo.readPacket(new PacketPing()).write(sender);
             
             case PacketRenderDistance.PACKET_ID ->{
                 final PacketRenderDistance packet = packetInfo.readPacket(new PacketRenderDistance());
-                playerList.getOnlinePlayer(packet.playerName).setRenderDistance(packet.renderDistance);
+                playerList.getOnlinePlayer(sender).setRenderDistance(packet.renderDistance);
             }
             
         }
     }
     
     @Override
-    public void connected(TcpChannel channel){ }
+    public void connected(TcpChannel channel){
+    
+    }
     
     @Override
-    public void disconnected(TcpChannel channel){ }
+    public void disconnected(TcpChannel channel){
+        serverOF.getPlayerList().disconnectOnlinePlayer(channel);
+    }
     
 }

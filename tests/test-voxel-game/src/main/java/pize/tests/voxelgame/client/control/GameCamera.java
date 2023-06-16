@@ -1,21 +1,38 @@
 package pize.tests.voxelgame.client.control;
 
-import pize.tests.voxelgame.clientserver.chunk.Chunk;
-import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
 import pize.graphics.camera.PerspectiveCamera;
 import pize.math.Maths;
+import pize.tests.voxelgame.client.entity.LocalPlayer;
+import pize.tests.voxelgame.clientserver.chunk.Chunk;
+import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.HEIGHT;
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.SIZE;
 
 public class GameCamera extends PerspectiveCamera{
 
+    private final LocalPlayer playerOF;
+    
     private CameraTarget target;
+    private final CameraTarget firstPerson, thirdPersonFront, thirdPersonBack;
+    private PerspectiveType perspective;
 
-    public GameCamera(double near, double far, double fieldOfView){
+    public GameCamera(LocalPlayer playerOF, double near, double far, double fieldOfView){
         super(near, far, fieldOfView);
+        this.playerOF = playerOF;
+        
+        firstPerson = new FirstPersonPlayerCameraTarget(playerOF);
+        thirdPersonFront = new ThirdPersonFrontCameraTarget(playerOF);
+        thirdPersonBack = new ThirdPersonBackCameraTarget(playerOF);
+        
+        perspective = PerspectiveType.FIRST_PERSON;
+        target = firstPerson;
         
         setImaginaryOrigins(true, false, true);
+    }
+    
+    public LocalPlayer getPlayerOf(){
+        return playerOF;
     }
 
 
@@ -24,7 +41,10 @@ public class GameCamera extends PerspectiveCamera{
             return;
             
         getPos().set(target.getPosition());
-        getRot().set(target.getDirection());
+        getRot().set(target.getRotation());
+        
+        if(playerOF.isOnGround())
+            setFov(70);
         
         super.update();
     }
@@ -35,12 +55,17 @@ public class GameCamera extends PerspectiveCamera{
     }
     
     
-    public void setTarget(CameraTarget target){
-        this.target = target;
+    public PerspectiveType getPerspective(){
+        return perspective;
     }
     
-    public CameraTarget getTarget(){
-        return target;
+    public void setPerspective(PerspectiveType perspective){
+        this.perspective = perspective;
+        switch(perspective){
+            case FIRST_PERSON -> target = firstPerson;
+            case THIRD_PERSON_BACK -> target = thirdPersonBack;
+            case THIRD_PERSON_FRONT -> target = thirdPersonFront;
+        }
     }
     
     

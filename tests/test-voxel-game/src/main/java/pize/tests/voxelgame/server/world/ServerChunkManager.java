@@ -62,7 +62,7 @@ public class ServerChunkManager extends ChunkManager{
     
     
     public void loadInitChunkForPlayer(OnlinePlayer player){
-        ChunkPos chunkPos = new ChunkPos(
+        final ChunkPos chunkPos = new ChunkPos(
             getChunkPos(player.getPosition().xf()),
             getChunkPos(player.getPosition().zf())
         );
@@ -98,7 +98,7 @@ public class ServerChunkManager extends ChunkManager{
         newFrontiers.add(chunkPos);
     }
     
-
+    
     private void loadChunks(){
         for(ChunkPos chunkPos: loadQueue){
             loadQueue.remove(chunkPos);
@@ -108,7 +108,7 @@ public class ServerChunkManager extends ChunkManager{
             loadChunk(chunkPos);
         }
     }
-
+    
     public void checkChunks(){
         for(ServerChunk chunk: allChunks.values())
             if(isOffTheGrid(chunk.getPosition()))
@@ -117,10 +117,9 @@ public class ServerChunkManager extends ChunkManager{
     
     public void loadChunk(ChunkPos chunkPos){
         final ServerChunk chunk = new ServerChunk(this, chunkPos);
-        allChunks.put(chunkPos, chunk);
         DefaultGenerator.getInstance().generate(chunk);
-        
         updateNeighborChunksEdgesAndSelf(chunk, true);
+        allChunks.put(chunkPos, chunk);
         
         if(requestedChunks.containsKey(chunkPos)){
             requestedChunks.get(chunkPos).sendPacket(chunk.getStorage().getPacket());

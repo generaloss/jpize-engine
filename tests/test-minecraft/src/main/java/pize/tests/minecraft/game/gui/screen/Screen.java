@@ -1,7 +1,7 @@
 package pize.tests.minecraft.game.gui.screen;
 
-import pize.activity.Disposable;
-import pize.activity.Resizable;
+import pize.app.Disposable;
+import pize.app.Resizable;
 import pize.graphics.util.batch.TextureBatch;
 import pize.io.glfw.Key;
 import pize.tests.minecraft.game.Session;

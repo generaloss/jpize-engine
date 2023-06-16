@@ -1,7 +1,7 @@
 package pize.graphics.postprocess.effects;
 
 import pize.Pize;
-import pize.activity.Disposable;
+import pize.app.Disposable;
 import pize.files.Resource;
 import pize.graphics.gl.*;
 import pize.graphics.postprocess.FrameBufferObject;

@@ -14,14 +14,12 @@ public class PacketPlayerBlockSet extends IPacket{
         super(PACKET_ID);
     }
     
-    public String playerName;
     public int x, y, z;
     public short state;
     
-    public PacketPlayerBlockSet(String playerName, int x, int y, int z, short state){
+    public PacketPlayerBlockSet(int x, int y, int z, short state){
         this();
         
-        this.playerName = playerName;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -31,7 +29,6 @@ public class PacketPlayerBlockSet extends IPacket{
     
     @Override
     protected void write(PacketOutputStream stream) throws IOException{
-        stream.writeUTF(playerName);
         stream.writeInt(x);
         stream.writeInt(y);
         stream.writeInt(z);
@@ -40,7 +37,6 @@ public class PacketPlayerBlockSet extends IPacket{
     
     @Override
     public void read(PacketInputStream stream) throws IOException{
-        playerName = stream.readUTF();
         x = stream.readInt();
         y = stream.readInt();
         z = stream.readInt();

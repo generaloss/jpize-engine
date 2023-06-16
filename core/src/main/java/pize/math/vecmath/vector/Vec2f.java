@@ -45,8 +45,12 @@ public class Vec2f extends Tuple2f implements Cloneable{
     }
 
 
-    public double len(){
-        return Math.sqrt(x * x + y * y);
+    public float len2(){
+        return x * x + y * y;
+    }
+    
+    public float len(){
+        return Mathc.sqrt(len2());
     }
 
     public Vec2f nor(){
@@ -157,7 +161,7 @@ public class Vec2f extends Tuple2f implements Cloneable{
         return Mathc.acos(Maths.clamp(cos, -1, 1));
     }
 
-    public Vec2f rotDeg(float degrees){
+    public Vec2f rotDeg(double degrees){
         return rotRad(degrees * Maths.toRad);
     }
 

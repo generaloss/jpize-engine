@@ -13,8 +13,9 @@ public class Maths{
     public static final float sqrt2 = Mathc.sqrt(2);
     public static final float sqrt3 = Mathc.sqrt(3);
     public static final float sqrt4 = Mathc.sqrt(4);
-    public static final int SECOND_IN_NANOS = 1000000000;
-
+    public static final float NANOS_IN_SECOND = 1000000000;
+    public static final float NANOS_IN_MS = 1000000;
+    
 
     public static float sinFromCos(float cos){
         return Mathc.sqrt(1 - cos * cos);

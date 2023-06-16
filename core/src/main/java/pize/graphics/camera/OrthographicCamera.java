@@ -1,7 +1,7 @@
 package pize.graphics.camera;
 
 import pize.Pize;
-import pize.activity.Resizable;
+import pize.app.Resizable;
 import pize.math.vecmath.matrix.Matrix4f;
 
 public class OrthographicCamera extends Camera2D implements Resizable{

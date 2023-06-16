@@ -2,12 +2,12 @@ package pize.tests.voxelgame.client;
 
 import pize.tests.voxelgame.Main;
 import pize.tests.voxelgame.client.world.render.WorldRenderer;
-import pize.activity.ActivityListener;
+import pize.app.AppAdapter;
 import pize.graphics.gl.DepthFunc;
 import pize.graphics.gl.Gl;
 import pize.graphics.gl.Target;
 
-public class ClientGameRenderer implements ActivityListener{
+public class ClientGameRenderer extends AppAdapter{
     
     private final Main sessionOF;
     private final WorldRenderer worldRenderer;

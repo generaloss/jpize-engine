@@ -1,6 +1,6 @@
 package pize.graphics.util;
 
-import pize.activity.Disposable;
+import pize.app.Disposable;
 import pize.graphics.gl.GlObject;
 import pize.graphics.gl.QueryTarget;
 

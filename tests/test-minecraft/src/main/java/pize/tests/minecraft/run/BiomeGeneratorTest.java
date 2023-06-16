@@ -1,7 +1,7 @@
 package pize.tests.minecraft.run;
 
 import pize.Pize;
-import pize.activity.ActivityListener;
+import pize.app.AppAdapter;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.color.Color;
@@ -11,7 +11,7 @@ import pize.io.glfw.Key;
 import pize.math.Maths;
 import pize.math.function.FastNoiseLite;
 
-public class BiomeGeneratorTest implements ActivityListener{
+public class BiomeGeneratorTest extends AppAdapter{
     private TextureBatch batch;
     private Texture mapTexture, cellTexture;
 
@@ -46,10 +46,7 @@ public class BiomeGeneratorTest implements ActivityListener{
         batch.draw(cellTexture, Maths.floor(Pize.getX() / pixel16) * pixel16, Maths.floor(Pize.getY() / pixel16) * pixel16, pixel16, pixel16);
         batch.end();
     }
-
-    @Override
-    public void resize(int w, int h){ }
-
+    
     @Override
     public void dispose(){
         mapTexture.dispose();

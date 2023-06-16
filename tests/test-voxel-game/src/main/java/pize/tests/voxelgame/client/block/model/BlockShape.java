@@ -1,7 +1,17 @@
 package pize.tests.voxelgame.client.block.model;
 
-public enum BlockShape{
+import pize.physic.BoundingBox;
+
+public class BlockShape{
     
-    SOLID
+    final BoundingBox[] boxes;
+    
+    public BlockShape(BoundingBox... boxes){
+        this.boxes = boxes;
+    }
+    
+    public BoundingBox[] getBoxes(){
+        return boxes;
+    }
     
 }

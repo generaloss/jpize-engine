@@ -217,12 +217,12 @@ public class ChunkBuilder{
         
         final float shadow = 0.7F;
         
-        addVertex(x  , y   ,z  , region.u2f(), region.v2f(), shadow * ao0); // * light0);
-        addVertex(x+1, y   ,z  , region.u1f(), region.v2f(), shadow * ao1); // * light1);
-        addVertex(x+1, y+1 ,z  , region.u1f(), region.v1f(), shadow * ao2); // * light2);
-        addVertex(x+1, y+1 ,z  , region.u1f(), region.v1f(), shadow * ao2); // * light2);
-        addVertex(x  , y+1 ,z  , region.u2f(), region.v1f(), shadow * ao3); // * light3);
-        addVertex(x  , y   ,z  , region.u2f(), region.v2f(), shadow * ao0); // * light0);
+        addVertex(x  , y  , z  , region.u2f(), region.v2f(), shadow * ao0); // * light0);
+        addVertex(x+1, y  , z  , region.u1f(), region.v2f(), shadow * ao1); // * light1);
+        addVertex(x+1, y+1, z  , region.u1f(), region.v1f(), shadow * ao2); // * light2);
+        addVertex(x+1, y+1, z  , region.u1f(), region.v1f(), shadow * ao2); // * light2);
+        addVertex(x  , y+1, z  , region.u2f(), region.v1f(), shadow * ao3); // * light3);
+        addVertex(x  , y  , z  , region.u2f(), region.v2f(), shadow * ao0); // * light0);
     }
 
     private static void addPzFace(final int x, final int y, final int z, final Region region){

@@ -1,27 +1,28 @@
 package pize.math.util;
 
 import pize.math.Maths;
+import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.vector.Vec3d;
 import pize.math.vecmath.vector.Vec3f;
 
-public class EulerAngle{
+public class EulerAngle implements Cloneable{
 
     public double pitch, yaw, roll;
+    
+    public EulerAngle(){ }
 
-
-    public EulerAngle(){}
-
-    public EulerAngle(double pitch, double yaw){
-        this.pitch = pitch;
-        this.yaw = yaw;
+    public EulerAngle(double yaw, double pitch){
+        set(yaw, pitch);
     }
 
     public EulerAngle(double yaw, double pitch, double roll){
-        this.pitch = pitch;
-        this.yaw = yaw;
-        this.roll = roll;
+        set(yaw, pitch, roll);
     }
-
+    
+    public EulerAngle(EulerAngle eulerAngle){
+        set(eulerAngle);
+    }
+    
 
     public void constrain(){
         if(pitch > 90)
@@ -42,18 +43,30 @@ public class EulerAngle{
         return new Vec3f(Math.cos(pitch) * Math.cos(yaw), Math.sin(pitch), Math.cos(pitch) * Math.sin(yaw));
     }
 
-    public void setDirection(double x, double y, double z){
+    public EulerAngle setDirection(double x, double y, double z){
         yaw = -Math.atan2(x, z) * Maths.toDeg + 90;
         pitch = Math.atan2(y, Math.sqrt(x * x + z * z)) * Maths.toDeg;
+        
+        return this;
+    }
+    
+    public EulerAngle setDirection(Vec3d dir){
+        return setDirection(dir.x, dir.y, dir.z);
     }
 
-    public void setDirection(Vec3d dir){
-        setDirection(dir.x, dir.y, dir.z);
+    public EulerAngle setDirection(Vec3f dir){
+        return setDirection(dir.x, dir.y, dir.z);
     }
-
-    public void setDirection(Vec3f dir){
-        setDirection(dir.x, dir.y, dir.z);
+    
+    
+    public Matrix4f toMatrix(){
+        return new Matrix4f()
+            //.toRotatedX(roll)
+            //.mul(new Matrix4f()
+            .toRotatedY(yaw) //)
+            .mul(new Matrix4f().toRotatedZ(pitch));
     }
+    
 
     public void set(EulerAngle eulerAngle){
         yaw = eulerAngle.yaw;
@@ -71,34 +84,11 @@ public class EulerAngle{
         this.yaw = yaw;
         this.pitch = pitch;
     }
-
-    public void rotate(EulerAngle eulerAngle){
-        yaw += eulerAngle.yaw;
-        pitch += eulerAngle.pitch;
-        roll += eulerAngle.roll;
-    }
-
-    public void rotate(double yaw, double pitch, double roll){
-        this.yaw += yaw;
-        this.pitch += pitch;
-        this.roll += roll;
-    }
-
-    public void rotate(double yaw, double pitch){
-        this.yaw += yaw;
-        this.pitch += pitch;
-    }
-
-    public void rotatePitch(double pitch){
-        this.pitch += pitch;
-    }
-
-    public void rotateYaw(double yaw){
-        this.yaw += yaw;
-    }
-
-    public void rotateRoll(double roll){
-        this.roll += roll;
+    
+    
+    @Override
+    public EulerAngle clone(){
+        return new EulerAngle(this);
     }
 
 }

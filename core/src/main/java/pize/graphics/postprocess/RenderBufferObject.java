@@ -1,7 +1,7 @@
 package pize.graphics.postprocess;
 
 import pize.Pize;
-import pize.activity.Resizable;
+import pize.app.Resizable;
 import pize.graphics.gl.*;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureParameters;

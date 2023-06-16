@@ -1,14 +1,14 @@
 package pize.tests.voxelgame.client.world.render;
 
-import pize.tests.voxelgame.client.control.GameCamera;
-import pize.tests.voxelgame.client.control.RayCast;
-import pize.activity.Disposable;
+import pize.app.Disposable;
 import pize.graphics.gl.Primitive;
 import pize.graphics.gl.Type;
 import pize.graphics.vertex.Mesh;
 import pize.graphics.vertex.VertexAttr;
 import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.vector.Vec3f;
+import pize.tests.voxelgame.client.control.GameCamera;
+import pize.tests.voxelgame.client.control.RayCast;
 
 public class BlockSelector implements Disposable{
     
@@ -51,12 +51,22 @@ public class BlockSelector implements Disposable{
     
     
     public void render(){
-        final RayCast rayCast = rendererOF.getSessionOf().getRayCast();
+        final RayCast rayCast = rendererOF.getSessionOf().getGame().getRayCast();
         if(!rayCast.isSelected())
             return;
         
-        final GameCamera camera = rendererOF.getSessionOf().getCamera();
+        //: render(rayCast.getSBP());
+        
+        final GameCamera camera = rendererOF.getSessionOf().getGame().getCamera();
         translationMatrix.toTranslated(new Vec3f(rayCast.getSelectedBlockPosition()).sub(camera.getX(), 0, camera.getZ()));
+        
+        rendererOF.lineShader.setUniform("u_model", translationMatrix);
+        mesh.render();
+    }
+    
+    public void render(int x, int y, int z){
+        final GameCamera camera = rendererOF.getSessionOf().getGame().getCamera();
+        translationMatrix.toTranslated(new Vec3f(x, y, z).sub(camera.getX(), 0, camera.getZ()));
         
         rendererOF.lineShader.setUniform("u_model", translationMatrix);
         mesh.render();

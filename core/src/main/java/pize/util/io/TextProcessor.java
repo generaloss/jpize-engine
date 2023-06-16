@@ -1,7 +1,7 @@
 package pize.util.io;
 
 import pize.Pize;
-import pize.activity.Disposable;
+import pize.app.Disposable;
 import pize.io.keyboard.CharCallback;
 import pize.io.keyboard.KeyCallback;
 import pize.io.glfw.Key;

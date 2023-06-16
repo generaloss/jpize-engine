@@ -1,6 +1,6 @@
 package pize.tests.voxelgame.client.chunk.mesh;
 
-import pize.activity.Disposable;
+import pize.app.Disposable;
 import pize.graphics.gl.BufferUsage;
 import pize.graphics.gl.Type;
 import pize.graphics.vertex.VertexArray;
@@ -33,7 +33,5 @@ public class ChunkMesh implements Disposable{
         vbo.dispose();
         vao.dispose();
     }
-
-
-
+    
 }
