@@ -18,7 +18,7 @@ import java.util.Map;
 public class PlayerList{
     
     private final Server server;
-    private final Map<String, Entity> playerMap;
+    private final Map<String, ServerPlayer> playerMap;
     
     public PlayerList(Server server){
         this.server = server;
@@ -30,7 +30,7 @@ public class PlayerList{
     }
     
     
-    public Collection<Entity> getPlayers(){
+    public Collection<ServerPlayer> getPlayers(){
         return playerMap.values();
     }
     
@@ -38,7 +38,7 @@ public class PlayerList{
         return playerMap.containsKey(name);
     }
     
-    public Entity getPlayer(String name){
+    public ServerPlayer getPlayer(String name){
         return playerMap.get(name);
     }
     
@@ -64,34 +64,34 @@ public class PlayerList{
         }
         
         // Add ServerPlayer to list
-        final Entity entity = new Entity(level, connection, name);
-        server.getConnectionManager().setPacketHandler(connection, entity.getConnectionAdapter());
-        entity.teleport(level, spawnPosition);
+        final ServerPlayer serverPlayer = new ServerPlayer(level, connection, name);
+        server.getConnectionManager().setPacketHandler(connection, serverPlayer.getConnectionAdapter());
+        serverPlayer.teleport(level, spawnPosition);
         
-        playerMap.put(name, entity);
+        playerMap.put(name, serverPlayer);
         
         // Send packets to player
-        final PlayerConnectionAdapter connectionAdapter = entity.getConnectionAdapter();
+        final PlayerConnectionAdapter connectionAdapter = serverPlayer.getConnectionAdapter();
         
         new CBPacketSpawnInfo(level.getName(), spawnPosition).write(connection); // spawn init info
         
-        for(Entity anotherPlayer: playerMap.values())
-            if(anotherPlayer != entity)
+        for(ServerPlayer anotherPlayer: playerMap.values())
+            if(anotherPlayer != serverPlayer)
                 connectionAdapter.sendPacket(new CBPacketSpawnPlayer(anotherPlayer)); // all players info
         
         // Load chunks for player
-        level.addEntity(entity);
-        level.getChunkManager().loadInitChunkForPlayer(entity);
+        level.addEntity(serverPlayer);
+        level.getChunkManager().loadInitChunkForPlayer(serverPlayer);
 
         // Send to all player-connection-event packet
-        broadcastToAllExceptPlayer(new CBPacketSpawnPlayer(entity), entity);
+        broadcastPacketExcept(new CBPacketSpawnPlayer(serverPlayer), serverPlayer);
         
-        broadcastMessage("Player " + name + " joined the game");
+        broadcastMessageExcept("Player " + name + " joined the game", serverPlayer);
     }
     
     
-    public void disconnectPlayer(Entity player){
-        broadcastToAllExceptPlayer(new CBPacketRemoveEntity(player), player); // Remove player entity on client
+    public void disconnectPlayer(ServerPlayer player){
+        broadcastPacketExcept(new CBPacketRemoveEntity(player), player); // Remove player entity on client
         player.getLevel().removeEntity(player); // Remove entity on server
         PlayerIO.save(player);                  // Save
         
@@ -104,19 +104,24 @@ public class PlayerList{
     }
     
     
-    public void broadcastToAll(IPacket<?> packet){
-        for(Entity player: playerMap.values())
+    public void broadcastPacket(IPacket<?> packet){
+        for(ServerPlayer player: playerMap.values())
             player.sendPacket(packet);
     }
 
-    public void broadcastToAllExceptPlayer(IPacket<?> packet, Entity except){
-        for(Entity player: playerMap.values())
+    public void broadcastPacketExcept(IPacket<?> packet, ServerPlayer except){
+        for(ServerPlayer player: playerMap.values())
             if(player != except)
                 player.sendPacket(packet);
     }
     
     public void broadcastMessage(String message){
-        broadcastToAll(new CBPacketChatMessage(message));
+        broadcastPacket(new CBPacketChatMessage(message));
+        System.out.println(message);
+    }
+    
+    public void broadcastMessageExcept(String message, ServerPlayer except){
+        broadcastPacketExcept(new CBPacketChatMessage(message), except);
         System.out.println(message);
     }
     

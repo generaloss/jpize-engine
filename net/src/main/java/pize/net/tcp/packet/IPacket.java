@@ -18,6 +18,9 @@ public abstract class IPacket<L extends PacketHandler>{
     }
     
     public void write(TcpConnection connection){
+        if(connection == null)
+            return;
+        
         connection.send(dataStream->{
             try{
                 dataStream.writeByte(packetID);

@@ -6,22 +6,22 @@ import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
 import pize.tests.voxelgame.clientserver.net.packet.*;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.level.ServerLevel;
-import pize.tests.voxelgame.server.player.Entity;
+import pize.tests.voxelgame.server.player.ServerPlayer;
 
 public class PlayerConnectionAdapter implements ServerPlayerPacketHandler{
     
-    private final Entity player;
+    private final ServerPlayer player;
     private final Server server;
     private final TcpConnection connection;
     
-    public PlayerConnectionAdapter(Entity player, TcpConnection connection){
+    public PlayerConnectionAdapter(ServerPlayer player, TcpConnection connection){
         this.player = player;
         this.server = player.getServer();
         this.connection = connection;
     }
     
     
-    public Entity getPlayer(){
+    public ServerPlayer getPlayer(){
         return player;
     }
     
@@ -44,7 +44,7 @@ public class PlayerConnectionAdapter implements ServerPlayerPacketHandler{
     public void handlePlayerBlockSet(SBPacketPlayerBlockSet packet){
         player.getLevel().setBlock(packet.x, packet.y, packet.z, packet.state);
         
-        server.getPlayerList().broadcastToAllExceptPlayer(new CBPacketBlockUpdate(packet.x, packet.y, packet.z, packet.state), player);
+        server.getPlayerList().broadcastPacketExcept(new CBPacketBlockUpdate(packet.x, packet.y, packet.z, packet.state), player);
     }
     
     @Override
@@ -53,7 +53,7 @@ public class PlayerConnectionAdapter implements ServerPlayerPacketHandler{
         player.getRotation().set(packet.rotation);
         player.getMotion().set(packet.motion);
         
-        server.getPlayerList().broadcastToAllExceptPlayer(new CBPacketEntityMove(player), player);
+        server.getPlayerList().broadcastPacketExcept(new CBPacketEntityMove(player), player);
     }
     
     @Override
@@ -65,7 +65,7 @@ public class PlayerConnectionAdapter implements ServerPlayerPacketHandler{
     public void handleSneaking(SBPacketPlayerSneaking packet){
         player.setSneaking(packet.sneaking);
         
-        server.getPlayerList().broadcastToAllExceptPlayer(new CBPacketPlayerSneaking(player), player);
+        server.getPlayerList().broadcastPacketExcept(new CBPacketPlayerSneaking(player), player);
     }
     
     @Override

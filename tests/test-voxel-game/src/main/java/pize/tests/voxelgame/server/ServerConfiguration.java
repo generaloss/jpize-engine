@@ -12,7 +12,7 @@ public class ServerConfiguration{
     
     public void loadDefaults(){
         port = 22854;
-        address = "192.168.0.101";
+        address = "0.0.0.0";
         version = new Version();
         defaultWorld = "world1";
         maxRenderDistance = 12;

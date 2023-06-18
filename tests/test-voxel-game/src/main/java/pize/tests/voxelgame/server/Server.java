@@ -3,7 +3,7 @@ package pize.tests.voxelgame.server;
 import pize.tests.voxelgame.clientserver.net.packet.CBPacketTeleportPlayer;
 import pize.tests.voxelgame.server.level.LevelManager;
 import pize.tests.voxelgame.server.net.ServerConnectionManager;
-import pize.tests.voxelgame.server.player.Entity;
+import pize.tests.voxelgame.server.player.ServerPlayer;
 import pize.tests.voxelgame.server.player.PlayerList;
 
 public abstract class Server{
@@ -21,11 +21,11 @@ public abstract class Server{
     }
     
     
-    public void executeCommand(String command, String[] args, Entity sender){
+    public void executeCommand(String command, String[] args, ServerPlayer sender){
         if(command.equals("tp")){
             
             if(args.length == 1){
-                final Entity targetPlayer = playerList.getPlayer(args[0]);
+                final ServerPlayer targetPlayer = playerList.getPlayer(args[0]);
                 if(targetPlayer == null)
                     sender.sendMessage("Cannot find player " + args[0]);
                 else{

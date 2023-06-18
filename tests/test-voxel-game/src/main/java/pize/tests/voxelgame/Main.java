@@ -5,9 +5,9 @@ import pize.app.AppAdapter;
 import pize.files.Resource;
 import pize.graphics.gl.Gl;
 import pize.tests.voxelgame.client.ClientGame;
-import pize.tests.voxelgame.client.renderer.ClientGameRenderer;
 import pize.tests.voxelgame.client.control.GameController;
 import pize.tests.voxelgame.client.options.Options;
+import pize.tests.voxelgame.client.renderer.ClientGameRenderer;
 import pize.tests.voxelgame.clientserver.Version;
 import pize.tests.voxelgame.clientserver.net.PlayerProfile;
 import pize.tests.voxelgame.server.LocalServer;
@@ -30,7 +30,7 @@ public class Main extends AppAdapter{
     private final GameController gameController;
     
     private final ClientGameRenderer clientRenderer;
-    private final LocalServer localServer;
+    private LocalServer localServer;
     private final ClientGame clientGame;
     
 
@@ -41,20 +41,25 @@ public class Main extends AppAdapter{
         options = new Options(this, SharedConstants.GAME_DIR_PATH);
         fpsSync = new Sync(0);
         
-        localServer = new LocalServer();
-        localServer.run();
-        
         gameController = new GameController(this);
         
         clientRenderer = new ClientGameRenderer(this);
         clientGame = new ClientGame(this);
-        clientGame.connect(localServer.getConfiguration().getAddress(), localServer.getConfiguration().getPort());
         
         clientRenderer.init();
         new Resource(SharedConstants.GAME_DIR_PATH).mkDirs();
-        options.load();
         
         Pize.setUpdateTPS(75);
+        options.load();
+        
+        
+        final String[] address = options.getHost().split(":");
+        if(address[0].equals("0.0.0.0")){
+            localServer = new LocalServer();
+            localServer.run();
+        }
+        
+        clientGame.connect(address[0], Integer.parseInt(address[1]));
     }
     
     @Override

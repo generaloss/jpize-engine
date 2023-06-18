@@ -8,7 +8,7 @@ import pize.net.tcp.packet.PacketInfo;
 import pize.net.tcp.packet.Packets;
 import pize.tests.voxelgame.clientserver.net.packet.*;
 import pize.tests.voxelgame.server.Server;
-import pize.tests.voxelgame.server.player.Entity;
+import pize.tests.voxelgame.server.player.ServerPlayer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -92,7 +92,7 @@ public class ServerConnectionManager implements TcpListener{
     public void disconnected(TcpConnection connection){
         final PacketHandler packetHandler = packetHandlerMap.get(connection);
         if(packetHandler instanceof PlayerConnectionAdapter connectionAdapter){
-            final Entity player = connectionAdapter.getPlayer();
+            final ServerPlayer player = connectionAdapter.getPlayer();
             server.getPlayerList().disconnectPlayer(player);
             
             server.getPlayerList().broadcastMessage("Player " + player.getName() + " leave the game");

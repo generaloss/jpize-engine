@@ -48,7 +48,7 @@ public class ClientGame{
     
     
     public void connect(String address, int port){
-        System.out.println("[Client]: Connect");
+        System.out.println("[Client]: Connect to " + address + ":" + port);
         client.connect(address, port);
         sendPacket( new SBPacketLogin(session.getVersion().getID(), session.getProfile().getName()) );
     }

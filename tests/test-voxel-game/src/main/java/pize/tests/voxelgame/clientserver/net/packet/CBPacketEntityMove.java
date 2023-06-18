@@ -7,7 +7,7 @@ import pize.net.tcp.packet.PacketHandler;
 import pize.net.tcp.packet.PacketInputStream;
 import pize.net.tcp.packet.PacketOutputStream;
 import pize.physic.Motion3D;
-import pize.tests.voxelgame.server.player.Entity;
+import pize.tests.voxelgame.server.player.ServerPlayer;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -26,12 +26,12 @@ public class CBPacketEntityMove extends IPacket<PacketHandler>{
     public EulerAngles rotation;
     public Motion3D motion;
 
-    public CBPacketEntityMove(Entity entity){
+    public CBPacketEntityMove(ServerPlayer serverPlayer){
         this();
-        uuid = entity.getUUID();
-        position = entity.getPosition();
-        rotation = entity.getRotation();
-        motion = entity.getMotion();
+        uuid = serverPlayer.getUUID();
+        position = serverPlayer.getPosition();
+        rotation = serverPlayer.getRotation();
+        motion = serverPlayer.getMotion();
     }
 
 

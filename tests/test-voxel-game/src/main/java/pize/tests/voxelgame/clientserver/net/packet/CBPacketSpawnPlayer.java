@@ -6,7 +6,7 @@ import pize.net.tcp.packet.IPacket;
 import pize.net.tcp.packet.PacketHandler;
 import pize.net.tcp.packet.PacketInputStream;
 import pize.net.tcp.packet.PacketOutputStream;
-import pize.tests.voxelgame.server.player.Entity;
+import pize.tests.voxelgame.server.player.ServerPlayer;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -24,7 +24,7 @@ public class CBPacketSpawnPlayer extends IPacket<PacketHandler>{
     public EulerAngles rotation;
     public String playerName;
     
-    public CBPacketSpawnPlayer(Entity player){
+    public CBPacketSpawnPlayer(ServerPlayer player){
         this();
         this.uuid = player.getUUID();
         this.position = player.getPosition();

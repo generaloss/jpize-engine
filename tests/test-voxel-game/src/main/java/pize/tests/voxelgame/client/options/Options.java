@@ -27,6 +27,7 @@ public class Options{
     private boolean showFps = false;
     private float mouseSensitivity = 0.5F;
     private float brightness = 0.5F;
+    private String host = "0.0.0.0:22854";
 
     public Options(Main sessionOF, String gameDirPath){
         this.sessionOF = sessionOF;
@@ -62,6 +63,11 @@ public class Options{
 
                 // category.key : value
                 switch(category){
+                    case "remote" -> {
+                        switch(key){
+                            case "host" -> setRemoteHost(value);
+                        }
+                    }
                     case "graphics" -> {
                         switch(key){
                             case "fov" -> setFOV(Integer.parseInt(value));
@@ -88,7 +94,8 @@ public class Options{
 
     public void save(){
         PrintStream out = resOptions.getWriter();
-
+        
+        out.println("remote.host : " + host);
         out.println("graphics.fov : " + fov);
         out.println("graphics.renderDistance : " + renderDistance);
         out.println("graphics.maxFramerate : " + maxFramerate);
@@ -100,7 +107,7 @@ public class Options{
 
         for(KeyMapping keyType: KeyMapping.values())
             out.println("key." + keyType.toString().toLowerCase() + " : " + keyMappings.getOrDefault(keyType, keyType.getDefault()).toString().toLowerCase());
-
+        
         out.close();
     }
 
@@ -189,6 +196,15 @@ public class Options{
     public void setMouseSensitivity(float mouseSensitivity){
         this.mouseSensitivity = mouseSensitivity;
         sessionOF.getController().getPlayerController().getRotationController().setSensitivity(mouseSensitivity);
+    }
+    
+    
+    public String getHost(){
+        return host;
+    }
+    
+    public void setRemoteHost(String host){
+        this.host = host;
     }
 
 }
