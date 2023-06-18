@@ -40,7 +40,6 @@ batch.end();
 // mouse
 Pize.getX(); // position
 Pize.getY();
-Pize.getCursorPos();
 
 Pize.isTouched(); // touch
 Pize.isTouchDown();
@@ -126,12 +125,12 @@ AudioLoader.load(new AudioBuffer(), res);
 
 #### 1. (Low)Encrypted Server-Client Example:
 ``` java
-KeyAES key = new KeyAES(512); // generate key for connection encoding
+KeyAES key = new KeyAES(128); // generate key for connection encoding
 
 // server
 TcpServer server = new TcpServer(new TcpListener(){
-    public void received(byte[] bytes, TcpByteChannel sender){
-        System.out.printf("received: %f\n", new String(data)); // 'received: Hello, World!'
+    public void received(byte[] bytes, TcpConnection sender){
+        System.out.printf("received: %f\n", new String(bytes)); // 'received: Hello, World!'
     }
     public void connected(TcpChannel channel){
         channel.encrypt(key);
