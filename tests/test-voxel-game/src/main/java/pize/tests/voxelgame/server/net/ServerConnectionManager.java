@@ -19,6 +19,9 @@ public class ServerConnectionManager implements TcpListener{
     private final Map<TcpConnection, PacketHandler> packetHandlerMap;
     private final KeyRSA rsaKey;
     
+    public static int rx;
+    public static int packetCount;
+    
     public ServerConnectionManager(Server server){
         this.server = server;
         this.packetHandlerMap = new HashMap<>();
@@ -45,6 +48,7 @@ public class ServerConnectionManager implements TcpListener{
             return;
         
         final PacketHandler packetHandler = packetHandlerMap.get(sender);
+        packetCount++;
         switch(packetInfo.getPacketID()){
             // Login
             case SBPacketAuth.PACKET_ID ->

@@ -1,5 +1,6 @@
 package pize.tests.voxelgame.client.chat;
 
+import pize.Pize;
 import pize.app.Disposable;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
@@ -41,26 +42,48 @@ public class ChatRenderer implements Disposable{
         
         if(chat.isOpened()){
             final String enteringText = chat.getEnteringText();
-            font.drawText(batch, enteringText, chatX, chatY);
-            batch.draw(TextureUtils.quadTexture(), chatX + font.getLineWidth(enteringText), chatY, font.getScale(), font.getScaledLineHeight());
+            final float lineWidth = font.getLineWidth(enteringText);
+            
+            batch.setColor(0, 0, 0, 0.3);
+            batch.draw(TextureUtils.quadTexture(), chatX, chatY, Math.max(lineWidth, Pize.getWidth() / 2F), font.getScaledLineHeight());
+            
+            final float cursorLineWidth = font.getLineWidth(enteringText.substring(0, chat.getCursorX()));
+            
+            drawText(enteringText, chatX, chatY, 1);
+            batch.draw(TextureUtils.quadTexture(), chatX + cursorLineWidth, chatY, font.getScale(), font.getScaledLineHeight());
         }
-        
         
         int pointer = 0;
         for(ChatMessage message: messages){
+            double alpha = 1;
             if(!chat.isOpened()){
                 if(message.getSeconds() < MSG_LIFE_TIME_SEC)
-                    batch.setAlpha(Math.min(1, MSG_LIFE_TIME_SEC - message.getSeconds()));
+                    alpha = Math.min(1, MSG_LIFE_TIME_SEC - message.getSeconds());
                 else
                     continue;
             }
             
-            font.drawText(batch, message.getMessage(), chatX, chatY + pointer * font.getScaledLineHeight() + (chat.isOpened() ? font.getScaledLineHeight() + 10 : 0));
+            final float lineWidth = font.getLineWidth(message.getMessage());
+            
+            batch.setColor(0, 0, 0, 0.3 * alpha);
+            batch.draw(TextureUtils.quadTexture(), chatX, chatY + pointer * font.getScaledLineHeight() + (chat.isOpened() ? font.getScaledLineHeight() + 10 : 0), Math.max(Pize.getWidth() / 2F, lineWidth), font.getScaledLineHeight());
+            batch.resetColor();
+            
+            batch.setAlpha(alpha);
+            drawText(message.getMessage(), chatX, chatY + pointer * font.getScaledLineHeight() + (chat.isOpened() ? font.getScaledLineHeight() + 10 : 0), alpha);
             pointer++;
         }
         
         batch.end();
         batch.setAlpha(1);
+    }
+    
+    private void drawText(String text, float x, float y, double alpha){
+        batch.setColor(0, 0, 0, alpha);
+        font.drawText(batch, text, x + font.getScale(), y - font.getScale());
+        
+        batch.setColor(1, 1, 1, alpha);
+        font.drawText(batch, text, x, y);
     }
     
     @Override

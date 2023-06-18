@@ -5,18 +5,24 @@ import pize.tests.voxelgame.clientserver.net.packet.SBPacketChatMessage;
 import pize.util.io.TextProcessor;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Chat{
     
     private final ClientGame game;
     private final ArrayDeque<ChatMessage> messageList;
-    private boolean opened;
     private final TextProcessor textProcessor;
+    private boolean opened;
+    
+    private final List<String> history;
+    private int historyPointer = 0;
     
     public Chat(ClientGame game){
         this.game = game;
         this.messageList = new ArrayDeque<>();
+        this.history = new ArrayList<>();
         this.textProcessor = new TextProcessor(false);
         
         textProcessor.setActive(false);
@@ -41,8 +47,45 @@ public class Chat{
     }
     
     public void enter(){
-        game.sendPacket(new SBPacketChatMessage(textProcessor.toString()));
+        final String message = textProcessor.toString();
+        game.sendPacket(new SBPacketChatMessage(message));
         textProcessor.clear();
+        
+        if(history.size() != 0 && history.get(history.size() - 1).equals(message))
+            return;
+        
+        history.add(message);
+        historyPointer = history.size() - 1;
+    }
+    
+    public void historyUp(){
+        if(historyPointer == history.size() - 1 && !history.get(history.size() - 1).equals(textProcessor.toString())){
+            historyPointer++;
+            if(!textProcessor.toString().isBlank())
+                history.add(textProcessor.toString());
+        }
+        
+        if(historyPointer - 1 < 0)
+            return;
+        
+        historyPointer--;
+        
+        textProcessor.removeLine();
+        textProcessor.insertLine(history.get(historyPointer));
+    }
+    
+    public void historyDown(){
+        if(historyPointer + 2 > history.size())
+            return;
+        
+        historyPointer++;
+        
+        textProcessor.removeLine();
+        textProcessor.insertLine(history.get(historyPointer));
+    }
+    
+    public int getCursorX(){
+        return textProcessor.getCursorX();
     }
     
     
@@ -58,6 +101,8 @@ public class Chat{
     
     public void close(){
         game.getSession().getController().getPlayerController().getRotationController().lockNextFrame();
+        historyPointer = history.size() - 1;
+        textProcessor.removeLine();
         setOpened(false);
     }
     

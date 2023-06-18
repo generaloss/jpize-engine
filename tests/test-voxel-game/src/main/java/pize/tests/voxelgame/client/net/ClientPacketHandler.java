@@ -52,7 +52,6 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
                 new SBPacketEncryptEnd(encryptedClientKey).write(sender);
                 
                 sender.encode(game.getEncryptKey());// * шифрование *
-                sender.setTcpNoDelay(false);
                 
                 new SBPacketAuth(game.getSession().getSessionToken()).write(sender);
             }
@@ -137,10 +136,15 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
             // Ping
             case CBPacketPong.PACKET_ID -> {
                 final CBPacketPong packet = packetInfo.readPacket(new CBPacketPong());
-                System.out.println("[Client]: ping " + (System.nanoTime() - packet.timeMillis) / 1000000F + " ms");
+                
+                final String message = "Ping - " + (System.nanoTime() - packet.timeMillis) / 1000000F + " ms";
+                game.getChat().putMessage(message);
+                System.out.println("[Client]: " + message);
             }
             
         }
+        
+        // Utils.delayElapsed(1);
     }
     
     @Override

@@ -36,7 +36,6 @@ public class Main extends AppAdapter{
 
     public Main(){
         version = new Version();
-        profile = new PlayerProfile();
         
         options = new Options(this, SharedConstants.GAME_DIR_PATH);
         fpsSync = new Sync(0);
@@ -49,8 +48,12 @@ public class Main extends AppAdapter{
         clientRenderer.init();
         new Resource(SharedConstants.GAME_DIR_PATH).mkDirs();
         
-        Pize.setUpdateTPS(75);
+        Pize.setUpdateTPS(40);
         options.load();
+        
+        /** Game **/
+        // Create Profile
+        profile = new PlayerProfile(getOptions().getPlayerName());
         
         // Run local server
         final String[] address = options.getHost().split(":");

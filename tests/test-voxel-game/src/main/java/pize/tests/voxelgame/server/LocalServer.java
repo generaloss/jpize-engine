@@ -2,6 +2,7 @@ package pize.tests.voxelgame.server;
 
 import pize.net.tcp.TcpServer;
 import pize.tests.voxelgame.server.level.ServerLevel;
+import pize.tests.voxelgame.server.net.ServerConnectionManager;
 import pize.util.time.TickGenerator;
 
 public class LocalServer extends Server{
@@ -32,6 +33,12 @@ public class LocalServer extends Server{
         tickCount++;
         for(ServerLevel world : getLevelManager().getLoadedLevels())
             world.tick();
+        
+        if(tickCount % 100 == 0){
+            ServerConnectionManager.rx = ServerConnectionManager.packetCount;
+            ServerConnectionManager.packetCount = 0;
+            System.out.println(ServerConnectionManager.rx);
+        }
     }
     
 }

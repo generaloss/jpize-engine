@@ -59,7 +59,7 @@ public class ServerLevel extends Level{
 
     
     public Vec3f getSpawnPosition(){
-        final Vec2f spawn = configuration.getSpawn();
+        final Vec2f spawn = configuration.getWorldSpawn();
         final int spawnY = getHeight(spawn.xf(), spawn.yf()) + 1;
         return new Vec3f(spawn.x, spawnY, spawn.y);
     }

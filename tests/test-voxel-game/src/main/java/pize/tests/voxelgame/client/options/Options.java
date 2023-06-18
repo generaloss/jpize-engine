@@ -4,6 +4,7 @@ import pize.Pize;
 import pize.files.Resource;
 import pize.io.glfw.Key;
 import pize.tests.voxelgame.client.control.GameCamera;
+import pize.tests.voxelgame.clientserver.net.PlayerProfile;
 import pize.util.io.FastReader;
 import pize.tests.voxelgame.Main;
 
@@ -18,7 +19,9 @@ public class Options{
 
     private final Main sessionOF;
     private final Resource resOptions;
-
+    
+    private String host = "0.0.0.0:22854";
+    private String playerName = PlayerProfile.genFunnyName();
     private final Map<KeyMapping, Key> keyMappings;
     private int fov = 70;
     private int renderDistance = 16;
@@ -27,7 +30,7 @@ public class Options{
     private boolean showFps = false;
     private float mouseSensitivity = 0.5F;
     private float brightness = 0.5F;
-    private String host = "0.0.0.0:22854";
+    
 
     public Options(Main sessionOF, String gameDirPath){
         this.sessionOF = sessionOF;
@@ -68,6 +71,11 @@ public class Options{
                             case "host" -> setRemoteHost(value);
                         }
                     }
+                    case "player" -> {
+                        switch(key){
+                            case "name" -> setPlayerName(value);
+                        }
+                    }
                     case "graphics" -> {
                         switch(key){
                             case "fov" -> setFOV(Integer.parseInt(value));
@@ -96,6 +104,7 @@ public class Options{
         PrintStream out = resOptions.getWriter();
         
         out.println("remote.host : " + host);
+        out.println("player.name : " + playerName);
         out.println("graphics.fov : " + fov);
         out.println("graphics.renderDistance : " + renderDistance);
         out.println("graphics.maxFramerate : " + maxFramerate);
@@ -110,7 +119,25 @@ public class Options{
         
         out.close();
     }
-
+    
+    
+    public String getPlayerName(){
+        return playerName;
+    }
+    
+    public void setPlayerName(String playerName){
+        this.playerName = playerName;
+    }
+    
+    
+    public String getHost(){
+        return host;
+    }
+    
+    public void setRemoteHost(String host){
+        this.host = host;
+    }
+    
 
     public Key getKey(KeyMapping keyType){
         return keyMappings.getOrDefault(keyType, keyType.getDefault());
@@ -196,15 +223,6 @@ public class Options{
     public void setMouseSensitivity(float mouseSensitivity){
         this.mouseSensitivity = mouseSensitivity;
         sessionOF.getController().getPlayerController().getRotationController().setSensitivity(mouseSensitivity);
-    }
-    
-    
-    public String getHost(){
-        return host;
-    }
-    
-    public void setRemoteHost(String host){
-        this.host = host;
     }
 
 }

@@ -16,11 +16,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.getChunkPos;
 import static pize.tests.voxelgame.clientserver.level.ChunkManagerUtils.*;
 
 public class ClientChunkManager extends ChunkManager{
     
-    private final ClientLevel worldOF;
+    private final ClientLevel level;
     
     public final PerSecCounter findTps, buildTps, checkTps;
     
@@ -32,8 +33,8 @@ public class ClientChunkManager extends ChunkManager{
     private final ConcurrentHashMap<ClientChunk, ChunkMesh> allMeshes;
     private final CopyOnWriteArrayList<ChunkMesh> toDispose;
     
-    public ClientChunkManager(ClientLevel worldOF){
-        this.worldOF = worldOF;
+    public ClientChunkManager(ClientLevel level){
+        this.level = level;
         
         requestedChunks = new ConcurrentHashMap<>();
         frontiers = new CopyOnWriteArrayList<>();
@@ -48,8 +49,8 @@ public class ClientChunkManager extends ChunkManager{
         checkTps = new PerSecCounter();
     }
     
-    public ClientLevel getWorldOf(){
-        return worldOF;
+    public ClientLevel getLevel(){
+        return level;
     }
     
     
@@ -72,8 +73,13 @@ public class ClientChunkManager extends ChunkManager{
     
     
     private void findChunks(){
-        if(frontiers.size() == 0)
-            ensureFrontier(new ChunkPos(0, 0));
+        if(frontiers.size() == 0){
+            final LocalPlayer player = level.getSession().getGame().getPlayer();
+            ensureFrontier(new ChunkPos(
+                getChunkPos(player.getPosition().xf()),
+                getChunkPos(player.getPosition().zf())
+            ));
+        }
         
         for(int i = 0; i < frontiers.size(); i++){
             final ChunkPos frontierPos = frontiers.get(i);
@@ -84,7 +90,7 @@ public class ClientChunkManager extends ChunkManager{
             ensureFrontier(frontierPos.getNeighbor(0, 1));
             
             if(!allChunks.containsKey(frontierPos) && !requestedChunks.containsKey(frontierPos)){
-                getWorldOf().getSessionOf().getGame().sendPacket(
+                getLevel().getSession().getGame().sendPacket(
                     new SBPacketChunkRequest(frontierPos.x, frontierPos.z)
                 );
                 requestedChunks.put(frontierPos, System.currentTimeMillis());
@@ -208,13 +214,13 @@ public class ClientChunkManager extends ChunkManager{
     
     
     private boolean isOffTheGrid(ChunkPos chunkPos){
-        final LocalPlayer player = worldOF.getSessionOf().getGame().getPlayer();
+        final LocalPlayer player = level.getSession().getGame().getPlayer();
         if(player == null)
             return true;
         
         return
             distToChunk(chunkPos.x, chunkPos.z, player.getPosition())
-            > worldOF.getSessionOf().getOptions().getRenderDistance();
+            > level.getSession().getOptions().getRenderDistance();
     }
 
 }

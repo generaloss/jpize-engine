@@ -265,6 +265,8 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
         
         lines.clear();
         lines.add("");
+        
+        updateCurrentLineLength();
     }
     
     @Override

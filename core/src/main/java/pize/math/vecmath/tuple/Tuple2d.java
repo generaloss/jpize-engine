@@ -347,7 +347,7 @@ public class Tuple2d{
 
     @Override
     public String toString(){
-        return "xy: " + x + ", " + y;
+        return x + ", " + y;
     }
 
     @Override

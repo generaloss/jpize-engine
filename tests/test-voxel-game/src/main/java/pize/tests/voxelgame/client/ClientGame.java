@@ -56,7 +56,7 @@ public class ClientGame{
     public void tick(){
         tickCount++;
         
-        if(tickCount % 75 == 0){
+        if(tickCount % 40 == 0){
             tx = txCounter;
             txCounter = 0;
             ClientPacketHandler.rx = ClientPacketHandler.rxCounter;
@@ -76,10 +76,11 @@ public class ClientGame{
         
         world.getChunkManager().updateMeshes();
         rayCast.update();
-        camera.update();
 
         player.tick();
         world.tick();
+        
+        camera.update();
     }
     
     public void createNetClientWorld(String worldName){

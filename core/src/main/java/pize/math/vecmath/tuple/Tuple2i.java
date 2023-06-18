@@ -181,7 +181,7 @@ public class Tuple2i{
 
     @Override
     public String toString(){
-        return "xy: " + x + ", " + y;
+        return x + ", " + y;
     }
 
     @Override

@@ -11,10 +11,12 @@ import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.SIZE;
 public class DefaultGenerator implements ChunkGenerator{
 
     private final FastNoiseLite noise = new FastNoiseLite();
+    private final int seed;
 
     private DefaultGenerator(){
         noise.setFrequency(0.007F);
-        noise.setSeed((int) Maths.randomSeed(8));
+        seed = (int) Maths.randomSeed(8);
+        noise.setSeed(seed);
     }
 
     @Override
@@ -39,8 +41,13 @@ public class DefaultGenerator implements ChunkGenerator{
             }
         // System.out.println("Gen: " + timer.getMillis());
     }
-
-
+    
+    @Override
+    public int getSeed(){
+        return seed;
+    }
+    
+    
     private static DefaultGenerator instance;
 
     public static DefaultGenerator getInstance(){

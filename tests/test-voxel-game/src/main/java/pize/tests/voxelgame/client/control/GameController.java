@@ -5,6 +5,7 @@ import pize.graphics.gl.Face;
 import pize.graphics.gl.Gl;
 import pize.graphics.gl.PolygonMode;
 import pize.io.glfw.Key;
+import pize.io.glfw.KeyAction;
 import pize.math.vecmath.vector.Vec3i;
 import pize.tests.voxelgame.Main;
 import pize.tests.voxelgame.client.block.blocks.Block;
@@ -51,11 +52,25 @@ public class GameController{
         
         final Chat chat = session.getGame().getChat();
         
+        Pize.keyboard().addKeyCallback((keyCode, action)->{
+            if(chat.isOpened() && action == KeyAction.REPEAT){
+                if(keyCode == Key.UP.GLFW)
+                    chat.historyUp();
+                if(keyCode == Key.DOWN.GLFW)
+                    chat.historyDown();
+            }
+        });
+        
         if(chat.isOpened()){
             if(Key.ENTER.isDown()){
                 chat.enter();
                 chat.close();
             }
+            
+            if(Key.UP.isDown())
+                chat.historyUp();
+            if(Key.DOWN.isDown())
+                chat.historyDown();
             
             if(Key.ESCAPE.isDown())
                 chat.close();

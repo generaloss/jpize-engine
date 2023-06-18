@@ -20,7 +20,7 @@ public class ClientLevel extends Level{
         chunkManager = new ClientChunkManager(this);
     }
     
-    public Main getSessionOf(){
+    public Main getSession(){
         return sessionOF;
     }
     

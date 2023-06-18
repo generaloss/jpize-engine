@@ -304,7 +304,7 @@ public class Tuple2f{
 
     @Override
     public String toString(){
-        return "xy: " + x + ", " + y;
+        return x + ", " + y;
     }
 
     @Override

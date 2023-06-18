@@ -359,7 +359,7 @@ public class Tuple3f{
 
     @Override
     public String toString(){
-        return "xyz: " + x + ", " + y + ", " + z;
+        return x + ", " + y + ", " + z;
     }
 
     @Override

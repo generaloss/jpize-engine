@@ -24,8 +24,12 @@ public class LevelConfiguration{
         return generator;
     }
     
-    public Vec2f getSpawn(){
+    public Vec2f getWorldSpawn(){
         return spawn;
+    }
+    
+    public void setWorldSpawn(double x, double z){
+        spawn.set(x, z);
     }
     
 }
