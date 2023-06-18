@@ -16,7 +16,7 @@ public class LocalServer extends Server{
     }
     
     public void run(){
-        System.out.println("[Server]: Server listening on " + getConfiguration().getAddress() + ":" + getConfiguration().getPort());
+        System.out.println("[Server]: Local server listening on " + getConfiguration().getAddress() + ":" + getConfiguration().getPort());
         
         getLevelManager().loadLevel(getConfiguration().getDefaultLevelName()); // Load default level
         tcpServer.run(getConfiguration().getAddress(), getConfiguration().getPort()); // Run TCP server

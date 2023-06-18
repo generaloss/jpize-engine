@@ -52,13 +52,14 @@ public class Main extends AppAdapter{
         Pize.setUpdateTPS(75);
         options.load();
         
-        
+        // Run local server
         final String[] address = options.getHost().split(":");
         if(address[0].equals("0.0.0.0")){
             localServer = new LocalServer();
             localServer.run();
         }
         
+        // Connect to server
         clientGame.connect(address[0], Integer.parseInt(address[1]));
     }
     

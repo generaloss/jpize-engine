@@ -2,6 +2,7 @@ package pize.tests.voxelgame.client.entity;
 
 import pize.Pize;
 import pize.math.Mathc;
+import pize.math.util.EulerAngles;
 import pize.math.vecmath.vector.Vec2f;
 import pize.math.vecmath.vector.Vec3d;
 import pize.math.vecmath.vector.Vec3f;
@@ -16,11 +17,27 @@ public class LocalPlayer extends AbstractClientPlayer{
     private final Vec2f moveControl;
     private float jumpDownY, oldMotionY, fallHeight;
     
+    private final Vec3f oldPos;
+    private final EulerAngles oldRot;
+    
     public LocalPlayer(Level levelOF, String name){
         super(levelOF, name); // 3) random skin ID
 
         moveControl = new Vec2f();
         setJumpHeight(1.25F);
+        
+        oldPos = new Vec3f();
+        oldRot = new EulerAngles();
+    }
+    
+    
+    public boolean isPosOrRotChanged(){
+        final boolean changed = !oldPos.equals(getPosition()) || !oldRot.equals(getRotation());
+        
+        oldPos.set(getPosition());
+        oldRot.set(getRotation());
+        
+        return changed;
     }
     
     

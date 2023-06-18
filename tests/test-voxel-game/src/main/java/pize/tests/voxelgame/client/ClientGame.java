@@ -66,7 +66,8 @@ public class ClientGame{
         if(world == null || player == null)
             return;
         
-        sendPacket(new SBPacketMove(player));
+        if(player.isPosOrRotChanged())
+            sendPacket(new SBPacketMove(player));
     }
     
     public void update(){

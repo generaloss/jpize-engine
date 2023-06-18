@@ -7,14 +7,14 @@ public class ServerConfiguration{
     private String address;
     private int port;
     private Version version;
-    private String defaultWorld;
+    private String defaultLevelName;
     private int maxRenderDistance;
     
     public void loadDefaults(){
         port = 22854;
         address = "0.0.0.0";
         version = new Version();
-        defaultWorld = "world1";
+        defaultLevelName = "world1";
         maxRenderDistance = 12;
     }
     
@@ -31,7 +31,7 @@ public class ServerConfiguration{
     }
     
     public String getDefaultLevelName(){
-        return defaultWorld;
+        return defaultLevelName;
     }
     
     public int getMaxRenderDistance(){

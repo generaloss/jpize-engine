@@ -14,7 +14,7 @@ public class DefaultGenerator implements ChunkGenerator{
 
     private DefaultGenerator(){
         noise.setFrequency(0.007F);
-        noise.setSeed(22854); //(int) Maths.randomSeed(8));
+        noise.setSeed((int) Maths.randomSeed(8));
     }
 
     @Override
