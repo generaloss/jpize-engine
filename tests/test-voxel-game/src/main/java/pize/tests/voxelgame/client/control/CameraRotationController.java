@@ -57,7 +57,7 @@ public class CameraRotationController{
         Pize.mouse().show(showMouse);
     }
     
-    public void switchShowMouse(){
+    public void toggleShowMouse(){
         showMouse(!showMouse);
     }
     

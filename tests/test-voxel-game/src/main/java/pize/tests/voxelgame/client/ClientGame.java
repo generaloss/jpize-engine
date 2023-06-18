@@ -5,6 +5,7 @@ import pize.net.security.KeyAES;
 import pize.net.tcp.TcpClient;
 import pize.net.tcp.packet.IPacket;
 import pize.tests.voxelgame.Main;
+import pize.tests.voxelgame.client.chat.Chat;
 import pize.tests.voxelgame.client.control.GameCamera;
 import pize.tests.voxelgame.client.control.RayCast;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
@@ -20,11 +21,14 @@ public class ClientGame{
     
     private final Main session;
     private final TcpClient client;
+    private final Chat chat;
     private final KeyAES encryptKey;
-    private ClientLevel world;
     private final RayCast rayCast;
+    
+    private ClientLevel world;
     private LocalPlayer player;
     private GameCamera camera;
+    
     private int tickCount;
     
     
@@ -35,6 +39,7 @@ public class ClientGame{
         encryptKey = new KeyAES(256);
         
         rayCast = new RayCast(session, 2000);
+        chat = new Chat(this);
     }
     
     public Main getSession(){
@@ -105,11 +110,11 @@ public class ClientGame{
     }
     
     
-    public KeyAES getEncryptKey(){
+    public final KeyAES getEncryptKey(){
         return encryptKey;
     }
     
-    public ClientLevel getLevel(){
+    public final ClientLevel getLevel(){
         return world;
     }
     
@@ -123,6 +128,10 @@ public class ClientGame{
     
     public final RayCast getRayCast(){
         return rayCast;
+    }
+    
+    public final Chat getChat(){
+        return chat;
     }
     
 }

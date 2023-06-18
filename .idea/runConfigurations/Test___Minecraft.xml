@@ -7,9 +7,7 @@
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/test-minecraft/src/main/resources" />
     <method v="2">
       <option name="Make" enabled="true" />
-      <option name="BuildArtifacts" enabled="true">
-        <artifact name="Test - Minecraft" />
-      </option>
+      <option name="BuildArtifacts" enabled="true" />
     </method>
   </configuration>
 </component>

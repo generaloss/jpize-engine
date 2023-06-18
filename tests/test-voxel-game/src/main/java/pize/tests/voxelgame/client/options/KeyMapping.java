@@ -13,6 +13,7 @@ public enum KeyMapping implements Option<Key>{
     SPRINT    (Key.LEFT_CONTROL),
 
     CHAT      (Key.T),
+    COMMAND   (Key.SLASH),
     ZOOM      (Key.C),
 
     FULLSCREEN(Key.F11),

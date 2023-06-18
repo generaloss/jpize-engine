@@ -1,4 +1,4 @@
-package pize.tests.voxelgame.client;
+package pize.tests.voxelgame.client.renderer;
 
 import pize.Pize;
 import pize.app.Disposable;
@@ -7,6 +7,7 @@ import pize.graphics.font.FontLoader;
 import pize.graphics.util.batch.TextureBatch;
 import pize.math.Maths;
 import pize.tests.voxelgame.Main;
+import pize.tests.voxelgame.client.ClientGame;
 import pize.tests.voxelgame.client.chunk.mesh.ChunkBuilder;
 import pize.tests.voxelgame.client.control.GameCamera;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
@@ -59,7 +60,6 @@ public class InfoRenderer implements Disposable{
         
         // INFO
         info("fps: " + Pize.getFPS());
-        
         info("position: " + player.getPosition().x + ", " + player.getPosition().y + ", " + player.getPosition().z);
         info("chunk: " + camera.chunkX() + ", " + camera.chunkZ());
         info("tx: " + ClientGame.tx + ", rx: " + ClientPacketHandler.rx);
@@ -79,10 +79,13 @@ public class InfoRenderer implements Disposable{
         // info("Selected light level (F/B): " + clientWorld.getLight(imaginaryPos.x, imaginaryPos.y, imaginaryPos.z) + ", " + clientWorld.getLight(selectedPos.x, selectedPos.y, selectedPos.z));
         
         // HINTS
-        hint("1, 2, 3 - set render mode");
-        hint("L - show mouse");
-        hint("F3 + G - show chunk border");
-        hint(options.getKey(KeyMapping.ZOOM) + " + Mouse Wheel - zoom");
+        hint("1, 2, 3 - Toggle render mode");
+        hint("F3 + G - Show chunk border");
+        hint("ESCAPE - Exit");
+        hint(options.getKey(KeyMapping.ZOOM) + " - Mouse Wheel - zoom");
+        hint(options.getKey(KeyMapping.CHAT) + " - Chat");
+        hint(options.getKey(KeyMapping.TOGGLE_PERSPECTIVE) + " - Toggle perspective");
+        hint("L - Show mouse");
         
         batch.end();
     }

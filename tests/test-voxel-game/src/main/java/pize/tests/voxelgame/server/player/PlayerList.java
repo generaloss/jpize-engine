@@ -3,6 +3,7 @@ package pize.tests.voxelgame.server.player;
 import pize.math.vecmath.vector.Vec3f;
 import pize.net.tcp.TcpConnection;
 import pize.net.tcp.packet.IPacket;
+import pize.tests.voxelgame.clientserver.net.packet.CBPacketChatMessage;
 import pize.tests.voxelgame.clientserver.net.packet.CBPacketRemoveEntity;
 import pize.tests.voxelgame.clientserver.net.packet.CBPacketSpawnInfo;
 import pize.tests.voxelgame.clientserver.net.packet.CBPacketSpawnPlayer;
@@ -17,7 +18,7 @@ import java.util.Map;
 public class PlayerList{
     
     private final Server server;
-    private final Map<String, ServerPlayer> playerMap;
+    private final Map<String, Entity> playerMap;
     
     public PlayerList(Server server){
         this.server = server;
@@ -29,7 +30,7 @@ public class PlayerList{
     }
     
     
-    public Collection<ServerPlayer> getPlayers(){
+    public Collection<Entity> getPlayers(){
         return playerMap.values();
     }
     
@@ -37,7 +38,7 @@ public class PlayerList{
         return playerMap.containsKey(name);
     }
     
-    public ServerPlayer getPlayer(String name){
+    public Entity getPlayer(String name){
         return playerMap.get(name);
     }
     
@@ -63,31 +64,33 @@ public class PlayerList{
         }
         
         // Add ServerPlayer to list
-        final ServerPlayer serverPlayer = new ServerPlayer(level, connection, name);
-        server.getConnectionManager().setPacketHandler(connection, serverPlayer.getConnectionAdapter());
-        serverPlayer.teleport(level, spawnPosition);
+        final Entity entity = new Entity(level, connection, name);
+        server.getConnectionManager().setPacketHandler(connection, entity.getConnectionAdapter());
+        entity.teleport(level, spawnPosition);
         
-        playerMap.put(name, serverPlayer);
+        playerMap.put(name, entity);
         
         // Send packets to player
-        final PlayerConnectionAdapter connectionAdapter = serverPlayer.getConnectionAdapter();
+        final PlayerConnectionAdapter connectionAdapter = entity.getConnectionAdapter();
         
         new CBPacketSpawnInfo(level.getName(), spawnPosition).write(connection); // spawn init info
         
-        for(ServerPlayer anotherPlayer: playerMap.values())
-            if(anotherPlayer != serverPlayer)
+        for(Entity anotherPlayer: playerMap.values())
+            if(anotherPlayer != entity)
                 connectionAdapter.sendPacket(new CBPacketSpawnPlayer(anotherPlayer)); // all players info
         
         // Load chunks for player
-        level.addEntity(serverPlayer);
-        level.getChunkManager().loadInitChunkForPlayer(serverPlayer);
+        level.addEntity(entity);
+        level.getChunkManager().loadInitChunkForPlayer(entity);
 
         // Send to all player-connection-event packet
-        broadcastToAllExceptPlayer(new CBPacketSpawnPlayer(serverPlayer), serverPlayer);
+        broadcastToAllExceptPlayer(new CBPacketSpawnPlayer(entity), entity);
+        
+        broadcastMessage("Player " + name + " joined the game");
     }
     
     
-    public void disconnectPlayer(ServerPlayer player){
+    public void disconnectPlayer(Entity player){
         broadcastToAllExceptPlayer(new CBPacketRemoveEntity(player), player); // Remove player entity on client
         player.getLevel().removeEntity(player); // Remove entity on server
         PlayerIO.save(player);                  // Save
@@ -102,14 +105,19 @@ public class PlayerList{
     
     
     public void broadcastToAll(IPacket<?> packet){
-        for(ServerPlayer player: playerMap.values())
+        for(Entity player: playerMap.values())
             player.sendPacket(packet);
     }
 
-    public void broadcastToAllExceptPlayer(IPacket<?> packet, ServerPlayer except){
-        for(ServerPlayer player: playerMap.values())
+    public void broadcastToAllExceptPlayer(IPacket<?> packet, Entity except){
+        for(Entity player: playerMap.values())
             if(player != except)
                 player.sendPacket(packet);
+    }
+    
+    public void broadcastMessage(String message){
+        broadcastToAll(new CBPacketChatMessage(message));
+        System.out.println(message);
     }
     
 }

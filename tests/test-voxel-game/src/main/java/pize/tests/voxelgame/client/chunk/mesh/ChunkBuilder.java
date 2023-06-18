@@ -14,7 +14,7 @@ public class ChunkBuilder{
 
     public static final float AO_BRIGHTNESS = 0.7F;
     
-    public static float buildTime;
+    public static double buildTime;
     public static int vertexCount;
     
     private static Chunk chunk;

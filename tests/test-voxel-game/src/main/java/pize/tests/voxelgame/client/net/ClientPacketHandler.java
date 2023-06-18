@@ -3,14 +3,16 @@ package pize.tests.voxelgame.client.net;
 import pize.Pize;
 import pize.net.tcp.TcpConnection;
 import pize.net.tcp.TcpListener;
+import pize.net.tcp.packet.PacketHandler;
 import pize.net.tcp.packet.PacketInfo;
 import pize.net.tcp.packet.Packets;
 import pize.tests.voxelgame.client.ClientGame;
+import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.entity.RemotePlayer;
 import pize.tests.voxelgame.clientserver.entity.Entity;
 import pize.tests.voxelgame.clientserver.net.packet.*;
 
-public class ClientPacketHandler implements TcpListener{
+public class ClientPacketHandler implements TcpListener, PacketHandler{
     
     private final ClientGame game;
     
@@ -56,6 +58,19 @@ public class ClientPacketHandler implements TcpListener{
             }
             
             // Game
+            case CBPacketTeleportPlayer.PACKET_ID ->{
+                final CBPacketTeleportPlayer packet = packetInfo.readPacket(new CBPacketTeleportPlayer());
+                
+                final LocalPlayer localPlayer = game.getPlayer();
+                localPlayer.getPosition().set(packet.position);
+                localPlayer.getRotation().set(packet.rotation);
+            }
+            
+            case CBPacketChatMessage.PACKET_ID ->{
+                final CBPacketChatMessage packet = packetInfo.readPacket(new CBPacketChatMessage());
+                game.getChat().putMessage(packet.message);
+            }
+            
             case CBPacketPlayerSneaking.PACKET_ID ->{
                 final CBPacketPlayerSneaking packet = packetInfo.readPacket(new CBPacketPlayerSneaking());
                 

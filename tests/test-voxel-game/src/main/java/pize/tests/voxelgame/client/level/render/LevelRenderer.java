@@ -4,6 +4,7 @@ import pize.Pize;
 import pize.app.Disposable;
 import pize.app.Resizable;
 import pize.files.Resource;
+import pize.graphics.gl.DepthFunc;
 import pize.graphics.gl.Gl;
 import pize.graphics.gl.Target;
 import pize.graphics.texture.Texture;
@@ -50,6 +51,7 @@ public class LevelRenderer implements Disposable, Resizable{
         skyViewMatrix = new Matrix4f();
         
         // Chunk
+        Gl.depthFunc(DepthFunc.LEQUAL);
         atlasTexture = new Texture("texture/block/minecraft.png");
         chunkShader = new Shader(new Resource("shader/chunk.vert"), new Resource("shader/chunk.frag"));
         chunkMatrix = new Matrix4f();

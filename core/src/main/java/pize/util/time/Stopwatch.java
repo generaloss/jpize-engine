@@ -1,5 +1,7 @@
 package pize.util.time;
 
+import pize.math.Maths;
+
 public class Stopwatch{
 
     private long lastNanos, nanos;
@@ -42,24 +44,20 @@ public class Stopwatch{
         return this;
     }
     
-    public Stopwatch setMillis(long millis){
-        setNanos(millis * 1000000);
-        return this;
+    public Stopwatch setMillis(double millis){
+        return setNanos(Maths.round(millis * 1000000));
     }
 
-    public Stopwatch setSeconds(long seconds){
-        setMillis(seconds * 1000);
-        return this;
+    public Stopwatch setSeconds(double seconds){
+        return setMillis(seconds * 1000);
     }
 
-    public Stopwatch setMinutes(long minutes){
-        setSeconds(minutes * 60);
-        return this;
+    public Stopwatch setMinutes(double minutes){
+        return setSeconds(minutes * 60);
     }
 
-    public Stopwatch setHours(long hours){
-        setMinutes(hours * 60);
-        return this;
+    public Stopwatch setHours(double hours){
+        return setMinutes(hours * 60);
     }
     
     public long getNanos(){
@@ -70,19 +68,19 @@ public class Stopwatch{
         return nanos - lastNanos;
     }
     
-    public long getMillis(){
-        return getNanos() / 1000000;
+    public double getMillis(){
+        return getNanos() / 1000000D;
     }
 
-    public long getSeconds(){
+    public double getSeconds(){
         return getMillis() / 1000;
     }
 
-    public long getMinutes(){
+    public double getMinutes(){
         return getSeconds() / 60;
     }
 
-    public long getHours(){
+    public double getHours(){
         return getMinutes() / 60;
     }
 

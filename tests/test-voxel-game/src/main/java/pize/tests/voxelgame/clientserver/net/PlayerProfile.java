@@ -5,7 +5,7 @@ import pize.util.StringUtils;
 
 public class PlayerProfile{
     
-    public static final String[] funnyNames = {"Makcum", "Kriper", "IlyaPro", "ViktorPlay", "Kirbo", "IbremMiner"};
+    public static final String[] funnyNames = {"Makcum", "Kriper", "IlyaPro", "ViktorPlay", "Kirbo", "IbremMiner", "intbyte", "@a.belevka", "Dmitry"};
     
     
     private final String name;

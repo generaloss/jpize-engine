@@ -3,18 +3,19 @@ package pize.tests.voxelgame.server.player;
 import pize.net.tcp.TcpConnection;
 import pize.net.tcp.packet.IPacket;
 import pize.tests.voxelgame.clientserver.entity.Player;
+import pize.tests.voxelgame.clientserver.net.packet.CBPacketChatMessage;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.level.ServerLevel;
 import pize.tests.voxelgame.server.net.PlayerConnectionAdapter;
 
-public class ServerPlayer extends Player{
+public class Entity extends Player{
     
     private final Server server;
     private final PlayerConnectionAdapter connectionAdapter;
     
     private int renderDistance;
 
-    public ServerPlayer(ServerLevel level, TcpConnection connection, String name){
+    public Entity(ServerLevel level, TcpConnection connection, String name){
         super(level, name);
         this.server = level.getServer();
         this.connectionAdapter = new PlayerConnectionAdapter(this, connection);
@@ -24,6 +25,12 @@ public class ServerPlayer extends Player{
     public Server getServer(){
         return server;
     }
+    
+    
+    public void sendMessage(String message){
+        sendPacket(new CBPacketChatMessage(message));
+    }
+    
     
     public PlayerConnectionAdapter getConnectionAdapter(){
         return connectionAdapter;

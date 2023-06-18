@@ -55,7 +55,6 @@ public class ServerLoginPacketHandler implements PacketHandler{
         }
         
         server.getPlayerList().addNewPlayer(profileName, connection);
-        System.out.println("[Server]: Player " + profileName + " joined the game");
     }
     
 }

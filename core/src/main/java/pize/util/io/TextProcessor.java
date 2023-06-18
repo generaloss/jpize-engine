@@ -260,7 +260,11 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     
     
     public void clear(){
+        moveCursorHome();
+        cursorY = 0;
+        
         lines.clear();
+        lines.add("");
     }
     
     @Override

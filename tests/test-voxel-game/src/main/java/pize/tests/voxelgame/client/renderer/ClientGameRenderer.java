@@ -1,40 +1,36 @@
-package pize.tests.voxelgame.client;
+package pize.tests.voxelgame.client.renderer;
 
-import pize.tests.voxelgame.Main;
-import pize.tests.voxelgame.client.level.render.LevelRenderer;
 import pize.app.AppAdapter;
-import pize.graphics.gl.DepthFunc;
-import pize.graphics.gl.Gl;
-import pize.graphics.gl.Target;
+import pize.tests.voxelgame.Main;
+import pize.tests.voxelgame.client.chat.ChatRenderer;
+import pize.tests.voxelgame.client.level.render.LevelRenderer;
 
 public class ClientGameRenderer extends AppAdapter{
     
-    private final Main sessionOF;
+    private final Main session;
+    
     private final LevelRenderer levelRenderer;
     private final InfoRenderer infoRenderer;
+    private final ChatRenderer chatRenderer;
     
-    public ClientGameRenderer(Main sessionOF){
-        this.sessionOF = sessionOF;
+    public ClientGameRenderer(Main session){
+        this.session = session;
         
-        levelRenderer = new LevelRenderer(sessionOF);
-        infoRenderer = new InfoRenderer(sessionOF);
+        levelRenderer = new LevelRenderer(session);
+        infoRenderer = new InfoRenderer(session);
+        chatRenderer = new ChatRenderer(session);
     }
     
-    public Main getSessionOf(){
-        return sessionOF;
+    public Main getSession(){
+        return session;
     }
     
-    
-    @Override
-    public void init(){
-        Gl.enable(Target.DEPTH_TEST);
-        Gl.depthFunc(DepthFunc.LEQUAL);
-    }
     
     @Override
     public void render(){
         levelRenderer.render();
         infoRenderer.render();
+        chatRenderer.render();
     }
     
     @Override
@@ -46,6 +42,7 @@ public class ClientGameRenderer extends AppAdapter{
     public void dispose(){
         levelRenderer.dispose();
         infoRenderer.dispose();
+        chatRenderer.dispose();
     }
     
     
@@ -55,6 +52,10 @@ public class ClientGameRenderer extends AppAdapter{
     
     public InfoRenderer getInfoRenderer(){
         return infoRenderer;
+    }
+    
+    public ChatRenderer getChatRenderer(){
+        return chatRenderer;
     }
     
 }

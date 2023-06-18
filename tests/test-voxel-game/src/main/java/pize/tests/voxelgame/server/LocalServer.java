@@ -7,6 +7,7 @@ import pize.util.time.TickGenerator;
 public class LocalServer extends Server{
     
     private final TcpServer tcpServer;
+    private int tickCount;
     
     public LocalServer(){
         getConfiguration().loadDefaults(); // Load server configuration
@@ -28,6 +29,7 @@ public class LocalServer extends Server{
     }
 
     private void tick(){
+        tickCount++;
         for(ServerLevel world : getLevelManager().getLoadedLevels())
             world.tick();
     }

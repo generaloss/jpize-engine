@@ -6,22 +6,22 @@ import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
 import pize.tests.voxelgame.clientserver.net.packet.*;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.level.ServerLevel;
-import pize.tests.voxelgame.server.player.ServerPlayer;
+import pize.tests.voxelgame.server.player.Entity;
 
 public class PlayerConnectionAdapter implements ServerPlayerPacketHandler{
     
-    private final ServerPlayer player;
+    private final Entity player;
     private final Server server;
     private final TcpConnection connection;
     
-    public PlayerConnectionAdapter(ServerPlayer player, TcpConnection connection){
+    public PlayerConnectionAdapter(Entity player, TcpConnection connection){
         this.player = player;
         this.server = player.getServer();
         this.connection = connection;
     }
     
     
-    public ServerPlayer getPlayer(){
+    public Entity getPlayer(){
         return player;
     }
     
@@ -66,6 +66,27 @@ public class PlayerConnectionAdapter implements ServerPlayerPacketHandler{
         player.setSneaking(packet.sneaking);
         
         server.getPlayerList().broadcastToAllExceptPlayer(new CBPacketPlayerSneaking(player), player);
+    }
+    
+    @Override
+    public void handleChatMessage(SBPacketChatMessage packet){
+        String message = packet.message;
+        
+        if(message.startsWith("/")){
+            message = message.substring(1);
+            
+            final String command = message.split(" ")[0];
+            
+            final String[] args;
+            if(message.length() != command.length())
+                args = message.substring(command.length() + 1).split(" ");
+            else
+                args = new String[0];
+            
+            System.out.println("[Server}: Player " + player.getName() + " execute command: " + message);
+            server.executeCommand(command, args, player);
+        }else
+            server.getPlayerList().broadcastMessage("<" + player.getName() + "> " + packet.message);
     }
     
 }

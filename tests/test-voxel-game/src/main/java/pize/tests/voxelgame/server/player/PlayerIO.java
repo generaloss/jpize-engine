@@ -2,7 +2,7 @@ package pize.tests.voxelgame.server.player;
 
 public class PlayerIO{
     
-    public static void save(ServerPlayer player){
+    public static void save(Entity player){
     
     }
     

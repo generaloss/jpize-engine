@@ -13,6 +13,8 @@ public interface ServerPlayerPacketHandler extends PacketHandler{
     
     void handleRenderDistance(SBPacketRenderDistance packet);
     
-    void handleSneaking(SBPacketPlayerSneaking shifting);
+    void handleSneaking(SBPacketPlayerSneaking packet);
+    
+    void handleChatMessage(SBPacketChatMessage packet);
     
 }

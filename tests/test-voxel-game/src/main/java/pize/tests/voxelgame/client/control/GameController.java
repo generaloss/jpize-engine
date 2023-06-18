@@ -1,4 +1,4 @@
-package pize.tests.voxelgame.client;
+package pize.tests.voxelgame.client.control;
 
 import pize.Pize;
 import pize.graphics.gl.Face;
@@ -8,10 +8,7 @@ import pize.io.glfw.Key;
 import pize.math.vecmath.vector.Vec3i;
 import pize.tests.voxelgame.Main;
 import pize.tests.voxelgame.client.block.blocks.Block;
-import pize.tests.voxelgame.client.control.GameCamera;
-import pize.tests.voxelgame.client.control.PerspectiveType;
-import pize.tests.voxelgame.client.control.PlayerController;
-import pize.tests.voxelgame.client.control.RayCast;
+import pize.tests.voxelgame.client.chat.Chat;
 import pize.tests.voxelgame.client.level.ClientLevel;
 import pize.tests.voxelgame.client.options.KeyMapping;
 import pize.tests.voxelgame.client.options.Options;
@@ -36,27 +33,51 @@ public class GameController{
     
     
     public void update(){
-        playerController.update();
-        debugControl();
-    }
-    
-    private void debugControl(){
         final Options options = session.getOptions();
         final GameCamera camera = session.getGame().getCamera();
         final RayCast rayCast = session.getGame().getRayCast();
         final ClientLevel world = session.getGame().getLevel();
         
-        // EXIT
-        if(Key.ESCAPE.isDown())
-            Pize.exit();
+        /** Window **/
         
-        // FULLSCREEN
+        // Fullscreen
         if(Key.F11.isDown()){
             playerController.getRotationController().lockNextFrame();
             Pize.window().toggleFullscreen();
         }
         
-        // RENDER MODE
+        
+        /** Chat **/
+        
+        final Chat chat = session.getGame().getChat();
+        
+        if(chat.isOpened()){
+            if(Key.ENTER.isDown()){
+                chat.enter();
+                chat.close();
+            }
+            
+            if(Key.ESCAPE.isDown())
+                chat.close();
+            
+            return; // Abort subsequent control
+            
+        }else if(options.getKey(KeyMapping.CHAT).isDown())
+            chat.open();
+        else if(options.getKey(KeyMapping.COMMAND).isDown()){
+            chat.openAsCommandLine();
+        }
+        
+        /** Game **/
+        
+        // Exit
+        if(Key.ESCAPE.isDown())
+            Pize.exit();
+        
+        // Player
+        playerController.update();
+        
+        // Render mode
         if(Key.NUM_1.isDown())
             Gl.polygonMode(Face.FRONT, PolygonMode.FILL);
         if(Key.NUM_2.isDown())
@@ -64,7 +85,7 @@ public class GameController{
         if(Key.NUM_3.isDown())
             Gl.polygonMode(Face.FRONT, PolygonMode.POINT);
         
-        // MOUSE SET BLOCK
+        // Place/Destroy block
         if(Pize.isTouched() && rayCast.isSelected()){
             if(Pize.mouse().isLeftDown()){
                 final Vec3i blockPos = rayCast.getSelectedBlockPosition();
@@ -77,17 +98,17 @@ public class GameController{
             }
         }
         
-        // SHOW MOUSE
+        // Show mouse
         if(Key.L.isDown())
-            playerController.getRotationController().switchShowMouse();
+            playerController.getRotationController().toggleShowMouse();
         
-        // CHUNK BORDER
+        // Chunk border
         if(Key.F3.isPressed() && Key.G.isDown()){
             session.getRenderer().getWorldRenderer().toggleShowChunkBorder();
             f3Plus = true;
         }
         
-        // INFO
+        // Info
         if(Key.F3.isReleased()){
             if(!f3Plus)
                 options.setShowFPS(!options.isShowFPS());
@@ -95,7 +116,7 @@ public class GameController{
             f3Plus = false;
         }
         
-        // ZOOM
+        // Camera zoom
         if(options.getKey(KeyMapping.ZOOM).isDown())
             zoomFOV = options.getFOV() / 3F;
         else if(options.getKey(KeyMapping.ZOOM).isPressed()){
@@ -107,18 +128,9 @@ public class GameController{
         }else if(options.getKey(KeyMapping.ZOOM).isReleased())
             camera.setFov(options.getFOV());
         
-        // PING SERVER
+        // Ping server
         if(Key.P.isDown())
             session.getGame().sendPacket(new SBPacketPing(System.currentTimeMillis()));
-        
-        // TOGGLE PERSPECTIVE
-        if(options.getKey(KeyMapping.TOGGLE_PERSPECTIVE).isDown()){
-            switch(camera.getPerspective()){
-                case FIRST_PERSON -> camera.setPerspective(PerspectiveType.THIRD_PERSON_BACK);
-                case THIRD_PERSON_BACK -> camera.setPerspective(PerspectiveType.THIRD_PERSON_FRONT);
-                case THIRD_PERSON_FRONT -> camera.setPerspective(PerspectiveType.FIRST_PERSON);
-            }
-        }
     }
     
     

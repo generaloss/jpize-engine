@@ -77,6 +77,10 @@ public abstract class Entity extends BoxBody{
         getRotation().set(rotation);
     }
     
+    public void teleport(Entity entity){
+        teleport(entity.getLevel(), entity.getPosition(), entity.getRotation());
+    }
+    
     public void teleport(Tuple3f position, EulerAngles rotation){
         teleport(level, position, rotation);
     }
@@ -88,6 +92,7 @@ public abstract class Entity extends BoxBody{
     public void teleport(Tuple3f position){
         teleport(level, position, rotation);
     }
+    
     
     
     public void tick(){

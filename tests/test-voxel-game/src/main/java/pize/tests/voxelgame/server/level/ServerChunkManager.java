@@ -2,11 +2,10 @@ package pize.tests.voxelgame.server.level;
 
 import pize.math.vecmath.vector.Vec2f;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
-import pize.tests.voxelgame.clientserver.entity.Entity;
 import pize.tests.voxelgame.clientserver.level.ChunkManager;
 import pize.tests.voxelgame.server.chunk.ServerChunk;
 import pize.tests.voxelgame.server.chunk.gen.DefaultGenerator;
-import pize.tests.voxelgame.server.player.ServerPlayer;
+import pize.tests.voxelgame.server.player.Entity;
 import pize.util.time.PerSecCounter;
 
 import java.util.Collection;
@@ -23,7 +22,7 @@ public class ServerChunkManager extends ChunkManager{
     
     private final ServerLevel level;
     
-    private final Map<ChunkPos, ServerPlayer> requestedChunks;
+    private final Map<ChunkPos, Entity> requestedChunks;
     private final CopyOnWriteArrayList<ChunkPos> newFrontiers, frontiers;
     private final Map<ChunkPos, ServerChunk> allChunks;
     private final List<ChunkPos> loadQueue;
@@ -66,7 +65,7 @@ public class ServerChunkManager extends ChunkManager{
     }
     
     
-    public void loadInitChunkForPlayer(ServerPlayer player){
+    public void loadInitChunkForPlayer(Entity player){
         final ChunkPos chunkPos = new ChunkPos(
             getChunkPos(player.getPosition().xf()),
             getChunkPos(player.getPosition().zf())
@@ -146,7 +145,7 @@ public class ServerChunkManager extends ChunkManager{
     }
     
     
-    public void requestedChunk(ServerPlayer player, ChunkPos chunkPos){
+    public void requestedChunk(Entity player, ChunkPos chunkPos){
         final ServerChunk chunk = getChunk(chunkPos);
         if(chunk != null)
             player.sendPacket(chunk.getStorage().getPacket());
@@ -175,8 +174,8 @@ public class ServerChunkManager extends ChunkManager{
         if(distToChunk(chunkPos.x, chunkPos.z, spawn) <= level.getServer().getConfiguration().getMaxRenderDistance())
             return false;
         
-        for(Entity entity: level.getEntities())
-            if(entity instanceof ServerPlayer player)
+        for(pize.tests.voxelgame.clientserver.entity.Entity entity: level.getEntities())
+            if(entity instanceof Entity player)
                 if(distToChunk(chunkPos.x, chunkPos.z, player.getPosition()) <= player.getRenderDistance())
                     return false;
         
