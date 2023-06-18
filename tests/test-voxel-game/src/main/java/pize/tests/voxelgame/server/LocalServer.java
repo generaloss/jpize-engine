@@ -37,7 +37,7 @@ public class LocalServer extends Server{
         if(tickCount % 100 == 0){
             ServerConnectionManager.rx = ServerConnectionManager.packetCount;
             ServerConnectionManager.packetCount = 0;
-            System.out.println(ServerConnectionManager.rx);
+            // System.out.println(ServerConnectionManager.rx);
         }
     }
     

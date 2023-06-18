@@ -8,7 +8,7 @@ import pize.graphics.util.TextureUtils;
 import pize.graphics.util.batch.TextureBatch;
 import pize.tests.voxelgame.Main;
 
-import java.util.Collection;
+import java.util.List;
 
 public class ChatRenderer implements Disposable{
     
@@ -36,7 +36,7 @@ public class ChatRenderer implements Disposable{
     
     public void render(){
         final Chat chat = session.getGame().getChat();
-        final Collection<ChatMessage> messages = chat.getMessages();
+        final List<ChatMessage> messages = chat.getMessages();
         
         batch.begin();
         
@@ -54,7 +54,9 @@ public class ChatRenderer implements Disposable{
         }
         
         int pointer = 0;
-        for(ChatMessage message: messages){
+        for(int i = messages.size() - 1; i >= 0; i--){
+            final ChatMessage message = messages.get(i);
+            
             double alpha = 1;
             if(!chat.isOpened()){
                 if(message.getSeconds() < MSG_LIFE_TIME_SEC)

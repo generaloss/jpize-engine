@@ -125,7 +125,25 @@ public abstract class Server{
             }
             
             case "level" -> {
-                sender.sendMessage("World seed: " + ((ServerLevel) sender.getLevel()).getConfiguration().getGenerator().getSeed());
+                if(args.length > 1){
+                    final String levelName = args[1];
+                    switch(args[0]){
+                        case "load" -> {
+                            if(levelManager.isLevelLoaded(levelName))
+                                sender.sendMessage("Level " + levelName + " already loaded");
+                            else
+                                levelManager.loadLevel(levelName);
+                        }
+                        case "goto" -> {
+                            if(!levelManager.isLevelLoaded(levelName))
+                                sender.sendMessage("Level " + levelName + " is not loaded");
+                            else{
+                                final ServerLevel level = levelManager.getLevel(levelName);
+                                sender.teleport(level, level.getSpawnPosition());
+                            }
+                        }
+                    }
+                }
             }
             
             default -> sender.sendMessage("Invalid command " + command);

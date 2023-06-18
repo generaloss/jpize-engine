@@ -7,39 +7,56 @@ import pize.tests.voxelgame.client.control.GameCamera;
 
 public class Pose{
     
-    private final Vec3f position;
+    private final Vec3f position, scale;
     private final EulerAngles rotation;
     
-    private final Matrix4f translateMatrix, rotationMatrix, modelMatrix;
+    private final Matrix4f translateMatrix, scaleMatrix, rotationMatrix, poseModelMatrix, modelMatrix;
     
     public Pose(){
         position = new Vec3f();
+        scale = new Vec3f(1, 1, 1);
         rotation = new EulerAngles();
         
         translateMatrix = new Matrix4f();
+        scaleMatrix = new Matrix4f();
         rotationMatrix = new Matrix4f();
+        poseModelMatrix = new Matrix4f();
         modelMatrix = new Matrix4f();
     }
     
     public void updateMatrices(GameCamera camera, Pose initial){
         translateMatrix.toTranslated(position);
+        scaleMatrix.toScaled(scale);
         rotationMatrix.set(rotation.toMatrix());
+        
+        poseModelMatrix
+            .identity()
+        
+            .mul(initial.translateMatrix).mul(initial.scaleMatrix).mul(initial.rotationMatrix)
+            .mul(translateMatrix).mul(scaleMatrix).mul(rotationMatrix)
+        ;
         
         modelMatrix
             .set(new Matrix4f().toTranslated(-camera.getX(), 0, -camera.getZ()))
-            .mul(initial.translateMatrix).mul(initial.rotationMatrix)
-            .mul(translateMatrix).mul(rotationMatrix);
+            .mul(poseModelMatrix);
     }
     
     public void updateMatrices(GameCamera camera, Pose initial, Pose parent){
         translateMatrix.toTranslated(position);
+        scaleMatrix.toScaled(scale);
         rotationMatrix.set(rotation.toMatrix());
+        
+        poseModelMatrix
+            .identity()
+            
+            .mul(parent.poseModelMatrix)
+            .mul(initial.poseModelMatrix)
+            .mul(translateMatrix).mul(scaleMatrix).mul(rotationMatrix)
+        ;
         
         modelMatrix
             .set(new Matrix4f().toTranslated(-camera.getX(), 0, -camera.getZ()))
-                .mul(parent.translateMatrix).mul(parent.rotationMatrix)
-            .mul(initial.translateMatrix).mul(initial.rotationMatrix)
-            .mul(translateMatrix).mul(rotationMatrix);
+            .mul(poseModelMatrix);
     }
     
     
@@ -59,6 +76,10 @@ public class Pose{
     
     public Vec3f getPosition(){
         return position;
+    }
+    
+    public Vec3f getScale(){
+        return scale;
     }
     
     public EulerAngles getRotation(){

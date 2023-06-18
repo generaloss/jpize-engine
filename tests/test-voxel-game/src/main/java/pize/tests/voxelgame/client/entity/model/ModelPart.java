@@ -26,6 +26,8 @@ public class ModelPart{
         else
             pose.updateMatrices(camera, initialPose, parent.getPose());
         
+        if(shader == null)
+            return;
         shader.setUniform(modelMatrixUniform, pose.getModelMatrix());
         mesh.render();
     }

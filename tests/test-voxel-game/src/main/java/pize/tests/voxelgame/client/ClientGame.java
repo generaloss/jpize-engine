@@ -54,17 +54,16 @@ public class ClientGame{
     }
     
     public void tick(){
-        tickCount++;
+        if(world == null || player == null)
+            return;
         
-        if(tickCount % 40 == 0){
+        tickCount++;
+        if(tickCount % 60 == 0){
             tx = txCounter;
             txCounter = 0;
             ClientPacketHandler.rx = ClientPacketHandler.rxCounter;
             ClientPacketHandler.rxCounter = 0;
         }
-        
-        if(world == null || player == null)
-            return;
         
         if(player.isPosOrRotChanged())
             sendPacket(new SBPacketMove(player));

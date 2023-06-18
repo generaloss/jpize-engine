@@ -30,7 +30,7 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
     
     
     @Override
-    public synchronized void received(byte[] bytes, TcpConnection sender){
+    public void received(byte[] bytes, TcpConnection sender){
         final PacketInfo packetInfo = Packets.getPacketInfo(bytes);
         if(packetInfo == null)
             return;
@@ -143,8 +143,6 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
             }
             
         }
-        
-        // Utils.delayElapsed(1);
     }
     
     @Override

@@ -4,15 +4,14 @@ import pize.tests.voxelgame.client.ClientGame;
 import pize.tests.voxelgame.clientserver.net.packet.SBPacketChatMessage;
 import pize.util.io.TextProcessor;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Chat{
     
     private final ClientGame game;
-    private final ArrayDeque<ChatMessage> messageList;
+    private final CopyOnWriteArrayList<ChatMessage> messageList;
     private final TextProcessor textProcessor;
     private boolean opened;
     
@@ -21,7 +20,7 @@ public class Chat{
     
     public Chat(ClientGame game){
         this.game = game;
-        this.messageList = new ArrayDeque<>();
+        this.messageList = new CopyOnWriteArrayList<>();
         this.history = new ArrayList<>();
         this.textProcessor = new TextProcessor(false);
         
@@ -29,12 +28,12 @@ public class Chat{
     }
     
     
-    public Collection<ChatMessage> getMessages(){
+    public List<ChatMessage> getMessages(){
         return messageList;
     }
     
     public void putMessage(String message){
-        messageList.addFirst(new ChatMessage(message));
+        messageList.add(new ChatMessage(message));
     }
     
     public void clear(){
@@ -54,7 +53,7 @@ public class Chat{
         if(history.size() != 0 && history.get(history.size() - 1).equals(message))
             return;
         
-        history.add(message);
+        history.add(history.size(), message);
         historyPointer = history.size() - 1;
     }
     

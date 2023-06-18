@@ -21,7 +21,7 @@ public class TcpConnection{
         this.socket = socket;
         this.disconnector = disconnector;
         
-        outStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+        outStream = new DataOutputStream(socket.getOutputStream());
 
         receiveThread = new Thread(()->{
             try(final DataInputStream inStream = new DataInputStream(socket.getInputStream())){
@@ -61,7 +61,6 @@ public class TcpConnection{
             
             outStream.writeInt(bytes.length);
             outStream.write(bytes);
-            outStream.flush();
         }catch(IOException ignored){ }
     }
     

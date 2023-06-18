@@ -48,7 +48,7 @@ public class Main extends AppAdapter{
         clientRenderer.init();
         new Resource(SharedConstants.GAME_DIR_PATH).mkDirs();
         
-        Pize.setUpdateTPS(40);
+        Pize.setUpdateTPS(60);
         options.load();
         
         /** Game **/
