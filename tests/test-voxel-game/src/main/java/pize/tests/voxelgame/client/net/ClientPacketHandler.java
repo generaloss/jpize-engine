@@ -23,7 +23,8 @@ public class ClientPacketHandler implements TcpListener{
     }
     
     
-    public static float rx;
+    public static int rx;
+    public static int rxCounter;
     
     
     @Override
@@ -31,11 +32,10 @@ public class ClientPacketHandler implements TcpListener{
         final PacketInfo packetInfo = Packets.getPacketInfo(bytes);
         if(packetInfo == null)
             return;
-        rx++;
+        rxCounter++;
         switch(packetInfo.getPacketID()){
-
-            // Login
             
+            // Login
             case CBPacketDisconnect.PACKET_ID ->{
                 final CBPacketDisconnect packet = packetInfo.readPacket(new CBPacketDisconnect());
                 
@@ -56,15 +56,12 @@ public class ClientPacketHandler implements TcpListener{
             }
             
             // Game
-            
             case CBPacketPlayerSneaking.PACKET_ID ->{
                 final CBPacketPlayerSneaking packet = packetInfo.readPacket(new CBPacketPlayerSneaking());
                 
                 final Entity targetEntity = game.getLevel().getEntity(packet.playerUUID);
                 if(targetEntity instanceof RemotePlayer player)
                     player.setSneaking(packet.sneaking);
-                else
-                    System.out.println("R");
             }
             
             case CBPacketEntityMove.PACKET_ID ->{
@@ -123,7 +120,6 @@ public class ClientPacketHandler implements TcpListener{
             }
             
             // Ping
-            
             case CBPacketPong.PACKET_ID -> {
                 final CBPacketPong packet = packetInfo.readPacket(new CBPacketPong());
                 System.out.println("[Client]: ping " + (System.nanoTime() - packet.timeMillis) / 1000000F + " ms");

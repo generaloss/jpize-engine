@@ -17,7 +17,7 @@ public class LocalPlayer extends AbstractClientPlayer{
     private float jumpDownY, oldMotionY, fallHeight;
     
     public LocalPlayer(Level levelOF, String name){
-        super(levelOF, name);
+        super(levelOF, name); // 3) random skin ID
 
         moveControl = new Vec2f();
         setJumpHeight(1.25F);

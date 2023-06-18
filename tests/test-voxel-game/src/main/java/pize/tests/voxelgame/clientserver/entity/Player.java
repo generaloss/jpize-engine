@@ -5,7 +5,7 @@ import pize.tests.voxelgame.clientserver.level.Level;
 public class Player extends Entity{
     
     private final String name;
-    private boolean sprinting, sneaking, shifting;
+    private boolean sprinting, sneaking;
     
     public Player(Level level, String name){
         super(EntityType.PLAYER, level);
@@ -13,10 +13,10 @@ public class Player extends Entity{
         this.name = name;
     }
     
-    
     public String getName(){
         return name;
     }
+    
     
     public boolean isSprinting(){
         return sprinting;
@@ -25,7 +25,6 @@ public class Player extends Entity{
     public void setSprinting(boolean sprinting){
         this.sprinting = sprinting;
     }
-    
     
     public boolean isSneaking(){
         return sneaking;

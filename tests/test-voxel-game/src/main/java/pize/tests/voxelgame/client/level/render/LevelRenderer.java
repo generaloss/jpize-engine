@@ -35,7 +35,6 @@ public class LevelRenderer implements Disposable, Resizable{
     private final BlockSelector blockSelector;
     private final ChunkBorder chunkBorder;
     private boolean showChunkBorder;
-    private PlayerModel playerModel;
     
     private final Framebuffer3D framebuffer;
     private final Framebuffer2D batchFramebuffer;
@@ -102,16 +101,14 @@ public class LevelRenderer implements Disposable, Resizable{
             Gl.disable(Target.POLYGON_OFFSET_FILL);
             
             // Player
-            if(playerModel == null && session.getGame().getPlayer() != null)
-                playerModel = new PlayerModel(session.getGame().getPlayer());
-            
+            final PlayerModel playerModel = session.getGame().getPlayer().getModel();
             if(playerModel != null){
                 playerModel.animate();
                 if(camera.getPerspective() != PerspectiveType.FIRST_PERSON)
                     playerModel.render(camera);
             }
 
-            // Entityes
+            // Entities
             for(Entity entity : session.getGame().getLevel().getEntities()){
                 if(entity.getClass() == RemotePlayer.class){
                     final RemotePlayer remotePlayer = (RemotePlayer) entity;

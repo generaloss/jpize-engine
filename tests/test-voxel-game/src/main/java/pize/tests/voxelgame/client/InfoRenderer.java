@@ -78,7 +78,7 @@ public class InfoRenderer implements Disposable{
         // Vec3i selectedPos = rayCast.getSelectedBlockPosition();
         // info("Selected light level (F/B): " + clientWorld.getLight(imaginaryPos.x, imaginaryPos.y, imaginaryPos.z) + ", " + clientWorld.getLight(selectedPos.x, selectedPos.y, selectedPos.z));
         
-        // CTRL HINT
+        // HINTS
         hint("1, 2, 3 - set render mode");
         hint("L - show mouse");
         hint("F3 + G - show chunk border");

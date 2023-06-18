@@ -7,7 +7,6 @@ import pize.graphics.util.Shader;
 import pize.math.Mathc;
 import pize.math.vecmath.vector.Vec3d;
 import pize.tests.voxelgame.client.control.GameCamera;
-import pize.tests.voxelgame.clientserver.entity.Entity;
 import pize.tests.voxelgame.clientserver.entity.Player;
 
 public class PlayerModel{
@@ -25,7 +24,7 @@ public class PlayerModel{
         this.player = player;
         
         shader = new Shader(new Resource("shader/model.vert"), new Resource("shader/model.frag"));
-        skinTexture = new Texture("texture/skin1.png");
+        skinTexture = new Texture("texture/skin" + (Math.abs(player.getName().hashCode()) % 5 + 1) + ".png");
         
         torso = new ModelPart(new BoxBuilder(-2 * w, -6 * w, -4 * w,  2 * w, 6 * w, 4 * w)
             .nx(1, 1, 1, 1, 32 * t, 20 * t, 40 * t, 32 * t)
@@ -92,7 +91,7 @@ public class PlayerModel{
         rightHand.setInitialPose(0, 22 * w, -6 * w);
     }
     
-    public Entity getEntityOf(){
+    public Player getPlayer(){
         return player;
     }
     

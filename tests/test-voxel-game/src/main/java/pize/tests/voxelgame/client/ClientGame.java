@@ -15,7 +15,8 @@ import pize.tests.voxelgame.clientserver.net.packet.SBPacketMove;
 
 public class ClientGame{
     
-    public static float tx;
+    public static int tx;
+    private static int txCounter;
     
     private final Main session;
     private final TcpClient client;
@@ -51,8 +52,10 @@ public class ClientGame{
         tickCount++;
         
         if(tickCount % 75 == 0){
-            tx *= 0.75;
-            ClientPacketHandler.rx *= 0.75;
+            tx = txCounter;
+            txCounter = 0;
+            ClientPacketHandler.rx = ClientPacketHandler.rxCounter;
+            ClientPacketHandler.rxCounter = 0;
         }
         
         if(world == null || player == null)
@@ -94,7 +97,7 @@ public class ClientGame{
     
     public void sendPacket(IPacket<?> packet){
         packet.write(client.getConnection());
-        tx++;
+        txCounter++;
     }
     
     public void disconnect(){

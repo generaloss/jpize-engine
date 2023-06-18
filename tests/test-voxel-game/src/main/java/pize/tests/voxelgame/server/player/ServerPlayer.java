@@ -14,7 +14,7 @@ public class ServerPlayer extends Player{
     
     private int renderDistance;
 
-    public ServerPlayer(ServerLevel level, String name, TcpConnection connection){
+    public ServerPlayer(ServerLevel level, TcpConnection connection, String name){
         super(level, name);
         this.server = level.getServer();
         this.connectionAdapter = new PlayerConnectionAdapter(this, connection);

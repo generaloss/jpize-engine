@@ -63,7 +63,7 @@ public class PlayerList{
         }
         
         // Add ServerPlayer to list
-        final ServerPlayer serverPlayer = new ServerPlayer(level, name, connection);
+        final ServerPlayer serverPlayer = new ServerPlayer(level, connection, name);
         server.getConnectionManager().setPacketHandler(connection, serverPlayer.getConnectionAdapter());
         serverPlayer.teleport(level, spawnPosition);
         
