@@ -2,7 +2,7 @@ package pize.tests.voxelgame.clientserver.chunk.storage;
 
 import pize.tests.voxelgame.client.block.BlockState;
 import pize.tests.voxelgame.clientserver.chunk.Chunk;
-import pize.tests.voxelgame.clientserver.net.packet.PacketChunk;
+import pize.tests.voxelgame.clientserver.net.packet.CBPacketChunk;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.*;
 
@@ -23,7 +23,7 @@ public class ChunkStorage{
         
     }
     
-    public ChunkStorage(Chunk chunkOF, PacketChunk packet){
+    public ChunkStorage(Chunk chunkOF, CBPacketChunk packet){
         this.chunkOF = chunkOF;
         
         blocks = packet.blocks;
@@ -106,8 +106,8 @@ public class ChunkStorage{
     }
     
     
-    public PacketChunk getPacket(){
-        return new PacketChunk(
+    public CBPacketChunk getPacket(){
+        return new CBPacketChunk(
             chunkOF.getPosition().x,
             chunkOF.getPosition().z,
             blocks,

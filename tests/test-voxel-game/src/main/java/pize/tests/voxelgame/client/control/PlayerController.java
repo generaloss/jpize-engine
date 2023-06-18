@@ -4,21 +4,22 @@ import pize.tests.voxelgame.Main;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.options.KeyMapping;
 import pize.tests.voxelgame.client.options.Options;
+import pize.tests.voxelgame.clientserver.net.packet.SBPacketPlayerSneaking;
 
 public class PlayerController{
     
-    private final Main sessionOF;
+    private final Main session;
     
     private LocalPlayer player;
     private final CameraRotationController rotationController;
     
-    public PlayerController(Main sessionOF){
-        this.sessionOF = sessionOF;
+    public PlayerController(Main session){
+        this.session = session;
         rotationController = new CameraRotationController();
     }
     
-    public Main getSessionOf(){
-        return sessionOF;
+    public Main getSession(){
+        return session;
     }
     
     public void update(){
@@ -28,7 +29,7 @@ public class PlayerController{
         rotationController.update();
         player.getRotation().set(rotationController.getRotation());
         
-        final Options options = sessionOF.getOptions();
+        final Options options = session.getOptions();
         float forward = 0;
         float strafe = 0;
         
@@ -41,16 +42,23 @@ public class PlayerController{
         if(options.getKey(KeyMapping.LEFT).isPressed())
             strafe++;
         
-        player.setMoving(forward, strafe);
+        player.moveControl(forward, strafe);
         
         if(options.getKey(KeyMapping.JUMP).isPressed())
             player.jump();
+        
         if(options.getKey(KeyMapping.SPRINT).isDown())
-            player.sprint();
-        if(options.getKey(KeyMapping.SNEAK).isDown())
+            player.setSprinting(true);
+        else if(options.getKey(KeyMapping.SPRINT).isReleased())
+            player.setSprinting(false);
+        
+        if(options.getKey(KeyMapping.SNEAK).isDown()){
             player.setSneaking(true);
-        else if(options.getKey(KeyMapping.SNEAK).isReleased())
+            session.getGame().sendPacket(new SBPacketPlayerSneaking(player));
+        }else if(options.getKey(KeyMapping.SNEAK).isReleased()){
             player.setSneaking(false);
+            session.getGame().sendPacket(new SBPacketPlayerSneaking(player));
+        }
     }
     
     

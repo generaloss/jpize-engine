@@ -5,7 +5,7 @@ import pize.math.vecmath.vector.Vec3f;
 public class BoxBody implements Cloneable{
 
     private final BoundingBox boundingBox;
-    protected final Vec3f position;
+    private final Vec3f position;
 
     public BoxBody(BoundingBox boundingBox){
         this.boundingBox = boundingBox;

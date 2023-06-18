@@ -19,7 +19,7 @@ public class OfflinePlayer{
         return name;
     }
     
-    public String getWorldName(){
+    public String getLevelName(){
         return worldName;
     }
     

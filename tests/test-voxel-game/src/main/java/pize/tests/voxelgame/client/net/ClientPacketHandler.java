@@ -1,111 +1,143 @@
 package pize.tests.voxelgame.client.net;
 
-import pize.tests.voxelgame.client.ClientGame;
-import pize.tests.voxelgame.client.entity.LocalPlayer;
-import pize.tests.voxelgame.client.entity.RemotePlayer;
-import pize.tests.voxelgame.clientserver.entity.Entity;
-import pize.tests.voxelgame.clientserver.net.PlayerProfile;
-import pize.net.tcp.TcpChannel;
+import pize.Pize;
+import pize.net.tcp.TcpConnection;
 import pize.net.tcp.TcpListener;
 import pize.net.tcp.packet.PacketInfo;
 import pize.net.tcp.packet.Packets;
+import pize.tests.voxelgame.client.ClientGame;
+import pize.tests.voxelgame.client.entity.RemotePlayer;
+import pize.tests.voxelgame.clientserver.entity.Entity;
 import pize.tests.voxelgame.clientserver.net.packet.*;
 
-public class ClientPacketHandler implements TcpListener{ //} implements NetListener<byte[]>{
+public class ClientPacketHandler implements TcpListener{
     
-    private final ClientGame gameOF;
+    private final ClientGame game;
     
-    public ClientPacketHandler(ClientGame gameOF){
-        this.gameOF = gameOF;
+    public ClientPacketHandler(ClientGame game){
+        this.game = game;
     }
     
-    public ClientGame getGameOf(){
-        return gameOF;
+    public ClientGame getGame(){
+        return game;
     }
+    
+    
+    public static float rx;
     
     
     @Override
-    public synchronized void received(byte[] bytes, TcpChannel sender){
-        final PlayerProfile profile = gameOF.getSessionOf().getProfile();
-        
+    public synchronized void received(byte[] bytes, TcpConnection sender){
         final PacketInfo packetInfo = Packets.getPacketInfo(bytes);
         if(packetInfo == null)
             return;
+        rx++;
         switch(packetInfo.getPacketID()){
 
-            case PacketEntityMove.PACKET_ID ->{
-                final PacketEntityMove packet = packetInfo.readPacket(new PacketEntityMove());
+            // Login
+            
+            case CBPacketDisconnect.PACKET_ID ->{
+                final CBPacketDisconnect packet = packetInfo.readPacket(new CBPacketDisconnect());
+                
+                game.disconnect();
+                System.out.println("[Client]: Connection closed: " + packet.reasonComponent);
+            }
+            
+            case CBPacketEncryptStart.PACKET_ID ->{
+                final CBPacketEncryptStart packet = packetInfo.readPacket(new CBPacketEncryptStart());
+                
+                byte[] encryptedClientKey = packet.publicServerKey.encrypt(game.getEncryptKey().getKey().getEncoded());
+                new SBPacketEncryptEnd(encryptedClientKey).write(sender);
+                
+                sender.encode(game.getEncryptKey());// * шифрование *
+                sender.setTcpNoDelay(false);
+                
+                new SBPacketAuth(game.getSession().getSessionToken()).write(sender);
+            }
+            
+            // Game
+            
+            case CBPacketPlayerSneaking.PACKET_ID ->{
+                final CBPacketPlayerSneaking packet = packetInfo.readPacket(new CBPacketPlayerSneaking());
+                
+                final Entity targetEntity = game.getLevel().getEntity(packet.playerUUID);
+                if(targetEntity instanceof RemotePlayer player)
+                    player.setSneaking(packet.sneaking);
+                else
+                    System.out.println("R");
+            }
+            
+            case CBPacketEntityMove.PACKET_ID ->{
+                final CBPacketEntityMove packet = packetInfo.readPacket(new CBPacketEntityMove());
 
-                final Entity targetEntity = gameOF.getWorld().getEntity(packet.playerName);
+                final Entity targetEntity = game.getLevel().getEntity(packet.uuid);
                 targetEntity.getPosition().set(packet.position);
                 targetEntity.getRotation().set(packet.rotation);
                 targetEntity.getMotion().set(packet.motion);
             }
 
-            case PacketSpawnPlayer.PACKET_ID ->{
-                final PacketSpawnPlayer packet = packetInfo.readPacket(new PacketSpawnPlayer());
+            case CBPacketSpawnEntity.PACKET_ID ->{
+                final CBPacketSpawnEntity packet = packetInfo.readPacket(new CBPacketSpawnEntity());
 
-                final RemotePlayer remotePlayer = new RemotePlayer(gameOF.getWorld(), packet.playerName);
+                final Entity entity = packet.type.createEntity(game.getLevel());
+                entity.getPosition().set(packet.position);
+                entity.getRotation().set(packet.rotation);
+                entity.setUUID(packet.uuid);
+
+                game.getLevel().addEntity(entity);
+            }
+            
+            case CBPacketRemoveEntity.PACKET_ID ->{
+                final CBPacketRemoveEntity packet = packetInfo.readPacket(new CBPacketRemoveEntity());
+                
+                game.getLevel().removeEntity(packet.uuid);
+            }
+            
+            case CBPacketSpawnPlayer.PACKET_ID ->{
+                final CBPacketSpawnPlayer packet = packetInfo.readPacket(new CBPacketSpawnPlayer());
+                
+                final RemotePlayer remotePlayer = new RemotePlayer(game.getLevel(), packet.playerName);
                 remotePlayer.getPosition().set(packet.position);
                 remotePlayer.getRotation().set(packet.rotation);
+                remotePlayer.setUUID(packet.uuid);
+                
+                game.getLevel().addEntity(remotePlayer);
+            }
 
-                gameOF.getWorld().addEntity(remotePlayer);
-                System.out.println("воооооооооооооо чел тут уже (должен) былы итыт крч ну то что инитиал циалаллизирует и вот да");
-            }
-
-            case PacketPlayerSpawnInfo.PACKET_ID ->{
-                final PacketPlayerSpawnInfo packet = packetInfo.readPacket(new PacketPlayerSpawnInfo());
+            case CBPacketSpawnInfo.PACKET_ID ->{
+                final CBPacketSpawnInfo packet = packetInfo.readPacket(new CBPacketSpawnInfo());
                 
-                gameOF.createNetClientWorld(packet.worldName);
-                gameOF.spawnPlayer(packet.position);
-                gameOF.getWorld().getChunkManager().start();
+                game.createNetClientWorld(packet.levelName);
+                game.spawnPlayer(packet.position);
+                game.getLevel().getChunkManager().start();
             }
             
-            case PacketBlockUpdate.PACKET_ID ->{
-                final PacketBlockUpdate packet = packetInfo.readPacket(new PacketBlockUpdate());
-                gameOF.getWorld().setBlock(packet.x, packet.y, packet.z, packet.state, true);
+            case CBPacketBlockUpdate.PACKET_ID ->{
+                final CBPacketBlockUpdate packet = packetInfo.readPacket(new CBPacketBlockUpdate());
+                game.getLevel().setBlock(packet.x, packet.y, packet.z, packet.state);
             }
             
-            case PacketChunk.PACKET_ID ->{
-                final PacketChunk packet = packetInfo.readPacket(new PacketChunk());
-                gameOF.getWorld().getChunkManager().receivedChunk(packet);
+            case CBPacketChunk.PACKET_ID ->{
+                final CBPacketChunk packet = packetInfo.readPacket(new CBPacketChunk());
+                game.getLevel().getChunkManager().receivedChunk(packet);
             }
             
-            case PacketDisconnect.PACKET_ID ->{
-                final PacketDisconnect packet = packetInfo.readPacket(new PacketDisconnect());
-                
-                gameOF.disconnect();
-                System.out.println("[CLIENT]: соединение прервано: " + packet.reasonComponent);
-            }
+            // Ping
             
-            case PacketEncryptStart.PACKET_ID ->{
-                final PacketEncryptStart packet = packetInfo.readPacket(new PacketEncryptStart());
-                
-                byte[] encryptedClientKey = packet.publicServerKey.encrypt(gameOF.getEncryptKey().getKey().getEncoded());
-                new PacketEncryptEnd(encryptedClientKey).write(sender);
-                
-                sender.encode(gameOF.getEncryptKey());// * шифрование *
-                sender.setTcpNoDelay(false);
-                
-                new PacketAuth(gameOF.getSessionOf().getProfile().getName(), gameOF.getSessionOf().getSessionToken()).write(sender);
-            }
-            
-            case PacketPing.PACKET_ID -> {
-                PacketPing packet = packetInfo.readPacket(new PacketPing());
-                System.out.println("[CLIENT]: ping " + (System.nanoTime() - packet.timeMillis) / 1000000F + " ms");
+            case CBPacketPong.PACKET_ID -> {
+                final CBPacketPong packet = packetInfo.readPacket(new CBPacketPong());
+                System.out.println("[Client]: ping " + (System.nanoTime() - packet.timeMillis) / 1000000F + " ms");
             }
             
         }
     }
     
     @Override
-    public void connected(TcpChannel channel){
-    
-    }
+    public void connected(TcpConnection connection){ }
     
     @Override
-    public void disconnected(TcpChannel channel){
-    
+    public void disconnected(TcpConnection connection){
+        Pize.exit();
     }
     
 }

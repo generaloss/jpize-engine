@@ -2,7 +2,7 @@ package pize.tests.net;
 
 import pize.net.security.KeyAES;
 import pize.net.security.KeyRSA;
-import pize.net.tcp.TcpChannel;
+import pize.net.tcp.TcpConnection;
 import pize.net.tcp.TcpListener;
 import pize.net.tcp.TcpServer;
 import pize.net.tcp.packet.PacketInfo;
@@ -33,7 +33,7 @@ public class ServerSide implements TcpListener{
     
     
     @Override
-    public void received(byte[] bytes, TcpChannel sender){
+    public void received(byte[] bytes, TcpConnection sender){
         try{
             final PacketInfo packetInfo = Packets.getPacketInfo(bytes);
             if(packetInfo == null){
@@ -70,14 +70,14 @@ public class ServerSide implements TcpListener{
     }
     
     @Override
-    public void connected(TcpChannel channel){
+    public void connected(TcpConnection connection){
         System.out.println("Client connected {");
-        new EncodePacket(key.getPublic().getKey().getEncoded()).write(channel);
+        new EncodePacket(key.getPublic().getKey().getEncoded()).write(connection);
         System.out.println("   send public key");
     }
     
     @Override
-    public void disconnected(TcpChannel channel){
+    public void disconnected(TcpConnection connection){
         System.out.println("   Client disconnected\n}");
     }
     

@@ -11,7 +11,7 @@ import pize.io.glfw.Key;
 import pize.math.vecmath.tuple.Tuple2f;
 import pize.net.security.KeyAES;
 import pize.net.security.PublicRSA;
-import pize.net.tcp.TcpChannel;
+import pize.net.tcp.TcpConnection;
 import pize.net.tcp.TcpClient;
 import pize.net.tcp.TcpListener;
 import pize.net.tcp.packet.PacketInfo;
@@ -48,18 +48,18 @@ public class ClientSide extends AppAdapter implements TcpListener{
         client = new TcpClient(this);
         client.connect("localhost", 5454);
         
-        client.getChannel().setTcpNoDelay(true);
+        client.getConnection().setTcpNoDelay(true);
     }
     
     @Override
     public void render(){
         if(Key.ENTER.isDown()){
-            new MessagePacket(text.toString()).write(client.getChannel());
+            new MessagePacket(text.toString()).write(client.getConnection());
             text.removeLine();
         }
         
         if(Key.LEFT_CONTROL.isPressed() && Key.P.isDown())
-            new PingPacket(System.nanoTime()).write(client.getChannel());
+            new PingPacket(System.nanoTime()).write(client.getConnection());
         
         if(Key.ESCAPE.isDown())
             Pize.exit();
@@ -105,7 +105,7 @@ public class ClientSide extends AppAdapter implements TcpListener{
     
     
     @Override
-    public void received(byte[] bytes, TcpChannel sender){
+    public void received(byte[] bytes, TcpConnection sender){
         try{
             final PacketInfo packetInfo = Packets.getPacketInfo(bytes);
             if(packetInfo == null){
@@ -136,7 +136,7 @@ public class ClientSide extends AppAdapter implements TcpListener{
                     sender.encode(key);
                     System.out.println("   encoded with key (hash): " + key.getKey().hashCode());
                     
-                    new PingPacket(System.nanoTime()).write(client.getChannel());
+                    new PingPacket(System.nanoTime()).write(client.getConnection());
                 }
             }
             
@@ -146,12 +146,12 @@ public class ClientSide extends AppAdapter implements TcpListener{
     }
     
     @Override
-    public void connected(TcpChannel channel){
+    public void connected(TcpConnection connection){
         System.out.println("Connected {");
     }
     
     @Override
-    public void disconnected(TcpChannel channel){
+    public void disconnected(TcpConnection connection){
         System.out.println("   Client disconnected\n}");
     }
     

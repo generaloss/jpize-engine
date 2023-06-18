@@ -9,6 +9,7 @@ import pize.math.vecmath.vector.Vec3f;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 public class PacketInputStream extends DataInputStream{
     
@@ -53,6 +54,10 @@ public class PacketInputStream extends DataInputStream{
             readDouble(),
             readDouble()
         );
+    }
+    
+    public UUID readUUID() throws IOException{
+        return new UUID(readLong(), readLong());
     }
     
 }

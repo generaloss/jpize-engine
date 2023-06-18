@@ -4,7 +4,7 @@ import pize.tests.voxelgame.client.block.BlockProperties;
 import pize.tests.voxelgame.client.block.BlockState;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkStorage;
-import pize.tests.voxelgame.clientserver.net.packet.PacketChunk;
+import pize.tests.voxelgame.clientserver.net.packet.CBPacketChunk;
 
 public class Chunk{
     
@@ -16,7 +16,7 @@ public class Chunk{
         this.position = position;
     }
     
-    public Chunk(PacketChunk packet){
+    public Chunk(CBPacketChunk packet){
         storage = new ChunkStorage(this, packet);
         this.position = new ChunkPos(packet.chunkX, packet.chunkZ);
     }

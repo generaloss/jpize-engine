@@ -1,5 +1,6 @@
 package pize.net.tcp;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -7,7 +8,7 @@ import java.net.Socket;
 
 public class TcpClient extends TcpDisconnector{
 
-    private TcpChannel channel;
+    private TcpConnection connection;
     private final TcpListener listener;
     
     public TcpClient(TcpListener listener){
@@ -16,7 +17,7 @@ public class TcpClient extends TcpDisconnector{
     
 
     public void connect(String address, int port){
-        if(channel != null && !channel.isClosed())
+        if(connection != null && !connection.isClosed())
             throw new RuntimeException("Already connected");
         
         try{
@@ -24,8 +25,8 @@ public class TcpClient extends TcpDisconnector{
             final InetSocketAddress socketAddress = new InetSocketAddress(InetAddress.getByName(address), port);
             socket.connect(socketAddress);
 
-            channel = new TcpChannel(socket, listener, this);
-            listener.connected(channel);
+            connection = new TcpConnection(socket, listener, this);
+            listener.connected(connection);
         }catch(IOException e){
             System.err.println("TcpClient: " + e.getMessage());
         }
@@ -33,25 +34,34 @@ public class TcpClient extends TcpDisconnector{
     
     
     public void send(byte[] packet){
-        channel.send(packet);
+        connection.send(packet);
     }
     
+    public void send(ByteArrayOutputStream stream){
+        connection.send(stream);
+    }
+    
+    public void send(PacketWriter data){
+        connection.send(data);
+    }
+    
+    
     synchronized public void disconnect(){
-        if(channel == null || channel.isClosed())
+        if(connection == null || connection.isClosed())
             return;
 
-        channel.close();
-        listener.disconnected(channel);
+        connection.close();
+        listener.disconnected(connection);
     }
     
     @Override
-    protected void disconnected(TcpChannel channel){
-        listener.disconnected(channel);
+    protected void disconnected(TcpConnection connection){
+        listener.disconnected(connection);
     }
 
     
-    public TcpChannel getChannel(){
-        return channel;
+    public TcpConnection getConnection(){
+        return connection;
     }
 
 }

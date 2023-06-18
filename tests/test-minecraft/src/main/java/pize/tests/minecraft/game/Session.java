@@ -21,8 +21,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Session implements Renderer{
-
-    public static final String CLIENT_NAME = "GeneralPashon";
+    
     public static final String GAME_DIR_PATH = System.getProperty("user.home") + "/minecraft/";
 
     private final Options options;

@@ -2,6 +2,7 @@ package pize.tests.voxelgame.clientserver.entity;
 
 import pize.math.Maths;
 import pize.math.util.EulerAngles;
+import pize.math.vecmath.tuple.Tuple3f;
 import pize.math.vecmath.vector.Vec3d;
 import pize.math.vecmath.vector.Vec3f;
 import pize.physic.BoundingBox;
@@ -12,86 +13,97 @@ import pize.tests.voxelgame.client.block.BlockProperties;
 import pize.tests.voxelgame.client.block.BlockState;
 import pize.tests.voxelgame.client.block.model.BlockFace;
 import pize.tests.voxelgame.client.block.model.BlockShape;
-import pize.tests.voxelgame.client.entity.model.PlayerModel;
 import pize.tests.voxelgame.clientserver.chunk.ChunkUtils;
-import pize.tests.voxelgame.clientserver.world.World;
+import pize.tests.voxelgame.clientserver.level.Level;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public abstract class Entity extends BoxBody{
     
-    private final World worldOF;
-    
-    protected final Motion3D motion;
-    protected final EulerAngles rotation;
+    private Level level;
+    private final EntityType entityType;
+    private final EulerAngles rotation;
+    private final Motion3D motion;
+    private UUID uuid;
     
     private BoxBody[] blockBoxes;
-    protected boolean onGround;
+    private boolean onGround;
 
-    private final Vec3f oldPosition;
-    
-    public Entity(BoundingBox boundingBox, World worldOF){
-        super(boundingBox);
-        this.worldOF = worldOF;
+    public Entity(EntityType entityType, Level level){
+        super(entityType.getBoundingBox());
         
-        motion = new Motion3D();
-        rotation = new EulerAngles();
-
-        oldPosition = new Vec3f();
-    }
-    
-    public World getWorldOf(){
-        return worldOF;
-    }
-
-
-    public void update(){
-        // Check is chunk loaded
-        final Vec3f pos = getPosition();
-        if(worldOF.getChunk(pos.xf(), pos.zf()) == null)
-            return;
-        
-        // Update blocks around player
-        blockBoxes = getBlockBoxes();
-        // Update is player on ground
-        onGround = isCollidedTo(BlockFace.NEGATIVE_Y);
-        
-        onLivingUpdate();
-    }
-
-
-    public boolean checkPositionChange(){
-        if(!oldPosition.equals(getPosition())){
-            oldPosition.set(getPosition());
-            return true;
-        }
-        return false;
+        this.level = level;
+        this.entityType = entityType;
+        this.rotation = new EulerAngles();
+        this.motion = new Motion3D();
+        this.uuid = UUID.randomUUID();
     }
     
     
-    public abstract void onLivingUpdate();
+    public Level getLevel(){
+        return level;
+    }
     
-    public abstract float getEyes();
-
-
-    public Motion3D getMotion(){
-        return motion;
+    public EntityType getEntityType(){
+        return entityType;
     }
     
     public EulerAngles getRotation(){
         return rotation;
     }
     
-    public boolean isOnGround(){
-        return onGround;
+    public Motion3D getMotion(){
+        return motion;
     }
     
     
-    protected Vec3d moveEntity(Vec3d motion){
-        final Vec3d collidedMove = Collider3D.getCollidedMotion(this, motion, blockBoxes);
-        getPosition().add(collidedMove);
+    public UUID getUUID(){
+        return uuid;
+    }
+    
+    public void setUUID(UUID uuid){
+        this.uuid = uuid;
+    }
+    
+    public float getEyeHeight(){
+        return getBoundingBox().getSizeY() * 0.85F;
+    }
+    
+    
+    public void teleport(Level level, Tuple3f position, EulerAngles rotation){
+        this.level = level;
+        getPosition().set(position);
+        getRotation().set(rotation);
+    }
+    
+    public void teleport(Tuple3f position, EulerAngles rotation){
+        teleport(level, position, rotation);
+    }
+    
+    public void teleport(Level level, Tuple3f position){
+        teleport(level, position, rotation);
+    }
+    
+    public void teleport(Tuple3f position){
+        teleport(level, position, rotation);
+    }
+    
+    
+    public void tick(){
+        // Check is chunk loaded
+        final Vec3f pos = getPosition();
+        if(level.getChunk(pos.xf(), pos.zf()) == null)
+            return;
         
-        return collidedMove;
+        // Update blocks around player
+        blockBoxes = getBlockBoxes();
+        // Update is player on ground
+        onGround = isCollidedTo(BlockFace.NEGATIVE_Y);
+    }
+    
+    public boolean isOnGround(){
+        return onGround;
     }
     
     protected boolean isCollidedTo(BlockFace face){
@@ -116,7 +128,7 @@ public abstract class Entity extends BoxBody{
         for(int x = beginX; x < endX; x++)
             for(int y = beginY; y < endY; y++)
                 for(int z = beginZ; z < endZ; z++){
-                    final BlockProperties block = BlockState.getProps(worldOF.getBlock(x, y, z));
+                    final BlockProperties block = BlockState.getProps(level.getBlock(x, y, z));
                     final BlockShape shape = block.getShape();
                     
                     for(BoundingBox boundingBox: shape.getBoxes()){
@@ -128,6 +140,16 @@ public abstract class Entity extends BoxBody{
                 }
         
         return blockBoxes.toArray(new BoxBody[0]);
+    }
+    
+    protected Vec3d moveEntity(Vec3d motion){
+        if(blockBoxes == null)
+            return null;
+        
+        final Vec3d collidedMove = Collider3D.getCollidedMotion(this, motion, blockBoxes);
+        getPosition().add(collidedMove);
+        
+        return collidedMove;
     }
     
 }

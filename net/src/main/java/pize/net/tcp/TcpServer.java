@@ -13,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class TcpServer extends TcpDisconnector implements Closeable{
 
     private ServerSocket serverSocket;
-    private CopyOnWriteArrayList<TcpChannel> channels;
+    private CopyOnWriteArrayList<TcpConnection> connectionList;
     private final TcpListener listener;
     private boolean closed;
 
@@ -31,7 +31,7 @@ public class TcpServer extends TcpDisconnector implements Closeable{
             serverSocket = new ServerSocket();
             serverSocket.bind(new InetSocketAddress(InetAddress.getByName(address), port));
             
-            channels = new CopyOnWriteArrayList<>();
+            connectionList = new CopyOnWriteArrayList<>();
             waitConnections();
             closed = false;
             
@@ -44,9 +44,9 @@ public class TcpServer extends TcpDisconnector implements Closeable{
         final Thread connectorThread = new Thread(()->{
             try{
                 while(!Thread.interrupted() && !closed){
-                    final TcpChannel channel = new TcpChannel(serverSocket.accept(), listener, this);
-                    listener.connected(channel);
-                    channels.add(channel);
+                    final TcpConnection connection = new TcpConnection(serverSocket.accept(), listener, this);
+                    listener.connected(connection);
+                    connectionList.add(connection);
                     
                     Thread.yield();
                 }
@@ -62,20 +62,20 @@ public class TcpServer extends TcpDisconnector implements Closeable{
     
     
     public void broadcast(byte[] packet){
-        for(TcpChannel channel: channels)
+        for(TcpConnection channel: connectionList)
             channel.send(packet);
     }
     
     @Override
-    synchronized public void disconnected(TcpChannel channel){
-        listener.disconnected(channel);
-        channels.remove(channel);
-        channel.close();
+    synchronized public void disconnected(TcpConnection connection){
+        listener.disconnected(connection);
+        connectionList.remove(connection);
+        connection.close();
     }
     
 
-    public Collection<TcpChannel> getAllChannels(){
-        return channels;
+    public Collection<TcpConnection> getConnections(){
+        return connectionList;
     }
     
     
@@ -88,9 +88,9 @@ public class TcpServer extends TcpDisconnector implements Closeable{
         if(closed)
             return;
         
-        for(TcpChannel connection: channels)
+        for(TcpConnection connection: connectionList)
             connection.close();
-        channels.clear();
+        connectionList.clear();
         
         closed = true;
         Utils.close(serverSocket);

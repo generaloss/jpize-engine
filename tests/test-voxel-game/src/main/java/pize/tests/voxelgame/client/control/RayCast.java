@@ -9,7 +9,7 @@ import pize.tests.voxelgame.client.block.BlockState;
 import pize.tests.voxelgame.client.block.blocks.Block;
 import pize.tests.voxelgame.client.block.model.BlockFace;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
-import pize.tests.voxelgame.client.world.ClientWorld;
+import pize.tests.voxelgame.client.level.ClientLevel;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.HEIGHT_IDX;
 
@@ -21,7 +21,7 @@ public class RayCast{
     private final Vec3i selectedBlock, imaginarySelectedBlock;
     private BlockFace selectedFace;
     private boolean selected;
-    private ClientWorld world;
+    private ClientLevel world;
     
     public RayCast(Main sessionOF, float length){
         this.sessionOF = sessionOF;
@@ -36,7 +36,7 @@ public class RayCast{
     }
     
     
-    public void setWorld(ClientWorld world){
+    public void setWorld(ClientLevel world){
         this.world = world;
     }
     
@@ -46,7 +46,7 @@ public class RayCast{
             return;
         
         final LocalPlayer player = sessionOF.getGame().getPlayer();
-        final Vec3f start = player.getPosition().clone().add(0, player.getEyes(), 0);
+        final Vec3f start = player.getPosition().clone().add(0, player.getEyeHeight(), 0);
         final Vec3f dir = player.getRotation().direction();
         
         final Vec3i step = new Vec3i(

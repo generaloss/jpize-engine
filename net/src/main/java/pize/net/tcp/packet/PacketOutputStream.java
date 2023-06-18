@@ -7,6 +7,7 @@ import pize.math.vecmath.tuple.Tuple3f;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.UUID;
 
 public class PacketOutputStream extends DataOutputStream{
     
@@ -46,6 +47,11 @@ public class PacketOutputStream extends DataOutputStream{
         writeDouble(vector.yaw);
         writeDouble(vector.pitch);
         writeDouble(vector.roll);
+    }
+    
+    public void writeUUID(UUID uuid) throws IOException{
+        writeLong(uuid.getMostSignificantBits());
+        writeLong(uuid.getLeastSignificantBits());
     }
     
 }

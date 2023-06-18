@@ -1,11 +1,14 @@
 package pize.tests.voxelgame.server.player;
 
-import pize.tests.voxelgame.clientserver.net.PlayerProfile;
-import pize.tests.voxelgame.clientserver.net.packet.PacketSpawnPlayer;
-import pize.tests.voxelgame.server.Server;
-import pize.tests.voxelgame.server.world.ServerWorld;
-import pize.net.tcp.TcpChannel;
+import pize.math.vecmath.vector.Vec3f;
+import pize.net.tcp.TcpConnection;
 import pize.net.tcp.packet.IPacket;
+import pize.tests.voxelgame.clientserver.net.packet.CBPacketRemoveEntity;
+import pize.tests.voxelgame.clientserver.net.packet.CBPacketSpawnInfo;
+import pize.tests.voxelgame.clientserver.net.packet.CBPacketSpawnPlayer;
+import pize.tests.voxelgame.server.Server;
+import pize.tests.voxelgame.server.level.ServerLevel;
+import pize.tests.voxelgame.server.net.PlayerConnectionAdapter;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,75 +16,83 @@ import java.util.Map;
 
 public class PlayerList{
     
-    private final Server serverOF;
-    private final Map<String, OnlinePlayer> playerNameMap;
-    private final Map<TcpChannel, OnlinePlayer> playerChannelMap;
+    private final Server server;
+    private final Map<String, ServerPlayer> playerMap;
     
-    public PlayerList(Server serverOF){
-        this.serverOF = serverOF;
-        playerNameMap = new HashMap<>();
-        playerChannelMap = new HashMap<>();
+    public PlayerList(Server server){
+        this.server = server;
+        playerMap = new HashMap<>();
     }
     
-    public Server getServerOf(){
-        return serverOF;
+    public Server getServer(){
+        return server;
     }
     
     
-    public Collection<OnlinePlayer> getOnlinePlayers(){
-        return playerNameMap.values();
-    }
-    
-    public OnlinePlayer getOnlinePlayer(String name){
-        return playerNameMap.get(name);
-    }
-    
-    public OnlinePlayer getOnlinePlayer(TcpChannel channel){
-        return playerChannelMap.get(channel);
+    public Collection<ServerPlayer> getPlayers(){
+        return playerMap.values();
     }
     
     public boolean isPlayerOnline(String name){
-        return playerNameMap.containsKey(name);
+        return playerMap.containsKey(name);
+    }
+    
+    public ServerPlayer getPlayer(String name){
+        return playerMap.get(name);
     }
     
     
-    public void connectOnlinePlayer(String name, TcpChannel channel){
-        final OnlinePlayer onlinePlayer = addOnlinePlayer(name, channel);
+    public void addNewPlayer(String name, TcpConnection connection){
+        // Get level & Spawn position
+        final ServerLevel level;
+        final Vec3f spawnPosition;
         
         final OfflinePlayer offlinePlayer = getOfflinePlayer(name);
-        final String worldInName = offlinePlayer == null ? serverOF.getConfiguration().getDefaultWorldName() : offlinePlayer.getWorldName();
+        if(offlinePlayer != null){
+            
+            final String levelName = offlinePlayer.getLevelName();
+            server.getLevelManager().loadLevel(levelName);
+            level = server.getLevelManager().getLevel(levelName);
+            spawnPosition = offlinePlayer.getPosition();
+        }else{
+            
+            final String levelName = server.getConfiguration().getDefaultLevelName();
+            server.getLevelManager().loadLevel(levelName);
+            level = server.getLevelManager().getLevel(levelName);
+            spawnPosition = level.getSpawnPosition();
+        }
         
-        onlinePlayer.setWorldIn(worldInName);
-        serverOF.getWorldManager().loadWorld(worldInName);
+        // Add ServerPlayer to list
+        final ServerPlayer serverPlayer = new ServerPlayer(level, name, connection);
+        server.getConnectionManager().setPacketHandler(connection, serverPlayer.getConnectionAdapter());
+        serverPlayer.teleport(level, spawnPosition);
         
-        final ServerWorld worldIn = serverOF.getWorldManager().getWorld(worldInName);
-        worldIn.getPlayersIn().add(onlinePlayer);
-        worldIn.getChunkManager().loadInitChunkForPlayer(onlinePlayer);
+        playerMap.put(name, serverPlayer);
+        
+        // Send packets to player
+        final PlayerConnectionAdapter connectionAdapter = serverPlayer.getConnectionAdapter();
+        
+        new CBPacketSpawnInfo(level.getName(), spawnPosition).write(connection); // spawn init info
+        
+        for(ServerPlayer anotherPlayer: playerMap.values())
+            if(anotherPlayer != serverPlayer)
+                connectionAdapter.sendPacket(new CBPacketSpawnPlayer(anotherPlayer)); // all players info
+        
+        // Load chunks for player
+        level.addEntity(serverPlayer);
+        level.getChunkManager().loadInitChunkForPlayer(serverPlayer);
 
-        broadcastPacket(new PacketSpawnPlayer(onlinePlayer), onlinePlayer);
-        System.out.println("[SERVER]: кароче чел присоеденисля к серверу и надо челам на сервере по такому поводу отправить весточку");
-    }
-    
-    public void disconnectOnlinePlayer(TcpChannel channel){
-        OnlinePlayer onlinePlayer = getOnlinePlayer(channel);
-        PlayerIO.save(onlinePlayer);
-        
-        removeOnlinePlayer(onlinePlayer);
+        // Send to all player-connection-event packet
+        broadcastToAllExceptPlayer(new CBPacketSpawnPlayer(serverPlayer), serverPlayer);
     }
     
     
-    private OnlinePlayer addOnlinePlayer(String name, TcpChannel channel){
-        final OnlinePlayer onlinePlayer = new OnlinePlayer(serverOF, new PlayerProfile(name), channel);
+    public void disconnectPlayer(ServerPlayer player){
+        broadcastToAllExceptPlayer(new CBPacketRemoveEntity(player), player); // Remove player entity on client
+        player.getLevel().removeEntity(player); // Remove entity on server
+        PlayerIO.save(player);                  // Save
         
-        playerNameMap.put(name, onlinePlayer);
-        playerChannelMap.put(channel, onlinePlayer);
-        
-        return onlinePlayer;
-    }
-    
-    private void removeOnlinePlayer(OnlinePlayer player){
-        playerNameMap.remove(player.getProfile().getName());
-        playerChannelMap.remove(player.getChannel());
+        playerMap.remove(player.getName());
     }
     
     
@@ -90,13 +101,13 @@ public class PlayerList{
     }
     
     
-    public void broadcastPacket(IPacket packet){
-        for(OnlinePlayer player: playerNameMap.values())
+    public void broadcastToAll(IPacket<?> packet){
+        for(ServerPlayer player: playerMap.values())
             player.sendPacket(packet);
     }
 
-    public void broadcastPacket(IPacket packet, OnlinePlayer except){
-        for(OnlinePlayer player: playerNameMap.values())
+    public void broadcastToAllExceptPlayer(IPacket<?> packet, ServerPlayer except){
+        for(ServerPlayer player: playerMap.values())
             if(player != except)
                 player.sendPacket(packet);
     }

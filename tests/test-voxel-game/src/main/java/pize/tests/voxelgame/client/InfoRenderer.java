@@ -9,12 +9,11 @@ import pize.math.Maths;
 import pize.tests.voxelgame.Main;
 import pize.tests.voxelgame.client.chunk.mesh.ChunkBuilder;
 import pize.tests.voxelgame.client.control.GameCamera;
-import pize.tests.voxelgame.client.control.RayCast;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
+import pize.tests.voxelgame.client.level.ClientLevel;
+import pize.tests.voxelgame.client.net.ClientPacketHandler;
 import pize.tests.voxelgame.client.options.KeyMapping;
 import pize.tests.voxelgame.client.options.Options;
-import pize.tests.voxelgame.client.world.ClientWorld;
-import pize.tests.voxelgame.server.world.ServerWorld;
 
 public class InfoRenderer implements Disposable{
     
@@ -49,9 +48,7 @@ public class InfoRenderer implements Disposable{
             return;
         
         GameCamera camera = sessionOF.getGame().getCamera();
-        RayCast rayCast = sessionOF.getGame().getRayCast();
-        ClientWorld clientWorld = sessionOF.getGame().getWorld();
-        ServerWorld serverWorld = sessionOF.getLocalServer().getDefaultWorld();
+        ClientLevel clientWorld = sessionOF.getGame().getLevel();
         LocalPlayer player = sessionOF.getGame().getPlayer();
         
         infoLineNum = 0;
@@ -65,16 +62,17 @@ public class InfoRenderer implements Disposable{
         
         info("position: " + player.getPosition().x + ", " + player.getPosition().y + ", " + player.getPosition().z);
         info("chunk: " + camera.chunkX() + ", " + camera.chunkZ());
-        info("Threads:");
-        if(serverWorld != null) info("chunk find tps: " + serverWorld.getChunkManager().findTps.get());
-        if(serverWorld != null) info("chunk load tps: " + serverWorld.getChunkManager().loadTps.get());
-        info("chunk build tps: " + clientWorld.getChunkManager().buildTps.get());
-        info("chunk check tps: " + clientWorld.getChunkManager().checkTps.get());
+        info("tx: " + ClientGame.tx + ", rx: " + ClientPacketHandler.rx);
         info("meshes: " + clientWorld.getChunkManager().getMeshes().size());
         info("render chunks: " + clientWorld.getChunkManager().getChunks().stream().filter(camera::isChunkSeen).count());
         info("Chunk build time (T/V): " + ChunkBuilder.buildTime + " ms, " + ChunkBuilder.vertexCount + " vertices");
         info("Player speed: " + LocalPlayer.speed);
         
+        // info("Threads:");
+        // if(serverWorld != null) info("chunk find tps: " + serverWorld.getChunkManager().findTps.get());
+        // if(serverWorld != null) info("chunk load tps: " + serverWorld.getChunkManager().loadTps.get());
+        // info("chunk build tps: " + clientWorld.getChunkManager().buildTps.get());
+        // info("chunk check tps: " + clientWorld.getChunkManager().checkTps.get());
         // info("Light time (I/D): " + WorldLight.increaseTime + " ms, " + WorldLight.decreaseTime + " ms");
         // Vec3i imaginaryPos = rayCast.getImaginaryBlockPosition();
         // Vec3i selectedPos = rayCast.getSelectedBlockPosition();

@@ -7,8 +7,8 @@ import pize.graphics.util.Shader;
 import pize.math.Mathc;
 import pize.math.vecmath.vector.Vec3d;
 import pize.tests.voxelgame.client.control.GameCamera;
-import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.clientserver.entity.Entity;
+import pize.tests.voxelgame.clientserver.entity.Player;
 
 public class PlayerModel{
     
@@ -16,13 +16,13 @@ public class PlayerModel{
     private static final float w = 1.8F / 32; // Pixel size in world
     
     
-    private final Entity entityOF;
+    private final Player player;
     private final ModelPart torso, head, leftLeg, rightLeg, leftHand, rightHand;
     private final Shader shader;
     private final Texture skinTexture;
     
-    public PlayerModel(Entity entityOF){
-        this.entityOF = entityOF;
+    public PlayerModel(Player player){
+        this.player = player;
         
         shader = new Shader(new Resource("shader/model.vert"), new Resource("shader/model.frag"));
         skinTexture = new Texture("texture/skin1.png");
@@ -93,7 +93,7 @@ public class PlayerModel{
     }
     
     public Entity getEntityOf(){
-        return entityOF;
+        return player;
     }
     
     
@@ -118,20 +118,18 @@ public class PlayerModel{
     private float time = 0;
     
     public void animate(){
-        torso.getPosition().set(entityOF.getPosition());
-        head .getPosition().set(entityOF.getPosition());
+        torso.getPosition().set(player.getPosition());
+        head .getPosition().set(player.getPosition());
         
-        torso.getRotation().yaw += (-entityOF.getRotation().yaw - torso.getRotation().yaw) * Pize.getDt() * 4;
+        torso.getRotation().yaw += (-player.getRotation().yaw - torso.getRotation().yaw) * Pize.getDt() * 4;
         
-        head.getRotation().yaw = -entityOF.getRotation().yaw;
-        head.getRotation().pitch = entityOF.getRotation().pitch;
+        head.getRotation().yaw = -player.getRotation().yaw;
+        head.getRotation().pitch = player.getRotation().pitch;
         
-        //final LocalPlayer player = (LocalPlayer) entityOF;
-        //if(player.isSneaking())
-        //    torso.getPosition().y -= 1 * w;
+        if(player.isSneaking())
+            torso.getPosition().y -= 1 * w;
         
-        
-        final Vec3d motion = entityOF.getMotion();
+        final Vec3d motion = this.player.getMotion();
         if(motion.len2() > 10E-5){
             time += Pize.getDt();
             final double animationSpeed = 5;

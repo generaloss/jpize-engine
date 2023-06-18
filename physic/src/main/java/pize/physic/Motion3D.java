@@ -25,6 +25,9 @@ public class Motion3D extends Vec3d implements Cloneable{
     
     
     public Motion3D collidedAxesToZero(Tuple3d collidedMotion){
+        if(collidedMotion == null)
+            return this;
+        
         if(x != 0 && collidedMotion.x == 0)
             x = 0;
         

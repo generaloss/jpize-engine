@@ -12,25 +12,26 @@ import pize.tests.voxelgame.client.control.GameCamera;
 import pize.tests.voxelgame.client.control.PerspectiveType;
 import pize.tests.voxelgame.client.control.PlayerController;
 import pize.tests.voxelgame.client.control.RayCast;
+import pize.tests.voxelgame.client.level.ClientLevel;
 import pize.tests.voxelgame.client.options.KeyMapping;
 import pize.tests.voxelgame.client.options.Options;
-import pize.tests.voxelgame.client.world.ClientWorld;
-import pize.tests.voxelgame.clientserver.net.packet.PacketPing;
+import pize.tests.voxelgame.clientserver.net.packet.SBPacketPing;
+import pize.tests.voxelgame.clientserver.net.packet.SBPacketPlayerBlockSet;
 
 public class GameController{
     
-    private final Main sessionOF;
+    private final Main session;
     private final PlayerController playerController;
     private float zoomFOV;
     private boolean f3Plus;
     
-    public GameController(Main sessionOF){
-        this.sessionOF = sessionOF;
-        playerController = new PlayerController(sessionOF);
+    public GameController(Main session){
+        this.session = session;
+        playerController = new PlayerController(session);
     }
     
-    public Main getSessionOf(){
-        return sessionOF;
+    public Main getSession(){
+        return session;
     }
     
     
@@ -40,10 +41,10 @@ public class GameController{
     }
     
     private void debugControl(){
-        final Options options = sessionOF.getOptions();
-        final GameCamera camera = sessionOF.getGame().getCamera();
-        final RayCast rayCast = sessionOF.getGame().getRayCast();
-        final ClientWorld world = sessionOF.getGame().getWorld();
+        final Options options = session.getOptions();
+        final GameCamera camera = session.getGame().getCamera();
+        final RayCast rayCast = session.getGame().getRayCast();
+        final ClientLevel world = session.getGame().getLevel();
         
         // EXIT
         if(Key.ESCAPE.isDown())
@@ -66,25 +67,14 @@ public class GameController{
         // MOUSE SET BLOCK
         if(Pize.isTouched() && rayCast.isSelected()){
             if(Pize.mouse().isLeftDown()){
-                Vec3i blockPos = rayCast.getSelectedBlockPosition();
-                world.setBlock(blockPos.x, blockPos.y, blockPos.z, Block.AIR.getState(), false);
+                final Vec3i blockPos = rayCast.getSelectedBlockPosition();
+                world.setBlock(blockPos.x, blockPos.y, blockPos.z, Block.AIR.getState());
+                session.getGame().sendPacket(new SBPacketPlayerBlockSet(blockPos.x, blockPos.y, blockPos.z, Block.AIR.getState()));
             }else if(Pize.mouse().isRightDown()){
-                Vec3i blockPos = rayCast.getImaginaryBlockPosition();
-                world.setBlock(blockPos.x, blockPos.y, blockPos.z, Block.LAMP.getState(), false);
-            }else if(Pize.mouse().isMiddleDown()){
-                Vec3i blockPos = rayCast.getImaginaryBlockPosition();
-                world.setBlock(blockPos.x, blockPos.y, blockPos.z, Block.OAK_LOG.getState(), false);
+                final Vec3i blockPos = rayCast.getImaginaryBlockPosition();
+                world.setBlock(blockPos.x, blockPos.y, blockPos.z, Block.LAMP.getState());
+                session.getGame().sendPacket(new SBPacketPlayerBlockSet(blockPos.x, blockPos.y, blockPos.z, Block.LAMP.getState()));
             }
-        }
-        
-        // KEYBOARD SET BLOCK
-        if(Key.B.isPressed()){
-            final Vec3i camPos = new Vec3i(
-                camera.getPos().xf(),
-                camera.getPos().yf(),
-                camera.getPos().zf()
-            );
-            world.setBlock(camPos.x, camPos.y, camPos.z, Block.GLASS.getState(), false);
         }
         
         // SHOW MOUSE
@@ -93,7 +83,7 @@ public class GameController{
         
         // CHUNK BORDER
         if(Key.F3.isPressed() && Key.G.isDown()){
-            sessionOF.getRenderer().getWorldRenderer().toggleShowChunkBorder();
+            session.getRenderer().getWorldRenderer().toggleShowChunkBorder();
             f3Plus = true;
         }
         
@@ -119,7 +109,7 @@ public class GameController{
         
         // PING SERVER
         if(Key.P.isDown())
-            sessionOF.getGame().sendPacket(new PacketPing(System.currentTimeMillis()));
+            session.getGame().sendPacket(new SBPacketPing(System.currentTimeMillis()));
         
         // TOGGLE PERSPECTIVE
         if(options.getKey(KeyMapping.TOGGLE_PERSPECTIVE).isDown()){

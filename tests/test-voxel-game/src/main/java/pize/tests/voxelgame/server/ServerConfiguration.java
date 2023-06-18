@@ -30,7 +30,7 @@ public class ServerConfiguration{
         return version;
     }
     
-    public String getDefaultWorldName(){
+    public String getDefaultLevelName(){
         return defaultWorld;
     }
     

@@ -21,7 +21,7 @@ public class ThirdPersonBackCameraTarget implements CameraTarget{
     public Tuple3f getPosition(){
         final float dist = 5;
         
-        position.set(targetPlayer.getPosition()).add(0, targetPlayer.getEyes(), 0).add(targetPlayer.getRotation().direction().mul(-dist));
+        position.set(targetPlayer.getPosition()).add(0, targetPlayer.getEyeHeight(), 0).add(targetPlayer.getRotation().direction().mul(-dist));
         return position;
     }
     

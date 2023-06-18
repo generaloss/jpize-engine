@@ -35,8 +35,6 @@ public class Main extends AppAdapter{
     
 
     public Main(){
-        Pize.setUpdateTPS(20);
-        
         version = new Version();
         profile = new PlayerProfile();
         
@@ -46,15 +44,17 @@ public class Main extends AppAdapter{
         localServer = new LocalServer();
         localServer.run();
         
+        gameController = new GameController(this);
+        
         clientRenderer = new ClientGameRenderer(this);
         clientGame = new ClientGame(this);
         clientGame.connect(localServer.getConfiguration().getAddress(), localServer.getConfiguration().getPort());
         
-        gameController = new GameController(this);
-        
         clientRenderer.init();
         new Resource(SharedConstants.GAME_DIR_PATH).mkDirs();
         options.load();
+        
+        Pize.setUpdateTPS(75);
     }
     
     @Override

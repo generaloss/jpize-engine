@@ -19,7 +19,7 @@ public class FirstPersonPlayerCameraTarget implements CameraTarget{
     
     @Override
     public Tuple3f getPosition(){
-        position.set(targetPlayer.getPosition()).add(0, targetPlayer.getEyes(), 0);
+        position.set(targetPlayer.getPosition()).add(0, targetPlayer.getEyeHeight(), 0);
         return position;
     }
     

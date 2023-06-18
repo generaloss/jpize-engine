@@ -1,26 +1,21 @@
 package pize.tests.voxelgame.server;
 
+import pize.tests.voxelgame.server.level.LevelManager;
+import pize.tests.voxelgame.server.net.ServerConnectionManager;
 import pize.tests.voxelgame.server.player.PlayerList;
-import pize.tests.voxelgame.server.world.ServerWorld;
-import pize.tests.voxelgame.server.world.WorldManager;
 
 public abstract class Server{
 
     private final ServerConfiguration configuration;
     private final PlayerList playerList;
-    private final WorldManager worldManager;
+    private final LevelManager levelManager;
+    private final ServerConnectionManager connectionManager;
     
     public Server(){
         configuration = new ServerConfiguration();
         playerList = new PlayerList(this);
-        worldManager = new WorldManager(this);
-        
-        worldManager.loadWorld(configuration.getDefaultWorldName());
-    }
-    
-    
-    public ServerWorld getDefaultWorld(){
-        return worldManager.getWorld(configuration.getDefaultWorldName());
+        levelManager = new LevelManager(this);
+        connectionManager = new ServerConnectionManager(this);
     }
     
     
@@ -32,8 +27,12 @@ public abstract class Server{
         return playerList;
     }
     
-    public WorldManager getWorldManager(){
-        return worldManager;
+    public LevelManager getLevelManager(){
+        return levelManager;
+    }
+    
+    public ServerConnectionManager getConnectionManager(){
+        return connectionManager;
     }
     
 }
