@@ -1,9 +1,14 @@
 package pize.tests.voxelgame.server.player;
 
+import pize.math.util.EulerAngles;
+import pize.math.vecmath.tuple.Tuple3f;
 import pize.net.tcp.TcpConnection;
 import pize.net.tcp.packet.IPacket;
+import pize.tests.voxelgame.clientserver.entity.Entity;
 import pize.tests.voxelgame.clientserver.entity.Player;
+import pize.tests.voxelgame.clientserver.level.Level;
 import pize.tests.voxelgame.clientserver.net.packet.CBPacketChatMessage;
+import pize.tests.voxelgame.clientserver.net.packet.CBPacketTeleportPlayer;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.level.ServerLevel;
 import pize.tests.voxelgame.server.net.PlayerConnectionAdapter;
@@ -24,6 +29,36 @@ public class ServerPlayer extends Player{
     
     public Server getServer(){
         return server;
+    }
+    
+    
+    public void teleport(Level level, Tuple3f position, EulerAngles rotation){
+        sendPacket(new CBPacketTeleportPlayer(level.getConfiguration().getName(), position, rotation));
+        
+        final Level oldLevel = getLevel();
+        if(level != oldLevel){
+            setLevel(level);
+            oldLevel.removeEntity(this);
+            level.addEntity(this);
+        }
+        getPosition().set(position);
+        getRotation().set(rotation);
+    }
+    
+    public void teleport(Entity entity){
+        teleport(entity.getLevel(), entity.getPosition(), entity.getRotation());
+    }
+    
+    public void teleport(Tuple3f position, EulerAngles rotation){
+        teleport(getLevel(), position, rotation);
+    }
+    
+    public void teleport(Level level, Tuple3f position){
+        teleport(level, position, getRotation());
+    }
+    
+    public void teleport(Tuple3f position){
+        teleport(getLevel(), position, getRotation());
     }
     
     

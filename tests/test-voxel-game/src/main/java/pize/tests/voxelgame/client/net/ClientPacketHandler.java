@@ -61,6 +61,16 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
                 final CBPacketTeleportPlayer packet = packetInfo.readPacket(new CBPacketTeleportPlayer());
                 
                 final LocalPlayer localPlayer = game.getPlayer();
+                if(localPlayer == null)
+                    break;
+                
+                // Load another level
+                if(!packet.levelName.equals(localPlayer.getLevel().getConfiguration().getName())){
+                    game.createClientLevel(packet.levelName);
+                    game.getLevel().getChunkManager().startLoadChunks();
+                    localPlayer.setLevel(game.getLevel());
+                }
+                
                 localPlayer.getPosition().set(packet.position);
                 localPlayer.getRotation().set(packet.rotation);
             }
@@ -81,10 +91,15 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
             case CBPacketEntityMove.PACKET_ID ->{
                 final CBPacketEntityMove packet = packetInfo.readPacket(new CBPacketEntityMove());
 
-                final Entity targetEntity = game.getLevel().getEntity(packet.uuid);
-                targetEntity.getPosition().set(packet.position);
-                targetEntity.getRotation().set(packet.rotation);
-                targetEntity.getMotion().set(packet.motion);
+                Entity targetEntity = game.getLevel().getEntity(packet.uuid);
+                if(targetEntity == null && game.getPlayer().getUUID() == packet.uuid)
+                    targetEntity = game.getPlayer();
+                
+                if(targetEntity != null){
+                    targetEntity.getPosition().set(packet.position);
+                    targetEntity.getRotation().set(packet.rotation);
+                    targetEntity.getMotion().set(packet.motion);
+                }
             }
 
             case CBPacketSpawnEntity.PACKET_ID ->{
@@ -118,9 +133,9 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
             case CBPacketSpawnInfo.PACKET_ID ->{
                 final CBPacketSpawnInfo packet = packetInfo.readPacket(new CBPacketSpawnInfo());
                 
-                game.createNetClientWorld(packet.levelName);
+                game.createClientLevel(packet.levelName);
                 game.spawnPlayer(packet.position);
-                game.getLevel().getChunkManager().start();
+                game.getLevel().getChunkManager().startLoadChunks();
             }
             
             case CBPacketBlockUpdate.PACKET_ID ->{

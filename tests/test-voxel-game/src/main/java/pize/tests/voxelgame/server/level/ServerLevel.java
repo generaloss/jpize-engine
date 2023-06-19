@@ -6,29 +6,25 @@ import pize.tests.voxelgame.client.block.blocks.Block;
 import pize.tests.voxelgame.clientserver.level.Level;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.chunk.ServerChunk;
-import pize.tests.voxelgame.server.chunk.gen.DefaultGenerator;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.getChunkPos;
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.getLocalPos;
 
 public class ServerLevel extends Level{
 
-    private final Server serverOF;
-    
-    private final LevelConfiguration configuration;
+    private final Server server;
     private final ServerChunkManager chunkManager;
+    private final ServerLevelConfiguration configuration;
 
-    public ServerLevel(Server serverOF, String name){
-        super(name);
-        this.serverOF = serverOF;
+    public ServerLevel(Server server){
+        this.server = server;
+        this.chunkManager = new ServerChunkManager(this);
         
-        configuration = new LevelConfiguration();
-        configuration.load(name, DefaultGenerator.getInstance());
-        chunkManager = new ServerChunkManager(this);
+        configuration = new ServerLevelConfiguration();
     }
     
     public Server getServer(){
-        return serverOF;
+        return server;
     }
     
     
@@ -56,16 +52,17 @@ public class ServerLevel extends Level{
         
         return 0;
     }
-
+    
     
     public Vec3f getSpawnPosition(){
-        final Vec2f spawn = configuration.getWorldSpawn();
+        final Vec2f spawn = getConfiguration().getWorldSpawn();
         final int spawnY = getHeight(spawn.xf(), spawn.yf()) + 1;
         return new Vec3f(spawn.x, spawnY, spawn.y);
     }
     
     
-    public LevelConfiguration getConfiguration(){
+    @Override
+    public ServerLevelConfiguration getConfiguration(){
         return configuration;
     }
     

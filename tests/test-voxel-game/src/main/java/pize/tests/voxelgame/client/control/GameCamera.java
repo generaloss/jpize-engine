@@ -1,8 +1,11 @@
 package pize.tests.voxelgame.client.control;
 
+import pize.Pize;
 import pize.graphics.camera.PerspectiveCamera;
 import pize.math.Maths;
+import pize.tests.voxelgame.client.ClientGame;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
+import pize.tests.voxelgame.client.options.Options;
 import pize.tests.voxelgame.clientserver.chunk.Chunk;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
 
@@ -11,41 +14,59 @@ import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.SIZE;
 
 public class GameCamera extends PerspectiveCamera{
 
-    private final LocalPlayer playerOF;
+    private final ClientGame game;
     
+    private final LocalPlayer player;
     private CameraTarget target;
     private final CameraTarget firstPerson, thirdPersonFront, thirdPersonBack;
     private PerspectiveType perspective;
+    private float notInterpolatedFov;
+    private float zoom = 1;
 
-    public GameCamera(LocalPlayer playerOF, double near, double far, double fieldOfView){
+    public GameCamera(ClientGame game, double near, double far, double fieldOfView){
         super(near, far, fieldOfView);
-        this.playerOF = playerOF;
         
-        firstPerson = new FirstPersonPlayerCameraTarget(playerOF);
-        thirdPersonFront = new ThirdPersonFrontCameraTarget(playerOF);
-        thirdPersonBack = new ThirdPersonBackCameraTarget(playerOF);
+        this.game = game;
+        this.player = game.getPlayer();
         
-        perspective = PerspectiveType.FIRST_PERSON;
-        target = firstPerson;
+        this.firstPerson = new FirstPersonPlayerCameraTarget(player);
+        this.thirdPersonFront = new ThirdPersonFrontCameraTarget(player);
+        this.thirdPersonBack = new ThirdPersonBackCameraTarget(player);
+        
+        this.perspective = PerspectiveType.FIRST_PERSON;
+        this.target = firstPerson;
         
         setImaginaryOrigins(true, false, true);
     }
     
-    public LocalPlayer getPlayerOf(){
-        return playerOF;
+    public ClientGame getGame(){
+        return game;
+    }
+    
+    public LocalPlayer getPlayer(){
+        return player;
     }
 
 
     public void update(){
+        // Follow to target
         if(target == null)
             return;
-            
         getPos().set(target.getPosition());
         getRot().set(target.getRotation());
         
-        if(playerOF.isOnGround())
-            setFov(70);
+        // Player
+        final Options options = game.getSession().getOptions();
         
+        float fov = options.getFOV() / zoom;
+        if(player.isSprinting())
+            fov *= 1.3F;
+        
+        setFov(fov);
+        
+        // Interpolate FOV
+        final float currentFOV = getFov();
+        super.setFov(currentFOV + (notInterpolatedFov - currentFOV) * Pize.getDt() * 9);
         super.update();
     }
     
@@ -66,6 +87,20 @@ public class GameCamera extends PerspectiveCamera{
             case THIRD_PERSON_BACK -> target = thirdPersonBack;
             case THIRD_PERSON_FRONT -> target = thirdPersonFront;
         }
+    }
+    
+    
+    public float getZoom(){
+        return zoom;
+    }
+    
+    public void setZoom(float zoom){
+        this.zoom = Maths.clamp(zoom, 1, 200);
+    }
+    
+    
+    public void setFov(float fieldOfView){
+        notInterpolatedFov = fieldOfView;
     }
     
     

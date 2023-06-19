@@ -3,21 +3,18 @@ package pize.tests.voxelgame.clientserver.level;
 import pize.tests.voxelgame.clientserver.chunk.Chunk;
 import pize.tests.voxelgame.clientserver.entity.Entity;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class Level{
     
-    private final String name;
     private final Map<UUID, Entity> entityMap;
     
-    public Level(String name){
-        this.name = name;
-        this.entityMap = new ConcurrentHashMap<>();
-    }
     
-    public String getName(){
-        return name;
+    public Level(){
+        this.entityMap = new ConcurrentHashMap<>();
     }
     
     
@@ -54,6 +51,8 @@ public abstract class Level{
     
     public abstract int getHeight(int x, int z);
     
+    
+    public abstract <C extends LevelConfiguration> C getConfiguration();
     
     public abstract <M extends ChunkManager> M getChunkManager();
     

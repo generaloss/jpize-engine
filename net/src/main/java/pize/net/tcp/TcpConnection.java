@@ -44,7 +44,7 @@ public class TcpConnection{
             }catch(IOException e){
                 setClosed();
             }
-        });
+        }, "TcpConnection-Thread");
 
         receiveThread.setPriority(Thread.MIN_PRIORITY);
         receiveThread.setDaemon(true);

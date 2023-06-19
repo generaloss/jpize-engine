@@ -1,11 +1,7 @@
 package pize.tests.voxelgame.client.control;
 
 import pize.Pize;
-import pize.graphics.gl.Face;
-import pize.graphics.gl.Gl;
-import pize.graphics.gl.PolygonMode;
 import pize.io.glfw.Key;
-import pize.io.glfw.KeyAction;
 import pize.math.vecmath.vector.Vec3i;
 import pize.tests.voxelgame.Main;
 import pize.tests.voxelgame.client.block.blocks.Block;
@@ -20,7 +16,6 @@ public class GameController{
     
     private final Main session;
     private final PlayerController playerController;
-    private float zoomFOV;
     private boolean f3Plus;
     
     public GameController(Main session){
@@ -51,15 +46,6 @@ public class GameController{
         /** Chat **/
         
         final Chat chat = session.getGame().getChat();
-        
-        Pize.keyboard().addKeyCallback((keyCode, action)->{
-            if(chat.isOpened() && action == KeyAction.REPEAT){
-                if(keyCode == Key.UP.GLFW)
-                    chat.historyUp();
-                if(keyCode == Key.DOWN.GLFW)
-                    chat.historyDown();
-            }
-        });
         
         if(chat.isOpened()){
             if(Key.ENTER.isDown()){
@@ -92,14 +78,6 @@ public class GameController{
         // Player
         playerController.update();
         
-        // Render mode
-        if(Key.NUM_1.isDown())
-            Gl.polygonMode(Face.FRONT, PolygonMode.FILL);
-        if(Key.NUM_2.isDown())
-            Gl.polygonMode(Face.FRONT, PolygonMode.LINE);
-        if(Key.NUM_3.isDown())
-            Gl.polygonMode(Face.FRONT, PolygonMode.POINT);
-        
         // Place/Destroy block
         if(Pize.isTouched() && rayCast.isSelected()){
             if(Pize.mouse().isLeftDown()){
@@ -114,7 +92,7 @@ public class GameController{
         }
         
         // Show mouse
-        if(Key.L.isDown())
+        if(Key.M.isDown())
             playerController.getRotationController().toggleShowMouse();
         
         // Chunk border
@@ -133,15 +111,11 @@ public class GameController{
         
         // Camera zoom
         if(options.getKey(KeyMapping.ZOOM).isDown())
-            zoomFOV = options.getFOV() / 3F;
+            camera.setZoom(10);
         else if(options.getKey(KeyMapping.ZOOM).isPressed()){
-            zoomFOV -= Pize.mouse().getScroll() * (zoomFOV / 8);
-            if(zoomFOV >= options.getFOV())
-                zoomFOV = options.getFOV();
-            
-            camera.setFov(zoomFOV);
+            camera.setZoom(camera.getZoom() + Pize.mouse().getScroll() * (camera.getZoom() / 8));
         }else if(options.getKey(KeyMapping.ZOOM).isReleased())
-            camera.setFov(options.getFOV());
+            camera.setZoom(1);
         
         // Ping server
         if(Key.P.isDown())

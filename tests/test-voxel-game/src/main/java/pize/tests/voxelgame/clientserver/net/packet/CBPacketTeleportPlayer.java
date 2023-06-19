@@ -1,7 +1,7 @@
 package pize.tests.voxelgame.clientserver.net.packet;
 
 import pize.math.util.EulerAngles;
-import pize.math.vecmath.vector.Vec3f;
+import pize.math.vecmath.tuple.Tuple3f;
 import pize.net.tcp.packet.IPacket;
 import pize.net.tcp.packet.PacketHandler;
 import pize.net.tcp.packet.PacketInputStream;
@@ -18,11 +18,11 @@ public class CBPacketTeleportPlayer extends IPacket<PacketHandler>{
     }
     
     
-    public Vec3f position;
+    public Tuple3f position;
     public EulerAngles rotation;
     public String levelName;
     
-    public CBPacketTeleportPlayer(String levelName, Vec3f position, EulerAngles rotation){
+    public CBPacketTeleportPlayer(String levelName, Tuple3f position, EulerAngles rotation){
         this();
         this.levelName = levelName;
         this.position = position;
@@ -40,7 +40,7 @@ public class CBPacketTeleportPlayer extends IPacket<PacketHandler>{
     @Override
     public void read(PacketInputStream stream) throws IOException{
         levelName = stream.readUTF();
-        position = (Vec3f) stream.readTuple3f();
+        position = stream.readTuple3f();
         rotation = stream.readEulerAngles();
     }
     

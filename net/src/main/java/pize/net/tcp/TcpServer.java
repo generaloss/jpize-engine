@@ -53,7 +53,7 @@ public class TcpServer extends TcpDisconnector implements Closeable{
             }catch(IOException e){
                 System.err.println("TcpServer (connect client error): " + e.getMessage());
             }
-        });
+        }, "TcpServer-Thread");
         
         connectorThread.setPriority(Thread.MIN_PRIORITY);
         connectorThread.setDaemon(true);

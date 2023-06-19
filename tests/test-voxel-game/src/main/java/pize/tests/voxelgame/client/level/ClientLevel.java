@@ -10,18 +10,20 @@ import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.getLocalPos;
 
 public class ClientLevel extends Level{
     
-    private final Main sessionOF;
+    private final Main session;
     private final ClientChunkManager chunkManager;
+    private final ClientLevelConfiguration configuration;
     
-    
-    public ClientLevel(Main sessionOF, String name){
-        super(name);
-        this.sessionOF = sessionOF;
-        chunkManager = new ClientChunkManager(this);
+    public ClientLevel(Main session, String levelName){
+        this.session = session;
+        this.chunkManager = new ClientChunkManager(this);
+        
+        configuration = new ClientLevelConfiguration();
+        configuration.load(levelName);
     }
     
     public Main getSession(){
-        return sessionOF;
+        return session;
     }
     
     
@@ -49,7 +51,12 @@ public class ClientLevel extends Level{
         
         return 0;
     }
-
+    
+    
+    @Override
+    public ClientLevelConfiguration getConfiguration(){
+        return configuration;
+    }
     
     @Override
     public ClientChunkManager getChunkManager(){

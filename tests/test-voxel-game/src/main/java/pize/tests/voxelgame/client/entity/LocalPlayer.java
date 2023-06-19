@@ -6,6 +6,7 @@ import pize.math.util.EulerAngles;
 import pize.math.vecmath.vector.Vec2f;
 import pize.math.vecmath.vector.Vec3d;
 import pize.math.vecmath.vector.Vec3f;
+import pize.tests.voxelgame.client.block.blocks.Block;
 import pize.tests.voxelgame.clientserver.level.Level;
 
 public class LocalPlayer extends AbstractClientPlayer{
@@ -19,6 +20,8 @@ public class LocalPlayer extends AbstractClientPlayer{
     
     private final Vec3f oldPos;
     private final EulerAngles oldRot;
+    
+    public Block holdBlock;
     
     public LocalPlayer(Level levelOF, String name){
         super(levelOF, name); // 3) random skin ID
@@ -44,15 +47,17 @@ public class LocalPlayer extends AbstractClientPlayer{
     public void tick(){
         super.tick();
         
+        final float deltaTime = Pize.getDt();
+        
         // Horizontal move
         float reduce = 0.91F;
-        float movementFactor = 0.34F * Pize.getDt();
+        float speed = 0.34F * Pize.getDt();
         if(isSprinting())
-            movementFactor *= 1.3;
+            speed *= 1.3;
         
-        float dist = moveControl.len();
+        float dist = moveControl.nor().len();
         if(dist > 0){
-            moveControl.mul(movementFactor);
+            moveControl.mul(speed);
             moveControl.rotDeg(getRotation().yaw);
             
             getMotion().x += moveControl.x;
@@ -61,7 +66,7 @@ public class LocalPlayer extends AbstractClientPlayer{
         
         // Gravity
         if(!isOnGround())
-            getMotion().y += gravity * (Pize.getDt() * Pize.getDt());
+            getMotion().y += gravity * (deltaTime * deltaTime);
         
         // Fall height
         if(getMotion().y < 0 && oldMotionY >= 0)
@@ -80,7 +85,7 @@ public class LocalPlayer extends AbstractClientPlayer{
             final Vec3d collidedMotion = moveEntity(getMotion());
             getMotion().collidedAxesToZero(collidedMotion);
         }
-        speed = ((Vec3f) oldPosition.sub(getPosition())).len() / Pize.getDt();
+        LocalPlayer.speed = ((Vec3f) oldPosition.sub(getPosition())).len() / deltaTime;
         
         // Reduce motion
         getMotion().mul(reduce, 1, reduce);

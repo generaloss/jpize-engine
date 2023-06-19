@@ -1,5 +1,8 @@
 package pize.tests.voxelgame.client.entity.model;
 
+import pize.Pize;
+import pize.math.Mathc;
+import pize.math.vecmath.vector.Vec3d;
 import pize.tests.voxelgame.client.control.GameCamera;
 import pize.tests.voxelgame.clientserver.entity.Player;
 
@@ -95,6 +98,47 @@ public class PlayerModel extends HumanoidModel{
         rightSleeve.render(camera, shader, "u_model");
     }
     
+    
+    private float time = 0;
+    
+    public void animate(){
+        torso.getPosition().set(player.getPosition());
+        head .getPosition().set(player.getPosition());
+        
+        torso.getRotation().yaw += (-player.getRotation().yaw - torso.getRotation().yaw) * Pize.getDt() * 4;
+        
+        head.getRotation().yaw = -player.getRotation().yaw;
+        head.getRotation().pitch = player.getRotation().pitch;
+        
+        if(player.isSneaking())
+            torso.getPosition().y -= 1 * w;
+        
+        final Vec3d motion = this.player.getMotion();
+        if(motion.len2() > 10E-5){
+            
+            final double animationSpeed;
+            if(player.isSprinting())
+                animationSpeed = 6;
+            else if(player.isSneaking())
+                animationSpeed = 2;
+            else
+                animationSpeed = 4;
+            
+            time += Pize.getUpdateDt() * animationSpeed;
+            
+            rightHand.getRotation().pitch = 45 * Mathc.sin(time);
+            leftHand.getRotation().pitch = -45 * Mathc.sin(time);
+            rightLeg.getRotation().pitch = -45 * Mathc.sin(time);
+            leftLeg.getRotation().pitch = 45 * Mathc.sin(time);
+        }else{
+            rightHand.getRotation().pitch -= rightHand.getRotation().pitch / 10;
+            leftHand.getRotation().pitch  -= leftHand.getRotation().pitch  / 10;
+            rightLeg.getRotation().pitch  -= rightLeg.getRotation().pitch  / 10;
+            leftLeg.getRotation().pitch   -= leftLeg.getRotation().pitch   / 10;
+            
+            time = 0;
+        }
+    }
     
     
     public void dispose(){

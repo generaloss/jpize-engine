@@ -5,16 +5,15 @@ import pize.tests.voxelgame.client.chunk.mesh.ChunkBuilder;
 import pize.tests.voxelgame.client.chunk.mesh.ChunkMesh;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
+import pize.tests.voxelgame.clientserver.level.ChunkManager;
 import pize.tests.voxelgame.clientserver.net.packet.CBPacketChunk;
 import pize.tests.voxelgame.clientserver.net.packet.SBPacketChunkRequest;
-import pize.tests.voxelgame.clientserver.level.ChunkManager;
 import pize.util.time.PerSecCounter;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.*;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.getChunkPos;
 import static pize.tests.voxelgame.clientserver.level.ChunkManagerUtils.*;
@@ -22,8 +21,7 @@ import static pize.tests.voxelgame.clientserver.level.ChunkManagerUtils.*;
 public class ClientChunkManager extends ChunkManager{
     
     private final ClientLevel level;
-    
-    public final PerSecCounter findTps, buildTps, checkTps;
+    public final PerSecCounter tps;
     
     private final ConcurrentHashMap<ChunkPos, Long> requestedChunks;
     private final CopyOnWriteArrayList<ChunkPos> frontiers;
@@ -32,6 +30,8 @@ public class ClientChunkManager extends ChunkManager{
     private final ConcurrentHashMap<ClientChunk, float[]> built;
     private final ConcurrentHashMap<ClientChunk, ChunkMesh> allMeshes;
     private final CopyOnWriteArrayList<ChunkMesh> toDispose;
+    
+    private final ExecutorService executorService;
     
     public ClientChunkManager(ClientLevel level){
         this.level = level;
@@ -44,9 +44,14 @@ public class ClientChunkManager extends ChunkManager{
         allMeshes = new ConcurrentHashMap<>();
         toDispose = new CopyOnWriteArrayList<>();
         
-        findTps = new PerSecCounter();
-        buildTps = new PerSecCounter();
-        checkTps = new PerSecCounter();
+        tps = new PerSecCounter();
+        
+        executorService = Executors.newSingleThreadExecutor(runnable->{
+            final Thread thread = new Thread(runnable, "ClientChunkManager-Thread");
+            thread.setPriority(Thread.MIN_PRIORITY);
+            thread.setDaemon(true);
+            return thread;
+        });
     }
     
     public ClientLevel getLevel(){
@@ -54,21 +59,29 @@ public class ClientChunkManager extends ChunkManager{
     }
     
     
-    public void start(){
-        newThread(()->{
-            findTps.count();
-            findChunks();
-        }, "Find Chunks");
+    public void startLoadChunks(){
+        executorService.submit(()->{
+            while(!Thread.currentThread().isInterrupted()){
+                tps.count();
+                findChunks();
+                buildChunks();
+                checkChunks();
+                
+                Thread.yield();
+            }
+        });
+    }
+    
+    public void dispose(){
+        executorService.shutdownNow();
         
-        newThread(()->{
-            buildTps.count();
-            buildChunks();
-        }, "Build Chunks");
-        
-        newThread(()->{
-            checkTps.count();
-            checkChunks();
-        }, "Check Chunks");
+        requestedChunks.clear();
+        frontiers      .clear();
+        allChunks      .clear();
+        toBuildQueue   .clear();
+        built          .clear();
+        allMeshes      .clear();
+        toDispose      .clear();
     }
     
     

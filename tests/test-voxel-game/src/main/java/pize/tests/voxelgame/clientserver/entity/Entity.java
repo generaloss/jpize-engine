@@ -2,7 +2,6 @@ package pize.tests.voxelgame.clientserver.entity;
 
 import pize.math.Maths;
 import pize.math.util.EulerAngles;
-import pize.math.vecmath.tuple.Tuple3f;
 import pize.math.vecmath.vector.Vec3d;
 import pize.math.vecmath.vector.Vec3f;
 import pize.physic.BoundingBox;
@@ -45,7 +44,11 @@ public abstract class Entity extends BoxBody{
         return level;
     }
     
-    public EntityType getEntityType(){
+    public void setLevel(Level level){
+        this.level = level;
+    }
+    
+    public EntityType<?> getEntityType(){
         return entityType;
     }
     
@@ -68,29 +71,6 @@ public abstract class Entity extends BoxBody{
     
     public float getEyeHeight(){
         return getBoundingBox().getSizeY() * 0.85F;
-    }
-    
-    
-    public void teleport(Level level, Tuple3f position, EulerAngles rotation){
-        this.level = level;
-        getPosition().set(position);
-        getRotation().set(rotation);
-    }
-    
-    public void teleport(Entity entity){
-        teleport(entity.getLevel(), entity.getPosition(), entity.getRotation());
-    }
-    
-    public void teleport(Tuple3f position, EulerAngles rotation){
-        teleport(level, position, rotation);
-    }
-    
-    public void teleport(Level level, Tuple3f position){
-        teleport(level, position, rotation);
-    }
-    
-    public void teleport(Tuple3f position){
-        teleport(level, position, rotation);
     }
     
     

@@ -5,19 +5,18 @@ import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
 import pize.tests.voxelgame.clientserver.entity.Entity;
 import pize.tests.voxelgame.clientserver.level.ChunkManager;
 import pize.tests.voxelgame.server.chunk.ServerChunk;
-import pize.tests.voxelgame.server.chunk.gen.DefaultGenerator;
 import pize.tests.voxelgame.server.player.ServerPlayer;
 import pize.util.time.PerSecCounter;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Queue;
+import java.util.concurrent.*;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.getChunkPos;
-import static pize.tests.voxelgame.clientserver.level.ChunkManagerUtils.*;
+import static pize.tests.voxelgame.clientserver.level.ChunkManagerUtils.distToChunk;
+import static pize.tests.voxelgame.clientserver.level.ChunkManagerUtils.updateNeighborChunksEdgesAndSelf;
 
 public class ServerChunkManager extends ChunkManager{
     
@@ -26,9 +25,11 @@ public class ServerChunkManager extends ChunkManager{
     private final Map<ChunkPos, ServerPlayer> requestedChunks;
     private final CopyOnWriteArrayList<ChunkPos> newFrontiers, frontiers;
     private final Map<ChunkPos, ServerChunk> allChunks;
-    private final List<ChunkPos> loadQueue;
+    private final Queue<ChunkPos> loadQueue;
     
-    public final PerSecCounter findTps, loadTps, checkTps;
+    public final PerSecCounter tps;
+    
+    private final ExecutorService executorService;
     
     public ServerChunkManager(ServerLevel level){
         this.level = level;
@@ -37,28 +38,30 @@ public class ServerChunkManager extends ChunkManager{
         frontiers = new CopyOnWriteArrayList<>();
         newFrontiers = new CopyOnWriteArrayList<>();
         allChunks = new ConcurrentHashMap<>();
-        loadQueue = new CopyOnWriteArrayList<>();
+        loadQueue = new LinkedBlockingQueue<>();
         
-        findTps = new PerSecCounter();
-        loadTps = new PerSecCounter();
-        checkTps = new PerSecCounter();
+        tps = new PerSecCounter();
+   
+        executorService = Executors.newSingleThreadExecutor(runnable->{
+            final Thread thread = new Thread(runnable, "ServerChunkManager-Thread");
+            thread.setPriority(Thread.MIN_PRIORITY);
+            thread.setDaemon(true);
+            return thread;
+        });
     }
     
     public void start(){
-        newThread(()->{
-            findTps.count();
-            findChunks();
-        }, "Find Chunks");
-        
-        newThread(()->{
-            loadTps.count();
-            loadChunks();
-        }, "Load Chunks");
-        
-        newThread(()->{
-            checkTps.count();
-            checkChunks();
-        }, "Check Chunks");
+        executorService.submit(()->{
+            while(!Thread.interrupted()){
+                tps.count();
+                
+                findChunks();
+                loadChunks();
+                unloadChunks();
+                
+                Thread.yield();
+            }
+        });
     }
     
     public ServerLevel getLevel(){
@@ -76,6 +79,7 @@ public class ServerChunkManager extends ChunkManager{
     }
     
     private void findChunks(){
+        // Load spawn chunks
         if(frontiers.size() == 0){
             final Vec2f spawn = level.getConfiguration().getWorldSpawn();
             ensureFrontier(new ChunkPos(
@@ -84,6 +88,7 @@ public class ServerChunkManager extends ChunkManager{
             ));
         }
         
+        // Load players chunks
         for(ServerPlayer player: level.getServer().getPlayerList().getPlayers()){
             ensureFrontier(new ChunkPos(
                 getChunkPos(player.getPosition().xf()),
@@ -91,6 +96,7 @@ public class ServerChunkManager extends ChunkManager{
             ));
         }
         
+        // Fast flood fill
         for(final ChunkPos frontierPos: frontiers){
             ensureFrontier(frontierPos.getNeighbor(-1, 0));
             ensureFrontier(frontierPos.getNeighbor(1, 0));
@@ -100,12 +106,13 @@ public class ServerChunkManager extends ChunkManager{
     
         frontiers.removeIf(this::isOffTheGrid);
         newFrontiers.removeIf(this::isOffTheGrid);
-        
         if(newFrontiers.size() == 0)
             return;
         
+        // Load new chunks
         loadQueue.addAll(newFrontiers);
         newFrontiers.clear();
+        System.out.println(level.getConfiguration().getName() + ": " + frontiers.size());
     }
     
     private void ensureFrontier(ChunkPos chunkPos){
@@ -127,7 +134,7 @@ public class ServerChunkManager extends ChunkManager{
         }
     }
     
-    public void checkChunks(){
+    public void unloadChunks(){
         for(ServerChunk chunk: allChunks.values())
             if(isOffTheGrid(chunk.getPosition()))
                 unloadChunk(chunk);
@@ -135,7 +142,7 @@ public class ServerChunkManager extends ChunkManager{
     
     public void loadChunk(ChunkPos chunkPos){
         final ServerChunk chunk = new ServerChunk(this, chunkPos);
-        DefaultGenerator.getInstance().generate(chunk);
+        level.getConfiguration().getGenerator().generate(chunk);
         updateNeighborChunksEdgesAndSelf(chunk, true);
         allChunks.put(chunkPos, chunk);
         

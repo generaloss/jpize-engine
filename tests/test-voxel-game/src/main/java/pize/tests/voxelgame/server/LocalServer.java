@@ -1,6 +1,7 @@
 package pize.tests.voxelgame.server;
 
 import pize.net.tcp.TcpServer;
+import pize.tests.voxelgame.server.chunk.gen.DefaultGenerator;
 import pize.tests.voxelgame.server.level.ServerLevel;
 import pize.tests.voxelgame.server.net.ServerConnectionManager;
 import pize.util.time.TickGenerator;
@@ -19,7 +20,7 @@ public class LocalServer extends Server{
     public void run(){
         System.out.println("[Server]: Local server listening on " + getConfiguration().getAddress() + ":" + getConfiguration().getPort());
         
-        getLevelManager().loadLevel(getConfiguration().getDefaultLevelName()); // Load default level
+        getLevelManager().createLevel(getConfiguration().getDefaultLevelName(), 43337, DefaultGenerator.getInstance()); // Create default level
         tcpServer.run(getConfiguration().getAddress(), getConfiguration().getPort()); // Run TCP server
 
         new TickGenerator(20){

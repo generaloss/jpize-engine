@@ -10,7 +10,7 @@ public class Pose{
     private final Vec3f position, scale;
     private final EulerAngles rotation;
     
-    private final Matrix4f translateMatrix, scaleMatrix, rotationMatrix, poseModelMatrix, modelMatrix;
+    private final Matrix4f translateMatrix, scaleMatrix, poseModelMatrix, modelMatrix;
     
     public Pose(){
         position = new Vec3f();
@@ -19,7 +19,6 @@ public class Pose{
         
         translateMatrix = new Matrix4f();
         scaleMatrix = new Matrix4f();
-        rotationMatrix = new Matrix4f();
         poseModelMatrix = new Matrix4f();
         modelMatrix = new Matrix4f();
     }
@@ -27,13 +26,12 @@ public class Pose{
     public void updateMatrices(GameCamera camera, Pose initial){
         translateMatrix.toTranslated(position);
         scaleMatrix.toScaled(scale);
-        rotationMatrix.set(rotation.toMatrix());
         
         poseModelMatrix
             .identity()
         
-            .mul(initial.translateMatrix).mul(initial.scaleMatrix).mul(initial.rotationMatrix)
-            .mul(translateMatrix).mul(scaleMatrix).mul(rotationMatrix)
+            .mul(initial.poseModelMatrix)
+            .mul(translateMatrix).mul(scaleMatrix).mul(rotation.toMatrix())
         ;
         
         modelMatrix
@@ -44,14 +42,13 @@ public class Pose{
     public void updateMatrices(GameCamera camera, Pose initial, Pose parent){
         translateMatrix.toTranslated(position);
         scaleMatrix.toScaled(scale);
-        rotationMatrix.set(rotation.toMatrix());
         
         poseModelMatrix
             .identity()
             
             .mul(parent.poseModelMatrix)
             .mul(initial.poseModelMatrix)
-            .mul(translateMatrix).mul(scaleMatrix).mul(rotationMatrix)
+            .mul(translateMatrix).mul(scaleMatrix).mul(rotation.toMatrix())
         ;
         
         modelMatrix

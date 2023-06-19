@@ -35,6 +35,8 @@ public class Main extends AppAdapter{
     
 
     public Main(){
+        Thread.currentThread().setName("Render-Thread");
+        
         version = new Version();
         
         options = new Options(this, SharedConstants.GAME_DIR_PATH);

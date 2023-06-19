@@ -11,16 +11,15 @@ import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.SIZE;
 public class DefaultGenerator implements ChunkGenerator{
 
     private final FastNoiseLite noise = new FastNoiseLite();
-    private final int seed;
 
     private DefaultGenerator(){
         noise.setFrequency(0.007F);
-        seed = (int) Maths.randomSeed(8);
-        noise.setSeed(seed);
     }
 
     @Override
     public void generate(ServerChunk chunk){
+        noise.setSeed(chunk.getManagerOf().getLevel().getConfiguration().getSeed());
+        
         // Stopwatch timer = new Stopwatch().start();
         for(int i = 0; i < SIZE; i++)
             for(int j = 0; j < SIZE; j++){
@@ -40,11 +39,6 @@ public class DefaultGenerator implements ChunkGenerator{
                     chunk.setBlockFast(i, y, j, Block.GRASS_BLOCK.getState());
             }
         // System.out.println("Gen: " + timer.getMillis());
-    }
-    
-    @Override
-    public int getSeed(){
-        return seed;
     }
     
     

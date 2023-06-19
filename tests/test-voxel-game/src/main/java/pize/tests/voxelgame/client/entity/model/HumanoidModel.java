@@ -1,11 +1,8 @@
 package pize.tests.voxelgame.client.entity.model;
 
-import pize.Pize;
 import pize.files.Resource;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.Shader;
-import pize.math.Mathc;
-import pize.math.vecmath.vector.Vec3d;
 import pize.tests.voxelgame.client.control.GameCamera;
 import pize.tests.voxelgame.clientserver.entity.Player;
 
@@ -56,7 +53,7 @@ public class HumanoidModel{
             .nz(1, 1, 1, 1, 16 * t, 52 * t, 20 * t, 64 * t)
             .end());
         leftLeg.setParent(torso);
-        leftLeg.setInitialPose(0, -4 * w, 1 * w);
+        leftLeg.setInitialPose(0, -8 * w, 2 * w);
         
         rightLeg = new ModelPart(new BoxBuilder(-2 * w, -10 * w, -2 * w,  2 * w, 2 * w, 2 * w)
             .nx(1, 1, 1, 1, 12 * t, 20 * t, 16 * t, 32 * t)
@@ -67,7 +64,7 @@ public class HumanoidModel{
             .nz(1, 1, 1, 1, 0  * t, 20 * t, 4  * t, 32 * t)
             .end());
         rightLeg.setParent(torso);
-        rightLeg.setInitialPose(0, -4 * w, -1 * w);
+        rightLeg.setInitialPose(0, -8 * w, -2 * w);
         
         leftHand = new ModelPart(new BoxBuilder(-2 * w, -10 * w, -2 * w,  2 * w, 2 * w, 2 * w)
             .nx(1, 1, 1, 1, 44 * t, 52 * t, 48 * t, 64 * t)
@@ -78,7 +75,7 @@ public class HumanoidModel{
             .nz(1, 1, 1, 1, 32 * t, 52 * t, 36 * t, 64 * t)
             .end());
         leftHand.setParent(torso);
-        leftHand.setInitialPose(0, 2 * w, 3 * w);
+        leftHand.setInitialPose(0, 4 * w, 6 * w);
         
         rightHand = new ModelPart(new BoxBuilder(-2 * w, -10 * w, -2 * w,  2 * w, 2 * w, 2 * w)
             .nx(1, 1, 1, 1, 52 * t, 20 * t, 56 * t, 32 * t)
@@ -89,7 +86,7 @@ public class HumanoidModel{
             .nz(1, 1, 1, 1, 40 * t, 20 * t, 44 * t, 32 * t)
             .end());
         rightHand.setParent(torso);
-        rightHand.setInitialPose(0, 2 * w, -3 * w);
+        rightHand.setInitialPose(0, 4 * w, -6 * w);
     }
     
     public Player getPlayer(){
@@ -112,40 +109,6 @@ public class HumanoidModel{
         rightLeg.render(camera, shader, "u_model");
         leftHand.render(camera, shader, "u_model");
         rightHand.render(camera, shader, "u_model");
-    }
-    
-    
-    private float time = 0;
-    
-    public void animate(){
-        torso.getPosition().set(player.getPosition());
-        head .getPosition().set(player.getPosition());
-        
-        torso.getRotation().yaw += (-player.getRotation().yaw - torso.getRotation().yaw) * Pize.getDt() * 4;
-        
-        head.getRotation().yaw = -player.getRotation().yaw;
-        head.getRotation().pitch = player.getRotation().pitch;
-        
-        if(player.isSneaking())
-            torso.getPosition().y -= 1 * w;
-        
-        final Vec3d motion = this.player.getMotion();
-        if(motion.len2() > 10E-5){
-            time += Pize.getDt();
-            final double animationSpeed = 5;
-            
-            rightHand.getRotation().pitch = 45 * Mathc.sin(time * animationSpeed);
-            leftHand.getRotation().pitch = -45 * Mathc.sin(time * animationSpeed);
-            rightLeg.getRotation().pitch = -45 * Mathc.sin(time * animationSpeed);
-            leftLeg.getRotation().pitch = 45 * Mathc.sin(time * animationSpeed);
-        }else{
-            rightHand.getRotation().pitch -= rightHand.getRotation().pitch / 10;
-            leftHand.getRotation().pitch  -= leftHand.getRotation().pitch  / 10;
-            rightLeg.getRotation().pitch  -= rightLeg.getRotation().pitch  / 10;
-            leftLeg.getRotation().pitch   -= leftLeg.getRotation().pitch   / 10;
-            
-            time = 0;
-        }
     }
     
     

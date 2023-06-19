@@ -25,7 +25,7 @@ public class ClientGame{
     private final KeyAES encryptKey;
     private final RayCast rayCast;
     
-    private ClientLevel world;
+    private ClientLevel level;
     private LocalPlayer player;
     private GameCamera camera;
     
@@ -54,7 +54,7 @@ public class ClientGame{
     }
     
     public void tick(){
-        if(world == null || player == null)
+        if(level == null || player == null)
             return;
         
         tickCount++;
@@ -73,28 +73,31 @@ public class ClientGame{
         if(camera == null)
             return;
         
-        world.getChunkManager().updateMeshes();
+        level.getChunkManager().updateMeshes();
         rayCast.update();
 
         player.tick();
-        world.tick();
+        level.tick();
         
         camera.update();
     }
     
-    public void createNetClientWorld(String worldName){
-        world = new ClientLevel(session, worldName);
-        rayCast.setWorld(world);
+    public void createClientLevel(String worldName){
+        if(level != null)
+            level.getChunkManager().dispose();
+        
+        level = new ClientLevel(session, worldName);
+        rayCast.setWorld(level);
     }
     
     public void spawnPlayer(Vec3f position){
-        if(world == null)
+        if(level == null)
             return;
         
-        player = new LocalPlayer(world, session.getProfile().getName());
+        player = new LocalPlayer(level, session.getProfile().getName());
         player.getPosition().set(position);
         
-        camera = new GameCamera(player, 0.1, 1000, session.getOptions().getFOV());
+        camera = new GameCamera(this, 0.1, 1000, session.getOptions().getFOV());
         camera.setDistance(session.getOptions().getRenderDistance());
         
         session.getController().getPlayerController().setTargetPlayer(player);
@@ -116,7 +119,7 @@ public class ClientGame{
     }
     
     public final ClientLevel getLevel(){
-        return world;
+        return level;
     }
     
     public final LocalPlayer getPlayer(){

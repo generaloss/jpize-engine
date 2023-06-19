@@ -56,7 +56,7 @@ public class ChunkBuilder{
         // addVertex(16, 128, 16, 1, 1, 1);
         // addVertex(0 , 128, 16, 0, 1, 1);
         // addVertex(0 , 128, 0 , 0, 0, 1);
-    
+        
         float[] array = new float[verticesList.size()];
         for(int i = 0; i < array.length; i++)
             array[i] = verticesList.get(i);

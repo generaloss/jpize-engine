@@ -1,6 +1,7 @@
 package pize.tests.voxelgame.server.level;
 
 import pize.tests.voxelgame.server.Server;
+import pize.tests.voxelgame.server.chunk.gen.ChunkGenerator;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -35,14 +36,27 @@ public class LevelManager{
     }
     
     public void loadLevel(String levelName){
+        if(levelName == null || isLevelExists(levelName) || isLevelLoaded(levelName))
+            return;
+        
+        // final ServerLevel level = new ServerLevel(server);
+        // level.getConfiguration().load(levelName, seed, generator);
+        // loadedLevels.put(levelName, level);
+        // level.getChunkManager().start();
+        
+        System.out.println("[Server]: Loaded level '" + levelName + "'");
+    }
+    
+    public void createLevel(String levelName, int seed, ChunkGenerator generator){
         if(levelName == null || !isLevelExists(levelName) || isLevelLoaded(levelName))
             return;
         
-        final ServerLevel level = new ServerLevel(server, levelName);
+        final ServerLevel level = new ServerLevel(server);
+        level.getConfiguration().load(levelName, seed, generator);
         loadedLevels.put(levelName, level);
         level.getChunkManager().start();
         
-        System.out.println("[Server]: Loaded level '" + levelName + "'");
+        System.out.println("[Server]: Created level '" + levelName + "'");
     }
     
     public boolean isLevelLoaded(String levelName){

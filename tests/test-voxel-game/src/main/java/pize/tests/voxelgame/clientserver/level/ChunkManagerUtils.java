@@ -11,19 +11,6 @@ import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.*;
 
 public class ChunkManagerUtils{
     
-    public static void newThread(Runnable runnable, String name){
-        final Thread thread = new Thread(()->{
-            while(!Thread.currentThread().isInterrupted()){
-                runnable.run();
-                Thread.yield();
-            }
-        }, name + " Thread");
-        
-        thread.setDaemon(true);
-        thread.start();
-    }
-    
-    
     public static void updateNeighborChunksEdgesAndSelf(ServerChunk chunk, boolean loaded){
         // neighbors
         ServerChunk neighbor = getNeighborChunk(chunk, -1, 0);

@@ -79,13 +79,12 @@ public class InfoRenderer implements Disposable{
         // info("Selected light level (F/B): " + clientWorld.getLight(imaginaryPos.x, imaginaryPos.y, imaginaryPos.z) + ", " + clientWorld.getLight(selectedPos.x, selectedPos.y, selectedPos.z));
         
         // HINTS
-        hint("1, 2, 3 - Toggle render mode");
         hint("F3 + G - Show chunk border");
         hint("ESCAPE - Exit");
         hint(options.getKey(KeyMapping.ZOOM) + " - Mouse Wheel - zoom");
         hint(options.getKey(KeyMapping.CHAT) + " - Chat");
         hint(options.getKey(KeyMapping.TOGGLE_PERSPECTIVE) + " - Toggle perspective");
-        hint("L - Show mouse");
+        hint("M - Show mouse");
         
         batch.end();
     }

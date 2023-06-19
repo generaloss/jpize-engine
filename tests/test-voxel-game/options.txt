@@ -1,10 +1,10 @@
-remote.host : 192.168.0.101:22854
+remote.host : 0.0.0.0:22854
 player.name : GeneralPashon
 graphics.fov : 70
-graphics.renderDistance : 8
+graphics.renderDistance : 4
 graphics.maxFramerate : 0
 graphics.fullscreen : false
-graphics.showFps : false
+graphics.showFps : true
 graphics.brightness : 0.5
 control.mouseSensitivity : 1.0
 key.forward : w
