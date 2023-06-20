@@ -1,64 +1,40 @@
 package pize.tests.voxelgame.client.chunk;
 
-import pize.tests.voxelgame.client.block.BlockProperties;
 import pize.tests.voxelgame.client.block.BlockState;
-import pize.tests.voxelgame.client.level.ClientChunkManager;
-import pize.tests.voxelgame.clientserver.chunk.Chunk;
+import pize.tests.voxelgame.client.block.blocks.Block;
+import pize.tests.voxelgame.client.level.ClientLevel;
+import pize.tests.voxelgame.clientserver.chunk.LevelChunk;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkBlockUtils;
-import pize.tests.voxelgame.clientserver.chunk.storage.ChunkHeightUtils;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
-import pize.tests.voxelgame.clientserver.net.packet.CBPacketChunk;
+import pize.tests.voxelgame.clientserver.chunk.storage.HeightmapType;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.isOutOfBounds;
 
-public class ClientChunk extends Chunk{
+public class ClientChunk extends LevelChunk{
     
-    private final ClientChunkManager chunkManagerOf;
-    
-    public ClientChunk(ClientChunkManager chunkManagerOf, ChunkPos position){
-        super(position);
-        this.chunkManagerOf = chunkManagerOf;
+    public ClientChunk(ClientLevel level, ChunkPos position){
+        super(level, position);
     }
     
-    public ClientChunk(ClientChunkManager chunkManagerOf, CBPacketChunk packet){
-        super(packet);
-        this.chunkManagerOf = chunkManagerOf;
-    }
-    
-    public ClientChunkManager getManagerOf(){
-        return chunkManagerOf;
+    public ClientLevel getLevel(){
+        return (ClientLevel) level;
     }
     
     
     public void rebuild(boolean important){
-        chunkManagerOf.rebuildChunk(this, important);
-    }
-    
-    public void rebuild(){
-        rebuild(false);
+        getLevel().getChunkManager().rebuildChunk(this, important);
     }
     
     
-    public void setBlock(int x, int y, int z, short state){
-        if(isOutOfBounds(x, z)){
-            storage.setBlock(x, y, z, state);
-            return;
-        }
+    public boolean setBlock(int lx, int y, int lz, short blockState){
+        if(!super.setBlock(lx, y, lz, blockState) || isOutOfBounds(lx, lz))
+            return false;
         
-        final BlockProperties previousBlock = BlockState.getProps(storage.setBlock(x, y, z, state));
-        final BlockProperties targetBlock = BlockState.getProps(state);
-        if(previousBlock.equals(targetBlock))
-            return;
-        
-        ChunkBlockUtils.updateNeighborChunksEdges(this, x, y, z, state);
-        ChunkHeightUtils.updateHeight(storage, x, y, z, !targetBlock.isEmpty());
-        
+        ChunkBlockUtils.updateNeighborChunksEdges(this, lx, y, lz, blockState);
+        getHeightMap(HeightmapType.SURFACE).update(lx, y, lz, BlockState.getID(blockState) != Block.AIR.ID);
         rebuild(true);
-    }
-    
-    public void setBlockFast(int x, int y, int z, short state){
-        if(storage.setBlock(x, y, z, state) != BlockState.getID(state) && !isOutOfBounds(x, z))
-            ChunkBlockUtils.updateNeighborChunksEdges(this, x, y, z, state);
+        
+        return true;
     }
     
     

@@ -58,7 +58,7 @@ public class ClientGame{
             return;
         
         tickCount++;
-        if(tickCount % 60 == 0){
+        if(tickCount % 20 == 0){
             tx = txCounter;
             txCounter = 0;
             ClientPacketHandler.rx = ClientPacketHandler.rxCounter;

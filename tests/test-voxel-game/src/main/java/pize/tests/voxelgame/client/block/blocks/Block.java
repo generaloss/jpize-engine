@@ -25,7 +25,7 @@ public enum Block{
         defaultState = BlockState.getState(ID);
     }
 
-    public final short getState(){
+    public final short getDefaultState(){
         return defaultState;
     }
 

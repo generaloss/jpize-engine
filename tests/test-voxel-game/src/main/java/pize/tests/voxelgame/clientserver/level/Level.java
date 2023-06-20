@@ -1,6 +1,6 @@
 package pize.tests.voxelgame.clientserver.level;
 
-import pize.tests.voxelgame.clientserver.chunk.Chunk;
+import pize.tests.voxelgame.clientserver.chunk.LevelChunk;
 import pize.tests.voxelgame.clientserver.entity.Entity;
 
 import java.util.Collection;
@@ -52,10 +52,10 @@ public abstract class Level{
     public abstract int getHeight(int x, int z);
     
     
-    public abstract <C extends LevelConfiguration> C getConfiguration();
+    public abstract LevelConfiguration getConfiguration();
     
-    public abstract <M extends ChunkManager> M getChunkManager();
+    public abstract ChunkManager getChunkManager();
     
-    public abstract  <C extends Chunk> C getChunk(int blockX, int blockZ);
+    public abstract LevelChunk getChunk(int blockX, int blockZ);
 
 }

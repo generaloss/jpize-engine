@@ -40,25 +40,35 @@ public class Motion3D extends Vec3d implements Cloneable{
         return this;
     }
     
-    public Motion3D clampToMax(){
+    public Motion3D clampToMax(boolean clampX, boolean clampY, boolean clampZ){
         final Vec3d normalized = clone().nor().module();
         
-        if(x > max * normalized.x)
-            x = max * normalized.x;
-        else if(x < -max * normalized.x)
-            x = -max * normalized.x;
+        if(clampX){
+            if(x > max * normalized.x)
+                x = max * normalized.x;
+            else if(x < -max * normalized.x)
+                x = -max * normalized.x;
+        }
         
-        if(y > max * normalized.y)
-            y = max * normalized.y;
-        else if(y < -max * normalized.y)
-            y = -max * normalized.y;
+        if(clampY){
+            if(y > max * normalized.y)
+                y = max * normalized.y;
+            else if(y < -max * normalized.y)
+                y = -max * normalized.y;
+        }
         
-        if(z > max * normalized.z)
-            z = max * normalized.z;
-        else if(z < -max * normalized.z)
-            z = -max * normalized.z;
+        if(clampZ){
+            if(z > max * normalized.z)
+                z = max * normalized.z;
+            else if(z < -max * normalized.z)
+                z = -max * normalized.z;
+        }
         
         return this;
+    }
+    
+    public Motion3D clampToMax(){
+        return clampToMax(true, true, true);
     }
     
     public Motion3D reduce(double reduce){

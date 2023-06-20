@@ -151,6 +151,15 @@ public class Vec3f extends Tuple3f implements Cloneable{
         
         return this;
     }
+    
+    
+    public Vec3f lerp(Tuple3f start, Tuple3f end, float t){
+        x = Maths.lerp(start.x, end.x, t);
+        y = Maths.lerp(start.y, end.y, t);
+        z = Maths.lerp(start.z, end.z, t);
+        
+        return this;
+    }
 
 
     public Vec2f xy(){

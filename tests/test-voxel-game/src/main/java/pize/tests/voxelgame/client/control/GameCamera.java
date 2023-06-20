@@ -3,10 +3,12 @@ package pize.tests.voxelgame.client.control;
 import pize.Pize;
 import pize.graphics.camera.PerspectiveCamera;
 import pize.math.Maths;
+import pize.math.util.EulerAngles;
+import pize.math.vecmath.vector.Vec3f;
 import pize.tests.voxelgame.client.ClientGame;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.options.Options;
-import pize.tests.voxelgame.clientserver.chunk.Chunk;
+import pize.tests.voxelgame.clientserver.chunk.LevelChunk;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.HEIGHT;
@@ -22,6 +24,7 @@ public class GameCamera extends PerspectiveCamera{
     private PerspectiveType perspective;
     private float notInterpolatedFov;
     private float zoom = 1;
+    private float time;
 
     public GameCamera(ClientGame game, double near, double far, double fieldOfView){
         super(near, far, fieldOfView);
@@ -49,11 +52,24 @@ public class GameCamera extends PerspectiveCamera{
 
 
     public void update(){
-        // Follow to target
+        // Follow target
         if(target == null)
             return;
-        getPos().set(target.getPosition());
-        getRot().set(target.getRotation());
+        final Vec3f position = target.getPosition().clone();
+        final EulerAngles rotation = target.getRotation().clone();
+        
+        // Shaking
+        // final float playerSpeed = (float) player.getMotion().xz().len();
+        // time += playerSpeed * 3;
+        // final float shakingHorizontal = Mathc.sin(time) * 0.02F;
+        // final float shakingVertical = Mathc.pow(Mathc.sin(time) * 0.02F, 2) - 0.02F;
+        // final Vec2f shakingShift = new Vec2f(0, shakingHorizontal);
+        // shakingShift.rotDeg(rotation.yaw);
+        // position.add(shakingShift.x, shakingVertical, shakingShift.y);
+        
+        // Follow to target
+        getPos().set(position);
+        getRot().set(rotation);
         
         // Player
         final Options options = game.getSession().getOptions();
@@ -115,12 +131,12 @@ public class GameCamera extends PerspectiveCamera{
         return isChunkSeen(pos.x, pos.z);
     }
     
-    public boolean isChunkSeen(Chunk chunk){
+    public boolean isChunkSeen(LevelChunk chunk){
         ChunkPos pos = chunk.getPosition();
         
         return getFrustum().isBoxInFrustum(
             pos.x * SIZE, 0, pos.z * SIZE,
-            pos.x * SIZE + SIZE, chunk.getStorage().getMaxY() + 1, pos.z * SIZE + SIZE
+            pos.x * SIZE + SIZE, (chunk.getHighestSectionIndex() + 1) * SIZE, pos.z * SIZE + SIZE
         );
     }
     

@@ -2,46 +2,43 @@ package pize.tests.voxelgame.server.chunk;
 
 import pize.tests.voxelgame.client.block.BlockProperties;
 import pize.tests.voxelgame.client.block.BlockState;
-import pize.tests.voxelgame.clientserver.chunk.Chunk;
+import pize.tests.voxelgame.clientserver.chunk.LevelChunk;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkBlockUtils;
-import pize.tests.voxelgame.clientserver.chunk.storage.ChunkHeightUtils;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
-import pize.tests.voxelgame.server.level.ServerChunkManager;
+import pize.tests.voxelgame.clientserver.chunk.storage.HeightmapType;
+import pize.tests.voxelgame.server.level.ServerLevel;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.isOutOfBounds;
 
-public class ServerChunk extends Chunk{
+public class ServerChunk extends LevelChunk{
     
-    private final ServerChunkManager chunkManagerOf;
-    
-    public ServerChunk(ServerChunkManager chunkManagerOf, ChunkPos position){
-        super(position);
-        
-        this.chunkManagerOf = chunkManagerOf;
+    public ServerChunk(ServerLevel level, ChunkPos position){
+        super(level, position);
     }
     
-    public ServerChunkManager getManagerOf(){
-        return chunkManagerOf;
+    public ServerLevel getLevel(){
+        return (ServerLevel) level;
     }
     
     
-    public void setBlock(int x, int y, int z, short state){
+    public boolean setBlock(int x, int y, int z, short state){
         if(isOutOfBounds(x, z)){
-            storage.setBlock(x, y, z, state);
-            return;
+            super.setBlock(x, y, z, state);
+            return false;
         }
         
-        BlockProperties previousBlock = BlockState.getProps(storage.setBlock(x, y, z, state));
         BlockProperties targetBlock = BlockState.getProps(state);
-        if(previousBlock.equals(targetBlock))
-            return;
+        if(!super.setBlock(x, y, z, state))
+            return false;
         
         ChunkBlockUtils.updateNeighborChunksEdges(this, x, y, z, state);
-        ChunkHeightUtils.updateHeight(storage, x, y, z, !targetBlock.isEmpty());
+        getHeightMap(HeightmapType.SURFACE).update(x, y, z, !targetBlock.isEmpty());
+        
+        return true;
     }
     
     public void setBlockFast(int x, int y, int z, short state){
-        if(storage.setBlock(x, y, z, state) != BlockState.getID(state) && !isOutOfBounds(x, z))
+        if(this.setBlock(x, y, z, state) && !isOutOfBounds(x, z))
             ChunkBlockUtils.updateNeighborChunksEdges(this, x, y, z, state);
     }
     

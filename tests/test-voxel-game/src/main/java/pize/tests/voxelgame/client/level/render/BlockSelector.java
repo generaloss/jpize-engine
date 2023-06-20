@@ -55,18 +55,8 @@ public class BlockSelector implements Disposable{
         if(!rayCast.isSelected())
             return;
         
-        //: render(rayCast.getSBP());
-        
         final GameCamera camera = rendererOF.getSession().getGame().getCamera();
         translationMatrix.toTranslated(new Vec3f(rayCast.getSelectedBlockPosition()).sub(camera.getX(), 0, camera.getZ()));
-        
-        rendererOF.lineShader.setUniform("u_model", translationMatrix);
-        mesh.render();
-    }
-    
-    public void render(int x, int y, int z){
-        final GameCamera camera = rendererOF.getSession().getGame().getCamera();
-        translationMatrix.toTranslated(new Vec3f(x, y, z).sub(camera.getX(), 0, camera.getZ()));
         
         rendererOF.lineShader.setUniform("u_model", translationMatrix);
         mesh.render();

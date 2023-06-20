@@ -3,7 +3,9 @@ package pize.tests.voxelgame.client.entity.model;
 import pize.Pize;
 import pize.math.Mathc;
 import pize.math.vecmath.vector.Vec3d;
+import pize.math.vecmath.vector.Vec3f;
 import pize.tests.voxelgame.client.control.GameCamera;
+import pize.tests.voxelgame.client.entity.RemotePlayer;
 import pize.tests.voxelgame.clientserver.entity.Player;
 
 public class PlayerModel extends HumanoidModel{
@@ -99,20 +101,45 @@ public class PlayerModel extends HumanoidModel{
     }
     
     
-    private float time = 0;
+    private float animationTime = 0;
+    
+    private Vec3f oldPlayerPosition;
+    private Vec3f interpolatedPlayerPosition;
+    private float time;
     
     public void animate(){
-        torso.getPosition().set(player.getPosition());
-        head .getPosition().set(player.getPosition());
+        // Interpolation
+        if(oldPlayerPosition == null){
+            oldPlayerPosition = player.getPosition().clone();
+            interpolatedPlayerPosition = player.getPosition().clone();
+        }
+        
+        if(player instanceof RemotePlayer){
+            time += Pize.getDt();
+            
+            interpolatedPlayerPosition.lerp(oldPlayerPosition, player.getPosition(), time * 20);
+            
+            if(!oldPlayerPosition.equals(player.getPosition())){
+                oldPlayerPosition.set(player.getPosition());
+                time = 0;
+            }
+        }else{
+            interpolatedPlayerPosition.set(player.getPosition());
+        }
+        // Position & Rotation
+        torso.getPosition().set(interpolatedPlayerPosition);
+        head.getPosition().set(interpolatedPlayerPosition);
         
         torso.getRotation().yaw += (-player.getRotation().yaw - torso.getRotation().yaw) * Pize.getDt() * 4;
         
         head.getRotation().yaw = -player.getRotation().yaw;
         head.getRotation().pitch = player.getRotation().pitch;
         
+        // Sneaking
         if(player.isSneaking())
             torso.getPosition().y -= 1 * w;
         
+        // Animation
         final Vec3d motion = this.player.getMotion();
         if(motion.len2() > 10E-5){
             
@@ -124,19 +151,19 @@ public class PlayerModel extends HumanoidModel{
             else
                 animationSpeed = 4;
             
-            time += Pize.getUpdateDt() * animationSpeed;
+            animationTime += Pize.getUpdateDt() * animationSpeed;
             
-            rightHand.getRotation().pitch = 45 * Mathc.sin(time);
-            leftHand.getRotation().pitch = -45 * Mathc.sin(time);
-            rightLeg.getRotation().pitch = -45 * Mathc.sin(time);
-            leftLeg.getRotation().pitch = 45 * Mathc.sin(time);
+            rightHand.getRotation().pitch = 45 * Mathc.sin(animationTime);
+            leftHand.getRotation().pitch = -45 * Mathc.sin(animationTime);
+            rightLeg.getRotation().pitch = -45 * Mathc.sin(animationTime);
+            leftLeg.getRotation().pitch = 45 * Mathc.sin(animationTime);
         }else{
             rightHand.getRotation().pitch -= rightHand.getRotation().pitch / 10;
             leftHand.getRotation().pitch  -= leftHand.getRotation().pitch  / 10;
             rightLeg.getRotation().pitch  -= rightLeg.getRotation().pitch  / 10;
             leftLeg.getRotation().pitch   -= leftLeg.getRotation().pitch   / 10;
             
-            time = 0;
+            animationTime = 0;
         }
     }
     

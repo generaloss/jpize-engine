@@ -79,7 +79,7 @@ public abstract class Server{
                         sender.sendMessage("Cannot find player " + args[0]);
                     else{
                         final Vec3f position = new Vec3f(Float.parseFloat(args[1]), Float.parseFloat(args[2]), Float.parseFloat(args[3]));
-                        sender.teleport(position);
+                        targetPlayer.teleport(position);
                         
                         sender.sendMessage(targetPlayer.getName() + " teleported to " + position);
                         targetPlayer.sendMessage("You teleported to " + position);

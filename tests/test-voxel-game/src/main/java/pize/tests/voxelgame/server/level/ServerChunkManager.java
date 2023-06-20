@@ -4,6 +4,7 @@ import pize.math.vecmath.vector.Vec2f;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
 import pize.tests.voxelgame.clientserver.entity.Entity;
 import pize.tests.voxelgame.clientserver.level.ChunkManager;
+import pize.tests.voxelgame.clientserver.net.packet.CBPacketChunk;
 import pize.tests.voxelgame.server.chunk.ServerChunk;
 import pize.tests.voxelgame.server.player.ServerPlayer;
 import pize.util.time.PerSecCounter;
@@ -112,7 +113,6 @@ public class ServerChunkManager extends ChunkManager{
         // Load new chunks
         loadQueue.addAll(newFrontiers);
         newFrontiers.clear();
-        System.out.println(level.getConfiguration().getName() + ": " + frontiers.size());
     }
     
     private void ensureFrontier(ChunkPos chunkPos){
@@ -141,13 +141,13 @@ public class ServerChunkManager extends ChunkManager{
     }
     
     public void loadChunk(ChunkPos chunkPos){
-        final ServerChunk chunk = new ServerChunk(this, chunkPos);
+        final ServerChunk chunk = new ServerChunk(level, chunkPos);
         level.getConfiguration().getGenerator().generate(chunk);
         updateNeighborChunksEdgesAndSelf(chunk, true);
         allChunks.put(chunkPos, chunk);
         
         if(requestedChunks.containsKey(chunkPos)){
-            requestedChunks.get(chunkPos).sendPacket(chunk.getStorage().getPacket());
+            requestedChunks.get(chunkPos).sendPacket(new CBPacketChunk(chunk));
             requestedChunks.remove(chunkPos);
         }
     }
@@ -162,7 +162,7 @@ public class ServerChunkManager extends ChunkManager{
         final ServerChunk chunk = getChunk(chunkPos);
         
         if(chunk != null)
-            player.sendPacket(chunk.getStorage().getPacket());
+            player.sendPacket(new CBPacketChunk(chunk));
         else
             requestedChunks.put(chunkPos, player);
     }

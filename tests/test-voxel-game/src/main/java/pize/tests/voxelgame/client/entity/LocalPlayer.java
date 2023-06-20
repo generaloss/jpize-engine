@@ -21,7 +21,7 @@ public class LocalPlayer extends AbstractClientPlayer{
     private final Vec3f oldPos;
     private final EulerAngles oldRot;
     
-    public Block holdBlock;
+    public short holdBlock = Block.STONE.getDefaultState();
     
     public LocalPlayer(Level levelOF, String name){
         super(levelOF, name); // 3) random skin ID
@@ -67,6 +67,9 @@ public class LocalPlayer extends AbstractClientPlayer{
         // Gravity
         if(!isOnGround())
             getMotion().y += gravity * (deltaTime * deltaTime);
+        
+        getMotion().setMax(50 * Pize.getDt());
+        getMotion().clampToMax(false, true, false);
         
         // Fall height
         if(getMotion().y < 0 && oldMotionY >= 0)

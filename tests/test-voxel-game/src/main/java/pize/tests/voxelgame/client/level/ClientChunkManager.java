@@ -6,6 +6,7 @@ import pize.tests.voxelgame.client.chunk.mesh.ChunkMesh;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
 import pize.tests.voxelgame.clientserver.level.ChunkManager;
+import pize.tests.voxelgame.clientserver.level.ChunkManagerUtils;
 import pize.tests.voxelgame.clientserver.net.packet.CBPacketChunk;
 import pize.tests.voxelgame.clientserver.net.packet.SBPacketChunkRequest;
 import pize.util.time.PerSecCounter;
@@ -13,10 +14,14 @@ import pize.util.time.PerSecCounter;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.getChunkPos;
-import static pize.tests.voxelgame.clientserver.level.ChunkManagerUtils.*;
+import static pize.tests.voxelgame.clientserver.level.ChunkManagerUtils.distToChunk;
+import static pize.tests.voxelgame.clientserver.level.ChunkManagerUtils.updateNeighborChunksEdgesAndSelf;
 
 public class ClientChunkManager extends ChunkManager{
     
@@ -94,18 +99,14 @@ public class ClientChunkManager extends ChunkManager{
             ));
         }
         
-        for(int i = 0; i < frontiers.size(); i++){
-            final ChunkPos frontierPos = frontiers.get(i);
-            
+        for(final ChunkPos frontierPos: frontiers){
             ensureFrontier(frontierPos.getNeighbor(-1, 0));
             ensureFrontier(frontierPos.getNeighbor(1, 0));
             ensureFrontier(frontierPos.getNeighbor(0, -1));
             ensureFrontier(frontierPos.getNeighbor(0, 1));
             
             if(!allChunks.containsKey(frontierPos) && !requestedChunks.containsKey(frontierPos)){
-                getLevel().getSession().getGame().sendPacket(
-                    new SBPacketChunkRequest(frontierPos.x, frontierPos.z)
-                );
+                getLevel().getSession().getGame().sendPacket(new SBPacketChunkRequest(frontierPos.x, frontierPos.z));
                 requestedChunks.put(frontierPos, System.currentTimeMillis());
             }
         }
@@ -123,7 +124,7 @@ public class ClientChunkManager extends ChunkManager{
     
     private void buildChunks(){
         while(!toBuildQueue.isEmpty()){
-            ClientChunk chunk = toBuildQueue.poll();
+            final ClientChunk chunk = toBuildQueue.poll();
             if(chunk == null)
                 continue;
             
@@ -179,9 +180,12 @@ public class ClientChunkManager extends ChunkManager{
     
     
     public void receivedChunk(CBPacketChunk packet){
-        final ClientChunk chunk = new ClientChunk(this, packet);
+        final ClientChunk chunk = packet.getChunk(level);
         allChunks.put(chunk.getPosition(), chunk);
-        toBuildQueue.add(chunk);
+        chunk.rebuild(false);
+        
+        ChunkManagerUtils.updateNeighborChunksEdgesAndSelf(chunk, true);
+        ChunkManagerUtils.rebuildNeighborChunksAndSelf(chunk);
         
         requestedChunks.remove(chunk.getPosition());
     }

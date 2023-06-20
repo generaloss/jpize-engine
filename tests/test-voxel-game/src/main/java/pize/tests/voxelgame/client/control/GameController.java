@@ -6,6 +6,7 @@ import pize.math.vecmath.vector.Vec3i;
 import pize.tests.voxelgame.Main;
 import pize.tests.voxelgame.client.block.blocks.Block;
 import pize.tests.voxelgame.client.chat.Chat;
+import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.level.ClientLevel;
 import pize.tests.voxelgame.client.options.KeyMapping;
 import pize.tests.voxelgame.client.options.Options;
@@ -78,16 +79,23 @@ public class GameController{
         // Player
         playerController.update();
         
-        // Place/Destroy block
+        // Place/Destroy/Take block
         if(Pize.isTouched() && rayCast.isSelected()){
+            final LocalPlayer player = session.getGame().getPlayer();
+            
             if(Pize.mouse().isLeftDown()){
                 final Vec3i blockPos = rayCast.getSelectedBlockPosition();
-                world.setBlock(blockPos.x, blockPos.y, blockPos.z, Block.AIR.getState());
-                session.getGame().sendPacket(new SBPacketPlayerBlockSet(blockPos.x, blockPos.y, blockPos.z, Block.AIR.getState()));
+                world.setBlock(blockPos.x, blockPos.y, blockPos.z, Block.AIR.getDefaultState());
+                session.getGame().sendPacket(new SBPacketPlayerBlockSet(blockPos.x, blockPos.y, blockPos.z, Block.AIR.getDefaultState()));
+                
             }else if(Pize.mouse().isRightDown()){
                 final Vec3i blockPos = rayCast.getImaginaryBlockPosition();
-                world.setBlock(blockPos.x, blockPos.y, blockPos.z, Block.LAMP.getState());
-                session.getGame().sendPacket(new SBPacketPlayerBlockSet(blockPos.x, blockPos.y, blockPos.z, Block.LAMP.getState()));
+                world.setBlock(blockPos.x, blockPos.y, blockPos.z, player.holdBlock);
+                session.getGame().sendPacket(new SBPacketPlayerBlockSet(blockPos.x, blockPos.y, blockPos.z, player.holdBlock));
+                
+            }else if(Pize.mouse().isMiddleDown()){
+                final Vec3i blockPos = rayCast.getSelectedBlockPosition();
+                player.holdBlock = world.getBlock(blockPos.x, blockPos.y, blockPos.z);
             }
         }
         

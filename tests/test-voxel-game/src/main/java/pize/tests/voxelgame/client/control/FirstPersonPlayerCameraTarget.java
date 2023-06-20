@@ -1,7 +1,6 @@
 package pize.tests.voxelgame.client.control;
 
 import pize.math.util.EulerAngles;
-import pize.math.vecmath.tuple.Tuple3f;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 
@@ -18,7 +17,7 @@ public class FirstPersonPlayerCameraTarget implements CameraTarget{
     }
     
     @Override
-    public Tuple3f getPosition(){
+    public Vec3f getPosition(){
         position.set(targetPlayer.getPosition()).add(0, targetPlayer.getEyeHeight(), 0);
         return position;
     }

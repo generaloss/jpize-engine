@@ -4,12 +4,30 @@ import pize.math.vecmath.vector.Vec2f;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.voxelgame.client.block.blocks.Block;
 import pize.tests.voxelgame.client.chunk.ClientChunk;
-import pize.tests.voxelgame.clientserver.chunk.Chunk;
+import pize.tests.voxelgame.clientserver.chunk.LevelChunk;
 import pize.tests.voxelgame.server.chunk.ServerChunk;
 
 import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.*;
 
 public class ChunkManagerUtils{
+    
+    public static void rebuildNeighborChunksAndSelf(ClientChunk chunk){
+        ClientChunk neighbor = getNeighborChunk(chunk, -1, 0);
+        if(neighbor != null)
+            neighbor.rebuild(false);
+        
+        neighbor = getNeighborChunk(chunk, 1, 0);
+        if(neighbor != null)
+            neighbor.rebuild(false);
+        
+        neighbor = getNeighborChunk(chunk, 0, 1);
+        if(neighbor != null)
+            neighbor.rebuild(false);
+        
+        neighbor = getNeighborChunk(chunk, 0, -1);
+        if(neighbor != null)
+            neighbor.rebuild(false);
+    }
     
     public static void updateNeighborChunksEdgesAndSelf(ServerChunk chunk, boolean loaded){
         // neighbors
@@ -107,11 +125,11 @@ public class ChunkManagerUtils{
                 updateEdge(y, loaded, chunk, neighbor, SIZE, -1, 0, SIZE_IDX, -1, SIZE, SIZE_IDX, 0);
     }
     
-    public static void updateEdge(int y, boolean loaded, Chunk chunk1, Chunk chunk2, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
-        chunk2.setBlock(x1, y, y1, loaded ? chunk1.getBlock(x2, y, y2) : Block.VOID_AIR.getState(), true);
+    public static void updateEdge(int y, boolean loaded, LevelChunk chunk1, LevelChunk chunk2, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
+        chunk2.setBlock(x1, y, y1, loaded ? chunk1.getBlock(x2, y, y2) : Block.VOID_AIR.getDefaultState());
         
         if(loaded)
-            chunk1.setBlock(x3, y, y3, chunk2.getBlock(x4, y, y4), true);
+            chunk1.setBlock(x3, y, y3, chunk2.getBlock(x4, y, y4));
     }
     
     public static float distToChunk(int x, int z, Vec3f pos){
