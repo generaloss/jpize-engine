@@ -4,11 +4,12 @@ import pize.math.util.EulerAngles;
 import pize.math.vecmath.tuple.Tuple3f;
 import pize.net.tcp.TcpConnection;
 import pize.net.tcp.packet.IPacket;
-import pize.tests.voxelgame.clientserver.entity.Entity;
-import pize.tests.voxelgame.clientserver.entity.Player;
-import pize.tests.voxelgame.clientserver.level.Level;
-import pize.tests.voxelgame.clientserver.net.packet.CBPacketChatMessage;
-import pize.tests.voxelgame.clientserver.net.packet.CBPacketTeleportPlayer;
+import pize.tests.voxelgame.base.entity.Entity;
+import pize.tests.voxelgame.base.entity.Player;
+import pize.tests.voxelgame.base.level.Level;
+import pize.tests.voxelgame.base.net.packet.CBPacketAbilities;
+import pize.tests.voxelgame.base.net.packet.CBPacketChatMessage;
+import pize.tests.voxelgame.base.net.packet.CBPacketTeleportPlayer;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.level.ServerLevel;
 import pize.tests.voxelgame.server.net.PlayerConnectionAdapter;
@@ -59,6 +60,12 @@ public class ServerPlayer extends Player{
     
     public void teleport(Tuple3f position){
         teleport(getLevel(), position, getRotation());
+    }
+    
+    
+    public void setFlyEnabled(boolean flyEnabled){
+        sendPacket(new CBPacketAbilities(flyEnabled));
+        super.setFlyEnabled(flyEnabled);
     }
     
     

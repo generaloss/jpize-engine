@@ -1,7 +1,7 @@
 package pize.tests.voxelgame.client.chat;
 
 import pize.tests.voxelgame.client.ClientGame;
-import pize.tests.voxelgame.clientserver.net.packet.SBPacketChatMessage;
+import pize.tests.voxelgame.base.net.packet.SBPacketChatMessage;
 import pize.util.io.TextProcessor;
 
 import java.util.ArrayList;
@@ -25,6 +25,8 @@ public class Chat{
         this.textProcessor = new TextProcessor(false);
         
         textProcessor.setActive(false);
+        
+        putMessage("Enter /help for command list");
     }
     
     

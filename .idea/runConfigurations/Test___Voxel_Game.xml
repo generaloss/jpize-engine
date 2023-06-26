@@ -2,11 +2,14 @@
   <configuration default="false" name="Test - Voxel Game" type="Application" factoryName="Application" singleton="false">
     <option name="ALTERNATIVE_JRE_PATH" value="17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-    <option name="MAIN_CLASS_NAME" value="pize.tests.voxelgame.Main" />
+    <option name="MAIN_CLASS_NAME" value="pize.tests.voxelgame.VoxelGame" />
     <module name="test-voxel-game" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/test-voxel-game" />
     <method v="2">
       <option name="Make" enabled="true" />
+      <option name="BuildArtifacts" enabled="true">
+        <artifact name="voxel-game-mod:jar" />
+      </option>
     </method>
   </configuration>
 </component>

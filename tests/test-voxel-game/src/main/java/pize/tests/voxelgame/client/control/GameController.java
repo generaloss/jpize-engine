@@ -3,28 +3,28 @@ package pize.tests.voxelgame.client.control;
 import pize.Pize;
 import pize.io.glfw.Key;
 import pize.math.vecmath.vector.Vec3i;
-import pize.tests.voxelgame.Main;
+import pize.tests.voxelgame.VoxelGame;
 import pize.tests.voxelgame.client.block.blocks.Block;
 import pize.tests.voxelgame.client.chat.Chat;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.level.ClientLevel;
 import pize.tests.voxelgame.client.options.KeyMapping;
 import pize.tests.voxelgame.client.options.Options;
-import pize.tests.voxelgame.clientserver.net.packet.SBPacketPing;
-import pize.tests.voxelgame.clientserver.net.packet.SBPacketPlayerBlockSet;
+import pize.tests.voxelgame.base.net.packet.SBPacketPing;
+import pize.tests.voxelgame.base.net.packet.SBPacketPlayerBlockSet;
 
 public class GameController{
     
-    private final Main session;
+    private final VoxelGame session;
     private final PlayerController playerController;
     private boolean f3Plus;
     
-    public GameController(Main session){
+    public GameController(VoxelGame session){
         this.session = session;
         playerController = new PlayerController(session);
     }
     
-    public Main getSession(){
+    public VoxelGame getSession(){
         return session;
     }
     

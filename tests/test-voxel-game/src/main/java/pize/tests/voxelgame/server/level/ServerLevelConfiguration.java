@@ -1,7 +1,7 @@
 package pize.tests.voxelgame.server.level;
 
 import pize.math.vecmath.vector.Vec2f;
-import pize.tests.voxelgame.clientserver.level.LevelConfiguration;
+import pize.tests.voxelgame.base.level.LevelConfiguration;
 import pize.tests.voxelgame.server.chunk.gen.ChunkGenerator;
 
 public class ServerLevelConfiguration extends LevelConfiguration{
@@ -16,7 +16,7 @@ public class ServerLevelConfiguration extends LevelConfiguration{
         
         this.seed = seed;
         this.generator = generator;
-        this.spawn = new Vec2f(0.5, 0.5);
+        this.spawn = new Vec2f(225, -122);
     }
     
     public ChunkGenerator getGenerator(){

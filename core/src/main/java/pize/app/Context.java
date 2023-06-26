@@ -64,14 +64,12 @@ public class Context{
         });
         
         if(initialUpdateTPS != 0){
-            updateTickGen = new TickGenerator(initialUpdateTPS){
-                @Override
-                public void run(){
-                    updateDeltaTime.update();
-                    listener.update();
-                }
-            };
-            updateTickGen.startAsync();
+            updateTickGen = new TickGenerator(initialUpdateTPS);
+            
+            updateTickGen.startAsync(()->{
+                updateDeltaTime.update();
+                listener.update();
+            });
         }
 
         while(!window.closeRequest() && !exitRequest)

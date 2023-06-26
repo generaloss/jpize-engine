@@ -4,9 +4,8 @@ import pize.Pize;
 import pize.math.Mathc;
 import pize.math.vecmath.vector.Vec3d;
 import pize.math.vecmath.vector.Vec3f;
+import pize.tests.voxelgame.base.entity.Player;
 import pize.tests.voxelgame.client.control.GameCamera;
-import pize.tests.voxelgame.client.entity.RemotePlayer;
-import pize.tests.voxelgame.clientserver.entity.Player;
 
 public class PlayerModel extends HumanoidModel{
     
@@ -114,18 +113,18 @@ public class PlayerModel extends HumanoidModel{
             interpolatedPlayerPosition = player.getPosition().clone();
         }
         
-        if(player instanceof RemotePlayer){
-            time += Pize.getDt();
-            
-            interpolatedPlayerPosition.lerp(oldPlayerPosition, player.getPosition(), time * 20);
-            
-            if(!oldPlayerPosition.equals(player.getPosition())){
-                oldPlayerPosition.set(player.getPosition());
-                time = 0;
-            }
-        }else{
+        //if(player instanceof RemotePlayer){
+        //    time += Pize.getDt();
+        //
+        //    interpolatedPlayerPosition.lerp(oldPlayerPosition, player.getPosition(), time * 20);
+        //
+        //    if(!oldPlayerPosition.equals(player.getPosition())){
+        //        oldPlayerPosition.set(player.getPosition());
+        //        time = 0;
+        //    }
+        //}else{
             interpolatedPlayerPosition.set(player.getPosition());
-        }
+        //}
         // Position & Rotation
         torso.getPosition().set(interpolatedPlayerPosition);
         head.getPosition().set(interpolatedPlayerPosition);
@@ -145,11 +144,11 @@ public class PlayerModel extends HumanoidModel{
             
             final double animationSpeed;
             if(player.isSprinting())
-                animationSpeed = 6;
+                animationSpeed = 5;
             else if(player.isSneaking())
-                animationSpeed = 2;
+                animationSpeed = 1;
             else
-                animationSpeed = 4;
+                animationSpeed = 3;
             
             animationTime += Pize.getUpdateDt() * animationSpeed;
             

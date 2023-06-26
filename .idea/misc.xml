@@ -9,14 +9,14 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/tests/pom.xml" />
-        <option value="$PROJECT_DIR$/tests/test-minecraft/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-voxel-game/voxel-game-mod/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
-        <option value="$PROJECT_DIR$/security/pom.xml" />
-        <option value="$PROJECT_DIR$/tests/test-3d-model/test-pon-yes/pom.xml" />
-        <option value="$PROJECT_DIR$/tilemap/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-vg/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-voxel-game/mod/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/vg/pom.xml" />
       </set>
     </option>
   </component>

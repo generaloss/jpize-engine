@@ -15,3 +15,5 @@
 /tests/test-text-editor/target/
 /tests/test-window/target/
 /tests/test-voxel-game/target/
+/tests/test-voxel-game/voxel-game-mod/target/
+/tests/test-noise/target/

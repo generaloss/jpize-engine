@@ -2,9 +2,10 @@ package pize.tests.voxelgame.server.net;
 
 import pize.net.tcp.TcpConnection;
 import pize.net.tcp.packet.IPacket;
-import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
-import pize.tests.voxelgame.clientserver.net.packet.*;
+import pize.tests.voxelgame.base.chunk.storage.ChunkPos;
+import pize.tests.voxelgame.base.net.packet.*;
 import pize.tests.voxelgame.server.Server;
+import pize.tests.voxelgame.server.command.source.CommandSourcePlayer;
 import pize.tests.voxelgame.server.level.ServerLevel;
 import pize.tests.voxelgame.server.player.ServerPlayer;
 
@@ -13,11 +14,13 @@ public class PlayerConnectionAdapter implements ServerPlayerPacketHandler{
     private final ServerPlayer player;
     private final Server server;
     private final TcpConnection connection;
+    private final CommandSourcePlayer commandSource;
     
     public PlayerConnectionAdapter(ServerPlayer player, TcpConnection connection){
         this.player = player;
         this.server = player.getServer();
         this.connection = connection;
+        this.commandSource = new CommandSourcePlayer(player);
     }
     
     
@@ -72,20 +75,9 @@ public class PlayerConnectionAdapter implements ServerPlayerPacketHandler{
     public void handleChatMessage(SBPacketChatMessage packet){
         String message = packet.message;
         
-        if(message.startsWith("/")){
-            message = message.substring(1);
-            
-            final String command = message.split(" ")[0];
-            
-            final String[] args;
-            if(message.length() != command.length())
-                args = message.substring(command.length() + 1).split(" ");
-            else
-                args = new String[0];
-            
-            System.out.println("[Server}: Player " + player.getName() + " execute command: " + message);
-            server.executeCommand(command, args, player);
-        }else
+        if(message.startsWith("/"))
+            server.getCommandDispatcher().executeCommand(message.substring(1), commandSource);
+        else
             server.getPlayerList().broadcastMessage("<" + player.getName() + "> " + packet.message);
     }
     

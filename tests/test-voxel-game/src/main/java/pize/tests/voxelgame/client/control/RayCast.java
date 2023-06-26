@@ -4,18 +4,18 @@ import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
 import pize.math.vecmath.vector.Vec3i;
-import pize.tests.voxelgame.Main;
+import pize.tests.voxelgame.VoxelGame;
 import pize.tests.voxelgame.client.block.BlockState;
 import pize.tests.voxelgame.client.block.blocks.Block;
 import pize.tests.voxelgame.client.block.model.BlockFace;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.level.ClientLevel;
 
-import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.HEIGHT_IDX;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.HEIGHT_IDX;
 
 public class RayCast{
     
-    private final Main sessionOF;
+    private final VoxelGame sessionOF;
     
     private float rayLength;
     private final Vec3i selectedBlock, imaginarySelectedBlock;
@@ -23,7 +23,7 @@ public class RayCast{
     private boolean selected;
     private ClientLevel world;
     
-    public RayCast(Main sessionOF, float length){
+    public RayCast(VoxelGame sessionOF, float length){
         this.sessionOF = sessionOF;
         
         setRayLength(length);
@@ -31,7 +31,7 @@ public class RayCast{
         imaginarySelectedBlock = new Vec3i();
     }
     
-    public Main getSessionOf(){
+    public VoxelGame getSessionOf(){
         return sessionOF;
     }
     

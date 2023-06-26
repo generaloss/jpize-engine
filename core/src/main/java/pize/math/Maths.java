@@ -109,8 +109,31 @@ public class Maths{
         return Long.parseLong(seed.toString());
     }
     
+    public static void randomInts(int[] array, int min, int max){
+        final int range = max - min;
+        for(int i = 0; i < array.length; i++)
+            array[i] = Maths.round(Math.random() * range + min);
+    }
+    
+    public static void randomShorts(Short[] array, int min, int max){
+        final int range = max - min;
+        for(int i = 0; i < array.length; i++){
+            array[i] = (short) Maths.round(Math.random() * range + min);
+        }
+    }
+    
+    public static void randomBytes(byte[] array, int min, int max){
+        final int range = max - min;
+        for(int i = 0; i < array.length; i++)
+            array[i] = (byte) Maths.round(Math.random() * range + min);
+    }
+    
     
     public static float lerp(float start, float end, float t){
+        return start + (end - start) * t;
+    }
+    
+    public static double lerp(double start, double end, double t){
         return start + (end - start) * t;
     }
     
@@ -127,24 +150,28 @@ public class Maths{
     }
     
     
-    public static float cubicCurve(float t){
+    public static double cubicCurve(double t){
         return -2 * t * t * t  +  3 * t * t;
     }
     
-    public static float cosineCurve(float t){
+    public static double cosineCurve(double t){
         return (1 - Mathc.cos(t / PI)) / 2;
     }
     
-    public static float quinticCurve(float t){
+    public static double quinticCurve(double t){
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
     
-    public static float hermiteCurve(float t){
+    public static double hermiteCurve(double t){
         return t * t * (3 - 2 * t);
     }
 
 
     static public float map(float value, float fromLow, float fromHigh, float toLow, float toHigh){
+        return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
+    }
+    
+    static public double map(double value, double fromLow, double fromHigh, double toLow, double toHigh){
         return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
     }
 

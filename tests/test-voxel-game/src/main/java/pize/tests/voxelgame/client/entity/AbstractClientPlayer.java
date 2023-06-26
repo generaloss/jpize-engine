@@ -1,8 +1,8 @@
 package pize.tests.voxelgame.client.entity;
 
 import pize.tests.voxelgame.client.entity.model.PlayerModel;
-import pize.tests.voxelgame.clientserver.entity.Player;
-import pize.tests.voxelgame.clientserver.level.Level;
+import pize.tests.voxelgame.base.entity.Player;
+import pize.tests.voxelgame.base.level.Level;
 
 public class AbstractClientPlayer extends Player{
     

@@ -3,17 +3,17 @@ package pize.tests.voxelgame.server.player;
 import pize.math.vecmath.vector.Vec3f;
 import pize.net.tcp.TcpConnection;
 import pize.net.tcp.packet.IPacket;
-import pize.tests.voxelgame.clientserver.net.packet.CBPacketChatMessage;
-import pize.tests.voxelgame.clientserver.net.packet.CBPacketRemoveEntity;
-import pize.tests.voxelgame.clientserver.net.packet.CBPacketSpawnInfo;
-import pize.tests.voxelgame.clientserver.net.packet.CBPacketSpawnPlayer;
+import pize.tests.voxelgame.base.net.packet.CBPacketChatMessage;
+import pize.tests.voxelgame.base.net.packet.CBPacketRemoveEntity;
+import pize.tests.voxelgame.base.net.packet.CBPacketSpawnInfo;
+import pize.tests.voxelgame.base.net.packet.CBPacketSpawnPlayer;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.level.ServerLevel;
 import pize.tests.voxelgame.server.net.PlayerConnectionAdapter;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerList{
     
@@ -22,7 +22,7 @@ public class PlayerList{
     
     public PlayerList(Server server){
         this.server = server;
-        playerMap = new HashMap<>();
+        playerMap = new ConcurrentHashMap<>();
     }
     
     public Server getServer(){

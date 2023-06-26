@@ -9,7 +9,7 @@ import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.voxelgame.client.control.GameCamera;
 
-import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.SIZE;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.SIZE;
 
 public class ChunkBorder implements Disposable{
     

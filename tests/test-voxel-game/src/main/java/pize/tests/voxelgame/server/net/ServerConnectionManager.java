@@ -6,7 +6,7 @@ import pize.net.tcp.TcpListener;
 import pize.net.tcp.packet.PacketHandler;
 import pize.net.tcp.packet.PacketInfo;
 import pize.net.tcp.packet.Packets;
-import pize.tests.voxelgame.clientserver.net.packet.*;
+import pize.tests.voxelgame.base.net.packet.*;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.player.ServerPlayer;
 
@@ -18,9 +18,6 @@ public class ServerConnectionManager implements TcpListener{
     private final Server server;
     private final Map<TcpConnection, PacketHandler> packetHandlerMap;
     private final KeyRSA rsaKey;
-    
-    public static int rx;
-    public static int packetCount;
     
     public ServerConnectionManager(Server server){
         this.server = server;
@@ -48,7 +45,7 @@ public class ServerConnectionManager implements TcpListener{
             return;
         
         final PacketHandler packetHandler = packetHandlerMap.get(sender);
-        packetCount++;
+        
         switch(packetInfo.getPacketID()){
             // Login
             case SBPacketAuth.PACKET_ID ->

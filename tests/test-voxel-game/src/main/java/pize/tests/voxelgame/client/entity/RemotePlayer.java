@@ -1,6 +1,6 @@
 package pize.tests.voxelgame.client.entity;
 
-import pize.tests.voxelgame.clientserver.level.Level;
+import pize.tests.voxelgame.base.level.Level;
 
 public class RemotePlayer extends AbstractClientPlayer{
     

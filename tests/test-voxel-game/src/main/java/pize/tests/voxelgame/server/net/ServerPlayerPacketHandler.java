@@ -1,7 +1,7 @@
 package pize.tests.voxelgame.server.net;
 
 import pize.net.tcp.packet.PacketHandler;
-import pize.tests.voxelgame.clientserver.net.packet.*;
+import pize.tests.voxelgame.base.net.packet.*;
 
 public interface ServerPlayerPacketHandler extends PacketHandler{
     

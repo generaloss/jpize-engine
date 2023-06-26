@@ -4,22 +4,22 @@ import pize.math.vecmath.vector.Vec3f;
 import pize.net.security.KeyAES;
 import pize.net.tcp.TcpClient;
 import pize.net.tcp.packet.IPacket;
-import pize.tests.voxelgame.Main;
+import pize.tests.voxelgame.VoxelGame;
 import pize.tests.voxelgame.client.chat.Chat;
 import pize.tests.voxelgame.client.control.GameCamera;
 import pize.tests.voxelgame.client.control.RayCast;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.level.ClientLevel;
 import pize.tests.voxelgame.client.net.ClientPacketHandler;
-import pize.tests.voxelgame.clientserver.net.packet.SBPacketLogin;
-import pize.tests.voxelgame.clientserver.net.packet.SBPacketMove;
+import pize.tests.voxelgame.base.net.packet.SBPacketLogin;
+import pize.tests.voxelgame.base.net.packet.SBPacketMove;
 
 public class ClientGame{
     
     public static int tx;
     private static int txCounter;
     
-    private final Main session;
+    private final VoxelGame session;
     private final TcpClient client;
     private final Chat chat;
     private final KeyAES encryptKey;
@@ -32,7 +32,7 @@ public class ClientGame{
     private int tickCount;
     
     
-    public ClientGame(Main session){
+    public ClientGame(VoxelGame session){
         this.session = session;
         
         client = new TcpClient(new ClientPacketHandler(this));
@@ -42,7 +42,7 @@ public class ClientGame{
         chat = new Chat(this);
     }
     
-    public Main getSession(){
+    public VoxelGame getSession(){
         return session;
     }
     

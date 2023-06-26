@@ -21,9 +21,7 @@
         <module>physic</module>
         <module>net</module>
         <module>particle</module>
-
         <module>tests</module>
-        <module>tests/test-net</module>
     </modules>
 
 </project>

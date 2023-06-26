@@ -4,7 +4,7 @@ import pize.tests.voxelgame.client.block.blocks.Block;
 import pize.tests.voxelgame.client.block.model.BlockShape;
 import pize.tests.voxelgame.client.block.model.BlockTextureRegion;
 
-import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.*;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.*;
 
 public abstract class BlockProperties{
 

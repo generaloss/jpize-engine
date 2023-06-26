@@ -10,37 +10,42 @@ import pize.graphics.gl.Target;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.*;
 import pize.graphics.util.batch.TextureBatch;
+import pize.graphics.util.color.Color;
 import pize.math.vecmath.matrix.Matrix4f;
-import pize.tests.voxelgame.Main;
+import pize.math.vecmath.vector.Vec3f;
+import pize.tests.voxelgame.VoxelGame;
 import pize.tests.voxelgame.client.chunk.ClientChunk;
 import pize.tests.voxelgame.client.chunk.mesh.ChunkMesh;
 import pize.tests.voxelgame.client.control.GameCamera;
 import pize.tests.voxelgame.client.control.PerspectiveType;
 import pize.tests.voxelgame.client.entity.RemotePlayer;
 import pize.tests.voxelgame.client.entity.model.PlayerModel;
-import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
-import pize.tests.voxelgame.clientserver.entity.Entity;
+import pize.tests.voxelgame.base.chunk.storage.ChunkPos;
+import pize.tests.voxelgame.base.entity.Entity;
 
 import java.util.Map;
 
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.SIZE;
+
 public class LevelRenderer implements Disposable, Resizable{
 
-    private final Main session;
+    private final VoxelGame session;
     
     private final TextureBatch batch;
     private final SkyBox skyBox;
-    private final Texture atlasTexture, cursorTexture;
+    private final Texture atlasTexture, cursorTexture, vignetteTexture;
     private final Shader chunkShader, postShader;
     protected final Shader lineShader;
     private final Matrix4f chunkMatrix, skyViewMatrix;
     private final BlockSelector blockSelector;
     private final ChunkBorder chunkBorder;
     private boolean showChunkBorder;
+    private final Color fogColor;
     
     private final Framebuffer3D framebuffer;
     private final Framebuffer2D batchFramebuffer;
     
-    public LevelRenderer(Main session){
+    public LevelRenderer(VoxelGame session){
         this.session = session;
         // Batch for Cursor
         batch = new TextureBatch();
@@ -66,15 +71,18 @@ public class LevelRenderer implements Disposable, Resizable{
         // Chunk Border (F3 + G)
         chunkBorder = new ChunkBorder(this);
         
-        // Cursor
+        // Cursor & Vignette
         cursorTexture = new Texture("texture/cursor.png");
+        vignetteTexture = new Texture("texture/vignette.png");
         
         // Post
         postShader = new Shader(new Resource("shader/post.vert"), new Resource("shader/post.frag"));
         framebuffer = new Framebuffer3D();
+        
+        fogColor = new Color(0, 0.01, 0.05, 1);
     }
     
-    public Main getSession(){
+    public VoxelGame getSession(){
         return session;
     }
     
@@ -95,6 +103,9 @@ public class LevelRenderer implements Disposable, Resizable{
             Gl.enable(Target.DEPTH_TEST);
             Gl.enable(Target.POLYGON_OFFSET_FILL);
             chunkShader.bind();
+            chunkShader.setUniform("u_fogColor", fogColor);
+            chunkShader.setUniform("u_renderDistanceBlocks", session.getOptions().getRenderDistance() * SIZE);
+            
             chunkShader.setUniform("u_projection", camera.getProjection());
             chunkShader.setUniform("u_view", camera.getView());
             chunkShader.setUniform("u_atlas", atlasTexture);
@@ -153,6 +164,19 @@ public class LevelRenderer implements Disposable, Resizable{
         postShader.setUniform("u_frame", framebuffer.getTexture());
         postShader.setUniform("u_batch", batchFramebuffer.getTexture());
         ScreenQuad.render();
+        
+        // Render Vignette
+        batch.begin();
+        
+        float vignette = 0;
+        final Vec3f playerPosition = session.getGame().getPlayer().getPosition();
+        final float light = session.getGame().getLevel().getLight(playerPosition.xf(), playerPosition.yf(), playerPosition.zf());
+        vignette = 1 - light / 15F;
+        
+        batch.setAlpha(vignette);
+        batch.draw(vignetteTexture, 0, 0, Pize.getWidth(), Pize.getHeight());
+        batch.resetColor();
+        batch.end();
     }
     
     private void renderAllChunkMeshes(){
@@ -209,6 +233,7 @@ public class LevelRenderer implements Disposable, Resizable{
         batch.dispose();
         atlasTexture.dispose();
         cursorTexture.dispose();
+        vignetteTexture.dispose();
         chunkShader.dispose();
         skyBox.dispose();
         blockSelector.dispose();

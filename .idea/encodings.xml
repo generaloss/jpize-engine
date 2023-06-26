@@ -28,6 +28,8 @@
     <file url="file://$PROJECT_DIR$/tests/test-model-3d/test-pon-yes/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-net/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-net/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-noise/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-noise/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-particle/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-particle/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-physic/src/main/java" charset="UTF-8" />
@@ -38,8 +40,14 @@
     <file url="file://$PROJECT_DIR$/tests/test-text-editor/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-ui/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-ui/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-vg/mod/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-vg/mod/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-vg/voxel-game-mod/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-vg/voxel-game-mod/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-voxel-game/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-voxel-game/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-voxel-game/voxel-game-mod/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-voxel-game/voxel-game-mod/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-window/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-window/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tilemap/src/main/java" charset="UTF-8" />

@@ -3,40 +3,51 @@ package pize.files;
 import pize.util.io.FastReader;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Resource{
     
     private final boolean external;
     private final File file;
+    private final Class<?> classLoader;
     
-    public Resource(String filepath, boolean external){
-        this.external = external;
-        if(!external)
-            filepath = "/" + filepath;
-        
-        file = new File(filepath);
-    }
-    
-    private Resource(File file, boolean external){
+    // Main
+    public Resource(File file, boolean external, Class<?> classLoader){
         this.external = external;
         this.file = file;
+        this.classLoader = classLoader;
     }
     
-    
-    public Resource(String filepath){
-        this(filepath, false);
+    public Resource(String filepath, boolean external, Class<?> classLoader){
+        this(new File((!external ? "/" : "") + filepath), external, classLoader);
     }
     
-    public Resource(File file){
-        this(file, false);
+    // Parent child
+    public Resource(File parent, String child, boolean external, Class<?> classLoader){
+        this(new File(parent, child), external, classLoader);
     }
     
     public Resource(File parent, String child, boolean external){
-        this(new File(parent, child), external);
+        this(new File(parent, child), external, Resource.class);
     }
     
-    public Resource(File parent, String child){
-        this(parent, child, false);
+    // Internal
+    public Resource(String filepath, Class<?> classLoader){
+        this(filepath, false, classLoader);
+    }
+    
+    public Resource(String filepath){
+        this(filepath, Resource.class);
+    }
+    
+    public Resource(File file){
+        this(file, false, Resource.class);
+    }
+    
+    // External
+    public Resource(String filepath, boolean external){
+        this(new File((!external ? "/" : "") + filepath), external, Resource.class);
     }
     
     
@@ -70,7 +81,7 @@ public class Resource{
             if(external)
                 return new FileInputStream(file);
             else{
-                final InputStream inputStream = getClass().getResourceAsStream(getPath());
+                final InputStream inputStream = classLoader.getResourceAsStream(getPath());
                 if(inputStream == null)
                     throw new FileNotFoundException("Internal file does not exists: " + getPath());
                 
@@ -152,11 +163,29 @@ public class Resource{
         return resources;
     }
     
+    public Resource[] listResources(FilenameFilter filter){
+        final Resource[] resources = listResources();
+        final List<Resource> filteredResources = new ArrayList<>();
+        for(Resource resource: resources)
+            if(filter.accept(file, resource.getName()))
+                filteredResources.add(resource);
+        
+        return filteredResources.toArray(new Resource[0]);
+    }
+    
+    public String[] list(){
+        return file.list();
+    }
+    
+    public String[] list(FilenameFilter filter){
+        return file.list(filter);
+    }
+    
     public Resource getChild(String name){
         if(getPath().length() == 0)
-            return new Resource(name, external);
+            return new Resource(name, external, classLoader);
         
-        return new Resource(new File(file, name), external);
+        return new Resource(new File(file, name), external, classLoader);
     }
     
     

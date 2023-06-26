@@ -1,14 +1,14 @@
 package pize.tests.voxelgame.client.chunk;
 
+import pize.tests.voxelgame.base.chunk.LevelChunk;
+import pize.tests.voxelgame.base.chunk.storage.ChunkPos;
+import pize.tests.voxelgame.base.chunk.storage.HeightmapType;
+import pize.tests.voxelgame.base.level.ChunkManagerUtils;
 import pize.tests.voxelgame.client.block.BlockState;
 import pize.tests.voxelgame.client.block.blocks.Block;
 import pize.tests.voxelgame.client.level.ClientLevel;
-import pize.tests.voxelgame.clientserver.chunk.LevelChunk;
-import pize.tests.voxelgame.clientserver.chunk.storage.ChunkBlockUtils;
-import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
-import pize.tests.voxelgame.clientserver.chunk.storage.HeightmapType;
 
-import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.isOutOfBounds;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.isOutOfBounds;
 
 public class ClientChunk extends LevelChunk{
     
@@ -30,12 +30,17 @@ public class ClientChunk extends LevelChunk{
         if(!super.setBlock(lx, y, lz, blockState) || isOutOfBounds(lx, lz))
             return false;
         
-        ChunkBlockUtils.updateNeighborChunksEdges(this, lx, y, lz, blockState);
         getHeightMap(HeightmapType.SURFACE).update(lx, y, lz, BlockState.getID(blockState) != Block.AIR.ID);
         rebuild(true);
+        ChunkManagerUtils.rebuildNeighborChunks(this, lx, lz);
         
         return true;
     }
     
+    
+    public void setLight(int lx, int y, int lz, int level){
+        super.setLight(lx, y, lz, level);
+        rebuild(true);
+    }
     
 }

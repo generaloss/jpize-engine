@@ -1,19 +1,19 @@
 package pize.tests.voxelgame.client.renderer;
 
 import pize.app.AppAdapter;
-import pize.tests.voxelgame.Main;
+import pize.tests.voxelgame.VoxelGame;
 import pize.tests.voxelgame.client.chat.ChatRenderer;
 import pize.tests.voxelgame.client.level.render.LevelRenderer;
 
 public class ClientGameRenderer extends AppAdapter{
     
-    private final Main session;
+    private final VoxelGame session;
     
     private final LevelRenderer levelRenderer;
     private final InfoRenderer infoRenderer;
     private final ChatRenderer chatRenderer;
     
-    public ClientGameRenderer(Main session){
+    public ClientGameRenderer(VoxelGame session){
         this.session = session;
         
         levelRenderer = new LevelRenderer(session);
@@ -21,7 +21,7 @@ public class ClientGameRenderer extends AppAdapter{
         chatRenderer = new ChatRenderer(session);
     }
     
-    public Main getSession(){
+    public VoxelGame getSession(){
         return session;
     }
     

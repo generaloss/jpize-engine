@@ -8,11 +8,11 @@ import pize.math.vecmath.vector.Vec3f;
 import pize.tests.voxelgame.client.ClientGame;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.options.Options;
-import pize.tests.voxelgame.clientserver.chunk.LevelChunk;
-import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
+import pize.tests.voxelgame.base.chunk.LevelChunk;
+import pize.tests.voxelgame.base.chunk.storage.ChunkPos;
 
-import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.HEIGHT;
-import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.SIZE;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.HEIGHT;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.SIZE;
 
 public class GameCamera extends PerspectiveCamera{
 

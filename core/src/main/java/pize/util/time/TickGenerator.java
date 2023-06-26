@@ -1,6 +1,6 @@
 package pize.util.time;
 
-public abstract class TickGenerator implements Runnable{
+public class TickGenerator{
 
     private final Sync sync;
     private boolean interrupt;
@@ -14,16 +14,16 @@ public abstract class TickGenerator implements Runnable{
         sync.setFps(ticksPerSecond);
     }
     
-    public void start(){
+    public void start(Tickable tickable){
         interrupt = false;
         while(!Thread.interrupted() && !interrupt){
-            run();
+            tickable.tick();
             sync.sync();
         }
     }
 
-    public void startAsync(){
-        final Thread thread = new Thread(this::start);
+    public void startAsync(Tickable tickable){
+        final Thread thread = new Thread(()->start(tickable));
         thread.setDaemon(true);
         thread.start();
     }

@@ -5,7 +5,6 @@ import pize.tests.voxelgame.client.block.BlockState;
 
 public enum Block{
     
-    VOID_AIR(new VoidAir(-1)),
     AIR(new Air(0)),
     DIRT(new Dirt(1)),
     GRASS_BLOCK(new GrassBlock(2)),

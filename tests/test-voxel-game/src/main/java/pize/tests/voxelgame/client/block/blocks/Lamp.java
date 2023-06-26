@@ -6,7 +6,7 @@ import pize.tests.voxelgame.client.block.model.BlockShape;
 import pize.tests.voxelgame.client.block.model.BlockTextureRegion;
 import pize.graphics.texture.Region;
 
-import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.MAX_LIGHT_LEVEL;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.MAX_LIGHT_LEVEL;
 
 public class Lamp extends BlockProperties{
     

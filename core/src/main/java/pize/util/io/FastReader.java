@@ -144,6 +144,14 @@ public class FastReader{
             throw new RuntimeException(e);
         }
     }
+    
+    public String readString(){
+        try{
+            return new String(inputStream.readAllBytes());
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+    }
 
 
     public int nextInt(){

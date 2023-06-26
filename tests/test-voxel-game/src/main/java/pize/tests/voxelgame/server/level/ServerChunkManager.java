@@ -1,10 +1,10 @@
 package pize.tests.voxelgame.server.level;
 
 import pize.math.vecmath.vector.Vec2f;
-import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
-import pize.tests.voxelgame.clientserver.entity.Entity;
-import pize.tests.voxelgame.clientserver.level.ChunkManager;
-import pize.tests.voxelgame.clientserver.net.packet.CBPacketChunk;
+import pize.tests.voxelgame.base.chunk.storage.ChunkPos;
+import pize.tests.voxelgame.base.entity.Entity;
+import pize.tests.voxelgame.base.level.ChunkManager;
+import pize.tests.voxelgame.base.net.packet.CBPacketChunk;
 import pize.tests.voxelgame.server.chunk.ServerChunk;
 import pize.tests.voxelgame.server.player.ServerPlayer;
 import pize.util.time.PerSecCounter;
@@ -15,9 +15,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.*;
 
-import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.getChunkPos;
-import static pize.tests.voxelgame.clientserver.level.ChunkManagerUtils.distToChunk;
-import static pize.tests.voxelgame.clientserver.level.ChunkManagerUtils.updateNeighborChunksEdgesAndSelf;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.getChunkPos;
+import static pize.tests.voxelgame.base.level.ChunkManagerUtils.distToChunk;
 
 public class ServerChunkManager extends ChunkManager{
     
@@ -26,6 +25,7 @@ public class ServerChunkManager extends ChunkManager{
     private final Map<ChunkPos, ServerPlayer> requestedChunks;
     private final CopyOnWriteArrayList<ChunkPos> newFrontiers, frontiers;
     private final Map<ChunkPos, ServerChunk> allChunks;
+    private final Map<ChunkPos, ServerChunk> generateDecorationsQueue;
     private final Queue<ChunkPos> loadQueue;
     
     public final PerSecCounter tps;
@@ -39,6 +39,7 @@ public class ServerChunkManager extends ChunkManager{
         frontiers = new CopyOnWriteArrayList<>();
         newFrontiers = new CopyOnWriteArrayList<>();
         allChunks = new ConcurrentHashMap<>();
+        generateDecorationsQueue = new ConcurrentHashMap<>();
         loadQueue = new LinkedBlockingQueue<>();
         
         tps = new PerSecCounter();
@@ -125,12 +126,38 @@ public class ServerChunkManager extends ChunkManager{
     
     
     private void loadChunks(){
+        // Load
         for(ChunkPos chunkPos: loadQueue){
             loadQueue.remove(chunkPos);
             if(isOffTheGrid(chunkPos))
                 continue;
             
             loadChunk(chunkPos);
+        }
+        
+        // Generate Decorations
+        for(ServerChunk chunk: generateDecorationsQueue.values()){
+            if(isOffTheGrid(chunk.getPosition(), 2)){
+                generateDecorationsQueue.remove(chunk.getPosition());
+                continue;
+            }
+            
+            //if(
+            //    (!allChunks.containsKey(chunk.getPosition().getNeighbor( 1,  0)) && !generateDecorationsQueue.containsKey(chunk.getPosition().getNeighbor( 1,  0))) ||
+            //    (!allChunks.containsKey(chunk.getPosition().getNeighbor(-1,  0)) && !generateDecorationsQueue.containsKey(chunk.getPosition().getNeighbor(-1,  0))) ||
+            //    (!allChunks.containsKey(chunk.getPosition().getNeighbor( 0,  1)) && !generateDecorationsQueue.containsKey(chunk.getPosition().getNeighbor( 0,  1))) ||
+            //    (!allChunks.containsKey(chunk.getPosition().getNeighbor( 0, -1)) && !generateDecorationsQueue.containsKey(chunk.getPosition().getNeighbor( 0, -1))) ||
+            //    (!allChunks.containsKey(chunk.getPosition().getNeighbor( 1,  1)) && !generateDecorationsQueue.containsKey(chunk.getPosition().getNeighbor( 1,  1))) ||
+            //    (!allChunks.containsKey(chunk.getPosition().getNeighbor( 1, -1)) && !generateDecorationsQueue.containsKey(chunk.getPosition().getNeighbor( 1, -1))) ||
+            //    (!allChunks.containsKey(chunk.getPosition().getNeighbor(-1,  1)) && !generateDecorationsQueue.containsKey(chunk.getPosition().getNeighbor(-1,  1))) ||
+            //    (!allChunks.containsKey(chunk.getPosition().getNeighbor(-1, -1)) && !generateDecorationsQueue.containsKey(chunk.getPosition().getNeighbor(-1, -1)))
+            //)
+            //    return;
+            
+            level.getConfiguration().getGenerator().generateDecorations(chunk);
+            generateDecorationsQueue.remove(chunk.getPosition());
+            
+            generatedChunk(chunk);
         }
     }
     
@@ -143,18 +170,19 @@ public class ServerChunkManager extends ChunkManager{
     public void loadChunk(ChunkPos chunkPos){
         final ServerChunk chunk = new ServerChunk(level, chunkPos);
         level.getConfiguration().getGenerator().generate(chunk);
-        updateNeighborChunksEdgesAndSelf(chunk, true);
-        allChunks.put(chunkPos, chunk);
-        
-        if(requestedChunks.containsKey(chunkPos)){
-            requestedChunks.get(chunkPos).sendPacket(new CBPacketChunk(chunk));
-            requestedChunks.remove(chunkPos);
+        allChunks.put(chunk.getPosition(), chunk);
+        generateDecorationsQueue.put(chunk.getPosition(), chunk);
+    }
+    
+    public void generatedChunk(ServerChunk chunk){
+        if(requestedChunks.containsKey(chunk.getPosition())){
+            requestedChunks.get(chunk.getPosition()).sendPacket(new CBPacketChunk(chunk));
+            requestedChunks.remove(chunk.getPosition());
         }
     }
 
     public void unloadChunk(ServerChunk chunk){
         allChunks.remove(chunk.getPosition());
-        updateNeighborChunksEdgesAndSelf(chunk, false);
     }
     
     
@@ -181,16 +209,20 @@ public class ServerChunkManager extends ChunkManager{
     public Collection<ServerChunk> getChunks(){
         return allChunks.values();
     }
-
+    
     
     private boolean isOffTheGrid(ChunkPos chunkPos){
+        return isOffTheGrid(chunkPos, 0);
+    }
+    
+    private boolean isOffTheGrid(ChunkPos chunkPos, int renderDistanceIncrease){
         final Vec2f spawn = level.getServer().getLevelManager().getDefaultLevel().getConfiguration().getWorldSpawn();
-        if(distToChunk(chunkPos.x, chunkPos.z, spawn) <= level.getServer().getConfiguration().getMaxRenderDistance())
+        if(distToChunk(chunkPos.x, chunkPos.z, spawn) <= level.getServer().getConfiguration().getMaxRenderDistance() + renderDistanceIncrease)
             return false;
         
         for(Entity entity: level.getEntities())
             if(entity instanceof ServerPlayer player)
-                if(distToChunk(chunkPos.x, chunkPos.z, player.getPosition()) <= player.getRenderDistance())
+                if(distToChunk(chunkPos.x, chunkPos.z, player.getPosition()) <= player.getRenderDistance() + renderDistanceIncrease)
                     return false;
         
         return true;

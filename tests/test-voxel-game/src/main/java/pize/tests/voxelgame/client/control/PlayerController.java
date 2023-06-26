@@ -1,26 +1,26 @@
 package pize.tests.voxelgame.client.control;
 
-import pize.tests.voxelgame.Main;
+import pize.tests.voxelgame.VoxelGame;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.options.KeyMapping;
 import pize.tests.voxelgame.client.options.Options;
-import pize.tests.voxelgame.clientserver.net.packet.SBPacketPlayerSneaking;
+import pize.tests.voxelgame.base.net.packet.SBPacketPlayerSneaking;
 
 import static pize.tests.voxelgame.client.control.PerspectiveType.*;
 
 public class PlayerController{
     
-    private final Main session;
+    private final VoxelGame session;
     
     private LocalPlayer player;
     private final CameraRotationController rotationController;
     
-    public PlayerController(Main session){
+    public PlayerController(VoxelGame session){
         this.session = session;
         rotationController = new CameraRotationController();
     }
     
-    public Main getSession(){
+    public VoxelGame getSession(){
         return session;
     }
     

@@ -9,8 +9,8 @@ import pize.net.tcp.packet.Packets;
 import pize.tests.voxelgame.client.ClientGame;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.entity.RemotePlayer;
-import pize.tests.voxelgame.clientserver.entity.Entity;
-import pize.tests.voxelgame.clientserver.net.packet.*;
+import pize.tests.voxelgame.base.entity.Entity;
+import pize.tests.voxelgame.base.net.packet.*;
 
 public class ClientPacketHandler implements TcpListener, PacketHandler{
     
@@ -57,6 +57,12 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
             }
             
             // Game
+            case CBPacketAbilities.PACKET_ID -> {
+                final CBPacketAbilities packet = packetInfo.readPacket(new CBPacketAbilities());
+                
+                getGame().getPlayer().setFlyEnabled(packet.flyEnabled);
+            }
+            
             case CBPacketTeleportPlayer.PACKET_ID ->{
                 final CBPacketTeleportPlayer packet = packetInfo.readPacket(new CBPacketTeleportPlayer());
                 

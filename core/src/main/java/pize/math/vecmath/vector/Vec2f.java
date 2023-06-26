@@ -197,7 +197,7 @@ public class Vec2f extends Tuple2f implements Cloneable{
         return x1 * x2 + y1 * y2;
     }
 
-    public static float len(float x, float y){
+    public static float len(double x, double y){
         return Mathc.sqrt(x * x + y * y);
     }
 

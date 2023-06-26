@@ -1,5 +1,6 @@
 package pize.io.mouse;
 
+import pize.Pize;
 import pize.io.glfw.Key;
 import pize.io.keyboard.Keyboard;
 import pize.io.window.Window;
@@ -78,7 +79,7 @@ public class Mouse{
         return windowId;
     }
 
-    public boolean inWindow(){
+    public boolean isInWindow(){
         return inWindow;
     }
 
@@ -94,17 +95,24 @@ public class Mouse{
     }
 
     public int getX(){
-        double[] x = new double[1];
+        final double[] x = new double[1];
         glfwGetCursorPos(windowId, x, null);
 
         return (int) x[0];
     }
 
     public int getY(){
-        double[] y = new double[1];
+        final double[] y = new double[1];
         glfwGetCursorPos(windowId, null, y);
 
         return (int) y[0];
+    }
+    
+    public boolean isInBounds(double x, double y, double width, double height){
+        final int cursorX = getX();
+        final int cursorY = Pize.getY();
+        
+        return !(cursorX < x || cursorY < y || cursorX >= x + width || cursorY >= y + height);
     }
 
     public int getTouchDownX(){

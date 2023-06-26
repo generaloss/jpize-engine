@@ -13,12 +13,15 @@ public interface ChunkGenerator{
         if(fromString.size() == 0){
             fromString.put("default", DefaultGenerator.getInstance());
             fromString.put("flat", FlatGenerator.getInstance());
+            fromString.put("island", IslandGenerator.getInstance());
         }
-        System.out.println("GGGGGGGG: " + fromString.get(name));
+        
         return fromString.get(name);
     }
     
 
     void generate(ServerChunk chunk);
 
+    void generateDecorations(ServerChunk chunk);
+    
 }

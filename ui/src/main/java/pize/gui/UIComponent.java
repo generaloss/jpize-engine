@@ -293,7 +293,7 @@ public abstract class UIComponent<C> implements Cloneable{
         if(!Pize.window().isFocused() || mouseX < 0 || mouseX >= Pize.getWidth() || mouseY < 0 || mouseY >= Pize.getHeight())
             return false;
         
-        boolean hover = !( mouseX < x || mouseY < y || mouseX > x + width || mouseY > y + height);
+        boolean hover = Pize.mouse().isInBounds(x, y, width, height);
         hover &= isChildHover(childList.values());
         
         if(parent != null)
@@ -305,7 +305,7 @@ public abstract class UIComponent<C> implements Cloneable{
                 if(!child.show)
                     continue;
                 
-                hover &= (mouseX < child.x || mouseY < child.y || mouseX > child.x + child.width || mouseY > child.y + child.height);
+                hover &= (mouseX < child.x || mouseY < child.y || mouseX >= child.x + child.width || mouseY >= child.y + child.height);
             }
         
         return hover;
@@ -318,7 +318,7 @@ public abstract class UIComponent<C> implements Cloneable{
         boolean hover = true;
         
         for(UIComponent<C> child: childList){
-            hover &= !child.show || mouseX < child.x || mouseY < child.y || mouseX > child.x + child.width || mouseY > child.y + child.height;
+            hover &= !child.show || mouseX < child.x || mouseY < child.y || mouseX >= child.x + child.width || mouseY >= child.y + child.height;
             if(hover)
                 hover = isChildHover(child.childList.values());
         }

@@ -68,21 +68,43 @@ public class EulerAngles implements Cloneable{
     }
     
 
-    public void set(EulerAngles eulerAngles){
+    public EulerAngles set(EulerAngles eulerAngles){
         yaw = eulerAngles.yaw;
         pitch = eulerAngles.pitch;
         roll = eulerAngles.roll;
+        
+        return this;
     }
 
-    public void set(double yaw, double pitch, double roll){
+    public EulerAngles set(double yaw, double pitch, double roll){
         this.yaw = yaw;
         this.pitch = pitch;
         this.roll = roll;
+        
+        return this;
     }
 
-    public void set(double yaw, double pitch){
+    public EulerAngles set(double yaw, double pitch){
         this.yaw = yaw;
         this.pitch = pitch;
+        
+        return this;
+    }
+    
+    
+    public EulerAngles add(double yaw, double pitch, double roll){
+        this.yaw += yaw;
+        this.pitch += pitch;
+        this.roll += roll;
+        
+        return this;
+    }
+    
+    public EulerAngles add(double yaw, double pitch){
+        this.yaw += yaw;
+        this.pitch += pitch;
+        
+        return this;
     }
     
     

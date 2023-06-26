@@ -83,16 +83,24 @@ public class BitmapFont implements Disposable{
     public void setLineHeight(int lineHeight){
         this.lineHeight = lineHeight;
     }
-
-
+    
+    
     public Tuple2f getBounds(String text){
+        return this.getBounds(text, -1);
+    }
+    
+    public Tuple2f getBounds(String text, double width){
         float maxAdvanceX = 0;
         float advanceX = 0;
         float advanceY = lineHeight;
         
         for(int i = 0; i < text.length(); i++){
             final int code = Character.codePointAt(text, i);
-
+            
+            final Glyph glyph = glyphs.get(code);
+            if(glyph == null)
+                continue;
+            
             if(code == 10){
                 maxAdvanceX = Math.max(maxAdvanceX, advanceX);
                 advanceX = 0;
@@ -100,13 +108,15 @@ public class BitmapFont implements Disposable{
                 continue;
             }
             
-            final Glyph glyph = glyphs.get(code);
-            if(glyph == null)
-                continue;
+            if(width > 0 && (advanceX + glyph.advanceX ) * scale > width){
+                maxAdvanceX = Math.max(maxAdvanceX, advanceX);
+                advanceX = 0;
+                advanceY += lineHeight;
+            }
 
             advanceX += glyph.advanceX;
         }
-
+        
         return new Vec2f(Math.max(advanceX, maxAdvanceX), advanceY).mul(scale);
     }
 
@@ -127,8 +137,12 @@ public class BitmapFont implements Disposable{
         
         return advanceX * scale;
     }
-
+    
     public void drawText(TextureBatch batch, String text, float x, float y){
+        this.drawText(batch, text, x, y, -1);
+    }
+    
+    public void drawText(TextureBatch batch, String text, float x, float y, double width){
         if(text == null)
             return;
         
@@ -140,7 +154,7 @@ public class BitmapFont implements Disposable{
         batch.shear(italic ? ITALIC_ANGLE : 0, 0);
 
         // Calculate centering offset
-        final Tuple2f bounds = getBounds(text);
+        final Tuple2f bounds = getBounds(text, width);
         final double angle = rotation * Maths.toRad + Math.atan(bounds.y / bounds.x);
         final float boundsCenter = Mathc.hypot(bounds.x / 2, bounds.y / 2);
         final float centeringOffsetX = boundsCenter * Mathc.cos(angle) - bounds.x / 2;
@@ -158,14 +172,19 @@ public class BitmapFont implements Disposable{
                 advanceX = 0;
                 continue;
             }
-
+            
             final Glyph glyph = glyphs.get(code);
             if(glyph == null)
                 continue;
-
+            
+            if(width > 0 && (advanceX + glyph.advanceX) * scale > width){
+                advanceY -= lineHeight;
+                advanceX = 0;
+            }
+            
             final float xOffset = (advanceX + glyph.offsetX) * scale;
             final float yOffset = (advanceY + glyph.offsetY) * scale;
-
+            
             final float renderX = x + xOffset * cos - yOffset * sin - centeringOffsetX;
             final float renderY = y + yOffset * cos + xOffset * sin - centeringOffsetY;
 

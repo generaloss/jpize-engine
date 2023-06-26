@@ -6,7 +6,7 @@ import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.graphics.util.batch.TextureBatch;
 import pize.math.Maths;
-import pize.tests.voxelgame.Main;
+import pize.tests.voxelgame.VoxelGame;
 import pize.tests.voxelgame.client.ClientGame;
 import pize.tests.voxelgame.client.chunk.mesh.ChunkBuilder;
 import pize.tests.voxelgame.client.control.GameCamera;
@@ -18,13 +18,13 @@ import pize.tests.voxelgame.client.options.Options;
 
 public class InfoRenderer implements Disposable{
     
-    private final Main sessionOF;
+    private final VoxelGame sessionOF;
     
     private int infoLineNum, hintLineNum;
     private final TextureBatch batch;
     private final BitmapFont font;
     
-    public InfoRenderer(Main sessionOF){
+    public InfoRenderer(VoxelGame sessionOF){
         this.sessionOF = sessionOF;
         
         batch = new TextureBatch(200);
@@ -32,7 +32,7 @@ public class InfoRenderer implements Disposable{
         font.setScale(2);
     }
     
-    public Main getSessionOf(){
+    public VoxelGame getSessionOf(){
         return sessionOF;
     }
     

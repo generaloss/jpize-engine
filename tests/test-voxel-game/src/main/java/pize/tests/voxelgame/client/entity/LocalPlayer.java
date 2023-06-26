@@ -1,13 +1,14 @@
 package pize.tests.voxelgame.client.entity;
 
 import pize.Pize;
+import pize.io.glfw.Key;
 import pize.math.Mathc;
 import pize.math.util.EulerAngles;
 import pize.math.vecmath.vector.Vec2f;
 import pize.math.vecmath.vector.Vec3d;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.voxelgame.client.block.blocks.Block;
-import pize.tests.voxelgame.clientserver.level.Level;
+import pize.tests.voxelgame.base.level.Level;
 
 public class LocalPlayer extends AbstractClientPlayer{
     
@@ -24,7 +25,7 @@ public class LocalPlayer extends AbstractClientPlayer{
     public short holdBlock = Block.STONE.getDefaultState();
     
     public LocalPlayer(Level levelOF, String name){
-        super(levelOF, name); // 3) random skin ID
+        super(levelOF, name);
 
         moveControl = new Vec2f();
         setJumpHeight(1.25F);
@@ -52,8 +53,12 @@ public class LocalPlayer extends AbstractClientPlayer{
         // Horizontal move
         float reduce = 0.91F;
         float speed = 0.34F * Pize.getDt();
+        if(isSneaking() && !isFlying())
+            speed *= 0.5;
         if(isSprinting())
             speed *= 1.3;
+        if(isFlying())
+            speed *= 10;
         
         float dist = moveControl.nor().len();
         if(dist > 0){
@@ -65,11 +70,15 @@ public class LocalPlayer extends AbstractClientPlayer{
         }
         
         // Gravity
-        if(!isOnGround())
-            getMotion().y += gravity * (deltaTime * deltaTime);
+        if(!isOnGround() && !isFlying())
+            getMotion().y += gravity * (deltaTime * deltaTime) / 0.91;
         
-        getMotion().setMax(50 * Pize.getDt());
-        getMotion().clampToMax(false, true, false);
+        // Fly
+        if(isFlying() && !isFlyEnabled())
+            setFlying(false);
+        
+        if(isSneaking())
+            getMotion().y -= 0.01F;
         
         // Fall height
         if(getMotion().y < 0 && oldMotionY >= 0)
@@ -91,14 +100,14 @@ public class LocalPlayer extends AbstractClientPlayer{
         LocalPlayer.speed = ((Vec3f) oldPosition.sub(getPosition())).len() / deltaTime;
         
         // Reduce motion
-        getMotion().mul(reduce, 1, reduce);
+        getMotion().mul(reduce, 0.995F, reduce);
     }
     
     public void setJumpHeight(float height){
         timeToMaxJumpY = 0.27F * Mathc.sqrt(height);
         
         gravity = -2 * height / (timeToMaxJumpY * timeToMaxJumpY);
-        jumpMotion = 2 * height / timeToMaxJumpY;
+        jumpMotion = 2 * height / timeToMaxJumpY / Pize.monitor().getRefreshRate();
     }
     
     public float getFallHeight(){
@@ -111,9 +120,18 @@ public class LocalPlayer extends AbstractClientPlayer{
     }
     
     public void jump(){
+        if(isOnGround() && isFlying())
+            setFlying(false);
+        
+        if(isFlying()){
+            getMotion().y += 0.01F;
+            
+            return;
+        }
+        
         if(isOnGround()){
             // Jump
-            getMotion().y = jumpMotion * Pize.getDt();
+            getMotion().y = jumpMotion;
             
             // Jump-boost
             if(isSprinting()){
@@ -121,7 +139,8 @@ public class LocalPlayer extends AbstractClientPlayer{
                 getMotion().x += jumpBoost.x;
                 getMotion().z += jumpBoost.y;
             }
-        }
+        }else if(isFlyEnabled() && !isFlying() && Key.SPACE.isDown())
+            setFlying(true);
     }
     
 }

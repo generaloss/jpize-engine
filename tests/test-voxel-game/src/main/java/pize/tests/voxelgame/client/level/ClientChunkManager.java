@@ -1,14 +1,14 @@
 package pize.tests.voxelgame.client.level;
 
+import pize.tests.voxelgame.base.chunk.storage.ChunkPos;
+import pize.tests.voxelgame.base.level.ChunkManager;
+import pize.tests.voxelgame.base.level.ChunkManagerUtils;
+import pize.tests.voxelgame.base.net.packet.CBPacketChunk;
+import pize.tests.voxelgame.base.net.packet.SBPacketChunkRequest;
 import pize.tests.voxelgame.client.chunk.ClientChunk;
 import pize.tests.voxelgame.client.chunk.mesh.ChunkBuilder;
 import pize.tests.voxelgame.client.chunk.mesh.ChunkMesh;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
-import pize.tests.voxelgame.clientserver.chunk.storage.ChunkPos;
-import pize.tests.voxelgame.clientserver.level.ChunkManager;
-import pize.tests.voxelgame.clientserver.level.ChunkManagerUtils;
-import pize.tests.voxelgame.clientserver.net.packet.CBPacketChunk;
-import pize.tests.voxelgame.clientserver.net.packet.SBPacketChunkRequest;
 import pize.util.time.PerSecCounter;
 
 import java.util.Collection;
@@ -19,9 +19,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.getChunkPos;
-import static pize.tests.voxelgame.clientserver.level.ChunkManagerUtils.distToChunk;
-import static pize.tests.voxelgame.clientserver.level.ChunkManagerUtils.updateNeighborChunksEdgesAndSelf;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.getChunkPos;
+import static pize.tests.voxelgame.base.level.ChunkManagerUtils.distToChunk;
 
 public class ClientChunkManager extends ChunkManager{
     
@@ -181,11 +180,10 @@ public class ClientChunkManager extends ChunkManager{
     
     public void receivedChunk(CBPacketChunk packet){
         final ClientChunk chunk = packet.getChunk(level);
-        allChunks.put(chunk.getPosition(), chunk);
         chunk.rebuild(false);
+        allChunks.put(chunk.getPosition(), chunk);
         
-        ChunkManagerUtils.updateNeighborChunksEdgesAndSelf(chunk, true);
-        ChunkManagerUtils.rebuildNeighborChunksAndSelf(chunk);
+        ChunkManagerUtils.rebuildNeighborChunks(chunk);
         
         requestedChunks.remove(chunk.getPosition());
     }
@@ -193,7 +191,6 @@ public class ClientChunkManager extends ChunkManager{
     
     public void unloadChunk(ClientChunk chunk){
         allChunks.remove(chunk.getPosition());
-        updateNeighborChunksEdgesAndSelf(chunk, false);
     }
     
     public void rebuildChunk(ClientChunk chunk, boolean important){

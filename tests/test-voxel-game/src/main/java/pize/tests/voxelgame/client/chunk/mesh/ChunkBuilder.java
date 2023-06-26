@@ -1,17 +1,20 @@
 package pize.tests.voxelgame.client.chunk.mesh;
 
 import pize.graphics.texture.Region;
+import pize.tests.voxelgame.base.level.Level;
 import pize.tests.voxelgame.client.block.BlockProperties;
+import pize.tests.voxelgame.client.block.BlockState;
 import pize.tests.voxelgame.client.block.model.BlockTextureRegion;
-import pize.tests.voxelgame.clientserver.chunk.ChunkUtils;
-import pize.tests.voxelgame.clientserver.chunk.LevelChunk;
-import pize.tests.voxelgame.clientserver.chunk.storage.HeightmapType;
+import pize.tests.voxelgame.base.chunk.ChunkUtils;
+import pize.tests.voxelgame.base.chunk.LevelChunk;
+import pize.tests.voxelgame.base.chunk.storage.HeightmapType;
 import pize.util.time.Stopwatch;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.SIZE;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.SIZE;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.isOutOfBounds;
 
 public class ChunkBuilder{
 
@@ -21,34 +24,42 @@ public class ChunkBuilder{
     public static int vertexCount;
     
     private static LevelChunk chunk;
+    private static int chunkBaseX, chunkBaseZ;
+    private static Level level;
     private static int vertexIndex;
     private static final List<Float> verticesList = new ArrayList<>();
 
     public static float[] build(LevelChunk chunk){
-        Stopwatch timer = new Stopwatch().start();
+        final Stopwatch timer = new Stopwatch().start();
         
         ChunkBuilder.chunk = chunk;
-        vertexIndex = 0;
+        ChunkBuilder.chunkBaseX = chunk.getPosition().x * SIZE;
+        ChunkBuilder.chunkBaseZ = chunk.getPosition().z * SIZE;
+        ChunkBuilder.level = chunk.getLevel();
+        ChunkBuilder.vertexIndex = 0;
         
         if(!chunk.isEmpty())
-            for(int x = 0; x < SIZE; x++){
-                for(int z = 0; z < SIZE; z++){
-                    final int height = chunk.getHeightMap(HeightmapType.SURFACE).getHeight(x, z) + 1;
+            for(int lx = 0; lx < SIZE; lx++){
+                final int x = lx + chunkBaseX;
+                
+                for(int lz = 0; lz < SIZE; lz++){
+                    final int z = lz + chunkBaseZ;
                     
+                    final int height = chunk.getHeightMap(HeightmapType.SURFACE).getHeight(lx, lz) + 1;
                     for(int y = 0; y < height; y++){
-                        final BlockProperties block = chunk.getBlockProps(x, y, z);
+                        
+                        final BlockProperties block = chunk.getBlockProps(lx, y, lz);
                         if(block.isEmpty())
                             continue;
                         
                         if(block.isSolid()){
                             final BlockTextureRegion region = block.getTextureRegion();
-                            
-                            if(isGenFace(x - 1, y, z, block)) addNxFace(x, y, z, region.getNx());
-                            if(isGenFace(x + 1, y, z, block)) addPxFace(x, y, z, region.getPx());
-                            if(isGenFace(x, y - 1, z, block)) addNyFace(x, y, z, region.getNy());
-                            if(isGenFace(x, y + 1, z, block)) addPyFace(x, y, z, region.getPy());
-                            if(isGenFace(x, y, z - 1, block)) addNzFace(x, y, z, region.getNz());
-                            if(isGenFace(x, y, z + 1, block)) addPzFace(x, y, z, region.getPz());
+                            if(isGenFace(x - 1, y,     z    , block)) addNxFace(lx, y, lz, region.getNx());
+                            if(isGenFace(x + 1, y,     z    , block)) addPxFace(lx, y, lz, region.getPx());
+                            if(isGenFace(x,     y - 1, z    , block)) addNyFace(lx, y, lz, region.getNy());
+                            if(isGenFace(x,     y + 1, z    , block)) addPyFace(lx, y, lz, region.getPy());
+                            if(isGenFace(x,     y,     z - 1, block)) addNzFace(lx, y, lz, region.getNz());
+                            if(isGenFace(x,     y,     z + 1, block)) addPzFace(lx, y, lz, region.getPz());
                         }
                     }
                 }
@@ -73,18 +84,20 @@ public class ChunkBuilder{
     }
     
     private static boolean isGenFace(int x, int y, int z, BlockProperties block){
-        final BlockProperties neighbor = chunk.getBlockProps(x, y, z);
+        if(isOutOfBounds(y))
+            return true;
         
-        return
-            neighbor.isEmpty() ||
+        final BlockProperties neighbor = BlockState.getProps(level.getBlock(x, y, z));
+        
+        return neighbor.isEmpty() ||
             (neighbor.isTransparent() && !block.isTransparent());
     }
     
     
     public static float getAO(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3){
-        final BlockProperties block1 = chunk.getBlockProps(x1, y1, z1);
-        final BlockProperties block2 = chunk.getBlockProps(x2, y2, z2);
-        final BlockProperties block3 = chunk.getBlockProps(x3, y3, z3);
+        final BlockProperties block1 = getBlockProps(x1, y1, z1);
+        final BlockProperties block2 = getBlockProps(x2, y2, z2);
+        final BlockProperties block3 = getBlockProps(x3, y3, z3);
         
         return
             !(block1.isEmpty() || block1.isTransparent()) ||
@@ -94,28 +107,26 @@ public class ChunkBuilder{
     }
     
     public static float getLight(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, int x4, int y4, int z4){
-        return 13;
-        /*
         float result = 0;
         byte n = 0;
         
-        if(chunk.getBlockProps(x1, y1, z1).isTransparent()){
-            result += chunk.getLight(x1, y1, z1);
+        if(getBlockProps(x1, y1, z1).isTransparent()){
+            result += getLight(x1, y1, z1);
             n++;
         }
         
-        if(chunk.getBlockProps(x2, y2, z2).isTransparent()){
-            result += chunk.getLight(x2, y2, z2);
+        if(getBlockProps(x2, y2, z2).isTransparent()){
+            result += getLight(x2, y2, z2);
             n++;
         }
         
-        if(chunk.getBlockProps(x3, y3, z3).isTransparent()){
-            result += chunk.getLight(x3, y3, z3);
+        if(getBlockProps(x3, y3, z3).isTransparent()){
+            result += getLight(x3, y3, z3);
             n++;
         }
         
-        if(chunk.getBlockProps(x4, y4, z4).isTransparent()){
-            result += chunk.getLight(x4, y4, z4);
+        if(getBlockProps(x4, y4, z4).isTransparent()){
+            result += getLight(x4, y4, z4);
             n++;
         }
         
@@ -123,7 +134,15 @@ public class ChunkBuilder{
             return 0;
         
         return result / n;
-        */
+    }
+    
+    
+    private static BlockProperties getBlockProps(int lx, int y, int lz){
+        return level.getBlockProps(lx + chunkBaseX, y, lz + chunkBaseZ);
+    }
+    
+    private static byte getLight(int lx, int y, int lz){
+        return level.getLight(lx + chunkBaseX, y, lz + chunkBaseZ);
     }
     
 

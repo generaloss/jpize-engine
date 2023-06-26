@@ -4,9 +4,9 @@ import pize.Pize;
 import pize.files.Resource;
 import pize.io.glfw.Key;
 import pize.tests.voxelgame.client.control.GameCamera;
-import pize.tests.voxelgame.clientserver.net.PlayerProfile;
+import pize.tests.voxelgame.base.net.PlayerProfile;
 import pize.util.io.FastReader;
-import pize.tests.voxelgame.Main;
+import pize.tests.voxelgame.VoxelGame;
 
 import java.io.PrintStream;
 import java.util.HashMap;
@@ -17,22 +17,22 @@ public class Options{
     public static int UNLIMITED_FPS_SETTING_THRESHOLD = 256;
 
 
-    private final Main sessionOF;
+    private final VoxelGame sessionOF;
     private final Resource resOptions;
     
     private String host = "0.0.0.0:22854";
     private String playerName = PlayerProfile.genFunnyName();
     private final Map<KeyMapping, Key> keyMappings;
     private int fov = 70;
-    private int renderDistance = 16;
+    private int renderDistance = 7;
     private int maxFramerate = 0;
     private boolean fullscreen = false;
     private boolean showFps = false;
-    private float mouseSensitivity = 0.5F;
+    private float mouseSensitivity = 1F;
     private float brightness = 0.5F;
     
 
-    public Options(Main sessionOF, String gameDirPath){
+    public Options(VoxelGame sessionOF, String gameDirPath){
         this.sessionOF = sessionOF;
 
         keyMappings = new HashMap<>();
@@ -41,7 +41,7 @@ public class Options{
         resOptions.create();
     }
     
-    public Main getSessionOf(){
+    public VoxelGame getSessionOf(){
         return sessionOF;
     }
     

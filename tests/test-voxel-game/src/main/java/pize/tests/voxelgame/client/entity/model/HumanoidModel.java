@@ -4,7 +4,7 @@ import pize.files.Resource;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.Shader;
 import pize.tests.voxelgame.client.control.GameCamera;
-import pize.tests.voxelgame.clientserver.entity.Player;
+import pize.tests.voxelgame.base.entity.Player;
 
 public class HumanoidModel{
     

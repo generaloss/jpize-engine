@@ -1,6 +1,6 @@
 package pize.tests.voxelgame.server;
 
-import pize.tests.voxelgame.clientserver.Version;
+import pize.tests.voxelgame.base.Version;
 
 public class ServerConfiguration{
     
@@ -15,7 +15,7 @@ public class ServerConfiguration{
         address = "0.0.0.0";
         version = new Version();
         defaultLevelName = "world1";
-        maxRenderDistance = 16;
+        maxRenderDistance = 12;
     }
     
     public String getAddress(){

@@ -6,7 +6,7 @@ import pize.tests.voxelgame.client.block.BlockProperties;
 import pize.tests.voxelgame.client.block.model.BlockShape;
 import pize.tests.voxelgame.client.block.model.BlockTextureRegion;
 
-import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.MAX_LIGHT_LEVEL;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.MAX_LIGHT_LEVEL;
 
 public class OakLog extends BlockProperties{
     

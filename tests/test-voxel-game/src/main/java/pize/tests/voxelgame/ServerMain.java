@@ -1,11 +1,18 @@
 package pize.tests.voxelgame;
 
-import pize.tests.voxelgame.server.LocalServer;
+import pize.tests.voxelgame.server.Server;
 
 public class ServerMain{
     
     public static void main(String[] args){
-        new LocalServer().run();
+        final Server server = new Server(){
+            @Override
+            public void run(){
+                super.run();
+            }
+        };
+        
+        server.run();
         
         while(!Thread.interrupted());
     }

@@ -2,14 +2,14 @@ package pize.tests.voxelgame.server.level;
 
 import pize.math.vecmath.vector.Vec2f;
 import pize.math.vecmath.vector.Vec3f;
+import pize.tests.voxelgame.base.chunk.storage.HeightmapType;
+import pize.tests.voxelgame.base.level.Level;
 import pize.tests.voxelgame.client.block.blocks.Block;
-import pize.tests.voxelgame.clientserver.chunk.storage.HeightmapType;
-import pize.tests.voxelgame.clientserver.level.Level;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.chunk.ServerChunk;
 
-import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.getChunkPos;
-import static pize.tests.voxelgame.clientserver.chunk.ChunkUtils.getLocalPos;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.getChunkPos;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.getLocalCoord;
 
 public class ServerLevel extends Level{
 
@@ -20,8 +20,7 @@ public class ServerLevel extends Level{
     public ServerLevel(Server server){
         this.server = server;
         this.chunkManager = new ServerChunkManager(this);
-        
-        configuration = new ServerLevelConfiguration();
+        this.configuration = new ServerLevelConfiguration();
     }
     
     public Server getServer(){
@@ -33,7 +32,7 @@ public class ServerLevel extends Level{
     public short getBlock(int x, int y, int z){
         final ServerChunk targetChunk = getChunk(x, z);
         if(targetChunk != null)
-            return targetChunk.getBlock(getLocalPos(x), y, getLocalPos(z));
+            return targetChunk.getBlock(getLocalCoord(x), y, getLocalCoord(z));
 
         return Block.AIR.getDefaultState();
     }
@@ -42,16 +41,33 @@ public class ServerLevel extends Level{
     public void setBlock(int x, int y, int z, short block){
         final ServerChunk targetChunk = getChunk(x, z);
         if(targetChunk != null)
-            targetChunk.setBlock(getLocalPos(x), y, getLocalPos(z), block);
+            targetChunk.setBlock(getLocalCoord(x), y, getLocalCoord(z), block);
     }
     
     @Override
     public int getHeight(int x, int z){
         final ServerChunk targetChunk = getChunk(x, z);
         if(targetChunk != null)
-            return targetChunk.getHeightMap(HeightmapType.SURFACE).getHeight(getLocalPos(x), getLocalPos(z));
+            return targetChunk.getHeightMap(HeightmapType.SURFACE).getHeight(getLocalCoord(x), getLocalCoord(z));
         
         return 0;
+    }
+    
+    
+    @Override
+    public byte getLight(int x, int y, int z){
+        final ServerChunk targetChunk = getChunk(x, z);
+        if(targetChunk != null)
+            return targetChunk.getLight(getLocalCoord(x), y, getLocalCoord(z));
+        
+        return 0;
+    }
+    
+    @Override
+    public void setLight(int x, int y, int z, int level){
+        final ServerChunk targetChunk = getChunk(x, z);
+        if(targetChunk != null)
+            targetChunk.setLight(getLocalCoord(x), y, getLocalCoord(z), level);
     }
     
     
