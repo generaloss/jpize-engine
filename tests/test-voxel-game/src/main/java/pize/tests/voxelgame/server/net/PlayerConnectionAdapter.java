@@ -4,6 +4,8 @@ import pize.net.tcp.TcpConnection;
 import pize.net.tcp.packet.IPacket;
 import pize.tests.voxelgame.base.chunk.storage.ChunkPos;
 import pize.tests.voxelgame.base.net.packet.*;
+import pize.tests.voxelgame.base.text.Component;
+import pize.tests.voxelgame.base.text.TextColor;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.command.source.CommandSourcePlayer;
 import pize.tests.voxelgame.server.level.ServerLevel;
@@ -78,7 +80,7 @@ public class PlayerConnectionAdapter implements ServerPlayerPacketHandler{
         if(message.startsWith("/"))
             server.getCommandDispatcher().executeCommand(message.substring(1), commandSource);
         else
-            server.getPlayerList().broadcastMessage("<" + player.getName() + "> " + packet.message);
+            server.getPlayerList().broadcastMessage(new Component().color(TextColor.DARK_GREEN).text("<" + player.getName() + "> ").reset().text(packet.message));
     }
     
 }

@@ -1,5 +1,6 @@
 package pize.tests.voxelgame.server.command.commands;
 
+import pize.tests.voxelgame.base.text.Component;
 import pize.tests.voxelgame.server.command.CommandContext;
 import pize.tests.voxelgame.server.command.CommandDispatcher;
 import pize.tests.voxelgame.server.command.builder.Commands;
@@ -26,7 +27,7 @@ public class CommandList{
         for(ServerPlayer player: players)
             joiner.add(player.getName());
         
-        source.sendMessage("Players: " + joiner);
+        source.sendMessage(new Component().text("Players: " + joiner));
     }
     
 }

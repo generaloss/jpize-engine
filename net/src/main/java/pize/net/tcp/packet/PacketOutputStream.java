@@ -1,5 +1,6 @@
 package pize.net.tcp.packet;
 
+import pize.graphics.util.color.IColor;
 import pize.math.util.EulerAngles;
 import pize.math.vecmath.tuple.Tuple3d;
 import pize.math.vecmath.tuple.Tuple3f;
@@ -52,6 +53,13 @@ public class PacketOutputStream extends DataOutputStream{
     public void writeUUID(UUID uuid) throws IOException{
         writeLong(uuid.getMostSignificantBits());
         writeLong(uuid.getLeastSignificantBits());
+    }
+    
+    public void writeColor(IColor color) throws IOException{
+        writeFloat(color.r());
+        writeFloat(color.g());
+        writeFloat(color.b());
+        writeFloat(color.a());
     }
     
 }

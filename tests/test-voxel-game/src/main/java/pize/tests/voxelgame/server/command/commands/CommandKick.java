@@ -1,6 +1,8 @@
 package pize.tests.voxelgame.server.command.commands;
 
 import pize.tests.voxelgame.base.net.packet.CBPacketDisconnect;
+import pize.tests.voxelgame.base.text.Component;
+import pize.tests.voxelgame.base.text.TextColor;
 import pize.tests.voxelgame.server.command.CommandContext;
 import pize.tests.voxelgame.server.command.CommandDispatcher;
 import pize.tests.voxelgame.server.command.argument.CommandArg;
@@ -28,7 +30,7 @@ public class CommandKick{
         final String reason = context.getArg(1).asText().getText();
         // Kick
         targetPlayer.sendPacket(new CBPacketDisconnect("You been kicked by " + sender.getName() + ", reason: " + reason));
-        context.getServer().getPlayerList().broadcastMessage(targetPlayer.getName() + " was kicked by " + sender.getName() + ", reason: " + reason);
+        context.getServer().getPlayerList().broadcastMessage(new Component().color(TextColor.DARK_RED).text(targetPlayer.getName() + " was kicked by " + sender.getName() + ", reason: " + reason));
     }
     
 }

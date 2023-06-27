@@ -23,8 +23,8 @@ public class CameraRotationController{
             if(!nextFrameRotationLock && Pize.mouse().isInWindow()){
                 float x = Pize.mouse().getX();
                 float y = Pize.mouse().getY();
-                dAngX += Pize.getWidth() / 2F - x;
-                dAngY += Pize.getHeight() / 2F - y;
+                dAngX += (int) (Pize.getWidth() / 2F) - x;
+                dAngY += (int) (Pize.getHeight() / 2F) - y;
                 
                 rotation.yaw += dAngX * 0.02 * mouseSensitivity;
                 rotation.pitch += dAngY * 0.02 * mouseSensitivity;

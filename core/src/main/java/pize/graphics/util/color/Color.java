@@ -100,39 +100,47 @@ public class Color extends IColor{
     }
 
 
-    public void setR(float r){
+    public Color setR(float r){
         this.r = r;
+        return this;
     }
 
-    public void setG(float g){
+    public Color setG(float g){
         this.g = g;
+        return this;
     }
 
-    public void setB(float b){
+    public Color setB(float b){
         this.b = b;
+        return this;
     }
 
-    public void setA(float a){
+    public Color setA(float a){
         this.a = a;
+        return this;
     }
 
 
-    public void mul(float r, float g, float b, float a){
+    public Color mul(double r, double g, double b, double a){
         set(
             r() * r,
             g() * g,
             b() * b,
             a() * a
         );
+        
+        return this;
     }
 
-    public void mul(float value){
+    public Color mul(double value){
         set(
             r() * value,
             g() * value,
             b() * value,
-            a() * value
+            a()
         );
+        
+        return this;
     }
 
 
@@ -153,10 +161,12 @@ public class Color extends IColor{
         set(1, 1, 1, 1F);
     }
 
-    public void inverse(){
+    public Color inverse(){
         r = 1 - r;
         g = 1 - g;
         b = 1 - b;
+        
+        return this;
     }
 
 

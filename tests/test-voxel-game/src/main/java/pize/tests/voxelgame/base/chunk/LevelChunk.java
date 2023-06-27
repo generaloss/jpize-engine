@@ -215,4 +215,9 @@ public class LevelChunk{
         return position.hashCode();
     }
     
+    
+    public LevelChunk getNeighbor(int chunkX, int chunkZ){
+        return level.getChunkManager().getChunk(position.x + chunkX, position.z + chunkZ);
+    }
+    
 }

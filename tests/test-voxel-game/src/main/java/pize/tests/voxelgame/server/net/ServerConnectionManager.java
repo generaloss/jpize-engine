@@ -7,6 +7,8 @@ import pize.net.tcp.packet.PacketHandler;
 import pize.net.tcp.packet.PacketInfo;
 import pize.net.tcp.packet.Packets;
 import pize.tests.voxelgame.base.net.packet.*;
+import pize.tests.voxelgame.base.text.Component;
+import pize.tests.voxelgame.base.text.TextColor;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.player.ServerPlayer;
 
@@ -96,7 +98,7 @@ public class ServerConnectionManager implements TcpListener{
             final ServerPlayer player = connectionAdapter.getPlayer();
             server.getPlayerList().disconnectPlayer(player);
             
-            server.getPlayerList().broadcastMessage("Player " + player.getName() + " leave the game");
+            server.getPlayerList().broadcastMessage(new Component().color(TextColor.YELLOW).text("Player " + player.getName() + " leave the game"));
         }
         
         packetHandlerMap.remove(connection);

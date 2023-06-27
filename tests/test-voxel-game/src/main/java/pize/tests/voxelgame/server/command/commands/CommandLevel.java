@@ -1,5 +1,7 @@
 package pize.tests.voxelgame.server.command.commands;
 
+import pize.tests.voxelgame.base.text.Component;
+import pize.tests.voxelgame.base.text.TextColor;
 import pize.tests.voxelgame.server.chunk.gen.ChunkGenerator;
 import pize.tests.voxelgame.server.command.CommandContext;
 import pize.tests.voxelgame.server.command.CommandDispatcher;
@@ -47,10 +49,10 @@ public class CommandLevel{
         final LevelManager levelManager = context.getServer().getLevelManager();
         
         if(levelManager.isLevelLoaded(levelName))
-            sender.sendMessage("Level " + levelName + " already loaded");
+            sender.sendMessage(new Component().color(TextColor.DARK_RED).text("Level " + levelName + " already loaded"));
         else{
             levelManager.createLevel(levelName, seed, generator);
-            context.getServer().getPlayerList().broadcastMessage("[Server]: Level " + levelName + " loaded");
+            context.getServer().getPlayerList().broadcastMessage(new Component().color(TextColor.YELLOW).text("Level '" + levelName + "' loaded"));
         }
     }
     
@@ -62,11 +64,11 @@ public class CommandLevel{
         final LevelManager levelManager = context.getServer().getLevelManager();
         
         if(!levelManager.isLevelLoaded(levelName))
-            sender.sendMessage("Level " + levelName + " is not loaded");
+            sender.sendMessage(new Component().color(TextColor.DARK_RED).text("Level " + levelName + " is not loaded"));
         else{
             final ServerLevel level = levelManager.getLevel(levelName);
             sender.teleport(level, level.getSpawnPosition());
-            sender.sendMessage("You teleported to level " + levelName);
+            sender.sendMessage(new Component().text("You teleported to level " + levelName));
         }
     }
     

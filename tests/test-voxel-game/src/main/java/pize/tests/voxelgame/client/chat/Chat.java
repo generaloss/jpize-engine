@@ -1,7 +1,9 @@
 package pize.tests.voxelgame.client.chat;
 
-import pize.tests.voxelgame.client.ClientGame;
 import pize.tests.voxelgame.base.net.packet.SBPacketChatMessage;
+import pize.tests.voxelgame.base.text.Component;
+import pize.tests.voxelgame.base.text.ComponentText;
+import pize.tests.voxelgame.client.ClientGame;
 import pize.util.io.TextProcessor;
 
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ public class Chat{
         
         textProcessor.setActive(false);
         
-        putMessage("Enter /help for command list");
+        putMessage(new Component().text("Enter /help for command list"));
     }
     
     
@@ -34,9 +36,14 @@ public class Chat{
         return messageList;
     }
     
-    public void putMessage(String message){
-        messageList.add(new ChatMessage(message));
+    public void putMessage(List<ComponentText> components){
+        messageList.add(new ChatMessage(components));
     }
+    
+    public void putMessage(Component component){
+        this.putMessage(component.toFlatList());
+    }
+    
     
     public void clear(){
         messageList.clear();
@@ -52,7 +59,7 @@ public class Chat{
         game.sendPacket(new SBPacketChatMessage(message));
         textProcessor.clear();
         
-        if(history.size() != 0 && history.get(history.size() - 1).equals(message))
+        if(!history.isEmpty() && history.get(history.size() - 1).equals(message))
             return;
         
         history.add(history.size(), message);

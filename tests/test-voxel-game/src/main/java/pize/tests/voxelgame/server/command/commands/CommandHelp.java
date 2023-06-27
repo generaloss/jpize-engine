@@ -1,5 +1,6 @@
 package pize.tests.voxelgame.server.command.commands;
 
+import pize.tests.voxelgame.base.text.Component;
 import pize.tests.voxelgame.server.command.CommandContext;
 import pize.tests.voxelgame.server.command.CommandDispatcher;
 import pize.tests.voxelgame.server.command.builder.Commands;
@@ -18,7 +19,7 @@ public class CommandHelp{
         final CommandSource source = context.getSource();
         
         for(CommandNodeLiteral command: context.getServer().getCommandDispatcher().getCommands()){
-            source.sendMessage("/" + command.getLiteral());
+            source.sendMessage(new Component().text("/" + command.getLiteral()));
         }
         
         // source.sendMessage("/help          - that command");

@@ -78,16 +78,16 @@ public class AudioSource implements Disposable{
         alSourcei(id, AL_LOOPING, loop ? AL_TRUE : AL_FALSE);
     }
 
-    public void setVolume(float volume){
-        alSourcef(id, AL_GAIN, volume);
+    public void setVolume(double volume){
+        alSourcef(id, AL_GAIN, (float) volume);
     }
 
-    public void setPitch(float pitch){
-        alSourcef(id, AL_PITCH, pitch);
+    public void setPitch(double pitch){
+        alSourcef(id, AL_PITCH, (float) pitch);
     }
 
-    public void setPosition(float seconds){
-        alSourcef(id, AL_SEC_OFFSET, seconds);
+    public void setPosition(double seconds){
+        alSourcef(id, AL_SEC_OFFSET, (float) seconds);
     }
 
 

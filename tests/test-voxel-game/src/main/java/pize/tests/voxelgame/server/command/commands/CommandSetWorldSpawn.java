@@ -1,6 +1,8 @@
 package pize.tests.voxelgame.server.command.commands;
 
 import pize.math.vecmath.vector.Vec3f;
+import pize.tests.voxelgame.base.text.Component;
+import pize.tests.voxelgame.base.text.TextColor;
 import pize.tests.voxelgame.server.command.CommandContext;
 import pize.tests.voxelgame.server.command.CommandDispatcher;
 import pize.tests.voxelgame.server.command.builder.Commands;
@@ -24,7 +26,7 @@ public class CommandSetWorldSpawn{
         final ServerLevel level = (ServerLevel) sender.getLevel();
         // Set world spawn
         level.getConfiguration().setWorldSpawn(position.x, position.z);
-        context.getServer().getPlayerList().broadcastMessage("World spawn set in: " + position);
+        context.getServer().getPlayerList().broadcastMessage(new Component().color(TextColor.GREEN).text("World spawn set in: " + position));
     }
     
 }

@@ -1,6 +1,7 @@
 package pize.tests.voxelgame.server.command.source;
 
 import pize.math.vecmath.tuple.Tuple3f;
+import pize.tests.voxelgame.base.text.Component;
 import pize.tests.voxelgame.server.player.ServerPlayer;
 
 public class CommandSourcePlayer extends CommandSource{
@@ -22,7 +23,7 @@ public class CommandSourcePlayer extends CommandSource{
     }
     
     @Override
-    public void sendMessage(String message){
+    public void sendMessage(Component message){
         player.sendMessage(message);
     }
     

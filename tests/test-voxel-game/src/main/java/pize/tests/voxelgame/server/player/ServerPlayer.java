@@ -10,6 +10,7 @@ import pize.tests.voxelgame.base.level.Level;
 import pize.tests.voxelgame.base.net.packet.CBPacketAbilities;
 import pize.tests.voxelgame.base.net.packet.CBPacketChatMessage;
 import pize.tests.voxelgame.base.net.packet.CBPacketTeleportPlayer;
+import pize.tests.voxelgame.base.text.Component;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.level.ServerLevel;
 import pize.tests.voxelgame.server.net.PlayerConnectionAdapter;
@@ -69,8 +70,8 @@ public class ServerPlayer extends Player{
     }
     
     
-    public void sendMessage(String message){
-        sendPacket(new CBPacketChatMessage(message));
+    public void sendMessage(Component message){
+        sendPacket(new CBPacketChatMessage(message.toFlatList()));
     }
     
     

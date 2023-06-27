@@ -1,49 +1,41 @@
 package pize.tests.voxelgame.client.chunk.mesh;
 
 import pize.graphics.texture.Region;
-import pize.tests.voxelgame.base.level.Level;
-import pize.tests.voxelgame.client.block.BlockProperties;
-import pize.tests.voxelgame.client.block.BlockState;
-import pize.tests.voxelgame.client.block.model.BlockTextureRegion;
 import pize.tests.voxelgame.base.chunk.ChunkUtils;
 import pize.tests.voxelgame.base.chunk.LevelChunk;
 import pize.tests.voxelgame.base.chunk.storage.HeightmapType;
+import pize.tests.voxelgame.client.block.BlockProperties;
+import pize.tests.voxelgame.client.block.blocks.Block;
+import pize.tests.voxelgame.client.block.model.BlockTextureRegion;
 import pize.util.time.Stopwatch;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static pize.tests.voxelgame.base.chunk.ChunkUtils.SIZE;
-import static pize.tests.voxelgame.base.chunk.ChunkUtils.isOutOfBounds;
+import static pize.tests.voxelgame.base.chunk.ChunkUtils.*;
 
 public class ChunkBuilder{
 
-    public static final float AO_BRIGHTNESS = 0.7F;
-    
     public static double buildTime;
     public static int vertexCount;
     
-    private static LevelChunk chunk;
-    private static int chunkBaseX, chunkBaseZ;
-    private static Level level;
+    private static LevelChunk[] neighborChunks;
     private static int vertexIndex;
     private static final List<Float> verticesList = new ArrayList<>();
 
     public static float[] build(LevelChunk chunk){
         final Stopwatch timer = new Stopwatch().start();
-        
-        ChunkBuilder.chunk = chunk;
-        ChunkBuilder.chunkBaseX = chunk.getPosition().x * SIZE;
-        ChunkBuilder.chunkBaseZ = chunk.getPosition().z * SIZE;
-        ChunkBuilder.level = chunk.getLevel();
+
         ChunkBuilder.vertexIndex = 0;
+        ChunkBuilder.neighborChunks = new LevelChunk[]{ // Rows - X, Columns - Z
+            chunk.getNeighbor(-1, -1), chunk.getNeighbor(0, -1) , chunk.getNeighbor(1, -1),
+            chunk.getNeighbor(-1,  0), chunk                    , chunk.getNeighbor(1,  0),
+            chunk.getNeighbor(-1,  1), chunk.getNeighbor(0,  1) , chunk.getNeighbor(1,  1)
+        };
         
         if(!chunk.isEmpty())
             for(int lx = 0; lx < SIZE; lx++){
-                final int x = lx + chunkBaseX;
-                
                 for(int lz = 0; lz < SIZE; lz++){
-                    final int z = lz + chunkBaseZ;
                     
                     final int height = chunk.getHeightMap(HeightmapType.SURFACE).getHeight(lx, lz) + 1;
                     for(int y = 0; y < height; y++){
@@ -54,12 +46,12 @@ public class ChunkBuilder{
                         
                         if(block.isSolid()){
                             final BlockTextureRegion region = block.getTextureRegion();
-                            if(isGenFace(x - 1, y,     z    , block)) addNxFace(lx, y, lz, region.getNx());
-                            if(isGenFace(x + 1, y,     z    , block)) addPxFace(lx, y, lz, region.getPx());
-                            if(isGenFace(x,     y - 1, z    , block)) addNyFace(lx, y, lz, region.getNy());
-                            if(isGenFace(x,     y + 1, z    , block)) addPyFace(lx, y, lz, region.getPy());
-                            if(isGenFace(x,     y,     z - 1, block)) addNzFace(lx, y, lz, region.getNz());
-                            if(isGenFace(x,     y,     z + 1, block)) addPzFace(lx, y, lz, region.getPz());
+                            if(isGenFace(lx - 1, y,     lz    , block)) addNxFace(lx, y, lz, region.getNx());
+                            if(isGenFace(lx + 1, y,     lz    , block)) addPxFace(lx, y, lz, region.getPx());
+                            if(isGenFace(lx,     y - 1, lz    , block)) addNyFace(lx, y, lz, region.getNy());
+                            if(isGenFace(lx,     y + 1, lz    , block)) addPyFace(lx, y, lz, region.getPy());
+                            if(isGenFace(lx,     y,     lz - 1, block)) addNzFace(lx, y, lz, region.getNz());
+                            if(isGenFace(lx,     y,     lz + 1, block)) addPzFace(lx, y, lz, region.getPz());
                         }
                     }
                 }
@@ -83,14 +75,12 @@ public class ChunkBuilder{
         return array;
     }
     
-    private static boolean isGenFace(int x, int y, int z, BlockProperties block){
+    private static boolean isGenFace(int lx, int y, int lz, BlockProperties block){
         if(isOutOfBounds(y))
             return true;
         
-        final BlockProperties neighbor = BlockState.getProps(level.getBlock(x, y, z));
-        
-        return neighbor.isEmpty() ||
-            (neighbor.isTransparent() && !block.isTransparent());
+        final BlockProperties neighbor = getBlockProps(lx, y, lz);
+        return neighbor.isEmpty() || (neighbor.isTransparent() && !block.isTransparent());
     }
     
     
@@ -99,11 +89,12 @@ public class ChunkBuilder{
         final BlockProperties block2 = getBlockProps(x2, y2, z2);
         final BlockProperties block3 = getBlockProps(x3, y3, z3);
         
-        return
-            !(block1.isEmpty() || block1.isTransparent()) ||
-            !(block2.isEmpty() || block2.isTransparent()) ||
-            !(block3.isEmpty() || block3.isTransparent())
-            ? AO_BRIGHTNESS : 1;
+        float result = 0;
+        if(!(block1.isEmpty() || block1.isTransparent())) result++;
+        if(!(block2.isEmpty() || block2.isTransparent())) result++;
+        if(!(block3.isEmpty() || block3.isTransparent())) result++;
+        
+        return 1 - result / 4;
     }
     
     public static float getLight(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, int x4, int y4, int z4){
@@ -138,11 +129,61 @@ public class ChunkBuilder{
     
     
     private static BlockProperties getBlockProps(int lx, int y, int lz){
-        return level.getBlockProps(lx + chunkBaseX, y, lz + chunkBaseZ);
+        // Находим соседний чанк в массиве 3x3
+        int signX = 0;
+        int signZ = 0;
+        
+        if(lx > SIZE_IDX){
+            signX = 1;
+            lx -= SIZE;
+        }else if(lx < 0){
+            signX = -1;
+            lx += SIZE;
+        }
+        
+        if(lz > SIZE_IDX){
+            signZ = 1;
+            lz -= SIZE;
+        }else if(lz < 0){
+            signZ = -1;
+            lz += SIZE;
+        }
+        
+        final LevelChunk chunk = neighborChunks[(signZ + 1) * 3 + (signX + 1)];
+        if(chunk == null)
+            return Block.AIR.properties;
+        
+        // Возвращаем блок
+        return chunk.getBlockProps(lx, y, lz);
     }
     
     private static byte getLight(int lx, int y, int lz){
-        return level.getLight(lx + chunkBaseX, y, lz + chunkBaseZ);
+        // Находим соседний чанк в массиве 3x3
+        int signX = 0;
+        int signZ = 0;
+        
+        if(lx > SIZE_IDX){
+            signX = 1;
+            lx -= SIZE;
+        }else if(lx < 0){
+            signX = -1;
+            lx += SIZE;
+        }
+        
+        if(lz > SIZE_IDX){
+            signZ = 1;
+            lz -= SIZE;
+        }else if(lz < 0){
+            signZ = -1;
+            lz += SIZE;
+        }
+        
+        final LevelChunk chunk = neighborChunks[(signZ + 1) * 3 + (signX + 1)];
+        if(chunk == null)
+            return 0;
+        
+        // Возвращаем уровень света
+        return chunk.getLight(lx, y, lz);
     }
     
 

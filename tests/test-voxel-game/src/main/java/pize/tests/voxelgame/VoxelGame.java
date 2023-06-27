@@ -2,16 +2,18 @@ package pize.tests.voxelgame;
 
 import pize.Pize;
 import pize.app.AppAdapter;
+import pize.audio.sound.Sound;
 import pize.files.Resource;
 import pize.graphics.gl.Gl;
+import pize.tests.voxelgame.base.Version;
 import pize.tests.voxelgame.base.modification.loader.ModEntryPointType;
+import pize.tests.voxelgame.base.modification.loader.ModLoader;
+import pize.tests.voxelgame.base.net.PlayerProfile;
+import pize.tests.voxelgame.base.text.TextComponentBatch;
 import pize.tests.voxelgame.client.ClientGame;
 import pize.tests.voxelgame.client.control.GameController;
 import pize.tests.voxelgame.client.options.Options;
 import pize.tests.voxelgame.client.renderer.ClientGameRenderer;
-import pize.tests.voxelgame.base.Version;
-import pize.tests.voxelgame.base.modification.loader.ModLoader;
-import pize.tests.voxelgame.base.net.PlayerProfile;
 import pize.tests.voxelgame.server.IntegratedServer;
 import pize.util.time.Sync;
 
@@ -37,6 +39,7 @@ public class VoxelGame extends AppAdapter{
     private final ClientGame clientGame;
     
     private final ModLoader modLoader;
+    private final TextComponentBatch textBatch;
     
 
     public VoxelGame(){
@@ -50,6 +53,7 @@ public class VoxelGame extends AppAdapter{
         
         gameController = new GameController(this);
         
+        textBatch = new TextComponentBatch();
         clientRenderer = new ClientGameRenderer(this);
         clientGame = new ClientGame(this);
         
@@ -62,7 +66,6 @@ public class VoxelGame extends AppAdapter{
         profile = new PlayerProfile(getOptions().getPlayerName());
         
         /** ModLoader **/
-        
         modLoader = new ModLoader();
         modLoader.loadMods(SharedConstants.MODS_PATH);
     }
@@ -83,8 +86,14 @@ public class VoxelGame extends AppAdapter{
         // Init mods
         modLoader.initializeMods(ModEntryPointType.CLIENT);
         modLoader.initializeMods(ModEntryPointType.MAIN);
+        
+        // Music
+        final Sound sound = new Sound("music/21_2.ogg");
+        sound.setVolume(0.3);
+        sound.setPitch(0.8);
+        sound.setLooping(true);
+        sound.play();
     }
-    
     
     @Override
     public void render(){
@@ -148,6 +157,10 @@ public class VoxelGame extends AppAdapter{
     
     public final GameController getController(){
         return gameController;
+    }
+    
+    public final TextComponentBatch getTextBatch(){
+        return textBatch;
     }
     
     

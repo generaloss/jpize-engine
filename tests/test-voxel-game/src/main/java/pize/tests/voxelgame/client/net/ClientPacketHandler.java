@@ -6,6 +6,7 @@ import pize.net.tcp.TcpListener;
 import pize.net.tcp.packet.PacketHandler;
 import pize.net.tcp.packet.PacketInfo;
 import pize.net.tcp.packet.Packets;
+import pize.tests.voxelgame.base.text.Component;
 import pize.tests.voxelgame.client.ClientGame;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.entity.RemotePlayer;
@@ -83,7 +84,7 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
             
             case CBPacketChatMessage.PACKET_ID ->{
                 final CBPacketChatMessage packet = packetInfo.readPacket(new CBPacketChatMessage());
-                game.getChat().putMessage(packet.message);
+                game.getChat().putMessage(packet.components);
             }
             
             case CBPacketPlayerSneaking.PACKET_ID ->{
@@ -159,7 +160,7 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
                 final CBPacketPong packet = packetInfo.readPacket(new CBPacketPong());
                 
                 final String message = "Ping - " + (System.nanoTime() - packet.timeMillis) / 1000000F + " ms";
-                game.getChat().putMessage(message);
+                game.getChat().putMessage(new Component().text(message));
                 System.out.println("[Client]: " + message);
             }
             

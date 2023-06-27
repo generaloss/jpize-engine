@@ -1,5 +1,6 @@
 package pize.net.tcp.packet;
 
+import pize.graphics.util.color.Color;
 import pize.math.util.EulerAngles;
 import pize.math.vecmath.tuple.Tuple3d;
 import pize.math.vecmath.tuple.Tuple3f;
@@ -58,6 +59,15 @@ public class PacketInputStream extends DataInputStream{
     
     public UUID readUUID() throws IOException{
         return new UUID(readLong(), readLong());
+    }
+    
+    public Color readColor() throws IOException{
+        return new Color(
+            readFloat(),
+            readFloat(),
+            readFloat(),
+            readFloat()
+        );
     }
     
 }

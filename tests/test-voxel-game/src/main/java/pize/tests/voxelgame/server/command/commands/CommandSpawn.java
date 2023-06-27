@@ -1,6 +1,7 @@
 package pize.tests.voxelgame.server.command.commands;
 
 import pize.math.vecmath.vector.Vec3f;
+import pize.tests.voxelgame.base.text.Component;
 import pize.tests.voxelgame.server.command.CommandContext;
 import pize.tests.voxelgame.server.command.CommandDispatcher;
 import pize.tests.voxelgame.server.command.builder.Commands;
@@ -24,7 +25,7 @@ public class CommandSpawn{
         final Vec3f spawnPosition = level.getSpawnPosition();
         // Teleport
         sender.teleport(spawnPosition);
-        sender.sendMessage("You teleported to spawn");
+        sender.sendMessage(new Component().text("You teleported to spawn"));
     }
     
 }

@@ -1,6 +1,7 @@
 package pize.tests.voxelgame.server.command.commands;
 
 import pize.math.vecmath.vector.Vec3f;
+import pize.tests.voxelgame.base.text.Component;
 import pize.tests.voxelgame.server.command.CommandContext;
 import pize.tests.voxelgame.server.command.CommandDispatcher;
 import pize.tests.voxelgame.server.command.argument.CommandArg;
@@ -42,7 +43,7 @@ public class CommandTeleport{
         final Vec3f position = argPosition.getPosition();
         // Teleport
         sender.teleport(position);
-        sender.sendMessage("You teleported to " + position);
+        sender.sendMessage(new Component().text("You teleported to " + position));
     }
     
     private static void teleportToPlayer(CommandContext context){
@@ -54,8 +55,8 @@ public class CommandTeleport{
         final ServerPlayer targetPlayer = argPlayer.getPlayer();
         // Teleport
         sender.teleport(targetPlayer);
-        sender.sendMessage("You teleported to " + targetPlayer.getName());
-        targetPlayer.sendMessage("Player " + sender.getName() + " teleported to you");
+        sender.sendMessage(new Component().text("You teleported to " + targetPlayer.getName()));
+        targetPlayer.sendMessage(new Component().text("Player " + sender.getName() + " teleported to you"));
     }
     
     private static void teleportPlayerToPlayer(CommandContext context){
@@ -69,8 +70,8 @@ public class CommandTeleport{
         
         // Teleport
         player.teleport(targetPlayer);
-        player.sendMessage("You teleported to " + targetPlayer.getName());
-        targetPlayer.sendMessage("Player " + player.getName() + " teleported to you");
+        player.sendMessage(new Component().text("You teleported to " + targetPlayer.getName()));
+        targetPlayer.sendMessage(new Component().text("Player " + player.getName() + " teleported to you"));
     }
     
     private static void teleportPlayerToPosition(CommandContext context){
@@ -83,7 +84,7 @@ public class CommandTeleport{
         final Vec3f position = argPosition.getPosition();
         // Teleport
         player.teleport(position);
-        player.sendMessage("You teleported to " + position);
+        player.sendMessage(new Component().text("You teleported to " + position));
     }
     
 }

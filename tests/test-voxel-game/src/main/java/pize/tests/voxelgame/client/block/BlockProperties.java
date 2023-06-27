@@ -8,6 +8,7 @@ import static pize.tests.voxelgame.base.chunk.ChunkUtils.*;
 
 public abstract class BlockProperties{
 
+    
     private final int id;
 
     protected BlockProperties(int id){

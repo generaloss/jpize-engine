@@ -15,7 +15,7 @@ public class LocalPlayer extends AbstractClientPlayer{
     public static float speed;
     
     
-    private float gravity, timeToMaxJumpY, jumpMotion;
+    private float jumpMotion, gravity;
     private final Vec2f moveControl;
     private float jumpDownY, oldMotionY, fallHeight;
     
@@ -52,7 +52,7 @@ public class LocalPlayer extends AbstractClientPlayer{
         
         // Horizontal move
         float reduce = 0.91F;
-        float speed = 0.34F * Pize.getDt();
+        float speed = 0.34F * deltaTime;
         if(isSneaking() && !isFlying())
             speed *= 0.5;
         if(isSprinting())
@@ -104,10 +104,10 @@ public class LocalPlayer extends AbstractClientPlayer{
     }
     
     public void setJumpHeight(float height){
-        timeToMaxJumpY = 0.27F * Mathc.sqrt(height);
+        final float timeToMaxJumpY = 0.27F * Mathc.sqrt(height);
         
         gravity = -2 * height / (timeToMaxJumpY * timeToMaxJumpY);
-        jumpMotion = 2 * height / timeToMaxJumpY / Pize.monitor().getRefreshRate();
+        jumpMotion = 2 * height / timeToMaxJumpY;
     }
     
     public float getFallHeight(){
@@ -131,7 +131,7 @@ public class LocalPlayer extends AbstractClientPlayer{
         
         if(isOnGround()){
             // Jump
-            getMotion().y = jumpMotion;
+            getMotion().y = jumpMotion * Pize.getDt();
             
             // Jump-boost
             if(isSprinting()){

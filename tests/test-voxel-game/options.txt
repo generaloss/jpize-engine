@@ -1,5 +1,5 @@
 remote.host : 0.0.0.0:22854
-player.name : GeneralPashon
+player.name : intbyte
 graphics.fov : 70
 graphics.renderDistance : 12
 graphics.maxFramerate : 0

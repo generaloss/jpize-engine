@@ -7,6 +7,8 @@ import pize.tests.voxelgame.base.net.packet.CBPacketChatMessage;
 import pize.tests.voxelgame.base.net.packet.CBPacketRemoveEntity;
 import pize.tests.voxelgame.base.net.packet.CBPacketSpawnInfo;
 import pize.tests.voxelgame.base.net.packet.CBPacketSpawnPlayer;
+import pize.tests.voxelgame.base.text.Component;
+import pize.tests.voxelgame.base.text.TextColor;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.level.ServerLevel;
 import pize.tests.voxelgame.server.net.PlayerConnectionAdapter;
@@ -86,7 +88,7 @@ public class PlayerList{
         // Send to all player-connection-event packet
         broadcastPacketExcept(new CBPacketSpawnPlayer(serverPlayer), serverPlayer);
         
-        broadcastMessageExcept("Player " + name + " joined the game", serverPlayer);
+        broadcastMessageExcept(new Component().color(TextColor.YELLOW).text("Player " + name + " joined the game"), serverPlayer);
     }
     
     
@@ -115,13 +117,13 @@ public class PlayerList{
                 player.sendPacket(packet);
     }
     
-    public void broadcastMessage(String message){
-        broadcastPacket(new CBPacketChatMessage(message));
+    public void broadcastMessage(Component message){
+        broadcastPacket(new CBPacketChatMessage(message.toFlatList()));
         System.out.println(message);
     }
     
-    public void broadcastMessageExcept(String message, ServerPlayer except){
-        broadcastPacketExcept(new CBPacketChatMessage(message), except);
+    public void broadcastMessageExcept(Component message, ServerPlayer except){
+        broadcastPacketExcept(new CBPacketChatMessage(message.toFlatList()), except);
         System.out.println(message);
     }
     

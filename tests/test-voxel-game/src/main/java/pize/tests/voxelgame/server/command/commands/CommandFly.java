@@ -1,5 +1,6 @@
 package pize.tests.voxelgame.server.command.commands;
 
+import pize.tests.voxelgame.base.text.Component;
 import pize.tests.voxelgame.server.command.CommandContext;
 import pize.tests.voxelgame.server.command.CommandDispatcher;
 import pize.tests.voxelgame.server.command.builder.Commands;
@@ -20,10 +21,10 @@ public class CommandFly{
         // Fly
         if(sender.isFlyEnabled()){
             sender.setFlyEnabled(false);
-            sender.sendMessage("Fly disabled");
+            sender.sendMessage(new Component().text("Fly disabled"));
         }else{
             sender.setFlyEnabled(true);
-            sender.sendMessage("Fly enabled");
+            sender.sendMessage(new Component().text("Fly enabled"));
         }
     }
     

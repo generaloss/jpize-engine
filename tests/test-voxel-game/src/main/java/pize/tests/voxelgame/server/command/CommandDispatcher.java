@@ -1,5 +1,7 @@
 package pize.tests.voxelgame.server.command;
 
+import pize.tests.voxelgame.base.text.Component;
+import pize.tests.voxelgame.base.text.TextColor;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.command.argument.CommandArg;
 import pize.tests.voxelgame.server.command.commands.*;
@@ -7,7 +9,6 @@ import pize.tests.voxelgame.server.command.node.CommandNodeArg;
 import pize.tests.voxelgame.server.command.node.CommandNodeLiteral;
 import pize.tests.voxelgame.server.command.source.CommandSource;
 import pize.tests.voxelgame.server.command.source.CommandSourcePlayer;
-import pize.tests.voxelgame.server.player.ServerPlayer;
 
 import java.util.*;
 
@@ -36,22 +37,6 @@ public class CommandDispatcher{
         CommandLevel.registerTo(this);
     }
     
-    public void executeCommandDeprecated(String commandMessage, String[] args, ServerPlayer sender){
-        switch(commandMessage){
-            
-            case "ban" -> {
-                sender.sendMessage("<GeneralPashon> нет такой команды))))");
-            }
-            
-            
-            
-            default -> sender.sendMessage("Invalid command " + commandMessage);
-        }
-        
-        // PORTALS
-        
-    }
-    
     public Server getServer(){
         return server;
     }
@@ -77,10 +62,10 @@ public class CommandDispatcher{
         // Проверяем существует ли такая команда в корневом списке
         CommandNodeLiteral targetCommandNode = commands.get(splitCommand[0]);
         if(targetCommandNode == null){
-            source.sendMessage("Command /" + splitCommand[0] + " is not exists");
+            source.sendMessage(new Component().color(TextColor.RED).text("Command /" + splitCommand[0] + " is not exists"));
             return;
         }else if(!targetCommandNode.requirementsTest(source)){
-            source.sendMessage("You don't have permission");
+            source.sendMessage(new Component().color(TextColor.RED).text("You don't have permission"));
             return;
         }
         
@@ -117,7 +102,7 @@ public class CommandDispatcher{
                             // Указать на ошибку
                             
                             final int wrongArgEndPointer = nextSpace > 0 ? (nextSpace + index) : joinedArguments.length();
-                            source.sendMessage("Wrong argument: /" + splitCommand[0] + joinedArguments.substring(0, wrongArgEndPointer) + "<-HERE");
+                            source.sendMessage(new Component().color(TextColor.RED).text("Wrong argument: ").reset().text("/" + splitCommand[0] + joinedArguments.substring(0, wrongArgEndPointer)).color(TextColor.RED).text("<-HERE"));
                             return;
                         }else
                             continue;
@@ -146,7 +131,7 @@ public class CommandDispatcher{
                         // И если этот аргумент оставался последним вариантом
                         if(j + 1 == children.size()){
                             final int wrongArgEndPointer = nextSpace > 0 ? (nextSpace + index) : joinedArguments.length();
-                            source.sendMessage("Wrong argument: /" + splitCommand[0] + joinedArguments.substring(0, wrongArgEndPointer) + "<-HERE");
+                            source.sendMessage(new Component().color(TextColor.RED).text("Wrong argument: ").reset().text("/" + splitCommand[0] + joinedArguments.substring(0, wrongArgEndPointer)).color(TextColor.RED).text("<-HERE"));
                             return;
                         }
                     }
@@ -157,21 +142,21 @@ public class CommandDispatcher{
             if(oldIndex == index){
                 // Выбрасываем ошибку
                 final int wrongArgEndPointer = nextSpace > 0 ? (nextSpace + index) : joinedArguments.length();
-                source.sendMessage("Wrong argument: /" + splitCommand[0] + joinedArguments.substring(0, wrongArgEndPointer) + "<-HERE");
+                source.sendMessage(new Component().color(TextColor.RED).text("Wrong argument: ").reset().text("/" + splitCommand[0] + joinedArguments.substring(0, wrongArgEndPointer)).color(TextColor.RED).text("<-HERE"));
                 return;
             }
         }
         
         // Check permissions
         if(!targetCommandNode.requirementsTest(source)){
-            source.sendMessage("You don't have permission");
+            source.sendMessage(new Component().color(TextColor.RED).text("You don't have permission"));
             return;
         }
         
         // Последняя нода должна содержать интерфейс 'Command' для исполнения команды
         final Command command = targetCommandNode.getCommand();
         if(command == null){
-            source.sendMessage("Wrong arguments");
+            source.sendMessage(new Component().color(TextColor.RED).text("Wrong arguments"));
             return;
         }
         

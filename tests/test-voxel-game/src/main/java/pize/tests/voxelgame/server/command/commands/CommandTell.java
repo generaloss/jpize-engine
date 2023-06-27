@@ -1,5 +1,7 @@
 package pize.tests.voxelgame.server.command.commands;
 
+import pize.tests.voxelgame.base.text.Component;
+import pize.tests.voxelgame.base.text.TextColor;
 import pize.tests.voxelgame.server.command.CommandContext;
 import pize.tests.voxelgame.server.command.CommandDispatcher;
 import pize.tests.voxelgame.server.command.argument.CommandArg;
@@ -27,7 +29,7 @@ public class CommandTell{
         final ServerPlayer targetPlayer = context.getArg(0).asPlayer().getPlayer();
         final String text = context.getArg(1).asText().getText();
         // Tell
-        targetPlayer.sendMessage("<" + sender.getName() + "> tells you: \"" + text + "\"");
+        targetPlayer.sendMessage(new Component().color(TextColor.YELLOW).text("<" + sender.getName() + "> tells you: \"").reset().text(text).color(TextColor.YELLOW).text("\""));
     }
     
 }
