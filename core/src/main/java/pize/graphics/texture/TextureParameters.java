@@ -18,7 +18,7 @@ public class TextureParameters{
     public static Wrap DEFAULT_WRAP_R = Wrap.CLAMP_TO_EDGE;
     public static SizedFormat DEFAULT_FORMAT = SizedFormat.RGBA8;
     public static Type DEFAULT_TYPE = Type.UNSIGNED_BYTE;
-    public static int DEFAULT_MIPMAP_LEVELS = 4;
+    public static int DEFAULT_MIPMAP_LEVELS = 1;
     public static float DEFAULT_LOD_BIAS = -glGetFloat(GL_MAX_TEXTURE_LOD_BIAS);
     public static float DEFAULT_ANISOTROPY_LEVELS = 0;
     

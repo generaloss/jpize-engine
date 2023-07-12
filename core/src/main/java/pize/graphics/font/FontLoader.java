@@ -65,8 +65,8 @@ public class FontLoader{
                     int advanceX = Integer.parseInt(getValue(tokens[8]));
 
                     Region regionOnTexture = new Region(s0, t0, s1, t1);
-                    float glyphHeight = regionOnTexture.getHeightOn(font.getPage(page));
-                    float glyphWidth = regionOnTexture.getWidthOn(font.getPage(page));
+                    float glyphHeight = regionOnTexture.getHeightPx(font.getPage(page));
+                    float glyphWidth = regionOnTexture.getWidthPx(font.getPage(page));
 
                     font.addGlyph(new Glyph(
                         font,

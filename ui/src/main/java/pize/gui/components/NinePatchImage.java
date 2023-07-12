@@ -40,10 +40,10 @@ public class NinePatchImage extends UIComponent<TextureBatch>{
 
         for(int i = 0; i < 9; i++){
             regions[i] = new TextureRegion(texture,
-                mesh.getMesh()[i % 3] / texture.getWidth(),
-                mesh.getMesh()[4 + i / 3] / texture.getHeight(),
-                mesh.getMesh()[i % 3 + 1] / texture.getWidth(),
-                mesh.getMesh()[4 + i / 3 + 1] / texture.getHeight()
+                mesh.getMesh()[i % 3] / texture.getWidthPx(),
+                mesh.getMesh()[4 + i / 3] / texture.getHeightPx(),
+                mesh.getMesh()[i % 3 + 1] / texture.getWidthPx(),
+                mesh.getMesh()[4 + i / 3 + 1] / texture.getHeightPx()
             );
         }
     }
@@ -80,27 +80,26 @@ public class NinePatchImage extends UIComponent<TextureBatch>{
         // Calc Render Info
 
         if(type == HORIZONTAL)
-            pixelSize = height / texture.getHeight();
+            pixelSize = height / texture.getHeightPx();
         else if(type == VERTICAL)
-            pixelSize = width / texture.getWidth();
+            pixelSize = width / texture.getWidthPx();
         else
-            pixelSize =
-                width > height * texture.aspect() ?
-                    height / texture.getHeight()
-                :
-                    width / texture.getWidth();
+            if(width > height * texture.aspect())
+                pixelSize = height / texture.getHeightPx();
+            else
+                pixelSize = width / texture.getWidthPx();
 
-        Vec2f cornerLeftBottomSize = getElementSize(0, 2);
-        Vec2f cornerRightUpSize = getElementSize(2, 0);
-        Vec2f centerElementSize = getElementSize(1, 1);
-        float elementCountXF = (width - cornerLeftBottomSize.x - cornerRightUpSize.x) / centerElementSize.x;
-        float elementCountYF = (height - cornerLeftBottomSize.y - cornerRightUpSize.y) / centerElementSize.y;
+        final Vec2f cornerLeftBottomSize = getElementSize(0, 2);
+        final Vec2f cornerRightUpSize = getElementSize(2, 0);
+        final Vec2f centerElementSize = getElementSize(1, 1);
+        final float elementCountXF = (width - cornerLeftBottomSize.x - cornerRightUpSize.x) / centerElementSize.x;
+        final float elementCountYF = (height - cornerLeftBottomSize.y - cornerRightUpSize.y) / centerElementSize.y;
 
-        int elementCountX = type == VERTICAL ? 1 : Math.max(type == HORIZONTAL ? 0 : 1, Maths.floor(elementCountXF));
-        int elementCountY = type == HORIZONTAL ? 1 : Math.max(type == VERTICAL ? 0 : 1, Maths.floor(elementCountYF));
+        final int elementCountX = type == VERTICAL ? 1 : Math.max(type == HORIZONTAL ? 0 : 1, Maths.floor(elementCountXF));
+        final int elementCountY = type == HORIZONTAL ? 1 : Math.max(type == VERTICAL ? 0 : 1, Maths.floor(elementCountYF));
 
-        float countDifferenceX = elementCountXF - elementCountX;
-        float countDifferenceY = elementCountYF - elementCountY;
+        final float countDifferenceX = elementCountXF - elementCountX;
+        final float countDifferenceY = elementCountYF - elementCountY;
 
         // Draw corners
 
@@ -132,7 +131,7 @@ public class NinePatchImage extends UIComponent<TextureBatch>{
 
         float borderDrawOffsetX = 0;
         for(int i = 0; i < elementCountX; i++){
-            Vec2f elementSize = renderRegion(
+            final Vec2f elementSize = renderRegion(
                 batch, 1, 2,
                 x + borderDrawOffsetX + cornerLeftBottomSize.x,
                 y,
@@ -170,7 +169,7 @@ public class NinePatchImage extends UIComponent<TextureBatch>{
 
         float borderDrawOffsetY = 0;
         for(int j = 0; j < elementCountY; j++){
-            Vec2f elementSize = renderRegion(
+            final Vec2f elementSize = renderRegion(
                 batch, 0, 1,
                 x,
                 y + borderDrawOffsetY + cornerLeftBottomSize.y,
@@ -245,18 +244,18 @@ public class NinePatchImage extends UIComponent<TextureBatch>{
     // PRIVATE
 
     private Vec2f renderRegion(Batch batch, int i, int j, float x, float y, float u, float v){
-        Vec2f size = getElementSize(i, j);
+        final Vec2f size = getElementSize(i, j);
         batch.draw(getRegion(i, j), x, y, size.x * u, size.y * v, new Region(0, 1 - v, u, 1));
 
         return size;
     }
 
     private Vec2f getElementSize(int i, int j){
-        TextureRegion region = getRegion(i, j);
+        final TextureRegion region = getRegion(i, j);
 
         return new Vec2f(
-            region.getWidth() * pixelSize,
-            region.getHeight() * pixelSize
+            region.getWidthPx() * pixelSize,
+            region.getHeightPx() * pixelSize
         );
     }
 

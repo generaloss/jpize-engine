@@ -12,11 +12,8 @@ public class Layout extends MComponent{
     
     @Override
     protected void render(TextureBatch batch, float x, float y, float width, float height){
-        // if(isHoverIgnoreChildren()){
-        //     batch.setColor(0.85F, 1F, 0.9F, 0.3F);
-        //     batch.draw(TextureUtils.quadTexture(), x, y, width, height);
-        //     batch.resetColor();
-        // }
+        // if(isHoverIgnoreChildren())
+        //     batch.drawQuad(0.85F, 1F, 0.9F, 0.3F, x, y, width, height);
     }
     
     public boolean isHoverIgnoreChildren(){

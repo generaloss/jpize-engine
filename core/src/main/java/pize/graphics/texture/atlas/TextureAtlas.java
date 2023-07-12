@@ -12,81 +12,107 @@ import java.util.List;
 
 public class TextureAtlas{
 
-    private final List<AtlasImage> images;
-    private Region[] textureRegions;
+    private final List<Image> images;
+    private Region[] regions;
     private Texture texture;
 
     public TextureAtlas(){
         images = new ArrayList<>();
     }
-
-
-    public void generate(int width, int height){
-        images.sort(Comparator.comparingInt(image->image.area));
-
-        Pixmap atlasPixmap = new Pixmap(width, height);
-
-        TextureAtlasNode root = new TextureAtlasNode(0, 0, width, height);
-        textureRegions = new Region[images.size()];
-
-        for(int i = images.size() - 1; i >= 0; i--){
-            AtlasImage image = images.get(i);
-
-            TextureAtlasNode node = root.insert(image.pixmap, 0);
-            if(node == null)
-                throw new Error("Size of atlas is too small");
-
-            atlasPixmap.drawPixmap(image.pixmap, node.rect.x, node.rect.y);
-
-            textureRegions[image.id] = new Region(
-                (double) node.rect.x / width,
-                (double) node.rect.y / height,
-                (double) (node.rect.x + node.rect.width) / width,
-                (double) (node.rect.y + node.rect.height) / height
+    
+    public void generate(int width, int height, int paddingLeft, int paddingTop, int paddingRight, int paddingBottom){
+        // Sort images from big to small perimeter
+        final int atlasHalfPerimeter = width + height;
+        images.sort(Comparator.comparingInt(
+            image -> (atlasHalfPerimeter - image.halfPerimeter)
+        ));
+        
+        final Pixmap pixmap = new Pixmap(width, height);
+        
+        final TextureAtlasNode root = new TextureAtlasNode(0, 0, width - paddingLeft, height - paddingTop);
+        regions = new Region[images.size()];
+        
+        // Iterate all images to generate
+        for(final Image image: images){
+            final TextureAtlasNode drawResult = root.insert(image.pixmap, paddingLeft, paddingTop, paddingRight, paddingBottom);
+            if(drawResult == null)
+                throw new Error("Insufficient atlas area");
+            
+            int drawX = drawResult.getX() + paddingLeft;
+            int drawY = drawResult.getY() + paddingTop;
+            int drawWidth = image.pixmap.getWidth();
+            int drawHeight = image.pixmap.getHeight();
+            
+            pixmap.drawPixmap(image.pixmap, drawX, drawY);
+            
+            regions[image.index] = new Region(
+                (double) (drawX) / width,
+                (double) (drawY) / height,
+                (double) (drawX + drawWidth ) / width,
+                (double) (drawY + drawHeight) / height
             );
         }
-
+        
+        texture = new Texture(pixmap);
         images.clear();
-
-        texture = new Texture(atlasPixmap);
     }
-
-
-    public int put(String path){
-        int id = images.size();
-        images.add(new AtlasImage(PixmapIO.load(path), id));
-        return id;
+    
+    public void generate(int width, int height, int paddingRight, int paddingBottom){
+        generate(width, height, 0, 0, paddingRight, paddingBottom);
+    }
+    
+    public void generate(int width, int height, int padding){
+        generate(width, height, padding, padding);
+    }
+    
+    public void generate(int width, int height){
+        generate(width, height, 0);
+    }
+    
+    
+    public int put(Pixmap pixmap){
+        int index = images.size();
+        images.add(new Image(pixmap, index));
+        return index;
     }
     
     public int put(Resource res){
-        int id = images.size();
-        images.add(new AtlasImage(PixmapIO.load(res), id));
-        return id;
+        return put(PixmapIO.load(res));
+    }
+    
+    public int put(String path){
+        return put(new Resource(path));
+    }
+    
+
+    public Region[] getRegions(){
+        return regions;
+    }
+    
+    public Region getRegion(int index){
+        return regions[index];
     }
 
-    public Region getRegion(int textureID){
-        return textureRegions[textureID];
-    }
-
+    
     public Texture getTexture(){
         return texture;
     }
 
     public int size(){
-        return textureRegions.length;
+        return Math.max(regions.length, images.size());
     }
 
 
-    private static class AtlasImage{
+    private static class Image{
 
         public final Pixmap pixmap;
-        public final int id;
-        public final int area;
+        public final int index; // Indexing for regions
+        public final int halfPerimeter;
 
-        public AtlasImage(Pixmap pixmap, int id){
+        public Image(Pixmap pixmap, int index){
             this.pixmap = pixmap;
-            this.id = id;
-            area = pixmap.getWidth() * pixmap.getHeight();
+            this.index = index;
+            halfPerimeter = pixmap.getWidth() + pixmap.getHeight();
         }
 
     }

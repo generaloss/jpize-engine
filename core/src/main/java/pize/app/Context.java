@@ -1,14 +1,12 @@
 package pize.app;
 
 import pize.audio.Audio;
+import pize.audio.util.TaskExecutor;
 import pize.graphics.gl.Gl;
 import pize.graphics.texture.CubeMap;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureArray;
-import pize.graphics.util.ScreenQuad;
-import pize.graphics.util.ScreenQuadShader;
-import pize.graphics.util.Shader;
-import pize.graphics.util.TextureUtils;
+import pize.graphics.util.*;
 import pize.graphics.vertex.ElementBuffer;
 import pize.graphics.vertex.VertexArray;
 import pize.graphics.vertex.VertexBuffer;
@@ -19,6 +17,9 @@ import pize.util.Utils;
 import pize.util.time.DeltaTimeCounter;
 import pize.util.time.PerSecCounter;
 import pize.util.time.TickGenerator;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
@@ -31,53 +32,72 @@ public class Context{
     private final Mouse mouse;
 
     private final PerSecCounter fpsCounter;
-    private final DeltaTimeCounter renderDeltaTime, updateDeltaTime;
-    private TickGenerator updateTickGen;
+    private final DeltaTimeCounter renderDeltaTime, fixedUpdateDeltaTime;
+    
+    private final ExecutorService fixedUpdateExecutor;
+    private TickGenerator fixedUpdateGenerator;
     private float initialUpdateTPS;
 
     private Screen screen;
-
     private boolean exitRequest;
+    private final TaskExecutor syncTaskExecutor;
 
     public Context(Window window, Keyboard keyboard, Mouse mouse){
-        audio = new Audio();
+        this.audio = new Audio();
         this.window = window;
         this.keyboard = keyboard;
         this.mouse = mouse;
 
-        fpsCounter = new PerSecCounter();
-        fpsCounter.count();
-        renderDeltaTime = new DeltaTimeCounter();
-        renderDeltaTime.update();
-        updateDeltaTime = new DeltaTimeCounter();
+        this.fpsCounter = new PerSecCounter();
+        this.fpsCounter.count();
+        this.renderDeltaTime = new DeltaTimeCounter();
+        this.renderDeltaTime.update();
+        
+        this.fixedUpdateExecutor = Executors.newFixedThreadPool(3);
+        this.fixedUpdateDeltaTime = new DeltaTimeCounter();
+        
+        this.syncTaskExecutor = new TaskExecutor();
     }
 
 
     public void begin(AppAdapter listener){
-        listener.init();
-
-        window.show();
+        listener.init(); /* INIT */
         
+        // Window initialization
+        window.show();
         window.addSizeCallback((int width, int height)->{
             listener.resize(width, height);
             Gl.viewport(width, height);
         });
         
+        // Fixed update
         if(initialUpdateTPS != 0){
-            updateTickGen = new TickGenerator(initialUpdateTPS);
+            fixedUpdateGenerator = new TickGenerator(initialUpdateTPS);
             
-            updateTickGen.startAsync(()->{
-                updateDeltaTime.update();
-                listener.update();
+            fixedUpdateGenerator.startAsync(()->{
+                fixedUpdateDeltaTime.update();
+                fixedUpdateExecutor.submit(listener::fixedUpdate); /* FIXED UPDATE */
             });
         }
-
-        while(!window.closeRequest() && !exitRequest)
-            draw(listener);
         
-        if(updateTickGen != null)
-            updateTickGen.stop();
+        // Render loop
+        while(!window.closeRequest()){
+            if(exitRequest)
+                break;
+            
+            render(listener);
+            
+            // Pize.syncExec() tasks
+            syncTaskExecutor.executeTasks();
+        }
+        
+        // Stop fixed update
+        if(fixedUpdateGenerator != null){
+            fixedUpdateGenerator.stop();
+            fixedUpdateExecutor.shutdownNow();
+        }
     
+        // Unbind OGL objects
         Shader.unbind();
         VertexArray.unbind();
         VertexBuffer.unbind();
@@ -86,27 +106,37 @@ public class Context{
         CubeMap.unbind();
         TextureArray.unbind();
     
+        // Dispose
         window.dispose();
         audio.dispose();
-        listener.dispose();
-
+        listener.dispose(); /* DISPOSE */
+        
+        // Static dispose methods
         Utils.invokeStatic(ScreenQuad.class, "dispose");
         Utils.invokeStatic(ScreenQuadShader.class, "dispose");
         Utils.invokeStatic(TextureUtils.class, "dispose");
+        Utils.invokeStatic(BaseShader.class, "disposeShaders");
 
+        // Terminate
         glfwTerminate();
     }
     
-    private void draw(AppAdapter listener){
+    private void render(AppAdapter listener){
         glfwPollEvents();
         
+        // Render screen
         if(screen != null)
-            screen.render();
+            screen.render(); /* RENDER */
         
+        // FPS & DeltaTime
         fpsCounter.count();
         renderDeltaTime.update();
-        listener.render();
         
+        // Render app
+        listener.update(); /* UPDATE */
+        listener.render(); /* RENDER */
+        
+        // Reset
         mouse.reset();
         keyboard.reset();
         window.swapBuffers();
@@ -116,7 +146,7 @@ public class Context{
     public void setScreen(Screen screen){
         this.screen.hide();
         this.screen = screen;
-        screen.show();
+        this.screen.show();
     }
 
 
@@ -128,15 +158,20 @@ public class Context{
         return renderDeltaTime.get();
     }
     
-    public float getUpdateDeltaTime(){
-        return updateDeltaTime.get();
+    public float getFixedUpdateDeltaTime(){
+        return fixedUpdateDeltaTime.get();
     }
     
     public void setUpdateTPS(float updateTPS){
-        if(updateTickGen != null)
-            updateTickGen.setTPS(updateTPS);
+        if(fixedUpdateGenerator != null)
+            fixedUpdateGenerator.setTPS(updateTPS);
         else
             initialUpdateTPS = updateTPS;
+    }
+    
+    
+    public void execSync(Runnable runnable){
+        syncTaskExecutor.newTask(runnable);
     }
     
 
@@ -158,6 +193,7 @@ public class Context{
 
 
     public void exit(){
+        syncTaskExecutor.dispose();
         exitRequest = true;
     }
 

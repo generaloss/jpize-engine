@@ -49,7 +49,7 @@ public class TextureArray extends GlTexture{
         
         pixmapList = new ArrayList<>();
         for(int z = 0; z < texture.length; z++){
-            Pixmap td = texture[z].getPixmap().clone();
+            Pixmap td = texture[z].getPixmap().copy();
             pixmapList.add(td);
     
             parameters.texSubImage3D(GL_TEXTURE_2D_ARRAY, td.getBuffer(), td.getWidth(), td.getHeight(), z);

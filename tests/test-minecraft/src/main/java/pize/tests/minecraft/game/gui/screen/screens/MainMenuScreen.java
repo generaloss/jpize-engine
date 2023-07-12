@@ -45,7 +45,7 @@ public class MainMenuScreen extends Screen{
             "vanilla/textures/gui/title/background/panorama_2.png"
         );
         camera = new PerspectiveCamera(0.1, 2, 79);
-        camera.getRot().set(90, -25);
+        camera.getRotation().set(90, -25);
         panorama_overlay = session.getResourceManager().getTexture("panorama_overlay").getTexture();
 
         // Main Layout
@@ -165,7 +165,7 @@ public class MainMenuScreen extends Screen{
     @Override
     public void render(TextureBatch batch){
         // Panorama
-        camera.getRot().yaw -= Pize.getDt() * 2;
+        camera.getRotation().yaw -= Pize.getDt() * 2;
         camera.update();
         skyBox.render(camera);
         // Panorama Overlay
@@ -184,7 +184,7 @@ public class MainMenuScreen extends Screen{
 
     @Override
     public void onShow(){
-        camera.getRot().set(90, -25);
+        camera.getRotation().set(90, -25);
     }
 
     @Override

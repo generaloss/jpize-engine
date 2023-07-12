@@ -3,12 +3,9 @@ package pize.tests.voxelgame.server.player;
 import pize.math.vecmath.vector.Vec3f;
 import pize.net.tcp.TcpConnection;
 import pize.net.tcp.packet.IPacket;
-import pize.tests.voxelgame.base.net.packet.CBPacketChatMessage;
-import pize.tests.voxelgame.base.net.packet.CBPacketRemoveEntity;
-import pize.tests.voxelgame.base.net.packet.CBPacketSpawnInfo;
-import pize.tests.voxelgame.base.net.packet.CBPacketSpawnPlayer;
-import pize.tests.voxelgame.base.text.Component;
-import pize.tests.voxelgame.base.text.TextColor;
+import pize.tests.voxelgame.main.net.packet.*;
+import pize.tests.voxelgame.main.text.Component;
+import pize.tests.voxelgame.main.text.TextColor;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.level.ServerLevel;
 import pize.tests.voxelgame.server.net.PlayerConnectionAdapter;
@@ -76,6 +73,7 @@ public class PlayerList{
         final PlayerConnectionAdapter connectionAdapter = serverPlayer.getConnectionAdapter();
         
         new CBPacketSpawnInfo(level.getConfiguration().getName(), spawnPosition).write(connection); // spawn init info
+        new CBPacketAbilities(false).write(connection); // abilities
         
         for(ServerPlayer anotherPlayer: playerMap.values())
             if(anotherPlayer != serverPlayer)
@@ -88,7 +86,7 @@ public class PlayerList{
         // Send to all player-connection-event packet
         broadcastPacketExcept(new CBPacketSpawnPlayer(serverPlayer), serverPlayer);
         
-        broadcastMessageExcept(new Component().color(TextColor.YELLOW).text("Player " + name + " joined the game"), serverPlayer);
+        serverPlayer.sendToChat(new Component().color(TextColor.YELLOW).text("Player " + name + " joined the game"));
     }
     
     
@@ -117,13 +115,14 @@ public class PlayerList{
                 player.sendPacket(packet);
     }
     
-    public void broadcastMessage(Component message){
+    
+    public void broadcastServerMessage(Component message){
         broadcastPacket(new CBPacketChatMessage(message.toFlatList()));
         System.out.println(message);
     }
     
-    public void broadcastMessageExcept(Component message, ServerPlayer except){
-        broadcastPacketExcept(new CBPacketChatMessage(message.toFlatList()), except);
+    public void broadcastPlayerMessage(ServerPlayer player, Component message){
+        broadcastPacket(new CBPacketChatMessage(player.getName(), message.toFlatList()));
         System.out.println(message);
     }
     

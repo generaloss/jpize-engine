@@ -1,5 +1,6 @@
 package pize.graphics.postprocess;
 
+import org.lwjgl.BufferUtils;
 import pize.Pize;
 import pize.app.Resizable;
 import pize.graphics.gl.Attachment;
@@ -91,7 +92,7 @@ public class FrameBufferObject extends GlObject implements Resizable{
         int width = texture.getWidth();
         int height = texture.getHeight();
 
-        ByteBuffer buffer = ByteBuffer.allocateDirect(width * height * texture.getFormat().getChannels());
+        ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * texture.getFormat().getChannels());
         glReadPixels(0, 0, width, height, texture.getFormat().GL, texture.getType().GL, buffer);
 
         unbind();

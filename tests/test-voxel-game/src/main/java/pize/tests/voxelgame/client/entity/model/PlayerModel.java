@@ -2,10 +2,14 @@ package pize.tests.voxelgame.client.entity.model;
 
 import pize.Pize;
 import pize.math.Mathc;
-import pize.math.vecmath.vector.Vec3d;
+import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
-import pize.tests.voxelgame.base.entity.Player;
-import pize.tests.voxelgame.client.control.GameCamera;
+import pize.tests.voxelgame.VoxelGame;
+import pize.tests.voxelgame.client.control.camera.GameCamera;
+import pize.tests.voxelgame.client.control.camera.PerspectiveType;
+import pize.tests.voxelgame.client.entity.AbstractClientPlayer;
+import pize.tests.voxelgame.client.level.ClientLevel;
+import pize.tests.voxelgame.client.options.Options;
 
 public class PlayerModel extends HumanoidModel{
     
@@ -15,10 +19,10 @@ public class PlayerModel extends HumanoidModel{
     
     private final ModelPart jacket, hat, leftPants, rightPants, leftSleeve, rightSleeve;
     
-    public PlayerModel(Player player){
+    public PlayerModel(AbstractClientPlayer player){
         super(player);
         
-        final float scale = 1 + w;
+        final float scale = 1 + t;
         
         hat = new ModelPart(new BoxBuilder(-4 * w, 0 * w, -4 * w,  4 * w, 8 * w, 4 * w)
             .nx(1, 1, 1, 1, 56 * t, 8  * t, 64 * t, 16 * t)
@@ -72,7 +76,7 @@ public class PlayerModel extends HumanoidModel{
             .pz(1, 1, 1, 1, 56 * t, 52 * t, 60 * t, 64 * t)
             .nz(1, 1, 1, 1, 48 * t, 52 * t, 52 * t, 64 * t)
         .end());
-        leftSleeve.setParent(leftHand);
+        leftSleeve.setParent(leftArm);
         leftSleeve.getPose().getScale().set(scale * 1.01);
         
         rightSleeve = new ModelPart(new BoxBuilder(-2 * w, -10 * w, -2 * w,  2 * w, 2 * w, 2 * w)
@@ -83,7 +87,7 @@ public class PlayerModel extends HumanoidModel{
             .pz(1, 1, 1, 1, 48 * t, 36 * t, 52 * t, 48 * t)
             .nz(1, 1, 1, 1, 40 * t, 36 * t, 44 * t, 48 * t)
         .end());
-        rightSleeve.setParent(rightHand);
+        rightSleeve.setParent(rightArm);
         rightSleeve.getPose().getScale().set(scale * 1.01);
     }
     
@@ -102,63 +106,64 @@ public class PlayerModel extends HumanoidModel{
     
     private float animationTime = 0;
     
-    private Vec3f oldPlayerPosition;
-    private Vec3f interpolatedPlayerPosition;
-    private float time;
-    
     public void animate(){
-        // Interpolation
-        if(oldPlayerPosition == null){
-            oldPlayerPosition = player.getPosition().clone();
-            interpolatedPlayerPosition = player.getPosition().clone();
-        }
-        
-        //if(player instanceof RemotePlayer){
-        //    time += Pize.getDt();
-        //
-        //    interpolatedPlayerPosition.lerp(oldPlayerPosition, player.getPosition(), time * 20);
-        //
-        //    if(!oldPlayerPosition.equals(player.getPosition())){
-        //        oldPlayerPosition.set(player.getPosition());
-        //        time = 0;
-        //    }
-        //}else{
-            interpolatedPlayerPosition.set(player.getPosition());
-        //}
         // Position & Rotation
-        torso.getPosition().set(interpolatedPlayerPosition);
-        head.getPosition().set(interpolatedPlayerPosition);
+        torso.getPosition().set(player.getLerpPosition());
+        head.getPosition().set(player.getLerpPosition());
         
-        torso.getRotation().yaw += (-player.getRotation().yaw - torso.getRotation().yaw) * Pize.getDt() * 4;
+        final VoxelGame session = ((ClientLevel) player.getLevel()).getSession();
+        final Options options = session.getOptions();
+        final GameCamera camera = session.getGame().getCamera();
+        if(options.isFirstPersonModel() && camera.getPerspective() == PerspectiveType.FIRST_PERSON){
+            final Vec3f offset = player.getRotation().getDirectionHorizontal().mul(-4 * w);
+            torso.getPosition().add(offset);
+            head.setShow(false);
+        }else
+            head.setShow(true);
         
-        head.getRotation().yaw = -player.getRotation().yaw;
-        head.getRotation().pitch = player.getRotation().pitch;
+        torso.getRotation().yaw += (-player.getLerpRotation().yaw - torso.getRotation().yaw) * Pize.getDt() * 4;
+        
+        head.getRotation().yaw = -player.getLerpRotation().yaw;
+        head.getRotation().pitch = player.getLerpRotation().pitch;
         
         // Sneaking
-        if(player.isSneaking())
-            torso.getPosition().y -= 1 * w;
+        if(player.isSneaking()){
+            leftLeg.getRotation().pitch = 45;
+            rightLeg.getRotation().pitch = 45;
+            torso.getRotation().pitch = -30;
+            torso.getPosition().add(0, -w * 2, 0);
+            head.getPosition().add(
+                3 * w * Mathc.cos(-torso.getRotation().yaw * Maths.toRad),
+                -w * 3,
+                3 * w * Mathc.sin(-torso.getRotation().yaw * Maths.toRad)
+            );
+        }else{
+            torso.getRotation().pitch = 0;
+            leftLeg.getRotation().pitch = 0;
+            rightLeg.getRotation().pitch = 0;
+        }
         
         // Animation
-        final Vec3d motion = this.player.getMotion();
+        final Vec3f motion = this.player.getMotion();
         if(motion.len2() > 10E-5){
             
             final double animationSpeed;
             if(player.isSprinting())
-                animationSpeed = 5;
-            else if(player.isSneaking())
-                animationSpeed = 1;
-            else
                 animationSpeed = 3;
+            else if(player.isSneaking())
+                animationSpeed = 0.5;
+            else
+                animationSpeed = 2;
             
             animationTime += Pize.getUpdateDt() * animationSpeed;
             
-            rightHand.getRotation().pitch = 45 * Mathc.sin(animationTime);
-            leftHand.getRotation().pitch = -45 * Mathc.sin(animationTime);
-            rightLeg.getRotation().pitch = -45 * Mathc.sin(animationTime);
-            leftLeg.getRotation().pitch = 45 * Mathc.sin(animationTime);
+            rightArm.getRotation().pitch = 60 * Mathc.sin(animationTime);
+            leftArm.getRotation().pitch = -60 * Mathc.sin(animationTime);
+            rightLeg.getRotation().pitch = -60 * Mathc.sin(animationTime);
+            leftLeg.getRotation().pitch = 60 * Mathc.sin(animationTime);
         }else{
-            rightHand.getRotation().pitch -= rightHand.getRotation().pitch / 10;
-            leftHand.getRotation().pitch  -= leftHand.getRotation().pitch  / 10;
+            rightArm.getRotation().pitch -= rightArm.getRotation().pitch / 10;
+            leftArm.getRotation().pitch  -= leftArm.getRotation().pitch  / 10;
             rightLeg.getRotation().pitch  -= rightLeg.getRotation().pitch  / 10;
             leftLeg.getRotation().pitch   -= leftLeg.getRotation().pitch   / 10;
             

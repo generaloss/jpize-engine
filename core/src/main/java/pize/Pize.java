@@ -14,7 +14,7 @@ import pize.io.monitor.Monitor;
 import pize.io.monitor.MonitorManager;
 import pize.io.mouse.Mouse;
 import pize.io.window.Window;
-import pize.math.vecmath.point.Point2f;
+import pize.math.vecmath.vector.Vec2f;
 
 public class Pize{
 
@@ -24,7 +24,7 @@ public class Pize{
         GLFWErrorCallback.createPrint(System.err).set();
         GLFW.glfwInit();
 
-        Window window = new Window(title, width, height, resizable, vsync, samples);
+        final Window window = new Window(title, width, height, resizable, vsync, samples);
         context = new Context(window, new Keyboard(window), new Mouse(window));
 
         Gl.enable(Target.BLEND, Target.CULL_FACE);
@@ -103,8 +103,8 @@ public class Pize{
         return window().getHeight() - mouse().getY();
     }
 
-    public static Point2f getCursorPos(){
-        return new Point2f(getX(), getY());
+    public static Vec2f getCursorPos(){
+        return new Vec2f(getX(), getY());
     }
 
 
@@ -117,11 +117,16 @@ public class Pize{
     }
     
     public static float getUpdateDt(){
-        return context.getUpdateDeltaTime();
+        return context.getFixedUpdateDeltaTime();
     }
     
     public static void setUpdateTPS(float updateTPS){
         context.setUpdateTPS(updateTPS);
+    }
+    
+    
+    public static void execSync(Runnable runnable){
+        context.execSync(runnable);
     }
 
 

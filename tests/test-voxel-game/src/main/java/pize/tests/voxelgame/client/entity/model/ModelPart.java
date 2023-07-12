@@ -4,18 +4,20 @@ import pize.graphics.util.Shader;
 import pize.graphics.vertex.Mesh;
 import pize.math.util.EulerAngles;
 import pize.math.vecmath.vector.Vec3f;
-import pize.tests.voxelgame.client.control.GameCamera;
+import pize.tests.voxelgame.client.control.camera.GameCamera;
 
 public class ModelPart{
     
     private ModelPart parent;
     private final Mesh mesh;
     private final Pose pose, initialPose;
+    private boolean show;
     
     public ModelPart(Mesh mesh){
         this.mesh = mesh;
         pose = new Pose();
         initialPose = new Pose();
+        show = true;
     }
     
     
@@ -26,7 +28,7 @@ public class ModelPart{
         else
             pose.updateMatrices(camera, initialPose, parent.getPose());
         
-        if(shader == null)
+        if(shader == null || !show)
             return;
         shader.setUniform(modelMatrixUniform, pose.getModelMatrix());
         mesh.render();
@@ -51,7 +53,7 @@ public class ModelPart{
     }
     
     
-    public void setInitialPose(double x, double y, double z, double yaw, double pitch, double roll){
+    public void setInitialPose(float x, float y, float z, float yaw, float pitch, float roll){
         initialPose.getPosition().set(x, y, z);
         initialPose.getRotation().set(yaw, pitch, roll);
     }
@@ -74,6 +76,14 @@ public class ModelPart{
     
     public EulerAngles getRotation(){
         return pose.getRotation();
+    }
+    
+    public boolean isShow(){
+        return show;
+    }
+    
+    public void setShow(boolean show){
+        this.show = show;
     }
     
 }

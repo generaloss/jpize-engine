@@ -1,10 +1,10 @@
 package pize.tests.voxelgame.server.command;
 
-import pize.tests.voxelgame.base.text.Component;
-import pize.tests.voxelgame.base.text.TextColor;
+import pize.tests.voxelgame.main.text.Component;
+import pize.tests.voxelgame.main.text.TextColor;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.command.argument.CommandArg;
-import pize.tests.voxelgame.server.command.commands.*;
+import pize.tests.voxelgame.server.command.vanilla.*;
 import pize.tests.voxelgame.server.command.node.CommandNodeArg;
 import pize.tests.voxelgame.server.command.node.CommandNodeLiteral;
 import pize.tests.voxelgame.server.command.source.CommandSource;
@@ -35,6 +35,7 @@ public class CommandDispatcher{
         CommandTell.registerTo(this);
         CommandKick.registerTo(this);
         CommandLevel.registerTo(this);
+        CommandTime.registerTo(this);
     }
     
     public Server getServer(){
@@ -48,13 +49,12 @@ public class CommandDispatcher{
     
     public void newCommand(CommandNodeLiteral node){
         commands.put(node.getLiteral(), node);
-        System.out.println("NEW COMMAND " + node.getLiteral());
     }
     
     public void executeCommand(String commandMessage, CommandSource source){
         // Уведомление об отправке команды игроком
         if(source instanceof CommandSourcePlayer playerSource)
-            System.out.println("[Server}: Player " + playerSource.getPlayer().getName() + " execute command: " + commandMessage);
+            System.out.println("[Server]: Player " + playerSource.getPlayer().getName() + " execute command: " + commandMessage);
         
         // Разделяем комманду на аргументы
         final String[] splitCommand = commandMessage.split(ARGUMENT_SEPARATOR);
@@ -93,7 +93,7 @@ public class CommandDispatcher{
                 if(child instanceof CommandNodeArg argumentNode){
                     final CommandArg arg = argumentNode.getArgument();
                     final int parsedChars = arg.parse(remainingChars, source, server);
-                    System.out.println("Parsed " + remainingChars + " by "+ arg.getClass().getSimpleName() + ": " + parsedChars);
+                    // [DEBUG]: System.out.println("Parsed " + remainingChars + " by "+ arg.getClass().getSimpleName() + ": " + parsedChars);
                     
                     // Если не удалось разобрать аргумент
                     if(parsedChars == 0){
@@ -119,7 +119,7 @@ public class CommandDispatcher{
                     // Находим текущий аргумент
                     final String currentArgument = nextSpace == -1 ? remainingChars : remainingChars.substring(0, nextSpace);
                     
-                    System.out.println("Check literal: " + currentArgument + " by " + child.getClass().getSimpleName() + "(" + child.getLiteral() + ")");
+                    // [DEBUG]: System.out.println("Check literal: " + currentArgument + " by " + child.getClass().getSimpleName() + "(" + child.getLiteral() + ")");
                     
                     // Проверяем
                     if(currentArgument.equalsIgnoreCase(child.getLiteral())){

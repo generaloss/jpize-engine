@@ -1,5 +1,7 @@
 package pize.net.udp;
 
+import org.lwjgl.BufferUtils;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -44,7 +46,7 @@ public class UdpChannel{
             return;
 
         try{
-            final byte[] length = ByteBuffer.allocate(4).putInt(packet.getLength()).array();
+            final byte[] length = BufferUtils.createByteBuffer(4).putInt(packet.getLength()).array();
             final DatagramPacket sizePacket = new DatagramPacket(length, 4, packet.getSocketAddress());
             socket.send(sizePacket);
 

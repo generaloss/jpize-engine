@@ -1,6 +1,6 @@
 package pize.tests.voxelgame.client.level;
 
-import pize.tests.voxelgame.base.level.LevelConfiguration;
+import pize.tests.voxelgame.main.level.LevelConfiguration;
 
 public class ClientLevelConfiguration extends LevelConfiguration{
     

@@ -25,6 +25,22 @@ public abstract class CommandArg{
         return new CommandArgWord();
     }
     
+    public static CommandArgInteger numInt(){
+        return new CommandArgInteger();
+    }
+    
+    public static CommandArgLong numLong(){
+        return new CommandArgLong();
+    }
+    
+    public static CommandArgFloat numFloat(){
+        return new CommandArgFloat();
+    }
+    
+    public static CommandArgTime time(){
+        return new CommandArgTime();
+    }
+    
     
     public CommandArgPosition asPosition(){
         return (CommandArgPosition) this;
@@ -40,6 +56,22 @@ public abstract class CommandArg{
     
     public CommandArgWord asWord(){
         return (CommandArgWord) this;
+    }
+    
+    public CommandArgInteger asNumInt(){
+        return (CommandArgInteger) this;
+    }
+    
+    public CommandArgLong asNumLong(){
+        return (CommandArgLong) this;
+    }
+    
+    public CommandArgFloat asNumFloat(){
+        return (CommandArgFloat) this;
+    }
+    
+    public CommandArgTime asTime(){
+        return (CommandArgTime) this;
     }
 
 }

@@ -178,7 +178,7 @@ public class Window implements Disposable, Resizable{
     }
 
     public void setCursor(Cursor cursor){
-        glfwSetCursor(ID, cursor != null ? cursor.getId() : 0);
+        glfwSetCursor(ID, cursor != null ? cursor.getID() : 0);
     }
 
 

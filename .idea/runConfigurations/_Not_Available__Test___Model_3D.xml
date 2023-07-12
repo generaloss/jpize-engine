@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="[Not Available] Test - Model 3D" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="pize.tests.model3d.Main" />
+    <module name="test-model-3d" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/test-model-3d/src/main/resources" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -1,7 +1,7 @@
 package pize.tests.voxelgame.server.command.source;
 
-import pize.math.vecmath.tuple.Tuple3f;
-import pize.tests.voxelgame.base.text.Component;
+import pize.math.vecmath.vector.Vec3f;
+import pize.tests.voxelgame.main.text.Component;
 import pize.tests.voxelgame.server.player.ServerPlayer;
 
 public class CommandSourcePlayer extends CommandSource{
@@ -18,7 +18,7 @@ public class CommandSourcePlayer extends CommandSource{
     
     
     @Override
-    public Tuple3f getPosition(){
+    public Vec3f getPosition(){
         return player.getPosition();
     }
     

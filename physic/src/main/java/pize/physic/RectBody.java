@@ -1,44 +1,42 @@
 package pize.physic;
 
-import pize.math.vecmath.point.Point2f;
-import pize.math.vecmath.tuple.Tuple2f;
+import pize.math.vecmath.vector.Vec2f;
 
 public class RectBody{
 
-    private final BoundingRect rect;
-    private final Point2f position;
+    private final BoundingBox2 rect;
+    private final Vec2f position;
 
-    public RectBody(BoundingRect rect){
+    public RectBody(BoundingBox2 rect){
         this.rect = rect;
-        position = new Point2f();
+        position = new Vec2f();
     }
 
     public RectBody(RectBody body){
-        rect = body.rect.clone();
-        position = body.pos().clone();
+        rect = body.rect.copy();
+        position = body.pos().copy();
     }
 
 
-    public Tuple2f getMin(){
-        return position.clone().add(rect.getMin());
+    public Vec2f getMin(){
+        return position.copy().add(rect.getMin());
     }
 
-    public Tuple2f getMax(){
-        return position.clone().add(rect.getMax());
+    public Vec2f getMax(){
+        return position.copy().add(rect.getMax());
     }
 
 
-    public BoundingRect rect(){
+    public BoundingBox2 rect(){
         return rect;
     }
 
-    public Point2f pos(){
+    public Vec2f pos(){
         return position;
     }
 
 
-    @Override
-    public RectBody clone(){
+    public RectBody copy(){
         return new RectBody(this);
     }
 

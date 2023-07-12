@@ -1,7 +1,7 @@
 package pize.tests.voxelgame.server.level;
 
 import pize.math.vecmath.vector.Vec2f;
-import pize.tests.voxelgame.base.level.LevelConfiguration;
+import pize.tests.voxelgame.main.level.LevelConfiguration;
 import pize.tests.voxelgame.server.chunk.gen.ChunkGenerator;
 
 public class ServerLevelConfiguration extends LevelConfiguration{

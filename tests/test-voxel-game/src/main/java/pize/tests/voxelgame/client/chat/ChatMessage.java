@@ -1,20 +1,27 @@
 package pize.tests.voxelgame.client.chat;
 
-import pize.tests.voxelgame.base.text.ComponentText;
+import pize.tests.voxelgame.main.chat.MessageSource;
+import pize.tests.voxelgame.main.text.ComponentText;
 import pize.util.time.Stopwatch;
 
 import java.util.List;
 
 public class ChatMessage{
     
+    private final MessageSource source;
     private final List<ComponentText> components;
     private final Stopwatch stopwatch;
     
-    public ChatMessage(List<ComponentText> components){
+    public ChatMessage(MessageSource source, List<ComponentText> components){
+        this.source = source;
         this.components = components;
         this.stopwatch = new Stopwatch().start();
     }
     
+    
+    public MessageSource getSource(){
+        return source;
+    }
     
     public List<ComponentText> getComponents(){
         return components;

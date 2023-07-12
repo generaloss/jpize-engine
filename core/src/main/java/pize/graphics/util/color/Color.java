@@ -1,6 +1,10 @@
 package pize.graphics.util.color;
 
 public class Color extends IColor{
+    
+    public static ImmutableColor WHITE = new ImmutableColor(1, 1, 1, 1F);
+    public static ImmutableColor BLACK = new ImmutableColor(0, 0, 0, 1F);
+    
 
     private float r, g, b, a;
 
@@ -170,8 +174,7 @@ public class Color extends IColor{
     }
 
 
-    @Override
-    public Color clone(){
+    public Color copy(){
         return new Color(this);
     }
 

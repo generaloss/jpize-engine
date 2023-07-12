@@ -1,6 +1,6 @@
 package pize.graphics.gl;
 
-import static org.lwjgl.opengl.GL46.*;
+import static org.lwjgl.opengl.GL44.*;
 
 public enum Type{
 
@@ -18,7 +18,7 @@ public enum Type{
     FIXED                        (GL_FIXED                       , 4),
     INT_2_10_10_10_REV           (GL_INT_2_10_10_10_REV          , 4),
     UNSIGNED_INT_2_10_10_10_REV  (GL_UNSIGNED_INT_2_10_10_10_REV , 4),
-    UNSIGNED_INT_10F_11F_11F_REV (GL_UNSIGNED_INT_10F_11F_11F_REV, 4),
+    UNSIGNED_INT_10F_11F_11F_REV (GL_UNSIGNED_INT_10F_11F_11F_REV, 4)
     ;
 
 

@@ -1,17 +1,30 @@
 package pize.tests.voxelgame.client.control;
 
 import pize.Pize;
+import pize.graphics.gl.Face;
+import pize.graphics.gl.Gl;
+import pize.graphics.gl.PolygonMode;
 import pize.io.glfw.Key;
+import pize.math.Maths;
+import pize.math.vecmath.vector.Vec3f;
 import pize.math.vecmath.vector.Vec3i;
+import pize.physic.BoundingBox3;
+import pize.physic.BoxBody;
 import pize.tests.voxelgame.VoxelGame;
-import pize.tests.voxelgame.client.block.blocks.Block;
+import pize.tests.voxelgame.client.block.BlockProperties;
+import pize.tests.voxelgame.client.block.Blocks;
+import pize.tests.voxelgame.client.block.shape.BlockCollideShape;
 import pize.tests.voxelgame.client.chat.Chat;
+import pize.tests.voxelgame.client.control.camera.GameCamera;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.level.ClientLevel;
 import pize.tests.voxelgame.client.options.KeyMapping;
 import pize.tests.voxelgame.client.options.Options;
-import pize.tests.voxelgame.base.net.packet.SBPacketPing;
-import pize.tests.voxelgame.base.net.packet.SBPacketPlayerBlockSet;
+import pize.tests.voxelgame.main.entity.Entity;
+import pize.tests.voxelgame.main.net.packet.SBPacketPing;
+import pize.tests.voxelgame.main.net.packet.SBPacketPlayerBlockSet;
+
+import java.util.Collection;
 
 public class GameController{
     
@@ -32,8 +45,8 @@ public class GameController{
     public void update(){
         final Options options = session.getOptions();
         final GameCamera camera = session.getGame().getCamera();
-        final RayCast rayCast = session.getGame().getRayCast();
-        final ClientLevel world = session.getGame().getLevel();
+        final BlockRayCast blockRayCast = session.getGame().getBlockRayCast();
+        final ClientLevel level = session.getGame().getLevel();
         
         /** Window **/
         
@@ -72,30 +85,30 @@ public class GameController{
         
         /** Game **/
         
-        // Exit
-        if(Key.ESCAPE.isDown())
-            Pize.exit();
-        
         // Player
         playerController.update();
         
-        // Place/Destroy/Take block
-        if(Pize.isTouched() && rayCast.isSelected()){
+        // Place/Destroy/Copy block
+        if(Pize.isTouched() && blockRayCast.isSelected()){
             final LocalPlayer player = session.getGame().getPlayer();
             
             if(Pize.mouse().isLeftDown()){
-                final Vec3i blockPos = rayCast.getSelectedBlockPosition();
-                world.setBlock(blockPos.x, blockPos.y, blockPos.z, Block.AIR.getDefaultState());
-                session.getGame().sendPacket(new SBPacketPlayerBlockSet(blockPos.x, blockPos.y, blockPos.z, Block.AIR.getDefaultState()));
+                final Vec3i blockPos = blockRayCast.getSelectedBlockPosition();
+                level.setBlock(blockPos.x, blockPos.y, blockPos.z, Blocks.AIR.getDefaultState());
+                session.getGame().sendPacket(new SBPacketPlayerBlockSet(blockPos.x, blockPos.y, blockPos.z, Blocks.AIR.getDefaultState()));
                 
+                for(int i = 0; i < 100; i++){
+                    session.getGame().spawnParticle(session.BREAK_PARTICLE, new Vec3f(
+                        blockPos.x + Maths.random(1F),
+                        blockPos.y + Maths.random(1F),
+                        blockPos.z + Maths.random(1F)
+                    ));
+                }
             }else if(Pize.mouse().isRightDown()){
-                final Vec3i blockPos = rayCast.getImaginaryBlockPosition();
-                world.setBlock(blockPos.x, blockPos.y, blockPos.z, player.holdBlock);
-                session.getGame().sendPacket(new SBPacketPlayerBlockSet(blockPos.x, blockPos.y, blockPos.z, player.holdBlock));
-                
+                placeBlock();
             }else if(Pize.mouse().isMiddleDown()){
-                final Vec3i blockPos = rayCast.getSelectedBlockPosition();
-                player.holdBlock = world.getBlock(blockPos.x, blockPos.y, blockPos.z);
+                final Vec3i blockPos = blockRayCast.getSelectedBlockPosition();
+                player.holdBlock = level.getBlockProps(blockPos.x, blockPos.y, blockPos.z);
             }
         }
         
@@ -105,14 +118,14 @@ public class GameController{
         
         // Chunk border
         if(Key.F3.isPressed() && Key.G.isDown()){
-            session.getRenderer().getWorldRenderer().toggleShowChunkBorder();
+            session.getRenderer().getWorldRenderer().getChunkBorderRenderer().toggleShow();
             f3Plus = true;
         }
         
-        // Info
+        // Info Panel
         if(Key.F3.isReleased()){
             if(!f3Plus)
-                options.setShowFPS(!options.isShowFPS());
+                session.getRenderer().getInfoRenderer().toggleOpen();
             
             f3Plus = false;
         }
@@ -128,6 +141,48 @@ public class GameController{
         // Ping server
         if(Key.P.isDown())
             session.getGame().sendPacket(new SBPacketPing(System.currentTimeMillis()));
+        
+        // Polygon Mode
+        if(Key.F9.isDown())
+            Gl.polygonMode(Face.FRONT_AND_BACK, PolygonMode.LINE);
+        if(Key.F8.isDown())
+            Gl.polygonMode(Face.FRONT_AND_BACK, PolygonMode.FILL);
+        
+        // Exit
+        if(Key.ESCAPE.isDown())
+            Pize.exit();
+    }
+    
+    private void placeBlock(){
+        final BlockRayCast blockRayCast = session.getGame().getBlockRayCast();
+        final ClientLevel level = session.getGame().getLevel();
+        final Vec3i blockPos = blockRayCast.getImaginaryBlockPosition();
+        final LocalPlayer player = session.getGame().getPlayer();
+        
+        final BlockProperties block = player.holdBlock;
+        
+        final BlockCollideShape collideShape = block.getCollideShape();
+        if(collideShape != null){
+            
+            final BoundingBox3[] blockBoxes = collideShape.getBoxes();
+            final BoxBody blockBox = new BoxBody(new Vec3f(blockPos));
+            final Collection<Entity> entities = session.getGame().getLevel().getEntities();
+            
+            // Check intersect with player & entity
+            for(BoundingBox3 box: blockBoxes){
+                blockBox.getBoundingBox().resize(box);
+                
+                if(player.intersects(blockBox))
+                    return;
+                
+                for(Entity entity: entities)
+                    if(entity.intersects(blockBox))
+                        return;
+            }
+        }
+        
+        level.setBlock(blockPos.x, blockPos.y, blockPos.z, block.getDefaultState());
+        session.getGame().sendPacket(new SBPacketPlayerBlockSet(blockPos.x, blockPos.y, blockPos.z, block.getDefaultState()));
     }
     
     

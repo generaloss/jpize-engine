@@ -31,7 +31,7 @@ public class ScreenQuad{
         instance.mesh.render();
     }
 
-    private static void dispose(){
+    private static void dispose(){ // Invoked from Context
         if(instance != null)
             instance.mesh.dispose();
     }

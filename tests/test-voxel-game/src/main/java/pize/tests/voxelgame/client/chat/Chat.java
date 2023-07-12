@@ -1,9 +1,11 @@
 package pize.tests.voxelgame.client.chat;
 
-import pize.tests.voxelgame.base.net.packet.SBPacketChatMessage;
-import pize.tests.voxelgame.base.text.Component;
-import pize.tests.voxelgame.base.text.ComponentText;
 import pize.tests.voxelgame.client.ClientGame;
+import pize.tests.voxelgame.main.chat.MessageSource;
+import pize.tests.voxelgame.main.chat.MessageSourceOther;
+import pize.tests.voxelgame.main.net.packet.CBPacketChatMessage;
+import pize.tests.voxelgame.main.net.packet.SBPacketChatMessage;
+import pize.tests.voxelgame.main.text.Component;
 import pize.util.io.TextProcessor;
 
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class Chat{
         
         textProcessor.setActive(false);
         
-        putMessage(new Component().text("Enter /help for command list"));
+        putMessage(new MessageSourceOther(), new Component().text("Enter /help for command list"));
     }
     
     
@@ -36,12 +38,12 @@ public class Chat{
         return messageList;
     }
     
-    public void putMessage(List<ComponentText> components){
-        messageList.add(new ChatMessage(components));
+    public void putMessage(CBPacketChatMessage messagePacket){
+        messageList.add(new ChatMessage(messagePacket.source, messagePacket.components));
     }
     
-    public void putMessage(Component component){
-        this.putMessage(component.toFlatList());
+    public void putMessage(MessageSource source, Component component){
+        messageList.add(new ChatMessage(source, component.toFlatList()));
     }
     
     

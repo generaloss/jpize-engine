@@ -1,5 +1,6 @@
 package pize.graphics.gl;
 
+import pize.graphics.util.color.Color;
 import pize.graphics.util.color.IColor;
 
 import java.nio.FloatBuffer;
@@ -167,6 +168,24 @@ public class Gl{
     
     public static void scissorArray(int first, IntBuffer buffer){
         glScissorArrayv(first, buffer);
+    }
+    
+    
+    public static void hint(Hint hint, Mode mode){
+        glHint(hint.GL, mode.GL);
+    }
+    
+    
+    public static void fog(Fog fog, int i){
+        glFogi(fog.GL, i);
+    }
+    
+    public static void fog(Fog fog, float v){
+        glFogf(fog.GL, v);
+    }
+    
+    public static void fog(Color color){
+        glFogfv(Fog.COLOR.GL, color.toArray());
     }
 
 }

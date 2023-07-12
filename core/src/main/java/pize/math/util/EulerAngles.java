@@ -1,21 +1,22 @@
 package pize.math.util;
 
+import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.vector.Vec3d;
 import pize.math.vecmath.vector.Vec3f;
 
-public class EulerAngles implements Cloneable{
+public class EulerAngles{
 
-    public double pitch, yaw, roll;
+    public float pitch, yaw, roll;
     
     public EulerAngles(){ }
 
-    public EulerAngles(double yaw, double pitch){
+    public EulerAngles(float yaw, float pitch){
         set(yaw, pitch);
     }
 
-    public EulerAngles(double yaw, double pitch, double roll){
+    public EulerAngles(float yaw, float pitch, float roll){
         set(yaw, pitch, roll);
     }
     
@@ -25,27 +26,35 @@ public class EulerAngles implements Cloneable{
     
 
     public void constrain(){
-        if(pitch > 90)
-            pitch = 90;
-        else if(pitch < -90)
-            pitch = -90;
-
         if(yaw >= 360)
             yaw -= 360;
         else if(yaw <= -360)
             yaw += 360;
     }
+    
+    public void limitPitch90(){
+        if(pitch > 90)
+            pitch = 90;
+        else if(pitch < -90)
+            pitch = -90;
+    }
 
-    public Vec3f direction(){
-        double yaw = Math.toRadians(this.yaw);
-        double pitch = Math.toRadians(this.pitch);
-
-        return new Vec3f(Math.cos(pitch) * Math.cos(yaw), Math.sin(pitch), Math.cos(pitch) * Math.sin(yaw));
+    public Vec3f getDirection(){
+        final float cosPitch = Maths.cosDeg(pitch);
+        return new Vec3f(
+            cosPitch * Maths.cosDeg(yaw),
+            Maths.sinDeg(pitch),
+            cosPitch * Maths.sinDeg(yaw)
+        );
+    }
+    
+    public Vec3f getDirectionHorizontal(){
+        return new Vec3f(Maths.cosDeg(yaw), 0, Maths.sinDeg(yaw));
     }
 
     public EulerAngles setDirection(double x, double y, double z){
-        yaw = -Math.atan2(x, z) * Maths.toDeg + 90;
-        pitch = Math.atan2(y, Math.sqrt(x * x + z * z)) * Maths.toDeg;
+        yaw = -Mathc.atan2(x, z) * Maths.toDeg + 90;
+        pitch = Mathc.atan2(y, Math.sqrt(x * x + z * z)) * Maths.toDeg;
         
         return this;
     }
@@ -76,7 +85,7 @@ public class EulerAngles implements Cloneable{
         return this;
     }
 
-    public EulerAngles set(double yaw, double pitch, double roll){
+    public EulerAngles set(float yaw, float pitch, float roll){
         this.yaw = yaw;
         this.pitch = pitch;
         this.roll = roll;
@@ -84,7 +93,7 @@ public class EulerAngles implements Cloneable{
         return this;
     }
 
-    public EulerAngles set(double yaw, double pitch){
+    public EulerAngles set(float yaw, float pitch){
         this.yaw = yaw;
         this.pitch = pitch;
         
@@ -92,7 +101,7 @@ public class EulerAngles implements Cloneable{
     }
     
     
-    public EulerAngles add(double yaw, double pitch, double roll){
+    public EulerAngles add(float yaw, float pitch, float roll){
         this.yaw += yaw;
         this.pitch += pitch;
         this.roll += roll;
@@ -100,7 +109,7 @@ public class EulerAngles implements Cloneable{
         return this;
     }
     
-    public EulerAngles add(double yaw, double pitch){
+    public EulerAngles add(float yaw, float pitch){
         this.yaw += yaw;
         this.pitch += pitch;
         
@@ -108,8 +117,16 @@ public class EulerAngles implements Cloneable{
     }
     
     
-    @Override
-    public EulerAngles clone(){
+    public EulerAngles lerp(EulerAngles start, EulerAngles end, float t){
+        yaw = Maths.lerp(start.yaw, end.yaw, t);
+        pitch = Maths.lerp(start.pitch, end.pitch, t);
+        roll = Maths.lerp(start.roll, end.roll, t);
+        
+        return this;
+    }
+    
+    
+    public EulerAngles copy(){
         return new EulerAngles(this);
     }
 

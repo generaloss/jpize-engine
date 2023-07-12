@@ -2,23 +2,27 @@ package pize.tests.voxelgame.client.renderer;
 
 import pize.app.AppAdapter;
 import pize.tests.voxelgame.VoxelGame;
-import pize.tests.voxelgame.client.chat.ChatRenderer;
-import pize.tests.voxelgame.client.level.render.LevelRenderer;
+import pize.tests.voxelgame.client.renderer.chat.ChatRenderer;
+import pize.tests.voxelgame.client.renderer.infopanel.InfoPanelRenderer;
+import pize.tests.voxelgame.client.renderer.level.LevelRenderer;
+import pize.tests.voxelgame.client.renderer.text.TextComponentBatch;
 
 public class ClientGameRenderer extends AppAdapter{
     
     private final VoxelGame session;
     
+    private final TextComponentBatch textComponentBatch;
     private final LevelRenderer levelRenderer;
-    private final InfoRenderer infoRenderer;
+    private final InfoPanelRenderer infoPanelRenderer;
     private final ChatRenderer chatRenderer;
     
     public ClientGameRenderer(VoxelGame session){
         this.session = session;
         
-        levelRenderer = new LevelRenderer(session);
-        infoRenderer = new InfoRenderer(session);
-        chatRenderer = new ChatRenderer(session);
+        textComponentBatch = new TextComponentBatch();
+        levelRenderer = new LevelRenderer(this);
+        infoPanelRenderer = new InfoPanelRenderer(this);
+        chatRenderer = new ChatRenderer(this);
     }
     
     public VoxelGame getSession(){
@@ -28,8 +32,9 @@ public class ClientGameRenderer extends AppAdapter{
     
     @Override
     public void render(){
+        textComponentBatch.updateScale();
         levelRenderer.render();
-        infoRenderer.render();
+        infoPanelRenderer.render();
         chatRenderer.render();
     }
     
@@ -40,18 +45,23 @@ public class ClientGameRenderer extends AppAdapter{
     
     @Override
     public void dispose(){
+        textComponentBatch.dispose();
         levelRenderer.dispose();
-        infoRenderer.dispose();
+        infoPanelRenderer.dispose();
         chatRenderer.dispose();
     }
     
+    
+    public final TextComponentBatch getTextComponentBatch(){
+        return textComponentBatch;
+    }
     
     public LevelRenderer getWorldRenderer(){
         return levelRenderer;
     }
     
-    public InfoRenderer getInfoRenderer(){
-        return infoRenderer;
+    public InfoPanelRenderer getInfoRenderer(){
+        return infoPanelRenderer;
     }
     
     public ChatRenderer getChatRenderer(){

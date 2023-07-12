@@ -8,11 +8,11 @@ import pize.graphics.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
 import pize.io.glfw.Key;
 import pize.math.Maths;
-import pize.math.vecmath.point.Point2f;
+import pize.math.vecmath.vector.Vec2f;
 import pize.tests.terraria.entity.Player;
 import pize.tests.terraria.graphics.GameRenderer;
-import pize.tests.terraria.world.World;
 import pize.tests.terraria.map.MapTile;
+import pize.tests.terraria.world.World;
 
 import static pize.tests.terraria.tile.TileType.AIR;
 import static pize.tests.terraria.tile.TileType.DIRT;
@@ -78,9 +78,9 @@ public class Main extends AppAdapter{
                 : 1
         );
 
-        gameRenderer.getCamera().getPos().set( player.pos().clone().add(player.rect().getCenter()) );
+        gameRenderer.getCamera().getPos().set( player.pos().copy().add(player.rect().getCenter()) );
 
-        Point2f touch = new Point2f(Pize.getX(), Pize.getY())
+        Vec2f touch = new Vec2f(Pize.getX(), Pize.getY())
             .sub(gameRenderer.getCamera().getWidth() / 2F, gameRenderer.getCamera().getHeight() / 2F)
             .div(gameRenderer.getRenderInfo().getCellSize() * gameRenderer.getRenderInfo().getScale())
             .add(gameRenderer.getCamera().getPos());

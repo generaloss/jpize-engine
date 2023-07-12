@@ -1,12 +1,12 @@
 package pize.graphics.texture;
 
+import org.lwjgl.BufferUtils;
 import pize.app.Resizable;
 import pize.graphics.gl.SizedFormat;
 import pize.graphics.util.color.Color;
 import pize.graphics.util.color.IColor;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec2d;
-import pize.util.Utils;
 
 import java.nio.ByteBuffer;
 
@@ -27,7 +27,7 @@ public class Pixmap extends Sizable implements Resizable{
 
     public Pixmap(int width, int height){
         super(width, height);
-        buffer = ByteBuffer.allocateDirect(width * height * 4);
+        buffer = BufferUtils.createByteBuffer(width * height * 4);
     }
     
 
@@ -38,8 +38,9 @@ public class Pixmap extends Sizable implements Resizable{
 
         if(!pixmap.match(this)){
             setSize(pixmap);
-            Utils.free(buffer);
-            buffer = ByteBuffer.allocateDirect(width * height * 4);
+            buffer.clear();
+            // Utils.free(buffer);
+            buffer = BufferUtils.createByteBuffer(width * height * 4);
         }
         for(int i = 0; i < buffer.limit(); i++)
             buffer.put(i, pixmap.buffer.get(i));
@@ -50,7 +51,7 @@ public class Pixmap extends Sizable implements Resizable{
         if(outOfBounds(x, y))
             return;
 
-        Color blendColor = blend(
+        final Color blendColor = blend(
             getPixelColor(x, y),
             new Color(color >> 24 & 0xFF, color >> 16 & 0xFF, color >> 8 & 0xFF, color & 0xFF)
         );
@@ -64,11 +65,11 @@ public class Pixmap extends Sizable implements Resizable{
         if(outOfBounds(x, y))
             return;
 
-        Color blendColor = blend(getPixelColor(x, y), color);
-        buffer.put(getIndex(x, y, 0), (byte) ((int) (color.r() * 255) & 0xFF));
-        buffer.put(getIndex(x, y, 1), (byte) ((int) (color.g() * 255) & 0xFF));
-        buffer.put(getIndex(x, y, 2), (byte) ((int) (color.b() * 255) & 0xFF));
-        buffer.put(getIndex(x, y, 3), (byte) ((int) (color.a() * 255) & 0xFF));
+        final Color blendColor = blend(getPixelColor(x, y), color);
+        buffer.put(getIndex(x, y, 0), (byte) ((int) (blendColor.r() * 255) & 0xFF));
+        buffer.put(getIndex(x, y, 1), (byte) ((int) (blendColor.g() * 255) & 0xFF));
+        buffer.put(getIndex(x, y, 2), (byte) ((int) (blendColor.b() * 255) & 0xFF));
+        buffer.put(getIndex(x, y, 3), (byte) ((int) (blendColor.a() * 255) & 0xFF));
     }
 
     public void setPixel(int x, int y, double r, double g, double b, double a){
@@ -382,8 +383,9 @@ public class Pixmap extends Sizable implements Resizable{
             return;
 
         setSize(width, height);
-        Utils.free(buffer);
-        buffer = ByteBuffer.allocateDirect(width * height * 4);
+        buffer.clear();
+        // Utils.free(buffer);
+        buffer = BufferUtils.createByteBuffer(width * height * 4);
     }
     
     // MIPMAPPED
@@ -428,7 +430,7 @@ public class Pixmap extends Sizable implements Resizable{
     }
 
 
-    public Pixmap clone(){
+    public Pixmap copy(){
         return new Pixmap(this);
     }
 

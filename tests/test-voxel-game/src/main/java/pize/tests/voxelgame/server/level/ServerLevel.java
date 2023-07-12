@@ -2,14 +2,14 @@ package pize.tests.voxelgame.server.level;
 
 import pize.math.vecmath.vector.Vec2f;
 import pize.math.vecmath.vector.Vec3f;
-import pize.tests.voxelgame.base.chunk.storage.HeightmapType;
-import pize.tests.voxelgame.base.level.Level;
-import pize.tests.voxelgame.client.block.blocks.Block;
+import pize.tests.voxelgame.main.chunk.storage.HeightmapType;
+import pize.tests.voxelgame.main.level.Level;
+import pize.tests.voxelgame.client.block.Blocks;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.chunk.ServerChunk;
 
-import static pize.tests.voxelgame.base.chunk.ChunkUtils.getChunkPos;
-import static pize.tests.voxelgame.base.chunk.ChunkUtils.getLocalCoord;
+import static pize.tests.voxelgame.main.chunk.ChunkUtils.getChunkPos;
+import static pize.tests.voxelgame.main.chunk.ChunkUtils.getLocalCoord;
 
 public class ServerLevel extends Level{
 
@@ -34,7 +34,7 @@ public class ServerLevel extends Level{
         if(targetChunk != null)
             return targetChunk.getBlock(getLocalCoord(x), y, getLocalCoord(z));
 
-        return Block.AIR.getDefaultState();
+        return Blocks.VOID_AIR.getDefaultState();
     }
     
     @Override
@@ -60,7 +60,7 @@ public class ServerLevel extends Level{
         if(targetChunk != null)
             return targetChunk.getLight(getLocalCoord(x), y, getLocalCoord(z));
         
-        return 0;
+        return 15;
     }
     
     @Override

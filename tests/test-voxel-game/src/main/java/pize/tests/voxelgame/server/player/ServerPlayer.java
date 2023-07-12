@@ -1,16 +1,16 @@
 package pize.tests.voxelgame.server.player;
 
 import pize.math.util.EulerAngles;
-import pize.math.vecmath.tuple.Tuple3f;
+import pize.math.vecmath.vector.Vec3f;
 import pize.net.tcp.TcpConnection;
 import pize.net.tcp.packet.IPacket;
-import pize.tests.voxelgame.base.entity.Entity;
-import pize.tests.voxelgame.base.entity.Player;
-import pize.tests.voxelgame.base.level.Level;
-import pize.tests.voxelgame.base.net.packet.CBPacketAbilities;
-import pize.tests.voxelgame.base.net.packet.CBPacketChatMessage;
-import pize.tests.voxelgame.base.net.packet.CBPacketTeleportPlayer;
-import pize.tests.voxelgame.base.text.Component;
+import pize.tests.voxelgame.main.entity.Entity;
+import pize.tests.voxelgame.main.entity.Player;
+import pize.tests.voxelgame.main.level.Level;
+import pize.tests.voxelgame.main.net.packet.CBPacketAbilities;
+import pize.tests.voxelgame.main.net.packet.CBPacketChatMessage;
+import pize.tests.voxelgame.main.net.packet.CBPacketTeleportPlayer;
+import pize.tests.voxelgame.main.text.Component;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.level.ServerLevel;
 import pize.tests.voxelgame.server.net.PlayerConnectionAdapter;
@@ -34,7 +34,7 @@ public class ServerPlayer extends Player{
     }
     
     
-    public void teleport(Level level, Tuple3f position, EulerAngles rotation){
+    public void teleport(Level level, Vec3f position, EulerAngles rotation){
         sendPacket(new CBPacketTeleportPlayer(level.getConfiguration().getName(), position, rotation));
         
         final Level oldLevel = getLevel();
@@ -51,15 +51,15 @@ public class ServerPlayer extends Player{
         teleport(entity.getLevel(), entity.getPosition(), entity.getRotation());
     }
     
-    public void teleport(Tuple3f position, EulerAngles rotation){
+    public void teleport(Vec3f position, EulerAngles rotation){
         teleport(getLevel(), position, rotation);
     }
     
-    public void teleport(Level level, Tuple3f position){
+    public void teleport(Level level, Vec3f position){
         teleport(level, position, getRotation());
     }
     
-    public void teleport(Tuple3f position){
+    public void teleport(Vec3f position){
         teleport(getLevel(), position, getRotation());
     }
     
@@ -69,6 +69,10 @@ public class ServerPlayer extends Player{
         super.setFlyEnabled(flyEnabled);
     }
     
+    
+    public void sendToChat(Component message){
+        server.getPlayerList().broadcastPlayerMessage(this, message);
+    }
     
     public void sendMessage(Component message){
         sendPacket(new CBPacketChatMessage(message.toFlatList()));

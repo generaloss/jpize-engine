@@ -47,8 +47,7 @@ public class ImmutableColor extends IColor{
     }
 
 
-    @Override
-    public ImmutableColor clone(){
+    public ImmutableColor copy(){
         return new ImmutableColor(this);
     }
 

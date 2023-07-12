@@ -9,14 +9,14 @@ public class VertexAttr{
     private final boolean normalize;
 
 
-    public VertexAttr(int count, Type type){
-        this(count, type, false);
-    }
-
     public VertexAttr(int count, Type type, boolean normalize){
         this.type = type;
         this.count = count;
         this.normalize = normalize;
+    }
+    
+    public VertexAttr(int count, Type type){
+        this(count, type, false);
     }
 
 

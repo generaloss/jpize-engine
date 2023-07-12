@@ -25,7 +25,7 @@ public class Framebuffer2D implements Resizable, Disposable{ // Для самы�
         fbo.unbind();
     }
     
-    public Texture getTexture(){
+    public Texture getFrameTexture(){
         return fbo.getTexture();
     }
     

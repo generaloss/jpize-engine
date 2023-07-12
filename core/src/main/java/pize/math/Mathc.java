@@ -1,8 +1,5 @@
 package pize.math;
 
-/**
- * Math Casts
- **/
 public class Mathc{
 
     public static float sin(double a){

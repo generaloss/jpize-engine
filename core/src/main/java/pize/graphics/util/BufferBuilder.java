@@ -1,0 +1,121 @@
+package pize.graphics.util;
+
+import pize.graphics.gl.BufferUsage;
+import pize.graphics.util.color.Color;
+import pize.graphics.vertex.VertexBuffer;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BufferBuilder{
+    
+    private final List<Float> vertices;
+    
+    public BufferBuilder(){
+        vertices = new ArrayList<>();
+    }
+    
+    
+    public BufferBuilder array(float... array){
+        for(float value: array)
+            vertices.add(value);
+        
+        return this;
+    }
+    
+    public BufferBuilder array(double... array){
+        for(double value: array)
+            vertices.add((float) value);
+        
+        return this;
+    }
+    
+    public BufferBuilder vertex(double x, double y){
+        vertices.add((float) x);
+        vertices.add((float) y);
+        
+        return this;
+    }
+    
+    public BufferBuilder vertex(double x, double y, double z){
+        vertices.add((float) x);
+        vertices.add((float) y);
+        vertices.add((float) z);
+        
+        return this;
+    }
+    
+    public BufferBuilder color(double r, double g, double b){
+        vertices.add((float) r);
+        vertices.add((float) g);
+        vertices.add((float) b);
+        vertices.add(1F);
+        
+        return this;
+    }
+    
+    public BufferBuilder color(double r, double g, double b, double a){
+        vertices.add((float) r);
+        vertices.add((float) g);
+        vertices.add((float) b);
+        vertices.add((float) a);
+        
+        return this;
+    }
+    
+    public BufferBuilder color(Color color){
+        vertices.add(color.r());
+        vertices.add(color.g());
+        vertices.add(color.b());
+        vertices.add(color.a());
+        
+        return this;
+    }
+    
+    public BufferBuilder color(){
+        return color(1, 1, 1);
+    }
+    
+    
+    public BufferBuilder uv(float u, float v){
+        vertices.add(u);
+        vertices.add(v);
+        
+        return this;
+    }
+    
+    public BufferBuilder uv(double u, double v){
+        vertices.add((float) u);
+        vertices.add((float) v);
+        
+        return this;
+    }
+    
+    
+    public BufferBuilder quad(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double x4, double y4, double z4, double u1, double v1, double u2, double v2){
+        vertex(x1, y1, z1).color().uv(u1, v1); // 1
+        vertex(x2, y2, z2).color().uv(u1, v2); // 2
+        vertex(x3, y3, z3).color().uv(u2, v2); // 3
+        vertex(x3, y3, z3).color().uv(u2, v2); // 3
+        vertex(x4, y4, z4).color().uv(u2, v1); // 4
+        vertex(x1, y1, z1).color().uv(u1, v1); // 1
+        
+        return this;
+    }
+    
+    
+    public void end(VertexBuffer buffer){
+        final float[] array = new float[vertices.size()];
+        for(int i = 0; i < array.length; i++)
+            array[i] = vertices.get(i);
+        
+        vertices.clear();
+        buffer.setData(array, BufferUsage.DYNAMIC_DRAW);
+    }
+    
+    public void end(List<Float> list){
+        list.addAll(vertices);
+        vertices.clear();
+    }
+    
+}

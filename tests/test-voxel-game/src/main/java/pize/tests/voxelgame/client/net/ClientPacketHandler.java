@@ -6,12 +6,13 @@ import pize.net.tcp.TcpListener;
 import pize.net.tcp.packet.PacketHandler;
 import pize.net.tcp.packet.PacketInfo;
 import pize.net.tcp.packet.Packets;
-import pize.tests.voxelgame.base.text.Component;
 import pize.tests.voxelgame.client.ClientGame;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.entity.RemotePlayer;
-import pize.tests.voxelgame.base.entity.Entity;
-import pize.tests.voxelgame.base.net.packet.*;
+import pize.tests.voxelgame.main.chat.MessageSourceServer;
+import pize.tests.voxelgame.main.entity.Entity;
+import pize.tests.voxelgame.main.net.packet.*;
+import pize.tests.voxelgame.main.text.Component;
 
 public class ClientPacketHandler implements TcpListener, PacketHandler{
     
@@ -58,6 +59,22 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
             }
             
             // Game
+            case CBPacketSpawnInfo.PACKET_ID ->{
+                final CBPacketSpawnInfo packet = packetInfo.readPacket(new CBPacketSpawnInfo());
+                
+                game.createClientLevel(packet.levelName);
+                game.spawnPlayer(packet.position);
+                game.getLevel().getChunkManager().startLoadChunks();
+                
+                game.sendPacket(new SBPacketRenderDistance(game.getSession().getOptions().getRenderDistance()));
+            }
+            
+            case CBPacketTime.PACKET_ID -> {
+                final CBPacketTime packet = packetInfo.readPacket(new CBPacketTime());
+                
+                getGame().getTime().setTicks(packet.gameTimeTicks);
+            }
+            
             case CBPacketAbilities.PACKET_ID -> {
                 final CBPacketAbilities packet = packetInfo.readPacket(new CBPacketAbilities());
                 
@@ -84,7 +101,7 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
             
             case CBPacketChatMessage.PACKET_ID ->{
                 final CBPacketChatMessage packet = packetInfo.readPacket(new CBPacketChatMessage());
-                game.getChat().putMessage(packet.components);
+                game.getChat().putMessage(packet);
             }
             
             case CBPacketPlayerSneaking.PACKET_ID ->{
@@ -136,14 +153,6 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
                 
                 game.getLevel().addEntity(remotePlayer);
             }
-
-            case CBPacketSpawnInfo.PACKET_ID ->{
-                final CBPacketSpawnInfo packet = packetInfo.readPacket(new CBPacketSpawnInfo());
-                
-                game.createClientLevel(packet.levelName);
-                game.spawnPlayer(packet.position);
-                game.getLevel().getChunkManager().startLoadChunks();
-            }
             
             case CBPacketBlockUpdate.PACKET_ID ->{
                 final CBPacketBlockUpdate packet = packetInfo.readPacket(new CBPacketBlockUpdate());
@@ -160,7 +169,7 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
                 final CBPacketPong packet = packetInfo.readPacket(new CBPacketPong());
                 
                 final String message = "Ping - " + (System.nanoTime() - packet.timeMillis) / 1000000F + " ms";
-                game.getChat().putMessage(new Component().text(message));
+                game.getChat().putMessage(new MessageSourceServer(), new Component().text(message));
                 System.out.println("[Client]: " + message);
             }
             

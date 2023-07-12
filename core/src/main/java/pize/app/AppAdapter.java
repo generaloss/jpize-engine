@@ -8,6 +8,8 @@ public abstract class AppAdapter implements Resizable, Disposable{
     
     public void update(){ }
     
+    public void fixedUpdate(){ }
+    
     @Override
     public void resize(int width, int height){ }
     

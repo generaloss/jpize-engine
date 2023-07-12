@@ -1,14 +1,13 @@
 package pize.tests.minecraft.game.resources;
 
+import pize.app.Disposable;
 import pize.audio.sound.AudioBuffer;
 import pize.audio.sound.Sound;
-import pize.app.Disposable;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontCharset;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
-import pize.graphics.texture.atlas.TextureAtlas;
 import pize.tests.minecraft.utils.log.Logger;
 
 import java.awt.*;
@@ -21,12 +20,9 @@ public class ResourceManager implements Disposable{
     private final Map<String, Resource<?>> resources;
     private final TextureRegion unknownTexture;
 
-    private final TextureAtlas blockAtlas;
 
     public ResourceManager(){
         resources = new HashMap<>();
-
-        blockAtlas = new TextureAtlas();
 
         Pixmap unknownPixmap = new Pixmap(2, 2);
         unknownPixmap.clear(1, 0, 1, 1F);
@@ -110,12 +106,7 @@ public class ResourceManager implements Disposable{
             else
                 resource.loadResource();
     }
-
-
-    public TextureAtlas getBlockAtlas(){
-        return blockAtlas;
-    }
-
+    
 
     @Override
     public void dispose(){

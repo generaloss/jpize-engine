@@ -3,10 +3,10 @@ package pize.tests.voxelgame.client.options;
 import pize.Pize;
 import pize.files.Resource;
 import pize.io.glfw.Key;
-import pize.tests.voxelgame.client.control.GameCamera;
-import pize.tests.voxelgame.base.net.PlayerProfile;
-import pize.util.io.FastReader;
 import pize.tests.voxelgame.VoxelGame;
+import pize.tests.voxelgame.main.net.PlayerProfile;
+import pize.tests.voxelgame.client.control.camera.GameCamera;
+import pize.util.io.FastReader;
 
 import java.io.PrintStream;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public class Options{
     public static int UNLIMITED_FPS_SETTING_THRESHOLD = 256;
 
 
-    private final VoxelGame sessionOF;
+    private final VoxelGame session;
     private final Resource resOptions;
     
     private String host = "0.0.0.0:22854";
@@ -30,19 +30,15 @@ public class Options{
     private boolean showFps = false;
     private float mouseSensitivity = 1F;
     private float brightness = 0.5F;
+    private boolean firstPersonModel = false;
     
 
-    public Options(VoxelGame sessionOF, String gameDirPath){
-        this.sessionOF = sessionOF;
+    public Options(VoxelGame session, String gameDirPath){
+        this.session = session;
 
-        keyMappings = new HashMap<>();
-
-        resOptions = new Resource(gameDirPath + "options.txt", true);
-        resOptions.create();
-    }
-    
-    public VoxelGame getSessionOf(){
-        return sessionOF;
+        this.keyMappings = new HashMap<>();
+        this.resOptions = new Resource(gameDirPath + "options.txt", true);
+        this.resOptions.create();
     }
     
 
@@ -74,6 +70,7 @@ public class Options{
                     case "player" -> {
                         switch(key){
                             case "name" -> setPlayerName(value);
+                            case "firstPersonModel" -> setFirstPersonModel(Boolean.parseBoolean(value));
                         }
                     }
                     case "graphics" -> {
@@ -105,6 +102,7 @@ public class Options{
         
         out.println("remote.host : " + host);
         out.println("player.name : " + playerName);
+        out.println("player.firstPersonModel : " + firstPersonModel);
         out.println("graphics.fov : " + fov);
         out.println("graphics.renderDistance : " + renderDistance);
         out.println("graphics.maxFramerate : " + maxFramerate);
@@ -155,7 +153,7 @@ public class Options{
     public void setFOV(int fov){
         this.fov = fov;
         
-        final GameCamera camera = sessionOF.getGame().getCamera();
+        final GameCamera camera = session.getGame().getCamera();
         if(camera != null)
             camera.setFov(fov);
     }
@@ -168,7 +166,7 @@ public class Options{
     public void setRenderDistance(int renderDistance){
         this.renderDistance = renderDistance;
         
-        final GameCamera camera = sessionOF.getGame().getCamera();
+        final GameCamera camera = session.getGame().getCamera();
         if(camera != null)
             camera.setDistance(renderDistance);
     }
@@ -180,9 +178,9 @@ public class Options{
 
     public void setMaxFramerate(int maxFramerate){
         this.maxFramerate = maxFramerate;
-        sessionOF.getFpsSync().setFps(maxFramerate);
+        session.getFpsSync().setFps(maxFramerate);
 
-        sessionOF.getFpsSync().enable(maxFramerate > 0 && maxFramerate < UNLIMITED_FPS_SETTING_THRESHOLD);
+        session.getFpsSync().enable(maxFramerate > 0 && maxFramerate < UNLIMITED_FPS_SETTING_THRESHOLD);
         Pize.window().setVsync(maxFramerate == 0);
     }
 
@@ -222,7 +220,16 @@ public class Options{
 
     public void setMouseSensitivity(float mouseSensitivity){
         this.mouseSensitivity = mouseSensitivity;
-        sessionOF.getController().getPlayerController().getRotationController().setSensitivity(mouseSensitivity);
+        session.getController().getPlayerController().getRotationController().setSensitivity(mouseSensitivity);
+    }
+    
+    
+    public boolean isFirstPersonModel(){
+        return firstPersonModel;
+    }
+    
+    public void setFirstPersonModel(boolean firstPersonModel){
+        this.firstPersonModel = firstPersonModel;
     }
 
 }

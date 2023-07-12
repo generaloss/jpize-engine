@@ -3,7 +3,7 @@ package pize.tests.voxelgame.client.entity.model;
 import pize.math.util.EulerAngles;
 import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.vector.Vec3f;
-import pize.tests.voxelgame.client.control.GameCamera;
+import pize.tests.voxelgame.client.control.camera.GameCamera;
 
 public class Pose{
     

@@ -7,65 +7,59 @@ import static org.lwjgl.opengl.GL33.*;
 
 public class ElementBuffer extends GlObject{
     
+    private long dataSize;
+    
     public ElementBuffer(){
         super(glGenBuffers());
         bind();
+    }
+    
+    
+    public int getIndicesNum(){
+        return (int) dataSize;
     }
 
 
     public void setData(long size, BufferUsage usage){
         bind();
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, usage.GL);
-    }
-
-    public void setData(float[] data, BufferUsage usage){
-        bind();
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.GL);
-    }
-
-    public void setData(double[] data, BufferUsage usage){
-        bind();
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.GL);
+        dataSize = size;
     }
 
     public void setData(int[] data, BufferUsage usage){
         bind();
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.GL);
+        dataSize = data.length;
     }
 
     public void setData(short[] data, BufferUsage usage){
         bind();
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.GL);
+        dataSize = data.length;
     }
 
     public void setData(long[] data, BufferUsage usage){
         bind();
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, data, usage.GL);
-    }
-
-    public void setSubData(long offset, float[] data){
-        bind();
-        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, data);
-    }
-
-    public void setSubData(long offset, double[] data){
-        bind();
-        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, data);
+        dataSize = data.length;
     }
 
     public void setSubData(long offset, int[] data){
         bind();
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, data);
+        dataSize = data.length;
     }
 
     public void setSubData(long offset, short[] data){
         bind();
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, data);
+        dataSize = data.length;
     }
 
     public void setSubData(long offset, long[] data){
         bind();
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, data);
+        dataSize = data.length;
     }
 
 

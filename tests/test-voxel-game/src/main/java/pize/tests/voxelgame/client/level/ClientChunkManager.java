@@ -1,14 +1,15 @@
 package pize.tests.voxelgame.client.level;
 
-import pize.tests.voxelgame.base.chunk.storage.ChunkPos;
-import pize.tests.voxelgame.base.level.ChunkManager;
-import pize.tests.voxelgame.base.level.ChunkManagerUtils;
-import pize.tests.voxelgame.base.net.packet.CBPacketChunk;
-import pize.tests.voxelgame.base.net.packet.SBPacketChunkRequest;
+import pize.Pize;
 import pize.tests.voxelgame.client.chunk.ClientChunk;
-import pize.tests.voxelgame.client.chunk.mesh.ChunkBuilder;
-import pize.tests.voxelgame.client.chunk.mesh.ChunkMesh;
+import pize.tests.voxelgame.client.chunk.mesh.ChunkMeshStack;
+import pize.tests.voxelgame.client.chunk.mesh.builder.ChunkMeshBuilder;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
+import pize.tests.voxelgame.main.chunk.storage.ChunkPos;
+import pize.tests.voxelgame.main.level.ChunkManager;
+import pize.tests.voxelgame.main.level.ChunkManagerUtils;
+import pize.tests.voxelgame.main.net.packet.CBPacketChunk;
+import pize.tests.voxelgame.main.net.packet.SBPacketChunkRequest;
 import pize.util.time.PerSecCounter;
 
 import java.util.Collection;
@@ -19,8 +20,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static pize.tests.voxelgame.base.chunk.ChunkUtils.getChunkPos;
-import static pize.tests.voxelgame.base.level.ChunkManagerUtils.distToChunk;
+import static pize.tests.voxelgame.main.chunk.ChunkUtils.getChunkPos;
+import static pize.tests.voxelgame.main.level.ChunkManagerUtils.distToChunk;
 
 public class ClientChunkManager extends ChunkManager{
     
@@ -31,9 +32,7 @@ public class ClientChunkManager extends ChunkManager{
     private final CopyOnWriteArrayList<ChunkPos> frontiers;
     private final ConcurrentHashMap<ChunkPos, ClientChunk> allChunks;
     private final LinkedList<ClientChunk> toBuildQueue;
-    private final ConcurrentHashMap<ClientChunk, float[]> built;
-    private final ConcurrentHashMap<ClientChunk, ChunkMesh> allMeshes;
-    private final CopyOnWriteArrayList<ChunkMesh> toDispose;
+    private final ConcurrentHashMap<ClientChunk, ChunkMeshStack> allMeshes;
     
     private final ExecutorService executorService;
     
@@ -44,9 +43,7 @@ public class ClientChunkManager extends ChunkManager{
         frontiers = new CopyOnWriteArrayList<>();
         allChunks = new ConcurrentHashMap<>();
         toBuildQueue = new LinkedList<>();
-        built = new ConcurrentHashMap<>();
         allMeshes = new ConcurrentHashMap<>();
-        toDispose = new CopyOnWriteArrayList<>();
         
         tps = new PerSecCounter();
         
@@ -79,13 +76,14 @@ public class ClientChunkManager extends ChunkManager{
     public void dispose(){
         executorService.shutdownNow();
         
+        for(ChunkMeshStack meshStack: allMeshes.values())
+            meshStack.dispose();
+        
         requestedChunks.clear();
         frontiers      .clear();
         allChunks      .clear();
         toBuildQueue   .clear();
-        built          .clear();
         allMeshes      .clear();
-        toDispose      .clear();
     }
     
     
@@ -130,10 +128,15 @@ public class ClientChunkManager extends ChunkManager{
             if(isOffTheGrid(chunk.getPosition()))
                 continue;
             
-            float[] vertices = ChunkBuilder.build(chunk);
-            built.put(chunk, vertices);
+            ChunkMeshStack meshStack = allMeshes.get(chunk);
+            if(meshStack == null)
+                meshStack = new ChunkMeshStack();
+            
+            ChunkMeshBuilder.build(chunk, meshStack);
+            allMeshes.put(chunk, meshStack);
         }
     }
+    
     
     public void checkChunks(){
         for(ClientChunk chunk: allChunks.values()){
@@ -144,37 +147,18 @@ public class ClientChunkManager extends ChunkManager{
         for(ClientChunk chunk: allMeshes.keySet())
             if(isOffTheGrid(chunk.getPosition())){
                 allMeshes.remove(chunk);
-                toDispose.add(allMeshes.get(chunk));
+                
+                final ChunkMeshStack meshStack = allMeshes.get(chunk);
+                if(meshStack != null)
+                    Pize.execSync(()->{
+                        System.out.println(1000000);
+                        meshStack.dispose();
+                    });
             }
         
         for(Map.Entry<ChunkPos, Long> entry: requestedChunks.entrySet())
             if(System.currentTimeMillis() - entry.getValue() > 1000)
                 requestedChunks.remove(entry.getKey());
-    }
-    
-    
-    public void updateMeshes(){
-        for(Map.Entry<ClientChunk, float[]> entry: built.entrySet()){
-            updateMesh(entry.getKey(), entry.getValue());
-            
-            built.remove(entry.getKey());
-        }
-        
-        for(ChunkMesh mesh: toDispose){
-            toDispose.remove(mesh);
-            if(mesh != null)
-                mesh.dispose();
-        }
-    }
-    
-    public void updateMesh(ClientChunk chunk, float[] vertices){
-        ChunkMesh mesh = allMeshes.get(chunk);
-        if(mesh == null)
-            mesh = new ChunkMesh();
-        
-        mesh.setVertices(vertices);
-        
-        allMeshes.put(chunk, mesh);
     }
     
     
@@ -218,12 +202,8 @@ public class ClientChunkManager extends ChunkManager{
         return allChunks.values();
     }
     
-    public Map<ClientChunk, ChunkMesh> getMeshes(){
+    public Map<ClientChunk, ChunkMeshStack> getMeshes(){
         return allMeshes;
-    }
-    
-    public ChunkMesh getMesh(ClientChunk chunk){
-        return allMeshes.get(chunk);
     }
     
     

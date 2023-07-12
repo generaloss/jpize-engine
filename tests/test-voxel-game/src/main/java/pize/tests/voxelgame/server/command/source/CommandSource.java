@@ -1,11 +1,11 @@
 package pize.tests.voxelgame.server.command.source;
 
-import pize.math.vecmath.tuple.Tuple3f;
-import pize.tests.voxelgame.base.text.Component;
+import pize.math.vecmath.vector.Vec3f;
+import pize.tests.voxelgame.main.text.Component;
 
 public abstract class CommandSource{
     
-    public abstract Tuple3f getPosition();
+    public abstract Vec3f getPosition();
     
     public abstract void sendMessage(Component message);
     

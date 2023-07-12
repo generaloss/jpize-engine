@@ -27,7 +27,7 @@ public class Main extends AppAdapter{
 
         // Generate WAV File and Save
         SoundGenerator generator = new SoundGenerator();
-        WavFile wavFile = new WavFile(resource.getFile(), generator.getSamplingRate(), generator.getChannels());
+        WavFile wavFile = new WavFile(resource.getFile(), generator.getSampleRate(), generator.getChannels());
         wavFile.setData(generator.sinDown(880, 0.15));
         wavFile.save();
 

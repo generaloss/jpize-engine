@@ -19,7 +19,6 @@ public class CommandArgWord extends CommandArg{
         
         // устанавливаем слово
         word = args[0];
-        System.out.println(word);
         return word.length();
     }
     

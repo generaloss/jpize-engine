@@ -29,11 +29,11 @@ public abstract class Camera3D extends Camera{
         return position.z;
     }
 
-    public Vec3f getPos(){
+    public Vec3f getPosition(){
         return position;
     }
 
-    public EulerAngles getRot(){
+    public EulerAngles getRotation(){
         return rotation;
     }
 

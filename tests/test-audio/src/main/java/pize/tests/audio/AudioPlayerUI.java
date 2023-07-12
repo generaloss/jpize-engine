@@ -47,7 +47,7 @@ public class AudioPlayerUI implements Disposable{
         layout.put("position", positionSlider);
         
         // Slider Pitch
-        Slider pitchSlider = new Slider(sliderBackground.clone(), sliderHandle.clone());
+        Slider pitchSlider = new Slider(sliderBackground.copy(), sliderHandle.copy());
         pitchSlider.setSize(Constraint.relative(1), Constraint.relative(0.5));
         pitchSlider.setValue(1 / 2F);
         layout.put("pitch", pitchSlider);

@@ -2,7 +2,7 @@ package pize.audio.sound;
 
 import pize.app.Disposable;
 import pize.math.Mathc;
-import pize.math.vecmath.tuple.Tuple3f;
+import pize.math.vecmath.vector.Vec3f;
 
 import static org.lwjgl.openal.AL11.*;
 
@@ -96,7 +96,7 @@ public class AudioSource implements Disposable{
     }
 
 
-    public void setPosition(Tuple3f position){
+    public void setPosition(Vec3f position){
         alSource3f(id, AL_POSITION, position.x, position.y, position.z);
     }
 
@@ -104,7 +104,7 @@ public class AudioSource implements Disposable{
         alSource3f(id, AL_POSITION, x, y, z);
     }
 
-    public void setVelocity(Tuple3f speed){
+    public void setVelocity(Vec3f speed){
         alSource3f(id, AL_VELOCITY, speed.x, speed.y, speed.z);
     }
 

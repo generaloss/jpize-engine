@@ -14,6 +14,7 @@ public class Main extends AppAdapter{
         Pize.run(new Main());
     }
     
+    
     private TextureBatch batch;
     private Texture texture;
     
@@ -21,9 +22,8 @@ public class Main extends AppAdapter{
     public void init(){
         batch = new TextureBatch();
         texture = new Texture("wallpaper-19.jpg");
-        
-        Pize.setUpdateTPS(1);
     }
+    
     
     @Override
     public void render(){
@@ -34,11 +34,6 @@ public class Main extends AppAdapter{
         
         if(Key.ESCAPE.isPressed())
             Pize.exit();
-    }
-    
-    @Override
-    public void update(){
-        System.out.println("Async updatу");
     }
     
     @Override

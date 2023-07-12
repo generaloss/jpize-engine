@@ -5,7 +5,6 @@ import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
 import pize.math.Mathc;
 import pize.math.Maths;
-import pize.math.vecmath.tuple.Tuple2f;
 import pize.math.vecmath.vector.Vec2f;
 import pize.util.StringUtils;
 
@@ -19,7 +18,7 @@ public class BitmapFont implements Disposable{
     private final Map<Integer, Glyph> glyphs = new HashMap<>();
     private final Map<Integer, Texture> pages = new HashMap<>();
     private int lineHeight;
-    private float scale, rotation;
+    private float scale, rotation, lineGaps;
     private boolean italic;
 
     protected BitmapFont(){
@@ -52,6 +51,15 @@ public class BitmapFont implements Disposable{
     public void setItalic(boolean italic){
         this.italic = italic;
     }
+    
+    
+    public float getLineGaps(){
+        return lineGaps;
+    }
+    
+    public void setLineGaps(float lineGaps){
+        this.lineGaps = lineGaps;
+    }
 
 
     public Glyph getGlyph(int code){
@@ -72,12 +80,20 @@ public class BitmapFont implements Disposable{
     }
 
 
-    public int getLineHeight(){
+    public float getLineHeight(){
         return lineHeight;
     }
-
-    public float getScaledLineHeight(){
+    
+    public float getLineHeightScaled(){
         return lineHeight * scale;
+    }
+    
+    public float getLineAdvance(){
+        return lineHeight + lineGaps;
+    }
+    
+    public float getLineAdvanceScaled(){
+        return getLineAdvance() * scale;
     }
 
     public void setLineHeight(int lineHeight){
@@ -85,14 +101,16 @@ public class BitmapFont implements Disposable{
     }
     
     
-    public Tuple2f getBounds(String text){
+    public Vec2f getBounds(String text){
         return this.getBounds(text, -1);
     }
     
-    public Tuple2f getBounds(String text, double width){
+    public Vec2f getBounds(String text, double width){
+        final float lineAdvance = getLineAdvance();
+        
         float maxAdvanceX = 0;
         float advanceX = 0;
-        float advanceY = lineHeight;
+        float advanceY = lineAdvance;
         
         for(int i = 0; i < text.length(); i++){
             final int code = Character.codePointAt(text, i);
@@ -104,14 +122,14 @@ public class BitmapFont implements Disposable{
             if(code == 10){
                 maxAdvanceX = Math.max(maxAdvanceX, advanceX);
                 advanceX = 0;
-                advanceY += lineHeight;
+                advanceY += lineAdvance;
                 continue;
             }
             
             if(width > 0 && (advanceX + glyph.advanceX ) * scale > width){
                 maxAdvanceX = Math.max(maxAdvanceX, advanceX);
                 advanceX = 0;
-                advanceY += lineHeight;
+                advanceY += lineAdvance;
             }
 
             advanceX += glyph.advanceX;
@@ -146,15 +164,17 @@ public class BitmapFont implements Disposable{
         if(text == null)
             return;
         
+        final float lineGaps = lineHeight;
+        
         float advanceX = 0;
         float advanceY = lineHeight * StringUtils.count(text, "\n");
 
         batch.setTransformOrigin(0, 0);
         batch.rotate(rotation);
         batch.shear(italic ? ITALIC_ANGLE : 0, 0);
-
+        
         // Calculate centering offset
-        final Tuple2f bounds = getBounds(text, width);
+        final Vec2f bounds = getBounds(text, width);
         final double angle = rotation * Maths.toRad + Math.atan(bounds.y / bounds.x);
         final float boundsCenter = Mathc.hypot(bounds.x / 2, bounds.y / 2);
         final float centeringOffsetX = boundsCenter * Mathc.cos(angle) - bounds.x / 2;
@@ -168,7 +188,7 @@ public class BitmapFont implements Disposable{
             final int code = Character.codePointAt(text, i);
             
             if(code == 10){
-                advanceY -= lineHeight;
+                advanceY -= lineGaps;
                 advanceX = 0;
                 continue;
             }
@@ -178,7 +198,7 @@ public class BitmapFont implements Disposable{
                 continue;
             
             if(width > 0 && (advanceX + glyph.advanceX) * scale > width){
-                advanceY -= lineHeight;
+                advanceY -= lineGaps;
                 advanceX = 0;
             }
             

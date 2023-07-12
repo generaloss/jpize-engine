@@ -15,8 +15,6 @@ import pize.graphics.vertex.VertexAttr;
 import pize.graphics.vertex.VertexBuffer;
 import pize.math.vecmath.matrix.Matrix3f;
 import pize.math.vecmath.matrix.Matrix4f;
-import pize.math.vecmath.point.Point2f;
-import pize.math.vecmath.tuple.Tuple2f;
 import pize.math.vecmath.vector.Vec2f;
 
 import java.util.ArrayList;
@@ -125,7 +123,7 @@ public class TextureBatchFast extends Batch{
         if(!textures.contains(texture))
             textures.add(texture);
 
-        addTexturedQuad(x, y, width, height, texReg.u1f(), texReg.v1f(), texReg.u2f(), texReg.v2f(), getTextureIndex(texture));
+        addTexturedQuad(x, y, width, height, texReg.u1(), texReg.v1(), texReg.u2(), texReg.v2(), getTextureIndex(texture));
     }
 
     @Override
@@ -137,7 +135,7 @@ public class TextureBatchFast extends Batch{
         if(!textures.contains(texture))
             textures.add(texture);
 
-        addTexturedQuad(x, y, width, height, region.u1f(), region.v1f(), region.u2f(), region.v2f(), getTextureIndex(texture));
+        addTexturedQuad(x, y, width, height, region.u1(), region.v1(), region.u2(), region.v2(), getTextureIndex(texture));
     }
 
     @Override
@@ -154,10 +152,10 @@ public class TextureBatchFast extends Batch{
 
         addTexturedQuad(
             x, y, width, height,
-            regionInRegion.u1f(),
-            regionInRegion.v1f(),
-            regionInRegion.u2f(),
-            regionInRegion.v2f(),
+            regionInRegion.u1(),
+            regionInRegion.v1(),
+            regionInRegion.u2(),
+            regionInRegion.v2(),
             getTextureIndex(texture)
         );
     }
@@ -210,10 +208,10 @@ public class TextureBatchFast extends Batch{
 
         transformMatrix.set( rotationMatrix.getMul(scaleMatrix.getMul(shearMatrix.getMul(flipMatrix))) );
 
-        Tuple2f vertex1 = new Point2f(0,     0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
-        Tuple2f vertex2 = new Point2f(width, 0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
-        Tuple2f vertex3 = new Point2f(width, height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
-        Tuple2f vertex4 = new Point2f(0,     height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
+        Vec2f vertex1 = new Vec2f(0,     0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
+        Vec2f vertex2 = new Vec2f(width, 0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
+        Vec2f vertex3 = new Vec2f(width, height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
+        Vec2f vertex4 = new Vec2f(0,     height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
 
         addVertex(vertex1.x, vertex1.y, u1, v2, texIndex);
         addVertex(vertex2.x, vertex2.y, u2, v2, texIndex);

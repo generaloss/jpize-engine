@@ -485,8 +485,7 @@ public abstract class UIComponent<C> implements Cloneable{
     }
 
     
-    @Override
-    public UIComponent<C> clone(){
+    public UIComponent<C> copy(){
         try{
             return (UIComponent) super.clone();
         }catch(CloneNotSupportedException e){

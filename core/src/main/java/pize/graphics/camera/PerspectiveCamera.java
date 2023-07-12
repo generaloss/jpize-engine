@@ -23,9 +23,9 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
         this.far = (float) far;
         this.fieldOfView = (float) fieldOfView;
 
-        view = new Matrix4f().toLookAt(position, rotation.direction());
+        view = new Matrix4f().toLookAt(position, rotation.getDirection());
         projection = new Matrix4f().toPerspective(width, height, this.near, this.far, this.fieldOfView);
-        imaginaryView = new Matrix4f();
+        imaginaryView = new Matrix4f().set(view);
 
         frustum = new Frustum(view, projection);
     }
@@ -42,11 +42,13 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
             imaginaryX ? 0 : position.x,
             imaginaryY ? 0 : position.y,
             imaginaryZ ? 0 : position.z,
-            rotation.direction()
+            rotation.getDirection()
         );
+        
+        imaginaryView.toLookAt(position, rotation.getDirection());
 
         frustum.setFrustum(
-            !(imaginaryX || imaginaryY || imaginaryZ) ? view : imaginaryView.toLookAt(position, rotation.direction()),
+            !(imaginaryX || imaginaryY || imaginaryZ) ? view : imaginaryView,
             projection
         );
     }
@@ -109,6 +111,10 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
     @Override
     public Matrix4f getView(){
         return view;
+    }
+    
+    public Matrix4f getImaginaryView(){
+        return imaginaryView;
     }
 
     @Override

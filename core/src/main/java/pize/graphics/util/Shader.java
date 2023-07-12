@@ -7,8 +7,8 @@ import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureArray;
 import pize.graphics.util.color.IColor;
 import pize.math.vecmath.matrix.Matrix4f;
-import pize.math.vecmath.tuple.Tuple2f;
-import pize.math.vecmath.tuple.Tuple3f;
+import pize.math.vecmath.vector.Vec2f;
+import pize.math.vecmath.vector.Vec3f;
 
 import java.util.HashMap;
 
@@ -108,11 +108,11 @@ public class Shader extends GlObject{
         glUniformMatrix4fv(uniforms.get(uniformName), false, matrix4f.val);
     }
 
-    public void setUniform(String uniformName, Tuple2f v){
+    public void setUniform(String uniformName, Vec2f v){
         glUniform2f(uniforms.get(uniformName), v.x, v.y);
     }
 
-    public void setUniform(String uniformName, Tuple3f v){
+    public void setUniform(String uniformName, Vec3f v){
         glUniform3f(uniforms.get(uniformName), v.x, v.y, v.z);
     }
 

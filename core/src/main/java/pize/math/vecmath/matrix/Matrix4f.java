@@ -251,10 +251,10 @@ public class Matrix4f implements Matrix4{
 
         return this;
     }
-
-    public Matrix4f toLookAt(float posX, float posY, float posZ, float leftX, float leftY, float leftZ, float upX, float upY, float upZ, float forwardX, float forwardY, float forwardZ){
+    
+    public Matrix4f toLookAt(float leftX, float leftY, float leftZ, float upX, float upY, float upZ, float forwardX, float forwardY, float forwardZ){
         identity();
-
+        
         val[m00] = leftX;
         val[m01] = leftY;
         val[m02] = leftZ;
@@ -264,22 +264,16 @@ public class Matrix4f implements Matrix4{
         val[m20] = forwardX;
         val[m21] = forwardY;
         val[m22] = forwardZ;
-
-        mul(new Matrix4f().toTranslated(-posX, -posY, -posZ));
-
+        
         return this;
     }
 
-    public Matrix4f toLookAt(Vec3d pos, Vec3d left, Vec3d up, Vec3d forward){
-        return toLookAt((float) pos.x, (float) pos.y, (float) pos.z, (float) left.x, (float) left.y, (float) left.z, (float) up.x, (float) up.y, (float) up.z, (float) forward.x, (float) forward.y, (float) forward.z);
+    public Matrix4f toLookAt(Vec3f left, Vec3f up, Vec3f forward){
+        return toLookAt(left.x, left.y, left.z, up.x, up.y, up.z, forward.x, forward.y, forward.z);
     }
-
-    public Matrix4f toLookAt(Vec3f pos, Vec3f left, Vec3f up, Vec3f forward){
-        return toLookAt(pos.x, pos.y, pos.z, left.x, left.y, left.z, up.x, up.y, up.z, forward.x, forward.y, forward.z);
-    }
-
+    
     public Matrix4f toLookAt(float posX, float posY, float posZ, Vec3f left, Vec3f up, Vec3f forward){
-        return toLookAt(posX, posY, posZ, left.x, left.y, left.z, up.x, up.y, up.z, forward.x, forward.y, forward.z);
+        return toLookAt(left, up, forward).mul(new Matrix4f().toTranslated(-posX, -posY, -posZ));
     }
 
     private static final Vec3d upDouble = new Vec3d(0, 1, 0);
@@ -287,19 +281,10 @@ public class Matrix4f implements Matrix4{
     private static final Vec3f up = new Vec3f(0, 1, 0);
     private static final Vec3f left = new Vec3f();
     private static final Vec3f camUp = new Vec3f();
-
-    public Matrix4f toLookAt(Vec3d position, Vec3d direction){
-        Vec3d left = Vec3d.crs(upDouble, direction.nor()).nor();
-        Vec3d up = Vec3d.crs(direction, left).nor();
-
-        return toLookAt(position, left, up, direction);
-    }
+    
 
     public Matrix4f toLookAt(Vec3f position, Vec3f direction){
-        left.set(Vec3f.crs(up, direction.nor()).nor());
-        camUp.set(Vec3f.crs(direction, left).nor());
-
-        return toLookAt(position, left, camUp, direction);
+        return toLookAt(position.x, position.y, position.z, direction);
     }
 
     public Matrix4f toLookAt(float posX, float posY, float posZ, Vec3f direction){
@@ -309,14 +294,23 @@ public class Matrix4f implements Matrix4{
         return toLookAt(posX, posY, posZ, left, camUp, direction);
     }
     
+    public Matrix4f toLookAt(Vec3f direction){
+        left.set(Vec3f.crs(up, direction.nor()).nor());
+        camUp.set(Vec3f.crs(direction, left).nor());
+        
+        return toLookAt(left, camUp, direction);
+    }
     
-    public void cullPosition(){
+    
+    public Matrix4f cullPosition(){
         val[m03] = 0;
         val[m13] = 0;
         val[m23] = 0;
+        
+        return this;
     }
     
-    public void cullRotation(){
+    public Matrix4f cullRotation(){
         val[m00] = 1;
         val[m10] = 0;
         val[m20] = 0;
@@ -328,6 +322,8 @@ public class Matrix4f implements Matrix4{
         val[m02] = 0;
         val[m12] = 0;
         val[m22] = 1;
+        
+        return this;
     }
 
 
@@ -347,19 +343,38 @@ public class Matrix4f implements Matrix4{
         return set(mul(this.val, matrix));
     }
 
+    
+    public Matrix4f copy(){
+        return new Matrix4f(this);
+    }
+    
 
     public static float[] mul(Matrix4f a, Matrix4f b){
         return mul(a.val, b.val);
     }
 
     public static float[] mul(float[] a, float[] b){
-        return new float[]{ a[m00] * b[m00] + a[m01] * b[m10] + a[m02] * b[m20] + a[m03] * b[m30], a[m10] * b[m00] + a[m11] * b[m10] + a[m12] * b[m20] + a[m13] * b[m30], a[m20] * b[m00] + a[m21] * b[m10] + a[m22] * b[m20] + a[m23] * b[m30], a[m30] * b[m00] + a[m31] * b[m10] + a[m32] * b[m20] + a[m33] * b[m30],
+        return new float[]{
+            a[m00] * b[m00] + a[m01] * b[m10] + a[m02] * b[m20] + a[m03] * b[m30],
+            a[m10] * b[m00] + a[m11] * b[m10] + a[m12] * b[m20] + a[m13] * b[m30],
+            a[m20] * b[m00] + a[m21] * b[m10] + a[m22] * b[m20] + a[m23] * b[m30],
+            a[m30] * b[m00] + a[m31] * b[m10] + a[m32] * b[m20] + a[m33] * b[m30],
 
-            a[m00] * b[m01] + a[m01] * b[m11] + a[m02] * b[m21] + a[m03] * b[m31], a[m10] * b[m01] + a[m11] * b[m11] + a[m12] * b[m21] + a[m13] * b[m31], a[m20] * b[m01] + a[m21] * b[m11] + a[m22] * b[m21] + a[m23] * b[m31], a[m30] * b[m01] + a[m31] * b[m11] + a[m32] * b[m21] + a[m33] * b[m31],
+            a[m00] * b[m01] + a[m01] * b[m11] + a[m02] * b[m21] + a[m03] * b[m31],
+            a[m10] * b[m01] + a[m11] * b[m11] + a[m12] * b[m21] + a[m13] * b[m31],
+            a[m20] * b[m01] + a[m21] * b[m11] + a[m22] * b[m21] + a[m23] * b[m31],
+            a[m30] * b[m01] + a[m31] * b[m11] + a[m32] * b[m21] + a[m33] * b[m31],
 
-            a[m00] * b[m02] + a[m01] * b[m12] + a[m02] * b[m22] + a[m03] * b[m32], a[m10] * b[m02] + a[m11] * b[m12] + a[m12] * b[m22] + a[m13] * b[m32], a[m20] * b[m02] + a[m21] * b[m12] + a[m22] * b[m22] + a[m23] * b[m32], a[m30] * b[m02] + a[m31] * b[m12] + a[m32] * b[m22] + a[m33] * b[m32],
+            a[m00] * b[m02] + a[m01] * b[m12] + a[m02] * b[m22] + a[m03] * b[m32],
+            a[m10] * b[m02] + a[m11] * b[m12] + a[m12] * b[m22] + a[m13] * b[m32],
+            a[m20] * b[m02] + a[m21] * b[m12] + a[m22] * b[m22] + a[m23] * b[m32],
+            a[m30] * b[m02] + a[m31] * b[m12] + a[m32] * b[m22] + a[m33] * b[m32],
 
-            a[m00] * b[m03] + a[m01] * b[m13] + a[m02] * b[m23] + a[m03] * b[m33], a[m10] * b[m03] + a[m11] * b[m13] + a[m12] * b[m23] + a[m13] * b[m33], a[m20] * b[m03] + a[m21] * b[m13] + a[m22] * b[m23] + a[m23] * b[m33], a[m30] * b[m03] + a[m31] * b[m13] + a[m32] * b[m23] + a[m33] * b[m33] };
+            a[m00] * b[m03] + a[m01] * b[m13] + a[m02] * b[m23] + a[m03] * b[m33],
+            a[m10] * b[m03] + a[m11] * b[m13] + a[m12] * b[m23] + a[m13] * b[m33],
+            a[m20] * b[m03] + a[m21] * b[m13] + a[m22] * b[m23] + a[m23] * b[m33],
+            a[m30] * b[m03] + a[m31] * b[m13] + a[m32] * b[m23] + a[m33] * b[m33]
+        };
     }
 
 }

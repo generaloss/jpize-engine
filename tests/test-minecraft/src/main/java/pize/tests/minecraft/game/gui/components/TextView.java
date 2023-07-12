@@ -3,14 +3,12 @@ package pize.tests.minecraft.game.gui.components;
 import pize.Pize;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.Glyph;
-import pize.graphics.util.TextureUtils;
 import pize.graphics.util.batch.TextureBatch;
 import pize.graphics.util.color.Color;
 import pize.gui.UIComponent;
 import pize.gui.constraint.Constraint;
 import pize.math.Mathc;
 import pize.math.Maths;
-import pize.math.vecmath.tuple.Tuple2f;
 import pize.math.vecmath.vector.Vec2f;
 import pize.tests.minecraft.game.Session;
 import pize.tests.minecraft.game.gui.text.Component;
@@ -39,7 +37,7 @@ public class TextView extends MComponent{
     private boolean scissor;
     private List<TextComponent> components;
     private final List<String> textList;
-    private Tuple2f bounds;
+    private Vec2f bounds;
     
     private boolean scrollDir;
     private float scrollShiftX;
@@ -113,7 +111,7 @@ public class TextView extends MComponent{
         
         // Init
         
-        final int lineHeight = font.getLineHeight();
+        final float lineHeight = font.getLineHeight();
         final float scale = font.getScale();
 
         float advanceX = 0;
@@ -223,7 +221,8 @@ public class TextView extends MComponent{
                 // Strikethrough & Underline
 
                 if(strikethrough && i == text.length() - 1){
-                    batch.draw(TextureUtils.quadTexture(),
+                    batch.drawQuad(
+                        1, 1, 1, 1,
                         x - centeringOffsetX + lineBeginX,
                         y - centeringOffsetY + lineBeginY + font.getLineHeight() * 3 / 8F * scale,
                         (lineWidth + advanceXIncrease) * scale,
@@ -232,7 +231,8 @@ public class TextView extends MComponent{
                 }
 
                 if(underline && i == text.length() - 1){
-                    batch.draw(TextureUtils.quadTexture(),
+                    batch.drawQuad(
+                        1, 1, 1, 1,
                         x - centeringOffsetX + lineBeginX,
                         y - centeringOffsetY + lineBeginY - font.getLineHeight() / 8F * scale,
                         (lineWidth + advanceXIncrease) * scale,
@@ -263,12 +263,12 @@ public class TextView extends MComponent{
         batch.resetColor();
     }
 
-    private Tuple2f getBounds(List<TextComponent> components){
-        int lineHeight = font.getLineHeight();
+    private Vec2f getBounds(List<TextComponent> components){
+        float lineHeight = font.getLineHeight();
         float scale = font.getScale();
 
         int advanceX = 0;
-        int advanceY = lineHeight;
+        float advanceY = lineHeight;
 
         int maxX = 0;
 

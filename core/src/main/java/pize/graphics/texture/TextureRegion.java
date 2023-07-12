@@ -1,10 +1,7 @@
 package pize.graphics.texture;
 
-import pize.math.Maths;
-
-public class TextureRegion extends Region implements Cloneable{
-
-    private double regionWidth, regionHeight;
+public class TextureRegion extends Region{
+    
     private Texture texture;
 
 
@@ -44,8 +41,6 @@ public class TextureRegion extends Region implements Cloneable{
 
     public void setTextureRegion(TextureRegion textureRegion){
         texture = textureRegion.texture;
-        regionWidth = textureRegion.regionWidth;
-        regionHeight = textureRegion.regionHeight;
         super.set(textureRegion.u1, textureRegion.v1, textureRegion.u2, textureRegion.v2);
     }
 
@@ -86,19 +81,14 @@ public class TextureRegion extends Region implements Cloneable{
     }
 
     public void setRegion(double u1, double v1, double u2, double v2){
-        regionWidth = Maths.round(Math.abs(u2 - u1) * texture.getWidth());
-        regionHeight = Maths.round(Math.abs(v2 - v1) * texture.getHeight());
-
         super.set(u1, v1, u2, v2);
     }
 
     public void setRegion(Region region){
-        regionWidth = Math.abs(region.u2 - region.u1) * texture.getWidth();
-        regionHeight = Math.abs(region.v2 - region.v1) * texture.getHeight();
-
         super.set(region);
     }
 
+    
     public void setTexture(Texture texture){
         this.texture = texture;
     }
@@ -107,30 +97,20 @@ public class TextureRegion extends Region implements Cloneable{
         return texture;
     }
 
-    public float getRegionWidth(){
-        return (float) regionWidth;
+    
+    public float getWidthPx(){
+        return getWidthPx(texture);
     }
 
-    public float getRegionHeight(){
-        return (float) regionHeight;
-    }
-
-
-    public float getWidth(){
-        return getWidthOn(texture);
-    }
-
-    public float getHeight(){
-        return getHeightOn(texture);
+    public float getHeightPx(){
+        return getHeightPx(texture);
     }
 
 
-    @Override
-    public TextureRegion clone(){
+    public TextureRegion copy(){
         return new TextureRegion(this);
     }
-
-
+    
     public static Region calcFromRect(int x, int y, int width, int height, Texture texture){
         return new Region(
             (double) x / texture.getWidth(),

@@ -1,23 +1,29 @@
 package pize.tests.voxelgame.client.control;
 
+import pize.graphics.camera.controller.Rotation3DController;
+import pize.math.vecmath.vector.Vec3f;
 import pize.tests.voxelgame.VoxelGame;
+import pize.tests.voxelgame.client.control.camera.GameCamera;
+import pize.tests.voxelgame.client.control.camera.HorizontalMoveController;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.options.KeyMapping;
 import pize.tests.voxelgame.client.options.Options;
-import pize.tests.voxelgame.base.net.packet.SBPacketPlayerSneaking;
+import pize.tests.voxelgame.main.net.packet.SBPacketPlayerSneaking;
 
-import static pize.tests.voxelgame.client.control.PerspectiveType.*;
+import static pize.tests.voxelgame.client.control.camera.PerspectiveType.*;
 
 public class PlayerController{
     
     private final VoxelGame session;
     
     private LocalPlayer player;
-    private final CameraRotationController rotationController;
+    private final Rotation3DController rotationController;
+    private final HorizontalMoveController horizontalMoveController;
     
     public PlayerController(VoxelGame session){
         this.session = session;
-        rotationController = new CameraRotationController();
+        rotationController = new Rotation3DController();
+        horizontalMoveController = new HorizontalMoveController(this);
     }
     
     public VoxelGame getSession(){
@@ -34,27 +40,20 @@ public class PlayerController{
         player.getRotation().set(rotationController.getRotation());
         
         // Horizontal motion
-        float forward = 0;
-        float strafe = 0;
-        
-        if(options.getKey(KeyMapping.FORWARD).isPressed())
-            forward++;
-        if(options.getKey(KeyMapping.BACK).isPressed())
-            forward--;
-        if(options.getKey(KeyMapping.RIGHT).isPressed())
-            strafe--;
-        if(options.getKey(KeyMapping.LEFT).isPressed())
-            strafe++;
-        
-        player.moveControl(forward, strafe);
+        horizontalMoveController.update();
+        final Vec3f motion = horizontalMoveController.getMotion();
+        player.moveControl(motion);
         
         // Jump, Sprint, Sneak
-        if(options.getKey(KeyMapping.JUMP).isPressed())
-            player.jump();
+        if(options.getKey(KeyMapping.JUMP).isDown())
+            player.setJumping(true);
+        else if(options.getKey(KeyMapping.JUMP).isReleased())
+            player.setJumping(false);
         
-        if(options.getKey(KeyMapping.SPRINT).isDown())
+        if(options.getKey(KeyMapping.SPRINT).isPressed() && options.getKey(KeyMapping.FORWARD).isPressed() ||
+            options.getKey(KeyMapping.SPRINT).isPressed() && options.getKey(KeyMapping.FORWARD).isDown())
             player.setSprinting(true);
-        else if(options.getKey(KeyMapping.SPRINT).isReleased())
+        else if(options.getKey(KeyMapping.FORWARD).isReleased())
             player.setSprinting(false);
         
         if(options.getKey(KeyMapping.SNEAK).isDown()){
@@ -84,7 +83,7 @@ public class PlayerController{
     }
     
     
-    public CameraRotationController getRotationController(){
+    public Rotation3DController getRotationController(){
         return rotationController;
     }
     

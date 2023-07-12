@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="[Not Available] Test - Particle" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="pize.tests.particle.Main" />
+    <module name="test-particle" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/test-particle/src/main/resources" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -22,11 +22,11 @@ public class Component{
     }
 
 
-    public Component text(String string){
+    public Component text(Object objectToString){
         components.add(new TextComponent(
             this,
-            string,
-            new Style(color.clone(), style[0], style[1], style[2], style[3], style[4], style[5])
+            String.valueOf(objectToString),
+            new Style(color.copy(), style[0], style[1], style[2], style[3], style[4], style[5])
         ));
 
         return this;

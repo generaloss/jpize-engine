@@ -2,18 +2,26 @@ package pize.tests.voxelgame;
 
 import pize.Pize;
 import pize.app.AppAdapter;
-import pize.audio.sound.Sound;
 import pize.files.Resource;
 import pize.graphics.gl.Gl;
-import pize.tests.voxelgame.base.Version;
-import pize.tests.voxelgame.base.modification.loader.ModEntryPointType;
-import pize.tests.voxelgame.base.modification.loader.ModLoader;
-import pize.tests.voxelgame.base.net.PlayerProfile;
-import pize.tests.voxelgame.base.text.TextComponentBatch;
+import pize.graphics.texture.Texture;
+import pize.math.Mathc;
+import pize.math.Maths;
+import pize.math.vecmath.vector.Vec3f;
+import pize.physic.Motion3f;
 import pize.tests.voxelgame.client.ClientGame;
+import pize.tests.voxelgame.client.block.BlockState;
+import pize.tests.voxelgame.client.block.Blocks;
 import pize.tests.voxelgame.client.control.GameController;
+import pize.tests.voxelgame.client.level.ClientLevel;
 import pize.tests.voxelgame.client.options.Options;
 import pize.tests.voxelgame.client.renderer.ClientGameRenderer;
+import pize.tests.voxelgame.client.renderer.particle.Particle;
+import pize.tests.voxelgame.main.Version;
+import pize.tests.voxelgame.main.time.GameTime;
+import pize.tests.voxelgame.main.modification.loader.ModEntryPointType;
+import pize.tests.voxelgame.main.modification.loader.ModLoader;
+import pize.tests.voxelgame.main.net.PlayerProfile;
 import pize.tests.voxelgame.server.IntegratedServer;
 import pize.util.time.Sync;
 
@@ -39,7 +47,57 @@ public class VoxelGame extends AppAdapter{
     private final ClientGame clientGame;
     
     private final ModLoader modLoader;
-    private final TextComponentBatch textBatch;
+    
+    
+    public final Particle BREAK_PARTICLE = new Particle()
+        .init(instance->{
+            instance.size = Maths.random(0.02F, 0.15F);
+            instance.region.set(Maths.random(0, 0.5), Maths.random(0, 0.5), Maths.random(0.5, 1), Maths.random(0.5, 1));
+            instance.rotation = Maths.random(1, 360);
+            instance.lifeTimeSeconds = Maths.random(0.5F, 2F);
+            instance.motion.set(Maths.random(-0.04F, 0.04F), Maths.random(-0.02F, 0.1F), Maths.random(-0.04F, 0.04F));
+        })
+        .texture(new Texture("texture/block/grass_block_side.png"))
+        .animate(instance->{
+            instance.motion.y -= Pize.getDt() * 0.35;
+            instance.motion.mul(0.95);
+            collide(instance.position, instance.motion);
+            instance.position.add(instance.motion);
+        });
+    
+    public void collide(Vec3f position, Motion3f motion){
+        final ClientLevel level = clientGame.getLevel();
+        
+        double x = motion.x;
+        //if(BlockState.getID(level.getBlock(position.xf() + Mathc.signum(x), position.yf(), position.zf())) != 0){
+        //    double nx = Maths.frac(position.x) + x;
+        //    if(nx > 1)
+        //        x = 1;
+        //    else if(nx < 0)
+        //        x = 0;
+        //}
+        
+        double y = motion.y;
+        if(BlockState.getID(level.getBlock(position.xf(), position.yf() + Mathc.signum(x), position.zf())) != 0){
+            double ny = Maths.frac(position.y) + y;
+            //if(ny > 1)
+            //    y = 1;
+            //else
+            if(ny < 0)
+                y = 0;
+        }
+        
+        double z = motion.z;
+        //if(BlockState.getID(level.getBlock(position.xf(), position.yf(), position.zf() + Mathc.signum(x))) != 0){
+        //    double nz = Maths.frac(position.z) + z;
+        //    if(nz > 1)
+        //        z = 1;
+        //    else if(nz < 0)
+        //        z = 0;
+        //}
+        
+        motion.set(x, y, z);
+    }
     
 
     public VoxelGame(){
@@ -52,8 +110,6 @@ public class VoxelGame extends AppAdapter{
         fpsSync = new Sync(0);
         
         gameController = new GameController(this);
-        
-        textBatch = new TextComponentBatch();
         clientRenderer = new ClientGameRenderer(this);
         clientGame = new ClientGame(this);
         
@@ -61,9 +117,11 @@ public class VoxelGame extends AppAdapter{
         new Resource(SharedConstants.GAME_DIR_PATH, true).mkDirs();
         new Resource(SharedConstants.MODS_PATH, true).mkDirs();
         
-        Pize.setUpdateTPS(20);
+        Pize.setUpdateTPS(GameTime.TICKS_IN_SECOND);
         options.load();
         profile = new PlayerProfile(getOptions().getPlayerName());
+        
+        Blocks.init();
         
         /** ModLoader **/
         modLoader = new ModLoader();
@@ -88,11 +146,11 @@ public class VoxelGame extends AppAdapter{
         modLoader.initializeMods(ModEntryPointType.MAIN);
         
         // Music
-        final Sound sound = new Sound("music/21_2.ogg");
-        sound.setVolume(0.3);
-        sound.setPitch(0.8);
-        sound.setLooping(true);
-        sound.play();
+        // final Sound sound = new Sound("music/21_2.ogg");
+        // sound.setVolume(0.3);
+        // sound.setPitch(0.8);
+        // sound.setLooping(true);
+        // sound.play();
     }
     
     @Override
@@ -107,7 +165,7 @@ public class VoxelGame extends AppAdapter{
     }
     
     @Override
-    public void update(){
+    public void fixedUpdate(){
         clientGame.tick();
     }
     
@@ -119,6 +177,7 @@ public class VoxelGame extends AppAdapter{
 
     @Override
     public void dispose(){
+        clientGame.disconnect();
         clientRenderer.dispose();
         options.save();
     }
@@ -159,8 +218,8 @@ public class VoxelGame extends AppAdapter{
         return gameController;
     }
     
-    public final TextComponentBatch getTextBatch(){
-        return textBatch;
+    public final ModLoader getModLoader(){
+        return modLoader;
     }
     
     

@@ -5,58 +5,98 @@ import pize.graphics.texture.Pixmap;
 import java.awt.*;
 
 public class TextureAtlasNode{
-
-    public TextureAtlasNode[] child;
-    public Rectangle rect;
-    public Pixmap image;
+    
+    private Pixmap imagePixmap;
+    private final Rectangle rectangle;
+    private TextureAtlasNode child1, child2;
 
     public TextureAtlasNode(int x, int y, int width, int height){
-        child = new TextureAtlasNode[2];
-        rect = new Rectangle(x, y, width, height);
+        rectangle = new Rectangle(x, y, width, height);
+    }
+    
+    
+    public boolean hasImage(){
+        return imagePixmap != null;
+    }
+    
+    public int getX(){
+        return rectangle.x;
+    }
+    
+    public int getY(){
+        return rectangle.y;
+    }
+    
+    public int getWidth(){
+        return rectangle.width;
+    }
+    
+    public int getHeight(){
+        return rectangle.height;
     }
 
 
-    public TextureAtlasNode insert(Pixmap image, int padding){
-        if(child[0] == null && child[1] == null){ // is leaf
-            if(this.image != null) // occupied
+    public TextureAtlasNode insert(Pixmap imagePixmap, int paddingLeft, int paddingTop, int paddingRight, int paddingBottom){
+        final int x = this.getX();
+        final int y = this.getY();
+        final int width  = this.getWidth();
+        final int height = this.getHeight();
+        
+        final int imageWidth  = imagePixmap.getWidth() + paddingRight;
+        final int imageHeight = imagePixmap.getHeight() + paddingBottom;
+        
+        if(child1 == null && child2 == null){ // Is leaf
+            if(this.hasImage()) // Occupied
                 return null;
 
-            if(image.getWidth() > rect.width || image.getHeight() > rect.height) // does not fit
+            final int diffWidth = width - imageWidth;
+            final int diffHeight = height - imageHeight;
+            
+            if(imageWidth > width || imageHeight > height) // Does not fit
                 return null;
-
-            if(image.getWidth() == rect.width && image.getHeight() == rect.height){ // perfect fit
-                this.image = image;
+            
+            if(imageWidth == width && imageHeight == height){ // Perfect fit
+                this.imagePixmap = imagePixmap;
                 return this;
             }
-
-            int dw = rect.width - image.getWidth();
-            int dh = rect.height - image.getHeight();
-
-            if(dw > dh){
-                child[0] = new TextureAtlasNode(rect.x, rect.y, image.getWidth(), rect.height);
-                child[1] = new TextureAtlasNode(
-                    padding + rect.x + image.getWidth(),
-                    rect.y,
-                    rect.width - image.getWidth() - padding,
-                    rect.height
+            
+            if(diffWidth > diffHeight){ // X
+                child1 = new TextureAtlasNode(
+                    x,
+                    y,
+                    imageWidth,
+                    height
                 );
-            }else{
-                child[0] = new TextureAtlasNode(rect.x, rect.y, rect.width, image.getHeight());
-                child[1] = new TextureAtlasNode(
-                    rect.x,
-                    padding + rect.y + image.getHeight(),
-                    rect.width,
-                    rect.height - image.getHeight() - padding
+                
+                child2 = new TextureAtlasNode(
+                    x + imageWidth + paddingLeft,
+                    y,
+                    width - imageWidth - paddingLeft,
+                    height
+                );
+            }else{ // Y
+                child1 = new TextureAtlasNode(
+                    x,
+                    y,
+                    width,
+                    imageHeight
+                );
+                
+                child2 = new TextureAtlasNode(
+                    x,
+                    y + imageHeight + paddingTop,
+                    width,
+                    height - imageHeight - paddingTop
                 );
             }
 
-            return child[0].insert(image, padding);
+            return child1.insert(imagePixmap, paddingLeft, paddingTop, paddingRight, paddingBottom);
         }else{
-            TextureAtlasNode newNode = child[0].insert(image, padding);
+            final TextureAtlasNode newNode = child1.insert(imagePixmap, paddingLeft, paddingTop, paddingRight, paddingBottom);
             if(newNode != null)
                 return newNode;
 
-            return child[1].insert(image, padding);
+            return child2.insert(imagePixmap, paddingLeft, paddingTop, paddingRight, paddingBottom);
         }
     }
 

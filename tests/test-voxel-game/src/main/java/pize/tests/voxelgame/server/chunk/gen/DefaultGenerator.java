@@ -4,13 +4,13 @@ import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.function.FastNoiseLite;
 import pize.math.util.Random;
-import pize.tests.voxelgame.base.chunk.storage.HeightmapType;
-import pize.tests.voxelgame.client.block.blocks.Block;
+import pize.tests.voxelgame.client.block.Blocks;
+import pize.tests.voxelgame.main.chunk.storage.Heightmap;
+import pize.tests.voxelgame.main.chunk.storage.HeightmapType;
 import pize.tests.voxelgame.server.chunk.ServerChunk;
-import pize.tests.voxelgame.server.level.ServerLevel;
 
-import static pize.tests.voxelgame.base.chunk.ChunkUtils.HEIGHT;
-import static pize.tests.voxelgame.base.chunk.ChunkUtils.SIZE;
+import static pize.tests.voxelgame.main.chunk.ChunkUtils.HEIGHT;
+import static pize.tests.voxelgame.main.chunk.ChunkUtils.SIZE;
 
 public class DefaultGenerator implements ChunkGenerator{
     
@@ -62,47 +62,72 @@ public class DefaultGenerator implements ChunkGenerator{
                 final int z = lz + baseZ;
                 
                 final float erosion = (erosionNoise.getNoise(x, z) + 1) * 0.5F;
-                final float continentalness = Mathc.pow((continentalnessNoise.getNoise(x, z) - 0.3), 3);
+                final float continentalness = Mathc.pow((continentalnessNoise.getNoise(x, z) - 0.4), 3);
                 final int height = Maths.round(continentalness * 32 + 128);
                 
-                for(int y = 0; y < height; y++)
-                    chunk.setBlockFast(lx, y, lz, Block.STONE.getDefaultState());
+                final int stoneLevel = Maths.random(3, 5);
+                for(int y = 0; y < height - stoneLevel; y++)
+                    chunk.setBlockFast(lx, y, lz, Blocks.STONE.getDefaultState());
+                
+                for(int y = height - stoneLevel; y < height; y++)
+                    chunk.setBlockFast(lx, y, lz, Blocks.DIRT.getDefaultState());
+                
+                chunk.setBlockFast(lx, height, lz, Blocks.GRASS_BLOCK.getDefaultState());
                 
                 for(int y = height; y < HEIGHT; y++){
                     final float continentalness3D = (continentalnessNoise.getNoise(x, y, z) + 1);
-                    if(continentalness3D < Mathc.pow(erosion * 0.8, (float) y / HEIGHT))
-                        chunk.setBlockFast(lx, y, lz, Block.STONE.getDefaultState());
+                    if(continentalness3D < Mathc.pow(erosion * 0.65, (float) y / HEIGHT))
+                        chunk.setBlockFast(lx, y, lz, Blocks.STONE.getDefaultState());
                 }
                 
-                for(int y = height; y < OCEAN_LEVEL; y++){
-                    if(chunk.getBlockID(lx, y, lz) == Block.AIR.ID)
-                        chunk.setBlockFast(lx, y, lz, Block.GLASS.getDefaultState());
-                }
+                //for(int y = height; y < OCEAN_LEVEL; y++){
+                //    if(chunk.getBlockID(lx, y, lz) == Block.AIR.ID)
+                //        chunk.setBlockFast(lx, y, lz, Block.GLASS.getDefaultState());
+                //}
                 
             }
         }
         
-        chunk.getHeightMap(HeightmapType.SURFACE).update();
+        final Heightmap heightmap = chunk.getHeightMap(HeightmapType.SURFACE);
+        heightmap.update();
         
         for(int lx = 0; lx < SIZE; lx++){
             for(int lz = 0; lz < SIZE; lz++){
-                
                 int height = chunk.getHeightMap(HeightmapType.SURFACE).getHeight(lx, lz);
-                if(height >= OCEAN_LEVEL)
-                    chunk.setBlockFast(lx, height, lz, Block.GRASS_BLOCK.getDefaultState());
+                
+                // if(chunk.getBlockProps(lx, height, lz).getID() == Block.GLASS.ID)
+                //     continue;
+                
+                
+                chunk.setBlockFast(lx, height, lz, Blocks.GRASS_BLOCK.getDefaultState());
+                
+                final boolean generateGrass = random.randomBoolean(0.05);
+                if(generateGrass){
+                    if(chunk.setBlockFast(lx, height + 1, lz, Blocks.GRASS.getDefaultState()))
+                        heightmap.setHeight(lx, lz, height + 1);
+                }else{
+                    boolean spawnTree = random.randomBoolean(0.00);
+                    if(spawnTree){
+                        final int y = chunk.getHeightMap(HeightmapType.SURFACE).getHeight(lx, lz);
+                        
+                        spawnTree(chunk, lx, y + 1, lz);
+                    }
+                }
             }
         }
         
-        for(int lx = 0; lx < SIZE; lx++){
-            final int x = lx + baseX;
-            
-            for(int lz = 0; lz < SIZE; lz++){
-                final int z = lz + baseZ;
-                
-                for(int y = 0; y < HEIGHT; y++)
-                    chunk.setLight(lx, y, lz, Maths.round((noiseLight.getNoise(x, y, z) + 1) / 2 * 15));
-            }
-        }
+        
+        //for(int lx = 0; lx < SIZE; lx++){
+        //    final int x = lx + baseX;
+        //
+        //    for(int lz = 0; lz < SIZE; lz++){
+        //        final int z = lz + baseZ;
+        //
+        //        for(int y = 0; y < HEIGHT; y++)
+        //            chunk.setLight(lx, y, lz, Maths.round((erosionNoise.getNoise(x, y, z) + 1) / 2 * 5 + 10));
+        //    }
+        //}
+        
         // System.out.println("Gen: " + timer.getMillis());
     }
     
@@ -124,17 +149,17 @@ public class DefaultGenerator implements ChunkGenerator{
                 if(spawnTree){
                     final int y = chunk.getHeightMap(HeightmapType.SURFACE).getHeight(lx, lz);
                     
-                    spawnTree(chunk.getLevel(), x, y + 1, z);
+                    spawnTree(chunk, x, y + 1, z);
                 }
             }
         }
     }
     
-    private void spawnTree(ServerLevel level, int x, int y, int z){
+    private void spawnTree(ServerChunk chunk, int x, int y, int z){
         final int logHeight = Math.round(Maths.map(continentalnessNoise.getNoise(x, z), -1, 1, 4, 8));
         
         for(int ly = 0; ly < logHeight; ly++){
-            level.setBlock(x, y + ly, z, Block.OAK_LOG.getDefaultState());
+            chunk.setBlock(x, y + ly, z, Blocks.OAK_LOG.getDefaultState());
         }
     }
     

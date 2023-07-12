@@ -1,10 +1,8 @@
 package pize.math;
 
-/**
- * Math Utilities
- **/
 public class Maths{
 
+    public static final float epsilon = 1E-19F;
     public static final float PI = (float) Math.PI;
     public static final float PI2 = PI * 2;
     public static final float halfPI = PI / 2;
@@ -13,8 +11,8 @@ public class Maths{
     public static final float sqrt2 = Mathc.sqrt(2);
     public static final float sqrt3 = Mathc.sqrt(3);
     public static final float sqrt4 = Mathc.sqrt(4);
-    public static final float NANOS_IN_SECOND = 1000000000;
-    public static final float NANOS_IN_MS = 1000000;
+    public static final float nanosInSecond = 1000000000;
+    public static final float nanosInMs = 1000000;
     
 
     public static float sinFromCos(float cos){
@@ -53,11 +51,16 @@ public class Maths{
 
 
     public static float frac(float a){
-        return floor(a) - a;
+        return a - floor(a);
     }
 
     public static double frac(double a){
-        return floor(a) - a;
+        return a - floor(a);
+    }
+    
+    public static double frac(double value, double min, double max){
+        final double interval = max - min;
+        return frac((value - min) / interval) * interval + min;
     }
 
 
@@ -77,6 +80,10 @@ public class Maths{
     public static float random(float min, float max){
         return lerp(min, max, Mathc.random());
     }
+    
+    public static double random(double min, double max){
+        return lerp(min, max, Mathc.random());
+    }
 
     public static int random(int min, int max){
         return round(lerp(min, max, Mathc.random()));
@@ -89,12 +96,12 @@ public class Maths{
     public static int random(int max){
         return round(Math.random() * max);
     }
-
-    static public boolean randomBoolean(float chance){
+    
+    public static boolean randomBoolean(float chance){
         return Math.random() < chance;
     }
-
-    static public boolean randomBoolean(){
+    
+    public static boolean randomBoolean(){
         return randomBoolean(0.5F);
     }
 
@@ -146,45 +153,93 @@ public class Maths{
         float q = (a - b) - p;
         float r = c - a;
         
-        return t * (t * (t * p + q) + r) + b; // pt3 + qt2 + rt + b
+        return t * (t * (t * p + q) + r) + b; // pt^3 + qt^2 + rt^1 + b
     }
     
     
-    public static double cubicCurve(double t){
+    public static float cubic(float t){
         return -2 * t * t * t  +  3 * t * t;
     }
     
-    public static double cosineCurve(double t){
+    public static float cosine(float t){
         return (1 - Mathc.cos(t / PI)) / 2;
     }
     
-    public static double quinticCurve(double t){
+    public static float quintic(float t){
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
     
-    public static double hermiteCurve(double t){
+    public static float hermite(float t){
         return t * t * (3 - 2 * t);
+    }
+    
+    
+    public static float sigmoid(float x){
+        return 1 / (1 + Mathc.exp(-x));
+    }
+    
+    public static float relu(float x){
+        return Math.max(0, x);
+    }
+    
+    public static float leakyRelu(float x){
+        return Math.max(0.1F * x, x);
     }
 
 
-    static public float map(float value, float fromLow, float fromHigh, float toLow, float toHigh){
+    public static float map(float value, float fromLow, float fromHigh, float toLow, float toHigh){
         return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
     }
     
-    static public double map(double value, double fromLow, double fromHigh, double toLow, double toHigh){
+    public static double map(double value, double fromLow, double fromHigh, double toLow, double toHigh){
         return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
     }
-
-    public static double toInterval(double value, double start, double end){
-        double interval = end - start + 1;
-
-        if(value < start)
-            value += interval * ceil((start - value) / interval);
-
-        if(value > end)
-            value -= interval * ceil((value - end) / interval);
-
-        return value;
+    
+    
+    public static float sinDeg(double a){
+        return Mathc.sin(a * toRad);
+    }
+    
+    public static float cosDeg(double a){
+        return Mathc.cos(a * toRad);
+    }
+    
+    public static float tanDeg(double a){
+        return Mathc.tan(a * toRad);
+    }
+    
+    
+    public static float invSqrt(float a){
+        final float aHalf = a * 0.5F;
+        int i = Float.floatToIntBits(a);
+        i = 0x5f3759df - (i >> 1);
+        a = Float.intBitsToFloat(i);
+        a *= (1.5F - aHalf * a * a);
+        return a;
+    }
+    
+    public static double invSqrt(double a){
+        final double aHalf = a * 0.5;
+        long i = Double.doubleToLongBits(a);
+        i = 0x5fe6ec85e7de30daL - (i >> 1);
+        a = Double.longBitsToDouble(i);
+        a *= (1.5 - aHalf * a * a);
+        return a;
+    }
+    
+    
+    public static float dot(float[] a, float[] b){
+        float result = 0;
+        for(int i = 0; i < a.length; i++)
+            result += a[i] * b[i];
+        
+        return result;
+    }
+    
+    public static void mul(float[] in, float[] w, float[] out){
+        for(int o = 0; o < out.length; o++)
+            for(int i = 0; i < in.length; i++)
+                out[o] += in[i] * w[i];
     }
 
 }

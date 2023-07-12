@@ -1,26 +1,14 @@
 package pize.tests.voxelgame.client.block;
 
-import pize.tests.voxelgame.client.block.blocks.Block;
-
 public class BlockState{
     
     public static BlockProperties getProps(short state){
-        return getType(state).properties;
+        return Blocks.fromID(getID(state));
     }
     
     public static BlockProperties getProps(byte id){
-        return getType(id).properties;
+        return Blocks.fromID(id);
     }
-    
-    
-    public static Block getType(short state){
-        return Block.fromID(getID(state));
-    }
-    
-    public static Block getType(byte id){
-        return Block.fromID(id);
-    }
-
     
     public static short getState(int id, byte extraData){
         return (short) ((id & 0xFF | (((short) extraData) << 8)));

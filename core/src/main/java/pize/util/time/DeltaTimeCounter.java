@@ -13,7 +13,7 @@ public class DeltaTimeCounter{
     
     public void update(){
         final long currentTime = System.nanoTime();
-        deltaTime = (currentTime - lastTime) / Maths.NANOS_IN_SECOND;
+        deltaTime = (currentTime - lastTime) / Maths.nanosInSecond;
         lastTime = currentTime;
     }
     

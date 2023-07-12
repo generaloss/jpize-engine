@@ -1,6 +1,6 @@
 package pize.tests.voxelgame.server;
 
-import pize.tests.voxelgame.base.Version;
+import pize.tests.voxelgame.main.Version;
 
 public class ServerConfiguration{
     

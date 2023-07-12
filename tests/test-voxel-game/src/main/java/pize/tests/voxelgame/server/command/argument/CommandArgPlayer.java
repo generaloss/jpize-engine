@@ -1,6 +1,6 @@
 package pize.tests.voxelgame.server.command.argument;
 
-import pize.tests.voxelgame.base.net.PlayerProfile;
+import pize.tests.voxelgame.main.net.PlayerProfile;
 import pize.tests.voxelgame.server.Server;
 import pize.tests.voxelgame.server.command.source.CommandSource;
 import pize.tests.voxelgame.server.player.ServerPlayer;

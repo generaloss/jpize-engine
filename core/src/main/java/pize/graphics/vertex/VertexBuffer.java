@@ -2,6 +2,7 @@ package pize.graphics.vertex;
 
 import pize.graphics.gl.BufferUsage;
 import pize.graphics.gl.GlObject;
+import pize.graphics.gl.Type;
 
 import java.nio.*;
 
@@ -9,7 +10,7 @@ import static org.lwjgl.opengl.GL33.*;
 
 public class VertexBuffer extends GlObject{
 
-    private int vertexSize;
+    private int vertexSize, vertexBytes;
     private long dataSize;
 
     public VertexBuffer(){
@@ -19,30 +20,38 @@ public class VertexBuffer extends GlObject{
 
 
     public void enableAttributes(VertexAttr... attributes){
-        for(VertexAttr attribute: attributes)
+        for(VertexAttr attribute: attributes){
             vertexSize += attribute.getCount();
+            vertexBytes += attribute.getCount() * attribute.getType().getSize();
+        }
 
         int pointer = 0;
         for(byte i = 0; i < attributes.length; i++){
             final VertexAttr attribute = attributes[i];
-            final int typeSize = attribute.getType().getSize();
-
-            glVertexAttribPointer(i, attribute.getCount(), attribute.getType().GL, attribute.isNormalize(), vertexSize * typeSize, pointer);
+            
+            final int count = attribute.getCount();
+            final Type type = attribute.getType();
+            
+            glVertexAttribPointer(i, count, type.GL, attribute.isNormalize(), vertexSize * type.getSize(), pointer);
             glEnableVertexAttribArray(i);
 
-            pointer += attribute.getCount() * typeSize;
+            pointer += count * type.getSize();
         }
     }
 
     public int getVertexSize(){
         return vertexSize;
     }
+    
+    public int getVertexBytes(){
+        return vertexBytes;
+    }
 
     public long getDataSize(){
         return dataSize;
     }
 
-    public int getVertexCount(){
+    public int getVerticesNum(){
         return (int) (dataSize / vertexSize);
     }
 

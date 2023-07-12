@@ -1,43 +1,38 @@
 package pize.tests.terraria.entity;
 
 import pize.Pize;
-import pize.graphics.util.batch.Batch;
-import pize.graphics.util.TextureUtils;
+import pize.graphics.util.batch.TextureBatch;
 import pize.io.glfw.Key;
 import pize.math.Maths;
-import pize.math.vecmath.tuple.Tuple2d;
-import pize.math.vecmath.vector.Vec2d;
-import pize.physic.BoundingRect;
-import pize.physic.Collider2D;
+import pize.math.vecmath.vector.Vec2f;
+import pize.physic.BoundingBox2;
+import pize.physic.Collider2f;
 import pize.physic.RectBody;
-import pize.tests.terraria.world.World;
 import pize.tests.terraria.map.MapTile;
 import pize.tests.terraria.map.WorldMap;
+import pize.tests.terraria.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Entity{
 
-    private static final BoundingRect TILE_BOUNDING_RECT = new BoundingRect(0, 0, 1, 1);
+    private static final BoundingBox2 TILE_BOUNDING_RECT = new BoundingBox2(0, 0, 1, 1);
 
     private final List<RectBody> rectList;
 
     public Player(){
-        super(new BoundingRect(0, 0, 2, 3));
+        super(new BoundingBox2(0, 0, 2, 3));
         rectList = new ArrayList<>();
         getMotion().setMax(50);
     }
 
 
-    public void render(Batch batch){
-        batch.draw(TextureUtils.quadTexture(), pos().x, pos().y, rect().getWidth(), rect().getHeight());
-        batch.setColor(1, 0, 0, 0.5F);
-
+    public void render(TextureBatch batch){
+        batch.drawQuad(1, 1, 1, 1,  pos().x, pos().y, rect().getWidth(), rect().getHeight());
+        
         for(RectBody r: rectList)
-            batch.draw(TextureUtils.quadTexture(), r.getMin().x, r.getMin().y, r.rect().getWidth(), r.rect().getHeight());
-
-        batch.resetColor();
+            batch.drawQuad(1, 0, 0, 0.5,  r.getMin().x, r.getMin().y, r.rect().getWidth(), r.rect().getHeight());
     }
 
     public void update(World world){
@@ -45,12 +40,12 @@ public class Player extends Entity{
 
         // Getting the nearest tiles
 
-        RectBody[] rects = getRects(tileMap, new Tuple2d(), 1);
+        RectBody[] rects = getRects(tileMap, new Vec2f(), 1);
 
-        boolean isCollideUp = isCollide(0, Float.MIN_VALUE, rects);
-        boolean isCollideDown = isCollide(0, -Float.MIN_VALUE, rects);
-        boolean isCollideLeft = isCollide(-Float.MIN_VALUE, 0, rects);
-        boolean isCollideRight = isCollide(Float.MIN_VALUE, 0, rects);
+        final boolean isCollideUp = isCollide(0, Float.MIN_VALUE, rects);
+        final boolean isCollideDown = isCollide(0, -Float.MIN_VALUE, rects);
+        final boolean isCollideLeft = isCollide(-Float.MIN_VALUE, 0, rects);
+        final boolean isCollideRight = isCollide(Float.MIN_VALUE, 0, rects);
 
         // Moving
 
@@ -64,15 +59,15 @@ public class Player extends Entity{
         // Auto jump
 
         if(isCollideDown && !isCollideUp){
-            RectBody rectBody = this.clone();
+            RectBody rectBody = this.copy();
             rectBody.pos().y++;
 
             if(
                 (getMotion().x > 0 && isCollideRight
-                && !Collider2D.getCollidedMotion(rectBody, new Vec2d(Float.MIN_VALUE, 0), rects).isZero())
+                && !Collider2f.getCollidedMotion(rectBody, new Vec2f(Float.MIN_VALUE, 0), rects).isZero())
             ||
                 (getMotion().x < 0 && isCollideLeft
-                && !Collider2D.getCollidedMotion(rectBody, new Vec2d(-Float.MIN_VALUE, 0), rects).isZero()
+                && !Collider2f.getCollidedMotion(rectBody, new Vec2f(-Float.MIN_VALUE, 0), rects).isZero()
             ))
                 getMotion().y = 21;
         }
@@ -86,9 +81,9 @@ public class Player extends Entity{
 
         // Process collisions
 
-        Vec2d motion = getMotion().clone().mul(delta);
+        Vec2f motion = getMotion().copy().mul(delta);
         rects = getRects(tileMap, motion, 0);
-        Vec2d collidedVel = Collider2D.getCollidedMotion(this, motion, rects);
+        Vec2f collidedVel = Collider2f.getCollidedMotion(this, motion, rects);
 
         getMotion().reduce(0.5);
         getMotion().collidedAxesToZero(collidedVel);
@@ -98,10 +93,10 @@ public class Player extends Entity{
     }
 
     public boolean isCollide(float x, float y, RectBody[] rects){
-        return Collider2D.getCollidedMotion(this, new Vec2d(x, y), rects).isZero();
+        return Collider2f.getCollidedMotion(this, new Vec2f(x, y), rects).isZero();
     }
 
-    public RectBody[] getRects(WorldMap map, Tuple2d vel, float padding){
+    public RectBody[] getRects(WorldMap map, Vec2f vel, float padding){
         rectList.clear();
         for(int i = Maths.floor(getMin().x + vel.x - padding); i < getMax().x + vel.x + padding; i++)
             for(int j = Maths.floor(getMin().y + vel.y - padding); j < getMax().y + vel.y + padding; j++){

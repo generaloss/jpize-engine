@@ -11,11 +11,13 @@
         <outputRelativeToContentRoot value="true" />
         <module name="test-audio" />
         <module name="test-minecraft" />
+        <module name="dev-tests" />
         <module name="voxel-game-mod" />
         <module name="test-model-3d" />
         <module name="test-physic" />
         <module name="test-text-editor" />
         <module name="test-voxel-game" />
+        <module name="test-window" />
         <module name="test-terraria" />
         <module name="core" />
         <module name="test-net" />
@@ -43,6 +45,7 @@
       <module name="test-android" target="1.6" />
       <module name="test-project-vostok" target="17" />
       <module name="test-vg" target="17" />
+      <module name="test-win" target="17" />
       <module name="tilemap" target="17" />
       <module name="vg" target="17" />
     </bytecodeTargetLevel>

@@ -1,58 +1,91 @@
 package pize.tests.voxelgame.client.block;
 
-import pize.tests.voxelgame.client.block.blocks.Block;
-import pize.tests.voxelgame.client.block.model.BlockShape;
-import pize.tests.voxelgame.client.block.model.BlockTextureRegion;
+import pize.tests.voxelgame.client.block.model.BlockModel;
+import pize.tests.voxelgame.client.block.shape.BlockCollideShape;
+import pize.tests.voxelgame.client.block.shape.BlockCursorShape;
 
-import static pize.tests.voxelgame.base.chunk.ChunkUtils.*;
+import static pize.tests.voxelgame.main.chunk.ChunkUtils.MAX_LIGHT_LEVEL;
 
 public abstract class BlockProperties{
-
     
     private final int id;
+    private final short defaultState;
 
+    protected boolean solid;
+    protected int lightLevel;
+    protected int opacity;
+    protected BlockCollideShape collideShape;
+    protected BlockCursorShape cursorShape;
+    protected BlockModel model;
+    
     protected BlockProperties(int id){
         this.id = id;
+        this.defaultState = BlockState.getState(id);
+        
+        solid = false;
+        lightLevel = 0;
+        opacity = 0;
+        collideShape = null;
+        cursorShape = null;
+        model = null;
     }
 
     public final int getID(){
         return id;
     }
     
+    public short getDefaultState(){
+        return defaultState;
+    }
+    
     
     /** Возвращает True если это воздух */
     public final boolean isEmpty(){
-        return id == Block.AIR.ID;
+        return id == Blocks.AIR.getID();
     }
     
     /** Возвращает True если блок является источником света */
     public final boolean isGlow(){
-        return getLightLevel() != 0;
+        return lightLevel != 0;
     }
     
     /** Возвращает True если блок пропускает свет */
     public boolean isTransparent(){
-        return getOpacity() != MAX_LIGHT_LEVEL;
+        return opacity != MAX_LIGHT_LEVEL;
     }
     
-    /** Возвращает True если блок имеет форму стандартного вокселя
-     * (куб, а не любая сложная модель)
-     */
-    public abstract boolean isSolid();
     
-    /** Возвращает регионы на атласе для сторон блока */
-    public abstract BlockTextureRegion getTextureRegion();
+    /** Возвращает True если блок имеет форму стандартного вокселя
+     * (куб, а не любая сложная модель) */
+    public boolean isSolid(){
+        return solid;
+    }
     
     /** Возвращает уровень света блока */
-    public abstract int getLightLevel();
+    public int getLightLevel(){
+        return lightLevel;
+    }
     
     /** Возвращает непрозрачность блока
-     * (например: 0 - стекло, 15 - камень)
-     */
-    public abstract int getOpacity();
+     * (например: 0 - стекло, 15 - камень) */
+    public int getOpacity(){
+        return opacity;
+    }
     
     /** Возвращает форму блока для коллизии */
-    public abstract BlockShape getShape();
+    public BlockCollideShape getCollideShape(){
+        return collideShape;
+    }
+    
+    /** Возвращает форму блока для курсора */
+    public BlockCursorShape getCursorShape(){
+        return cursorShape;
+    }
+    
+    /** Возвращает модель блока */
+    public BlockModel getModel(){
+        return model;
+    }
     
     
     @Override

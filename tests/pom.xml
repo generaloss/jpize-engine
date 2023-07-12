@@ -22,10 +22,11 @@
         <module>test-model-3d</module>
         <module>test-particle</module>
         <module>test-text-editor</module>
-        <module>test-window</module>
         <module>test-noise</module>
         <module>test-voxel-game</module>
         <module>test-net</module>
+        <module>test-window</module>
+        <module>dev-tests</module>
     </modules>
     
     <dependencies>

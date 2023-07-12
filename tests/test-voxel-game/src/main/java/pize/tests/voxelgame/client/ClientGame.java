@@ -1,18 +1,22 @@
 package pize.tests.voxelgame.client;
 
+import pize.Pize;
 import pize.math.vecmath.vector.Vec3f;
 import pize.net.security.KeyAES;
 import pize.net.tcp.TcpClient;
 import pize.net.tcp.packet.IPacket;
 import pize.tests.voxelgame.VoxelGame;
 import pize.tests.voxelgame.client.chat.Chat;
-import pize.tests.voxelgame.client.control.GameCamera;
-import pize.tests.voxelgame.client.control.RayCast;
+import pize.tests.voxelgame.client.control.camera.GameCamera;
+import pize.tests.voxelgame.client.control.BlockRayCast;
 import pize.tests.voxelgame.client.entity.LocalPlayer;
 import pize.tests.voxelgame.client.level.ClientLevel;
+import pize.tests.voxelgame.client.renderer.particle.Particle;
+import pize.tests.voxelgame.client.renderer.particle.ParticleBatch;
 import pize.tests.voxelgame.client.net.ClientPacketHandler;
-import pize.tests.voxelgame.base.net.packet.SBPacketLogin;
-import pize.tests.voxelgame.base.net.packet.SBPacketMove;
+import pize.tests.voxelgame.main.time.GameTime;
+import pize.tests.voxelgame.main.net.packet.SBPacketLogin;
+import pize.tests.voxelgame.main.net.packet.SBPacketMove;
 
 public class ClientGame{
     
@@ -23,13 +27,12 @@ public class ClientGame{
     private final TcpClient client;
     private final Chat chat;
     private final KeyAES encryptKey;
-    private final RayCast rayCast;
+    private final BlockRayCast blockRayCast;
+    private final GameTime time;
     
     private ClientLevel level;
     private LocalPlayer player;
     private GameCamera camera;
-    
-    private int tickCount;
     
     
     public ClientGame(VoxelGame session){
@@ -38,8 +41,9 @@ public class ClientGame{
         client = new TcpClient(new ClientPacketHandler(this));
         encryptKey = new KeyAES(256);
         
-        rayCast = new RayCast(session, 2000);
+        blockRayCast = new BlockRayCast(session, 2000);
         chat = new Chat(this);
+        time = new GameTime();
     }
     
     public VoxelGame getSession(){
@@ -57,37 +61,39 @@ public class ClientGame{
         if(level == null || player == null)
             return;
         
-        tickCount++;
-        if(tickCount % 20 == 0){
+        time.tick();
+        player.tick();
+        level.tick();
+        
+        if(player.isPositionChanged() || player.isRotationChanged())
+            sendPacket(new SBPacketMove(player));
+        
+        if(time.getTicks() % GameTime.TICKS_IN_SECOND == 0){ //: HARAM
             tx = txCounter;
             txCounter = 0;
             ClientPacketHandler.rx = ClientPacketHandler.rxCounter;
             ClientPacketHandler.rxCounter = 0;
         }
-        
-        if(player.isPosOrRotChanged())
-            sendPacket(new SBPacketMove(player));
     }
     
     public void update(){
         if(camera == null)
             return;
         
-        level.getChunkManager().updateMeshes();
-        rayCast.update();
-
-        player.tick();
-        level.tick();
-        
+        player.updateInterpolation();
+        blockRayCast.update();
         camera.update();
     }
     
     public void createClientLevel(String worldName){
         if(level != null)
-            level.getChunkManager().dispose();
+            Pize.execSync(()->{
+                System.out.println(100);
+                level.getChunkManager().dispose();
+            });
         
         level = new ClientLevel(session, worldName);
-        rayCast.setWorld(level);
+        blockRayCast.setWorld(level);
     }
     
     public void spawnPlayer(Vec3f position){
@@ -111,6 +117,18 @@ public class ClientGame{
     
     public void disconnect(){
         client.disconnect();
+        
+        if(level != null)
+            Pize.execSync(()->{
+                System.out.println(10000);
+                level.getChunkManager().dispose();
+            });
+    }
+    
+    
+    public void spawnParticle(Particle particle, Vec3f position){
+        final ParticleBatch particleBatch = session.getRenderer().getWorldRenderer().getParticleBatch();
+        particleBatch.spawnParticle(particle, position);
     }
     
     
@@ -130,12 +148,16 @@ public class ClientGame{
         return camera;
     }
     
-    public final RayCast getRayCast(){
-        return rayCast;
+    public final BlockRayCast getBlockRayCast(){
+        return blockRayCast;
     }
     
     public final Chat getChat(){
         return chat;
+    }
+    
+    public final GameTime getTime(){
+        return time;
     }
     
 }

@@ -15,7 +15,7 @@ public class SkyBox implements Disposable{
     private final CubeMap cubeMap;
     private final Shader shader;
     private final Mesh mesh;
-
+    
     public SkyBox(String px, String nx, String py, String ny, String pz, String nz){
         cubeMap = new CubeMap(px, nx, py, ny, pz, nz);
 
@@ -53,6 +53,18 @@ public class SkyBox implements Disposable{
             7, 5, 4
         });
     }
+    
+    public SkyBox(){
+        this(
+            "skybox/2/skybox_positive_x.png",
+            "skybox/2/skybox_negative_x.png",
+            "skybox/2/skybox_positive_y.png",
+            "skybox/2/skybox_negative_y.png",
+            "skybox/2/skybox_positive_z.png",
+            "skybox/2/skybox_negative_z.png"
+        );
+    }
+    
 
     public void render(Matrix4f projection, Matrix4f view){
         Gl.depthMask(false);
@@ -68,7 +80,8 @@ public class SkyBox implements Disposable{
     }
     
     public void render(Camera camera){
-        render(camera.getProjection(), camera.getView());
+        final Matrix4f view = camera.getView().copy().cullPosition();
+        render(camera.getProjection(), view);
     }
     
     public CubeMap getCubeMap(){

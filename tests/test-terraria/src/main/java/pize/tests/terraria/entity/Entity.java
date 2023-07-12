@@ -1,23 +1,23 @@
 package pize.tests.terraria.entity;
 
-import pize.graphics.util.batch.Batch;
-import pize.physic.BoundingRect;
+import pize.graphics.util.batch.TextureBatch;
+import pize.physic.BoundingBox2;
+import pize.physic.Motion2f;
 import pize.physic.RectBody;
-import pize.physic.Motion2D;
 
 public abstract class Entity extends RectBody{
 
-    private final Motion2D motion;
+    private final Motion2f motion;
 
-    public Entity(BoundingRect rect){
+    public Entity(BoundingBox2 rect){
         super(rect);
 
-        motion = new Motion2D();
+        motion = new Motion2f();
     }
 
-    public abstract void render(Batch batch);
+    public abstract void render(TextureBatch batch);
 
-    public Motion2D getMotion(){
+    public Motion2f getMotion(){
         return motion;
     }
 

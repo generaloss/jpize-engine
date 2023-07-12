@@ -1,5 +1,6 @@
 package pize.graphics.util;
 
+import org.lwjgl.BufferUtils;
 import pize.Pize;
 import pize.files.Resource;
 import pize.graphics.gl.Format;
@@ -20,7 +21,7 @@ public class ScreenUtils{
         final int width = Pize.getWidth();
         final int height = Pize.getHeight();
         
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(width * height * 4).order(ByteOrder.LITTLE_ENDIAN);
+        final ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4).order(ByteOrder.LITTLE_ENDIAN);
         glReadPixels(0, 0, width, height, Format.BGRA.GL, Type.UNSIGNED_BYTE.GL, buffer);
         
         final int[] pixels = new int[width * height];

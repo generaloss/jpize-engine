@@ -2,8 +2,6 @@ package pize.net.tcp.packet;
 
 import pize.graphics.util.color.Color;
 import pize.math.util.EulerAngles;
-import pize.math.vecmath.tuple.Tuple3d;
-import pize.math.vecmath.tuple.Tuple3f;
 import pize.math.vecmath.vector.Vec3d;
 import pize.math.vecmath.vector.Vec3f;
 
@@ -33,7 +31,15 @@ public class PacketInputStream extends DataInputStream{
         return readNBytes(readInt());
     }
     
-    public Tuple3f readTuple3f() throws IOException{
+    public Vec3f readVec3i() throws IOException{
+        return new Vec3f(
+            readInt(),
+            readInt(),
+            readInt()
+        );
+    }
+    
+    public Vec3f readVec3f() throws IOException{
         return new Vec3f(
             readFloat(),
             readFloat(),
@@ -41,7 +47,7 @@ public class PacketInputStream extends DataInputStream{
         );
     }
 
-    public Tuple3d readTuple3d() throws IOException{
+    public Vec3d readVec3d() throws IOException{
         return new Vec3d(
             readDouble(),
             readDouble(),
@@ -51,9 +57,9 @@ public class PacketInputStream extends DataInputStream{
 
     public EulerAngles readEulerAngles() throws IOException{
         return new EulerAngles(
-            readDouble(),
-            readDouble(),
-            readDouble()
+            readFloat(),
+            readFloat(),
+            readFloat()
         );
     }
     

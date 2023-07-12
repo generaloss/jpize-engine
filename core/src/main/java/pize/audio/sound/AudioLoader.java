@@ -52,7 +52,7 @@ public class AudioLoader{
             final byte[] buffer = output.toByteArray();
             final int bufferSize = buffer.length - (buffer.length % (input.channels() > 1 ? 4 : 2));
             
-            final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(bufferSize);
+            final ByteBuffer byteBuffer = BufferUtils.createByteBuffer(bufferSize);
             byteBuffer.order(ByteOrder.nativeOrder());
             byteBuffer.put(buffer);
             byteBuffer.flip();
@@ -94,7 +94,7 @@ public class AudioLoader{
                 bitstream.closeFrame();
             }
             
-            final ByteBuffer byteBuffer = ByteBuffer.allocateDirect(output.size());
+            final ByteBuffer byteBuffer = BufferUtils.createByteBuffer(output.size());
             byteBuffer.order(ByteOrder.nativeOrder());
             byteBuffer.put(output.toByteArray());
             byteBuffer.flip();

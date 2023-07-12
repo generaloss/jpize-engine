@@ -5,12 +5,11 @@ import pize.app.AppAdapter;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.graphics.gl.Gl;
-import pize.graphics.util.TextureUtils;
 import pize.graphics.util.batch.TextureBatch;
 import pize.io.glfw.Key;
-import pize.math.vecmath.tuple.Tuple2f;
 import pize.util.io.TextProcessor;
 
+import java.util.List;
 import java.util.StringJoiner;
 
 public class Main extends AppAdapter{
@@ -41,18 +40,20 @@ public class Main extends AppAdapter{
         Gl.clearColor(0.2, 0.2, 0.2, 1);
         batch.begin();
         
-        // Draw background
-        Tuple2f bounds = font.getBounds(text.toString());
-        batch.setColor(0.1, 0.15, 0.2, 1);
-        batch.draw(TextureUtils.quadTexture(), 50, 10, bounds.x, bounds.y);
-        batch.setColor(0.3, 0.45, 0.5, 1);
-        batch.draw(TextureUtils.quadTexture(), 0, 10, 50, bounds.y);
-        batch.resetColor();
-        
-        // Draw line numbers
+        // Iterate lines
         final StringJoiner lineNumbersJoiner = new StringJoiner("\n");
-        for(int i = 0; i < text.getLines().size(); i++)
+        final List<String> lines = text.getLines();
+        for(int i = 0; i < lines.size(); i++){
+            // Add line number
             lineNumbersJoiner.add(String.valueOf(i + 1));
+            
+            // Draw line background
+            final float lineWidth = font.getLineWidth(lines.get(i));
+            final float advance = font.getLineAdvanceScaled();
+            batch.drawQuad(0.1, 0.15, 0.2, 1,  50, 10 + (lines.size() - 1 - i) * advance,  lineWidth, advance);
+            batch.drawQuad(0.3, 0.45, 0.5, 1,  0 , 10 + (lines.size() - 1 - i) * advance,  50, advance);
+        }
+        // Draw line numbers
         font.drawText(batch, lineNumbersJoiner.toString(), 5, 10);
         
         // Draw text
@@ -61,9 +62,9 @@ public class Main extends AppAdapter{
         // Draw cursor
         if(System.currentTimeMillis() / 500 % 2 == 0 && text.isActive()){
             final String currentLine = text.getCurrentLine();
-            final float cursorY = font.getBounds(text.toString()).y - (text.getCursorY() + 1) * font.getScaledLineHeight();
+            final float cursorY = (text.getCursorY() + 1) * font.getLineAdvanceScaled() - font.getLineAdvanceScaled() * text.getLines().size();
             final float cursorX = font.getLineWidth(currentLine.substring(0, text.getCursorX()));
-            batch.draw(TextureUtils.quadTexture(), 50 + cursorX, 10 + cursorY, 2, font.getScaledLineHeight());
+            batch.drawQuad(1, 1, 1, 1,  50 + cursorX, 10 + cursorY, 2, font.getLineAdvanceScaled());
         }
         
         batch.end();

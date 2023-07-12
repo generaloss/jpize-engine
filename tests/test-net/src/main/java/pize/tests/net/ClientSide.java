@@ -5,14 +5,13 @@ import pize.app.AppAdapter;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.graphics.gl.Gl;
-import pize.graphics.util.TextureUtils;
 import pize.graphics.util.batch.TextureBatch;
 import pize.io.glfw.Key;
-import pize.math.vecmath.tuple.Tuple2f;
+import pize.math.vecmath.vector.Vec2f;
 import pize.net.security.KeyAES;
 import pize.net.security.PublicRSA;
-import pize.net.tcp.TcpConnection;
 import pize.net.tcp.TcpClient;
+import pize.net.tcp.TcpConnection;
 import pize.net.tcp.TcpListener;
 import pize.net.tcp.packet.PacketInfo;
 import pize.net.tcp.packet.Packets;
@@ -69,12 +68,9 @@ public class ClientSide extends AppAdapter implements TcpListener{
         batch.begin();
         
         // Draw background
-        Tuple2f bounds = font.getBounds(text.toString());
-        batch.setColor(0.1, 0.15, 0.2, 1);
-        batch.draw(TextureUtils.quadTexture(), 50, 10, bounds.x, bounds.y);
-        batch.setColor(0.3, 0.45, 0.5, 1);
-        batch.draw(TextureUtils.quadTexture(), 0, 10, 50, bounds.y);
-        batch.resetColor();
+        final Vec2f bounds = font.getBounds(text.toString());
+        batch.drawQuad(0.1, 0.15, 0.2, 1,  50, 10, bounds.x, bounds.y);
+        batch.drawQuad(0.3, 0.45, 0.5, 1,  0, 10, 50, bounds.y);
         
         // Draw line numbers
         final StringJoiner lineNumbersJoiner = new StringJoiner("\n");
@@ -88,9 +84,9 @@ public class ClientSide extends AppAdapter implements TcpListener{
         // Draw cursor
         if(System.currentTimeMillis() / 500 % 2 == 0 && text.isActive()){
             final String currentLine = text.getCurrentLine();
-            final float cursorY = font.getBounds(text.toString()).y - (text.getCursorY() + 1) * font.getScaledLineHeight();
+            final float cursorY = font.getBounds(text.toString()).y - (text.getCursorY() + 1) * font.getLineAdvanceScaled();
             final float cursorX = font.getLineWidth(currentLine.substring(0, text.getCursorX()));
-            batch.draw(TextureUtils.quadTexture(), 50 + cursorX, 10 + cursorY, 2, font.getScaledLineHeight());
+            batch.drawQuad(1, 1, 1, 1,  50 + cursorX, 10 + cursorY, 2, font.getLineAdvanceScaled());
         }
         
         batch.end();

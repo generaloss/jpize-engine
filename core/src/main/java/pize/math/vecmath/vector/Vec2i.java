@@ -1,124 +1,370 @@
 package pize.math.vecmath.vector;
 
-import pize.math.vecmath.tuple.Tuple2i;
-import pize.math.vecmath.tuple.Tuple3i;
+import pize.math.Mathc;
 
-public class Vec2i extends Tuple2i implements Cloneable{
+import java.util.Objects;
 
-    public Vec2i(){}
-
+public class Vec2i{
+    
+    public Vec2i(){ }
+    
     public Vec2i(int x, int y){
         set(x, y);
     }
-
+    
     public Vec2i(int xy){
         set(xy);
     }
-
-    public Vec2i(Tuple2i vector){
+    
+    public Vec2i(Vec2i vector){
         set(vector);
     }
-
-    public Vec2i(Tuple3i vector){
+    
+    public Vec2i(Vec3i vector){
         set(vector);
     }
-
-
+    
+    
+    /**             POINT             */
+    
+    public float dst(int x, int y){
+        double dx = this.x - x;
+        double dy = this.y - y;
+        
+        return Mathc.sqrt(dx * dx + dy * dy);
+    }
+    
+    public float dst(double x, double y){
+        double dx = this.x - x;
+        double dy = this.y - y;
+        
+        return Mathc.sqrt(dx * dx + dy * dy);
+    }
+    
+    public float dst(float x, float y){
+        double dx = this.x - x;
+        double dy = this.y - y;
+        
+        return Mathc.sqrt(dx * dx + dy * dy);
+    }
+    
+    
+    public float dst(Vec2i vector){
+        double dx = x - vector.x;
+        double dy = y - vector.y;
+        
+        return Mathc.sqrt(dx * dx + dy * dy);
+    }
+    
+    public float dst(Vec2d vector){
+        double dx = x - vector.x;
+        double dy = y - vector.y;
+        
+        return Mathc.sqrt(dx * dx + dy * dy);
+    }
+    
+    public float dst(Vec2f vector){
+        double dx = x - vector.x;
+        double dy = y - vector.y;
+        
+        return Mathc.sqrt(dx * dx + dy * dy);
+    }
+    
+    
+    /**             VECTOR             */
+    
     public double len(){
         return Math.sqrt(x * x + y * y);
     }
-
-
-    public Vec2i module(){
+    
+    
+    public Vec2i abs(){
         if(x < 0)
             x *= -1;
         if(y < 0)
             y *= -1;
-
+        
         return this;
     }
-
+    
     public Vec2i zero(){
         set(0, 0);
-
+        
         return this;
     }
-
+    
     public boolean isZero(){
         return x == 0 && y == 0;
     }
-
-
+    
+    
     public double dot(float x, float y){
         return this.x * x + this.y * y;
     }
-
+    
     public double dot(double x, double y){
         return this.x * x + this.y * y;
     }
-
+    
     public double dot(Vec2i vector){
         return x * vector.x + y * vector.y;
     }
-
+    
     public double dot(Vec2f vector){
         return x * vector.x + y * vector.y;
     }
-
+    
     public double dot(Vec2d vector){
         return x * vector.x + y * vector.y;
     }
-
-
+    
+    
     public float crs(float x, float y){
         return this.x * y - this.y * x;
     }
-
+    
     public double crs(double x, double y){
         return this.x * y - this.y * x;
     }
-
+    
     public float crs(Vec2i vector){
         return this.x * vector.y - this.y * vector.x;
     }
-
+    
     public float crs(Vec2f vector){
         return this.x * vector.y - this.y * vector.x;
     }
-
+    
     public double crs(Vec2d vector){
         return this.x * vector.y - this.y * vector.x;
     }
-
+    
     public Vec2i crs(){
         return new Vec2i(y, -x);
     }
-
-
-    @Override
-    public Vec2i clone(){
+    
+    
+    public Vec2i copy(){
         return new Vec2i(this);
     }
-
-
-    public static float crs(Tuple2i a, Tuple2i b){
+    
+    
+    public static float crs(Vec2i a, Vec2i b){
         return a.x * b.y - a.y * b.x;
     }
-
+    
     public static float crs(int x1, int y1, int x2, int y2){
         return x1 * y2 - y1 * x2;
     }
-
-    public static float dot(Tuple2i a, Tuple2i b){
+    
+    public static float dot(Vec2i a, Vec2i b){
         return a.x * b.x + a.y * b.y;
     }
-
+    
     public static float dot(int x1, int y1, int x2, int y2){
         return x1 * x2 + y1 * y2;
     }
-
+    
     public static double len(int x, int y){
         return Math.sqrt(x * x + y * y);
     }
-
+    
+    
+    /**             TUPLE             */
+    
+    public int x, y;
+    
+    
+    public Vec2i set(int x, int y){
+        this.x = x;
+        this.y = y;
+        return this;
+    }
+    
+    public Vec2i set(int xy){
+        x = xy;
+        y = xy;
+        return this;
+    }
+    
+    public Vec2i set(Vec2i vector){
+        x = vector.x;
+        y = vector.y;
+        return this;
+    }
+    
+    public Vec2i set(Vec3i vector){
+        x = vector.x;
+        y = vector.y;
+        return this;
+    }
+    
+    
+    public Vec2i add(int x, int y){
+        this.x += x;
+        this.y += y;
+        return this;
+    }
+    
+    public Vec2i add(int xy){
+        x += xy;
+        y += xy;
+        return this;
+    }
+    
+    public Vec2i add(Vec2d vector){
+        x += vector.x;
+        y += vector.y;
+        return this;
+    }
+    
+    public Vec2i add(Vec2f vector){
+        x += vector.x;
+        y += vector.y;
+        return this;
+    }
+    
+    public Vec2i add(Vec3d vector){
+        x += vector.x;
+        y += vector.y;
+        return this;
+    }
+    
+    public Vec2i add(Vec3f vector){
+        x += vector.x;
+        y += vector.y;
+        return this;
+    }
+    
+    
+    public Vec2i sub(int x, int y){
+        this.x -= x;
+        this.y -= y;
+        return this;
+    }
+    
+    public Vec2i sub(int xy){
+        x -= xy;
+        y -= xy;
+        return this;
+    }
+    
+    public Vec2i sub(Vec2d vector){
+        x -= vector.x;
+        y -= vector.y;
+        return this;
+    }
+    
+    public Vec2i sub(Vec2f vector){
+        x -= vector.x;
+        y -= vector.y;
+        return this;
+    }
+    
+    public Vec2i sub(Vec3d vector){
+        x -= vector.x;
+        y -= vector.y;
+        return this;
+    }
+    
+    public Vec2i sub(Vec3f vector){
+        x -= vector.x;
+        y -= vector.y;
+        return this;
+    }
+    
+    
+    public Vec2i mul(int x, int y){
+        this.x *= x;
+        this.y *= y;
+        return this;
+    }
+    
+    public Vec2i mul(int xy){
+        x *= xy;
+        y *= xy;
+        return this;
+    }
+    
+    public Vec2i mul(Vec2d vector){
+        x *= vector.x;
+        y *= vector.y;
+        return this;
+    }
+    
+    public Vec2i mul(Vec2f vector){
+        x *= vector.x;
+        y *= vector.y;
+        return this;
+    }
+    
+    public Vec2i mul(Vec3d vector){
+        x *= vector.x;
+        y *= vector.y;
+        return this;
+    }
+    
+    public Vec2i mul(Vec3f vector){
+        x *= vector.x;
+        y *= vector.y;
+        return this;
+    }
+    
+    
+    public Vec2i div(int x, int y){
+        this.x /= x;
+        this.y /= y;
+        return this;
+    }
+    
+    public Vec2i div(int xy){
+        x /= xy;
+        y /= xy;
+        return this;
+    }
+    
+    public Vec2i div(Vec2d vector){
+        x /= vector.x;
+        y /= vector.y;
+        return this;
+    }
+    
+    public Vec2i div(Vec2f vector){
+        x /= vector.x;
+        y /= vector.y;
+        return this;
+    }
+    
+    public Vec2i div(Vec3d vector){
+        x /= vector.x;
+        y /= vector.y;
+        return this;
+    }
+    
+    public Vec2i div(Vec3f vector){
+        x /= vector.x;
+        y /= vector.y;
+        return this;
+    }
+    
+    
+    @Override
+    public String toString(){
+        return x + ", " + y;
+    }
+    
+    @Override
+    public boolean equals(Object object){
+        if(object == null || getClass() != object.getClass())
+            return false;
+        
+        final Vec2i tuple = (Vec2i) object;
+        return x == tuple.x && y == tuple.y;
+    }
+    
+    @Override
+    public int hashCode(){
+        return Objects.hash(x, y);
+    }
+    
 }

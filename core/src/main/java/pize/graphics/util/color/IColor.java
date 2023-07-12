@@ -1,8 +1,9 @@
 package pize.graphics.util.color;
 
+import pize.math.Mathc;
 import pize.math.Maths;
 
-public abstract class IColor implements Cloneable{
+public abstract class IColor{
 
     abstract public float r();
 
@@ -42,9 +43,7 @@ public abstract class IColor implements Cloneable{
 
 
     public float[] toArray(){
-        return new float[]{
-            r(), g(), b(), a()
-        };
+        return new float[]{ r(), g(), b(), a() };
     }
 
 
@@ -62,6 +61,15 @@ public abstract class IColor implements Cloneable{
 
     public static float intToFloatColor(int value){
         return Float.intBitsToFloat(value & 0xFEFFFFFF);
+    }
+    
+    public static Color random(){
+        return new Color(
+            Mathc.random(),
+            Mathc.random(),
+            Mathc.random(),
+            1F
+        );
     }
 
 }

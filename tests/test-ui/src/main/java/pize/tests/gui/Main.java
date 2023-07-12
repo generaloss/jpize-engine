@@ -18,33 +18,29 @@ import pize.io.glfw.Key;
 public class Main extends AppAdapter{
 
     public static void main(String[] args){
-        Pize.create("GUI", 480, 360);
+        Pize.create("Test - UI", 480, 360);
         Pize.window().setIcon("icon.png");
         Pize.run(new Main());
     }
-
-
+    
     private TextureBatch batch;
-
-    private Layout layout;
-
     private Texture texture;
+    private Layout layout;
 
     @Override
     public void init(){
         batch = new TextureBatch();
 
         texture = new Texture("widgets.png");
-        TextureRegion buttonTextureRegion = new TextureRegion(texture, 0, 66, 200, 20);
-        RegionMesh regionMesh = new RegionMesh(0,0, 2,2, 198,17, 200,20);
+        final TextureRegion buttonTextureRegion = new TextureRegion(texture, 0, 66, 200, 20);
+        final RegionMesh regionMesh = new RegionMesh(0,0, 2,2, 198,17, 200,20);
 
-        // GUI
-
+        // UI
         layout = new Layout();
         layout.setLayoutType(LayoutType.HORIZONTAL);
         layout.alignItems(Align.CENTER);
 
-        NinePatchImage button = new NinePatchImage(buttonTextureRegion, regionMesh);
+        final NinePatchImage button = new NinePatchImage(buttonTextureRegion, regionMesh);
         button.setExpandType(ExpandType.HORIZONTAL);
         button.setSize(Constraint.relative(0.333), Constraint.relative(0.333));
         layout.put("button", button);
@@ -54,11 +50,11 @@ public class Main extends AppAdapter{
     public void render(){
         if(Key.ESCAPE.isDown())
             Pize.exit();
+        
         Gl.clearColorBuffer();
         Gl.clearColor(0.08, 0.11, 0.15, 1);
-
         batch.begin();
-        layout.render(batch);
+        layout.render(batch); // render layout
         batch.end();
     }
     

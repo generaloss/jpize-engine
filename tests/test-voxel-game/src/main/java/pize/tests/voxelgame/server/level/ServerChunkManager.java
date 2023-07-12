@@ -1,10 +1,10 @@
 package pize.tests.voxelgame.server.level;
 
 import pize.math.vecmath.vector.Vec2f;
-import pize.tests.voxelgame.base.chunk.storage.ChunkPos;
-import pize.tests.voxelgame.base.entity.Entity;
-import pize.tests.voxelgame.base.level.ChunkManager;
-import pize.tests.voxelgame.base.net.packet.CBPacketChunk;
+import pize.tests.voxelgame.main.chunk.storage.ChunkPos;
+import pize.tests.voxelgame.main.entity.Entity;
+import pize.tests.voxelgame.main.level.ChunkManager;
+import pize.tests.voxelgame.main.net.packet.CBPacketChunk;
 import pize.tests.voxelgame.server.chunk.ServerChunk;
 import pize.tests.voxelgame.server.player.ServerPlayer;
 import pize.util.time.PerSecCounter;
@@ -15,8 +15,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.*;
 
-import static pize.tests.voxelgame.base.chunk.ChunkUtils.getChunkPos;
-import static pize.tests.voxelgame.base.level.ChunkManagerUtils.distToChunk;
+import static pize.tests.voxelgame.main.chunk.ChunkUtils.getChunkPos;
+import static pize.tests.voxelgame.main.level.ChunkManagerUtils.distToChunk;
 
 public class ServerChunkManager extends ChunkManager{
     

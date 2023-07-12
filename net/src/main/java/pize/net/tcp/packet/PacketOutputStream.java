@@ -2,8 +2,9 @@ package pize.net.tcp.packet;
 
 import pize.graphics.util.color.IColor;
 import pize.math.util.EulerAngles;
-import pize.math.vecmath.tuple.Tuple3d;
-import pize.math.vecmath.tuple.Tuple3f;
+import pize.math.vecmath.vector.Vec3d;
+import pize.math.vecmath.vector.Vec3f;
+import pize.math.vecmath.vector.Vec3i;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -32,22 +33,28 @@ public class PacketOutputStream extends DataOutputStream{
         write(byteArray);
     }
     
-    public void writeTuple3f(Tuple3f vector) throws IOException{
+    public void writeVec3i(Vec3i vector) throws IOException{
+        writeInt(vector.x);
+        writeInt(vector.y);
+        writeInt(vector.z);
+    }
+    
+    public void writeVec3f(Vec3f vector) throws IOException{
         writeFloat(vector.x);
         writeFloat(vector.y);
         writeFloat(vector.z);
     }
 
-    public void writeTuple3d(Tuple3d vector) throws IOException{
+    public void writeVec3d(Vec3d vector) throws IOException{
         writeDouble(vector.x);
         writeDouble(vector.y);
         writeDouble(vector.z);
     }
 
     public void writeEulerAngles(EulerAngles vector) throws IOException{
-        writeDouble(vector.yaw);
-        writeDouble(vector.pitch);
-        writeDouble(vector.roll);
+        writeFloat(vector.yaw);
+        writeFloat(vector.pitch);
+        writeFloat(vector.roll);
     }
     
     public void writeUUID(UUID uuid) throws IOException{

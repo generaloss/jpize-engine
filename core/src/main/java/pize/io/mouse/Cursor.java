@@ -11,35 +11,35 @@ import static org.lwjgl.glfw.GLFW.glfwDestroyCursor;
 
 public class Cursor implements Disposable{
 
-    private final long id;
+    private final long ID;
 
     public Cursor(String filepath){
-        Pixmap cursorTextureData = PixmapIO.load(filepath);
-        GLFWImage cursorBuffer = GLFWImage.malloc();
+        final Pixmap cursorTextureData = PixmapIO.load(filepath);
+        final GLFWImage cursorBuffer = GLFWImage.malloc();
         cursorBuffer.set(cursorTextureData.getWidth(), cursorTextureData.getHeight(), cursorTextureData.getBuffer());
-        id = glfwCreateCursor(cursorBuffer, 0, 0);
+        ID = glfwCreateCursor(cursorBuffer, 0, 0);
     }
 
     public Cursor(Texture cursorTexture){
-        GLFWImage cursorBuffer = GLFWImage.malloc();
+        final GLFWImage cursorBuffer = GLFWImage.malloc();
         cursorBuffer.set(cursorTexture.getWidth(), cursorTexture.getHeight(), cursorTexture.getPixmap().getBuffer());
-        id = glfwCreateCursor(cursorBuffer, 0, 0);
+        ID = glfwCreateCursor(cursorBuffer, 0, 0);
     }
 
     public Cursor(Pixmap cursorTexture){
-        GLFWImage cursorBuffer = GLFWImage.malloc();
+        final GLFWImage cursorBuffer = GLFWImage.malloc();
         cursorBuffer.set(cursorTexture.getWidth(), cursorTexture.getHeight(), cursorTexture.getBuffer());
-        id = glfwCreateCursor(cursorBuffer, 0, 0);
+        ID = glfwCreateCursor(cursorBuffer, 0, 0);
     }
 
 
-    public long getId(){
-        return id;
+    public long getID(){
+        return ID;
     }
 
     @Override
     public void dispose(){
-        glfwDestroyCursor(id);
+        glfwDestroyCursor(ID);
     }
 
 }

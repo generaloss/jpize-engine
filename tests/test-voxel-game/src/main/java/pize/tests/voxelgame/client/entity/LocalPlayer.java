@@ -1,87 +1,115 @@
 package pize.tests.voxelgame.client.entity;
 
-import pize.Pize;
 import pize.io.glfw.Key;
 import pize.math.Mathc;
-import pize.math.util.EulerAngles;
-import pize.math.vecmath.vector.Vec2f;
-import pize.math.vecmath.vector.Vec3d;
+import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
-import pize.tests.voxelgame.client.block.blocks.Block;
-import pize.tests.voxelgame.base.level.Level;
+import pize.tests.voxelgame.client.block.BlockProperties;
+import pize.tests.voxelgame.client.block.Blocks;
+import pize.tests.voxelgame.main.level.Level;
 
 public class LocalPlayer extends AbstractClientPlayer{
     
-    public static float speed;
+    private final Vec3f moveControl;
+    private float jumpDownY, lastMotionY, fallHeight;
     
-    
-    private float jumpMotion, gravity;
-    private final Vec2f moveControl;
-    private float jumpDownY, oldMotionY, fallHeight;
-    
-    private final Vec3f oldPos;
-    private final EulerAngles oldRot;
-    
-    public short holdBlock = Block.STONE.getDefaultState();
+    public BlockProperties holdBlock = Blocks.GRASS;
     
     public LocalPlayer(Level levelOF, String name){
         super(levelOF, name);
 
-        moveControl = new Vec2f();
-        setJumpHeight(1.25F);
-        
-        oldPos = new Vec3f();
-        oldRot = new EulerAngles();
-    }
-    
-    
-    public boolean isPosOrRotChanged(){
-        final boolean changed = !oldPos.equals(getPosition()) || !oldRot.equals(getRotation());
-        
-        oldPos.set(getPosition());
-        oldRot.set(getRotation());
-        
-        return changed;
+        moveControl = new Vec3f();
     }
     
     
     public void tick(){
         super.tick();
         
-        final float deltaTime = Pize.getDt();
+        /** -------- Vertical Move -------- */
         
-        // Horizontal move
-        float reduce = 0.91F;
-        float speed = 0.34F * deltaTime;
-        if(isSneaking() && !isFlying())
-            speed *= 0.5;
-        if(isSprinting())
-            speed *= 1.3;
-        if(isFlying())
-            speed *= 10;
-        
-        float dist = moveControl.nor().len();
-        if(dist > 0){
-            moveControl.mul(speed);
-            moveControl.rotDeg(getRotation().yaw);
+        // Jumping
+        if(isJumping()){
+            if(isOnGround()){
+                // Jump
+                getMotion().y = 0.42F;
+                
+                // Jump-boost
+                if(isSprinting()){
+                    final float yaw = getRotation().yaw * Maths.toRad;
+                    final float jumpBoost = 0.2F;
+                    getMotion().x += jumpBoost * Mathc.cos(yaw);
+                    getMotion().z += jumpBoost * Mathc.sin(yaw);
+                }
+            }
             
-            getMotion().x += moveControl.x;
-            getMotion().z += moveControl.y;
+            // Activate Flying
+            else if(isFlyEnabled() && !isFlying() && Key.SPACE.isDown())
+                setFlying(true);
+        }
+        
+        // Flying
+        if(isOnGround() && isFlying())
+            setFlying(false);
+        
+        if(isFlying()){
+            if(isSneaking())
+                getMotion().y -= 0.05F;
+            
+            if(isJumping())
+                getMotion().y += 0.05F;
+            
+            if(!isFlyEnabled())
+                setFlying(false);
         }
         
         // Gravity
         if(!isOnGround() && !isFlying())
-            getMotion().y += gravity * (deltaTime * deltaTime) / 0.91;
+            getMotion().y -= 0.08;
         
-        // Fly
-        if(isFlying() && !isFlyEnabled())
-            setFlying(false);
+        // Reduce Vertical Motion
+        getMotion().y *= 0.98;
         
-        if(isSneaking())
-            getMotion().y -= 0.01F;
+        
+        /** -------- Horizontal Move -------- */
+        
+        // Movement multiplier
+        float movementMul = 0.98F; // Default
+        if(isSneaking() && !isFlying())
+            movementMul *= 0.3; // Sneaking
+        if(isSprinting())
+            movementMul *= 1.3; // Sprinting
+        if(isFlying())
+            movementMul *= 10; // Flying
+        
+        
+        // Slipperiness multiplier
+        float slipperinessMul = 1; // Air
+        if(isOnGround())
+            slipperinessMul *= 0.6; // Ground
+        
+        // Reduce Last Motion
+        final float reduceHorizontal = slipperinessMul * 0.91F;
+        getMotion().mul(reduceHorizontal, 1, reduceHorizontal);
+        
+        // Move
+        float moveControlLen = moveControl.len();
+        if(moveControlLen > 0){
+            final Vec3f acceleration = new Vec3f(moveControl.x, 0, moveControl.z);
+            
+            if(isOnGround()){
+                final float slipperiness = 0.6F / slipperinessMul;
+                acceleration.mul(0.1 * movementMul * slipperiness * slipperiness * slipperiness);
+            }else
+                acceleration.mul(0.02 * movementMul);
+            
+            getMotion().add(acceleration);
+        }
+        
+        
+        /** -------- Other -------- */
         
         // Fall height
-        if(getMotion().y < 0 && oldMotionY >= 0)
+        if(getMotion().y < 0 && lastMotionY >= 0)
             jumpDownY = getPosition().y;
         
         if(isOnGround() && jumpDownY != 0){
@@ -89,25 +117,15 @@ public class LocalPlayer extends AbstractClientPlayer{
             jumpDownY = 0;
         }
         
-        oldMotionY = (float) getMotion().y;
+        lastMotionY = getMotion().y;
         
-        // Move entity & Measure speed
-        final Vec3f oldPosition = getPosition().clone();
-        {
-            final Vec3d collidedMotion = moveEntity(getMotion());
-            getMotion().collidedAxesToZero(collidedMotion);
-        }
-        LocalPlayer.speed = ((Vec3f) oldPosition.sub(getPosition())).len() / deltaTime;
+        // Move entity
+        final Vec3f collidedMotion = moveEntity(getMotion());
+        getMotion().collidedAxesToZero(collidedMotion);
         
-        // Reduce motion
-        getMotion().mul(reduce, 0.995F, reduce);
-    }
-    
-    public void setJumpHeight(float height){
-        final float timeToMaxJumpY = 0.27F * Mathc.sqrt(height);
-        
-        gravity = -2 * height / (timeToMaxJumpY * timeToMaxJumpY);
-        jumpMotion = 2 * height / timeToMaxJumpY;
+        // Disable sprinting
+        if(collidedMotion.x == 0 || collidedMotion.z == 0)
+            setSprinting(false);
     }
     
     public float getFallHeight(){
@@ -115,32 +133,8 @@ public class LocalPlayer extends AbstractClientPlayer{
     }
     
     
-    public void moveControl(float forward, float strafe){
-        moveControl.set(forward, strafe);
-    }
-    
-    public void jump(){
-        if(isOnGround() && isFlying())
-            setFlying(false);
-        
-        if(isFlying()){
-            getMotion().y += 0.01F;
-            
-            return;
-        }
-        
-        if(isOnGround()){
-            // Jump
-            getMotion().y = jumpMotion * Pize.getDt();
-            
-            // Jump-boost
-            if(isSprinting()){
-                final Vec2f jumpBoost = new Vec2f(2 * Pize.getDt(), 0).rotDeg(getRotation().yaw);
-                getMotion().x += jumpBoost.x;
-                getMotion().z += jumpBoost.y;
-            }
-        }else if(isFlyEnabled() && !isFlying() && Key.SPACE.isDown())
-            setFlying(true);
+    public void moveControl(Vec3f motion){
+        moveControl.set(motion);
     }
     
 }

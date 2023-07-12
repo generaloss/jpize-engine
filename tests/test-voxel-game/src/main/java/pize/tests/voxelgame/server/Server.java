@@ -18,6 +18,7 @@ public abstract class Server implements Tickable{
     private final PlayerList playerList;
     private final LevelManager levelManager;
     private final CommandDispatcher commandDispatcher;
+    private final ServerGameTime gameTime;
     
     public Server(){
         configuration = new ServerConfiguration();
@@ -28,6 +29,7 @@ public abstract class Server implements Tickable{
         playerList = new PlayerList(this);
         levelManager = new LevelManager(this);
         commandDispatcher = new CommandDispatcher(this);
+        gameTime = new ServerGameTime(this);
     }
     
     
@@ -40,6 +42,8 @@ public abstract class Server implements Tickable{
     
     @Override
     public void tick(){
+        gameTime.tick();
+        
         for(ServerLevel level : getLevelManager().getLoadedLevels())
             level.tick();
     }
@@ -63,6 +67,10 @@ public abstract class Server implements Tickable{
     
     public CommandDispatcher getCommandDispatcher(){
         return commandDispatcher;
+    }
+    
+    public ServerGameTime getGameTime(){
+        return gameTime;
     }
     
 }

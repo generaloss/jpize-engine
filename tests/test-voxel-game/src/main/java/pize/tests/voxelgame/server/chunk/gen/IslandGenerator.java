@@ -2,12 +2,12 @@ package pize.tests.voxelgame.server.chunk.gen;
 
 import pize.math.Maths;
 import pize.math.function.FastNoiseLite;
-import pize.tests.voxelgame.base.chunk.storage.HeightmapType;
-import pize.tests.voxelgame.client.block.blocks.Block;
+import pize.tests.voxelgame.main.chunk.storage.HeightmapType;
+import pize.tests.voxelgame.client.block.Blocks;
 import pize.tests.voxelgame.server.chunk.ServerChunk;
 
-import static pize.tests.voxelgame.base.chunk.ChunkUtils.HEIGHT;
-import static pize.tests.voxelgame.base.chunk.ChunkUtils.SIZE;
+import static pize.tests.voxelgame.main.chunk.ChunkUtils.HEIGHT;
+import static pize.tests.voxelgame.main.chunk.ChunkUtils.SIZE;
 
 public class IslandGenerator implements ChunkGenerator{
     
@@ -62,7 +62,7 @@ public class IslandGenerator implements ChunkGenerator{
                     
                     float continentalness3D = (continentalnessNoise.getNoise(x, y, z) + 1) * 0.5F;
                     if(continentalness3D < ((float) y / (HEIGHT - height)) * density)
-                        chunk.setBlockFast(lx, y, lz, Block.STONE.getDefaultState());
+                        chunk.setBlockFast(lx, y, lz, Blocks.STONE.getDefaultState());
                 }
             }
         }
@@ -74,7 +74,7 @@ public class IslandGenerator implements ChunkGenerator{
                 
                 int height = chunk.getHeightMap(HeightmapType.SURFACE).getHeight(lx, lz);
                 if(height > 60)
-                    chunk.setBlockFast(lx, height, lz, Block.GRASS_BLOCK.getDefaultState());
+                    chunk.setBlockFast(lx, height, lz, Blocks.GRASS_BLOCK.getDefaultState());
             }
         }
         

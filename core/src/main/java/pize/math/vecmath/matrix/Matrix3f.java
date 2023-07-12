@@ -17,12 +17,15 @@ public class Matrix3f implements Matrix3{
         val[m11] = 1;
         val[m22] = 1;
     }
-
-
+    
+    
     public Matrix3f(float[] values){
         val = new float[16];
-
         set(values);
+    }
+    
+    public Matrix3f(Matrix3f matrix){
+        this(matrix.val);
     }
 
 
@@ -155,7 +158,12 @@ public class Matrix3f implements Matrix3{
     public Matrix3f mul(float[] matrix){
         return set(mul(this.val, matrix));
     }
-
+    
+    
+    public Matrix3f copy(){
+        return new Matrix3f(this);
+    }
+    
 
     public static float[] mul(Matrix3f a, Matrix3f b){
         return mul(a.val, b.val);

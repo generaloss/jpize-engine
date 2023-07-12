@@ -8,13 +8,14 @@
     </parent>
     
     <artifactId>test-window</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     
     <name>test-window</name>
     <url>http://maven.apache.org</url>
     
     <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
 </project>

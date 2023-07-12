@@ -127,7 +127,7 @@ public class VideoSettingsScreen extends IOptionsScreen{
         
         if(fovSlider.isChanged()){
             getOptions().setFov( Maths.round(fovSlider.getValue() * (MAX_FOV - MIN_FOV) + MIN_FOV) );
-            fovSlider.getText().getComponentAsTranslation(0).getArg(0).clear().text(String.valueOf(session.getOptions().getFov()));
+            fovSlider.getText().getComponentAsTranslation(0).getArg(0).clear().text(session.getOptions().getFov());
         }
         
         if(renderDistanceSlider.isChanged()){

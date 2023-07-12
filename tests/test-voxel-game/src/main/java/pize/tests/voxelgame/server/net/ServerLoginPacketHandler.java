@@ -3,8 +3,8 @@ package pize.tests.voxelgame.server.net;
 import pize.net.security.KeyAES;
 import pize.net.tcp.TcpConnection;
 import pize.net.tcp.packet.PacketHandler;
-import pize.tests.voxelgame.base.net.PlayerProfile;
-import pize.tests.voxelgame.base.net.packet.*;
+import pize.tests.voxelgame.main.net.PlayerProfile;
+import pize.tests.voxelgame.main.net.packet.*;
 import pize.tests.voxelgame.server.Server;
 
 public class ServerLoginPacketHandler implements PacketHandler{

@@ -9,15 +9,15 @@ import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
 import pize.graphics.util.Shader;
+import pize.graphics.util.TextureUtils;
 import pize.graphics.util.batch.scissor.Scissor;
+import pize.graphics.util.color.IColor;
 import pize.graphics.vertex.ElementBuffer;
 import pize.graphics.vertex.VertexArray;
 import pize.graphics.vertex.VertexAttr;
 import pize.graphics.vertex.VertexBuffer;
 import pize.math.vecmath.matrix.Matrix3f;
 import pize.math.vecmath.matrix.Matrix4f;
-import pize.math.vecmath.point.Point2f;
-import pize.math.vecmath.tuple.Tuple2f;
 import pize.math.vecmath.vector.Vec2f;
 
 public class TextureBatch extends Batch{
@@ -86,8 +86,8 @@ public class TextureBatch extends Batch{
         scaleMatrix = new Matrix3f();
         flipMatrix = new Matrix3f();
     }
-
-
+    
+    
     @Override
     public void draw(Texture texture, float x, float y, float width, float height){
         if(size + 1 >= batchSize)
@@ -98,8 +98,33 @@ public class TextureBatch extends Batch{
             lastTexture = texture;
         }
 
-        addTexturedQuad(x, y, width, height, 0, 0, 1, 1);
+        addTexturedQuad(x, y, width, height, 0, 0, 1, 1, color.r(), color.g(), color.b(), color.a());
         size++;
+    }
+    
+    public void draw(Texture texture, float x, float y, float width, float height, float r, float g, float b, float a){
+        if(size + 1 >= batchSize)
+            end();
+        
+        if(texture != lastTexture){
+            end();
+            lastTexture = texture;
+        }
+        
+        addTexturedQuad(x, y, width, height, 0, 0, 1, 1, r, g, b, a);
+        size++;
+    }
+    
+    public void drawQuad(double r, double g, double b, double a, float x, float y, float width, float height){
+        draw(TextureUtils.quadTexture(), x, y, width, height, (float) r, (float) g, (float) b, (float) a);
+    }
+    
+    public void drawQuad(IColor color, float x, float y, float width, float height){
+        drawQuad(color.r(), color.g(), color.b(), color.a(), x, y, width, height);
+    }
+    
+    public void drawQuad(double alpha, float x, float y, float width, float height){
+        drawQuad(0, 0, 0, alpha, x, y, width, height);
     }
 
     @Override
@@ -113,7 +138,7 @@ public class TextureBatch extends Batch{
             lastTexture = texture;
         }
 
-        addTexturedQuad(x, y, width, height, texReg.u1f(), texReg.v1f(), texReg.u2f(), texReg.v2f());
+        addTexturedQuad(x, y, width, height, texReg.u1(), texReg.v1(), texReg.u2(), texReg.v2(), color.r(), color.g(), color.b(), color.a());
         size++;
     }
 
@@ -127,7 +152,7 @@ public class TextureBatch extends Batch{
             lastTexture = texture;
         }
 
-        addTexturedQuad(x, y, width, height, region.u1f(), region.v1f(), region.u2f(), region.v2f());
+        addTexturedQuad(x, y, width, height, region.u1(), region.v1(), region.u2(), region.v2(), color.r(), color.g(), color.b(), color.a());
         size++;
     }
 
@@ -146,10 +171,14 @@ public class TextureBatch extends Batch{
 
         addTexturedQuad(
             x, y, width, height,
-            regionInRegion.u1f(),
-            regionInRegion.v1f(),
-            regionInRegion.u2f(),
-            regionInRegion.v2f()
+            regionInRegion.u1(),
+            regionInRegion.v1(),
+            regionInRegion.u2(),
+            regionInRegion.v2(),
+            color.r(),
+            color.g(),
+            color.b(),
+            color.a()
         );
 
         size++;
@@ -189,10 +218,8 @@ public class TextureBatch extends Batch{
         
         // Reset
         final int sizeResult = size;
-        
         size = 0;
         vertexOffset = 0;
-    
         return sizeResult;
     }
     
@@ -201,33 +228,33 @@ public class TextureBatch extends Batch{
     }
     
 
-    private void addTexturedQuad(float x, float y, float width, float height, float u1, float v1, float u2, float v2){
+    private void addTexturedQuad(float x, float y, float width, float height, float u1, float v1, float u2, float v2, float r, float g, float b, float a){
         final Vec2f origin = new Vec2f(width * transformOrigin.x, height * transformOrigin.y);
 
         transformMatrix.set( rotationMatrix.getMul(scaleMatrix.getMul(shearMatrix.getMul(flipMatrix))) );
 
-        final Tuple2f vertex1 = new Point2f(0,     0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
-        final Tuple2f vertex2 = new Point2f(width, 0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
-        final Tuple2f vertex3 = new Point2f(width, height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
-        final Tuple2f vertex4 = new Point2f(0,     height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
+        final Vec2f vertex1 = new Vec2f(0,     0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
+        final Vec2f vertex2 = new Vec2f(width, 0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
+        final Vec2f vertex3 = new Vec2f(width, height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
+        final Vec2f vertex4 = new Vec2f(0,     height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
 
-        addVertex(vertex1.x, vertex1.y, u1, v2);
-        addVertex(vertex2.x, vertex2.y, u2, v2);
-        addVertex(vertex3.x, vertex3.y, u2, v1);
-        addVertex(vertex4.x, vertex4.y, u1, v1);
+        addVertex(vertex1.x, vertex1.y, u1, v2, r, g, b, a);
+        addVertex(vertex2.x, vertex2.y, u2, v2, r, g, b, a);
+        addVertex(vertex3.x, vertex3.y, u2, v1, r, g, b, a);
+        addVertex(vertex4.x, vertex4.y, u1, v1, r, g, b, a);
     }
 
-    private void addVertex(float x, float y, float s, float t){
+    private void addVertex(float x, float y, float s, float t, float r, float g, float b, float a){
         vertices[vertexOffset    ] = x;
         vertices[vertexOffset + 1] = y;
 
         vertices[vertexOffset + 2] = s;
         vertices[vertexOffset + 3] = t;
 
-        vertices[vertexOffset + 4] = color.r();
-        vertices[vertexOffset + 5] = color.g();
-        vertices[vertexOffset + 6] = color.b();
-        vertices[vertexOffset + 7] = color.a();
+        vertices[vertexOffset + 4] = r;
+        vertices[vertexOffset + 5] = g;
+        vertices[vertexOffset + 6] = b;
+        vertices[vertexOffset + 7] = a;
 
         vertexOffset += vbo.getVertexSize();
     }

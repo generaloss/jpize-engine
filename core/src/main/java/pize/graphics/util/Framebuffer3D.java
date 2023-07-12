@@ -35,8 +35,12 @@ public class Framebuffer3D implements Resizable, Disposable{
         rbo.unbind();
     }
     
-    public Texture getTexture(){
+    public Texture getFrameTexture(){
         return fbo.getTexture();
+    }
+    
+    public Texture getDepthMap(){
+        return rbo.getTexture();
     }
     
     

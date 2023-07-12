@@ -1,5 +1,7 @@
 package pize.math.function;
 
+import pize.math.Maths;
+
 public final class ImprovedNoise{
     
     static public double noise(double x, double y, double z){
@@ -20,36 +22,36 @@ public final class ImprovedNoise{
         y -= Math.floor(y); // of point in cube
         z -= Math.floor(z);
         
-        double u = quintic(x); // Compute fade curves for each of x ,y , z
-        double v = quintic(y);
-        double w = quintic(z);
+        double u = Maths.quintic((float) x); // Compute fade curves for each of x, y, z
+        double v = Maths.quintic((float) y);
+        double w = Maths.quintic((float) z);
         
         // ... and add blended results from 8 corners of cube
-        return lerp(
+        return Maths.lerp(
             w,
             
-            lerp(
+            Maths.lerp(
                 v,
-                lerp(
+                Maths.lerp(
                     u,
                     grad(p[AA], x, y, z),
                     grad(p[BA], x - 1, y, z)
                 ),
-                lerp(
+                Maths.lerp(
                     u,
                     grad(p[AB], x, y - 1, z),
                     grad(p[BB], x - 1, y - 1, z)
                 )
             ),
             
-            lerp(
+            Maths.lerp(
                 v,
-                lerp(
+                Maths.lerp(
                     u,
                     grad(p[AA + 1], x, y, z - 1),
                     grad(p[BA + 1], x - 1, y, z - 1)
                 ),
-                lerp(
+                Maths.lerp(
                     u,
                     grad(p[AB + 1], x, y - 1, z - 1),
                     grad(p[BB + 1], x - 1, y - 1, z - 1)
@@ -58,13 +60,6 @@ public final class ImprovedNoise{
         );
     }
     
-    static double quintic(double t){
-        return t * t * t * (t * (t * 6 - 15) + 10);
-    }
-    
-    static double lerp(double t, double a, double b){
-        return a + t * (b - a);
-    }
     
     static double grad(int hash, double x, double y, double z){
         // Convert low 4 bits of hash code into 12 gradient directions

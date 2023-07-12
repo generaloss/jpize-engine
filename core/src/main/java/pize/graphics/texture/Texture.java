@@ -32,7 +32,7 @@ public class Texture extends GlTexture implements Resizable{
     }
 
     public Texture(Texture texture){
-        this(texture.getPixmap().clone());
+        this(texture.getPixmap().copy());
     }
 
 
