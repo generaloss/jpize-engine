@@ -51,7 +51,7 @@ public class CommandLevel{
         final String generatorName = context.getArg(2).asWord().getWord();
         final ChunkGenerator generator = ChunkGenerator.fromString(generatorName);
         // Create level
-        final ServerPlayer sender = context.getSource().asPlayer().getPlayer();
+        final ServerPlayer sender = context.getSource().asPlayer();
         final LevelManager levelManager = context.getServer().getLevelManager();
         
         if(levelManager.isLevelLoaded(levelName))
@@ -66,7 +66,7 @@ public class CommandLevel{
         // Level name
         final String levelName = context.getArg(0).asWord().getWord();
         // Go to level
-        final ServerPlayer sender = context.getSource().asPlayer().getPlayer();
+        final ServerPlayer sender = context.getSource().asPlayer();
         final LevelManager levelManager = context.getServer().getLevelManager();
         
         if(!levelManager.isLevelLoaded(levelName))

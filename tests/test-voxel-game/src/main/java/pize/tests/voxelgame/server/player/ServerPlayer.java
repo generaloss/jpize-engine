@@ -68,7 +68,11 @@ public class ServerPlayer extends Player{
         sendPacket(new CBPacketAbilities(flyEnabled));
         super.setFlyEnabled(flyEnabled);
     }
-    
+
+
+    public void disconnect(){
+        getConnectionAdapter().getConnection().close();
+    }
     
     public void sendToChat(Component message){
         server.getPlayerList().broadcastPlayerMessage(this, message);

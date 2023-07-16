@@ -53,8 +53,8 @@ public class EulerAngles{
     }
 
     public EulerAngles setDirection(double x, double y, double z){
-        yaw = -Mathc.atan2(x, z) * Maths.toDeg + 90;
-        pitch = Mathc.atan2(y, Math.sqrt(x * x + z * z)) * Maths.toDeg;
+        yaw = -Mathc.atan2(x, z) * Maths.ToDeg + 90;
+        pitch = Mathc.atan2(y, Math.sqrt(x * x + z * z)) * Maths.ToDeg;
         
         return this;
     }

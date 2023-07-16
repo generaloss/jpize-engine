@@ -16,22 +16,22 @@ public class CBPacketPong extends IPacket<PacketHandler>{
     }
     
     
-    public long timeMillis;
+    public long timeNanos;
     
-    public CBPacketPong(long timeMillis){
+    public CBPacketPong(long timeNanos){
         this();
-        this.timeMillis = timeMillis;
+        this.timeNanos = timeNanos;
     }
     
     
     @Override
     protected void write(PacketOutputStream stream) throws IOException{
-        stream.writeLong(timeMillis);
+        stream.writeLong(timeNanos);
     }
     
     @Override
     public void read(PacketInputStream stream) throws IOException{
-        timeMillis = stream.readLong();
+        timeNanos = stream.readLong();
     }
     
 }

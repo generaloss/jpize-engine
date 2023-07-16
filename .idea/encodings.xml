@@ -22,6 +22,8 @@
     <file url="file://$PROJECT_DIR$/tests/test-android/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-audio/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-audio/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-drift/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-drift/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraft/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraft/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-model-3d/src/main/java" charset="UTF-8" />

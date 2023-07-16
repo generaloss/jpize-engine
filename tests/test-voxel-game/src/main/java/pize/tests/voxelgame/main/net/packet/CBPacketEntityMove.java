@@ -6,7 +6,7 @@ import pize.net.tcp.packet.IPacket;
 import pize.net.tcp.packet.PacketHandler;
 import pize.net.tcp.packet.PacketInputStream;
 import pize.net.tcp.packet.PacketOutputStream;
-import pize.physic.Motion3f;
+import pize.physic.Velocity3f;
 import pize.tests.voxelgame.server.player.ServerPlayer;
 
 import java.io.IOException;
@@ -24,14 +24,14 @@ public class CBPacketEntityMove extends IPacket<PacketHandler>{
     public UUID uuid;
     public Vec3f position;
     public EulerAngles rotation;
-    public Motion3f motion;
+    public Velocity3f velocity;
 
     public CBPacketEntityMove(ServerPlayer serverPlayer){
         this();
         uuid = serverPlayer.getUUID();
         position = serverPlayer.getPosition();
         rotation = serverPlayer.getRotation();
-        motion = serverPlayer.getMotion();
+        velocity = serverPlayer.getVelocity();
     }
 
 
@@ -40,7 +40,7 @@ public class CBPacketEntityMove extends IPacket<PacketHandler>{
         stream.writeUUID(uuid);
         stream.writeVec3f(position);
         stream.writeEulerAngles(rotation);
-        stream.writeVec3f(motion);
+        stream.writeVec3f(velocity);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class CBPacketEntityMove extends IPacket<PacketHandler>{
         uuid = stream.readUUID();
         position = stream.readVec3f();
         rotation = stream.readEulerAngles();
-        motion = new Motion3f(stream.readVec3f());
+        velocity = new Velocity3f(stream.readVec3f());
     }
 
 }

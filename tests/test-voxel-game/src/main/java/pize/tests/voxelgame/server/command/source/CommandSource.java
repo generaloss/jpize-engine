@@ -2,6 +2,7 @@ package pize.tests.voxelgame.server.command.source;
 
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.voxelgame.main.text.Component;
+import pize.tests.voxelgame.server.player.ServerPlayer;
 
 public abstract class CommandSource{
     
@@ -10,8 +11,8 @@ public abstract class CommandSource{
     public abstract void sendMessage(Component message);
     
     
-    public CommandSourcePlayer asPlayer(){
-        return (CommandSourcePlayer) this;
+    public ServerPlayer asPlayer(){
+        return ((CommandSourcePlayer) this).getPlayer();
     }
     
 }

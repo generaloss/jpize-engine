@@ -17,7 +17,7 @@ public class CommandFly{
     
     private static void toggleFly(CommandContext context){
         // Player
-        final ServerPlayer sender = context.getSource().asPlayer().getPlayer();
+        final ServerPlayer sender = context.getSource().asPlayer();
         // Fly
         if(sender.isFlyEnabled()){
             sender.setFlyEnabled(false);

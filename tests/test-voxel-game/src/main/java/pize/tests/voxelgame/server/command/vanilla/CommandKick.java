@@ -24,7 +24,7 @@ public class CommandKick{
     
     private static void kick(CommandContext context){
         // Players
-        final ServerPlayer sender = context.getSource().asPlayer().getPlayer();
+        final ServerPlayer sender = context.getSource().asPlayer();
         final ServerPlayer targetPlayer = context.getArg(0).asPlayer().getPlayer();
         // Reason
         final String reason = context.getArg(1).asText().getText();

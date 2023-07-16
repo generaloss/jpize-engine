@@ -8,7 +8,7 @@ import pize.graphics.texture.Texture;
 import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
-import pize.physic.Motion3f;
+import pize.physic.Velocity3f;
 import pize.tests.voxelgame.client.ClientGame;
 import pize.tests.voxelgame.client.block.BlockState;
 import pize.tests.voxelgame.client.block.Blocks;
@@ -55,20 +55,20 @@ public class VoxelGame extends AppAdapter{
             instance.region.set(Maths.random(0, 0.5), Maths.random(0, 0.5), Maths.random(0.5, 1), Maths.random(0.5, 1));
             instance.rotation = Maths.random(1, 360);
             instance.lifeTimeSeconds = Maths.random(0.5F, 2F);
-            instance.motion.set(Maths.random(-0.04F, 0.04F), Maths.random(-0.02F, 0.1F), Maths.random(-0.04F, 0.04F));
+            instance.velocity.set(Maths.random(-0.04F, 0.04F), Maths.random(-0.02F, 0.1F), Maths.random(-0.04F, 0.04F));
         })
         .texture(new Texture("texture/block/grass_block_side.png"))
         .animate(instance->{
-            instance.motion.y -= Pize.getDt() * 0.35;
-            instance.motion.mul(0.95);
-            collide(instance.position, instance.motion);
-            instance.position.add(instance.motion);
+            instance.velocity.y -= Pize.getDt() * 0.35;
+            instance.velocity.mul(0.95);
+            collide(instance.position, instance.velocity);
+            instance.position.add(instance.velocity);
         });
     
-    public void collide(Vec3f position, Motion3f motion){
+    public void collide(Vec3f position, Velocity3f velocity){
         final ClientLevel level = clientGame.getLevel();
         
-        double x = motion.x;
+        double x = velocity.x;
         //if(BlockState.getID(level.getBlock(position.xf() + Mathc.signum(x), position.yf(), position.zf())) != 0){
         //    double nx = Maths.frac(position.x) + x;
         //    if(nx > 1)
@@ -77,7 +77,7 @@ public class VoxelGame extends AppAdapter{
         //        x = 0;
         //}
         
-        double y = motion.y;
+        double y = velocity.y;
         if(BlockState.getID(level.getBlock(position.xf(), position.yf() + Mathc.signum(x), position.zf())) != 0){
             double ny = Maths.frac(position.y) + y;
             //if(ny > 1)
@@ -87,7 +87,7 @@ public class VoxelGame extends AppAdapter{
                 y = 0;
         }
         
-        double z = motion.z;
+        double z = velocity.z;
         //if(BlockState.getID(level.getBlock(position.xf(), position.yf(), position.zf() + Mathc.signum(x))) != 0){
         //    double nz = Maths.frac(position.z) + z;
         //    if(nz > 1)
@@ -96,7 +96,7 @@ public class VoxelGame extends AppAdapter{
         //        z = 0;
         //}
         
-        motion.set(x, y, z);
+        velocity.set(x, y, z);
     }
     
 
@@ -117,13 +117,14 @@ public class VoxelGame extends AppAdapter{
         new Resource(SharedConstants.GAME_DIR_PATH, true).mkDirs();
         new Resource(SharedConstants.MODS_PATH, true).mkDirs();
         
-        Pize.setUpdateTPS(GameTime.TICKS_IN_SECOND);
+        Pize.setFixedUpdateTPS(GameTime.TICKS_IN_SECOND);
         options.load();
         profile = new PlayerProfile(getOptions().getPlayerName());
         
         Blocks.init();
         
         /** ModLoader **/
+
         modLoader = new ModLoader();
         modLoader.loadMods(SharedConstants.MODS_PATH);
     }
@@ -144,17 +145,11 @@ public class VoxelGame extends AppAdapter{
         // Init mods
         modLoader.initializeMods(ModEntryPointType.CLIENT);
         modLoader.initializeMods(ModEntryPointType.MAIN);
-        
-        // Music
-        // final Sound sound = new Sound("music/21_2.ogg");
-        // sound.setVolume(0.3);
-        // sound.setPitch(0.8);
-        // sound.setLooping(true);
-        // sound.play();
     }
     
     @Override
     public void render(){
+        fpsSync.sync();
         gameController.update();
         clientGame.update();
         
@@ -177,9 +172,17 @@ public class VoxelGame extends AppAdapter{
 
     @Override
     public void dispose(){
-        clientGame.disconnect();
-        clientRenderer.dispose();
+        // Save options
         options.save();
+
+        // Stop server
+        if(integratedServer != null)
+            integratedServer.stop();
+        else
+            clientGame.disconnect();
+
+        // Free resources
+        clientRenderer.dispose();
     }
     
     public final Options getOptions(){

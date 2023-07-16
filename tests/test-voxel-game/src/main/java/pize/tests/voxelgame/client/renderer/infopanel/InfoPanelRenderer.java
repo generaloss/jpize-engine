@@ -176,7 +176,7 @@ public class InfoPanelRenderer implements Disposable{
         );
         
         // Speed
-        info(TextColor.DARK_GREEN, "Move Speed: ", TextColor.AQUA, String.format("%.2f", player.getMotion().len() * GameTime.TICKS_IN_SECOND) + " m/s");
+        info(TextColor.DARK_GREEN, "Move Speed: ", TextColor.AQUA, String.format("%.2f", player.getVelocity().len() * GameTime.TICKS_IN_SECOND) + " m/s");
         
         // Render Distance
         nextLine();

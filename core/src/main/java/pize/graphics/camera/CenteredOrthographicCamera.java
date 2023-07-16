@@ -69,7 +69,7 @@ public class CenteredOrthographicCamera extends Camera2D implements Resizable{
         this.scale = scale;
     }
 
-    public float getRot(){
+    public float getRotation(){
         return rotation;
     }
 
@@ -77,7 +77,7 @@ public class CenteredOrthographicCamera extends Camera2D implements Resizable{
         rotation += deg;
     }
 
-    public void setRot(float deg){
+    public void setRotation(float deg){
         rotation = deg;
     }
 

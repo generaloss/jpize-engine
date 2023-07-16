@@ -10,7 +10,6 @@ public class ChunkMeshStack{
     
     public ChunkMeshStack(){
         Pize.execSync(()->{
-            System.out.println(100000000);
             solid = new ChunkSolidMesh();
             custom = new ChunkCustomMesh();
         });
@@ -41,8 +40,11 @@ public class ChunkMeshStack{
     
     
     public void dispose(){
-        if(solid != null) solid.dispose();
-        if(custom != null) custom.dispose();
+        if(solid != null)
+            solid.dispose();
+
+        if(custom != null)
+            custom.dispose();
     }
     
 }

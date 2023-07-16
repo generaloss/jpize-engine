@@ -1,6 +1,7 @@
 package pize.tests.voxelgame.client.net;
 
 import pize.Pize;
+import pize.math.Maths;
 import pize.net.tcp.TcpConnection;
 import pize.net.tcp.TcpListener;
 import pize.net.tcp.packet.PacketHandler;
@@ -122,7 +123,7 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
                 if(targetEntity != null){
                     targetEntity.getPosition().set(packet.position);
                     targetEntity.getRotation().set(packet.rotation);
-                    targetEntity.getMotion().set(packet.motion);
+                    targetEntity.getVelocity().set(packet.velocity);
                 }
             }
 
@@ -168,7 +169,7 @@ public class ClientPacketHandler implements TcpListener, PacketHandler{
             case CBPacketPong.PACKET_ID -> {
                 final CBPacketPong packet = packetInfo.readPacket(new CBPacketPong());
                 
-                final String message = "Ping - " + (System.nanoTime() - packet.timeMillis) / 1000000F + " ms";
+                final String message = "Ping - " + String.format("%.5f", (System.nanoTime() - packet.timeNanos) / Maths.NanosInSecond) + " ms";
                 game.getChat().putMessage(new MessageSourceServer(), new Component().text(message));
                 System.out.println("[Client]: " + message);
             }

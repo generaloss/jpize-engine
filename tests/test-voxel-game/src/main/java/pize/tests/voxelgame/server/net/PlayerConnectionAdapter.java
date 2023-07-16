@@ -29,6 +29,10 @@ public class PlayerConnectionAdapter implements ServerPlayerPacketHandler{
     public ServerPlayer getPlayer(){
         return player;
     }
+
+    public TcpConnection getConnection(){
+        return connection;
+    }
     
     public void sendPacket(IPacket<?> packet){
         packet.write(connection);
@@ -56,7 +60,7 @@ public class PlayerConnectionAdapter implements ServerPlayerPacketHandler{
     public void handleMove(SBPacketMove packet){
         player.getPosition().set(packet.position);
         player.getRotation().set(packet.rotation);
-        player.getMotion().set(packet.motion);
+        player.getVelocity().set(packet.velocity);
         
         server.getPlayerList().broadcastPacketExcept(new CBPacketEntityMove(player), player);
     }

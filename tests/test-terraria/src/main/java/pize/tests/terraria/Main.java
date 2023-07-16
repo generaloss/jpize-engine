@@ -78,12 +78,12 @@ public class Main extends AppAdapter{
                 : 1
         );
 
-        gameRenderer.getCamera().getPos().set( player.pos().copy().add(player.rect().getCenter()) );
+        gameRenderer.getCamera().getPosition().set( player.pos().copy().add(player.rect().getCenter()) );
 
         Vec2f touch = new Vec2f(Pize.getX(), Pize.getY())
             .sub(gameRenderer.getCamera().getWidth() / 2F, gameRenderer.getCamera().getHeight() / 2F)
             .div(gameRenderer.getRenderInfo().getCellSize() * gameRenderer.getRenderInfo().getScale())
-            .add(gameRenderer.getCamera().getPos());
+            .add(gameRenderer.getCamera().getPosition());
 
         MapTile tile = world.getTileMap().getTile(touch.xf(), touch.yf());
         if(tile != null && Pize.isTouched())

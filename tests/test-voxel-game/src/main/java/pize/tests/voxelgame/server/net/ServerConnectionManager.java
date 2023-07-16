@@ -81,7 +81,7 @@ public class ServerConnectionManager implements TcpListener{
             // Ping
             case SBPacketPing.PACKET_ID -> {
                 final SBPacketPing packet = packetInfo.readPacket(new SBPacketPing());
-                new CBPacketPong(packet.timeMillis).write(sender);
+                new CBPacketPong(packet.timeNanos).write(sender);
             }
         }
     }

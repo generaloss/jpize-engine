@@ -44,7 +44,7 @@ public class BiomeGenerator extends AppAdapter{
                 final float erosion = erosionNoise.getNoise(x, y);
                 
                 
-                final float grayscale = Maths.round(Maths.map(erosion, -0.55 * Maths.sqrt2, 0.55 * Maths.sqrt2, 0, 1) * 5) / 5F;
+                final float grayscale = Maths.round(Maths.map(erosion, -0.55 * Maths.Sqrt2, 0.55 * Maths.Sqrt2, 0, 1) * 5) / 5F;
                 
                 map.setPixel(x, y, grayscale, grayscale, grayscale, 1);
             }

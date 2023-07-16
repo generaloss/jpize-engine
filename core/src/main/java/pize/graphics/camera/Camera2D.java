@@ -20,12 +20,12 @@ public abstract class Camera2D extends Camera{
         return position.y;
     }
 
-    public Vec2f getPos(){
+    public Vec2f getPosition(){
         return position;
     }
 
 
-    public abstract float getRot();
+    public abstract float getRotation();
 
     public abstract float getScale();
 

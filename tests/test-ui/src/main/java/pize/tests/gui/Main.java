@@ -2,6 +2,7 @@ package pize.tests.gui;
 
 import pize.Pize;
 import pize.app.AppAdapter;
+import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
 import pize.graphics.gl.Gl;
@@ -44,6 +45,9 @@ public class Main extends AppAdapter{
         button.setExpandType(ExpandType.HORIZONTAL);
         button.setSize(Constraint.relative(0.333), Constraint.relative(0.333));
         layout.put("button", button);
+
+        framePixmap = new Pixmap(Pize.getWidth(), Pize.getHeight());
+        frameTexture = new Texture(framePixmap);
     }
 
     @Override
@@ -57,7 +61,7 @@ public class Main extends AppAdapter{
         layout.render(batch); // render layout
         batch.end();
     }
-    
+
     @Override
     public void dispose(){
         batch.dispose();

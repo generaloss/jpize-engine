@@ -2,17 +2,17 @@ package pize.math;
 
 public class Maths{
 
-    public static final float epsilon = 1E-19F;
+    public static final float Epsilon = 1E-19F;
     public static final float PI = (float) Math.PI;
     public static final float PI2 = PI * 2;
-    public static final float halfPI = PI / 2;
-    public static final float toDeg = 180 / PI;
-    public static final float toRad = PI / 180;
-    public static final float sqrt2 = Mathc.sqrt(2);
-    public static final float sqrt3 = Mathc.sqrt(3);
-    public static final float sqrt4 = Mathc.sqrt(4);
-    public static final float nanosInSecond = 1000000000;
-    public static final float nanosInMs = 1000000;
+    public static final float HalfPI = PI / 2;
+    public static final float ToDeg = 180 / PI;
+    public static final float ToRad = PI / 180;
+    public static final float Sqrt2 = Mathc.sqrt(2);
+    public static final float Sqrt3 = Mathc.sqrt(3);
+    public static final float Sqrt4 = Mathc.sqrt(4);
+    public static final float NanosInSecond = 1000000000;
+    public static final float NanosInMs = 1000000;
     
 
     public static float sinFromCos(float cos){
@@ -197,15 +197,28 @@ public class Maths{
     
     
     public static float sinDeg(double a){
-        return Mathc.sin(a * toRad);
+        return Mathc.sin(a * ToRad);
     }
     
     public static float cosDeg(double a){
-        return Mathc.cos(a * toRad);
+        return Mathc.cos(a * ToRad);
     }
     
     public static float tanDeg(double a){
-        return Mathc.tan(a * toRad);
+        return Mathc.tan(a * ToRad);
+    }
+
+
+    public static int nonZeroSignum(int a){
+        return a >= 0 ? 1 : -1;
+    }
+
+    public static int nonZeroSignum(float a){
+        return a >= 0 ? 1 : -1;
+    }
+
+    public static int nonZeroSignum(double a){
+        return a >= 0 ? 1 : -1;
     }
     
     

@@ -52,13 +52,10 @@ public class MusicManager implements Disposable{
         current.setVolume(getVolume());
         current.play();
 
-        new PizeRunnable(){
-            @Override
-            public void run(){
-                Utils.delayMillis(1);
-                next();
-            }
-        }.runLaterAsync((long)(current.getDuration() * 1000));
+        new PizeRunnable(() -> {
+            Utils.delayMillis(1);
+            next();
+        }).runLaterAsync((long)(current.getDuration() * 1000));
     }
 
     private void next(){

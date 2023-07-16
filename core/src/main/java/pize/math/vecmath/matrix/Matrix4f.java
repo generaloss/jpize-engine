@@ -169,8 +169,8 @@ public class Matrix4f implements Matrix4{
     public Matrix4f toRotatedX(double angle){
         identity();
 
-        float cos = Mathc.cos(angle * Maths.toRad);
-        float sin = Mathc.sin(angle * Maths.toRad);
+        float cos = Mathc.cos(angle * Maths.ToRad);
+        float sin = Mathc.sin(angle * Maths.ToRad);
 
         val[m11] = cos;
         val[m12] = -sin;
@@ -183,8 +183,8 @@ public class Matrix4f implements Matrix4{
     public Matrix4f toRotatedY(double angle){
         identity();
 
-        float cos = Mathc.cos(angle * Maths.toRad);
-        float sin = Mathc.sin(angle * Maths.toRad);
+        float cos = Mathc.cos(angle * Maths.ToRad);
+        float sin = Mathc.sin(angle * Maths.ToRad);
 
         val[m00] = cos;
         val[m02] = sin;
@@ -197,8 +197,8 @@ public class Matrix4f implements Matrix4{
     public Matrix4f toRotatedZ(double angle){
         identity();
 
-        float cos = Mathc.cos(angle * Maths.toRad);
-        float sin = Mathc.sin(angle * Maths.toRad);
+        float cos = Mathc.cos(angle * Maths.ToRad);
+        float sin = Mathc.sin(angle * Maths.ToRad);
 
         val[m00] = cos;
         val[m01] = -sin;

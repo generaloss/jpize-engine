@@ -122,8 +122,8 @@ public class Matrix3f implements Matrix3{
     public Matrix3f toRotated(double angle){
         identity();
 
-        float cos = Mathc.cos(angle * Maths.toRad);
-        float sin = Mathc.sin(angle * Maths.toRad);
+        float cos = Mathc.cos(angle * Maths.ToRad);
+        float sin = Mathc.sin(angle * Maths.ToRad);
 
         val[m00] = cos;
         val[m01] = -sin;
@@ -136,8 +136,8 @@ public class Matrix3f implements Matrix3{
     public Matrix3f toSheared(float angleX, float angleY){
         identity();
 
-        val[m01] = Mathc.tan(angleX * Maths.toRad);
-        val[m10] = Mathc.tan(angleY * Maths.toRad);
+        val[m01] = Mathc.tan(angleX * Maths.ToRad);
+        val[m10] = Mathc.tan(angleY * Maths.ToRad);
 
         return this;
     }

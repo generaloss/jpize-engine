@@ -20,7 +20,7 @@ public class CommandSetWorldSpawn{
     
     private static void setWorldSpawn(CommandContext context){
         // Player
-        final ServerPlayer sender = context.getSource().asPlayer().getPlayer();
+        final ServerPlayer sender = context.getSource().asPlayer();
         // Spawn position
         final Vec3f position = sender.getPosition();
         final ServerLevel level = (ServerLevel) sender.getLevel();

@@ -8,7 +8,7 @@ public enum TextColor{
     DARK_BLUE    (new ImmutableColor(0  , 0  , 170, 255)),
     DARK_GREEN   (new ImmutableColor(0  , 170, 0  , 255)),
     DARK_AQUA    (new ImmutableColor(0  , 170, 170, 255)),
-    DARK_RED     (new ImmutableColor(170, 0  , 0  , 255)),
+    DARK_RED     (new ImmutableColor(200, 0  , 0  , 255)),
     DARK_PURPLE  (new ImmutableColor(170, 0  , 170, 255)),
     ORANGE       (new ImmutableColor(255, 170, 0  , 255)),
     GRAY         (new ImmutableColor(170, 170, 170, 255)),

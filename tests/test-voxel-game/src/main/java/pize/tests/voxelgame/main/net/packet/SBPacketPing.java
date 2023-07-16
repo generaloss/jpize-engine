@@ -16,22 +16,22 @@ public class SBPacketPing extends IPacket<PacketHandler>{
     }
     
     
-    public long timeMillis;
+    public long timeNanos;
     
-    public SBPacketPing(long timeMillis){
+    public SBPacketPing(long timeNanos){
         this();
-        this.timeMillis = timeMillis;
+        this.timeNanos = timeNanos;
     }
     
     
     @Override
     protected void write(PacketOutputStream stream) throws IOException{
-        stream.writeLong(timeMillis);
+        stream.writeLong(timeNanos);
     }
     
     @Override
     public void read(PacketInputStream stream) throws IOException{
-        timeMillis = stream.readLong();
+        timeNanos = stream.readLong();
     }
     
 }

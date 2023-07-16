@@ -9,6 +9,7 @@ import pize.audio.Audio;
 import pize.graphics.gl.BlendFactor;
 import pize.graphics.gl.Gl;
 import pize.graphics.gl.Target;
+import pize.io.joystick.JoystickManager;
 import pize.io.keyboard.Keyboard;
 import pize.io.monitor.Monitor;
 import pize.io.monitor.MonitorManager;
@@ -19,11 +20,18 @@ import pize.math.vecmath.vector.Vec2f;
 public class Pize{
 
     private static Context context;
-
-    public static void create(String title, int width, int height, boolean resizable, boolean vsync, int samples){
+    
+    private static void init(){
         GLFWErrorCallback.createPrint(System.err).set();
         GLFW.glfwInit();
+        
+        MonitorManager.init();
+        JoystickManager.init();
+    }
 
+    public static void create(String title, int width, int height, boolean resizable, boolean vsync, int samples){
+        init();
+        
         final Window window = new Window(title, width, height, resizable, vsync, samples);
         context = new Context(window, new Keyboard(window), new Mouse(window));
 
@@ -103,6 +111,10 @@ public class Pize{
         return window().getHeight() - mouse().getY();
     }
 
+    public static int getInvY(){
+        return mouse().getY();
+    }
+
     public static Vec2f getCursorPos(){
         return new Vec2f(getX(), getY());
     }
@@ -120,13 +132,22 @@ public class Pize{
         return context.getFixedUpdateDeltaTime();
     }
     
-    public static void setUpdateTPS(float updateTPS){
-        context.setUpdateTPS(updateTPS);
+    public static void setFixedUpdateTPS(float updateTPS){
+        context.setFixedUpdateTPS(updateTPS);
     }
     
     
     public static void execSync(Runnable runnable){
         context.execSync(runnable);
+    }
+    
+    
+    public static String getClipboardString(){
+        return window().getClipboardString();
+    }
+    
+    public static void setClipboardString(CharSequence charSequence){
+        window().setClipboardString(charSequence);
     }
 
 

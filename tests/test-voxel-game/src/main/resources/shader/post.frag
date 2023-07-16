@@ -9,7 +9,7 @@ void main(){
     vec4 color = texture(u_frame, uv); // Level sampling
     vec4 batch = texture(u_batch, uv); // Cursor sampling
 
-    if(batch.a > 0.9)
+    if(batch.a > 0.99)
         color.rgb = 1 - color.rgb;
 
     const float gamma = 0.7;

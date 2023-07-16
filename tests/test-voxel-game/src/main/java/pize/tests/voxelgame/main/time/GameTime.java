@@ -9,7 +9,12 @@ public class GameTime{
     public static final int TICKS_IN_MINUTE = TICKS_IN_SECOND * SECONDS_IN_MINUTE;
     public static final int MINUTES_IN_DAY = 20;
     public static final int TICKS_IN_DAY = TICKS_IN_MINUTE * MINUTES_IN_DAY;
-    
+
+    public static final int TIME_DAY = 1000;
+    public static final int TIME_MIDNIGHT = 18000;
+    public static final int TIME_NIGHT = 13000;
+    public static final int TIME_NOON = 6000;
+
 
     private long ticks;
     
@@ -110,19 +115,19 @@ public class GameTime{
     
     
     public void setDay(){
-        setDayTicks(1000);
+        setDayTicks(TIME_DAY);
     }
     
     public void setMidnight(){
-        setDayTicks(18000);
+        setDayTicks(TIME_MIDNIGHT);
     }
     
     public void setNight(){
-        setDayTicks(13000);
+        setDayTicks(TIME_NIGHT);
     }
     
     public void setNoon(){
-        setDayTicks(6000);
+        setDayTicks(TIME_NOON);
     }
 
 }

@@ -126,7 +126,7 @@ public class BitmapFont implements Disposable{
                 continue;
             }
             
-            if(width > 0 && (advanceX + glyph.advanceX ) * scale > width){
+            if(width > 0 && (advanceX + glyph.advanceX) * scale > width){
                 maxAdvanceX = Math.max(maxAdvanceX, advanceX);
                 advanceX = 0;
                 advanceY += lineAdvance;
@@ -137,6 +137,42 @@ public class BitmapFont implements Disposable{
         
         return new Vec2f(Math.max(advanceX, maxAdvanceX), advanceY).mul(scale);
     }
+    
+    
+    public Vec2f getTextHeight(String text){
+        return this.getBounds(text, -1);
+    }
+    
+    public float getTextHeight(String text, double width){
+        final float lineAdvance = getLineAdvance();
+        
+        float advanceX = 0;
+        float advanceY = lineAdvance;
+        
+        for(int i = 0; i < text.length(); i++){
+            final int code = Character.codePointAt(text, i);
+            
+            final Glyph glyph = glyphs.get(code);
+            if(glyph == null)
+                continue;
+            
+            if(code == 10){
+                advanceX = 0;
+                advanceY += lineAdvance;
+                continue;
+            }
+            
+            if(width > 0 && (advanceX + glyph.advanceX) * scale > width){
+                advanceX = 0;
+                advanceY += lineAdvance;
+            }
+            
+            advanceX += glyph.advanceX;
+        }
+        
+        return advanceY * scale;
+    }
+    
 
     public float getLineWidth(String line){
         float advanceX = 0;
@@ -164,7 +200,7 @@ public class BitmapFont implements Disposable{
         if(text == null)
             return;
         
-        final float lineGaps = lineHeight;
+        final float lineAdvance = getLineAdvance();
         
         float advanceX = 0;
         float advanceY = lineHeight * StringUtils.count(text, "\n");
@@ -175,20 +211,20 @@ public class BitmapFont implements Disposable{
         
         // Calculate centering offset
         final Vec2f bounds = getBounds(text, width);
-        final double angle = rotation * Maths.toRad + Math.atan(bounds.y / bounds.x);
+        final double angle = rotation * Maths.ToRad + Math.atan(bounds.y / bounds.x);
         final float boundsCenter = Mathc.hypot(bounds.x / 2, bounds.y / 2);
         final float centeringOffsetX = boundsCenter * Mathc.cos(angle) - bounds.x / 2;
         final float centeringOffsetY = boundsCenter * Mathc.sin(angle) - bounds.y / 2;
 
         // Rotation
-        final float cos = Mathc.cos(rotation * Maths.toRad);
-        final float sin = Mathc.sin(rotation * Maths.toRad);
+        final float cos = Mathc.cos(rotation * Maths.ToRad);
+        final float sin = Mathc.sin(rotation * Maths.ToRad);
 
         for(int i = 0; i < text.length(); i++){
             final int code = Character.codePointAt(text, i);
             
             if(code == 10){
-                advanceY -= lineGaps;
+                advanceY -= lineAdvance;
                 advanceX = 0;
                 continue;
             }
@@ -198,7 +234,7 @@ public class BitmapFont implements Disposable{
                 continue;
             
             if(width > 0 && (advanceX + glyph.advanceX) * scale > width){
-                advanceY -= lineGaps;
+                advanceY -= lineAdvance;
                 advanceX = 0;
             }
             

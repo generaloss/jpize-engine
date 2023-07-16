@@ -19,7 +19,7 @@ public class CommandSeed{
     
     private static void sendSeed(CommandContext context){
         // Player
-        final ServerPlayer sender = context.getSource().asPlayer().getPlayer();
+        final ServerPlayer sender = context.getSource().asPlayer();
         sender.sendMessage(new Component().color(TextColor.GREEN).text("World seed: " + ((ServerLevel) sender.getLevel()).getConfiguration().getSeed()));
     }
     

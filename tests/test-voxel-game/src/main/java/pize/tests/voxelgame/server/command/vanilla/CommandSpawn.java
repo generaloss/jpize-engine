@@ -19,7 +19,7 @@ public class CommandSpawn{
     
     private static void teleportToSpawn(CommandContext context){
         // Player
-        final ServerPlayer sender = context.getSource().asPlayer().getPlayer();
+        final ServerPlayer sender = context.getSource().asPlayer();
         // Spawn position
         final ServerLevel level = (ServerLevel) sender.getLevel();
         final Vec3f spawnPosition = level.getSpawnPosition();

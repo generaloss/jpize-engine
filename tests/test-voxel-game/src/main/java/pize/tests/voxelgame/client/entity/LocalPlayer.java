@@ -11,7 +11,7 @@ import pize.tests.voxelgame.main.level.Level;
 public class LocalPlayer extends AbstractClientPlayer{
     
     private final Vec3f moveControl;
-    private float jumpDownY, lastMotionY, fallHeight;
+    private float jumpDownY, lastVelocityY, fallHeight;
     
     public BlockProperties holdBlock = Blocks.GRASS;
     
@@ -31,14 +31,14 @@ public class LocalPlayer extends AbstractClientPlayer{
         if(isJumping()){
             if(isOnGround()){
                 // Jump
-                getMotion().y = 0.42F;
+                getVelocity().y = 0.42F;
                 
                 // Jump-boost
                 if(isSprinting()){
-                    final float yaw = getRotation().yaw * Maths.toRad;
+                    final float yaw = getRotation().yaw * Maths.ToRad;
                     final float jumpBoost = 0.2F;
-                    getMotion().x += jumpBoost * Mathc.cos(yaw);
-                    getMotion().z += jumpBoost * Mathc.sin(yaw);
+                    getVelocity().x += jumpBoost * Mathc.cos(yaw);
+                    getVelocity().z += jumpBoost * Mathc.sin(yaw);
                 }
             }
             
@@ -53,10 +53,10 @@ public class LocalPlayer extends AbstractClientPlayer{
         
         if(isFlying()){
             if(isSneaking())
-                getMotion().y -= 0.05F;
+                getVelocity().y -= 0.05F;
             
             if(isJumping())
-                getMotion().y += 0.05F;
+                getVelocity().y += 0.05F;
             
             if(!isFlyEnabled())
                 setFlying(false);
@@ -64,10 +64,10 @@ public class LocalPlayer extends AbstractClientPlayer{
         
         // Gravity
         if(!isOnGround() && !isFlying())
-            getMotion().y -= 0.08;
+            getVelocity().y -= 0.08;
         
         // Reduce Vertical Motion
-        getMotion().y *= 0.98;
+        getVelocity().y *= 0.98;
         
         
         /** -------- Horizontal Move -------- */
@@ -89,7 +89,7 @@ public class LocalPlayer extends AbstractClientPlayer{
         
         // Reduce Last Motion
         final float reduceHorizontal = slipperinessMul * 0.91F;
-        getMotion().mul(reduceHorizontal, 1, reduceHorizontal);
+        getVelocity().mul(reduceHorizontal, 1, reduceHorizontal);
         
         // Move
         float moveControlLen = moveControl.len();
@@ -102,14 +102,14 @@ public class LocalPlayer extends AbstractClientPlayer{
             }else
                 acceleration.mul(0.02 * movementMul);
             
-            getMotion().add(acceleration);
+            getVelocity().add(acceleration);
         }
         
         
         /** -------- Other -------- */
         
         // Fall height
-        if(getMotion().y < 0 && lastMotionY >= 0)
+        if(getVelocity().y < 0 && lastVelocityY >= 0)
             jumpDownY = getPosition().y;
         
         if(isOnGround() && jumpDownY != 0){
@@ -117,11 +117,11 @@ public class LocalPlayer extends AbstractClientPlayer{
             jumpDownY = 0;
         }
         
-        lastMotionY = getMotion().y;
+        lastVelocityY = getVelocity().y;
         
         // Move entity
-        final Vec3f collidedMotion = moveEntity(getMotion());
-        getMotion().collidedAxesToZero(collidedMotion);
+        final Vec3f collidedMotion = moveEntity(getVelocity());
+        getVelocity().collidedAxesToZero(collidedMotion);
         
         // Disable sprinting
         if(collidedMotion.x == 0 || collidedMotion.z == 0)

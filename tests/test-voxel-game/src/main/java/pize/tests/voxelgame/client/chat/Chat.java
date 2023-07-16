@@ -125,4 +125,9 @@ public class Chat{
         textProcessor.insertChar('/');
     }
     
+    
+    public TextProcessor getTextProcessor(){
+        return textProcessor;
+    }
+    
 }

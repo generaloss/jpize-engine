@@ -162,7 +162,7 @@ public class Context{
         return fixedUpdateDeltaTime.get();
     }
     
-    public void setUpdateTPS(float updateTPS){
+    public void setFixedUpdateTPS(float updateTPS){
         if(fixedUpdateGenerator != null)
             fixedUpdateGenerator.setTPS(updateTPS);
         else

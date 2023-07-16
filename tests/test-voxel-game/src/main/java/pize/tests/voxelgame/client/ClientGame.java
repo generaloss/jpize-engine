@@ -54,6 +54,7 @@ public class ClientGame{
     public void connect(String address, int port){
         System.out.println("[Client]: Connect to " + address + ":" + port);
         client.connect(address, port);
+        client.getConnection().setTcpNoDelay(true);
         sendPacket( new SBPacketLogin(session.getVersion().getID(), session.getProfile().getName()) );
     }
     

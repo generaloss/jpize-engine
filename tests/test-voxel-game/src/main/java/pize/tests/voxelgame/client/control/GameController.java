@@ -72,6 +72,13 @@ public class GameController{
             if(Key.DOWN.isDown())
                 chat.historyDown();
             
+            if(Key.LEFT_CONTROL.isPressed()){
+                if(Key.C.isDown())
+                    Pize.setClipboardString(chat.getEnteringText());
+                if(Key.V.isDown())
+                    chat.getTextProcessor().insertLine(Pize.getClipboardString());
+            }
+            
             if(Key.ESCAPE.isDown())
                 chat.close();
             
@@ -140,7 +147,7 @@ public class GameController{
         
         // Ping server
         if(Key.P.isDown())
-            session.getGame().sendPacket(new SBPacketPing(System.currentTimeMillis()));
+            session.getGame().sendPacket(new SBPacketPing(System.nanoTime()));
         
         // Polygon Mode
         if(Key.F9.isDown())

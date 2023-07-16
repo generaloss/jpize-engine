@@ -77,7 +77,7 @@ public class SkyRenderer implements Disposable{
         builder.vertex(0.0, radius, 0.0);
         
         for(int i = 0; i <= 360; i += 120){
-            final float angle = i * Maths.toRad;
+            final float angle = i * Maths.ToRad;
         
             builder.vertex(
                 radius * Math.cos(angle),
@@ -171,11 +171,15 @@ public class SkyRenderer implements Disposable{
     
     
     public Color getFogColor(){
-        return new Color(0.5, 0.7, 0.9, 0.8);
+        return new Color(0.5, 0.7, 0.9, 0.95);
     }
     
     public Color getSkyColor(){
-        return new Color(0.4, 0.6, 0.9, 1);
+        return new Color(0.6, 0.8, 1, 1);
+    }
+
+    public float getFogStart(){
+        return 0.7F;
     }
     
     public float[] getSunriseColor(float dayTime){

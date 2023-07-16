@@ -13,12 +13,8 @@ import pize.tests.voxelgame.main.net.packet.SBPacketChunkRequest;
 import pize.util.time.PerSecCounter;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 import static pize.tests.voxelgame.main.chunk.ChunkUtils.getChunkPos;
 import static pize.tests.voxelgame.main.level.ChunkManagerUtils.distToChunk;
@@ -31,7 +27,7 @@ public class ClientChunkManager extends ChunkManager{
     private final ConcurrentHashMap<ChunkPos, Long> requestedChunks;
     private final CopyOnWriteArrayList<ChunkPos> frontiers;
     private final ConcurrentHashMap<ChunkPos, ClientChunk> allChunks;
-    private final LinkedList<ClientChunk> toBuildQueue;
+    private final ConcurrentLinkedDeque<ClientChunk> toBuildQueue;
     private final ConcurrentHashMap<ClientChunk, ChunkMeshStack> allMeshes;
     
     private final ExecutorService executorService;
@@ -42,7 +38,7 @@ public class ClientChunkManager extends ChunkManager{
         requestedChunks = new ConcurrentHashMap<>();
         frontiers = new CopyOnWriteArrayList<>();
         allChunks = new ConcurrentHashMap<>();
-        toBuildQueue = new LinkedList<>();
+        toBuildQueue = new ConcurrentLinkedDeque<>();
         allMeshes = new ConcurrentHashMap<>();
         
         tps = new PerSecCounter();
@@ -97,12 +93,12 @@ public class ClientChunkManager extends ChunkManager{
         }
         
         for(final ChunkPos frontierPos: frontiers){
-            ensureFrontier(frontierPos.getNeighbor(-1, 0));
-            ensureFrontier(frontierPos.getNeighbor(1, 0));
-            ensureFrontier(frontierPos.getNeighbor(0, -1));
-            ensureFrontier(frontierPos.getNeighbor(0, 1));
+            ensureFrontier(frontierPos.getNeighbor(-1,  0));
+            ensureFrontier(frontierPos.getNeighbor( 1,  0));
+            ensureFrontier(frontierPos.getNeighbor( 0, -1));
+            ensureFrontier(frontierPos.getNeighbor( 0,  1));
             
-            if(!allChunks.containsKey(frontierPos) && !requestedChunks.containsKey(frontierPos)){
+            if(!allChunks.containsKey(frontierPos) && !requestedChunks.containsKey(frontierPos) && toBuildQueue.stream().noneMatch(chunk -> chunk.getPosition().equals(frontierPos))){
                 getLevel().getSession().getGame().sendPacket(new SBPacketChunkRequest(frontierPos.x, frontierPos.z));
                 requestedChunks.put(frontierPos, System.currentTimeMillis());
             }
@@ -150,10 +146,7 @@ public class ClientChunkManager extends ChunkManager{
                 
                 final ChunkMeshStack meshStack = allMeshes.get(chunk);
                 if(meshStack != null)
-                    Pize.execSync(()->{
-                        System.out.println(1000000);
-                        meshStack.dispose();
-                    });
+                    Pize.execSync(meshStack::dispose);
             }
         
         for(Map.Entry<ChunkPos, Long> entry: requestedChunks.entrySet())

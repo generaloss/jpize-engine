@@ -39,7 +39,7 @@ public class CommandTeleport{
         final CommandArgPosition argPosition = context.getArg(0).asPosition();
         
         // Sender, Position
-        final ServerPlayer sender = context.getSource().asPlayer().getPlayer();
+        final ServerPlayer sender = context.getSource().asPlayer();
         final Vec3f position = argPosition.getPosition();
         // Teleport
         sender.teleport(position);
@@ -51,7 +51,7 @@ public class CommandTeleport{
         final CommandArgPlayer argPlayer = context.getArg(0).asPlayer();
         
         // Players
-        final ServerPlayer sender = context.getSource().asPlayer().getPlayer();
+        final ServerPlayer sender = context.getSource().asPlayer();
         final ServerPlayer targetPlayer = argPlayer.getPlayer();
         // Teleport
         sender.teleport(targetPlayer);

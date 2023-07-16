@@ -200,7 +200,7 @@ public class Vec2f{
     
     
     public float deg(Vec2f vector){
-        return rad(vector) * Maths.toDeg;
+        return rad(vector) * Maths.ToDeg;
     }
     
     public float rad(Vec2f vector){
@@ -210,7 +210,7 @@ public class Vec2f{
     }
     
     public Vec2f rotDeg(double degrees){
-        return rotRad(degrees * Maths.toRad);
+        return rotRad(degrees * Maths.ToRad);
     }
     
     public Vec2f rotRad(double radians){

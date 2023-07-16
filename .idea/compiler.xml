@@ -19,6 +19,7 @@
         <module name="test-voxel-game" />
         <module name="test-window" />
         <module name="test-terraria" />
+        <module name="test-drift" />
         <module name="core" />
         <module name="test-net" />
         <module name="test-noise" />

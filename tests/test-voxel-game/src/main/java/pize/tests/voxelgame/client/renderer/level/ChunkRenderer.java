@@ -104,6 +104,7 @@ public class ChunkRenderer implements Disposable{
     private void setupShaders(GameCamera camera){
         final Options options = levelRenderer.getGameRenderer().getSession().getOptions();
         final Color fogColor = levelRenderer.getSkyRenderer().getFogColor();
+        final float fogStart = levelRenderer.getSkyRenderer().getFogStart();
         
         // Solid
         solidShader.bind();
@@ -111,8 +112,9 @@ public class ChunkRenderer implements Disposable{
         solidShader.setUniform("u_view", camera.getView());
         solidShader.setUniform("u_atlas", atlasTexture);
         
-        solidShader.setUniform("u_renderDistanceBlocks", options.getRenderDistance() * (SIZE));
+        solidShader.setUniform("u_renderDistanceBlocks", (options.getRenderDistance() - 1) * SIZE);
         solidShader.setUniform("u_fogColor", fogColor);
+        solidShader.setUniform("u_fogStart", fogStart);
         solidShader.setUniform("u_brightness", options.getBrightness());
         
         // Custom
@@ -121,8 +123,9 @@ public class ChunkRenderer implements Disposable{
         customShader.setUniform("u_view", camera.getView());
         customShader.setUniform("u_atlas", atlasTexture);
         
-        customShader.setUniform("u_renderDistanceBlocks", options.getRenderDistance() * (SIZE));
+        customShader.setUniform("u_renderDistanceBlocks", (options.getRenderDistance() - 1) * SIZE);
         customShader.setUniform("u_fogColor", fogColor);
+        customShader.setUniform("u_fogStart", fogStart);
         customShader.setUniform("u_brightness", options.getBrightness());
     }
     

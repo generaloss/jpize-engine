@@ -58,7 +58,7 @@ public class Quaternion{
     }
     
     public Quaternion set(Vec3f axis, double angle, boolean degrees){
-        return set(axis, (degrees ? (angle * Maths.toRad) : angle));
+        return set(axis, (degrees ? (angle * Maths.ToRad) : angle));
     }
     
     public Quaternion set(double yaw, double pitch, double roll){
@@ -78,7 +78,7 @@ public class Quaternion{
     }
     
     public Quaternion set(EulerAngles eulerAngles){
-        return set(eulerAngles.yaw * Maths.toRad, eulerAngles.pitch * Maths.toRad, eulerAngles.roll * Maths.toRad);
+        return set(eulerAngles.yaw * Maths.ToRad, eulerAngles.pitch * Maths.ToRad, eulerAngles.roll * Maths.ToRad);
     }
 
     
@@ -126,7 +126,7 @@ public class Quaternion{
     }
     
     public float getRoll(){
-        return getRollRad() * Maths.toDeg;
+        return getRollRad() * Maths.ToDeg;
     }
     
     public float getPitchRad(){
@@ -135,7 +135,7 @@ public class Quaternion{
     }
     
     public float getPitch(){
-        return getPitchRad() * Maths.toDeg;
+        return getPitchRad() * Maths.ToDeg;
     }
     
     public float getYawRad(){
@@ -143,7 +143,7 @@ public class Quaternion{
     }
     
     public float getYaw(){
-        return getYawRad() * Maths.toDeg;
+        return getYawRad() * Maths.ToDeg;
     }
     
     

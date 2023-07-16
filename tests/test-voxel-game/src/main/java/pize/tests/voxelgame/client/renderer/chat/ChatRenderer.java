@@ -11,6 +11,7 @@ import pize.tests.voxelgame.client.chat.ChatMessage;
 import pize.tests.voxelgame.client.renderer.ClientGameRenderer;
 import pize.tests.voxelgame.client.renderer.text.TextComponentBatch;
 import pize.tests.voxelgame.main.text.Component;
+import pize.tests.voxelgame.main.text.ComponentText;
 
 import java.util.HashMap;
 import java.util.List;
@@ -90,9 +91,14 @@ public class ChatRenderer implements Disposable{
         scroll = Math.min(0, scroll);
         scroll = Math.max(Math.min(0, chatHeight - chatMessagesHeight), scroll);
         
-        batch.getScissor().begin(0, chatX, openedChatY, chatWidth, chatHeight); // Scissors begin
-        
         // Chat
+        final float headSize = lineAdvance;
+        final float headAdvance = headSize * 1.5F;
+        final float headDrawX = (headAdvance - headSize) / 2;
+        final float headDrawY = (lineAdvance - headSize) / 2;
+        
+        batch.getScissor().begin(0, chatX, openedChatY, chatWidth + headAdvance, chatHeight); // Scissors begin
+        
         int textAdvanceY = 0;
         for(int i = messages.size() - 1; i >= 0; i--){
             final ChatMessage message = messages.get(i);
@@ -105,21 +111,17 @@ public class ChatRenderer implements Disposable{
                     continue;
             }
             
-            final String messageText = message.getComponents().toString();
-            final float textWidth = Math.min(chatWidth, textBatch.getFont().getLineWidth(messageText));
-            final float textHeight = textBatch.getFont().getBounds(message.getComponents().toString(), chatWidth).y;
+            final float textHeight = textBatch.getFont().getTextHeight(message.getComponents().toString(), chatWidth + headAdvance);
             final float renderChatY = openedChatY + textAdvanceY + scroll;
             final float lineWrapAdvanceY = textHeight - lineAdvance;
             
-            
             final boolean isPlayer = message.getSource().isPlayer();
-            final float headSize = lineAdvance;
-            final float headAdvance = headSize * 1.5F;
-            final float headDrawX = (headAdvance - headSize) / 2;
-            final float headDrawY = (lineAdvance - headSize) / 2;
+            final StringBuilder messageStringBuilder = new StringBuilder();
+            for(ComponentText component: message.getComponents())
+                messageStringBuilder.append(component.toString());
             
             // Render background
-            batch.drawQuad(0.4 * alpha, chatX, renderChatY, Math.max(chatWidth, textWidth) + headAdvance, textHeight);
+            batch.drawQuad(0.4 * alpha, chatX, renderChatY, chatWidth + headAdvance, textHeight);
             
             // Render head
             if(isPlayer){

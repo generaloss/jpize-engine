@@ -4,7 +4,7 @@ import pize.graphics.texture.Region;
 import pize.graphics.util.color.Color;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
-import pize.physic.Motion3f;
+import pize.physic.Velocity3f;
 
 public class ParticleInstance{
     
@@ -16,7 +16,7 @@ public class ParticleInstance{
     public Region region;
     public float lifeTimeSeconds;
     public Vec3f position;
-    public Motion3f motion;
+    public Velocity3f velocity;
     public float rotation, size;
     public Color color;
     
@@ -26,7 +26,7 @@ public class ParticleInstance{
         this.position = position.copy();
         this.creationTime = System.currentTimeMillis();
         this.color = particle.color.copy();
-        this.motion = new Motion3f();
+        this.velocity = new Velocity3f();
     }
     
     public void update(){

@@ -4,6 +4,7 @@ import pize.Pize;
 import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
+import pize.physic.Velocity3f;
 import pize.tests.voxelgame.VoxelGame;
 import pize.tests.voxelgame.client.control.camera.GameCamera;
 import pize.tests.voxelgame.client.control.camera.PerspectiveType;
@@ -133,9 +134,9 @@ public class PlayerModel extends HumanoidModel{
             torso.getRotation().pitch = -30;
             torso.getPosition().add(0, -w * 2, 0);
             head.getPosition().add(
-                3 * w * Mathc.cos(-torso.getRotation().yaw * Maths.toRad),
+                3 * w * Mathc.cos(-torso.getRotation().yaw * Maths.ToRad),
                 -w * 3,
-                3 * w * Mathc.sin(-torso.getRotation().yaw * Maths.toRad)
+                3 * w * Mathc.sin(-torso.getRotation().yaw * Maths.ToRad)
             );
         }else{
             torso.getRotation().pitch = 0;
@@ -144,8 +145,8 @@ public class PlayerModel extends HumanoidModel{
         }
         
         // Animation
-        final Vec3f motion = this.player.getMotion();
-        if(motion.len2() > 10E-5){
+        final Velocity3f velocity = this.player.getVelocity();
+        if(velocity.len2() > 10E-5){
             
             final double animationSpeed;
             if(player.isSprinting())

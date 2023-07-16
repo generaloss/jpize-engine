@@ -27,6 +27,7 @@
         <module>test-net</module>
         <module>test-window</module>
         <module>dev-tests</module>
+        <module>test-drift</module>
     </modules>
     
     <dependencies>

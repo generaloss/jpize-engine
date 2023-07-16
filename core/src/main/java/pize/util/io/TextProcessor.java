@@ -83,6 +83,8 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     }
     
     public void insertLine(String line){
+        line = line.replaceAll("\n", "");
+        
         String currentLine = lines.get(cursorY);
         currentLine = currentLine.substring(0, cursorX) + line + currentLine.substring(cursorX);
         lines.set(cursorY, currentLine);

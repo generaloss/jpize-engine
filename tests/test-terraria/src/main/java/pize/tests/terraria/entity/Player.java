@@ -24,7 +24,7 @@ public class Player extends Entity{
     public Player(){
         super(new BoundingBox2(0, 0, 2, 3));
         rectList = new ArrayList<>();
-        getMotion().setMax(50);
+        getVelocity().setMax(50);
     }
 
 
@@ -52,9 +52,9 @@ public class Player extends Entity{
         float delta = Pize.getDt();
 
         if(Key.A.isPressed())
-            getMotion().x -= 0.7;
+            getVelocity().x -= 0.7;
         if(Key.D.isPressed())
-            getMotion().x += 0.7;
+            getVelocity().x += 0.7;
 
         // Auto jump
 
@@ -63,31 +63,31 @@ public class Player extends Entity{
             rectBody.pos().y++;
 
             if(
-                (getMotion().x > 0 && isCollideRight
+                (getVelocity().x > 0 && isCollideRight
                 && !Collider2f.getCollidedMotion(rectBody, new Vec2f(Float.MIN_VALUE, 0), rects).isZero())
             ||
-                (getMotion().x < 0 && isCollideLeft
+                (getVelocity().x < 0 && isCollideLeft
                 && !Collider2f.getCollidedMotion(rectBody, new Vec2f(-Float.MIN_VALUE, 0), rects).isZero()
             ))
-                getMotion().y = 21;
+                getVelocity().y = 21;
         }
 
         // Gravity & Jump
 
-        getMotion().y -= 2;
+        getVelocity().y -= 2;
 
         if(Key.SPACE.isPressed() && isCollideDown)
-            getMotion().y = 50;
+            getVelocity().y = 50;
 
         // Process collisions
 
-        Vec2f motion = getMotion().copy().mul(delta);
+        Vec2f motion = getVelocity().copy().mul(delta);
         rects = getRects(tileMap, motion, 0);
         Vec2f collidedVel = Collider2f.getCollidedMotion(this, motion, rects);
 
-        getMotion().reduce(0.5);
-        getMotion().collidedAxesToZero(collidedVel);
-        getMotion().clampToMax();
+        getVelocity().reduce(0.5);
+        getVelocity().collidedAxesToZero(collidedVel);
+        getVelocity().clampToMax();
 
         pos().add(collidedVel);
     }

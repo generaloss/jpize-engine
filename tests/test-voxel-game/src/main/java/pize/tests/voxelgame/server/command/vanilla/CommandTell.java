@@ -25,7 +25,7 @@ public class CommandTell{
     
     private static void tell(CommandContext context){
         // Players
-        final ServerPlayer sender = context.getSource().asPlayer().getPlayer();
+        final ServerPlayer sender = context.getSource().asPlayer();
         final ServerPlayer targetPlayer = context.getArg(0).asPlayer().getPlayer();
         final String text = context.getArg(1).asText().getText();
         // Tell

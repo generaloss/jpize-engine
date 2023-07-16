@@ -69,7 +69,7 @@ public class Ray3f{
         final Vec3f normal = direction.copy().crs(edge20);
         final float det = edge10.copy().dot(normal);
         
-        if(det < Maths.epsilon)
+        if(det < Maths.Epsilon)
             return -1;
         
         final float invDet = 1 / det;

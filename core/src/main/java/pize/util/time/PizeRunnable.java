@@ -2,29 +2,35 @@ package pize.util.time;
 
 import pize.util.Utils;
 
-public abstract class PizeRunnable implements Runnable{
+public class PizeRunnable{
 
+    private final Runnable runnable;
     private boolean interrupt;
 
-    public void runLater(long delay){
-        Utils.delayMillis(delay);
-        run();
+    public PizeRunnable(Runnable runnable){
+        this.runnable = runnable;
     }
 
-    public void runTimer(long delay, long period){
-        runLater(delay);
+
+    public void runLater(long delayMillis){
+        Utils.delayMillis(delayMillis);
+        runnable.run();
+    }
+
+    public void runTimer(long delayMillis, long periodMillis){
+        runLater(delayMillis);
         while(!Thread.interrupted() && !interrupt)
-            runLater(period);
+            runLater(periodMillis);
     }
 
-    public void runLaterAsync(long delay){
-        Thread thread = new Thread(()->runLater(delay), "PizeRunnable-Thread");
+    public void runLaterAsync(long delayMillis){
+        final Thread thread = new Thread(() -> runLater(delayMillis), "PizeRunnable-Thread");
         thread.setDaemon(true);
         thread.start();
     }
 
-    public void runTimerAsync(long delay, long period){
-        Thread thread = new Thread(()->runTimer(delay, period), "PizeRunnable-Thread");
+    public void runTimerAsync(long delayMillis, long periodMillis){
+        final Thread thread = new Thread(() -> runTimer(delayMillis, periodMillis), "PizeRunnable-Thread");
         thread.setDaemon(true);
         thread.start();
     }

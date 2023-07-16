@@ -6,7 +6,7 @@ import pize.math.vecmath.vector.Vec3f;
 import pize.physic.BoundingBox3;
 import pize.physic.BoxBody;
 import pize.physic.Collider3f;
-import pize.physic.Motion3f;
+import pize.physic.Velocity3f;
 import pize.tests.voxelgame.client.block.BlockFace;
 import pize.tests.voxelgame.client.block.BlockProperties;
 import pize.tests.voxelgame.client.block.shape.BlockCollideShape;
@@ -21,7 +21,7 @@ public abstract class Entity extends BoxBody{
     private Level level;
     private final EntityType<?> entityType;
     private final EulerAngles rotation;
-    private final Motion3f motion;
+    private final Velocity3f velocity;
     private UUID uuid;
     
     private BoxBody[] blockBoxes;
@@ -33,7 +33,7 @@ public abstract class Entity extends BoxBody{
         this.level = level;
         this.entityType = entityType;
         this.rotation = new EulerAngles();
-        this.motion = new Motion3f();
+        this.velocity = new Velocity3f();
         this.uuid = UUID.randomUUID();
     }
     
@@ -54,8 +54,8 @@ public abstract class Entity extends BoxBody{
         return rotation;
     }
     
-    public Motion3f getMotion(){
-        return motion;
+    public Velocity3f getVelocity(){
+        return velocity;
     }
     
     
@@ -93,7 +93,7 @@ public abstract class Entity extends BoxBody{
     }
     
     public boolean isCollidedTo(Vec3f direction){
-        final Vec3f dir = direction.copy().nor().mul(Maths.epsilon);
+        final Vec3f dir = direction.copy().nor().mul(Maths.Epsilon);
         return Collider3f.getCollidedMotion(this, dir, blockBoxes).len2() < dir.len2();
     }
     
@@ -101,21 +101,21 @@ public abstract class Entity extends BoxBody{
     private BoxBody[] getBlockBoxes(){
         final ArrayList<BoxBody> blockBoxes = new ArrayList<>();
         
-        final Motion3f motion = getMotion();
+        final Velocity3f velocity = getVelocity();
         final Vec3f min = this.getMin();
         final Vec3f max = this.getMax();
         
-        final int beginX = Maths.floor(min.x - 0.5 + Math.min(0, motion.x));
+        final int beginX = Maths.floor(min.x - 0.5 + Math.min(0, velocity.x));
         final int beginY = Math.max(0, Math.min(ChunkUtils.HEIGHT_IDX,
-            Maths.floor(min.y - 0.5 + Math.min(0, motion.y))
+            Maths.floor(min.y - 0.5 + Math.min(0, velocity.y))
         ));
-        final int beginZ = Maths.floor(min.z - 0.5 + Math.min(0, motion.z));
+        final int beginZ = Maths.floor(min.z - 0.5 + Math.min(0, velocity.z));
         
-        final int endX = Maths.ceil(max.x + 0.5 + Math.max(0, motion.x));
+        final int endX = Maths.ceil(max.x + 0.5 + Math.max(0, velocity.x));
         final int endY = Math.max(0, Math.min(ChunkUtils.HEIGHT,
-            Maths.ceil(max.y + 0.5 + Math.max(0, motion.y))
+            Maths.ceil(max.y + 0.5 + Math.max(0, velocity.y))
         ));
-        final int endZ = Maths.ceil(max.z + 0.5 + Math.max(0, motion.z));
+        final int endZ = Maths.ceil(max.z + 0.5 + Math.max(0, velocity.z));
         
         for(int x = beginX; x < endX; x++)
             for(int y = beginY; y < endY; y++)

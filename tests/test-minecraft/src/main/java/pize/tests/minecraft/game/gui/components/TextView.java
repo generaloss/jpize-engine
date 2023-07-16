@@ -119,15 +119,15 @@ public class TextView extends MComponent{
 
         // Calculate centering offset
         
-        final double angle = rotation * Maths.toRad + Math.atan(bounds.y / bounds.x);
+        final double angle = rotation * Maths.ToRad + Math.atan(bounds.y / bounds.x);
         final float boundsCenter = Mathc.hypot(bounds.x / 2, bounds.y / 2);
         final float centeringOffsetX = boundsCenter * Mathc.cos(angle) - bounds.x / 2;
         final float centeringOffsetY = boundsCenter * Mathc.sin(angle) - bounds.y / 2;
 
         // Rotation
 
-        final float cos = Mathc.cos(rotation * Maths.toRad);
-        final float sin = Mathc.sin(rotation * Maths.toRad);
+        final float cos = Mathc.cos(rotation * Maths.ToRad);
+        final float sin = Mathc.sin(rotation * Maths.ToRad);
 
         // Calc shadow offset
 

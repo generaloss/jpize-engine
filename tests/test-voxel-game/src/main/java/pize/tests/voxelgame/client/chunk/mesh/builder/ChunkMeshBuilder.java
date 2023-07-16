@@ -90,10 +90,7 @@ public class ChunkMeshBuilder{
         for(int i = 0; i < solidVerticesArray.length; i++)
             solidVerticesArray[i] = solidVertices.get(i);
         
-        Pize.execSync(()->{
-            System.out.println(555);
-            meshStack.setDataSolid(solidVerticesArray);
-        });
+        Pize.execSync(()->meshStack.setDataSolid(solidVerticesArray));
         solidVertices.clear();
         
         // Custom vertices list to array
@@ -101,17 +98,12 @@ public class ChunkMeshBuilder{
         for(int i = 0; i < customVerticesArray.length; i++)
             customVerticesArray[i] = customVertices.get(i);
         
-        Pize.execSync(()->{
-            System.out.println(77777);
-            meshStack.setDataCustom(customVerticesArray);
-        });
+        Pize.execSync(()->meshStack.setDataCustom(customVerticesArray));
         customVertices.clear();
         
         // Time / Vertices
         buildTime = timer.getMillis();
         verticesNum = solidVertexIndex + customVertexIndex;
-        
-        System.out.println("Chunk: (" + chunk.getPosition().x + ", " + chunk.getPosition().z + ")");
     }
     
     private static boolean isGenSolidFace(int lx, int y, int lz, BlockProperties block){

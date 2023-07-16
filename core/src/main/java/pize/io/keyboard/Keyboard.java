@@ -17,11 +17,11 @@ public class Keyboard{
     private final List<KeyCallback> keyCallbackList;
 
     public Keyboard(Window window){
-        pressed = new boolean[GLFW_KEY_LAST + 1];
-        down = new boolean[GLFW_KEY_LAST + 1];
-        released = new boolean[GLFW_KEY_LAST + 1];
+        this.pressed = new boolean[GLFW_KEY_LAST + 1];
+        this.down = new boolean[GLFW_KEY_LAST + 1];
+        this.released = new boolean[GLFW_KEY_LAST + 1];
         
-        keyCallbackList = new ArrayList<>();
+        this.keyCallbackList = new ArrayList<>();
         
         glfwSetKeyCallback(window.getID(), (long windowID, int key, int scancode, int action, int mods)->{
             if(key == -1)
@@ -42,7 +42,7 @@ public class Keyboard{
             }
         });
         
-        charCallbackList = new ArrayList<>();
+        this.charCallbackList = new ArrayList<>();
         
         glfwSetCharCallback(window.getID(), (long windowID, int character)->{
             for(CharCallback charCallback: charCallbackList)

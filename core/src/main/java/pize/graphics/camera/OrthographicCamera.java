@@ -71,7 +71,7 @@ public class OrthographicCamera extends Camera2D implements Resizable{
         this.scale = scale;
     }
 
-    public float getRot(){
+    public float getRotation(){
         return rotation;
     }
 

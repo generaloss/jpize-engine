@@ -13,9 +13,6 @@ import pize.tests.voxelgame.server.command.source.CommandSourcePlayer;
 import java.util.*;
 
 public class CommandDispatcher{
-    
-    public static final String ARGUMENT_SEPARATOR = " ";
-    
 
     private final Server server;
     private final Map<String, CommandNodeLiteral> commands;
@@ -36,6 +33,7 @@ public class CommandDispatcher{
         CommandKick.registerTo(this);
         CommandLevel.registerTo(this);
         CommandTime.registerTo(this);
+        CommandShutdown.registerTo(this);
     }
     
     public Server getServer(){
@@ -57,7 +55,7 @@ public class CommandDispatcher{
             System.out.println("[Server]: Player " + playerSource.getPlayer().getName() + " execute command: " + commandMessage);
         
         // Разделяем комманду на аргументы
-        final String[] splitCommand = commandMessage.split(ARGUMENT_SEPARATOR);
+        final String[] splitCommand = commandMessage.split(" ");
         
         // Проверяем существует ли такая команда в корневом списке
         CommandNodeLiteral targetCommandNode = commands.get(splitCommand[0]);

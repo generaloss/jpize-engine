@@ -8,21 +8,25 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class MonitorManager{
 
-    private static final MonitorManager instance = new MonitorManager();
+    private static MonitorManager instance;
+    
+    public static void init(){
+        instance = new MonitorManager();
+    }
 
 
     private final Map<Long, Monitor> monitors;
 
     private MonitorManager(){
-        monitors = new HashMap<>();
+        monitors = new HashMap<>(2);
 
-        long primaryMonitorId = glfwGetPrimaryMonitor();
-        monitors.put(primaryMonitorId, new Monitor(primaryMonitorId));
+        long primaryMonitorID = glfwGetPrimaryMonitor();
+        monitors.put(primaryMonitorID, new Monitor(primaryMonitorID));
 
-        glfwSetMonitorCallback((long monitorId, int event)->{
+        glfwSetMonitorCallback((long monitorID, int event)->{
             switch(event){
-                case GLFW_CONNECTED -> monitors.put(monitorId, new Monitor(monitorId));
-                case GLFW_DISCONNECTED -> monitors.remove(monitorId);
+                case GLFW_CONNECTED -> monitors.put(monitorID, new Monitor(monitorID));
+                case GLFW_DISCONNECTED -> monitors.remove(monitorID);
             }
         });
     }

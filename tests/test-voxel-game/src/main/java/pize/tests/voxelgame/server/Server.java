@@ -1,14 +1,18 @@
 package pize.tests.voxelgame.server;
 
 import pize.net.tcp.TcpServer;
+import pize.tests.voxelgame.main.text.Component;
 import pize.tests.voxelgame.server.chunk.gen.DefaultGenerator;
 import pize.tests.voxelgame.server.command.CommandDispatcher;
 import pize.tests.voxelgame.server.level.LevelManager;
 import pize.tests.voxelgame.server.level.ServerLevel;
 import pize.tests.voxelgame.server.net.ServerConnectionManager;
 import pize.tests.voxelgame.server.player.PlayerList;
+import pize.tests.voxelgame.server.player.ServerPlayer;
 import pize.util.time.TickGenerator;
 import pize.util.time.Tickable;
+
+import java.util.Collection;
 
 public abstract class Server implements Tickable{
     
@@ -39,6 +43,14 @@ public abstract class Server implements Tickable{
         
         new TickGenerator(20).startAsync(this);
     }
+
+    public void stop(){
+        final Collection<ServerPlayer> players = getPlayerList().getPlayers();
+        for(ServerPlayer player: players){
+            player.disconnect();
+        }
+    }
+
     
     @Override
     public void tick(){
@@ -46,6 +58,11 @@ public abstract class Server implements Tickable{
         
         for(ServerLevel level : getLevelManager().getLoadedLevels())
             level.tick();
+    }
+
+
+    public void broadcast(Component component){
+        playerList.broadcastServerMessage(component);
     }
     
     

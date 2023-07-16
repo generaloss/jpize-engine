@@ -2,20 +2,20 @@ package pize.tests.physic;
 
 import pize.physic.BoundingBox2;
 import pize.physic.RectBody;
-import pize.physic.Motion2f;
+import pize.physic.Velocity2f;
 
 public class DynamicRect extends RectBody{
 
-    private final Motion2f motion;
+    private final Velocity2f velocity;
 
     public DynamicRect(BoundingBox2 rect){
         super(rect);
 
-        motion = new Motion2f();
+        velocity = new Velocity2f();
     }
 
-    public Motion2f motion(){
-        return motion;
+    public Velocity2f motion(){
+        return velocity;
     }
 
 }
