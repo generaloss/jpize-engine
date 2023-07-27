@@ -5,6 +5,8 @@ in vec2 uv;
 uniform sampler2D u_frame;
 uniform sampler2D u_batch;
 
+uniform vec4 u_color;
+
 void main(){
     vec4 color = texture(u_frame, uv); // Level sampling
     vec4 batch = texture(u_batch, uv); // Cursor sampling
@@ -24,5 +26,5 @@ void main(){
     color.rgb = mapped;
 
     // Result
-    gl_FragColor = color;
+    gl_FragColor = color * u_color;
 }

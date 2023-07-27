@@ -79,7 +79,7 @@ public class Context{
                     return;
 
                 fixedUpdateDeltaTime.update();
-                fixedUpdateExecutor.submit(listener::fixedUpdate); /* FIXED UPDATE */
+                fixedUpdateExecutor.execute(listener::fixedUpdate); /* FIXED UPDATE */
             });
         }
         

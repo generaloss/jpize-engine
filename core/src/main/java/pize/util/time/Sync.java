@@ -10,6 +10,7 @@ public class Sync{
 
     public Sync(double fps){
         setFps(fps);
+        enable(true);
     }
 
     public Sync(){
@@ -19,8 +20,6 @@ public class Sync{
     public void setFps(double fps){
         frameNano = (long) (1000000000 / fps); // Время между кадрами, при [fps] количестве тпс
         prevTime = System.nanoTime(); // Для подсчета времени между кадрами
-
-        enabled = true;
     }
 
     public void sync(){
@@ -36,8 +35,7 @@ public class Sync{
             long elapsed;
             do{
                 elapsed = System.nanoTime() - startTime;
-            }
-            while(elapsed < sleepNano);
+            }while(elapsed < sleepNano);
         }
 
         prevTime = System.nanoTime();

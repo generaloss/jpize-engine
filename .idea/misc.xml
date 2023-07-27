@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
@@ -8,10 +9,16 @@
         <option value="$PROJECT_DIR$/tests/test-voxel-game/voxel-game-mod/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-minecraft-oss/minecraft-oss-mod/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-minecraft-osp/minecraft-osp-mod/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/minecraft-osp-mod/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/particle/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-minecraf-osp/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-minecraft-osp-old/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-model-3d/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-particle/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-vg/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-voxel-game/mod/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-win/pom.xml" />

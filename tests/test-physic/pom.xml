@@ -5,17 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>pizza-engine.tests</groupId>
+        <groupId>pizza-engine</groupId>
         <artifactId>tests</artifactId>
         <version>1.0.0</version>
     </parent>
 
+    <groupId>tests</groupId>
     <artifactId>test-physic</artifactId>
-    <version>1.0.0</version>
-    
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+
 </project>

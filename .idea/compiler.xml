@@ -13,7 +13,6 @@
         <module name="test-audio" />
         <module name="dev-tests" />
         <module name="test-minecraft" />
-        <module name="test-model-3d" />
         <module name="minecraft-osp-mod" />
         <module name="test-physic" />
         <module name="test-text-editor" />
@@ -22,13 +21,12 @@
         <module name="test-drift" />
         <module name="core" />
         <module name="test-net" />
+        <module name="test-minecraf-osp" />
         <module name="test-noise" />
         <module name="ui" />
         <module name="test-ui" />
-        <module name="particle" />
         <module name="net" />
         <module name="physic" />
-        <module name="test-particle" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -41,9 +39,15 @@
       <module name="delta-tilemap" target="17" />
       <module name="delta-ui" target="17" />
       <module name="mod" target="17" />
+      <module name="particle" target="17" />
+      <module name="PizzaEngine" target="17" />
       <module name="security" target="17" />
       <module name="sgl-core" target="17" />
       <module name="test-android" target="1.6" />
+      <module name="test-minecraf-osp" target="17" />
+      <module name="test-minecraft-osp-old" target="17" />
+      <module name="test-model-3d" target="17" />
+      <module name="test-particle" target="17" />
       <module name="test-project-vostok" target="17" />
       <module name="test-vg" target="17" />
       <module name="test-win" target="17" />

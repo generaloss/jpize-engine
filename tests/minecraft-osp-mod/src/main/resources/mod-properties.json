@@ -1,0 +1,13 @@
+{
+  "name": "Voxel Game Mod",
+  "id": "voxelgamemod",
+  "version": "1.0",
+  "description": "Adds stuff",
+  "authors": [ "GeneralPashon" ],
+  "icon": "icon.png",
+  "entrypoints": {
+    "main": "pize.tests.voxelgame.mod.ModMain",
+    "client": "pize.tests.voxelgame.mod.ModClient",
+    "server": "pize.tests.voxelgame.mod.ModServer"
+  }
+}

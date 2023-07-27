@@ -15,6 +15,8 @@
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/dev-tests/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/dev-tests/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/minecraft-osp-mod/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/minecraft-osp-mod/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-android/src/main/java" charset="UTF-8" />
@@ -24,8 +26,12 @@
     <file url="file://$PROJECT_DIR$/tests/test-audio/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-drift/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-drift/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp/minecraft-osp-mod/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp/minecraft-osp-mod/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraf-osp/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraf-osp/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp-old/minecraft-osp-mod/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp-old/minecraft-osp-mod/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp-old/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp-old/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraft/src/main/java" charset="UTF-8" />

@@ -78,6 +78,8 @@
     </dependencyManagement>
     
     <dependencies>
+
+        <!-- LWJGL -->
         <dependency>
             <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl</artifactId>

@@ -3,15 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <groupId>pizza-engine</groupId>
+    <artifactId>tests</artifactId>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
-    
-    <groupId>pizza-engine.tests</groupId>
-    <artifactId>tests</artifactId>
-    <version>1.0.0</version>
 
     <modules>
         <module>test-minecraft</module>
@@ -19,15 +20,13 @@
         <module>test-ui</module>
         <module>test-physic</module>
         <module>test-terraria</module>
-        <module>test-model-3d</module>
-        <module>test-particle</module>
         <module>test-text-editor</module>
         <module>test-noise</module>
-        <module>test-minecraft-osp</module>
         <module>test-net</module>
         <module>test-window</module>
         <module>dev-tests</module>
         <module>test-drift</module>
+        <module>test-minecraft-osp</module>
     </modules>
     
     <dependencies>
@@ -40,12 +39,6 @@
         <dependency>
             <groupId>pizza-engine</groupId>
             <artifactId>net</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>pizza-engine</groupId>
-            <artifactId>particle</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
