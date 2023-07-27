@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="voxel-game-mod:jar">
-    <output-path>$PROJECT_DIR$/tests/test-voxel-game/mods</output-path>
-    <root id="archive" name="voxel-game-mod.jar">
-      <element id="module-output" name="voxel-game-mod" />
-    </root>
-  </artifact>
-</component>

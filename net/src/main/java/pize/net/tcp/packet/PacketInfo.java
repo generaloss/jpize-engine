@@ -1,13 +1,15 @@
 package pize.net.tcp.packet;
 
+import pize.util.io.PizeInputStream;
+
 import java.io.IOException;
 
 public class PacketInfo{
     
     private final int packetID;
-    private final PacketInputStream dataStream;
+    private final PizeInputStream dataStream;
     
-    public PacketInfo(int packetID, PacketInputStream inStream){
+    public PacketInfo(int packetID, PizeInputStream inStream){
         this.packetID = packetID;
         this.dataStream = inStream;
     }

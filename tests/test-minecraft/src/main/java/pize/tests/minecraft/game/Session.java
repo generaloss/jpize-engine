@@ -48,7 +48,7 @@ public class Session implements Renderer{
         {
             resourceManager = new ResourceManager();
             // TEXTURE: GUI
-            resourceManager.setLocation("vanilla/textures/guin/");
+            resourceManager.setLocation("vanilla/textures/gui/");
             {
                 resourceManager.putTexture("button", "widgets.png", new Rectangle(0, 66, 200, 20));
                 resourceManager.putTexture("button_hover", "widgets.png", new Rectangle(0, 86, 200, 20));

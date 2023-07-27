@@ -19,11 +19,11 @@ import static org.lwjgl.openal.AL11.alBufferData;
 
 public class AudioLoader{
 
-    public static void loadWav(AudioBuffer audioBuffer, Resource res){
+    public static void loadWav(AudioBuffer audioBuffer, Resource resource){
         if(audioBuffer == null)
             return;
 
-        try(final WavInputStream input = new WavInputStream(res.inStream())){
+        try(final WavInputStream input = new WavInputStream(resource.inStream())){
             
             final byte[] data = input.readAllBytes();
             final ByteBuffer buffer = BufferUtils.createByteBuffer(data.length);
@@ -31,15 +31,15 @@ public class AudioLoader{
             audioBuffer.setData(buffer, input.channels(), input.sampleRate());
             
         }catch(Exception e){
-            throw new RuntimeException("Sound '" + res.getPath() + "' reading is failed: " + e.getMessage());
+            throw new RuntimeException("Sound '" + resource.getPath() + "' reading is failed: " + e.getMessage());
         }
     }
 
-    public static void loadOgg(AudioBuffer audioBuffer, Resource res){
+    public static void loadOgg(AudioBuffer audioBuffer, Resource resource){
         if(audioBuffer == null)
             return;
 
-        try(final OggInputStream input = new OggInputStream(res.inStream())){
+        try(final OggInputStream input = new OggInputStream(resource.inStream())){
             
             final ByteArrayOutputStream output = new ByteArrayOutputStream(4096);
             final byte[] tempBuffer = new byte[2048];
@@ -59,16 +59,16 @@ public class AudioLoader{
             audioBuffer.setData(byteBuffer.asShortBuffer(), input.channels(), input.sampleRate());
             
         }catch(IOException e){
-            throw new RuntimeException("Sound '" + res.getPath() + "' reading is failed: " + e.getMessage());
+            throw new RuntimeException("Sound '" + resource.getPath() + "' reading is failed: " + e.getMessage());
         }
     }
 
-    public static void loadMp3(AudioBuffer audioBuffer, Resource res){
+    public static void loadMp3(AudioBuffer audioBuffer, Resource resource){
         if(audioBuffer == null)
             return;
         
         final ByteArrayOutputStream output = new ByteArrayOutputStream(1024);
-        final Bitstream bitstream = new Bitstream(res.inStream());
+        final Bitstream bitstream = new Bitstream(resource.inStream());
         final Decoder decoder = new Decoder();
 
         int sampleRate = -1;
@@ -100,16 +100,16 @@ public class AudioLoader{
             byteBuffer.flip();
             audioBuffer.setData(byteBuffer.asShortBuffer(), channels, sampleRate);
         }catch(Throwable e){
-            throw new RuntimeException("Sound '" + res.getPath() + "' reading is failed: " + e.getMessage());
+            throw new RuntimeException("Sound '" + resource.getPath() + "' reading is failed: " + e.getMessage());
         }
     }
 
-    public static void load(AudioBuffer audioBuffer, Resource res){
-        switch(res.getExtension().toLowerCase()){
-            case "ogg" -> loadOgg(audioBuffer, res);
-            case "wav" -> loadWav(audioBuffer, res);
-            case "mp3" -> loadMp3(audioBuffer, res);
-            default -> throw new Error("Sound format is not supported: " + res);
+    public static void load(AudioBuffer audioBuffer, Resource resource){
+        switch(resource.getExtension().toLowerCase()){
+            case "ogg" -> loadOgg(audioBuffer, resource);
+            case "wav" -> loadWav(audioBuffer, resource);
+            case "mp3" -> loadMp3(audioBuffer, resource);
+            default -> throw new Error("Sound format is not supported: " + resource);
         }
     }
 

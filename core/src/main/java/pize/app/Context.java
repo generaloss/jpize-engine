@@ -75,6 +75,9 @@ public class Context{
             fixedUpdateGenerator = new TickGenerator(initialUpdateTPS);
             
             fixedUpdateGenerator.startAsync(()->{
+                if(fixedUpdateExecutor.isShutdown())
+                    return;
+
                 fixedUpdateDeltaTime.update();
                 fixedUpdateExecutor.submit(listener::fixedUpdate); /* FIXED UPDATE */
             });

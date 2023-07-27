@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="pize-physic">
+    <output-path>$PROJECT_DIR$/out/artifacts/pize_physic</output-path>
+    <root id="archive" name="pize-physic.jar">
+      <element id="module-output" name="physic" />
+    </root>
+  </artifact>
+</component>

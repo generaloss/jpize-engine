@@ -23,7 +23,7 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
         this.far = (float) far;
         this.fieldOfView = (float) fieldOfView;
 
-        view = new Matrix4f().toLookAt(position, rotation.getDirection());
+        view = new Matrix4f().toLookAt(position, rotation.getDirection()).mul(new Matrix4f().toRotatedZ(rotation.roll));
         projection = new Matrix4f().toPerspective(width, height, this.near, this.far, this.fieldOfView);
         imaginaryView = new Matrix4f().set(view);
 
@@ -45,7 +45,7 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
             rotation.getDirection()
         );
         
-        imaginaryView.toLookAt(position, rotation.getDirection());
+        imaginaryView.toLookAt(position, rotation.getDirection()).mul(new Matrix4f().toRotatedZ(rotation.roll));
 
         frustum.setFrustum(
             !(imaginaryX || imaginaryY || imaginaryZ) ? view : imaginaryView,

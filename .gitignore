@@ -8,12 +8,11 @@
 /tests/test-model-3d/target/
 /tests/test-particle/target/
 /tests/test-physic/target/
-/tests/test-project-vostok/target/
 /tests/test-terraria/target/
 /tests/test-ui/target/
 /tests/test-net/target/
 /tests/test-text-editor/target/
 /tests/test-window/target/
-/tests/test-voxel-game/target/
-/tests/test-voxel-game/voxel-game-mod/target/
 /tests/test-noise/target/
+/tests/test-minecraft-osp/target/
+/tests/test-minecraft-osp/minecraft-osp-mod/target/

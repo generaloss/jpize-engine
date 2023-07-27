@@ -9,14 +9,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="test-minecraft-osp" />
         <module name="test-audio" />
-        <module name="test-minecraft" />
         <module name="dev-tests" />
-        <module name="voxel-game-mod" />
+        <module name="test-minecraft" />
         <module name="test-model-3d" />
+        <module name="minecraft-osp-mod" />
         <module name="test-physic" />
         <module name="test-text-editor" />
-        <module name="test-voxel-game" />
         <module name="test-window" />
         <module name="test-terraria" />
         <module name="test-drift" />

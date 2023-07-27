@@ -35,12 +35,12 @@ public class Pize{
         final Window window = new Window(title, width, height, resizable, vsync, samples);
         context = new Context(window, new Keyboard(window), new Mouse(window));
 
-        Gl.enable(Target.BLEND, Target.CULL_FACE);
+        Gl.enable(Target.BLEND, Target.CULL_FACE, Target.MULTISAMPLE);
         Gl.blendFunc(BlendFactor.SRC_ALPHA, BlendFactor.ONE_MINUS_SRC_ALPHA);
     }
     
     public static void create(String title, int width, int height){
-        create(title, width, height, true, true, 0);
+        create(title, width, height, true, true, 4);
     }
 
     public static void run(AppAdapter listener){

@@ -23,7 +23,7 @@ public class TickGenerator{
     }
 
     public void startAsync(Tickable tickable){
-        final Thread thread = new Thread(()->start(tickable));
+        final Thread thread = new Thread(() -> start(tickable));
         thread.setDaemon(true);
         thread.start();
     }

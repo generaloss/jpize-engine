@@ -11,15 +11,15 @@ import static org.lwjgl.opengl.GL46.*;
 
 public class TextureParameters{
     
-    public static Filter DEFAULT_MIN_FILTER = Filter.NEAREST;
+    public static Filter DEFAULT_MIN_FILTER = Filter.LINEAR_MIPMAP_LINEAR;
     public static Filter DEFAULT_MAG_FILTER = Filter.NEAREST;
     public static Wrap DEFAULT_WRAP_S = Wrap.CLAMP_TO_EDGE;
     public static Wrap DEFAULT_WRAP_T = Wrap.CLAMP_TO_EDGE;
     public static Wrap DEFAULT_WRAP_R = Wrap.CLAMP_TO_EDGE;
     public static SizedFormat DEFAULT_FORMAT = SizedFormat.RGBA8;
     public static Type DEFAULT_TYPE = Type.UNSIGNED_BYTE;
-    public static int DEFAULT_MIPMAP_LEVELS = 1;
-    public static float DEFAULT_LOD_BIAS = -glGetFloat(GL_MAX_TEXTURE_LOD_BIAS);
+    public static int DEFAULT_MIPMAP_LEVELS = 0;
+    public static float DEFAULT_LOD_BIAS = -getMaxLodBias();
     public static float DEFAULT_ANISOTROPY_LEVELS = 0;
     
 
@@ -202,6 +202,11 @@ public class TextureParameters{
         this.lodBias = lodBias;
         
         return this;
+    }
+
+
+    public static float getMaxLodBias(){
+        return glGetFloat(GL_MAX_TEXTURE_LOD_BIAS);
     }
 
 }

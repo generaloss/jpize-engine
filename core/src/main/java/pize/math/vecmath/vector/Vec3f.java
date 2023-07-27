@@ -63,14 +63,6 @@ public class Vec3f{
     
     /**             POINT             */
     
-    public float dst(int x, int y, int z){
-        double dx = this.x - x;
-        double dy = this.y - y;
-        double dz = this.z - z;
-        
-        return Mathc.sqrt(dx * dx + dy * dy + dz * dz);
-    }
-    
     public float dst(float x, float y, float z){
         double dx = this.x - x;
         double dy = this.y - y;
@@ -86,16 +78,16 @@ public class Vec3f{
         
         return Mathc.sqrt(dx * dx + dy * dy + dz * dz);
     }
-    
-    
-    public float dst(Vec3i vector){
-        double dx = x - vector.x;
-        double dy = y - vector.y;
-        double dz = z - vector.z;
-        
+
+    public float dst(int x, int y, int z){
+        double dx = this.x - x;
+        double dy = this.y - y;
+        double dz = this.z - z;
+
         return Mathc.sqrt(dx * dx + dy * dy + dz * dz);
     }
     
+
     public float dst(Vec3f vector){
         double dx = x - vector.x;
         double dy = y - vector.y;
@@ -109,6 +101,14 @@ public class Vec3f{
         double dy = y - vector.y;
         double dz = z - vector.z;
         
+        return Mathc.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    public float dst(Vec3i vector){
+        double dx = x - vector.x;
+        double dy = y - vector.y;
+        double dz = z - vector.z;
+
         return Mathc.sqrt(dx * dx + dy * dy + dz * dz);
     }
     
@@ -162,6 +162,10 @@ public class Vec3f{
     public double dot(double x, double y, double z){
         return this.x * x + this.y * y + this.z * z;
     }
+
+    public double dot(int x, int y, int z){
+        return this.x * x + this.y * y + this.z * z;
+    }
     
     public float dot(Vec3f vector){
         return x * vector.x + y * vector.y + z * vector.z;
@@ -170,37 +174,69 @@ public class Vec3f{
     public double dot(Vec3d vector){
         return x * vector.x + y * vector.y + z * vector.z;
     }
-    
+
+    public double dot(Vec3i vector){
+        return x * vector.x + y * vector.y + z * vector.z;
+    }
+
     
     public Vec3f crs(float x, float y, float z){
-        this.x = this.y * z - this.z * y;
-        this.y = this.z * x - this.x * z;
-        this.z = this.x * y - this.y * x;
+        set(
+            this.y * z - this.z * y,
+            this.z * x - this.x * z,
+            this.x * y - this.y * x
+        );
         
         return this;
     }
     
     public Vec3f crs(double x, double y, double z){
-        this.x = (float) (this.y * z - this.z * y);
-        this.y = (float) (this.z * x - this.x * z);
-        this.z = (float) (this.x * y - this.y * x);
+        set(
+            this.y * z - this.z * y,
+            this.z * x - this.x * z,
+            this.x * y - this.y * x
+        );
         
+        return this;
+    }
+
+    public Vec3f crs(int x, int y, int z){
+        set(
+            this.y * z - this.z * y,
+            this.z * x - this.x * z,
+            this.x * y - this.y * x
+        );
+
         return this;
     }
     
     public Vec3f crs(Vec3f vector){
-        this.x = y * vector.z - z * vector.y;
-        this.y = z * vector.x - x * vector.z;
-        this.z = x * vector.y - y * vector.x;
+        set(
+            y * vector.z - z * vector.y,
+            z * vector.x - x * vector.z,
+            x * vector.y - y * vector.x
+        );
         
         return this;
     }
     
     public Vec3f crs(Vec3d vector){
-        this.x = (float) (y * vector.z - z * vector.y);
-        this.y = (float) (z * vector.x - x * vector.z);
-        this.z = (float) (x * vector.y - y * vector.x);
+        set(
+            y * vector.z - z * vector.y,
+            z * vector.x - x * vector.z,
+            x * vector.y - y * vector.x
+        );
         
+        return this;
+    }
+
+    public Vec3f crs(Vec3i vector){
+        set(
+            y * vector.z - z * vector.y,
+            z * vector.x - x * vector.z,
+            x * vector.y - y * vector.x
+        );
+
         return this;
     }
     
@@ -305,6 +341,13 @@ public class Vec3f{
         this.z = z;
         return this;
     }
+
+    public Vec3f set(int x, int y, int z){
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        return this;
+    }
     
     public Vec3f set(double xyz){
         x = (float) xyz;
@@ -314,6 +357,13 @@ public class Vec3f{
     }
     
     public Vec3f set(float xyz){
+        x = xyz;
+        y = xyz;
+        z = xyz;
+        return this;
+    }
+
+    public Vec3f set(int xyz){
         x = xyz;
         y = xyz;
         z = xyz;
@@ -376,6 +426,13 @@ public class Vec3f{
         this.z += z;
         return this;
     }
+
+    public Vec3f add(int x, int y, int z){
+        this.x += x;
+        this.y += y;
+        this.z += z;
+        return this;
+    }
     
     public Vec3f add(double xyz){
         x += xyz;
@@ -385,6 +442,13 @@ public class Vec3f{
     }
     
     public Vec3f add(float xyz){
+        x += xyz;
+        y += xyz;
+        z += xyz;
+        return this;
+    }
+
+    public Vec3f add(int xyz){
         x += xyz;
         y += xyz;
         z += xyz;
@@ -402,6 +466,12 @@ public class Vec3f{
         y += vector.y;
         return this;
     }
+
+    public Vec3f add(Vec2i vector){
+        x += vector.x;
+        y += vector.y;
+        return this;
+    }
     
     public Vec3f add(Vec3d vector){
         x += vector.x;
@@ -411,6 +481,13 @@ public class Vec3f{
     }
     
     public Vec3f add(Vec3f vector){
+        x += vector.x;
+        y += vector.y;
+        z += vector.z;
+        return this;
+    }
+
+    public Vec3f add(Vec3i vector){
         x += vector.x;
         y += vector.y;
         z += vector.z;
@@ -431,6 +508,13 @@ public class Vec3f{
         this.z -= z;
         return this;
     }
+
+    public Vec3f sub(int x, int y, int z){
+        this.x -= x;
+        this.y -= y;
+        this.z -= z;
+        return this;
+    }
     
     public Vec3f sub(double xyz){
         x -= xyz;
@@ -445,7 +529,14 @@ public class Vec3f{
         z -= xyz;
         return this;
     }
-    
+
+    public Vec3f sub(int xyz){
+        x -= xyz;
+        y -= xyz;
+        z -= xyz;
+        return this;
+    }
+
     public Vec3f sub(Vec2d vector){
         x -= vector.x;
         y -= vector.y;
@@ -457,7 +548,13 @@ public class Vec3f{
         y -= vector.y;
         return this;
     }
-    
+
+    public Vec3f sub(Vec2i vector){
+        x -= vector.x;
+        y -= vector.y;
+        return this;
+    }
+
     public Vec3f sub(Vec3d vector){
         x -= vector.x;
         y -= vector.y;
@@ -471,9 +568,23 @@ public class Vec3f{
         z -= vector.z;
         return this;
     }
+
+    public Vec3f sub(Vec3i vector){
+        x -= vector.x;
+        y -= vector.y;
+        z -= vector.z;
+        return this;
+    }
     
     
     public Vec3f mul(double x, double y, double z){
+        this.x *= x;
+        this.y *= y;
+        this.z *= z;
+        return this;
+    }
+
+    public Vec3f mul(int x, int y, int z){
         this.x *= x;
         this.y *= y;
         this.z *= z;
@@ -500,6 +611,13 @@ public class Vec3f{
         z *= xyz;
         return this;
     }
+
+    public Vec3f mul(int xyz){
+        x *= xyz;
+        y *= xyz;
+        z *= xyz;
+        return this;
+    }
     
     public Vec3f mul(Vec2d vector){
         x *= vector.x;
@@ -508,6 +626,12 @@ public class Vec3f{
     }
     
     public Vec3f mul(Vec2f vector){
+        x *= vector.x;
+        y *= vector.y;
+        return this;
+    }
+
+    public Vec3f mul(Vec2i vector){
         x *= vector.x;
         y *= vector.y;
         return this;
@@ -521,6 +645,13 @@ public class Vec3f{
     }
     
     public Vec3f mul(Vec3f vector){
+        x *= vector.x;
+        y *= vector.y;
+        z *= vector.z;
+        return this;
+    }
+
+    public Vec3f mul(Vec3i vector){
         x *= vector.x;
         y *= vector.y;
         z *= vector.z;
@@ -541,6 +672,13 @@ public class Vec3f{
         this.z /= z;
         return this;
     }
+
+    public Vec3f div(int x, int y, int z){
+        this.x /= x;
+        this.y /= y;
+        this.z /= z;
+        return this;
+    }
     
     public Vec3f div(double xyz){
         x /= xyz;
@@ -555,6 +693,13 @@ public class Vec3f{
         z /= xyz;
         return this;
     }
+
+    public Vec3f div(int xyz){
+        x /= xyz;
+        y /= xyz;
+        z /= xyz;
+        return this;
+    }
     
     public Vec3f div(Vec2d vector){
         x /= vector.x;
@@ -563,6 +708,12 @@ public class Vec3f{
     }
     
     public Vec3f div(Vec2f vector){
+        x /= vector.x;
+        y /= vector.y;
+        return this;
+    }
+
+    public Vec3f div(Vec2i vector){
         x /= vector.x;
         y /= vector.y;
         return this;
@@ -581,6 +732,13 @@ public class Vec3f{
         z /= vector.z;
         return this;
     }
+
+    public Vec3f div(Vec3i vector){
+        x /= vector.x;
+        y /= vector.y;
+        z /= vector.z;
+        return this;
+    }
     
     
     public Vec3f mul(Matrix4f matrix){
@@ -592,11 +750,6 @@ public class Vec3f{
             (x * matrix[m00]) + (y * matrix[m10]) + (z * matrix[m20]) + matrix[m30],
             (x * matrix[m01]) + (y * matrix[m11]) + (z * matrix[m21]) + matrix[m31],
             (x * matrix[m02]) + (y * matrix[m12]) + (z * matrix[m22]) + matrix[m32]
-            // (x * matrix[m03]) + (y * matrix[m13]) + (z * matrix[m23]) + matrix[m33]
-            //
-            // x * matrix[m00] + y * matrix[m01] + z * matrix[m02],
-            // x * matrix[m10] + y * matrix[m11] + z * matrix[m12],
-            // x * matrix[m10] + y * matrix[m11] + z * matrix[m12]
         );
         return this;
     }

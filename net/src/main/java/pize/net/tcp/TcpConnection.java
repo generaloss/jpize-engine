@@ -1,7 +1,7 @@
 package pize.net.tcp;
 
 import pize.net.security.KeyAES;
-import pize.net.tcp.packet.PacketOutputStream;
+import pize.util.io.PizeOutputStream;
 import pize.util.Utils;
 
 import java.io.*;
@@ -70,7 +70,7 @@ public class TcpConnection{
     
     public synchronized void send(PacketWriter data){
         final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        final PacketOutputStream dataStream = new PacketOutputStream(byteStream);
+        final PizeOutputStream dataStream = new PizeOutputStream(byteStream);
         
         data.write(dataStream);
         send(byteStream);

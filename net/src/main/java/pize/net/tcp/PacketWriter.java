@@ -1,10 +1,10 @@
 package pize.net.tcp;
 
-import pize.net.tcp.packet.PacketOutputStream;
+import pize.util.io.PizeOutputStream;
 
 @FunctionalInterface
 public interface PacketWriter{
     
-    void write(PacketOutputStream dataStream);
+    void write(PizeOutputStream dataStream);
     
 }

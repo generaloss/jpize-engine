@@ -1,8 +1,8 @@
 package pize.tests.net.packet;
 
 import pize.net.tcp.packet.IPacket;
-import pize.net.tcp.packet.PacketInputStream;
-import pize.net.tcp.packet.PacketOutputStream;
+import pize.util.io.PizeInputStream;
+import pize.util.io.PizeOutputStream;
 
 import java.io.*;
 
@@ -28,12 +28,12 @@ public class MessagePacket extends IPacket{
     
     
     @Override
-    protected void write(PacketOutputStream stream) throws IOException{
+    protected void write(PizeOutputStream stream) throws IOException{
         stream.writeUTF(message);
     }
     
     @Override
-    public void read(PacketInputStream stream) throws IOException{
+    public void read(PizeInputStream stream) throws IOException{
         message = stream.readUTF();
     }
     

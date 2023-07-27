@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="pize-ui">
+    <output-path>$PROJECT_DIR$/out/</output-path>
+    <root id="archive" name="pize-ui.jar">
+      <element id="module-output" name="ui" />
+    </root>
+  </artifact>
+</component>

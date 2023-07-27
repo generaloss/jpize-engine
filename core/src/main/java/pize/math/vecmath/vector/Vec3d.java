@@ -62,14 +62,6 @@ public class Vec3d{
     
     /**             POINT             */
     
-    public double dst(int x, int y, int z){
-        double dx = this.x - x;
-        double dy = this.y - y;
-        double dz = this.z - z;
-        
-        return Math.sqrt(dx * dx + dy * dy + dz * dz);
-    }
-    
     public double dst(float x, float y, float z){
         double dx = this.x - x;
         double dy = this.y - y;
@@ -85,15 +77,15 @@ public class Vec3d{
         
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
-    
-    
-    public double dst(Vec3i vector){
-        double dx = x - vector.x;
-        double dy = y - vector.y;
-        double dz = z - vector.z;
-        
+
+    public double dst(int x, int y, int z){
+        double dx = this.x - x;
+        double dy = this.y - y;
+        double dz = this.z - z;
+
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
+
     
     public double dst(Vec3f vector){
         double dx = x - vector.x;
@@ -108,6 +100,14 @@ public class Vec3d{
         double dy = y - vector.y;
         double dz = z - vector.z;
         
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    public double dst(Vec3i vector){
+        double dx = x - vector.x;
+        double dy = y - vector.y;
+        double dz = z - vector.z;
+
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
     
@@ -161,7 +161,11 @@ public class Vec3d{
     public double dot(double x, double y, double z){
         return this.x * x + this.y * y + this.z * z;
     }
-    
+
+    public double dot(int x, int y, int z){
+        return this.x * x + this.y * y + this.z * z;
+    }
+
     public double dot(Vec3f vector){
         return x * vector.x + y * vector.y + z * vector.z;
     }
@@ -169,37 +173,69 @@ public class Vec3d{
     public double dot(Vec3d vector){
         return x * vector.x + y * vector.y + z * vector.z;
     }
-    
+
+    public double dot(Vec3i vector){
+        return x * vector.x + y * vector.y + z * vector.z;
+    }
+
     
     public Vec3d crs(float x, float y, float z){
-        this.x = this.y * z - this.z * y;
-        this.y = this.z * x - this.x * z;
-        this.z = this.x * y - this.y * x;
+        set(
+            this.y * z - this.z * y,
+            this.z * x - this.x * z,
+            this.x * y - this.y * x
+        );
         
         return this;
     }
     
     public Vec3d crs(double x, double y, double z){
-        this.x = this.y * z - this.z * y;
-        this.y = this.z * x - this.x * z;
-        this.z = this.x * y - this.y * x;
+        set(
+            this.y * z - this.z * y,
+            this.z * x - this.x * z,
+            this.x * y - this.y * x
+        );
         
+        return this;
+    }
+
+    public Vec3d crs(int x, int y, int z){
+        set(
+            this.y * z - this.z * y,
+            this.z * x - this.x * z,
+            this.x * y - this.y * x
+        );
+
         return this;
     }
     
     public Vec3d crs(Vec3f vector){
-        this.x = y * vector.z - z * vector.y;
-        this.y = z * vector.x - x * vector.z;
-        this.z = x * vector.y - y * vector.x;
-        
+        set(
+            y * vector.z - z * vector.y,
+            z * vector.x - x * vector.z,
+            x * vector.y - y * vector.x
+        );
+
         return this;
     }
     
     public Vec3d crs(Vec3d vector){
-        this.x = y * vector.z - z * vector.y;
-        this.y = z * vector.x - x * vector.z;
-        this.z = x * vector.y - y * vector.x;
+        set(
+            y * vector.z - z * vector.y,
+            z * vector.x - x * vector.z,
+            x * vector.y - y * vector.x
+        );
         
+        return this;
+    }
+
+    public Vec3d crs(Vec3i vector){
+        set(
+            y * vector.z - z * vector.y,
+            z * vector.x - x * vector.z,
+            x * vector.y - y * vector.x
+        );
+
         return this;
     }
     
@@ -295,6 +331,13 @@ public class Vec3d{
         this.z = z;
         return this;
     }
+
+    public Vec3d set(int x, int y, int z){
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        return this;
+    }
     
     public Vec3d set(double xyz){
         x = xyz;
@@ -304,6 +347,13 @@ public class Vec3d{
     }
     
     public Vec3d set(float xyz){
+        x = xyz;
+        y = xyz;
+        z = xyz;
+        return this;
+    }
+
+    public Vec3d set(int xyz){
         x = xyz;
         y = xyz;
         z = xyz;
@@ -366,6 +416,13 @@ public class Vec3d{
         this.z += z;
         return this;
     }
+
+    public Vec3d add(int x, int y, int z){
+        this.x += x;
+        this.y += y;
+        this.z += z;
+        return this;
+    }
     
     public Vec3d add(double xyz){
         x += xyz;
@@ -375,6 +432,13 @@ public class Vec3d{
     }
     
     public Vec3d add(float xyz){
+        x += xyz;
+        y += xyz;
+        z += xyz;
+        return this;
+    }
+
+    public Vec3d add(int xyz){
         x += xyz;
         y += xyz;
         z += xyz;
@@ -392,6 +456,12 @@ public class Vec3d{
         y += vector.y;
         return this;
     }
+
+    public Vec3d add(Vec2i vector){
+        x += vector.x;
+        y += vector.y;
+        return this;
+    }
     
     public Vec3d add(Vec3d vector){
         x += vector.x;
@@ -401,6 +471,13 @@ public class Vec3d{
     }
     
     public Vec3d add(Vec3f vector){
+        x += vector.x;
+        y += vector.y;
+        z += vector.z;
+        return this;
+    }
+
+    public Vec3d add(Vec3i vector){
         x += vector.x;
         y += vector.y;
         z += vector.z;
@@ -421,6 +498,13 @@ public class Vec3d{
         this.z -= z;
         return this;
     }
+
+    public Vec3d sub(int x, int y, int z){
+        this.x -= x;
+        this.y -= y;
+        this.z -= z;
+        return this;
+    }
     
     public Vec3d sub(double xyz){
         x -= xyz;
@@ -430,6 +514,13 @@ public class Vec3d{
     }
     
     public Vec3d sub(float xyz){
+        x -= xyz;
+        y -= xyz;
+        z -= xyz;
+        return this;
+    }
+
+    public Vec3d sub(int xyz){
         x -= xyz;
         y -= xyz;
         z -= xyz;
@@ -447,6 +538,12 @@ public class Vec3d{
         y -= vector.y;
         return this;
     }
+
+    public Vec3d sub(Vec2i vector){
+        x -= vector.x;
+        y -= vector.y;
+        return this;
+    }
     
     public Vec3d sub(Vec3d vector){
         x -= vector.x;
@@ -456,6 +553,13 @@ public class Vec3d{
     }
     
     public Vec3d sub(Vec3f vector){
+        x -= vector.x;
+        y -= vector.y;
+        z -= vector.z;
+        return this;
+    }
+
+    public Vec3d sub(Vec3i vector){
         x -= vector.x;
         y -= vector.y;
         z -= vector.z;
@@ -476,6 +580,13 @@ public class Vec3d{
         this.z *= z;
         return this;
     }
+
+    public Vec3d mul(int x, int y, int z){
+        this.x *= x;
+        this.y *= y;
+        this.z *= z;
+        return this;
+    }
     
     public Vec3d mul(double xyz){
         x *= xyz;
@@ -485,6 +596,13 @@ public class Vec3d{
     }
     
     public Vec3d mul(float xyz){
+        x *= xyz;
+        y *= xyz;
+        z *= xyz;
+        return this;
+    }
+
+    public Vec3d mul(int xyz){
         x *= xyz;
         y *= xyz;
         z *= xyz;
@@ -502,6 +620,12 @@ public class Vec3d{
         y *= vector.y;
         return this;
     }
+
+    public Vec3d mul(Vec2i vector){
+        x *= vector.x;
+        y *= vector.y;
+        return this;
+    }
     
     public Vec3d mul(Vec3d vector){
         x *= vector.x;
@@ -511,6 +635,13 @@ public class Vec3d{
     }
     
     public Vec3d mul(Vec3f vector){
+        x *= vector.x;
+        y *= vector.y;
+        z *= vector.z;
+        return this;
+    }
+
+    public Vec3d mul(Vec3i vector){
         x *= vector.x;
         y *= vector.y;
         z *= vector.z;
@@ -531,6 +662,13 @@ public class Vec3d{
         this.z /= z;
         return this;
     }
+
+    public Vec3d div(int x, int y, int z){
+        this.x /= x;
+        this.y /= y;
+        this.z /= z;
+        return this;
+    }
     
     public Vec3d div(double xyz){
         x /= xyz;
@@ -540,6 +678,13 @@ public class Vec3d{
     }
     
     public Vec3d div(float xyz){
+        x /= xyz;
+        y /= xyz;
+        z /= xyz;
+        return this;
+    }
+
+    public Vec3d div(int xyz){
         x /= xyz;
         y /= xyz;
         z /= xyz;
@@ -557,6 +702,12 @@ public class Vec3d{
         y /= vector.y;
         return this;
     }
+
+    public Vec3d div(Vec2i vector){
+        x /= vector.x;
+        y /= vector.y;
+        return this;
+    }
     
     public Vec3d div(Vec3d vector){
         x /= vector.x;
@@ -566,6 +717,13 @@ public class Vec3d{
     }
     
     public Vec3d div(Vec3f vector){
+        x /= vector.x;
+        y /= vector.y;
+        z /= vector.z;
+        return this;
+    }
+
+    public Vec3d div(Vec3i vector){
         x /= vector.x;
         y /= vector.y;
         z /= vector.z;

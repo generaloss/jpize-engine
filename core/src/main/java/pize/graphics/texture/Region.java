@@ -53,7 +53,7 @@ public class Region{
             (y + height) / texture.getHeight()
         );
     }
-    
+
 
     public float u1(){
         return u1;
@@ -62,7 +62,7 @@ public class Region{
     public float v1(){
         return v1;
     }
-    
+
     public float u2(){
         return u2;
     }
@@ -70,7 +70,7 @@ public class Region{
     public float v2(){
         return v2;
     }
-    
+
     public float getWidth(){
         return width;
     }
@@ -98,10 +98,10 @@ public class Region{
         final float regionHeight = region.getHeight();
 
         return new Region(
-            region.u1() + u1 * regionWidth,
-            region.v1() + v1 * regionHeight,
-            region.u1() + u2 * regionWidth,
-            region.v1() + v2 * regionHeight
+            region.u1 + u1 * regionWidth,
+            region.v1 + v1 * regionHeight,
+            region.u1 + u2 * regionWidth,
+            region.v1 + v2 * regionHeight
         );
     }
 

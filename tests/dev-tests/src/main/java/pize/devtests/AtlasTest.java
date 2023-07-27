@@ -9,14 +9,14 @@ import pize.graphics.util.batch.TextureBatch;
 public class AtlasTest extends AppAdapter{
     
     TextureBatch batch;
-    TextureAtlas atlas;
+    TextureAtlas<Integer> atlas;
     
     public void init(){
         batch = new TextureBatch();
-        atlas = new TextureAtlas();
+        atlas = new TextureAtlas<>();
         
         for(int i = 1; i <= 25; i++)
-            atlas.put("texture" + i + ".png");
+            atlas.put(i, "texture" + i + ".png");
         
         atlas.generate(128, 128, 1);
     }

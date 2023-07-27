@@ -1,7 +1,8 @@
 package pize.net.tcp.packet;
 
+import pize.util.io.PizeInputStream;
+
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 
 public class Packets{
@@ -11,7 +12,7 @@ public class Packets{
             if(data.length < 2)
                 return null;
             
-            final PacketInputStream stream = new PacketInputStream(new ByteArrayInputStream(data));
+            final PizeInputStream stream = new PizeInputStream(new ByteArrayInputStream(data));
             int packetID = stream.readByte();
             
             return new PacketInfo(packetID, stream);

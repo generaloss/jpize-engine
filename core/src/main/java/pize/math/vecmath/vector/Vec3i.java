@@ -1,8 +1,12 @@
 package pize.math.vecmath.vector;
 
 import pize.math.Mathc;
+import pize.math.Maths;
+import pize.math.vecmath.matrix.Matrix4f;
 
 import java.util.Objects;
+
+import static pize.math.vecmath.matrix.Matrix4.*;
 
 public class Vec3i{
     
@@ -104,6 +108,53 @@ public class Vec3i{
     public boolean isZero(){
         return x == 0 && y == 0 && z == 0;
     }
+
+
+    public float dot(float x, float y, float z){
+        return this.x * x + this.y * y + this.z * z;
+    }
+
+    public double dot(double x, double y, double z){
+        return this.x * x + this.y * y + this.z * z;
+    }
+
+    public double dot(int x, int y, int z){
+        return this.x * x + this.y * y + this.z * z;
+    }
+
+    public float dot(Vec3f vector){
+        return x * vector.x + y * vector.y + z * vector.z;
+    }
+
+    public double dot(Vec3d vector){
+        return x * vector.x + y * vector.y + z * vector.z;
+    }
+
+    public double dot(Vec3i vector){
+        return x * vector.x + y * vector.y + z * vector.z;
+    }
+
+
+    public Vec3i crs(int x, int y, int z){
+        set(
+            this.y * z - this.z * y,
+            this.z * x - this.x * z,
+            this.x * y - this.y * x
+        );
+
+        return this;
+    }
+
+    public Vec3i crs(Vec3i vector){
+        set(
+            y * vector.z - z * vector.y,
+            z * vector.x - x * vector.z,
+            x * vector.y - y * vector.x
+        );
+
+        return this;
+    }
+
     
     public Vec2i xy(){
         return new Vec2i(x, y);
@@ -121,7 +172,27 @@ public class Vec3i{
     public Vec3i copy(){
         return new Vec3i(this);
     }
-    
+
+
+    public static Vec3i crs(Vec3i a, Vec3i b){
+        return new Vec3i(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+    }
+
+    public static Vec3i crs(int x1, int y1, int z1, int x2, int y2, int z2){
+        return new Vec3i(y1 * z2 - z1 * y2, z1 * x2 - x1 * z2, x1 * y2 - y1 * x2);
+    }
+
+    public static float dot(Vec3i a, Vec3i b){
+        return a.x * b.x + a.y * b.y + a.z * b.z;
+    }
+
+    public static float dot(int x1, int y1, int z1, int x2, int y2, int z2){
+        return x1 * x2 + y1 * y2 + z1 * z2;
+    }
+
+    public static float len(int x, int y, int z){
+        return (float) Math.sqrt(x * x + y * y + z * z);
+    }
     
     
     /**             TUPLE             */
@@ -294,14 +365,27 @@ public class Vec3i{
         return this;
     }
     
-    public Vec3i sub(Vec3i vector){
+    public Vec3i sub(Vec2i vector){
+        x -= vector.x;
+        y -= vector.y;
+        return this;
+    }
+    
+    public Vec3i sub(Vec3d vector){
         x -= vector.x;
         y -= vector.y;
         z -= vector.z;
         return this;
     }
-    
+
     public Vec3i sub(Vec3f vector){
+        x -= vector.x;
+        y -= vector.y;
+        z -= vector.z;
+        return this;
+    }
+
+    public Vec3i sub(Vec3i vector){
         x -= vector.x;
         y -= vector.y;
         z -= vector.z;
@@ -351,7 +435,7 @@ public class Vec3i{
         return this;
     }
     
-    public Vec3i mul(Vec2i vector){
+    public Vec3i mul(Vec2d vector){
         x *= vector.x;
         y *= vector.y;
         return this;
@@ -362,8 +446,14 @@ public class Vec3i{
         y *= vector.y;
         return this;
     }
+
+    public Vec3i mul(Vec2i vector){
+        x *= vector.x;
+        y *= vector.y;
+        return this;
+    }
     
-    public Vec3i mul(Vec3i vector){
+    public Vec3i mul(Vec3d vector){
         x *= vector.x;
         y *= vector.y;
         z *= vector.z;
@@ -376,7 +466,14 @@ public class Vec3i{
         z *= vector.z;
         return this;
     }
-    
+
+    public Vec3i mul(Vec3i vector){
+        x *= vector.x;
+        y *= vector.y;
+        z *= vector.z;
+        return this;
+    }
+
     
     public Vec3i div(double x, double y, double z){
         this.x /= x;
@@ -420,7 +517,7 @@ public class Vec3i{
         return this;
     }
     
-    public Vec3i div(Vec2i vector){
+    public Vec3i div(Vec2d vector){
         x /= vector.x;
         y /= vector.y;
         return this;
@@ -431,8 +528,14 @@ public class Vec3i{
         y /= vector.y;
         return this;
     }
+
+    public Vec3i div(Vec2i vector){
+        x /= vector.x;
+        y /= vector.y;
+        return this;
+    }
     
-    public Vec3i div(Vec3i vector){
+    public Vec3i div(Vec3d vector){
         x /= vector.x;
         y /= vector.y;
         z /= vector.z;
@@ -445,7 +548,28 @@ public class Vec3i{
         z /= vector.z;
         return this;
     }
-    
+
+    public Vec3i div(Vec3i vector){
+        x /= vector.x;
+        y /= vector.y;
+        z /= vector.z;
+        return this;
+    }
+
+
+    public Vec3i mul(Matrix4f matrix){
+        return mul(matrix.val);
+    }
+
+    public Vec3i mul(float[] matrix){
+        set(
+            Maths.round( (x * matrix[m00]) + (y * matrix[m10]) + (z * matrix[m20]) + matrix[m30] ),
+            Maths.round( (x * matrix[m01]) + (y * matrix[m11]) + (z * matrix[m21]) + matrix[m31] ),
+            Maths.round( (x * matrix[m02]) + (y * matrix[m12]) + (z * matrix[m22]) + matrix[m32] )
+        );
+        return this;
+    }
+
     
     @Override
     public String toString(){

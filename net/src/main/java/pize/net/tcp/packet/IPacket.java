@@ -1,6 +1,8 @@
 package pize.net.tcp.packet;
 
 import pize.net.tcp.TcpConnection;
+import pize.util.io.PizeInputStream;
+import pize.util.io.PizeOutputStream;
 
 import java.io.IOException;
 
@@ -32,9 +34,9 @@ public abstract class IPacket<L extends PacketHandler>{
         });
     }
     
-    abstract protected void write(PacketOutputStream stream) throws IOException; // For a sender
+    abstract protected void write(PizeOutputStream stream) throws IOException; // For a sender
     
-    abstract public void read(PacketInputStream stream) throws IOException; // For a receiver
+    abstract public void read(PizeInputStream stream) throws IOException; // For a receiver
     
     public void handle(L packetListener){ }
     

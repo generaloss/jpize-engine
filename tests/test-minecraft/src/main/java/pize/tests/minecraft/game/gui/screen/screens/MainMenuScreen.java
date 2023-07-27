@@ -36,7 +36,7 @@ public class MainMenuScreen extends Screen{
         super(session);
 
         // Panorama
-        skyBox = new SkyBox("vanilla/textures/guin/title/background/panorama_1.png", "vanilla/textures/guin/title/background/panorama_3.png", "vanilla/textures/guin/title/background/panorama_4.png", "vanilla/textures/guin/title/background/panorama_5.png", "vanilla/textures/guin/title/background/panorama_0.png", "vanilla/textures/guin/title/background/panorama_2.png"
+        skyBox = new SkyBox("vanilla/textures/gui/title/background/panorama_1.png", "vanilla/textures/gui/title/background/panorama_3.png", "vanilla/textures/gui/title/background/panorama_4.png", "vanilla/textures/gui/title/background/panorama_5.png", "vanilla/textures/gui/title/background/panorama_0.png", "vanilla/textures/gui/title/background/panorama_2.png"
         );
         camera = new PerspectiveCamera(0.1, 2, 79);
         camera.getRotation().set(90, -25);
