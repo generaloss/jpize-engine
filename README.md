@@ -7,16 +7,16 @@ Repository contains examples in 'tests' module
 Modules:
 * Core
 * Net
-* Physics
+* Physic
 * UI
 
 ### Core:
 * Audio (OGG, MP3, WAV)
-* Graphics (2D, 3D; Fonts, Postprocessing)
-* Math (Vectors, Matrices)
+* Graphics (2D, 3D, Fonts, Postprocessing)
+* Math (Vectors, Matrices, Quaternion)
 * IO (Keyboard, Mouse, Monitors)
 * Files (Resources: Internal / External)
-* Utils (FastReader, FpsCounter, Sync, Stopwatch, TickGenerator, ...etc)
+* Utils (FastReader, FpsCounter, Sync, Stopwatch, TickGenerator, PizeInputStream, PizeOutputStream ...etc)
 
 #### 1. 2D Graphics:
 ``` java
@@ -62,13 +62,16 @@ Pize.monitor().getWidth();
 Pize.monitor().getHeight();
 Pize.monitor().getAspect();
 
-// fps
+// fps & Delta Time
 Pize.getFPS();
-Pize.getDeltaTime();
+Pize.getDt();
+Pize.setFixedUpdateTPS(update_rate);
+Pize.getUpdateDt();
 ```
 
 #### 3. Audio:
 ``` java
+// sound
 Sound sound = new Sound("sound.mp3");
 
 sound.setVolume(0.5F);
@@ -76,6 +79,14 @@ sound.setLooping(true);
 sound.setPitch(1.5F);
 
 sound.play();
+
+// buffers and sources
+AudioBuffer buffer = new AudioBuffer();
+AudioLoader.load(buffer, resource);
+
+AudioSource source = new AudioSource();
+source.setBuffer(buffer);
+source.play();
 ```
 
 #### 4. Resources:
@@ -116,14 +127,14 @@ new Texture(res);
 new Sound(res);
 PixmapIO.load(res);
 new Shader(res_vert, res_frag);
-AudioLoader.load(new AudioBuffer(), res);
+AudioLoader.load(audio_buffer, res);
 ```
 
 ### Net:
 * Security Keys (AES, RSA)
 * TCP / UDP Client and Server
 
-#### 1. (Low)Encrypted Server-Client Example:
+#### 1. Encrypted Server-Client Example:
 ``` java
 KeyAES key = new KeyAES(128); // generate key for connection encoding
 
@@ -146,19 +157,70 @@ client.encrypt(key);
 client.send("Hello, World!".getBytes()); // send 'Hello, World!'
 ```
 
-### Physics:
+#### 2. Packet Example:
+``` java
+// packet
+class MyPacket extends IPacket<MyPacketHandler>{ // package processing can be done without MyPacketHandler if you write PacketHandler instead
+    public MyPacket(){
+        super(MY_PACKET_ID);
+    }
+    public MyPacket(some_data){
+        this();
+        ...
+    }
+
+    protected void write(PizeOutputStream outStream){ ... } // write data when sending
+    public void read(PizeInputStream inStream){ ... } // read data when receivind
+
+    public void handle(MyPacketHandler handler){ // handle this packet
+        handler.handleMyPacket(this); 
+    }
+}
+
+// packets handler
+class MyPacketHandler implements PacketHandler{
+    public void handleMyPacket(MyPacket packet){ ... }
+    public void handleAnotherPacket(AnotherPacket packet){ ... }
+}
+
+// packet sending
+TcpClient client = ...;
+TcpConnection connection = client.getConnection();
+
+new MyPacket(some_data).write(connection);
+
+// packet receiving
+MyPacketHandler handler = ...;
+...
+void received(byte[] bytes, TcpConnection sender){
+    PacketInfo packetInfo = Packets.getPacketInfo(bytes);
+    if(packetInfo == null) return;
+
+    switch(packetInfo.getPacketID()){
+        // MyPacket
+        case MyPacket.MY_PACKET_ID -> packetInfo.readPacket(new MyPacket()) .handle(handler);
+        // AnotherPacket
+        case AnotherPacket.MY_PACKET_ID -> { // without packet handler
+            AnotherPacket packet = packetInfo.readPacket(new AnotherPacket());
+            ...
+        }
+    }
+}
+```
+
+### Physic:
 * AABB Collider (2D, 3D)
 * Utils (Velocity, Body)
 
 #### 1. Collider Example:
 ``` java
-BoxBody body_1 = new BoxBody( new BoundingBox(-1,-1,-1,  1, 1, 1) ); // 2x2x2 box
-BoxBody body_2 = new BoxBody( new BoundingBox(-1,-1,-1,  1, 1, 1) ); // another box
+BoxBody body_1 = new BoxBody( new BoundingBox3f(-1,-1,-1,  1, 1, 1) ); // 2x2x2 box
+BoxBody body_2 = new BoxBody( new BoundingBox3f(-1,-1,-1,  1, 1, 1) ); // another box
 
 body_1.getPosition().set(-5F, 0, 0);
 
-Vec3d b1_velocity = new Vec3d(10F, 0, 0);
-velocity = Collider3D.getCollidedMove(body_1, b1_velocity, body_2);
+Vec3f b1_velocity = new Vec3f(10F, 0, 0);
+velocity = Collider3f.getCollidedMotion(body_1, b1_velocity, body_2);
 
 body_1.getPosition().add( b1_velocity ); // box will move only 3 units
 ```
