@@ -30,7 +30,7 @@ public class Grass extends BlockProperties {
 
         newState(
             Direction.NONE,
-            new BlockModel(ChunkMeshType.SOLID)
+            new BlockModel(ChunkMeshType.CUSTOM)
                 .face(new Face(new Quad(0, 1, 0,  0, 0, 0,  1, 0, 1,  1, 1, 1), resources.getBlockRegion("grass"), COLOR))
                 .face(new Face(new Quad(1, 1, 0,  1, 0, 0,  0, 0, 1,  0, 1, 1), resources.getBlockRegion("grass"), COLOR)),
             null,

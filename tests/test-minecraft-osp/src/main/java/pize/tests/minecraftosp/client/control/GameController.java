@@ -8,7 +8,7 @@ import pize.io.glfw.Key;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
 import pize.math.vecmath.vector.Vec3i;
-import pize.physic.BoundingBox3;
+import pize.physic.BoundingBox3f;
 import pize.physic.BoxBody;
 import pize.tests.minecraftosp.Minecraft;
 import pize.tests.minecraftosp.client.block.BlockProperties;
@@ -193,12 +193,12 @@ public class GameController{
         final BlockCollide collideShape = block.getState(blockState).getCollide();
         if(collideShape != null){
             
-            final BoundingBox3[] blockBoxes = collideShape.getBoxes();
+            final BoundingBox3f[] blockBoxes = collideShape.getBoxes();
             final BoxBody blockBox = new BoxBody(new Vec3f(blockPos));
             final Collection<Entity> entities = session.getGame().getLevel().getEntities();
             
             // Check intersect with player & entity
-            for(BoundingBox3 box: blockBoxes){
+            for(BoundingBox3f box: blockBoxes){
                 blockBox.getBoundingBox().resize(box);
                 
                 if(player.intersects(blockBox))

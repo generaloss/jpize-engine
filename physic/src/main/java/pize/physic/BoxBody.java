@@ -4,22 +4,22 @@ import pize.math.vecmath.vector.Vec3f;
 
 public class BoxBody{
 
-    private final BoundingBox3 boundingBox;
+    private final BoundingBox3f boundingBox;
     private final Vec3f position;
     
     public BoxBody(){
-        this(new BoundingBox3(0, 0, 0, 0, 0, 0), new Vec3f());
+        this(new BoundingBox3f(0, 0, 0, 0, 0, 0), new Vec3f());
     }
     
     public BoxBody(Vec3f position){
-        this(new BoundingBox3(0, 0, 0, 0, 0, 0), position);
+        this(new BoundingBox3f(0, 0, 0, 0, 0, 0), position);
     }
     
-    public BoxBody(BoundingBox3 box){
+    public BoxBody(BoundingBox3f box){
         this(box, new Vec3f());
     }
     
-    public BoxBody(BoundingBox3 box, Vec3f position){
+    public BoxBody(BoundingBox3f box, Vec3f position){
         this.boundingBox = box;
         this.position = position;
     }
@@ -38,7 +38,7 @@ public class BoxBody{
     }
 
 
-    public BoundingBox3 getBoundingBox(){
+    public BoundingBox3f getBoundingBox(){
         return boundingBox;
     }
 

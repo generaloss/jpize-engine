@@ -10,10 +10,8 @@ import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
 import pize.physic.Velocity3f;
-import pize.tests.minecraftosp.main.Version;
 import pize.tests.minecraftosp.client.ClientGame;
 import pize.tests.minecraftosp.client.audio.AudioPlayer;
-import pize.tests.minecraftosp.main.block.BlockData;
 import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.client.control.GameController;
 import pize.tests.minecraftosp.client.level.ClientLevel;
@@ -24,6 +22,8 @@ import pize.tests.minecraftosp.client.resources.GameResources;
 import pize.tests.minecraftosp.client.resources.VanillaAudio;
 import pize.tests.minecraftosp.client.resources.VanillaBlocks;
 import pize.tests.minecraftosp.client.resources.VanillaMusic;
+import pize.tests.minecraftosp.main.Version;
+import pize.tests.minecraftosp.main.block.BlockData;
 import pize.tests.minecraftosp.main.modification.loader.ModEntryPointType;
 import pize.tests.minecraftosp.main.modification.loader.ModLoader;
 import pize.tests.minecraftosp.main.net.PlayerProfile;
@@ -35,7 +35,7 @@ import pize.util.time.Sync;
 public class Minecraft extends AppAdapter{
     
     public static void main(String[] args){
-        Pize.create("Minecraft OSP", 1280, 720);
+        Pize.create("Minecraft Open Source Project", 1280, 720);
         Pize.run(getInstance());
     }
     
@@ -75,6 +75,7 @@ public class Minecraft extends AppAdapter{
         
         options = new Options(this, SharedConstants.GAME_DIR_PATH);
         fpsSync = new Sync(0);
+        fpsSync.enable(false);
         
         gameController = new GameController(this);
         clientRenderer = new GameRenderer(this);
@@ -132,7 +133,6 @@ public class Minecraft extends AppAdapter{
     
     @Override
     public void fixedUpdate(){
-        System.out.println("TICK!!!");
         clientGame.tick();
     }
     
@@ -228,7 +228,7 @@ public class Minecraft extends AppAdapter{
         })
         .texture(new Texture("texture/block/grass_block_side.png"))
         .animate(instance->{
-            instance.velocity.y -= Pize.getDt() * 0.35;
+            instance.velocity.y -= Pize.getDt() * 0.35F;
             instance.velocity.mul(0.95);
             collide(instance.position, instance.velocity);
             instance.position.add(instance.velocity);
@@ -238,32 +238,13 @@ public class Minecraft extends AppAdapter{
         final ClientLevel level = clientGame.getLevel();
 
         double x = velocity.x;
-        //if(BlockState.getID(level.getBlock(position.xf() + Mathc.signum(x), position.yf(), position.zf())) != 0){
-        //    double nx = Maths.frac(position.x) + x;
-        //    if(nx > 1)
-        //        x = 1;
-        //    else if(nx < 0)
-        //        x = 0;
-        //}
-
         double y = velocity.y;
         if(BlockData.getID(level.getBlock(position.xf(), position.yf() + Mathc.signum(x), position.zf())) != 0){
             double ny = Maths.frac(position.y) + y;
-            //if(ny > 1)
-            //    y = 1;
-            //else
             if(ny < 0)
                 y = 0;
         }
-
         double z = velocity.z;
-        //if(BlockState.getID(level.getBlock(position.xf(), position.yf(), position.zf() + Mathc.signum(x))) != 0){
-        //    double nz = Maths.frac(position.z) + z;
-        //    if(nz > 1)
-        //        z = 1;
-        //    else if(nz < 0)
-        //        z = 0;
-        //}
 
         velocity.set(x, y, z);
     }

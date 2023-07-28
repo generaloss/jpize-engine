@@ -5,7 +5,7 @@ import pize.graphics.util.batch.TextureBatch;
 import pize.io.glfw.Key;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec2f;
-import pize.physic.BoundingBox2;
+import pize.physic.BoundingBox2f;
 import pize.physic.Collider2f;
 import pize.physic.RectBody;
 import pize.tests.terraria.map.MapTile;
@@ -17,12 +17,12 @@ import java.util.List;
 
 public class Player extends Entity{
 
-    private static final BoundingBox2 TILE_BOUNDING_RECT = new BoundingBox2(0, 0, 1, 1);
+    private static final BoundingBox2f TILE_BOUNDING_RECT = new BoundingBox2f(0, 0, 1, 1);
 
     private final List<RectBody> rectList;
 
     public Player(){
-        super(new BoundingBox2(0, 0, 2, 3));
+        super(new BoundingBox2f(0, 0, 2, 3));
         rectList = new ArrayList<>();
         getVelocity().setMax(50);
     }

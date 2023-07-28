@@ -6,7 +6,7 @@ import pize.graphics.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
 import pize.io.glfw.Key;
 import pize.math.vecmath.vector.Vec2f;
-import pize.physic.BoundingBox2;
+import pize.physic.BoundingBox2f;
 import pize.physic.Collider2f;
 
 public class Main extends AppAdapter{
@@ -24,10 +24,10 @@ public class Main extends AppAdapter{
     public void init(){
         batch = new TextureBatch();
 
-        rect1 = new DynamicRect(new BoundingBox2(-25, -25, 25, 25));
+        rect1 = new DynamicRect(new BoundingBox2f(-25, -25, 25, 25));
         rect1.motion().setMax(50);
 
-        rect2 = new DynamicRect(new BoundingBox2(-100, -100, 100, 100));
+        rect2 = new DynamicRect(new BoundingBox2f(-100, -100, 100, 100));
         rect2.pos().add(600, 400);
     }
 

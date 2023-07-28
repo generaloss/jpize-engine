@@ -4,10 +4,10 @@ import pize.math.vecmath.vector.Vec2f;
 
 public class RectBody{
 
-    private final BoundingBox2 rect;
+    private final BoundingBox2f rect;
     private final Vec2f position;
 
-    public RectBody(BoundingBox2 rect){
+    public RectBody(BoundingBox2f rect){
         this.rect = rect;
         position = new Vec2f();
     }
@@ -27,7 +27,7 @@ public class RectBody{
     }
 
 
-    public BoundingBox2 rect(){
+    public BoundingBox2f rect(){
         return rect;
     }
 

@@ -3,7 +3,7 @@ package pize.tests.minecraftosp.main.entity;
 import pize.math.Maths;
 import pize.math.util.EulerAngles;
 import pize.math.vecmath.vector.Vec3f;
-import pize.physic.BoundingBox3;
+import pize.physic.BoundingBox3f;
 import pize.physic.BoxBody;
 import pize.physic.Collider3f;
 import pize.physic.Velocity3f;
@@ -137,7 +137,7 @@ public abstract class Entity extends BoxBody implements Tickable {
                     if(shape == null)
                         continue;
                     
-                    for(BoundingBox3 boundingBox: shape.getBoxes()){
+                    for(BoundingBox3f boundingBox: shape.getBoxes()){
                         final BoxBody box = new BoxBody(boundingBox);
                         box.getPosition().set(x, y, z);
                         

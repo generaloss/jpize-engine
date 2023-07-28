@@ -191,8 +191,7 @@ public class Options{
         this.maxFrameRate = maxFrameRate;
         session.getFpsSync().setFps(maxFrameRate);
 
-        session.getFpsSync().enable(false);//maxFrameRate > 0 && maxFrameRate < UNLIMITED_FPS_THRESHOLD);
-        System.out.println((maxFrameRate > 0 && maxFrameRate < UNLIMITED_FPS_THRESHOLD) + " " + maxFrameRate);
+        session.getFpsSync().enable(maxFrameRate > 0 && maxFrameRate < UNLIMITED_FPS_THRESHOLD);
         Pize.window().setVsync(maxFrameRate == 0);
     }
 

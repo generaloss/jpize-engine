@@ -2,22 +2,22 @@ package pize.physic;
 
 import pize.math.vecmath.vector.Vec3f;
 
-public class BoundingBox3{
+public class BoundingBox3f {
     
     private final Vec3f min, max;
     
     
-    public BoundingBox3(double minX, double minY, double minZ, double maxX, double maxY, double maxZ){
+    public BoundingBox3f(double minX, double minY, double minZ, double maxX, double maxY, double maxZ){
         this.min = new Vec3f(minX, minY, minZ);
         this.max = new Vec3f(maxX, maxY, maxZ);
     }
     
-    public BoundingBox3(Vec3f min, Vec3f max){
+    public BoundingBox3f(Vec3f min, Vec3f max){
         this.min = min;
         this.max = max;
     }
     
-    public BoundingBox3(BoundingBox3 box){
+    public BoundingBox3f(BoundingBox3f box){
         this.min = box.min.copy();
         this.max = box.max.copy();
     }
@@ -33,7 +33,7 @@ public class BoundingBox3{
         this.max.set(max);
     }
     
-    public void resize(BoundingBox3 box){
+    public void resize(BoundingBox3f box){
         resize(box.min, box.max);
     }
     
@@ -107,8 +107,8 @@ public class BoundingBox3{
     }
     
     
-    public BoundingBox3 copy(){
-        return new BoundingBox3(this);
+    public BoundingBox3f copy(){
+        return new BoundingBox3f(this);
     }
     
 }
