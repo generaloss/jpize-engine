@@ -134,7 +134,7 @@ AudioLoader.load(audio_buffer, res);
 * Security Keys (AES, RSA)
 * TCP / UDP Client and Server
 
-#### 1. (Low)Encrypted Server-Client Example:
+#### 1. Encrypted Server-Client Example:
 ``` java
 KeyAES key = new KeyAES(128); // generate key for connection encoding
 
@@ -155,14 +155,16 @@ TcpClient client = new TcpClient(new TcpListener(){ ... });
 client.connect("localhost", 8080);
 client.encrypt(key);
 client.send("Hello, World!".getBytes()); // send 'Hello, World!'
+```
 
-
+#### 2. Packet Example:
+``` java
 // packet
 class MyPacket extends IPacket<MyPacketHandler>{ // package processing can be done without MyPacketHandler if you write PacketHandler instead
     public MyPacket(){
         super(MY_PACKET_ID);
     }
-    public MyPacket(some_data...){
+    public MyPacket(some_data){
         this();
         ...
     }
@@ -185,10 +187,9 @@ class MyPacketHandler implements PacketHandler{
 TcpClient client = ...;
 TcpConnection connection = client.getConnection();
 
-new MyPacket().write(connection);
+new MyPacket(some_data).write(connection);
 
 // packet receiving
-
 MyPacketHandler handler = ...;
 ...
 void received(byte[] bytes, TcpConnection sender){
