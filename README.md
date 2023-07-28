@@ -207,7 +207,7 @@ void received(byte[] bytes, TcpConnection sender){
 }
 ```
 
-### Physics:
+### Physic:
 * AABB Collider (2D, 3D)
 * Utils (Velocity, Body)
 
