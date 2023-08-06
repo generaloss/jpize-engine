@@ -8,7 +8,7 @@ import pize.math.vecmath.vector.Vec3f;
 import pize.math.vecmath.vector.Vec3i;
 import pize.tests.minecraftosp.Minecraft;
 import pize.tests.minecraftosp.client.ClientGame;
-import pize.tests.minecraftosp.client.net.ClientPacketHandler;
+import pize.tests.minecraftosp.client.net.ClientConnection;
 import pize.tests.minecraftosp.main.modification.loader.Modification;
 import pize.tests.minecraftosp.client.chunk.mesh.builder.ChunkBuilder;
 import pize.tests.minecraftosp.client.control.BlockRayCast;
@@ -116,9 +116,9 @@ public class InfoPanelRenderer implements Disposable{
         
         // Game Version
         final Collection<Modification> loadedMods = session.getModLoader().getLoadedMods();
-        final String modLoaderState = (loadedMods.size() == 0) ? "Vanilla" : loadedMods.size() + " Mod(s) loaded";
+        final String modLoaderState = loadedMods.isEmpty() ? "Vanilla" : loadedMods.size() + " Mod(s) loaded";
         info(new Component().color(TextColor.DARK_GRAY)
-            .text("VoxelGame")
+            .text("Minecraft Open Source Edition")
             .text(" " + session.getVersion().getName() + " (" + modLoaderState + ")")
         );
         
@@ -126,12 +126,12 @@ public class InfoPanelRenderer implements Disposable{
         info(new Component().color(TextColor.YELLOW).text(Pize.getFPS() + " fps"));
         
         // Packets
-        nextLine();
+        infoNextLine();
         info(TextColor.GRAY, "Packets sent", TextColor.YELLOW, ClientGame.tx);
-        info(TextColor.GRAY, "Packets received", TextColor.YELLOW, ClientPacketHandler.rx);
+        info(TextColor.GRAY, "Packets received", TextColor.YELLOW, ClientConnection.rx);
         
         // Position
-        nextLine();
+        infoNextLine();
         info(new Component()
             .color(TextColor.RED  ).text("X")
             .color(TextColor.GREEN).text("Y")
@@ -167,7 +167,7 @@ public class InfoPanelRenderer implements Disposable{
         );
         
         // Level
-        nextLine();
+        infoNextLine();
         info(TextColor.DARK_GREEN, "Level", TextColor.AQUA, level.getConfiguration().getName());
         
         // Rotation
@@ -180,7 +180,7 @@ public class InfoPanelRenderer implements Disposable{
         info(TextColor.DARK_GREEN, "Move Speed: ", TextColor.AQUA, String.format("%.2f", player.getVelocity().len() * GameTime.TICKS_IN_SECOND) + " m/s");
         
         // Render Distance
-        nextLine();
+        infoNextLine();
         info(TextColor.BLUE, "Render Distance", TextColor.YELLOW, options.getRenderDistance());
         
         // Chunks Rendered
@@ -202,9 +202,13 @@ public class InfoPanelRenderer implements Disposable{
         );
         
         // Time
-        nextLine();
+        infoNextLine();
         info(TextColor.YELLOW, "Day: ", TextColor.AQUA, time.getDayNumber());
         info(TextColor.YELLOW, "Time: ", TextColor.AQUA, time.getTime());
+
+        // Sounds
+        infoNextLine();
+        info(TextColor.YELLOW, "Sounds: ", TextColor.AQUA, session.getSoundPlayer().getPlayingSoundsNum());
         
         // info("Threads:");
         // if(serverWorld != null) info("chunk find tps: " + serverWorld.getChunkManager().findTps.get());
@@ -217,19 +221,27 @@ public class InfoPanelRenderer implements Disposable{
         // info("Selected light level (F/B): " + level.getLight(imaginaryPos.x, imaginaryPos.y, imaginaryPos.z) + ", " + level.getLight(selectedPos.x, selectedPos.y, selectedPos.z));
         
         // HINTS
+        hint(new Component().color(TextColor.ORANGE).text("F9 / F8").color(TextColor.GRAY).text(" - Polygon Mode (Line / Fill)"));
         hint(new Component().color(TextColor.ORANGE).text("F3 + G").color(TextColor.GRAY).text(" - Show chunk border"));
+        hint(new Component().color(TextColor.ORANGE).text("F3 + C").color(TextColor.GRAY).text(" - Update current chunk"));
+        hint(new Component().color(TextColor.ORANGE).text("F3 + H").color(TextColor.GRAY).text(" - Update all chunks"));
+        hintNextLine();
         hint(new Component().color(TextColor.ORANGE).text("ESCAPE").color(TextColor.GRAY).text(" - Exit"));
-        hint(new Component().color(TextColor.ORANGE).text(options.getKey(KeyMapping.ZOOM)).color(TextColor.GRAY).text(" - Mouse Wheel - zoom"));
+        hint(new Component().color(TextColor.ORANGE).text("M").color(TextColor.GRAY).text(" - Show mouse"));
         hint(new Component().color(TextColor.ORANGE).text(options.getKey(KeyMapping.CHAT)).color(TextColor.GRAY).text(" - Chat"));
         hint(new Component().color(TextColor.ORANGE).text(options.getKey(KeyMapping.TOGGLE_PERSPECTIVE)).color(TextColor.GRAY).text(" - Toggle perspective"));
-        hint(new Component().color(TextColor.ORANGE).text("M").color(TextColor.GRAY).text(" - Show mouse"));
-        
+        hint(new Component().color(TextColor.ORANGE).text(options.getKey(KeyMapping.ZOOM) + " + Mouse Wheel").color(TextColor.GRAY).text(" - zoom"));
+
         batch.end();
     }
     
     
-    private void nextLine(){
+    private void infoNextLine(){
         infoLineNum++;
+    }
+
+    private void hintNextLine(){
+        hintLineNum++;
     }
     
     private void info(TextColor keyColor, String key, TextColor valueColor, String value){

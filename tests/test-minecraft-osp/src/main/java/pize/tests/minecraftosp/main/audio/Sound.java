@@ -1,20 +1,26 @@
 package pize.tests.minecraftosp.main.audio;
 
-import pize.tests.minecraftosp.main.Identifier;
-
 public enum Sound{
 
+    // Random
     CLICK   ("random.click"),
     EXPLODE ("random.explode"),
-    GLASS   ("random.glass"),
+
+    GLASS_1 ("random.glass.1"),
+    GLASS_2 ("random.glass.2"),
+    GLASS_3 ("random.glass.3"),
+
     LEVEL_UP("random.levelup"),
 
+    // Hit
     FALL_BIG  ("damage.fallbig"),
     FALL_SMALL("damage.fallsmall"),
+
     HIT_1("damage.hit.1"),
     HIT_2("damage.hit.2"),
     HIT_3("damage.hit.3"),
 
+    // Dig
     DIG_GRASS_1("dig.grass.1"),
     DIG_GRASS_2("dig.grass.2"),
     DIG_GRASS_3("dig.grass.3"),
@@ -39,7 +45,7 @@ public enum Sound{
     private final String ID;
 
     Sound(String ID){
-        this.ID = Identifier.DEFAULT_NAMESPACE + ":" + ID;
+        this.ID = ID;
     }
 
     public String getID(){

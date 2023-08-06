@@ -51,13 +51,13 @@ public class ServerConnectionManager implements TcpListener{
         switch(packetInfo.getPacketID()){
             // Login
             case SBPacketAuth.PACKET_ID ->
-                packetInfo.readPacket(new SBPacketAuth()) .handle((ServerLoginPacketHandler) packetHandler);
+                packetInfo.readPacket(new SBPacketAuth()) .handle((PlayerLoginConnection) packetHandler);
             
             case SBPacketEncryptEnd.PACKET_ID ->
-                packetInfo.readPacket(new SBPacketEncryptEnd()) .handle((ServerLoginPacketHandler) packetHandler);
+                packetInfo.readPacket(new SBPacketEncryptEnd()) .handle((PlayerLoginConnection) packetHandler);
             
             case SBPacketLogin.PACKET_ID ->
-                packetInfo.readPacket(new SBPacketLogin()) .handle((ServerLoginPacketHandler) packetHandler);
+                packetInfo.readPacket(new SBPacketLogin()) .handle((PlayerLoginConnection) packetHandler);
             
             // Game
             case SBPacketChunkRequest.PACKET_ID ->
@@ -88,7 +88,7 @@ public class ServerConnectionManager implements TcpListener{
     
     @Override
     public void connected(TcpConnection connection){
-        setPacketHandler(connection, new ServerLoginPacketHandler(server, connection));
+        setPacketHandler(connection, new PlayerLoginConnection(server, connection));
     }
     
     @Override

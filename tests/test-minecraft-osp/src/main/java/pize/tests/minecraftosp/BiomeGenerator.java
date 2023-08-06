@@ -14,26 +14,28 @@ public class BiomeGenerator extends AppAdapter{
     private Texture mapTexture;
     
     private final FastNoiseLite
-        continentalnessNoise, erosionNoise, peaksValleysNoise, temperatureNoise, humidityNoise;
-    
+        continentalnessNoise, erosionNoise, peaksValleysNoise, temperatureNoise, humidityNoise, randomNoise;
+
     public BiomeGenerator(){
         batch = new TextureBatch();
-        
+
         continentalnessNoise = new FastNoiseLite();
         erosionNoise = new FastNoiseLite();
         peaksValleysNoise = new FastNoiseLite();
         temperatureNoise = new FastNoiseLite();
         humidityNoise = new FastNoiseLite();
-        
+        randomNoise = new FastNoiseLite();
+
         continentalnessNoise.setFrequency(0.002F);
         continentalnessNoise.setFractalType(FastNoiseLite.FractalType.FBm);
         continentalnessNoise.setFractalOctaves(7);
-        
+
         erosionNoise.setFrequency(0.002F);
         erosionNoise.setFractalType(FastNoiseLite.FractalType.FBm);
         erosionNoise.setFractalOctaves(5);
+        randomNoise.setFrequency(1);
     }
-    
+
     
     public void init(){
         final Pixmap map = new Pixmap(1024, 1024);

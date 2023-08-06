@@ -13,7 +13,7 @@ import pize.tests.minecraftosp.main.audio.BlockSoundPack;
 
 public class Grass extends BlockProperties {
 
-    public static final ImmutableColor COLOR = new ImmutableColor(0.3, 0.55, 0.15, 1);
+    public static final ImmutableColor COLOR = new ImmutableColor(0.44, 0.67, 0.28, 1);
 
     
     public Grass(int id){

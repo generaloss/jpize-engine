@@ -2,7 +2,6 @@ package pize.tests.minecraftosp;
 
 import pize.Pize;
 import pize.app.AppAdapter;
-import pize.audio.sound.Sound;
 import pize.files.Resource;
 import pize.graphics.gl.Gl;
 import pize.graphics.texture.Texture;
@@ -11,7 +10,9 @@ import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
 import pize.physic.Velocity3f;
 import pize.tests.minecraftosp.client.ClientGame;
-import pize.tests.minecraftosp.client.audio.AudioPlayer;
+import pize.tests.minecraftosp.client.audio.MusicGroup;
+import pize.tests.minecraftosp.client.audio.MusicPlayer;
+import pize.tests.minecraftosp.client.audio.SoundPlayer;
 import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.client.control.GameController;
 import pize.tests.minecraftosp.client.level.ClientLevel;
@@ -22,6 +23,7 @@ import pize.tests.minecraftosp.client.resources.GameResources;
 import pize.tests.minecraftosp.client.resources.VanillaAudio;
 import pize.tests.minecraftosp.client.resources.VanillaBlocks;
 import pize.tests.minecraftosp.client.resources.VanillaMusic;
+import pize.tests.minecraftosp.main.SharedConstants;
 import pize.tests.minecraftosp.main.Version;
 import pize.tests.minecraftosp.main.block.BlockData;
 import pize.tests.minecraftosp.main.modification.loader.ModEntryPointType;
@@ -35,7 +37,7 @@ import pize.util.time.Sync;
 public class Minecraft extends AppAdapter{
     
     public static void main(String[] args){
-        Pize.create("Minecraft Open Source Project", 1280, 720);
+        Pize.create("Minecraft Open Source Edition", 1280, 720);
         Pize.run(getInstance());
     }
     
@@ -54,7 +56,8 @@ public class Minecraft extends AppAdapter{
     private final GameRenderer clientRenderer;
     private IntegratedServer integratedServer;
     private final ClientGame clientGame;
-    private final AudioPlayer audioPlayer;
+    private final SoundPlayer soundPlayer;
+    private final MusicPlayer musicPlayer;
     
     private final ModLoader modLoader;
 
@@ -80,7 +83,8 @@ public class Minecraft extends AppAdapter{
         gameController = new GameController(this);
         clientRenderer = new GameRenderer(this);
         clientGame = new ClientGame(this);
-        audioPlayer = new AudioPlayer(this);
+        soundPlayer = new SoundPlayer(this);
+        musicPlayer = new MusicPlayer(this);
         
         clientRenderer.init();
         new Resource(SharedConstants.GAME_DIR_PATH, true).mkDirs();
@@ -115,8 +119,8 @@ public class Minecraft extends AppAdapter{
         Utils.delayElapsed(1000);
         clientGame.connect(address[0], Integer.parseInt(address[1]));
 
-        final Sound sound = new Sound("music/game/sweden.ogg");
-        sound.play();
+        // Music
+        musicPlayer.setGroup(MusicGroup.GAME);
     }
     
     @Override
@@ -156,6 +160,8 @@ public class Minecraft extends AppAdapter{
         // Free resources
         clientRenderer.dispose();
         gameResources.dispose();
+        soundPlayer.dispose();
+        musicPlayer.dispose();
     }
     
     public final Options getOptions(){
@@ -202,8 +208,8 @@ public class Minecraft extends AppAdapter{
         return gameResources;
     }
 
-    public AudioPlayer getAudioPlayer(){
-        return audioPlayer;
+    public SoundPlayer getSoundPlayer(){
+        return soundPlayer;
     }
     
     
@@ -225,6 +231,7 @@ public class Minecraft extends AppAdapter{
             instance.rotation = Maths.random(1, 360);
             instance.lifeTimeSeconds = Maths.random(0.5F, 2F);
             instance.velocity.set(Maths.random(-0.04F, 0.04F), Maths.random(-0.02F, 0.1F), Maths.random(-0.04F, 0.04F));
+            instance.color.set(0.6, 0.6, 0.6);
         })
         .texture(new Texture("texture/block/grass_block_side.png"))
         .animate(instance->{

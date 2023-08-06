@@ -32,11 +32,8 @@ public class EulerAngles{
             yaw += 360;
     }
     
-    public void limitPitch90(){
-        if(pitch > 90)
-            pitch = 90;
-        else if(pitch < -90)
-            pitch = -90;
+    public void clampPitch90(){
+        pitch = Maths.clamp(pitch, -90, 90);
     }
 
     public Vec3f getDirection(){

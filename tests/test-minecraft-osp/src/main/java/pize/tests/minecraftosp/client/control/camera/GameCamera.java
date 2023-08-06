@@ -5,14 +5,19 @@ import pize.graphics.camera.PerspectiveCamera;
 import pize.math.Maths;
 import pize.math.util.EulerAngles;
 import pize.math.vecmath.vector.Vec3f;
+import pize.physic.Velocity3f;
 import pize.tests.minecraftosp.client.ClientGame;
 import pize.tests.minecraftosp.client.block.BlockProperties;
 import pize.tests.minecraftosp.client.block.Blocks;
+import pize.tests.minecraftosp.client.chunk.ClientChunk;
+import pize.tests.minecraftosp.client.control.camera.perspective.CameraTarget;
+import pize.tests.minecraftosp.client.control.camera.perspective.FirstPersonPlayerCameraTarget;
+import pize.tests.minecraftosp.client.control.camera.perspective.ThirdPersonBackCameraTarget;
+import pize.tests.minecraftosp.client.control.camera.perspective.ThirdPersonFrontCameraTarget;
+import pize.tests.minecraftosp.client.entity.LocalPlayer;
 import pize.tests.minecraftosp.client.options.Options;
 import pize.tests.minecraftosp.main.chunk.ChunkUtils;
-import pize.tests.minecraftosp.main.chunk.LevelChunk;
 import pize.tests.minecraftosp.main.chunk.storage.ChunkPos;
-import pize.tests.minecraftosp.client.entity.LocalPlayer;
 
 public class GameCamera extends PerspectiveCamera{
 
@@ -25,6 +30,7 @@ public class GameCamera extends PerspectiveCamera{
     private float notInterpolatedFov;
     private float zoom = 1;
     private boolean inWater;
+    private final Velocity3f hitDirection;
 
     public GameCamera(ClientGame game, double near, double far, double fieldOfView){
         super(near, far, fieldOfView);
@@ -38,6 +44,7 @@ public class GameCamera extends PerspectiveCamera{
         
         this.perspective = PerspectiveType.FIRST_PERSON;
         this.target = firstPerson;
+        this.hitDirection = new Velocity3f().setMax(3);
         
         setImaginaryOrigins(true, false, true);
     }
@@ -52,6 +59,8 @@ public class GameCamera extends PerspectiveCamera{
 
 
     public void update(){
+        final float deltaTime = Pize.getDt();
+
         // Follow target
         if(target == null)
             return;
@@ -59,10 +68,12 @@ public class GameCamera extends PerspectiveCamera{
         final EulerAngles rotation = target.getRotation().copy();
         
         // Shaking
-        // final float playerSpeed = (float) player.getMotion().xz().len();
-        // time += playerSpeed * 3;
-        // final float shakingHorizontal = Mathc.sin(time) * 0.02F;
-        // final float shakingVertical = Mathc.pow(Mathc.sin(time) * 0.02F, 2) - 0.02F;
+        // final GameTime gameTime = game.getTime();
+        // final float time = gameTime.getSeconds() * 10;
+
+        // final float playerSpeed = player.getVelocity().xz().len() * 20;
+        // final float shakingHorizontal = Mathc.sin(time) * 0.02F * playerSpeed;
+        // final float shakingVertical = (Mathc.pow(Mathc.sin(time) * 0.02F, 2) - 0.02F) * playerSpeed;
         // final Vec2f shakingShift = new Vec2f(0, shakingHorizontal);
         // shakingShift.rotDeg(rotation.yaw);
         // position.add(shakingShift.x, shakingVertical, shakingShift.y);
@@ -79,10 +90,21 @@ public class GameCamera extends PerspectiveCamera{
             fov *= 1.27F;
         
         setFov(fov);
-        
+
+        // Directed Hit
+        hitDirection.mul(0.8);
+        hitDirection.clampToMax();
+        final Vec3f hitLocalDirection = hitDirection.copy().rotY(rotation.yaw);
+        this.rotation.pitch -= hitLocalDirection.x * 1.5F;
+        this.rotation.roll -= hitLocalDirection.z * 1.5F;
+
+        // Jumps
+        this.rotation.pitch -= Maths.clamp(player.getVelocity().y / 2, -10, 10);
+
         // Interpolate FOV
         final float currentFOV = getFov();
-        super.setFov(currentFOV + (notInterpolatedFov - currentFOV) * Pize.getDt() * 9);
+        super.setFov(currentFOV + (notInterpolatedFov - currentFOV) * deltaTime * 9);
+        this.rotation.clampPitch90();
         super.update();
 
         // Update is camera in water
@@ -108,6 +130,11 @@ public class GameCamera extends PerspectiveCamera{
             case THIRD_PERSON_FRONT -> target = thirdPersonFront;
         }
     }
+
+
+    public void push(Vec3f hitDirection){
+        this.hitDirection.add(hitDirection.nor());
+    }
     
     
     public float getZoom(){
@@ -122,25 +149,19 @@ public class GameCamera extends PerspectiveCamera{
     public void setFov(float fieldOfView){
         notInterpolatedFov = fieldOfView;
     }
+
     
-    
-    public boolean isChunkSeen(int chunkX, int chunkZ){
-        return getFrustum().isBoxInFrustum(
-            chunkX * ChunkUtils.SIZE, 0, chunkZ * ChunkUtils.SIZE,
-            chunkX * ChunkUtils.SIZE + ChunkUtils.SIZE, ChunkUtils.HEIGHT, chunkZ * ChunkUtils.SIZE + ChunkUtils.SIZE
-        );
-    }
-    
-    public boolean isChunkSeen(ChunkPos pos){
-        return isChunkSeen(pos.x, pos.z);
-    }
-    
-    public boolean isChunkSeen(LevelChunk chunk){
+    public boolean isChunkSeen(ClientChunk chunk){
         ChunkPos pos = chunk.getPosition();
         
         return getFrustum().isBoxInFrustum(
-            pos.x * ChunkUtils.SIZE, 0, pos.z * ChunkUtils.SIZE,
-            pos.x * ChunkUtils.SIZE + ChunkUtils.SIZE, (chunk.getHighestSectionIndex() + 1) * ChunkUtils.SIZE, pos.z * ChunkUtils.SIZE + ChunkUtils.SIZE
+            pos.x * ChunkUtils.SIZE,
+            0,
+            pos.z * ChunkUtils.SIZE,
+
+            pos.x * ChunkUtils.SIZE + ChunkUtils.SIZE,
+            (chunk.getMaxY() + 1),
+            pos.z * ChunkUtils.SIZE + ChunkUtils.SIZE
         );
     }
     

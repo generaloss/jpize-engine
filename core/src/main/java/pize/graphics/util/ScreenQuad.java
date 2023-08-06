@@ -1,8 +1,8 @@
 package pize.graphics.util;
 
 import pize.graphics.gl.Type;
-import pize.graphics.vertex.Mesh;
-import pize.graphics.vertex.VertexAttr;
+import pize.graphics.mesh.Mesh;
+import pize.graphics.mesh.VertexAttr;
 
 public class ScreenQuad{
     

@@ -239,6 +239,40 @@ public class Vec3f{
 
         return this;
     }
+
+
+    public Vec3f rotX(double degrees){
+        final float cos = Maths.cosDeg(degrees);
+        final float sin = Maths.sinDeg(degrees);
+
+        final float newY = y *  cos + z * sin;
+        z = y * -sin + z * cos;
+        y = newY;
+
+        return this;
+    }
+
+    public Vec3f rotY(double degrees){
+        final float cos = Maths.cosDeg(degrees);
+        final float sin = Maths.sinDeg(degrees);
+
+        final float newX = x * cos + z * -sin;
+        z = x * sin + z *  cos;
+        x = newX;
+
+        return this;
+    }
+
+    public Vec3f rotZ(double degrees){
+        final float cos = Maths.cosDeg(degrees);
+        final float sin = Maths.sinDeg(degrees);
+
+        final float newX = x *  cos + y * sin;
+        y = x * -sin + y * cos;
+        x = newX;
+
+        return this;
+    }
     
     
     public Vec3f frac(){
@@ -747,9 +781,9 @@ public class Vec3f{
     
     public Vec3f mul(float[] matrix){
         set(
-            (x * matrix[m00]) + (y * matrix[m10]) + (z * matrix[m20]) + matrix[m30],
-            (x * matrix[m01]) + (y * matrix[m11]) + (z * matrix[m21]) + matrix[m31],
-            (x * matrix[m02]) + (y * matrix[m12]) + (z * matrix[m22]) + matrix[m32]
+            x * matrix[m00]  +  y * matrix[m01]  +  z * matrix[m02]  +  matrix[m03],
+            x * matrix[m10]  +  y * matrix[m11]  +  z * matrix[m12]  +  matrix[m13],
+            x * matrix[m20]  +  y * matrix[m21]  +  z * matrix[m22]  +  matrix[m23]
         );
         return this;
     }

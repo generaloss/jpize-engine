@@ -81,20 +81,20 @@ public enum SizedFormat{
     DEPTH32F_STENCIL8  (GL_DEPTH32F_STENCIL8 , Format.DEPTH_STENCIL  ),
 
     // COMPRESSED
-    COMPRESSED_RED	                  (GL_COMPRESSED_RED	                , Format.RED),
-    COMPRESSED_RED_RGTC1	          (GL_COMPRESSED_RED_RGTC1	            , Format.RED),
-    COMPRESSED_SIGNED_RED_RGTC1       (GL_COMPRESSED_SIGNED_RED_RGTC1       , Format.RED),
-    COMPRESSED_RG	                  (GL_COMPRESSED_RG	                    , Format.RG ),
-    COMPRESSED_RG_RGTC2	              (GL_COMPRESSED_RG_RGTC2	            , Format.RG ),
-    COMPRESSED_SIGNED_RG_RGTC2        (GL_COMPRESSED_SIGNED_RG_RGTC2        , Format.RG ),
-    COMPRESSED_RGB	                  (GL_COMPRESSED_RGB	                , Format.RGB),
-    COMPRESSED_RGB_BPTC_SIGNED_FLOAT  (GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT  , Format.RGB),
-    COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT(GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT, Format.RGB),
-    COMPRESSED_SRGB	                  (GL_COMPRESSED_SRGB	                , Format.RGB),
+    COMPRESSED_RED	                  (GL_COMPRESSED_RED	                , Format.RED ),
+    COMPRESSED_RED_RGTC1	          (GL_COMPRESSED_RED_RGTC1	            , Format.RED ),
+    COMPRESSED_SIGNED_RED_RGTC1       (GL_COMPRESSED_SIGNED_RED_RGTC1       , Format.RED ),
+    COMPRESSED_RG	                  (GL_COMPRESSED_RG	                    , Format.RG  ),
+    COMPRESSED_RG_RGTC2	              (GL_COMPRESSED_RG_RGTC2	            , Format.RG  ),
+    COMPRESSED_SIGNED_RG_RGTC2        (GL_COMPRESSED_SIGNED_RG_RGTC2        , Format.RG  ),
+    COMPRESSED_RGB	                  (GL_COMPRESSED_RGB	                , Format.RGB ),
+    COMPRESSED_RGB_BPTC_SIGNED_FLOAT  (GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT  , Format.RGB ),
+    COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT(GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT, Format.RGB ),
+    COMPRESSED_SRGB	                  (GL_COMPRESSED_SRGB	                , Format.RGB ),
     COMPRESSED_RGBA	                  (GL_COMPRESSED_RGBA	                , Format.RGBA),
     COMPRESSED_RGBA_BPTC_UNORM        (GL_COMPRESSED_RGBA_BPTC_UNORM        , Format.RGBA),
     COMPRESSED_SRGB_ALPHA             (GL_COMPRESSED_SRGB_ALPHA             , Format.RGBA),
-    COMPRESSED_SRGB_ALPHA_BPTC_UNORM  (GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM  , Format.RGB);
+    COMPRESSED_SRGB_ALPHA_BPTC_UNORM  (GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM  , Format.RGBA);
 
 
     public final int GL;

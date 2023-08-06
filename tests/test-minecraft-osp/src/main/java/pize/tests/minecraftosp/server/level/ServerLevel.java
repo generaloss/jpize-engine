@@ -3,6 +3,8 @@ package pize.tests.minecraftosp.server.level;
 import pize.math.vecmath.vector.Vec2f;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.minecraftosp.client.block.Blocks;
+import pize.tests.minecraftosp.main.chunk.storage.ChunkPos;
+import pize.tests.minecraftosp.server.level.chunk.ServerChunkManager;
 import pize.tests.minecraftosp.server.player.ServerPlayer;
 import pize.tests.minecraftosp.main.audio.Sound;
 import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
@@ -19,13 +21,13 @@ public class ServerLevel extends Level{
     private final Server server;
     private final ServerChunkManager chunkManager;
     private final ServerLevelConfiguration configuration;
-    private final LightEngine lightEngine;
+    private final LevelLight levelLight;
 
     public ServerLevel(Server server){
         this.server = server;
         this.chunkManager = new ServerChunkManager(this);
         this.configuration = new ServerLevelConfiguration();
-        this.lightEngine = new LightEngine(this);
+        this.levelLight = new LevelLight(this);
     }
     
     public Server getServer(){
@@ -43,11 +45,17 @@ public class ServerLevel extends Level{
     }
     
     @Override
-    public boolean setBlock(int x, int y, int z, short block){
-        final ServerChunk targetChunk = getBlockChunk(x, z);
-        if(targetChunk != null)
-            return targetChunk.setBlock(getLocalCoord(x), y, getLocalCoord(z), block);
+    public boolean setBlock(int x, int y, int z, short blockData){
+        final ChunkPos chunkPos = new ChunkPos(getChunkPos(x), getChunkPos(z));
+        final ServerChunk targetChunk = chunkManager.getChunk(chunkPos);
 
+        final int lx = getLocalCoord(x);
+        final int lz = getLocalCoord(z);
+
+        if(targetChunk != null)
+            return targetChunk.setBlock(lx, y, lz, blockData);
+
+        chunkManager.getBlockPool().setBlock(chunkPos, lx, y, lz, blockData);
         return false;
     }
 
@@ -106,8 +114,8 @@ public class ServerLevel extends Level{
     }
 
 
-    public LightEngine getLightEngine(){
-        return lightEngine;
+    public LevelLight getLight(){
+        return levelLight;
     }
     
     @Override

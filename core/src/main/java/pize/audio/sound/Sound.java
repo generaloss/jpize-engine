@@ -25,7 +25,7 @@ public class Sound extends AudioSource{
 
 
     public float getDuration(){
-        return buffer.getDuration();
+        return buffer.getDurationSeconds();
     }
 
     public AudioBuffer getBuffer(){

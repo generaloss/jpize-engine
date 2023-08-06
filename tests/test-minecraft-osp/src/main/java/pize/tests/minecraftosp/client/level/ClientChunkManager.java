@@ -1,22 +1,20 @@
 package pize.tests.minecraftosp.client.level;
 
 import pize.Pize;
+import pize.tests.minecraftosp.client.chunk.ClientChunk;
+import pize.tests.minecraftosp.client.chunk.mesh.builder.ChunkBuilder;
 import pize.tests.minecraftosp.client.entity.LocalPlayer;
 import pize.tests.minecraftosp.main.chunk.ChunkUtils;
 import pize.tests.minecraftosp.main.chunk.storage.ChunkPos;
 import pize.tests.minecraftosp.main.level.ChunkManager;
 import pize.tests.minecraftosp.main.level.ChunkManagerUtils;
-import pize.tests.minecraftosp.client.chunk.ClientChunk;
-import pize.tests.minecraftosp.client.chunk.mesh.builder.ChunkBuilder;
 import pize.tests.minecraftosp.main.net.packet.CBPacketChunk;
 import pize.tests.minecraftosp.main.net.packet.SBPacketChunkRequest;
-import pize.util.time.PerSecCounter;
+import pize.util.time.FpsCounter;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.*;
-
-import static pize.tests.minecraftosp.main.level.ChunkManagerUtils.distToChunk;
 
 public class ClientChunkManager extends ChunkManager {
 
@@ -24,7 +22,7 @@ public class ClientChunkManager extends ChunkManager {
 
     
     private final ClientLevel level;
-    public final PerSecCounter tps;
+    public final FpsCounter tps;
 
     private final ChunkBuilder[] chunkBuilders;
     private final ExecutorService executor;
@@ -57,7 +55,7 @@ public class ClientChunkManager extends ChunkManager {
         this.allChunks = new ConcurrentHashMap<>();
         this.toBuildQueue = new ConcurrentLinkedDeque<>();
         
-        this.tps = new PerSecCounter();
+        this.tps = new FpsCounter();
     }
     
     public ClientLevel getLevel(){
@@ -157,7 +155,7 @@ public class ClientChunkManager extends ChunkManager {
     
     
     private void findChunks(){
-        if(frontiers.size() == 0){
+        if(frontiers.isEmpty()){
             final LocalPlayer player = level.getSession().getGame().getPlayer();
 
             putFrontier(new ChunkPos(
@@ -172,7 +170,7 @@ public class ClientChunkManager extends ChunkManager {
             ensureFrontier(frontierPos.getNeighbor( 0, -1));
             ensureFrontier(frontierPos.getNeighbor( 0,  1));
         }
-        
+
         frontiers.removeIf(this::isOffTheGrid);
     }
     
@@ -220,12 +218,12 @@ public class ClientChunkManager extends ChunkManager {
     
     public void receivedChunk(CBPacketChunk packet){
         final ClientChunk chunk = packet.getChunk(level);
-        chunk.rebuild(false);
+
         allChunks.put(chunk.getPosition(), chunk);
-        
-        ChunkManagerUtils.rebuildNeighborChunks(chunk);
-        
         requestedChunks.remove(chunk.getPosition());
+
+        chunk.rebuild(false);
+        ChunkManagerUtils.rebuildNeighborChunks(chunk);
     }
     
     

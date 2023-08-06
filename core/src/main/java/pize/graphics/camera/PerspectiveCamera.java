@@ -8,9 +8,9 @@ import pize.math.vecmath.matrix.Matrix4f;
 public class PerspectiveCamera extends Camera3D implements Resizable{
 
     private float fieldOfView, near, far;
-    private final Matrix4f projection, view, imaginaryView;
+    private final Matrix4f projection, view, imaginaryView, rollMatrix;
     private final Frustum frustum;
-    private boolean dirtyProjection, imaginaryX, imaginaryY, imaginaryZ;
+    private boolean imaginaryX, imaginaryY, imaginaryZ, hasImaginaryAxis;
 
     public PerspectiveCamera(double near, double far, double fieldOfView){
         this(Pize.getWidth(), Pize.getHeight(), near, far, fieldOfView);
@@ -22,35 +22,48 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
         this.near = (float) near;
         this.far = (float) far;
         this.fieldOfView = (float) fieldOfView;
+        this.view = new Matrix4f();
+        this.projection = new Matrix4f();
+        this.imaginaryView = new Matrix4f();
+        this.rollMatrix = new Matrix4f();
+        this.frustum = new Frustum();
 
-        view = new Matrix4f().toLookAt(position, rotation.getDirection()).mul(new Matrix4f().toRotatedZ(rotation.roll));
-        projection = new Matrix4f().toPerspective(width, height, this.near, this.far, this.fieldOfView);
-        imaginaryView = new Matrix4f().set(view);
-
-        frustum = new Frustum(view, projection);
+        updateProjectionMatrix();
+        calculateView();
     }
-
 
     @Override
     public void update(){
-        if(dirtyProjection){
-            projection.toPerspective(width, height, near, far, fieldOfView);
-            dirtyProjection = false;
-        }
+        calculateView();
+    }
 
-        view.toLookAt(
-            imaginaryX ? 0 : position.x,
-            imaginaryY ? 0 : position.y,
-            imaginaryZ ? 0 : position.z,
-            rotation.getDirection()
-        );
-        
-        imaginaryView.toLookAt(position, rotation.getDirection()).mul(new Matrix4f().toRotatedZ(rotation.roll));
+    private void updateProjectionMatrix(){
+        this.projection.toPerspective(width, height, near, far, fieldOfView);
+    }
 
-        frustum.setFrustum(
-            !(imaginaryX || imaginaryY || imaginaryZ) ? view : imaginaryView,
-            projection
-        );
+    private void calculateView(){
+        // Roll camera rotation
+        rollMatrix.toRotatedZ(rotation.roll);
+
+        // Imaginary view matrix
+        imaginaryView.toLookAt(position, rotation.getDirection());
+        imaginaryView.set(rollMatrix.copy().mul(imaginaryView));
+
+        // View matrix
+        if(hasImaginaryAxis){
+            view.toLookAt(
+                imaginaryX ? 0 : position.x,
+                imaginaryY ? 0 : position.y,
+                imaginaryZ ? 0 : position.z,
+                rotation.getDirection()
+            );
+        }else
+            imaginaryView.set(view);
+
+        view.set(rollMatrix.mul(view));
+
+        // Frustum
+        frustum.setFrustum(imaginaryView, projection);
     }
 
     @Override
@@ -59,13 +72,14 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
             return;
     
         setSize(width, height);
-        dirtyProjection = true;
+        updateProjectionMatrix();
     }
 
     public void setImaginaryOrigins(boolean x, boolean y, boolean z){
-        imaginaryX = x;
-        imaginaryY = y;
-        imaginaryZ = z;
+        this.imaginaryX = x;
+        this.imaginaryY = y;
+        this.imaginaryZ = z;
+        this.hasImaginaryAxis = imaginaryX || imaginaryY || imaginaryZ;
     }
 
     public Frustum getFrustum(){
@@ -81,7 +95,7 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
             return;
 
         this.fieldOfView = fieldOfView;
-        dirtyProjection = true;
+        updateProjectionMatrix();
     }
 
     public float getNear(){
@@ -93,7 +107,7 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
             return;
 
         this.near = near;
-        dirtyProjection = true;
+        updateProjectionMatrix();
     }
 
     public float getFar(){
@@ -105,7 +119,7 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
             return;
 
         this.far = far;
-        dirtyProjection = true;
+        updateProjectionMatrix();
     }
 
     @Override

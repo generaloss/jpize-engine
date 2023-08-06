@@ -513,8 +513,8 @@ public class Vec2d{
     
     public Vec2d mul(Matrix3f matrix){
         set(
-            x * matrix.val[m00] + y * matrix.val[m01],
-            x * matrix.val[m10] + y * matrix.val[m11]
+            x * matrix.val[m00] + y * matrix.val[m10],
+            x * matrix.val[m01] + y * matrix.val[m11]
         );
         return this;
     }

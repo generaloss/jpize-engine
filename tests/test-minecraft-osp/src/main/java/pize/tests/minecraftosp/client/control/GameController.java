@@ -22,6 +22,7 @@ import pize.tests.minecraftosp.main.block.BlockData;
 import pize.tests.minecraftosp.main.entity.Entity;
 import pize.tests.minecraftosp.client.entity.LocalPlayer;
 import pize.tests.minecraftosp.client.level.ClientLevel;
+import pize.tests.minecraftosp.main.net.packet.SBPacketChunkRequest;
 import pize.tests.minecraftosp.main.net.packet.SBPacketPing;
 import pize.tests.minecraftosp.main.net.packet.SBPacketPlayerBlockSet;
 
@@ -97,10 +98,39 @@ public class GameController{
         }
         
         /** Game **/
-        
-        // Player
-        playerController.update();
-        
+
+        // F3 + ...
+        if(Key.F3.isPressed()){
+            // G - Chunk border
+            if(Key.G.isDown()){
+                session.getRenderer().getWorldRenderer().getChunkBorderRenderer().toggleShow();
+                f3Plus = true;
+                return;
+            }
+
+            // R - Reload chunks
+            if(Key.H.isDown()){
+                session.getGame().getLevel().getChunkManager().reload();
+                f3Plus = true;
+                return;
+            }
+
+            // C - Reload chunks
+            if(Key.C.isDown()){
+                getSession().getGame().sendPacket(new SBPacketChunkRequest(camera.chunkX(), camera.chunkZ()));
+                f3Plus = true;
+                return;
+            }
+        }
+
+        // Info Panel
+        if(Key.F3.isReleased()){
+            if(!f3Plus)
+                session.getRenderer().getInfoRenderer().toggleOpen();
+
+            f3Plus = false;
+        }
+
         // Place/Destroy/Copy block
         if(blockRayCast.isSelected()){
             final LocalPlayer player = session.getGame().getPlayer();
@@ -128,29 +158,6 @@ public class GameController{
         // Show mouse
         if(Key.M.isDown())
             playerController.getRotationController().toggleShowMouse();
-
-        // F3 + ...
-        if(Key.F3.isPressed()){
-            // G - Chunk border
-            if(Key.G.isDown()){
-                session.getRenderer().getWorldRenderer().getChunkBorderRenderer().toggleShow();
-                f3Plus = true;
-            }
-
-            // R - Reload chunks
-            if(Key.H.isDown()){
-                session.getGame().getLevel().getChunkManager().reload();
-                f3Plus = true;
-            }
-        }
-
-        // Info Panel
-        if(Key.F3.isReleased()){
-            if(!f3Plus)
-                session.getRenderer().getInfoRenderer().toggleOpen();
-            
-            f3Plus = false;
-        }
         
         // Camera zoom
         if(options.getKey(KeyMapping.ZOOM).isDown())
@@ -173,6 +180,9 @@ public class GameController{
         // Exit
         if(Key.ESCAPE.isDown())
             Pize.exit();
+
+        // Player
+        playerController.update();
     }
     
     private void placeBlock(){

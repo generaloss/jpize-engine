@@ -4,8 +4,8 @@ import pize.app.Disposable;
 import pize.graphics.gl.BufferUsage;
 import pize.graphics.gl.Primitive;
 import pize.graphics.gl.Type;
-import pize.graphics.vertex.Mesh;
-import pize.graphics.vertex.VertexAttr;
+import pize.graphics.mesh.Mesh;
+import pize.graphics.mesh.VertexAttr;
 
 public class BlockCursor implements Disposable{
     

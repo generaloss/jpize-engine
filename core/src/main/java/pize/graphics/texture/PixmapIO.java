@@ -21,12 +21,12 @@ public class PixmapIO{
 
         for(int y = 0; y < height; y++){
             for(int x = 0; x < width; x++){
-                int pixelIndex = (!invY ? y : height - 1 - y) * width + (!invX ? x : width - 1 - x);
-                int pixel = pixels[pixelIndex];
+                final int pixelIndex = (!invY ? y : height - 1 - y) * width + (!invX ? x : width - 1 - x);
+                final int pixel = pixels[pixelIndex];
 
                 buffer.put((byte) ((pixel >> 16) & 0xFF));
-                buffer.put((byte) ((pixel >> 8) & 0xFF));
-                buffer.put((byte) ((pixel) & 0xFF));
+                buffer.put((byte) ((pixel >> 8 ) & 0xFF));
+                buffer.put((byte) ((pixel      ) & 0xFF));
                 buffer.put((byte) ((pixel >> 24) & 0xFF));
             }
         }
@@ -83,8 +83,8 @@ public class PixmapIO{
         }
     }
     
-    public static void save(Pixmap pixmap, String path){
-        final Resource resource = new Resource(path, true);
+    public static void save(Pixmap pixmap, String filepath){
+        final Resource resource = new Resource(filepath, true);
         resource.mkParentDirs();
         resource.create();
         save(pixmap, resource.getFile());

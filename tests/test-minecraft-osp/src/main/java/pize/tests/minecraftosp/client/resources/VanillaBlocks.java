@@ -2,7 +2,7 @@ package pize.tests.minecraftosp.client.resources;
 
 public class VanillaBlocks{
 
-    private static final String BLOCK_DIR = "texture/block/faithful/";
+    private static final String BLOCK_DIR = "texture/block/old/";
 
     public static void register(GameResources resources){
         System.out.println("[Resources]: Load Block Atlas");

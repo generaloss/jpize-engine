@@ -8,6 +8,7 @@ import pize.physic.BoxBody;
 import pize.physic.Collider3f;
 import pize.physic.Velocity3f;
 import pize.tests.minecraftosp.client.block.BlockProperties;
+import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.client.block.shape.BlockCollide;
 import pize.tests.minecraftosp.main.Direction;
 import pize.tests.minecraftosp.main.Tickable;
@@ -110,17 +111,17 @@ public abstract class Entity extends BoxBody implements Tickable {
         final Vec3f min = this.getMin();
         final Vec3f max = this.getMax();
         
-        final int beginX = Maths.floor(min.x - 0.5 + Math.min(0, velocity.x));
+        final int beginX = Maths.floor(min.x - 1 + Math.min(0, velocity.x));
         final int beginY = Math.max(0, Math.min(ChunkUtils.HEIGHT_IDX,
-            Maths.floor(min.y - 0.5 + Math.min(0, velocity.y))
+            Maths.floor(min.y - 1 + Math.min(0, velocity.y))
         ));
-        final int beginZ = Maths.floor(min.z - 0.5 + Math.min(0, velocity.z));
+        final int beginZ = Maths.floor(min.z - 1 + Math.min(0, velocity.z));
         
-        final int endX = Maths.ceil(max.x + 0.5 + Math.max(0, velocity.x));
+        final int endX = Maths.ceil(max.x + 1 + Math.max(0, velocity.x));
         final int endY = Math.max(0, Math.min(ChunkUtils.HEIGHT,
-            Maths.ceil(max.y + 0.5 + Math.max(0, velocity.y))
+            Maths.ceil(max.y + 1 + Math.max(0, velocity.y))
         ));
-        final int endZ = Maths.ceil(max.z + 0.5 + Math.max(0, velocity.z));
+        final int endZ = Maths.ceil(max.z + 1 + Math.max(0, velocity.z));
         
         for(int x = beginX; x < endX; x++)
             for(int y = beginY; y < endY; y++)
@@ -130,8 +131,15 @@ public abstract class Entity extends BoxBody implements Tickable {
                     final byte blockState = BlockData.getState(blockData);
                     final BlockProperties block = BlockData.getProps(blockData);
 
-                    if(block.getStates().isEmpty())
+                    if(block.getID() == Blocks.AIR.getID())
                         continue;
+
+                    if(block.getID() == Blocks.VOID_AIR.getID()){
+                        final BoxBody box = new BoxBody(BlockCollide.SOLID.getBoxes()[0]);
+                        box.getPosition().set(x, y, z);
+                        blockBoxes.add(box);
+                        continue;
+                    }
 
                     final BlockCollide shape = block.getState(blockState).getCollide();
                     if(shape == null)

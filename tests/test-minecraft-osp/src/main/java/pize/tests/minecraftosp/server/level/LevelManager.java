@@ -1,7 +1,7 @@
 package pize.tests.minecraftosp.server.level;
 
 import pize.tests.minecraftosp.server.Server;
-import pize.tests.minecraftosp.server.chunk.gen.ChunkGenerator;
+import pize.tests.minecraftosp.server.gen.ChunkGenerator;
 
 import java.util.Collection;
 import java.util.HashMap;

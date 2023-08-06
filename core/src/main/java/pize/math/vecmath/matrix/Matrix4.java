@@ -2,9 +2,9 @@ package pize.math.vecmath.matrix;
 
 public interface Matrix4{
 
-    byte m00 = 0 , m10 = 1 , m20 = 2 , m30 = 3 ;
-    byte m01 = 4 , m11 = 5 , m21 = 6 , m31 = 7 ;
-    byte m02 = 8 , m12 = 9 , m22 = 10, m32 = 11;
-    byte m03 = 12, m13 = 13, m23 = 14, m33 = 15;
+    int m00 = 0, m10 = 4, m20 = 8 , m30 = 12;
+    int m01 = 1, m11 = 5, m21 = 9 , m31 = 13;
+    int m02 = 2, m12 = 6, m22 = 10, m32 = 14;
+    int m03 = 3, m13 = 7, m23 = 11, m33 = 15;
 
 }

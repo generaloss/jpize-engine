@@ -6,8 +6,8 @@ import pize.graphics.camera.Camera;
 import pize.graphics.gl.Gl;
 import pize.graphics.gl.Type;
 import pize.graphics.texture.CubeMap;
-import pize.graphics.vertex.Mesh;
-import pize.graphics.vertex.VertexAttr;
+import pize.graphics.mesh.Mesh;
+import pize.graphics.mesh.VertexAttr;
 import pize.math.vecmath.matrix.Matrix4f;
 
 public class SkyBox implements Disposable{

@@ -161,20 +161,20 @@ public class Quaternion{
         final Matrix4f result = new Matrix4f();
         
         result.val[Matrix4f.m00] = 1 - 2 * (yy + zz);
-        result.val[Matrix4f.m01] = 2 * (xy - zw);
-        result.val[Matrix4f.m02] = 2 * (xz + yw);
-        result.val[Matrix4f.m03] = 0;
-        result.val[Matrix4f.m10] = 2 * (xy + zw);
-        result.val[Matrix4f.m11] = 1 - 2 * (xx + zz);
-        result.val[Matrix4f.m12] = 2 * (yz - xw);
-        result.val[Matrix4f.m13] = 0;
-        result.val[Matrix4f.m20] = 2 * (xz - yw);
-        result.val[Matrix4f.m21] = 2 * (yz + xw);
-        result.val[Matrix4f.m22] = 1 - 2 * (xx + yy);
-        result.val[Matrix4f.m23] = 0;
+        result.val[Matrix4f.m10] = 2 * (xy - zw);
+        result.val[Matrix4f.m20] = 2 * (xz + yw);
         result.val[Matrix4f.m30] = 0;
+        result.val[Matrix4f.m01] = 2 * (xy + zw);
+        result.val[Matrix4f.m11] = 1 - 2 * (xx + zz);
+        result.val[Matrix4f.m21] = 2 * (yz - xw);
         result.val[Matrix4f.m31] = 0;
+        result.val[Matrix4f.m02] = 2 * (xz - yw);
+        result.val[Matrix4f.m12] = 2 * (yz + xw);
+        result.val[Matrix4f.m22] = 1 - 2 * (xx + yy);
         result.val[Matrix4f.m32] = 0;
+        result.val[Matrix4f.m03] = 0;
+        result.val[Matrix4f.m13] = 0;
+        result.val[Matrix4f.m23] = 0;
         result.val[Matrix4f.m33] = 1;
         
         return result;

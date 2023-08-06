@@ -3,7 +3,7 @@ package pize.tests.minecraftosp.client.chunk.mesh;
 import pize.Pize;
 import pize.graphics.gl.BufferUsage;
 import pize.graphics.gl.Type;
-import pize.graphics.vertex.VertexAttr;
+import pize.graphics.mesh.VertexAttr;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +24,6 @@ public class ChunkMeshCullingOff extends ChunkMesh{
 
     @Override
     public int updateVertices(){
-        if(verticesList.size() == 0)
-            return 0;
-
         final float[] verticesArray = new float[verticesList.size()];
         for(int i = 0; i < verticesList.size(); i++)
             verticesArray[i] = verticesList.get(i);

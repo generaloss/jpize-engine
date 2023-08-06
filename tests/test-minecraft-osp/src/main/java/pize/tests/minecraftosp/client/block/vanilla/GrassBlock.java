@@ -13,7 +13,7 @@ import pize.tests.minecraftosp.main.chunk.ChunkUtils;
 
 public class GrassBlock extends BlockProperties {
 
-    public static final ImmutableColor COLOR = new ImmutableColor(0.3, 0.55, 0.15, 1);
+    public static final ImmutableColor COLOR = Grass.COLOR;
     
     public GrassBlock(int id){
         super(id);

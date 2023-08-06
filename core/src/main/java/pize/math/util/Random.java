@@ -4,8 +4,16 @@ public class Random{
 
     private final java.util.Random random;
 
+    public Random(){
+        random = new java.util.Random();
+    }
+
     public Random(long seed){
         random = new java.util.Random(seed);
+    }
+
+    public void setSeed(long seed){
+        random.setSeed(seed);
     }
 
 

@@ -563,9 +563,9 @@ public class Vec3i{
 
     public Vec3i mul(float[] matrix){
         set(
-            Maths.round( (x * matrix[m00]) + (y * matrix[m10]) + (z * matrix[m20]) + matrix[m30] ),
-            Maths.round( (x * matrix[m01]) + (y * matrix[m11]) + (z * matrix[m21]) + matrix[m31] ),
-            Maths.round( (x * matrix[m02]) + (y * matrix[m12]) + (z * matrix[m22]) + matrix[m32] )
+            Maths.round( (x * matrix[m00]) + (y * matrix[m01]) + (z * matrix[m02]) + matrix[m03] ),
+            Maths.round( (x * matrix[m10]) + (y * matrix[m11]) + (z * matrix[m12]) + matrix[m13] ),
+            Maths.round( (x * matrix[m20]) + (y * matrix[m21]) + (z * matrix[m22]) + matrix[m23] )
         );
         return this;
     }

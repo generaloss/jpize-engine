@@ -30,10 +30,10 @@ public class Shader extends GlObject{
 
         glLinkProgram(ID);
         if(glGetProgrami(ID, GL_LINK_STATUS) == GL_FALSE)
-            throw new RuntimeException("Linking shader error: " + glGetProgramInfoLog(ID));
+            throw new RuntimeException("Linking shader error: \n" + glGetProgramInfoLog(ID));
         glValidateProgram(ID);
         if(glGetProgrami(ID, GL_VALIDATE_STATUS) == GL_FALSE)
-            throw new RuntimeException("Validating shader error: " + glGetProgramInfoLog(ID));
+            throw new RuntimeException("Validating shader error: \n" + glGetProgramInfoLog(ID));
 
         glDeleteShader(vertexShaderID);
         glDeleteShader(fragmentShaderID);
@@ -59,10 +59,10 @@ public class Shader extends GlObject{
 
         glLinkProgram(ID);
         if(glGetProgrami(ID, GL_LINK_STATUS) == GL_FALSE)
-            throw new RuntimeException("Linking shader error: " + glGetProgramInfoLog(ID));
+            throw new RuntimeException("Linking shader error: \n" + glGetProgramInfoLog(ID));
         glValidateProgram(ID);
         if(glGetProgrami(ID, GL_VALIDATE_STATUS) == GL_FALSE)
-            throw new RuntimeException("Validating shader error: " + glGetProgramInfoLog(ID));
+            throw new RuntimeException("Validating shader error: \n" + glGetProgramInfoLog(ID));
 
         glDeleteShader(vertexShaderID);
         glDeleteShader(fragmentShaderID);
@@ -80,12 +80,12 @@ public class Shader extends GlObject{
 
 
     private int createShader(String code, int shaderType){
-        int shaderID = glCreateShader(shaderType);
+        final int shaderID = glCreateShader(shaderType);
         glShaderSource(shaderID, code);
 
         glCompileShader(shaderID);
         if(glGetShaderi(shaderID, GL_COMPILE_STATUS) == GL_FALSE)
-            throw new RuntimeException("Compiling shader error: " + glGetShaderInfoLog(shaderID));
+            throw new RuntimeException("Compiling shader error: \n" + glGetShaderInfoLog(shaderID));
 
         return shaderID;
     }

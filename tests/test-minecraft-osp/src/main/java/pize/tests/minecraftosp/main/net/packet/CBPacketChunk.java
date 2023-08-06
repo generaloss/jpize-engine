@@ -3,11 +3,13 @@ package pize.tests.minecraftosp.main.net.packet;
 import pize.net.tcp.packet.IPacket;
 import pize.net.tcp.packet.PacketHandler;
 import pize.tests.minecraftosp.client.level.ClientLevel;
+import pize.tests.minecraftosp.main.chunk.ChunkUtils;
 import pize.tests.minecraftosp.main.chunk.LevelChunk;
 import pize.tests.minecraftosp.main.chunk.LevelChunkSection;
 import pize.tests.minecraftosp.main.chunk.storage.ChunkPos;
 import pize.tests.minecraftosp.main.chunk.storage.Heightmap;
 import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
+import pize.tests.minecraftosp.main.chunk.storage.SectionPos;
 import pize.util.io.PizeInputStream;
 import pize.util.io.PizeOutputStream;
 import pize.tests.minecraftosp.client.chunk.ClientChunk;
@@ -46,6 +48,7 @@ public class CBPacketChunk extends IPacket<PacketHandler>{
         final ClientChunk chunk = new ClientChunk(level, position);
         chunk.setSections(sections, highestSectionIndex);
         chunk.setHeightmaps(readHeightmaps);
+        chunk.updateMaxY();
         return chunk;
     }
     
@@ -79,7 +82,7 @@ public class CBPacketChunk extends IPacket<PacketHandler>{
         stream.writeByte(sectionIndex); // index
         stream.writeShort(section.blocksNum); // blocks num
         stream.writeShortArray(section.blocks); // blocks data
-        stream.writeByteArray(section.light); // light data
+        stream.write(section.light); // light data
     }
     
     private void writeHeightmap(PizeOutputStream stream, Heightmap heightmap) throws IOException{
@@ -119,9 +122,13 @@ public class CBPacketChunk extends IPacket<PacketHandler>{
         final byte sectionIndex = stream.readByte(); // index
         final short blocksNum = stream.readShort(); // blocks num
         final short[] blocks = stream.readShortArray(); // blocks data
-        final byte[] light = stream.readByteArray(); // light data
+        final byte[] light = stream.readNBytes(ChunkUtils.VOLUME); // light data
         
-        final LevelChunkSection section = new LevelChunkSection(blocks, light);
+        final LevelChunkSection section = new LevelChunkSection(
+            new SectionPos(position.x, sectionIndex, position.z),
+            blocks,
+            light
+        );
         section.blocksNum = blocksNum;
         sections[sectionIndex] = section;
     }

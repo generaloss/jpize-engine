@@ -2,9 +2,9 @@ package pize.tests.minecraftosp.client.chunk.mesh;
 
 import pize.Pize;
 import pize.app.Disposable;
-import pize.graphics.vertex.VertexArray;
-import pize.graphics.vertex.VertexAttr;
-import pize.graphics.vertex.VertexBuffer;
+import pize.graphics.mesh.VertexArray;
+import pize.graphics.mesh.VertexAttr;
+import pize.graphics.mesh.VertexBuffer;
 
 public abstract class ChunkMesh implements Disposable{
 

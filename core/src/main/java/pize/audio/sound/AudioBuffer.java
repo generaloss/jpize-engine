@@ -54,7 +54,7 @@ public class AudioBuffer implements Disposable{
         return alGetBufferi(id, AL_SIZE);
     }
 
-    public float getDuration(){
+    public float getDurationSeconds(){
         return (float) getSize() * 8 / (getChannels() * getBits()) / getFrequency();
     }
 

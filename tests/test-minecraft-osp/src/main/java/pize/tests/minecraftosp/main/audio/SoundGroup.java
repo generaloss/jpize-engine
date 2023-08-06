@@ -10,7 +10,7 @@ public enum SoundGroup{
     DIG_STONE(Sound.DIG_STONE_1, Sound.DIG_STONE_2, Sound.DIG_STONE_3, Sound.DIG_STONE_4),
     DIG_WOOD (Sound.DIG_WOOD_1,  Sound.DIG_WOOD_2,  Sound.DIG_WOOD_3,  Sound.DIG_WOOD_4 ),
     DIG_SAND (Sound.DIG_SAND_1,  Sound.DIG_SAND_2,  Sound.DIG_SAND_3,  Sound.DIG_SAND_4 ),
-    DIG_GLASS(Sound.GLASS);
+    GLASS    (Sound.GLASS_1,     Sound.GLASS_2,     Sound.GLASS_3);
 
     private final Sound[] sounds;
 

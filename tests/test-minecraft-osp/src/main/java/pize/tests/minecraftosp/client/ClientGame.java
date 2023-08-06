@@ -7,7 +7,7 @@ import pize.net.tcp.TcpClient;
 import pize.net.tcp.packet.IPacket;
 import pize.tests.minecraftosp.Minecraft;
 import pize.tests.minecraftosp.client.chat.Chat;
-import pize.tests.minecraftosp.client.net.ClientPacketHandler;
+import pize.tests.minecraftosp.client.net.ClientConnection;
 import pize.tests.minecraftosp.main.Tickable;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;
 import pize.tests.minecraftosp.client.control.BlockRayCast;
@@ -19,7 +19,7 @@ import pize.tests.minecraftosp.main.time.GameTime;
 import pize.tests.minecraftosp.main.net.packet.SBPacketLogin;
 import pize.tests.minecraftosp.main.net.packet.SBPacketMove;
 
-public class ClientGame implements Tickable {
+public class ClientGame implements Tickable{
     
     public static int tx;
     private static int txCounter;
@@ -39,7 +39,7 @@ public class ClientGame implements Tickable {
     public ClientGame(Minecraft session){
         this.session = session;
         
-        client = new TcpClient(new ClientPacketHandler(this));
+        client = new TcpClient(new ClientConnection(this));
         encryptKey = new KeyAES(256);
         
         blockRayCast = new BlockRayCast(session, 2000);
@@ -76,8 +76,8 @@ public class ClientGame implements Tickable {
         if(time.getTicks() % GameTime.TICKS_IN_SECOND == 0){
             tx = txCounter;
             txCounter = 0;
-            ClientPacketHandler.rx = ClientPacketHandler.rxCounter;
-            ClientPacketHandler.rxCounter = 0;
+            ClientConnection.rx = ClientConnection.rxCounter;
+            ClientConnection.rxCounter = 0;
         }
     }
     

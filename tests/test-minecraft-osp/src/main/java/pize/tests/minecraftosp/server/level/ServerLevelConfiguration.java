@@ -2,7 +2,7 @@ package pize.tests.minecraftosp.server.level;
 
 import pize.math.vecmath.vector.Vec2f;
 import pize.tests.minecraftosp.main.level.LevelConfiguration;
-import pize.tests.minecraftosp.server.chunk.gen.ChunkGenerator;
+import pize.tests.minecraftosp.server.gen.ChunkGenerator;
 
 public class ServerLevelConfiguration extends LevelConfiguration{
     

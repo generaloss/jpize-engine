@@ -17,6 +17,8 @@ import pize.io.mouse.Mouse;
 import pize.io.window.Window;
 import pize.math.vecmath.vector.Vec2f;
 
+import java.util.function.BooleanSupplier;
+
 public class Pize{
 
     private static Context context;
@@ -140,7 +142,11 @@ public class Pize{
     public static void execSync(Runnable runnable){
         context.execSync(runnable);
     }
-    
+
+    public static void execIf(Runnable runnable, BooleanSupplier condition){
+        context.execIf(runnable, condition);
+    }
+
     
     public static String getClipboardString(){
         return window().getClipboardString();

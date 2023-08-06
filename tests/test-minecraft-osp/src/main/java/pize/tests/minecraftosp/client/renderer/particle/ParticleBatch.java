@@ -10,8 +10,8 @@ import pize.graphics.texture.Texture;
 import pize.graphics.util.Shader;
 import pize.graphics.util.batch.Batch;
 import pize.graphics.util.color.Color;
-import pize.graphics.vertex.Mesh;
-import pize.graphics.vertex.VertexAttr;
+import pize.graphics.mesh.Mesh;
+import pize.graphics.mesh.VertexAttr;
 import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.vector.Vec3f;
 

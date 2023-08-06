@@ -48,45 +48,52 @@ public class Vec2f{
     /**             POINT             */
     
     public float dst(int x, int y){
-        double dx = this.x - x;
-        double dy = this.y - y;
+        final double dx = this.x - x;
+        final double dy = this.y - y;
         
         return Mathc.sqrt(dx * dx + dy * dy);
     }
     
     public float dst(double x, double y){
-        double dx = this.x - x;
-        double dy = this.y - y;
+        final double dx = this.x - x;
+        final double dy = this.y - y;
         
         return Mathc.sqrt(dx * dx + dy * dy);
     }
     
     public float dst(float x, float y){
-        double dx = this.x - x;
-        double dy = this.y - y;
+        final double dx = this.x - x;
+        final double dy = this.y - y;
         
         return Mathc.sqrt(dx * dx + dy * dy);
     }
     
     
     public float dst(Vec2i vector){
-        double dx = x - vector.x;
-        double dy = y - vector.y;
+        final double dx = x - vector.x;
+        final double dy = y - vector.y;
         
         return Mathc.sqrt(dx * dx + dy * dy);
     }
     
     public float dst(Vec2d vector){
-        double dx = x - vector.x;
-        double dy = y - vector.y;
+        final double dx = x - vector.x;
+        final double dy = y - vector.y;
         
         return Mathc.sqrt(dx * dx + dy * dy);
     }
     
     public float dst(Vec2f vector){
-        double dx = x - vector.x;
-        double dy = y - vector.y;
+        final double dx = x - vector.x;
+        final double dy = y - vector.y;
         
+        return Mathc.sqrt(dx * dx + dy * dy);
+    }
+
+
+    public static float dst(float x1, float y1, float x2, float y2){
+        final double dx = x1 - x2;
+        final double dy = y1 - y2;
         return Mathc.sqrt(dx * dx + dy * dy);
     }
     
@@ -512,7 +519,7 @@ public class Vec2f{
     
     
     public Vec2f mul(Matrix3f matrix){
-        set(x * matrix.val[m00] + y * matrix.val[m01], x * matrix.val[m10] + y * matrix.val[m11]);
+        set(x * matrix.val[m00] + y * matrix.val[m10], x * matrix.val[m01] + y * matrix.val[m11]);
         
         return this;
     }

@@ -1,25 +1,34 @@
 package pize.tests.minecraftosp.main.chunk;
 
+import pize.tests.minecraftosp.main.chunk.storage.SectionPos;
+
 import static pize.tests.minecraftosp.main.chunk.ChunkUtils.VOLUME;
 import static pize.tests.minecraftosp.main.chunk.ChunkUtils.getIndex;
 
 public class LevelChunkSection{
-    
+
+    public final SectionPos position;
     public final short[] blocks;
     public final byte[] light;
     public int blocksNum;
     
-    public LevelChunkSection(short[] blocks, byte[] light){
+    public LevelChunkSection(SectionPos position, short[] blocks, byte[] light){
+        this.position = position;
         this.blocks = blocks;
         this.light = light;
     }
     
-    public LevelChunkSection(){
+    public LevelChunkSection(SectionPos position){
         this(
+            position,
             new short[VOLUME],
             new byte[VOLUME]
         );
-        // Arrays.fill(light, (byte) 15);
+    }
+
+
+    public SectionPos getPosition(){
+        return position;
     }
     
     

@@ -13,7 +13,7 @@ import pize.tests.minecraftosp.main.chunk.ChunkUtils;
 
 public class OakLeaves extends BlockProperties {
 
-    public static final ImmutableColor COLOR = new ImmutableColor(0.25, 0.6, 0.05, 1);
+    public static final ImmutableColor COLOR = new ImmutableColor(0.25, 0.6, 0.15, 1);
 
     public OakLeaves(int id){
         super(id);

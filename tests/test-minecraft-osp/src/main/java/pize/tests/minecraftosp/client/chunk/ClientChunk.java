@@ -9,16 +9,16 @@ import pize.tests.minecraftosp.main.block.BlockData;
 import pize.tests.minecraftosp.main.chunk.ChunkUtils;
 import pize.tests.minecraftosp.main.chunk.LevelChunk;
 import pize.tests.minecraftosp.main.chunk.storage.ChunkPos;
+import pize.tests.minecraftosp.main.chunk.storage.Heightmap;
 import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
 import pize.tests.minecraftosp.main.level.ChunkManagerUtils;
-
-import static pize.tests.minecraftosp.main.chunk.ChunkUtils.isOutOfBounds;
 
 public class ClientChunk extends LevelChunk {
 
     private final ChunkMeshStack meshStack;
     private final Matrix4f translationMatrix;
-    
+    private int maxY;
+
     public ClientChunk(ClientLevel level, ChunkPos position){
         super(level, position);
         meshStack = new ChunkMeshStack();
@@ -44,13 +44,16 @@ public class ClientChunk extends LevelChunk {
     }
     
     
-    public boolean setBlock(int lx, int y, int lz, short blockState){
-        if(!super.setBlock(lx, y, lz, blockState) || ChunkUtils.isOutOfBounds(lx, lz))
+    public boolean setBlock(int lx, int y, int lz, short blockData){
+        if(!super.setBlock(lx, y, lz, blockData) || ChunkUtils.isOutOfBounds(lx, lz))
             return false;
-        
-        getHeightMap(HeightmapType.HIGHEST).update(lx, y, lz, BlockData.getID(blockState) != Blocks.AIR.getID());
+
+        final Heightmap heightmapHighest = getHeightMap(HeightmapType.HIGHEST);
+        heightmapHighest.update(lx, y, lz, BlockData.getID(blockData) != Blocks.AIR.getID());
         rebuild(true);
         ChunkManagerUtils.rebuildNeighborChunks(this, lx, lz);
+
+        updateMaxY();
         
         return true;
     }
@@ -71,6 +74,18 @@ public class ClientChunk extends LevelChunk {
     
     public ClientChunk getNeighbor(int chunkX, int chunkZ){
         return getLevel().getChunkManager().getChunk(position.x + chunkX, position.z + chunkZ);
+    }
+
+
+    public int getMaxY(){
+        return maxY;
+    }
+
+    public void updateMaxY(){
+        maxY = 0;
+        final Heightmap heightmapHighest = getHeightMap(HeightmapType.HIGHEST);
+        for(short height: heightmapHighest.getValues())
+            maxY = Math.max(maxY, height);
     }
     
 }

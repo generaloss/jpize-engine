@@ -2,8 +2,8 @@ package pize.math.vecmath.matrix;
 
 public interface Matrix3{
 
-    byte m00 = 0, m10 = 1, m20 = 2;
-    byte m01 = 3, m11 = 4, m21 = 5;
-    byte m02 = 6, m12 = 7, m22 = 8;
+    int m00 = 0, m10 = 3, m20 = 6;
+    int m01 = 1, m11 = 4, m21 = 7;
+    int m02 = 2, m12 = 5, m22 = 8;
 
 }

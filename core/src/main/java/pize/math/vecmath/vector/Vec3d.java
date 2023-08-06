@@ -733,9 +733,9 @@ public class Vec3d{
     
     public Vec3d mul(Matrix4f matrix){
         set(
-            x * matrix.val[m00] + y * matrix.val[m01] + z * matrix.val[m02],
-            x * matrix.val[m10] + y * matrix.val[m11] + z * matrix.val[m12],
-            x * matrix.val[m10] + y * matrix.val[m11] + z * matrix.val[m12]
+            x * matrix.val[m00] + y * matrix.val[m10] + z * matrix.val[m20],
+            x * matrix.val[m01] + y * matrix.val[m11] + z * matrix.val[m21],
+            x * matrix.val[m01] + y * matrix.val[m11] + z * matrix.val[m21]
         );
         return this;
     }

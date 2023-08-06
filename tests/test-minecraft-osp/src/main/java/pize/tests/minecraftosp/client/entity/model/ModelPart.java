@@ -1,7 +1,7 @@
 package pize.tests.minecraftosp.client.entity.model;
 
 import pize.graphics.util.Shader;
-import pize.graphics.vertex.Mesh;
+import pize.graphics.mesh.Mesh;
 import pize.math.util.EulerAngles;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;

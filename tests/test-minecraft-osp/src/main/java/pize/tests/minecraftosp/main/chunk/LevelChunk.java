@@ -2,11 +2,12 @@ package pize.tests.minecraftosp.main.chunk;
 
 import pize.tests.minecraftosp.client.block.BlockProperties;
 import pize.tests.minecraftosp.client.block.Blocks;
+import pize.tests.minecraftosp.main.block.BlockData;
 import pize.tests.minecraftosp.main.chunk.storage.ChunkPos;
 import pize.tests.minecraftosp.main.chunk.storage.Heightmap;
 import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
+import pize.tests.minecraftosp.main.chunk.storage.SectionPos;
 import pize.tests.minecraftosp.main.level.Level;
-import pize.tests.minecraftosp.main.block.BlockData;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -53,13 +54,13 @@ public class LevelChunk{
         return section.getBlock(lx, getLocalCoord(y), lz);
     }
     
-    public boolean setBlock(int lx, int y, int lz, short blockState){
+    public boolean setBlock(int lx, int y, int lz, short blockData){
         if(isOutOfBounds(lx, y, lz))
             return false;
         
         // Проверяем является ли устанавливаемый блок воздухом
         final int airID = Blocks.AIR.getID();
-        final int blockID = BlockData.getID(blockState);
+        final int blockID = BlockData.getID(blockData);
         final boolean isBlockAir = (blockID == airID);
         
         // Находим по Y нужную секцию
@@ -97,7 +98,7 @@ public class LevelChunk{
             section.blocksNum++; // Если воздух был заменен блоком - увеличиваем на 1
         
         // УСТАНАВЛИВАЕМ БЛОК
-        section.setBlock(lx, ly, lz, blockState);
+        section.setBlock(lx, ly, lz, blockData);
         return true;
     }
     
@@ -108,6 +109,10 @@ public class LevelChunk{
     
     public LevelChunkSection getSection(int index){
         return sections[index];
+    }
+
+    public LevelChunkSection getBlockSection(int y){
+        return getSection(ChunkUtils.getSectionIndex(y));
     }
     
     public int getHighestSectionIndex(){
@@ -130,7 +135,7 @@ public class LevelChunk{
     
     protected LevelChunkSection createSection(int index){
         highestSectionIndex = Math.max(highestSectionIndex, index);
-        return sections[index] = new LevelChunkSection();
+        return sections[index] = new LevelChunkSection(new SectionPos(position.x, index, position.z));
     }
     
     public void setSections(LevelChunkSection[] sections, int highestSectionIndex){
@@ -187,8 +192,8 @@ public class LevelChunk{
     }
     
     public void setLight(int lx, int y, int lz, int level){
-        // if(isOutOfBoundsE(lx, y, lz))
-        //     return;
+        if(isOutOfBounds(lx, y, lz))
+            return;
         
         // Находим по Y нужную секцию
         final int sectionIndex = getSectionIndex(y);
@@ -197,6 +202,9 @@ public class LevelChunk{
             section = createSection(sectionIndex);
         
         section.setLight(lx, getLocalCoord(y), lz, level);
+
+        // if(getLevel() instanceof ServerLevel serverLevel)
+        //     serverLevel.getServer().getPlayerList().broadcastPacket(new CBPacketLightUpdate(section));
     }
     
     

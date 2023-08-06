@@ -1,7 +1,7 @@
 package pize.tests.minecraftosp.server;
 
 import pize.net.tcp.TcpServer;
-import pize.tests.minecraftosp.server.chunk.gen.DefaultGenerator;
+import pize.tests.minecraftosp.server.gen.DefaultGenerator;
 import pize.tests.minecraftosp.server.command.CommandDispatcher;
 import pize.tests.minecraftosp.server.level.LevelManager;
 import pize.tests.minecraftosp.server.level.ServerLevel;
@@ -47,9 +47,8 @@ public abstract class Server implements Tickable{
 
     public void stop(){
         final Collection<ServerPlayer> players = getPlayerList().getPlayers();
-        for(ServerPlayer player: players){
+        for(ServerPlayer player: players)
             player.disconnect();
-        }
     }
 
     

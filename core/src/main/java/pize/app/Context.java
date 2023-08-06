@@ -1,25 +1,26 @@
 package pize.app;
 
 import pize.audio.Audio;
-import pize.audio.util.TaskExecutor;
+import pize.audio.util.ContextTaskExecutor;
 import pize.graphics.gl.Gl;
 import pize.graphics.texture.CubeMap;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureArray;
 import pize.graphics.util.*;
-import pize.graphics.vertex.ElementBuffer;
-import pize.graphics.vertex.VertexArray;
-import pize.graphics.vertex.VertexBuffer;
+import pize.graphics.mesh.ElementBuffer;
+import pize.graphics.mesh.VertexArray;
+import pize.graphics.mesh.VertexBuffer;
 import pize.io.keyboard.Keyboard;
 import pize.io.mouse.Mouse;
 import pize.io.window.Window;
 import pize.util.Utils;
 import pize.util.time.DeltaTimeCounter;
-import pize.util.time.PerSecCounter;
+import pize.util.time.FpsCounter;
 import pize.util.time.TickGenerator;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.BooleanSupplier;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
@@ -31,7 +32,7 @@ public class Context{
     private final Keyboard keyboard;
     private final Mouse mouse;
 
-    private final PerSecCounter fpsCounter;
+    private final FpsCounter fpsCounter;
     private final DeltaTimeCounter renderDeltaTime, fixedUpdateDeltaTime;
     
     private final ExecutorService fixedUpdateExecutor;
@@ -40,7 +41,7 @@ public class Context{
 
     private Screen screen;
     private boolean exitRequest;
-    private final TaskExecutor syncTaskExecutor;
+    private final ContextTaskExecutor syncTaskExecutor;
 
     public Context(Window window, Keyboard keyboard, Mouse mouse){
         this.audio = new Audio();
@@ -48,7 +49,7 @@ public class Context{
         this.keyboard = keyboard;
         this.mouse = mouse;
 
-        this.fpsCounter = new PerSecCounter();
+        this.fpsCounter = new FpsCounter();
         this.fpsCounter.count();
         this.renderDeltaTime = new DeltaTimeCounter();
         this.renderDeltaTime.update();
@@ -56,7 +57,7 @@ public class Context{
         this.fixedUpdateExecutor = Executors.newFixedThreadPool(3);
         this.fixedUpdateDeltaTime = new DeltaTimeCounter();
         
-        this.syncTaskExecutor = new TaskExecutor();
+        this.syncTaskExecutor = new ContextTaskExecutor();
     }
 
 
@@ -174,7 +175,11 @@ public class Context{
     
     
     public void execSync(Runnable runnable){
-        syncTaskExecutor.newTask(runnable);
+        syncTaskExecutor.exec(runnable);
+    }
+
+    public void execIf(Runnable runnable, BooleanSupplier condition){
+        syncTaskExecutor.execIf(runnable, condition);
     }
     
 

@@ -10,9 +10,11 @@ public class VanillaMusic{
         System.out.println("[Resources]: Load Music");
 
         // Menu //
-        resources.registerSound(SOUND_MENU_DIR, "mutation");
+        resources.registerMusic(SOUND_MENU_DIR, "mutation");
         // Game //
-        resources.registerSound(SOUND_GAME_DIR, "wet_hands");
+        resources.registerMusic(SOUND_GAME_DIR, "wet_hands");
+        resources.registerMusic(SOUND_GAME_DIR, "clark");
+        resources.registerMusic(SOUND_GAME_DIR, "haggstorm");
     }
 
 }

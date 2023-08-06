@@ -18,9 +18,9 @@ public class ServerChunk extends LevelChunk{
     }
     
     
-    public boolean setBlock(int lx, int y, int lz, short state){
-        final BlockProperties blockProperties = BlockData.getProps(state);
-        final boolean result = super.setBlock(lx, y, lz, state);
+    public boolean setBlock(int lx, int y, int lz, short blockData){
+        final BlockProperties blockProperties = BlockData.getProps(blockData);
+        final boolean result = super.setBlock(lx, y, lz, blockData);
         if(result){
             getHeightMap(HeightmapType.HIGHEST).update(lx, y, lz, !blockProperties.isEmpty());
             return true;
@@ -29,8 +29,8 @@ public class ServerChunk extends LevelChunk{
         return false;
     }
     
-    public boolean setBlockFast(int lx, int y, int lz, short state){
-        return super.setBlock(lx, y, lz, state);
+    public boolean setBlockFast(int lx, int y, int lz, short data){
+        return super.setBlock(lx, y, lz, data);
     }
     
     

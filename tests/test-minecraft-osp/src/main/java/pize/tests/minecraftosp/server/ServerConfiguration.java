@@ -15,7 +15,7 @@ public class ServerConfiguration{
         address = "0.0.0.0";
         version = new Version();
         defaultLevelName = "world1";
-        maxRenderDistance = 12;
+        maxRenderDistance = 6;
     }
     
     public String getAddress(){

@@ -28,7 +28,7 @@ public class Rotation3DController{
                 
                 rotation.yaw += dAngX * 0.02 * mouseSensitivity;
                 rotation.pitch += dAngY * 0.02 * mouseSensitivity;
-                rotation.limitPitch90();
+                rotation.clampPitch90();
             
                 dAngX *= 0.1;
                 dAngY *= 0.1;

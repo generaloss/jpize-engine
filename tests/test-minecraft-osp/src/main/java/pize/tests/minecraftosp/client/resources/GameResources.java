@@ -9,7 +9,6 @@ import pize.graphics.texture.PixmapIO;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.atlas.TextureAtlas;
-import pize.tests.minecraftosp.main.Identifier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,14 +61,13 @@ public class GameResources implements Disposable{
 
 
     public void registerSound(String soundID, Resource resource){
-        System.out.println("Load sound " + soundID);
         final AudioBuffer buffer = new AudioBuffer();
         AudioLoader.load(buffer, resource);
         audioList.put(soundID, buffer);
     }
 
     public void registerSound(String soundID, String path, String name){
-        registerSound(Identifier.namespaceID(soundID), new Resource(path + name + ".ogg"));
+        registerSound(soundID, new Resource(path + name + ".ogg"));
     }
 
     public void registerSound(String path, String name){
@@ -84,8 +82,12 @@ public class GameResources implements Disposable{
         }
     }
 
-    public AudioBuffer getSound(String soundID){
+    public AudioBuffer getAudio(String soundID){
         return audioList.get(soundID);
+    }
+
+    public void registerMusic(String path, String name){
+        registerSound(path, name);
     }
 
 

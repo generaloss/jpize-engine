@@ -3,7 +3,7 @@ package pize.graphics.util;
 import pize.graphics.gl.BufferUsage;
 import pize.graphics.texture.Region;
 import pize.graphics.util.color.IColor;
-import pize.graphics.vertex.VertexBuffer;
+import pize.graphics.mesh.VertexBuffer;
 
 import java.util.ArrayList;
 import java.util.List;

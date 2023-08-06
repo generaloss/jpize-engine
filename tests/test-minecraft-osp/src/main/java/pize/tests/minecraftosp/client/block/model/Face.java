@@ -133,8 +133,8 @@ public class Face extends Quad{
     }
 
     private void putVertexPacked(final List<Integer> intList, float x, float y, float z, float u, float v, float light){
-        final int mulU = 16;
-        final int mulV = 16;
+        final int mulU = 512 / 16;
+        final int mulV = 512 / 16;
 
         // Packed position
         final int positionPacked = (

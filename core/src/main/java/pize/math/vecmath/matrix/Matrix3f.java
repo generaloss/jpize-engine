@@ -37,15 +37,15 @@ public class Matrix3f implements Matrix3{
 
     public Matrix3f identity(){
         val[m00] = 1;
-        val[m10] = 0;
-        val[m20] = 0;
-
         val[m01] = 0;
-        val[m11] = 1;
-        val[m21] = 0;
-
         val[m02] = 0;
+
+        val[m10] = 0;
+        val[m11] = 1;
         val[m12] = 0;
+
+        val[m20] = 0;
+        val[m21] = 0;
         val[m22] = 1;
 
         return this;
@@ -53,15 +53,15 @@ public class Matrix3f implements Matrix3{
 
     public Matrix3f set(float[] values){
         val[m00] = values[m00];
-        val[m10] = values[m10];
-        val[m20] = values[m20];
-
         val[m01] = values[m01];
-        val[m11] = values[m11];
-        val[m21] = values[m21];
-
         val[m02] = values[m02];
+
+        val[m10] = values[m10];
+        val[m11] = values[m11];
         val[m12] = values[m12];
+
+        val[m20] = values[m20];
+        val[m21] = values[m21];
         val[m22] = values[m22];
 
         return this;
@@ -79,9 +79,9 @@ public class Matrix3f implements Matrix3{
     }
 
     public Matrix3f translate(double x, double y){
-        val[m02] += val[m00] * x + val[m01] * y;
-        val[m12] += val[m10] * x + val[m11] * y;
-        val[m22] += val[m20] * x + val[m21] * y;
+        val[m20] += val[m00] * x + val[m10] * y;
+        val[m21] += val[m01] * x + val[m11] * y;
+        val[m22] += val[m02] * x + val[m12] * y;
 
         return this;
     }
@@ -107,8 +107,8 @@ public class Matrix3f implements Matrix3{
     public Matrix3f toTranslated(float x, float y){
         identity();
 
-        val[m02] = x;
-        val[m12] = y;
+        val[m20] = x;
+        val[m21] = y;
 
         return this;
     }
@@ -126,8 +126,8 @@ public class Matrix3f implements Matrix3{
         float sin = Mathc.sin(angle * Maths.ToRad);
 
         val[m00] = cos;
-        val[m01] = -sin;
-        val[m10] = sin;
+        val[m10] = -sin;
+        val[m01] = sin;
         val[m11] = cos;
 
         return this;
@@ -136,8 +136,8 @@ public class Matrix3f implements Matrix3{
     public Matrix3f toSheared(float angleX, float angleY){
         identity();
 
-        val[m01] = Mathc.tan(angleX * Maths.ToRad);
-        val[m10] = Mathc.tan(angleY * Maths.ToRad);
+        val[m10] = Mathc.tan(angleX * Maths.ToRad);
+        val[m01] = Mathc.tan(angleY * Maths.ToRad);
 
         return this;
     }
@@ -171,17 +171,17 @@ public class Matrix3f implements Matrix3{
 
     public static float[] mul(float[] a, float[] b){
         return new float[]{
-            a[m00] * b[m00] + a[m01] * b[m10] + a[m02] * b[m20],
-            a[m10] * b[m00] + a[m11] * b[m10] + a[m12] * b[m20],
-            a[m20] * b[m00] + a[m21] * b[m10] + a[m22] * b[m20],
+            a[m00] * b[m00] + a[m10] * b[m01] + a[m20] * b[m02],
+            a[m01] * b[m00] + a[m11] * b[m01] + a[m21] * b[m02],
+            a[m02] * b[m00] + a[m12] * b[m01] + a[m22] * b[m02],
 
-            a[m00] * b[m01] + a[m01] * b[m11] + a[m02] * b[m21],
-            a[m10] * b[m01] + a[m11] * b[m11] + a[m12] * b[m21],
-            a[m20] * b[m01] + a[m21] * b[m11] + a[m22] * b[m21],
+            a[m00] * b[m10] + a[m10] * b[m11] + a[m20] * b[m12],
+            a[m01] * b[m10] + a[m11] * b[m11] + a[m21] * b[m12],
+            a[m02] * b[m10] + a[m12] * b[m11] + a[m22] * b[m12],
 
-            a[m00] * b[m02] + a[m01] * b[m12] + a[m02] * b[m22],
-            a[m10] * b[m02] + a[m11] * b[m12] + a[m12] * b[m22],
-            a[m20] * b[m02] + a[m21] * b[m12] + a[m22] * b[m22],
+            a[m00] * b[m20] + a[m10] * b[m21] + a[m20] * b[m22],
+            a[m01] * b[m20] + a[m11] * b[m21] + a[m21] * b[m22],
+            a[m02] * b[m20] + a[m12] * b[m21] + a[m22] * b[m22],
         };
     }
 

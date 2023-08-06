@@ -1,14 +1,19 @@
 package pize.audio.sound;
 
+import pize.Pize;
 import pize.app.Disposable;
 import pize.math.Mathc;
 import pize.math.vecmath.vector.Vec3f;
+import pize.util.time.Stopwatch;
 
 import static org.lwjgl.openal.AL11.*;
 
 public class AudioSource implements Disposable{
 
     protected final int id;
+    private AudioStopCallback callback;
+    private Stopwatch stopwatch;
+    private AudioBuffer buffer;
 
     public AudioSource(){
         id = alGenSources();
@@ -52,7 +57,12 @@ public class AudioSource implements Disposable{
     }
 
 
+    public AudioBuffer getBuffer(){
+        return buffer;
+    }
+
     public void setBuffer(AudioBuffer buffer){
+        this.buffer = buffer;
         alSourcei(id, AL_BUFFER, buffer.getId());
     }
 
@@ -141,14 +151,51 @@ public class AudioSource implements Disposable{
 
     public void play(){
         alSourcePlay(id);
+        playCallback();
     }
 
     public void pause(){
         alSourcePause(id);
+        pauseCallback();
     }
 
     public void stop(){
         alSourceStop(id);
+        stopCallback();
+    }
+
+
+    public void play(AudioStopCallback callback){
+        this.callback = callback;
+        alSourcePlay(id);
+
+        if(stopwatch == null)
+            stopwatch = new Stopwatch().start();
+        else
+            stopwatch.reset().start();
+
+        Pize.execIf(callback::onStop, () -> stopwatch.getSeconds() >= buffer.getDurationSeconds());
+    }
+
+    private void pauseCallback(){
+        if(callback == null)
+            return;
+
+        stopwatch.pause();
+    }
+
+    private void stopCallback(){
+        if(callback == null)
+            return;
+
+        stopwatch.stop();
+    }
+
+    private void playCallback(){
+        if(callback == null)
+            return;
+
+        stopwatch.resume();
     }
 
 

@@ -1,7 +1,5 @@
 package pize.tests.minecraftosp.main;
 
-import pize.tests.minecraftosp.SharedConstants;
-
 public class Version{
     
     private final String name;

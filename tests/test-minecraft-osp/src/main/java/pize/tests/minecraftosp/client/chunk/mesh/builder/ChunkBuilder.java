@@ -3,20 +3,22 @@ package pize.tests.minecraftosp.client.chunk.mesh.builder;
 import pize.tests.minecraftosp.client.block.BlockProperties;
 import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.client.block.model.BlockModel;
-import pize.tests.minecraftosp.client.level.ClientChunkManager;
-import pize.tests.minecraftosp.main.block.BlockData;
-import pize.tests.minecraftosp.main.chunk.ChunkUtils;
-import pize.tests.minecraftosp.main.chunk.LevelChunk;
-import pize.tests.minecraftosp.main.chunk.storage.Heightmap;
-import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
 import pize.tests.minecraftosp.client.chunk.ClientChunk;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshCullingOff;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshPackedCullingOn;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshStack;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshTranslucentCullingOn;
+import pize.tests.minecraftosp.client.level.ClientChunkManager;
+import pize.tests.minecraftosp.main.block.BlockData;
+import pize.tests.minecraftosp.main.chunk.LevelChunk;
+import pize.tests.minecraftosp.main.chunk.LevelChunkSection;
+import pize.tests.minecraftosp.main.chunk.storage.Heightmap;
+import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
 import pize.util.time.Stopwatch;
 
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static pize.tests.minecraftosp.main.chunk.ChunkUtils.*;
 
 public class ChunkBuilder{
 
@@ -41,7 +43,7 @@ public class ChunkBuilder{
 
     private ClientChunk[] neighborChunks;
 
-    private volatile AtomicInteger state = new AtomicInteger();
+    private final AtomicInteger state = new AtomicInteger();
 
 
     public int getState(){
@@ -75,13 +77,18 @@ public class ChunkBuilder{
 
         state.incrementAndGet();
 
+        final LevelChunkSection[] sections = chunk.getSections();
+
         if(!chunk.isEmpty())
-            for(int lx = 0; lx < ChunkUtils.SIZE; lx++){
+            for(int lx = 0; lx < SIZE; lx++){
                 state.incrementAndGet();
-                for(int lz = 0; lz < ChunkUtils.SIZE; lz++){
+                for(int lz = 0; lz < SIZE; lz++){
                     
                     final int height = heightmap.getHeight(lx, lz) + 1;
                     for(int y = 0; y < height; y++){
+                        final int sectionIndex = getSectionIndex(y);
+                        if(sections[sectionIndex] == null)
+                            y += SIZE;
 
                         final short blockData = chunk.getBlock(lx, y, lz);
                         final BlockProperties block = BlockData.getProps(blockData);
@@ -90,30 +97,8 @@ public class ChunkBuilder{
                             continue;
                         
                         final BlockModel model = block.getState(blockState).getModel();
-                        if(model == null)
-                            continue;
-
-                        model.build(this, block, lx, y, lz);
-                        
-                        // if(block.isSolid()){
-                        //     final BlockModelSolid solidModel = model.asSolid();
-                        //
-                        //     if(isGenSolidFace(lx, y, lz, -1,  0,  0, block)) solidModel.buildNxFaces(this, lx, y, lz);
-                        //     if(isGenSolidFace(lx, y, lz, +1,  0,  0, block)) solidModel.buildPxFaces(this, lx, y, lz);
-                        //     if(isGenSolidFace(lx, y, lz,  0, -1,  0, block)) solidModel.buildNyFaces(this, lx, y, lz);
-                        //     if(isGenSolidFace(lx, y, lz,  0, +1,  0, block)) solidModel.buildPyFaces(this, lx, y, lz);
-                        //     if(isGenSolidFace(lx, y, lz,  0,  0, -1, block)) solidModel.buildNzFaces(this, lx, y, lz);
-                        //     if(isGenSolidFace(lx, y, lz,  0,  0, +1, block)) solidModel.buildPzFaces(this, lx, y, lz);
-                        // }else{
-                        //     final float[] add = new float[]{lx, y, lz, 0, 0, 0, 0, 0, 0};
-                        //     final float light = chunk.getLight(lx, y, lz) / 15F;
-                        //     final float[] mul = new float[]{1, 1, 1, light, light, light, 1, 1, 1};
-                        //     final BlockModelCustom customModel = model.asCustom();
-                        //     for(int i = 0; i < customModel.getVertices().size(); i++){
-                        //         float vertex = customModel.getVertices().get(i) * mul[i % 9] + add[i % 9];
-                        //         customMesh.put(vertex);
-                        //     }
-                        // }
+                        if(model != null)
+                            model.build(this, block, lx, y, lz);
                     }
                 }
             }
@@ -135,7 +120,7 @@ public class ChunkBuilder{
     }
     
     public boolean isGenSolidFace(int lx, int y, int lz, int normalX, int normalY, int normalZ, BlockProperties block){
-        if(ChunkUtils.isOutOfBounds(y))
+        if(isOutOfBounds(y))
             return true;
 
         final short neighborData = getBlock(lx + normalX, y + normalY, lz + normalZ);
@@ -212,20 +197,20 @@ public class ChunkBuilder{
         int signX = 0;
         int signZ = 0;
         
-        if(lx > ChunkUtils.SIZE_IDX){
+        if(lx > SIZE_IDX){
             signX = 1;
-            lx -= ChunkUtils.SIZE;
+            lx -= SIZE;
         }else if(lx < 0){
             signX = -1;
-            lx += ChunkUtils.SIZE;
+            lx += SIZE;
         }
         
-        if(lz > ChunkUtils.SIZE_IDX){
+        if(lz > SIZE_IDX){
             signZ = 1;
-            lz -= ChunkUtils.SIZE;
+            lz -= SIZE;
         }else if(lz < 0){
             signZ = -1;
-            lz += ChunkUtils.SIZE;
+            lz += SIZE;
         }
         
         final LevelChunk chunk = neighborChunks[(signZ + 1) * 3 + (signX + 1)];
@@ -241,20 +226,20 @@ public class ChunkBuilder{
         int signX = 0;
         int signZ = 0;
         
-        if(lx > ChunkUtils.SIZE_IDX){
+        if(lx > SIZE_IDX){
             signX = 1;
-            lx -= ChunkUtils.SIZE;
+            lx -= SIZE;
         }else if(lx < 0){
             signX = -1;
-            lx += ChunkUtils.SIZE;
+            lx += SIZE;
         }
         
-        if(lz > ChunkUtils.SIZE_IDX){
+        if(lz > SIZE_IDX){
             signZ = 1;
-            lz -= ChunkUtils.SIZE;
+            lz -= SIZE;
         }else if(lz < 0){
             signZ = -1;
-            lz += ChunkUtils.SIZE;
+            lz += SIZE;
         }
         
         final ClientChunk chunk = neighborChunks[(signZ + 1) * 3 + (signX + 1)];

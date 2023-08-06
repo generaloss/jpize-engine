@@ -11,8 +11,8 @@ uniform mat4 u_projection;
 uniform mat4 u_view;
 uniform mat4 u_model;
 
-const float tileWidth = 1.0 / 16;
-const float tileHeight = 1.0 / 16;
+const float tileWidth = 1.0 / (512 / 16);
+const float tileHeight = 1.0 / (512 / 16);
 
 void main(){
     // Unpack
