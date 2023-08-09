@@ -17,7 +17,7 @@ public class ChunkUtils{
     public static final int VOLUME = AREA * SIZE;
     
     // Light
-    public static final int MAX_LIGHT_LEVEL = 15;
+    public static final int MAX_LIGHT_LEVEL = 32;
     
     
     public static int getIndex(int x, int y, int z){

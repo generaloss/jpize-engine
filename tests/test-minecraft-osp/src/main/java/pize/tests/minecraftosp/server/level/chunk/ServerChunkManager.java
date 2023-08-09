@@ -29,7 +29,7 @@ public class ServerChunkManager extends ChunkManager{
     private final Map<ChunkPos, ServerPlayer> requestedChunks;
     private final CopyOnWriteArrayList<ChunkPos> newFrontiers, frontiers;
     private final Map<ChunkPos, ServerChunk> allChunks;
-    private final Map<ChunkPos, ServerChunk> generateChunks;
+    private final Map<ChunkPos, ServerChunk> generatingChunks;
     private final Queue<ChunkPos> loadQueue;
 
     private final BlockPool blockPool;
@@ -46,7 +46,7 @@ public class ServerChunkManager extends ChunkManager{
         newFrontiers = new CopyOnWriteArrayList<>();
         loadQueue = new LinkedBlockingQueue<>();
         allChunks = new ConcurrentHashMap<>();
-        generateChunks = new ConcurrentHashMap<>();
+        generatingChunks = new ConcurrentHashMap<>();
 
         blockPool = new BlockPool(this);
         
@@ -85,7 +85,7 @@ public class ServerChunkManager extends ChunkManager{
 
     public void addToAllChunks(ServerChunk chunk){
         allChunks.put(chunk.getPosition(), chunk);
-        generateChunks.remove(chunk.getPosition());
+        generatingChunks.remove(chunk.getPosition());
         sendChunkIsRequired(chunk);
     }
 
@@ -173,7 +173,7 @@ public class ServerChunkManager extends ChunkManager{
             generateChunk(chunkPos); // Start generate
         }
         // [Debug]: System.out.println("generateChunk.size() => " + generateChunks.size() + "; allChunks.size() => " + allChunks.size() + ";");
-        for(ServerChunk chunk: generateChunks.values()){
+        for(ServerChunk chunk: generatingChunks.values()){
             if(!checkChunkDist(chunk))
                 continue;
 
@@ -214,7 +214,7 @@ public class ServerChunkManager extends ChunkManager{
     }
 
     private boolean isChunkExists(ChunkPos chunkPosition){
-        return allChunks.containsKey(chunkPosition) || generateChunks.containsKey(chunkPosition);
+        return allChunks.containsKey(chunkPosition) || generatingChunks.containsKey(chunkPosition);
     }
     
     public void unloadChunks(){
@@ -222,9 +222,9 @@ public class ServerChunkManager extends ChunkManager{
             if(isOffTheGrid(chunk.getPosition()))
                 unloadChunk(chunk);
 
-        for(ServerChunk chunk: generateChunks.values())
+        for(ServerChunk chunk: generatingChunks.values())
             if(isOffTheGrid(chunk.getPosition(), Mathc.sqrt(1F * 2)))
-                generateChunks.remove(chunk.getPosition());
+                generatingChunks.remove(chunk.getPosition());
     }
     
     public ServerChunk loadChunk(ChunkPos chunkPos){
@@ -237,7 +237,7 @@ public class ServerChunkManager extends ChunkManager{
             return;
 
         // If Generated
-        if(generateChunks.containsKey(chunkPos))
+        if(generatingChunks.containsKey(chunkPos))
             return;
         if(allChunks.containsKey(chunkPos))
             return;
@@ -245,7 +245,7 @@ public class ServerChunkManager extends ChunkManager{
         // Generate Base
         final ServerChunk chunk = new ServerChunk(level, chunkPos);
         generator.generate(chunk);
-        generateChunks.put(chunkPos, chunk);
+        generatingChunks.put(chunkPos, chunk);
     }
 
 
@@ -259,7 +259,7 @@ public class ServerChunkManager extends ChunkManager{
     }
 
     public ServerChunk getProcessChunk(ChunkPos chunkPos){
-        return generateChunks.get(chunkPos);
+        return generatingChunks.get(chunkPos);
     }
 
     

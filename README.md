@@ -26,6 +26,21 @@ Modules:
 * Files (Resources: Internal / External)
 * Utils (FastReader, FpsCounter, Sync, Stopwatch, TickGenerator, PizeInputStream, PizeOutputStream ...etc)
 
+#### 0. Main class
+``` java
+public class Main extends AppAdapter{
+
+    public static void main(String[] args){
+        Pize.create("Window Title", 1280, 720);
+        Pize.window().setIcon("icon.png");
+        Pize.run(new Main());
+    }
+    
+    public Main(){ } // Init on 
+    
+    public void init(){ } // Init on run
+```
+
 #### 1. 2D Graphics:
 ``` java
 TextureBatch batch = new TextureBatch(); // canvas for textures
