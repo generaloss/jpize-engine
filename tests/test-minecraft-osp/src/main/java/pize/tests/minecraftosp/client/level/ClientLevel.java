@@ -7,6 +7,8 @@ import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
 import pize.tests.minecraftosp.main.level.Level;
 import pize.tests.minecraftosp.client.chunk.ClientChunk;
 
+import static pize.tests.minecraftosp.main.chunk.ChunkUtils.MAX_LIGHT_LEVEL;
+
 public class ClientLevel extends Level {
     
     private final Minecraft session;
@@ -60,7 +62,7 @@ public class ClientLevel extends Level {
         if(targetChunk != null)
             return targetChunk.getLight(ChunkUtils.getLocalCoord(x), y, ChunkUtils.getLocalCoord(z));
         
-        return 15;
+        return MAX_LIGHT_LEVEL;
     }
     
     @Override

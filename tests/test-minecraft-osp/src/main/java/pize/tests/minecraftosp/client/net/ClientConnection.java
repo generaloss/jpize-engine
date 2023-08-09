@@ -79,7 +79,7 @@ public class ClientConnection implements TcpListener, PacketHandler{
 
                 Pize.execSync(() ->
                     game.getSession().getSoundPlayer().play(
-                        packet.soundID,
+                        packet.sound,
                         packet.volume, packet.pitch,
                         packet.x - camPosition.x,
                         packet.y - camPosition.y,

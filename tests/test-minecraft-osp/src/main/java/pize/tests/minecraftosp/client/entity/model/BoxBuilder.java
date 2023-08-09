@@ -1,12 +1,12 @@
 package pize.tests.minecraftosp.client.entity.model;
 
 import pize.graphics.gl.Type;
-import pize.graphics.mesh.Mesh;
+import pize.graphics.mesh.IndexedMesh;
 import pize.graphics.mesh.VertexAttr;
 
 public class BoxBuilder{
     
-    private final Mesh mesh;
+    private final IndexedMesh mesh;
     private float[] vertices;
     private int vertexPointer;
     private final float x1, y1, z1, x2, y2, z2;
@@ -19,8 +19,12 @@ public class BoxBuilder{
         this.y2 = y2;
         this.z2 = z2;
         
-        mesh = new Mesh(new VertexAttr(3, Type.FLOAT), new VertexAttr(4, Type.FLOAT), new VertexAttr(2, Type.FLOAT));
-        vertices = new float[4 * 6 * mesh.getVBO().getVertexSize()];
+        mesh = new IndexedMesh(
+                new VertexAttr(3, Type.FLOAT),
+                new VertexAttr(4, Type.FLOAT),
+                new VertexAttr(2, Type.FLOAT)
+        );
+        vertices = new float[4 * 6 * mesh.getBuffer().getVertexSize()];
     }
     
     public BoxBuilder nx(float r, float g, float b, float a, float u1, float v1, float u2, float v2){
@@ -89,8 +93,8 @@ public class BoxBuilder{
             x2, y2, z2,  x2, y1, z2,  x1, y1, z2,  repeat3, x1, y2, z2,  repeat0,  // +z
         };
         */
-        
-        int p = vertexPointer * mesh.getVBO().getVertexSize();
+
+        int p = vertexPointer * mesh.getBuffer().getVertexSize();
         
         vertices[p    ] = x;
         vertices[p + 1] = y;
@@ -107,9 +111,9 @@ public class BoxBuilder{
         vertexPointer++;
     }
     
-    public Mesh end(){
-        mesh.setVertices(vertices);
-        mesh.setIndices(new int[]{
+    public IndexedMesh end(){
+        mesh.getBuffer().setData(vertices);
+        mesh.getIndexBuffer().setData(new int[]{
             0 , 1 , 2 ,  2 , 3 , 0 , // -x
             4 , 5 , 6 ,  6 , 7 , 4 , // +x
             8 , 9 , 10,  10, 11, 8 , // -y

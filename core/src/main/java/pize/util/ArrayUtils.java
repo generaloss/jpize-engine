@@ -1,5 +1,7 @@
 package pize.util;
 
+import java.util.List;
+
 public class ArrayUtils{
 
     public static boolean contains(int[] arr, int e){
@@ -24,6 +26,14 @@ public class ArrayUtils{
             c = add(c, b[i]);
         
         return c;
+    }
+
+    public static float[] fromList(List<Float> list){
+        final float[] array = new float[list.size()];
+        for(int i = 0; i < array.length; i++)
+            array[i] = list.get(i);
+
+        return array;
     }
 
 }

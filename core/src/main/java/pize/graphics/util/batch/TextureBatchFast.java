@@ -3,16 +3,13 @@ package pize.graphics.util.batch;
 import pize.Pize;
 import pize.files.Resource;
 import pize.graphics.camera.Camera;
-import pize.graphics.gl.BufferUsage;
+import pize.graphics.gl.BufUsage;
 import pize.graphics.gl.Type;
+import pize.graphics.mesh.*;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
 import pize.graphics.util.Shader;
-import pize.graphics.mesh.ElementBuffer;
-import pize.graphics.mesh.VertexArray;
-import pize.graphics.mesh.VertexAttr;
-import pize.graphics.mesh.VertexBuffer;
 import pize.math.vecmath.matrix.Matrix3f;
 import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.vector.Vec2f;
@@ -22,14 +19,16 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL33.GL_MAX_TEXTURE_IMAGE_UNITS;
 import static org.lwjgl.opengl.GL33.glGetInteger;
+import static pize.graphics.mesh.QuadIndexBuffer.QUAD_INDICES;
+import static pize.graphics.mesh.QuadIndexBuffer.QUAD_VERTICES;
 
 public class TextureBatchFast extends Batch{
 
     public static int MAX_TEXTURE_SLOTS = glGetInteger(GL_MAX_TEXTURE_IMAGE_UNITS);
 
-    private final VertexBuffer vbo;
-    private final VertexArray vao;
-    private final ElementBuffer ebo;
+    private final GlVbo vbo;
+    private final GlVao vao;
+    private final QuadIndexBuffer ebo;
     private final Shader shader;
 
     private final Vec2f transformOrigin;
@@ -59,45 +58,27 @@ public class TextureBatchFast extends Batch{
             "TEX_SLOTS", Integer.toString(maxTextures)
         );
 
-        shader = new Shader(vs, fs);
+        this.shader = new Shader(vs, fs);
 
-        { // Create VAO, VBO, EBO
-            vao = new VertexArray();
-
-            vbo = new VertexBuffer();
-            vbo.enableAttributes(new VertexAttr(2, Type.FLOAT), new VertexAttr(2, Type.FLOAT), new VertexAttr(4, Type.FLOAT, true), new VertexAttr(1, Type.FLOAT));
-
-            ebo = new ElementBuffer();
-
-            int[] indices = new int[QUAD_INDICES * maxSize];
-            for(int i = 0; i < maxSize; i++){
-                int indexQuadOffset = QUAD_INDICES * i;
-                int vertexQuadOffset = QUAD_VERTICES * i;
-
-                indices[indexQuadOffset    ] = vertexQuadOffset;
-                indices[indexQuadOffset + 1] = vertexQuadOffset + 1;
-                indices[indexQuadOffset + 2] = vertexQuadOffset + 2;
-
-                indices[indexQuadOffset + 3] = vertexQuadOffset + 2;
-                indices[indexQuadOffset + 4] = vertexQuadOffset + 3;
-                indices[indexQuadOffset + 5] = vertexQuadOffset;
-            }
-            ebo.setData(indices, BufferUsage.STATIC_DRAW);
-        }
+        // Create VAO, VBO, EBO
+        this.vao = new GlVao();
+        this.vbo = new GlVbo();
+        this.vbo.enableAttributes(new VertexAttr(2, Type.FLOAT), new VertexAttr(2, Type.FLOAT), new VertexAttr(4, Type.FLOAT, true), new VertexAttr(1, Type.FLOAT));
+        this.ebo = new QuadIndexBuffer(maxSize);
 
         this.texSlots = new int[maxTextures];
         for(int i = 0; i < maxTextures; i++)
             this.texSlots[i] = i;
 
-        vertices = new float[QUAD_VERTICES * maxSize * vbo.getVertexSize()];
-        textures = new ArrayList<>();
+        this.vertices = new float[QUAD_VERTICES * maxSize * vbo.getVertexSize()];
+        this.textures = new ArrayList<>();
 
-        transformOrigin = new Vec2f(0.5);
-        transformMatrix = new Matrix3f();
-        rotationMatrix = new Matrix3f();
-        shearMatrix = new Matrix3f();
-        scaleMatrix = new Matrix3f();
-        flipMatrix = new Matrix3f();
+        this.transformOrigin = new Vec2f(0.5);
+        this.transformMatrix = new Matrix3f();
+        this.rotationMatrix = new Matrix3f();
+        this.shearMatrix = new Matrix3f();
+        this.scaleMatrix = new Matrix3f();
+        this.flipMatrix = new Matrix3f();
     }
 
 
@@ -170,7 +151,7 @@ public class TextureBatchFast extends Batch{
         for(int i = 0; i < textures.size(); i++)
             textures.get(i).bind(i + 1);
 
-        vbo.setData(vertices, BufferUsage.STREAM_DRAW);
+        vbo.setData(vertices, BufUsage.STREAM_DRAW);
         vao.drawElements(size * QUAD_INDICES);
 
         // Reset

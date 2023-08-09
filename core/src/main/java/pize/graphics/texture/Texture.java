@@ -59,7 +59,7 @@ public class Texture extends GlTexture implements Resizable{
         
         for(int i = 0; i < parameters.getMipmapLevels(); i++){
             Pixmap pixmap = mipmaps[i];
-            parameters.texImage2D(GL_TEXTURE_2D, pixmap.getBuffer(), pixmap.width, pixmap.height, i + 1);
+            parameters.texImage2D(GL_TEXTURE_2D, pixmap.getBuffer(), pixmap.getWidth(), pixmap.getHeight(), i + 1);
         }
     }
     
@@ -76,7 +76,7 @@ public class Texture extends GlTexture implements Resizable{
     protected void genMipMapManual(){
         Pixmap pixmap = this.pixmap.getMipmapped();
         for(int level = 1; level <= parameters.getMipmapLevels(); level++){
-            parameters.texImage2D(GL_TEXTURE_2D, pixmap.getBuffer(), pixmap.width, pixmap.height, level);
+            parameters.texImage2D(GL_TEXTURE_2D, pixmap.getBuffer(), pixmap.getWidth(), pixmap.getHeight(), level);
             if(level != parameters.getMipmapLevels())
                 pixmap = pixmap.getMipmapped();
         }

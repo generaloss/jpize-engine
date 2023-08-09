@@ -110,7 +110,7 @@ public class LevelLight{
 
 
     public synchronized void decrease(ServerChunk chunk, int lx, int y, int lz, int level){
-        if(chunk.getLight(lx, y, lz) >= level)
+        if(chunk.getLight(lx, y, lz) > level)
             return;
 
         chunk.setLight(lx, y, lz, 0);
@@ -176,15 +176,15 @@ public class LevelLight{
 
     public synchronized void updateSkyLight(ServerChunk chunk){
         final Heightmap heightmapHighest = chunk.getHeightMap(HeightmapType.HIGHEST);
-        // final Heightmap heightmapOpaque = chunk.getHeightMap(HeightmapType.OPAQUE);
+        final Heightmap heightmapOpaque = chunk.getHeightMap(HeightmapType.OPAQUE);
 
         for(int lx = 0; lx < SIZE; lx++){
             for(int lz = 0; lz < SIZE; lz++){
-                final int height = heightmapHighest.getHeight(lx, lz) + 1;
-                increase(chunk, lx, height, lz, 15);
+                final int height = heightmapOpaque.getHeight(lx, lz) + 1;
+                increase(chunk, lx, height, lz, MAX_LIGHT_LEVEL);
                 // chunk.setBlock(lx, height, lz, Blocks.GLASS.getDefaultData());
                 for(int y = HEIGHT_IDX; y >= height; y--){
-                    chunk.setLight(lx, y, lz, 15);
+                    chunk.setLight(lx, y, lz, MAX_LIGHT_LEVEL);
                     updateSideSkyLight(chunk, lx, lz);
                 }
             }
@@ -221,7 +221,7 @@ public class LevelLight{
                 if(chunk.getBlockID(localSideX, checkY, localSideZ) != Blocks.AIR.getID())
                     continue;
 
-                increase(sideChunk, localSideX, checkY, localSideZ, 15);
+                increase(sideChunk, localSideX, checkY, localSideZ, MAX_LIGHT_LEVEL);
             }
         }
 
@@ -237,8 +237,10 @@ public class LevelLight{
     }
 
 
-    public synchronized void placeBlockUpdate(ServerChunk chunk, int lx, int y, int lz){
-        decrease(chunk, lx, y, lz, chunk.getLight(lx, y, lz));
+    public synchronized void placeBlockUpdate(ServerChunk chunk, int oldHeight, int lx, int y, int lz){
+        for(int i = y; i > oldHeight; i--)
+            decrease(chunk, lx, i, lz, chunk.getLight(lx, i, lz));
+
         level.getServer().getPlayerList().broadcastPacket(new CBPacketLightUpdate(chunk.getBlockSection(y)));
     }
 

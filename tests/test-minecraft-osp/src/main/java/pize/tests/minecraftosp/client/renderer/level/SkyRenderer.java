@@ -7,9 +7,9 @@ import pize.graphics.util.BufferBuilder;
 import pize.graphics.util.Shader;
 import pize.graphics.util.SkyBox;
 import pize.graphics.util.color.Color;
-import pize.graphics.mesh.VertexArray;
+import pize.graphics.mesh.GlVao;
 import pize.graphics.mesh.VertexAttr;
-import pize.graphics.mesh.VertexBuffer;
+import pize.graphics.mesh.GlVbo;
 import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.matrix.Matrix4f;
@@ -24,8 +24,8 @@ public class SkyRenderer implements Disposable{
     private final Matrix4f skyViewMatrix;
     
     private final Shader sunriseShader, skydiscShader;
-    private final VertexBuffer sunriseVbo, lightSkyVbo, darkSkyVbo;
-    private final VertexArray sunriseVao, lightSkyVao, darkSkyVao;
+    private final GlVbo sunriseVbo, lightSkyVbo, darkSkyVbo;
+    private final GlVao sunriseVao, lightSkyVao, darkSkyVao;
     
     public SkyRenderer(LevelRenderer levelRenderer){
         this.levelRenderer = levelRenderer;
@@ -44,16 +44,16 @@ public class SkyRenderer implements Disposable{
         this.sunriseShader = new Shader(new Resource("shader/level/sky/sunrise.vert"), new Resource("shader/level/sky/sunrise.frag"));
         this.skydiscShader = new Shader(new Resource("shader/level/sky/skydisc.vert"), new Resource("shader/level/sky/skydisc.frag"));
         
-        this.sunriseVao = new VertexArray();
-        this.sunriseVbo = new VertexBuffer();
+        this.sunriseVao = new GlVao();
+        this.sunriseVbo = new GlVbo();
         this.sunriseVbo.enableAttributes(new VertexAttr(3, Type.FLOAT), new VertexAttr(4, Type.FLOAT)); // pos3, col4
         
-        this.lightSkyVao = new VertexArray();
-        this.lightSkyVbo = new VertexBuffer();
+        this.lightSkyVao = new GlVao();
+        this.lightSkyVbo = new GlVbo();
         this.lightSkyVbo.enableAttributes(new VertexAttr(3, Type.FLOAT)); // pos3
         
-        this.darkSkyVao = new VertexArray();
-        this.darkSkyVbo = new VertexBuffer();
+        this.darkSkyVao = new GlVao();
+        this.darkSkyVbo = new GlVbo();
         this.darkSkyVbo.enableAttributes(new VertexAttr(3, Type.FLOAT)); // pos3
         
         buildSkyDisc(16).end(lightSkyVbo);

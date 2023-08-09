@@ -17,6 +17,7 @@ public class MusicPlayer implements Disposable{
     public MusicPlayer(Minecraft session){
         this.session = session;
         this.source = new AudioSource();
+        this.source.setVolume(0.15);
     }
 
     public Minecraft getSession(){
@@ -42,7 +43,6 @@ public class MusicPlayer implements Disposable{
             return;
         }
 
-        source.stop();
         source.setBuffer(buffer);
         source.play(this::playNext);
 

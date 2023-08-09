@@ -26,16 +26,12 @@ public class SoundPlayer implements Disposable{
 
 
     public void play(Sound sound, float volume, float pitch, float x, float y, float z){
-        play(sound.getID(), volume, pitch, x, y, z);
-    }
-
-    public void play(String soundID, float volume, float pitch, float x, float y, float z){
-        final AudioBuffer buffer = session.getResources().getAudio(soundID);
+        final AudioBuffer buffer = session.getResources().getAudio(sound.getID());
         if(buffer == null){
-            System.err.println("Sound " + soundID + " is not found");
+            System.err.println("Sound " + sound.getID() + " is not found");
             return;
         }
-        play(buffer, volume, pitch, x, y, z);
+        play(buffer, volume, pitch * sound.getPitch(), x, y, z);
     }
 
     public void play(AudioBuffer buffer, float volume, float pitch, float x, float y, float z){

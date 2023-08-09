@@ -2,22 +2,37 @@ package pize.tests.minecraft.run;
 
 import pize.Pize;
 import pize.app.AppAdapter;
+import pize.graphics.camera.CenteredOrthographicCamera;
+import pize.graphics.gl.Gl;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.Texture;
-import pize.graphics.util.color.Color;
-import pize.graphics.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
+import pize.graphics.util.color.Color;
 import pize.io.glfw.Key;
 import pize.math.Maths;
 import pize.math.function.FastNoiseLite;
 
 public class BiomeGeneratorTest extends AppAdapter{
+
+    public static void main(String[] args){
+        Pize.create("Minecraft", 925, 640);
+        Pize.window().setIcon("icon.png");
+        Pize.run(new BiomeGeneratorTest());
+    }
+
     private TextureBatch batch;
+    private CenteredOrthographicCamera camera;
+    private float scale = 1, scaleMul = 1;
     private Texture mapTexture, cellTexture;
+    private float SIZE;
 
     @Override
     public void init(){
+        SIZE = Pize.getHeight();
+
         batch = new TextureBatch();
+        camera = new CenteredOrthographicCamera();
+        camera.getPosition().add(SIZE / 2F);
         generate(16 * 100);
 
         Pixmap cellPixmap = new Pixmap(16, 16);
@@ -37,14 +52,35 @@ public class BiomeGeneratorTest extends AppAdapter{
         if(Key.V.isDown())
             Pize.window().toggleVsync();
 
+        int scroll = Pize.mouse().getScroll();
+        if(scroll > 0)
+            scaleMul += 0.01F * scroll;
+        else if(scroll < 0)
+            scaleMul += 0.01F * scroll;
+
+        scaleMul = (scaleMul - 1) * 0.93F + 1;
+        System.out.println(scaleMul);
+        scale *= scaleMul;
+        camera.setScale(scale);
+        camera.update();
+
         Gl.clearColorBuffer();
         Gl.clearColor(0.4, 0.6, 1);
-        batch.begin();
-
-        batch.draw(mapTexture, 0, 0, Pize.getHeight(), Pize.getHeight());
-        float pixel16 = Pize.getHeight() / (float) mapTexture.getHeight() * 16;
-        batch.draw(cellTexture, Maths.floor(Pize.getX() / pixel16) * pixel16, Maths.floor(Pize.getY() / pixel16) * pixel16, pixel16, pixel16);
+        batch.begin(camera);
+        batch.draw(mapTexture, 0, 0, SIZE, SIZE);
+        float map16PixelSize = SIZE / mapTexture.getHeight() * 16;
+        batch.draw(cellTexture,
+                Maths.floor(((Pize.getX() + camera.getX()) - camera.getHalfWidth() ) / map16PixelSize) * map16PixelSize,
+                Maths.floor(((Pize.getY() + camera.getY()) - camera.getHalfHeight()) / map16PixelSize) * map16PixelSize,
+                map16PixelSize,
+                map16PixelSize
+        );
         batch.end();
+    }
+
+    @Override
+    public void resize(int width, int height){
+        camera.resize(width, height);
     }
     
     @Override

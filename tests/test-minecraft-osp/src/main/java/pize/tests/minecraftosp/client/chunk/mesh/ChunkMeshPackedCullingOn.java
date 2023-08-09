@@ -1,7 +1,7 @@
 package pize.tests.minecraftosp.client.chunk.mesh;
 
 import pize.Pize;
-import pize.graphics.gl.BufferUsage;
+import pize.graphics.gl.BufUsage;
 import pize.graphics.gl.Type;
 import pize.graphics.mesh.VertexAttr;
 
@@ -65,7 +65,7 @@ public class ChunkMeshPackedCullingOn extends ChunkMesh{
         for(int i = 0; i < verticesList.size(); i++)
             verticesArray[i] = verticesList.get(i);
 
-        Pize.execSync(() -> vbo.setData(verticesArray, BufferUsage.STATIC_DRAW));
+        Pize.execSync(() -> vbo.setData(verticesArray, BufUsage.DYNAMIC_DRAW));
         verticesList.clear();
 
         return verticesArray.length;

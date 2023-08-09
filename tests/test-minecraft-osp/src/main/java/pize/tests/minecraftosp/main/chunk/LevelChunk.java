@@ -179,13 +179,13 @@ public class LevelChunk{
     
     public byte getLight(int lx, int y, int lz){
         if(isOutOfBounds(y))
-            return 15;
+            return MAX_LIGHT_LEVEL;
         
         // Находим по Y нужную секцию
         final int sectionIndex = getSectionIndex(y);
         final LevelChunkSection section = getSection(sectionIndex);
         if(section == null)
-            return 15;
+            return MAX_LIGHT_LEVEL;
         
         // Возвращаем блок
         return section.getLight(lx, getLocalCoord(y), lz);

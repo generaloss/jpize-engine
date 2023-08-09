@@ -16,7 +16,7 @@ public class ServerLevelConfiguration extends LevelConfiguration{
         
         this.seed = seed;
         this.generator = generator;
-        this.spawn = new Vec2f(-717, -952);
+        this.spawn = new Vec2f(-1858, -579).add(0.5); // [-718, -953]
     }
     
     public ChunkGenerator getGenerator(){

@@ -8,6 +8,7 @@ import pize.math.vecmath.vector.Vec3f;
 import pize.math.vecmath.vector.Vec3i;
 import pize.tests.minecraftosp.Minecraft;
 import pize.tests.minecraftosp.client.ClientGame;
+import pize.tests.minecraftosp.client.audio.SoundPlayer;
 import pize.tests.minecraftosp.client.net.ClientConnection;
 import pize.tests.minecraftosp.main.modification.loader.Modification;
 import pize.tests.minecraftosp.client.chunk.mesh.builder.ChunkBuilder;
@@ -105,7 +106,9 @@ public class InfoPanelRenderer implements Disposable{
         
         final BlockRayCast blockRayCast = game.getBlockRayCast();
         final Vec3i blockPos = blockRayCast.getSelectedBlockPosition();
-        
+        final Vec3i imaginaryBlockPos = blockRayCast.getImaginaryBlockPosition();
+        final int lightLevel = level.getLight(imaginaryBlockPos.x, imaginaryBlockPos.y, imaginaryBlockPos.z);
+
         infoLineNum = 0;
         hintLineNum = 0;
         
@@ -200,7 +203,17 @@ public class InfoPanelRenderer implements Disposable{
             .color(TextColor.BLUE).text("/")
             .color(TextColor.ORANGE).text(chunkBuilder.verticesNum)
         );
-        
+
+        // Light
+        infoNextLine();
+        info(new Component()
+                .color(TextColor.YELLOW).text("Light Level")
+                .reset().text(": ")
+                .color(TextColor.AQUA).text(lightLevel)
+                .reset().text("/")
+                .color(TextColor.AQUA).text(ChunkUtils.MAX_LIGHT_LEVEL)
+        );
+
         // Time
         infoNextLine();
         info(TextColor.YELLOW, "Day: ", TextColor.AQUA, time.getDayNumber());
@@ -208,7 +221,13 @@ public class InfoPanelRenderer implements Disposable{
 
         // Sounds
         infoNextLine();
-        info(TextColor.YELLOW, "Sounds: ", TextColor.AQUA, session.getSoundPlayer().getPlayingSoundsNum());
+        info(new Component()
+                .color(TextColor.YELLOW).text("Sounds")
+                .reset().text(": ")
+                .color(TextColor.AQUA).text(session.getSoundPlayer().getPlayingSoundsNum())
+                .reset().text("/")
+                .color(TextColor.AQUA).text(SoundPlayer.MAX_SOUND_SOURCES)
+        );
         
         // info("Threads:");
         // if(serverWorld != null) info("chunk find tps: " + serverWorld.getChunkManager().findTps.get());

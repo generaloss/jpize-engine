@@ -124,16 +124,16 @@ public class BlockRayCast{
                     break;
                 }else{
                     final BlockCursor shape = block.getState(blockState).getCursor();
-                    final float[] vertices = shape.getMesh().getIndexedVertices();
-                    if(ray.intersects(vertices)){
-                        selectedFace = Direction.fromNormal(faceNormal.x, faceNormal.y, faceNormal.z);
-                        selectedBlockProperties = block;
-                        selectedBlockState = blockState;
-                        imaginarySelectedBlock.set(selectedBlock).add(selectedFace.getNormal());
-                        selected = true;
-                        
-                        break;
-                    }
+                    // final float[] vertices = shape.getMesh().getIndexedVertices();
+                    // if(ray.intersects(vertices)){
+                    //     selectedFace = Direction.fromNormal(faceNormal.x, faceNormal.y, faceNormal.z);
+                    //     selectedBlockProperties = block;
+                    //     selectedBlockState = blockState;
+                    //     imaginarySelectedBlock.set(selectedBlock).add(selectedFace.getNormal());
+                    //     selected = true;
+                    //
+                    //     break;
+                    // }
                 }
             }
         }

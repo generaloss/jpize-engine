@@ -244,7 +244,7 @@ public class ChunkBuilder{
         
         final ClientChunk chunk = neighborChunks[(signZ + 1) * 3 + (signX + 1)];
         if(chunk == null)
-            return 15;
+            return MAX_LIGHT_LEVEL;
         
         // Возвращаем уровень света
         return chunk.getLight(lx, y, lz);

@@ -6,8 +6,7 @@ import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
 import pize.tests.minecraftosp.server.chunk.ServerChunk;
 
-import static pize.tests.minecraftosp.main.chunk.ChunkUtils.HEIGHT;
-import static pize.tests.minecraftosp.main.chunk.ChunkUtils.SIZE;
+import static pize.tests.minecraftosp.main.chunk.ChunkUtils.*;
 
 public class FlatGenerator implements ChunkGenerator{
     
@@ -44,7 +43,7 @@ public class FlatGenerator implements ChunkGenerator{
                 final int z = lz + baseZ;
                 
                 for(int y = 0; y < HEIGHT; y++)
-                    chunk.setLight(lx, y, lz, Maths.round((noiseLight.getNoise(x, y, z) + 1) / 2 * 15));
+                    chunk.setLight(lx, y, lz, Maths.round((noiseLight.getNoise(x, y, z) + 1) / 2 * MAX_LIGHT_LEVEL));
             }
         }
     }

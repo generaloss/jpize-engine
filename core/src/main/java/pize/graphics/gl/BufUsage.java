@@ -2,7 +2,7 @@ package pize.graphics.gl;
 
 import static org.lwjgl.opengl.GL33.*;
 
-public enum BufferUsage{
+public enum BufUsage{
 
     STATIC_DRAW  (GL_STATIC_DRAW ),
     DYNAMIC_DRAW (GL_DYNAMIC_DRAW),
@@ -18,7 +18,7 @@ public enum BufferUsage{
 
     public final int GL;
 
-    BufferUsage(int GL){
+    BufUsage(int GL){
         this.GL = GL;
     }
 

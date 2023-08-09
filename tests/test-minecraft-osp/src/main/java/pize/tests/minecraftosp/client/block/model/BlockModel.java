@@ -4,16 +4,17 @@ import pize.graphics.texture.Region;
 import pize.graphics.util.color.Color;
 import pize.graphics.util.color.IColor;
 import pize.math.vecmath.vector.Vec3i;
-import pize.tests.minecraftosp.main.Direction;
 import pize.tests.minecraftosp.client.block.BlockProperties;
 import pize.tests.minecraftosp.client.block.BlockRotation;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMesh;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshPackedCullingOn;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshType;
 import pize.tests.minecraftosp.client.chunk.mesh.builder.ChunkBuilder;
-import pize.tests.minecraftosp.main.chunk.ChunkUtils;
+import pize.tests.minecraftosp.main.Direction;
 
 import java.util.*;
+
+import static pize.tests.minecraftosp.main.chunk.ChunkUtils.MAX_LIGHT_LEVEL;
 
 public class BlockModel{
 
@@ -245,9 +246,9 @@ public class BlockModel{
     public void build(ChunkBuilder builder, BlockProperties block, int lx, int y, int lz){
         if(meshType == ChunkMeshType.CUSTOM){
             // Custom faces
-            final float light = builder.chunk.getLight(lx, y, lz) / 15F;
+            final float light = (float) builder.chunk.getLight(lx, y, lz) / MAX_LIGHT_LEVEL;
             for(Face face: faces)
-                face.putFloats(builder.customMesh.getVerticesList(), lx, y, lz, light, light, light, 1);
+                face.putFloats(builder.customMesh.getVerticesList(), lx, y, lz, light, light, light, light);
         }else{
             // Solid faces
             buildSolidFaces(builder, block, lx, y, lz);
@@ -270,10 +271,10 @@ public class BlockModel{
     }
 
     private void buildNxFace(ChunkBuilder builder, Face face, int x, int y, int z){
-        final float light1 = builder.getLight(x-1, y  , z,  x-1, y, z+1,  x-1, y+1, z+1,  x-1, y+1, z  ) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light2 = builder.getLight(x-1, y  , z,  x-1, y, z+1,  x-1, y-1, z+1,  x-1, y-1, z  ) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light3 = builder.getLight(x-1, y  , z,  x-1, y, z-1,  x-1, y-1, z-1,  x-1, y-1, z  ) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light4 = builder.getLight(x-1, y  , z,  x-1, y, z-1,  x-1, y+1, z-1,  x-1, y+1, z  ) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light1 = builder.getLight(x-1, y  , z,  x-1, y, z+1,  x-1, y+1, z+1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
+        final float light2 = builder.getLight(x-1, y  , z,  x-1, y, z+1,  x-1, y-1, z+1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float light3 = builder.getLight(x-1, y  , z,  x-1, y, z-1,  x-1, y-1, z-1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float light4 = builder.getLight(x-1, y  , z,  x-1, y, z-1,  x-1, y+1, z-1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
 
         final float ao1 = builder.getAO(x-1, y+1, z,  x-1, y, z+1,  x-1, y+1, z+1,  x-1, y  , z  );
         final float ao2 = builder.getAO(x-1, y-1, z,  x-1, y, z+1,  x-1, y-1, z+1,  x-1, y  , z  );
@@ -295,10 +296,10 @@ public class BlockModel{
     }
 
     private void buildPxFace(ChunkBuilder builder, Face face, int x, int y, int z){
-        final float light1 = builder.getLight(x+1, y, z,  x+1, y, z-1,  x+1, y+1, z-1,  x+1, y+1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light2 = builder.getLight(x+1, y, z,  x+1, y, z-1,  x+1, y-1, z-1,  x+1, y-1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light3 = builder.getLight(x+1, y, z,  x+1, y, z+1,  x+1, y-1, z+1,  x+1, y-1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light4 = builder.getLight(x+1, y, z,  x+1, y, z+1,  x+1, y+1, z+1,  x+1, y+1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light1 = builder.getLight(x+1, y, z,  x+1, y, z-1,  x+1, y+1, z-1,  x+1, y+1, z) / MAX_LIGHT_LEVEL;
+        final float light2 = builder.getLight(x+1, y, z,  x+1, y, z-1,  x+1, y-1, z-1,  x+1, y-1, z) / MAX_LIGHT_LEVEL;
+        final float light3 = builder.getLight(x+1, y, z,  x+1, y, z+1,  x+1, y-1, z+1,  x+1, y-1, z) / MAX_LIGHT_LEVEL;
+        final float light4 = builder.getLight(x+1, y, z,  x+1, y, z+1,  x+1, y+1, z+1,  x+1, y+1, z) / MAX_LIGHT_LEVEL;
 
         final float ao1 = builder.getAO(x+1, y+1, z,  x+1, y, z-1,  x+1, y+1, z-1,  x+1, y  , z  );
         final float ao2 = builder.getAO(x+1, y-1, z,  x+1, y, z-1,  x+1, y-1, z-1,  x+1, y  , z  );
@@ -320,10 +321,10 @@ public class BlockModel{
     }
 
     private void buildNyFace(ChunkBuilder builder, Face face, int x, int y, int z){
-        final float light1 = builder.getLight(x, y-1, z,  x, y-1, z+1,  x+1, y-1, z+1,  x+1, y-1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light2 = builder.getLight(x, y-1, z,  x, y-1, z-1,  x+1, y-1, z-1,  x+1, y-1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light3 = builder.getLight(x, y-1, z,  x, y-1, z-1,  x-1, y-1, z-1,  x-1, y-1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light4 = builder.getLight(x, y-1, z,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y-1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light1 = builder.getLight(x, y-1, z,  x, y-1, z+1,  x+1, y-1, z+1,  x+1, y-1, z) / MAX_LIGHT_LEVEL;
+        final float light2 = builder.getLight(x, y-1, z,  x, y-1, z-1,  x+1, y-1, z-1,  x+1, y-1, z) / MAX_LIGHT_LEVEL;
+        final float light3 = builder.getLight(x, y-1, z,  x, y-1, z-1,  x-1, y-1, z-1,  x-1, y-1, z) / MAX_LIGHT_LEVEL;
+        final float light4 = builder.getLight(x, y-1, z,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y-1, z) / MAX_LIGHT_LEVEL;
 
         final float ao1 = builder.getAO(x+1, y-1, z,  x, y-1, z+1,  x+1, y-1, z+1,  x  , y-1, z  );
         final float ao2 = builder.getAO(x+1, y-1, z,  x, y-1, z-1,  x+1, y-1, z-1,  x  , y-1, z  );
@@ -345,10 +346,10 @@ public class BlockModel{
     }
 
     private void buildPyFace(ChunkBuilder builder, Face face, int x, int y, int z){
-        final float light1 = builder.getLight(x, y+1, z,  x, y+1, z-1,  x+1, y+1, z-1,  x+1, y+1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light2 = builder.getLight(x, y+1, z,  x, y+1, z+1,  x+1, y+1, z+1,  x+1, y+1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light3 = builder.getLight(x, y+1, z,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y+1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light4 = builder.getLight(x, y+1, z,  x, y+1, z-1,  x-1, y+1, z-1,  x-1, y+1, z) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light1 = builder.getLight(x, y+1, z,  x, y+1, z-1,  x+1, y+1, z-1,  x+1, y+1, z) / MAX_LIGHT_LEVEL;
+        final float light2 = builder.getLight(x, y+1, z,  x, y+1, z+1,  x+1, y+1, z+1,  x+1, y+1, z) / MAX_LIGHT_LEVEL;
+        final float light3 = builder.getLight(x, y+1, z,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y+1, z) / MAX_LIGHT_LEVEL;
+        final float light4 = builder.getLight(x, y+1, z,  x, y+1, z-1,  x-1, y+1, z-1,  x-1, y+1, z) / MAX_LIGHT_LEVEL;
 
         final float ao1 = builder.getAO(x+1, y+1, z,  x, y+1, z-1,  x+1, y+1, z-1,  x  , y+1, z  );
         final float ao2 = builder.getAO(x+1, y+1, z,  x, y+1, z+1,  x+1, y+1, z+1,  x  , y+1, z  );
@@ -370,10 +371,10 @@ public class BlockModel{
     }
 
     private void buildNzFace(ChunkBuilder builder, Face face, int x, int y, int z){
-        final float light1 = builder.getLight(x, y, z-1,  x, y+1, z-1,  x-1, y+1, z-1,  x, y+1, z-1) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light2 = builder.getLight(x, y, z-1,  x, y-1, z-1,  x-1, y-1, z-1,  x, y-1, z-1) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light3 = builder.getLight(x, y, z-1,  x, y-1, z-1,  x+1, y-1, z-1,  x, y-1, z-1) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light4 = builder.getLight(x, y, z-1,  x, y+1, z-1,  x+1, y+1, z-1,  x, y+1, z-1) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light1 = builder.getLight(x, y, z-1,  x, y+1, z-1,  x-1, y+1, z-1,  x, y+1, z-1) / MAX_LIGHT_LEVEL;
+        final float light2 = builder.getLight(x, y, z-1,  x, y-1, z-1,  x-1, y-1, z-1,  x, y-1, z-1) / MAX_LIGHT_LEVEL;
+        final float light3 = builder.getLight(x, y, z-1,  x, y-1, z-1,  x+1, y-1, z-1,  x, y-1, z-1) / MAX_LIGHT_LEVEL;
+        final float light4 = builder.getLight(x, y, z-1,  x, y+1, z-1,  x+1, y+1, z-1,  x, y+1, z-1) / MAX_LIGHT_LEVEL;
 
         final float ao1 = builder.getAO(x-1, y, z-1,  x, y+1, z-1,  x-1, y+1, z-1,  x  , y  , z-1);
         final float ao2 = builder.getAO(x-1, y, z-1,  x, y-1, z-1,  x-1, y-1, z-1,  x  , y  , z-1);
@@ -395,10 +396,10 @@ public class BlockModel{
     }
 
     private void buildPzFace(ChunkBuilder builder, Face face, int x, int y, int z){
-        final float light1 = builder.getLight(x, y, z+1,  x, y+1, z+1,  x+1, y+1, z+1,  x+1, y, z+1) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light2 = builder.getLight(x, y, z+1,  x, y-1, z+1,  x+1, y-1, z+1,  x+1, y, z+1) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light3 = builder.getLight(x, y, z+1,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y, z+1) / ChunkUtils.MAX_LIGHT_LEVEL;
-        final float light4 = builder.getLight(x, y, z+1,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y, z+1) / ChunkUtils.MAX_LIGHT_LEVEL;
+        final float light1 = builder.getLight(x, y, z+1,  x, y+1, z+1,  x+1, y+1, z+1,  x+1, y, z+1) / MAX_LIGHT_LEVEL;
+        final float light2 = builder.getLight(x, y, z+1,  x, y-1, z+1,  x+1, y-1, z+1,  x+1, y, z+1) / MAX_LIGHT_LEVEL;
+        final float light3 = builder.getLight(x, y, z+1,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y, z+1) / MAX_LIGHT_LEVEL;
+        final float light4 = builder.getLight(x, y, z+1,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y, z+1) / MAX_LIGHT_LEVEL;
 
         final float ao1 = builder.getAO(x+1, y, z+1,  x, y+1, z+1,  x+1, y+1, z+1,  x  , y  , z+1);
         final float ao2 = builder.getAO(x+1, y, z+1,  x, y-1, z+1,  x+1, y-1, z+1,  x  , y  , z+1);

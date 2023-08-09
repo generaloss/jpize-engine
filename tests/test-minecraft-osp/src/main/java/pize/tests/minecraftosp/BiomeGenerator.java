@@ -1,5 +1,6 @@
 package pize.tests.minecraftosp;
 
+import pize.Pize;
 import pize.app.AppAdapter;
 import pize.graphics.gl.Gl;
 import pize.graphics.texture.Pixmap;
@@ -9,7 +10,12 @@ import pize.math.Maths;
 import pize.math.function.FastNoiseLite;
 
 public class BiomeGenerator extends AppAdapter{
-    
+
+    public static void main(String[] args){
+        Pize.create("Minecraft Open Source Edition", 1280, 720);
+        Pize.run(new BiomeGenerator());
+    }
+
     private final TextureBatch batch;
     private Texture mapTexture;
     

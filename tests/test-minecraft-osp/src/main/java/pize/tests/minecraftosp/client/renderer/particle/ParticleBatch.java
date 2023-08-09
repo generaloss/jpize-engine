@@ -3,29 +3,28 @@ package pize.tests.minecraftosp.client.renderer.particle;
 import pize.app.Disposable;
 import pize.files.Resource;
 import pize.graphics.camera.PerspectiveCamera;
-import pize.graphics.gl.BufferUsage;
+import pize.graphics.gl.BufUsage;
 import pize.graphics.gl.Type;
+import pize.graphics.mesh.QuadMesh;
+import pize.graphics.mesh.VertexAttr;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.Shader;
-import pize.graphics.util.batch.Batch;
 import pize.graphics.util.color.Color;
-import pize.graphics.mesh.Mesh;
-import pize.graphics.mesh.VertexAttr;
 import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.vector.Vec3f;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static pize.graphics.mesh.QuadIndexBuffer.QUAD_INDICES;
+import static pize.graphics.mesh.QuadIndexBuffer.QUAD_VERTICES;
+
 public class ParticleBatch implements Disposable{
-    
-    public static final int QUAD_VERTICES = Batch.QUAD_VERTICES;
-    public static final int QUAD_INDICES = Batch.QUAD_INDICES;
     
     final CopyOnWriteArrayList<ParticleInstance> instances;
     final Shader shader;
     final Matrix4f rotateMatrix;
-    final Mesh mesh;
+    final QuadMesh mesh;
     final int size;
     Texture lastTexture;
     final Color currentColor;
@@ -38,29 +37,15 @@ public class ParticleBatch implements Disposable{
         this.shader = new Shader(new Resource("shader/level/particle/particle-batch.vert"), new Resource("shader/level/particle/particle-batch.frag"));
         // Matrices
         this.rotateMatrix = new Matrix4f();
-        // Mesh
-        this.mesh = new Mesh(
-            new VertexAttr(3, Type.FLOAT), // pos3
-            new VertexAttr(4, Type.FLOAT), // col4
-            new VertexAttr(2, Type.FLOAT)  // uv2
+        // Buffer
+        this.mesh = new QuadMesh(
+                size,
+                new VertexAttr(3, Type.FLOAT), // pos3
+                new VertexAttr(4, Type.FLOAT), // col4
+                new VertexAttr(2, Type.FLOAT)  // uv2
         );
-        // Generate indices
-        final int[] indices = new int[QUAD_INDICES * size];
-        for(int i = 0; i < size; i++){
-            final int quadIndexPointer = i * QUAD_INDICES;
-            final int quadVertexPointer = i * QUAD_VERTICES;
-            
-            indices[quadIndexPointer    ] = quadVertexPointer;
-            indices[quadIndexPointer + 1] = quadVertexPointer + 1;
-            indices[quadIndexPointer + 2] = quadVertexPointer + 2;
-            
-            indices[quadIndexPointer + 3] = quadVertexPointer + 2;
-            indices[quadIndexPointer + 4] = quadVertexPointer + 3;
-            indices[quadIndexPointer + 5] = quadVertexPointer;
-        }
-        this.mesh.getEBO().setData(indices, BufferUsage.STATIC_DRAW);
         // Vertices array
-        this.vertices = new float[QUAD_VERTICES * size * mesh.getVBO().getVertexSize()];
+        this.vertices = new float[QUAD_VERTICES * size * mesh.getBuffer().getVertexSize()];
         // Color
         this.currentColor = new Color();
     }
@@ -124,7 +109,7 @@ public class ParticleBatch implements Disposable{
     }
     
     private void addVertex(float x, float y, float z, float u, float v){
-        final int pointer = vertexIndex * mesh.getVBO().getVertexSize();
+        final int pointer = vertexIndex * mesh.getBuffer().getVertexSize();
         
         // pos3
         vertices[pointer    ] = x;
@@ -153,8 +138,8 @@ public class ParticleBatch implements Disposable{
             return;
         
         shader.setUniform("u_texture", lastTexture);
-        mesh.getVBO().setData(vertices, BufferUsage.STREAM_DRAW);
-        mesh.getVAO().drawElements(particleIndex * QUAD_INDICES);
+        mesh.getBuffer().setData(vertices, BufUsage.STREAM_DRAW);
+        mesh.render(particleIndex * QUAD_INDICES);
         
         vertexIndex = 0;
         particleIndex = 0;

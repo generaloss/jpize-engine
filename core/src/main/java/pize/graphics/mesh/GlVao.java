@@ -6,9 +6,9 @@ import pize.graphics.gl.Type;
 
 import static org.lwjgl.opengl.GL33.*;
 
-public class VertexArray extends GlObject{
+public class GlVao extends GlObject{
 
-    public VertexArray(){
+    public GlVao(){
         super(glGenVertexArrays());
         bind();
     }

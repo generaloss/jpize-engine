@@ -3,6 +3,7 @@ package pize.graphics.texture;
 import org.lwjgl.BufferUtils;
 import pize.app.Resizable;
 import pize.graphics.gl.SizedFormat;
+import pize.graphics.util.Sizable;
 import pize.graphics.util.color.Color;
 import pize.graphics.util.color.IColor;
 import pize.math.Maths;

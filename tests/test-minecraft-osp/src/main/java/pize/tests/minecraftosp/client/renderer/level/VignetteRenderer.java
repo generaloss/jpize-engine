@@ -8,6 +8,8 @@ import pize.math.vecmath.vector.Vec3f;
 import pize.tests.minecraftosp.client.ClientGame;
 import pize.tests.minecraftosp.client.level.ClientLevel;
 
+import static pize.tests.minecraftosp.main.chunk.ChunkUtils.MAX_LIGHT_LEVEL;
+
 public class VignetteRenderer implements Disposable{
     
     final LevelRenderer levelRenderer;
@@ -31,7 +33,7 @@ public class VignetteRenderer implements Disposable{
         final float light = level.getLight(playerPos.xf(), playerPos.yf(), playerPos.zf());
         
         // Interpolation
-        vignette += ((1 - light / 15F) - vignette) / 100F;
+        vignette += ((1 - light / MAX_LIGHT_LEVEL) - vignette) / 100F;
         
         // Render
         batch.setAlpha(vignette);

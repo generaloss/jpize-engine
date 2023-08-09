@@ -4,9 +4,9 @@ import pize.app.Disposable;
 import pize.files.Resource;
 import pize.graphics.gl.Primitive;
 import pize.graphics.gl.Type;
-import pize.graphics.util.Shader;
-import pize.graphics.mesh.Mesh;
+import pize.graphics.mesh.IndexedMesh;
 import pize.graphics.mesh.VertexAttr;
+import pize.graphics.util.Shader;
 import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;
@@ -17,7 +17,7 @@ public class ChunkBorderRenderer implements Disposable{
     
     private final LevelRenderer levelRenderer;
     private final Shader shader;
-    private final Mesh mesh;
+    private final IndexedMesh mesh;
     private final Matrix4f translationMatrix;
     private boolean show;
     
@@ -26,10 +26,10 @@ public class ChunkBorderRenderer implements Disposable{
         
         this.shader = new Shader(new Resource("shader/line.vert"), new Resource("shader/line.frag"));
         
-        this.mesh = new Mesh(new VertexAttr(3, Type.FLOAT));
-        this.mesh.setRenderMode(Primitive.LINES);
+        this.mesh = new IndexedMesh(new VertexAttr(3, Type.FLOAT));
+        this.mesh.setMode(Primitive.LINES);
         
-        this.mesh.setVertices(new float[]{
+        this.mesh.getBuffer().setData(new float[]{
             16, 256, 16, //0
             0 , 256, 16, //1
             16, 0  , 16, //2
@@ -39,7 +39,7 @@ public class ChunkBorderRenderer implements Disposable{
             16, 0  , 0 , //6
             0 , 0  , 0 , //7
         });
-        this.mesh.setIndices(new int[]{
+        this.mesh.getIndexBuffer().setData(new int[]{
             7, 6, 6, 2, 2, 3, 3, 7, //Top
             0, 4, 4, 5, 5, 1, 1, 0, //Bottom
             0, 2, 2, 6, 6, 4, 4, 0, //Left

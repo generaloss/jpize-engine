@@ -1,4 +1,4 @@
-package pize.graphics.texture;
+package pize.graphics.util;
 
 public abstract class Sizable{
     
@@ -44,6 +44,14 @@ public abstract class Sizable{
     
     public int getHeight(){
         return height;
+    }
+
+    public float getHalfWidth(){
+        return width * 0.5F;
+    }
+
+    public float getHalfHeight(){
+        return height * 0.5F;
     }
     
 }

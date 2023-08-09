@@ -3,13 +3,13 @@ package pize.app;
 import pize.audio.Audio;
 import pize.audio.util.ContextTaskExecutor;
 import pize.graphics.gl.Gl;
+import pize.graphics.mesh.GlVao;
+import pize.graphics.mesh.GlVbo;
+import pize.graphics.mesh.IndexBuffer;
 import pize.graphics.texture.CubeMap;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureArray;
 import pize.graphics.util.*;
-import pize.graphics.mesh.ElementBuffer;
-import pize.graphics.mesh.VertexArray;
-import pize.graphics.mesh.VertexBuffer;
 import pize.io.keyboard.Keyboard;
 import pize.io.mouse.Mouse;
 import pize.io.window.Window;
@@ -103,9 +103,9 @@ public class Context{
     
         // Unbind OGL objects
         Shader.unbind();
-        VertexArray.unbind();
-        VertexBuffer.unbind();
-        ElementBuffer.unbind();
+        GlVbo.unbind();
+        GlVao.unbind();
+        IndexBuffer.unbind();
         Texture.unbind();
         CubeMap.unbind();
         TextureArray.unbind();

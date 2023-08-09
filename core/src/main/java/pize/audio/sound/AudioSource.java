@@ -174,7 +174,10 @@ public class AudioSource implements Disposable{
         else
             stopwatch.reset().start();
 
-        Pize.execIf(callback::onStop, () -> stopwatch.getSeconds() >= buffer.getDurationSeconds());
+        Pize.execIf(() -> {
+            this.stop();
+            callback.onStop();
+        }, () -> (stopwatch.getSeconds() >= buffer.getDurationSeconds()));
     }
 
     private void pauseCallback(){

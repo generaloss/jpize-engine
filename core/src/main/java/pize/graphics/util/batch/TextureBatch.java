@@ -3,8 +3,10 @@ package pize.graphics.util.batch;
 import pize.Pize;
 import pize.files.Resource;
 import pize.graphics.camera.Camera;
-import pize.graphics.gl.BufferUsage;
+import pize.graphics.gl.BufUsage;
 import pize.graphics.gl.Type;
+import pize.graphics.mesh.QuadMesh;
+import pize.graphics.mesh.VertexAttr;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
@@ -12,19 +14,16 @@ import pize.graphics.util.Shader;
 import pize.graphics.util.TextureUtils;
 import pize.graphics.util.batch.scissor.Scissor;
 import pize.graphics.util.color.IColor;
-import pize.graphics.mesh.ElementBuffer;
-import pize.graphics.mesh.VertexArray;
-import pize.graphics.mesh.VertexAttr;
-import pize.graphics.mesh.VertexBuffer;
 import pize.math.vecmath.matrix.Matrix3f;
 import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.vector.Vec2f;
 
+import static pize.graphics.mesh.QuadIndexBuffer.QUAD_INDICES;
+import static pize.graphics.mesh.QuadIndexBuffer.QUAD_VERTICES;
+
 public class TextureBatch extends Batch{
 
-    private final VertexBuffer vbo;
-    private final VertexArray vao;
-    private final ElementBuffer ebo;
+    private final QuadMesh mesh;
     private final Shader shader;
 
     private final Vec2f transformOrigin;
@@ -44,47 +43,31 @@ public class TextureBatch extends Batch{
         this(256);
     }
 
-    public TextureBatch(int batchSize){
-        this.batchSize = batchSize;
+    public TextureBatch(int maxSize){
+        this.batchSize = maxSize;
 
         // Shader
-        shader = new Shader(
+        this.shader = new Shader(
             new Resource("shader/batch/batch.vert").readString(),
             new Resource("shader/batch/batch.frag").readString()
         );
 
-        { // Create VAO, VBO, EBO
-            vao = new VertexArray();
+        // Mesh
+        this.mesh = new QuadMesh(
+                maxSize,
+                new VertexAttr(2, Type.FLOAT),
+                new VertexAttr(2, Type.FLOAT),
+                new VertexAttr(4, Type.FLOAT)
+        );
 
-            vbo = new VertexBuffer();
-            vbo.enableAttributes(new VertexAttr(2, Type.FLOAT), new VertexAttr(2, Type.FLOAT), new VertexAttr(4, Type.FLOAT, false));
+        this.vertices = new float[QUAD_VERTICES * maxSize * mesh.getBuffer().getVertexSize()];
 
-            ebo = new ElementBuffer();
-
-            int[] indices = new int[QUAD_INDICES * batchSize];
-            for(int i = 0; i < batchSize; i++){
-                int indexQuadOffset = QUAD_INDICES * i;
-                int vertexQuadOffset = QUAD_VERTICES * i;
-
-                indices[indexQuadOffset    ] = vertexQuadOffset;
-                indices[indexQuadOffset + 1] = vertexQuadOffset + 1;
-                indices[indexQuadOffset + 2] = vertexQuadOffset + 2;
-
-                indices[indexQuadOffset + 3] = vertexQuadOffset + 2;
-                indices[indexQuadOffset + 4] = vertexQuadOffset + 3;
-                indices[indexQuadOffset + 5] = vertexQuadOffset;
-            }
-            ebo.setData(indices, BufferUsage.STATIC_DRAW);
-        }
-
-        vertices = new float[QUAD_VERTICES * batchSize * vbo.getVertexSize()];
-
-        transformOrigin = new Vec2f(0.5);
-        transformMatrix = new Matrix3f();
-        rotationMatrix = new Matrix3f();
-        shearMatrix = new Matrix3f();
-        scaleMatrix = new Matrix3f();
-        flipMatrix = new Matrix3f();
+        this.transformOrigin = new Vec2f(0.5);
+        this.transformMatrix = new Matrix3f();
+        this.rotationMatrix = new Matrix3f();
+        this.shearMatrix = new Matrix3f();
+        this.scaleMatrix = new Matrix3f();
+        this.flipMatrix = new Matrix3f();
     }
     
     
@@ -213,8 +196,8 @@ public class TextureBatch extends Batch{
         usedShader.setUniform("u_view", viewMatrix);
         usedShader.setUniform("u_texture", lastTexture);
 
-        vbo.setData(vertices, BufferUsage.STREAM_DRAW);
-        vao.drawElements(size * QUAD_INDICES);
+        mesh.getBuffer().setData(vertices, BufUsage.STREAM_DRAW);
+        mesh.render(size * QUAD_INDICES);
         
         // Reset
         final int sizeResult = size;
@@ -256,7 +239,7 @@ public class TextureBatch extends Batch{
         vertices[vertexOffset + 6] = b;
         vertices[vertexOffset + 7] = a;
 
-        vertexOffset += vbo.getVertexSize();
+        vertexOffset += mesh.getBuffer().getVertexSize();
     }
     
     
@@ -310,9 +293,7 @@ public class TextureBatch extends Batch{
     @Override
     public void dispose(){
         shader.dispose();
-        vbo.dispose();
-        vao.dispose();
-        ebo.dispose();
+        mesh.dispose();
     }
 
 }

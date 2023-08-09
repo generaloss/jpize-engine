@@ -1,7 +1,7 @@
 package pize.tests.minecraftosp.client.entity.model;
 
+import pize.graphics.mesh.IndexedMesh;
 import pize.graphics.util.Shader;
-import pize.graphics.mesh.Mesh;
 import pize.math.util.EulerAngles;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;
@@ -9,11 +9,11 @@ import pize.tests.minecraftosp.client.control.camera.GameCamera;
 public class ModelPart{
     
     private ModelPart parent;
-    private final Mesh mesh;
+    private final IndexedMesh mesh;
     private final Pose pose, initialPose;
     private boolean show;
     
-    public ModelPart(Mesh mesh){
+    public ModelPart(IndexedMesh mesh){
         this.mesh = mesh;
         pose = new Pose();
         initialPose = new Pose();
@@ -39,7 +39,7 @@ public class ModelPart{
         this.parent = parent;
     }
     
-    public Mesh getMesh(){
+    public IndexedMesh getMesh(){
         return mesh;
     }
     

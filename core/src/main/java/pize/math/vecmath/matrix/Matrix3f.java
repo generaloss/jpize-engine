@@ -1,6 +1,5 @@
 package pize.math.vecmath.matrix;
 
-import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec2f;
 
@@ -17,8 +16,7 @@ public class Matrix3f implements Matrix3{
         val[m11] = 1;
         val[m22] = 1;
     }
-    
-    
+
     public Matrix3f(float[] values){
         val = new float[16];
         set(values);
@@ -31,45 +29,23 @@ public class Matrix3f implements Matrix3{
 
     public Matrix3f zero(){
         Arrays.fill(val, 0);
-
         return this;
     }
 
     public Matrix3f identity(){
-        val[m00] = 1;
-        val[m01] = 0;
-        val[m02] = 0;
-
-        val[m10] = 0;
-        val[m11] = 1;
-        val[m12] = 0;
-
-        val[m20] = 0;
-        val[m21] = 0;
-        val[m22] = 1;
-
+        val[m00] = 1; val[m10] = 0; val[m20] = 0;
+        val[m01] = 0; val[m11] = 1; val[m21] = 0;
+        val[m02] = 0; val[m12] = 0; val[m22] = 1;
         return this;
     }
 
     public Matrix3f set(float[] values){
-        val[m00] = values[m00];
-        val[m01] = values[m01];
-        val[m02] = values[m02];
-
-        val[m10] = values[m10];
-        val[m11] = values[m11];
-        val[m12] = values[m12];
-
-        val[m20] = values[m20];
-        val[m21] = values[m21];
-        val[m22] = values[m22];
-
+        System.arraycopy(values, 0, val, 0, values.length);
         return this;
     }
 
     public Matrix3f set(Matrix3f matrix){
         set(matrix.val);
-
         return this;
     }
 
@@ -78,7 +54,7 @@ public class Matrix3f implements Matrix3{
         return translate(translation.x, translation.y);
     }
 
-    public Matrix3f translate(double x, double y){
+    public Matrix3f translate(float x, float y){
         val[m20] += val[m00] * x + val[m10] * y;
         val[m21] += val[m01] * x + val[m11] * y;
         val[m22] += val[m02] * x + val[m12] * y;
@@ -113,17 +89,11 @@ public class Matrix3f implements Matrix3{
         return this;
     }
 
-    /**
-     * Set matrix to rotated
-     *
-     * @param angle Angle in degrees
-     * @return      That instance
-     */
-    public Matrix3f toRotated(double angle){
+    public Matrix3f toRotated(double degrees){
         identity();
 
-        float cos = Mathc.cos(angle * Maths.ToRad);
-        float sin = Mathc.sin(angle * Maths.ToRad);
+        float cos = Maths.cosDeg(degrees);
+        float sin = Maths.sinDeg(degrees);
 
         val[m00] = cos;
         val[m10] = -sin;
@@ -133,11 +103,11 @@ public class Matrix3f implements Matrix3{
         return this;
     }
 
-    public Matrix3f toSheared(float angleX, float angleY){
+    public Matrix3f toSheared(float degreesX, float degreesY){
         identity();
 
-        val[m10] = Mathc.tan(angleX * Maths.ToRad);
-        val[m01] = Mathc.tan(angleY * Maths.ToRad);
+        val[m10] = Maths.tanDeg(degreesX);
+        val[m01] = Maths.tanDeg(degreesY);
 
         return this;
     }

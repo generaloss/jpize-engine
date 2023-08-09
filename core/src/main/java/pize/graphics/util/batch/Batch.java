@@ -10,9 +10,6 @@ import pize.math.vecmath.vector.Vec2f;
 
 public abstract class Batch implements Disposable{
 
-    public static int QUAD_INDICES = 6;
-    public static int QUAD_VERTICES = 4;
-
     protected final Color color;
 
     public Batch(){

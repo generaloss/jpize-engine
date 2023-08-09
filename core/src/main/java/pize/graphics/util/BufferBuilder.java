@@ -1,9 +1,9 @@
 package pize.graphics.util;
 
-import pize.graphics.gl.BufferUsage;
+import pize.graphics.mesh.GlVbo;
 import pize.graphics.texture.Region;
 import pize.graphics.util.color.IColor;
-import pize.graphics.mesh.VertexBuffer;
+import pize.util.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,13 +109,9 @@ public class BufferBuilder{
     }
     
     
-    public void end(VertexBuffer buffer){
-        final float[] array = new float[vertices.size()];
-        for(int i = 0; i < array.length; i++)
-            array[i] = vertices.get(i);
-        
+    public void end(GlVbo buffer){
+        buffer.setData(ArrayUtils.fromList(vertices));
         vertices.clear();
-        buffer.setData(array, BufferUsage.DYNAMIC_DRAW);
     }
     
     public void end(List<Float> list){

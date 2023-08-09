@@ -57,10 +57,12 @@ public class PlayerGameConnection implements PacketHandler{
     }
     
     public void handlePlayerBlockSet(SBPacketPlayerBlockSet packet){
-        final BlockProperties oldBlock = player.getLevel().getBlockProps(packet.x, packet.y, packet.z);
+        final ServerLevel level = player.getLevel();
+        final BlockProperties oldBlock = level.getBlockProps(packet.x, packet.y, packet.z);
+        final int oldHeight = level.getHeight(packet.x, packet.z);
 
         // Set Block on the Server //
-        final boolean result = player.getLevel().setBlock(packet.x, packet.y, packet.z, packet.state);
+        final boolean result = level.setBlock(packet.x, packet.y, packet.z, packet.state);
         if(!result)
             return;
         
@@ -78,14 +80,13 @@ public class PlayerGameConnection implements PacketHandler{
             soundPack = oldBlock.getSoundPack();
 
         if(soundPack != null)
-            player.getLevel().playSound(soundPack.randomSound(setType), 1, 1, packet.x + 0.5F, packet.y + 0.5F, packet.z + 0.5F);
+            level.playSound(soundPack.randomSound(setType), 1, 1, packet.x + 0.5F, packet.y + 0.5F, packet.z + 0.5F);
 
         // Process grass
-        final ServerLevel level = player.getLevel();
         if(setType == BlockSetType.DESTROY && level.getBlockProps(packet.x, packet.y + 1, packet.z).getID() == Blocks.GRASS.getID()){
             level.setBlock(packet.x, packet.y + 1, packet.z, Blocks.AIR.getID());
             player.sendPacket(new CBPacketBlockUpdate(packet.x, packet.y + 1, packet.z, Blocks.AIR.getDefaultData()));
-            player.getLevel().playSound(Blocks.GRASS.getSoundPack().randomDestroySound(), 1, 1, packet.x + 0.5F, packet.y + 1.5F, packet.z + 0.5F);
+            level.playSound(Blocks.GRASS.getSoundPack().randomDestroySound(), 1, 1, packet.x + 0.5F, packet.y + 1.5F, packet.z + 0.5F);
         }
 
         // Process light
@@ -93,7 +94,7 @@ public class PlayerGameConnection implements PacketHandler{
         if(block.isLightTranslucent())
             level.getLight().destroyBlockUpdate(chunk, ChunkUtils.getLocalCoord(packet.x), packet.y, ChunkUtils.getLocalCoord(packet.z));
         else
-            level.getLight().placeBlockUpdate(chunk, ChunkUtils.getLocalCoord(packet.x), packet.y, ChunkUtils.getLocalCoord(packet.z));
+            level.getLight().placeBlockUpdate(chunk, oldHeight, ChunkUtils.getLocalCoord(packet.x), packet.y, ChunkUtils.getLocalCoord(packet.z));
     }
     
     public void handleMove(SBPacketMove packet){

@@ -63,9 +63,9 @@ public class PixmapIO{
     
     
     public static void save(Pixmap pixmap, OutputStream output){
-        final BufferedImage bufferedImage = new BufferedImage(pixmap.width, pixmap.height, BufferedImage.TYPE_INT_ARGB);
-        for(int x = 0; x < pixmap.width; x++)
-            for(int y = 0; y < pixmap.height; y++)
+        final BufferedImage bufferedImage = new BufferedImage(pixmap.getWidth(), pixmap.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        for(int x = 0; x < pixmap.getWidth(); x++)
+            for(int y = 0; y < pixmap.getHeight(); y++)
                 bufferedImage.setRGB(x, y, pixmap.getPixelBGRA(x, y));
         
         try{

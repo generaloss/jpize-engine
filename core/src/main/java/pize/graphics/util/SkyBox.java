@@ -5,24 +5,24 @@ import pize.files.Resource;
 import pize.graphics.camera.Camera;
 import pize.graphics.gl.Gl;
 import pize.graphics.gl.Type;
-import pize.graphics.texture.CubeMap;
-import pize.graphics.mesh.Mesh;
+import pize.graphics.mesh.IndexedMesh;
 import pize.graphics.mesh.VertexAttr;
+import pize.graphics.texture.CubeMap;
 import pize.math.vecmath.matrix.Matrix4f;
 
 public class SkyBox implements Disposable{
 
     private final CubeMap cubeMap;
     private final Shader shader;
-    private final Mesh mesh;
+    private final IndexedMesh mesh;
     
     public SkyBox(String px, String nx, String py, String ny, String pz, String nz){
         cubeMap = new CubeMap(px, nx, py, ny, pz, nz);
 
         shader = new Shader(new Resource("shader/skybox/skybox.vert"), new Resource("shader/skybox/skybox.frag"));
 
-        mesh = new Mesh(new VertexAttr(3, Type.FLOAT));
-        mesh.setVertices(new float[]{
+        mesh = new IndexedMesh(new VertexAttr(3, Type.FLOAT));
+        mesh.getBuffer().setData(new float[]{
             -1, -1,  1, //0
              1, -1,  1, //1
             -1,  1,  1, //2
@@ -32,7 +32,7 @@ public class SkyBox implements Disposable{
             -1,  1, -1, //6
              1,  1, -1  //7
         });
-        mesh.setIndices(new int[]{
+        mesh.getIndexBuffer().setData(new int[]{
             //Top
             7, 6, 2,
             2, 3, 7,

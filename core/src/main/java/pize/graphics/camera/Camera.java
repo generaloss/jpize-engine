@@ -1,7 +1,7 @@
 package pize.graphics.camera;
 
 import pize.app.Resizable;
-import pize.graphics.texture.Sizable;
+import pize.graphics.util.Sizable;
 import pize.math.vecmath.matrix.Matrix4f;
 
 public abstract class Camera extends Sizable implements Resizable{

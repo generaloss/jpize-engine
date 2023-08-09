@@ -1,6 +1,6 @@
 package pize.graphics.mesh;
 
-import pize.graphics.gl.BufferUsage;
+import pize.graphics.gl.BufUsage;
 import pize.graphics.gl.GlObject;
 import pize.graphics.gl.Type;
 
@@ -8,12 +8,12 @@ import java.nio.*;
 
 import static org.lwjgl.opengl.GL33.*;
 
-public class VertexBuffer extends GlObject{
+public class GlVbo extends GlObject{
 
     private int vertexSizeCount, vertexSizeBytes;
     private long dataSizeCount;
 
-    public VertexBuffer(){
+    public GlVbo(){
         super(glGenBuffers());
         bind();
     }
@@ -56,77 +56,106 @@ public class VertexBuffer extends GlObject{
     }
 
 
-    public void setData(long size, BufferUsage usage){
+    public void setData(long size, BufUsage usage){
         bind();
         glBufferData(GL_ARRAY_BUFFER, size, usage.GL);
         dataSizeCount = size;
     }
 
-    public void setData(float[] data, BufferUsage usage){
+    public void setData(float[] data, BufUsage usage){
         bind();
         glBufferData(GL_ARRAY_BUFFER, data, usage.GL);
         dataSizeCount = data.length;
     }
 
-    public void setData(double[] data, BufferUsage usage){
+    public void setData(double[] data, BufUsage usage){
         bind();
         glBufferData(GL_ARRAY_BUFFER, data, usage.GL);
         dataSizeCount = data.length;
     }
 
-    public void setData(int[] data, BufferUsage usage){
+    public void setData(int[] data, BufUsage usage){
         bind();
         glBufferData(GL_ARRAY_BUFFER, data, usage.GL);
         dataSizeCount = data.length;
     }
 
-    public void setData(short[] data, BufferUsage usage){
-        bind();
-        glBufferData(GL_ARRAY_BUFFER, data, usage.GL);
-        dataSizeCount = data.length;
-    }
-
-    public void setData(long[] data, BufferUsage usage){
+    public void setData(short[] data, BufUsage usage){
         bind();
         glBufferData(GL_ARRAY_BUFFER, data, usage.GL);
         dataSizeCount = data.length;
     }
 
 
-    public void setData(IntBuffer buffer, BufferUsage usage){
+    public void setData(IntBuffer buffer, BufUsage usage){
         bind();
         glBufferData(GL_ARRAY_BUFFER, buffer, usage.GL);
         dataSizeCount = buffer.limit();
     }
 
-    public void setData(ByteBuffer buffer, BufferUsage usage){
+    public void setData(ByteBuffer buffer, BufUsage usage){
         bind();
         glBufferData(GL_ARRAY_BUFFER, buffer, usage.GL);
         dataSizeCount = buffer.limit();
     }
 
-    public void setData(FloatBuffer buffer, BufferUsage usage){
+    public void setData(FloatBuffer buffer, BufUsage usage){
         bind();
         glBufferData(GL_ARRAY_BUFFER, buffer, usage.GL);
         dataSizeCount = buffer.limit();
     }
 
-    public void setData(LongBuffer buffer, BufferUsage usage){
+    public void setData(ShortBuffer buffer, BufUsage usage){
         bind();
         glBufferData(GL_ARRAY_BUFFER, buffer, usage.GL);
         dataSizeCount = buffer.limit();
     }
 
-    public void setData(ShortBuffer buffer, BufferUsage usage){
+    public void setData(DoubleBuffer buffer, BufUsage usage){
         bind();
         glBufferData(GL_ARRAY_BUFFER, buffer, usage.GL);
         dataSizeCount = buffer.limit();
     }
 
-    public void setData(DoubleBuffer buffer, BufferUsage usage){
-        bind();
-        glBufferData(GL_ARRAY_BUFFER, buffer, usage.GL);
-        dataSizeCount = buffer.limit();
+
+    public void setData(long size){
+        setData(size, BufUsage.STATIC_DRAW);
+    }
+
+    public void setData(float[] data){
+        setData(data, BufUsage.STATIC_DRAW);
+    }
+
+    public void setData(double[] data){
+        setData(data, BufUsage.STATIC_DRAW);
+    }
+
+    public void setData(int[] data){
+        setData(data, BufUsage.STATIC_DRAW);
+    }
+
+    public void setData(short[] data){
+        setData(data, BufUsage.STATIC_DRAW);
+    }
+
+    public void setData(IntBuffer buffer){
+        setData(buffer, BufUsage.STATIC_DRAW);
+    }
+
+    public void setData(ByteBuffer buffer){
+        setData(buffer, BufUsage.STATIC_DRAW);
+    }
+
+    public void setData(FloatBuffer buffer){
+        setData(buffer, BufUsage.STATIC_DRAW);
+    }
+
+    public void setData(ShortBuffer buffer){
+        setData(buffer, BufUsage.STATIC_DRAW);
+    }
+
+    public void setData(DoubleBuffer buffer){
+        setData(buffer, BufUsage.STATIC_DRAW);
     }
 
 

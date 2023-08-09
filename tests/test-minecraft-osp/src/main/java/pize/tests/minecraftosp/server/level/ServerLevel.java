@@ -13,8 +13,7 @@ import pize.tests.minecraftosp.main.net.packet.CBPacketPlaySound;
 import pize.tests.minecraftosp.server.Server;
 import pize.tests.minecraftosp.server.chunk.ServerChunk;
 
-import static pize.tests.minecraftosp.main.chunk.ChunkUtils.getChunkPos;
-import static pize.tests.minecraftosp.main.chunk.ChunkUtils.getLocalCoord;
+import static pize.tests.minecraftosp.main.chunk.ChunkUtils.*;
 
 public class ServerLevel extends Level{
 
@@ -75,7 +74,7 @@ public class ServerLevel extends Level{
         if(targetChunk != null)
             return targetChunk.getLight(getLocalCoord(x), y, getLocalCoord(z));
         
-        return 15;
+        return MAX_LIGHT_LEVEL;
     }
     
     @Override

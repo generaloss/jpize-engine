@@ -2,19 +2,19 @@ package pize.tests.minecraftosp.client.chunk.mesh;
 
 import pize.Pize;
 import pize.app.Disposable;
-import pize.graphics.mesh.VertexArray;
+import pize.graphics.mesh.GlVao;
 import pize.graphics.mesh.VertexAttr;
-import pize.graphics.mesh.VertexBuffer;
+import pize.graphics.mesh.GlVbo;
 
 public abstract class ChunkMesh implements Disposable{
 
-    private VertexArray vao;
-    protected VertexBuffer vbo;
+    private GlVao vao;
+    protected GlVbo vbo;
     
     public ChunkMesh(VertexAttr... attributes){
         Pize.execSync(()->{
-            vao = new VertexArray();
-            vbo = new VertexBuffer();
+            vao = new GlVao();
+            vbo = new GlVbo();
             vbo.enableAttributes(attributes);
         });
     }

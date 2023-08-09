@@ -18,12 +18,12 @@ public class CBPacketPlaySound extends IPacket<PacketHandler>{
     }
 
 
-    public String soundID;
+    public Sound sound;
     public float volume, pitch, x, y, z;
 
-    public CBPacketPlaySound(String soundID, float volume, float pitch, float x, float y, float z){
+    public CBPacketPlaySound(Sound sound, float volume, float pitch, float x, float y, float z){
         this();
-        this.soundID = soundID;
+        this.sound = sound;
         this.volume = volume;
         this.pitch = pitch;
         this.x = x;
@@ -31,18 +31,14 @@ public class CBPacketPlaySound extends IPacket<PacketHandler>{
         this.z = z;
     }
 
-    public CBPacketPlaySound(Sound sound, float volume, float pitch, float x, float y, float z){
-        this(sound.getID(), volume, pitch, x, y, z);
-    }
-
     public CBPacketPlaySound(Sound sound, float volume, float pitch, Vec3f position){
-        this(sound.getID(), volume, pitch, position.x, position.y, position.z);
+        this(sound, volume, pitch, position.x, position.y, position.z);
     }
 
 
     @Override
     protected void write(PizeOutputStream stream) throws IOException{
-        stream.writeUTF(soundID);
+        stream.writeByte(sound.ordinal());
         stream.writeFloat(volume);
         stream.writeFloat(pitch);
         stream.writeFloat(x);
@@ -52,7 +48,7 @@ public class CBPacketPlaySound extends IPacket<PacketHandler>{
 
     @Override
     public void read(PizeInputStream stream) throws IOException{
-        soundID = stream.readUTF();
+        sound = Sound.values()[stream.readByte()];
         volume = stream.readFloat();
         pitch = stream.readFloat();
         x = stream.readFloat();

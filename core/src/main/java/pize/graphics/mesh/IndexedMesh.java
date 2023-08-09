@@ -3,22 +3,28 @@ package pize.graphics.mesh;
 import pize.app.Disposable;
 import pize.graphics.gl.Primitive;
 
-public class Mesh implements Disposable{
+public class IndexedMesh implements Disposable{
 
     private final GlVao vertexArray;
     private final GlVbo vertexBuffer;
+    private final IndexBuffer indexBuffer;
     private Primitive mode;
 
-    public Mesh(VertexAttr... attributes){
+    public IndexedMesh(VertexAttr... attributes){
         this.vertexArray = new GlVao();
         this.vertexBuffer = new GlVbo();
         this.vertexBuffer.enableAttributes(attributes);
+        this.indexBuffer = new IndexBuffer();
         this.mode = Primitive.TRIANGLES;
     }
 
 
+    public void render(int indices){
+        vertexArray.drawElements(indices, mode);
+    }
+
     public void render(){
-        vertexArray.drawArrays(vertexBuffer.getVerticesNum(), mode);
+        this.render(indexBuffer.getIndicesNum());
     }
 
     public void setMode(Primitive mode){
@@ -30,10 +36,15 @@ public class Mesh implements Disposable{
         return vertexBuffer;
     }
 
+    public IndexBuffer getIndexBuffer(){
+        return indexBuffer;
+    }
+
     @Override
     public void dispose(){
         vertexBuffer.dispose();
         vertexArray.dispose();
+        indexBuffer.dispose();
     }
 
 }
