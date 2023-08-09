@@ -1,7 +1,6 @@
 package pize.app;
 
 import pize.audio.Audio;
-import pize.audio.util.ContextTaskExecutor;
 import pize.graphics.gl.Gl;
 import pize.graphics.mesh.GlVao;
 import pize.graphics.mesh.GlVbo;

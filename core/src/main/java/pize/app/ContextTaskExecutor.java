@@ -1,4 +1,4 @@
-package pize.audio.util;
+package pize.app;
 
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
