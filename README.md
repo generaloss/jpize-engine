@@ -1,7 +1,9 @@
 # PIZE - Pizza Engine 
-The engine focuses on being clear, simple and productive
+### The engine focuses on being clear, simple and productive
 
-Kotlin version: [Pizza-Engine-Kotlin](https://github.com/Raf0707/Pizza-Engine-Kotlin) by [Raf0707](https://github.com/Raf0707) 
+Kotlin fork: [Pizza-Engine-Kotlin](https://github.com/Raf0707/Pizza-Engine-Kotlin) by [Raf0707](https://github.com/Raf0707)
+
+С++ version (InDev): [Pizza-Engine-C++](https://github.com/GeneralPashon/Pizza-Engine-Cpp)
 
 ## Tests
 #### Minecraft Open Source Edition
