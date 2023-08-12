@@ -172,10 +172,13 @@ public class InfoPanelRenderer implements Disposable{
         // Level
         infoNextLine();
         info(TextColor.DARK_GREEN, "Level", TextColor.AQUA, level.getConfiguration().getName());
-        
+
+        // Biome
+        info(TextColor.DARK_GREEN, "Biome", TextColor.AQUA, level.getBiome(playerPos.xf(), playerPos.zf()));
+
         // Rotation
         info(TextColor.DARK_GREEN, "Rotation", TextColor.AQUA,
-               "Yaw: " + String.format("%.1f", Maths.frac(camera.getRotation().yaw, -180, 180)) +
+            "Yaw: " + String.format("%.1f", Maths.frac(camera.getRotation().yaw, -180, 180)) +
             " Pitch: " + String.format("%.1f", camera.getRotation().pitch)
         );
         

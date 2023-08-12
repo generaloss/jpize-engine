@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 public enum HeightmapType{
 
     HIGHEST(blockID -> blockID == Blocks.AIR.getID()),
-    OPAQUE(blockID -> BlockData.getProps(blockID).isLightTranslucent()),
+    OPAQUE(blockID -> BlockData.getProps(blockID).isLightTranslucent() && blockID != Blocks.WATER.getID() && blockID != Blocks.ICE.getID()),
     SURFACE(blockID -> blockID == Blocks.AIR.getID() || blockID == Blocks.WATER.getID());
     
     

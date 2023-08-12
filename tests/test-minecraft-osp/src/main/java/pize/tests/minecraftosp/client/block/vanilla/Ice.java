@@ -2,13 +2,16 @@ package pize.tests.minecraftosp.client.block.vanilla;
 
 import pize.tests.minecraftosp.client.block.BlockProperties;
 import pize.tests.minecraftosp.client.block.model.BlockModel;
+import pize.tests.minecraftosp.client.block.shape.BlockCollide;
+import pize.tests.minecraftosp.client.block.shape.BlockCursor;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshType;
 import pize.tests.minecraftosp.client.resources.GameResources;
 import pize.tests.minecraftosp.main.Direction;
+import pize.tests.minecraftosp.main.audio.BlockSoundPack;
 
-public class Water extends BlockProperties{
+public class Ice extends BlockProperties{
 
-    public Water(int id){
+    public Ice(int id){
         super(id);
     }
 
@@ -16,16 +19,16 @@ public class Water extends BlockProperties{
     protected void load(GameResources resources){
         solid = true;
         lightLevel = 0;
-        opacity = 1;
+        opacity = 3;
         translucent = false;
-        soundPack = null;
+        soundPack = BlockSoundPack.GLASS;
 
         newState(
-            Direction.NONE,
-            new BlockModel(ChunkMeshType.TRANSLUCENT)
-                .allFaces( resources.getBlockRegion("water"), (byte) 2),
-            null,
-            null
+                Direction.NONE,
+                new BlockModel(ChunkMeshType.TRANSLUCENT)
+                        .allFaces( resources.getBlockRegion("ice")),
+                BlockCollide.SOLID,
+                BlockCursor.SOLID
         );
     }
 

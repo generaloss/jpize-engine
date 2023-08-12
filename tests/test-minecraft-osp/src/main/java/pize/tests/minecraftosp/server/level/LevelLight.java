@@ -221,7 +221,7 @@ public class LevelLight{
                 if(chunk.getBlockID(localSideX, checkY, localSideZ) != Blocks.AIR.getID())
                     continue;
 
-                increase(sideChunk, localSideX, checkY, localSideZ, MAX_LIGHT_LEVEL);
+                increase(sideChunk, localSideX, checkY, localSideZ, MAX_LIGHT_LEVEL - 1);
             }
         }
 

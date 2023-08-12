@@ -1,7 +1,7 @@
 package pize.tests.minecraftosp.client.block.vanilla;
 
+import pize.graphics.util.color.ImmutableColor;
 import pize.tests.minecraftosp.client.block.BlockProperties;
-import pize.tests.minecraftosp.client.block.BlockRotation;
 import pize.tests.minecraftosp.client.block.model.BlockModel;
 import pize.tests.minecraftosp.client.block.shape.BlockCollide;
 import pize.tests.minecraftosp.client.block.shape.BlockCursor;
@@ -11,9 +11,11 @@ import pize.tests.minecraftosp.main.Direction;
 import pize.tests.minecraftosp.main.audio.BlockSoundPack;
 import pize.tests.minecraftosp.main.chunk.ChunkUtils;
 
-public class OakLog extends BlockProperties {
-    
-    public OakLog(int id){
+public class SpruceLeaves extends BlockProperties{
+
+    public static final ImmutableColor COLOR = new ImmutableColor(0, 0.4, 0.1, 1);
+
+    public SpruceLeaves(int id){
         super(id);
     }
 
@@ -23,32 +25,16 @@ public class OakLog extends BlockProperties {
         lightLevel = 0;
         opacity = ChunkUtils.MAX_LIGHT_LEVEL;
         translucent = false;
-        soundPack = BlockSoundPack.WOOD;
-
-        final BlockModel model = new BlockModel(ChunkMeshType.SOLID)
-            .sideXZFaces(resources.getBlockRegion("oak_log"))
-            .yFaces(resources.getBlockRegion("oak_log_top"));
+        soundPack = BlockSoundPack.GRASS;
 
         newState(
             Direction.NONE,
-            model,
-            BlockCollide.SOLID,
-            BlockCursor.SOLID
-        );
-
-        newState(
-            Direction.NONE,
-            model.rotated(BlockRotation.Z90),
-            BlockCollide.SOLID,
-            BlockCursor.SOLID
-        );
-
-        newState(
-            Direction.NONE,
-            model.rotated(BlockRotation.X90),
+            new BlockModel(ChunkMeshType.SOLID)
+                .allFaces(resources.getBlockRegion("spruce_leaves"), COLOR)
+                .setFacesTransparentForNeighbors(true),
             BlockCollide.SOLID,
             BlockCursor.SOLID
         );
     }
-    
+
 }

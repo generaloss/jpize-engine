@@ -2,7 +2,9 @@ package pize.tests.minecraftosp.main.net.packet;
 
 import pize.net.tcp.packet.IPacket;
 import pize.net.tcp.packet.PacketHandler;
+import pize.tests.minecraftosp.client.chunk.ClientChunk;
 import pize.tests.minecraftosp.client.level.ClientLevel;
+import pize.tests.minecraftosp.main.biome.Biome;
 import pize.tests.minecraftosp.main.chunk.ChunkUtils;
 import pize.tests.minecraftosp.main.chunk.LevelChunk;
 import pize.tests.minecraftosp.main.chunk.LevelChunkSection;
@@ -12,10 +14,11 @@ import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
 import pize.tests.minecraftosp.main.chunk.storage.SectionPos;
 import pize.util.io.PizeInputStream;
 import pize.util.io.PizeOutputStream;
-import pize.tests.minecraftosp.client.chunk.ClientChunk;
 
 import java.io.IOException;
 import java.util.*;
+
+import static pize.tests.minecraftosp.main.chunk.ChunkUtils.AREA;
 
 public class CBPacketChunk extends IPacket<PacketHandler>{
     
@@ -27,6 +30,7 @@ public class CBPacketChunk extends IPacket<PacketHandler>{
     private int highestSectionIndex;
     private Collection<Heightmap> heightmapsToWrite;
     private Map<HeightmapType, short[]> readHeightmaps;
+    private Biome[] biomes;
     
     public CBPacketChunk(){
         super(PACKET_ID);
@@ -41,6 +45,7 @@ public class CBPacketChunk extends IPacket<PacketHandler>{
         sections = chunk.getSections();
         highestSectionIndex = chunk.getHighestSectionIndex();
         heightmapsToWrite = chunk.getHeightmaps();
+        biomes = chunk.getBiomes().getValues();
     }
     
     
@@ -49,6 +54,7 @@ public class CBPacketChunk extends IPacket<PacketHandler>{
         chunk.setSections(sections, highestSectionIndex);
         chunk.setHeightmaps(readHeightmaps);
         chunk.updateMaxY();
+        chunk.getBiomes().setValues(biomes);
         return chunk;
     }
     
@@ -74,6 +80,10 @@ public class CBPacketChunk extends IPacket<PacketHandler>{
         
         for(Heightmap heightmap: heightmapsToWrite)
             writeHeightmap(stream, heightmap);
+
+        // Biomes
+        for(Biome biome: biomes)
+            stream.writeByte(biome.ordinal());
     }
     
     private void writeSection(PizeOutputStream stream, int sectionIndex) throws IOException{
@@ -116,6 +126,11 @@ public class CBPacketChunk extends IPacket<PacketHandler>{
         final byte heightmapsNum = stream.readByte();
         for(int i = 0; i < heightmapsNum; i++)
             readHeightmap(stream);
+
+        // Biomes
+        biomes = new Biome[AREA];
+        for(int i = 0; i < biomes.length; i++)
+            biomes[i] = Biome.values()[stream.readByte()];
     }
     
     private void readSection(PizeInputStream stream) throws IOException{

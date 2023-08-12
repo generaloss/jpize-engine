@@ -1,6 +1,7 @@
 package pize.tests.minecraftosp.client.control;
 
 import pize.graphics.camera.controller.Rotation3DController;
+import pize.io.glfw.Key;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.minecraftosp.Minecraft;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;
@@ -85,6 +86,12 @@ public class PlayerController{
                 case THIRD_PERSON_FRONT -> camera.setPerspective(PerspectiveType.FIRST_PERSON);
             }
         }
+
+        // Boost
+        if(Key.Y.isDown())
+            player.getVelocity().mul(2, 1.4, 2);
+        if(Key.H.isDown())
+            player.getVelocity().add(camera.getRotation().getDirection().mul(2));
     }
     
     

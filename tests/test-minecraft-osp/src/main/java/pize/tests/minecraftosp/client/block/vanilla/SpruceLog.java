@@ -11,9 +11,9 @@ import pize.tests.minecraftosp.main.Direction;
 import pize.tests.minecraftosp.main.audio.BlockSoundPack;
 import pize.tests.minecraftosp.main.chunk.ChunkUtils;
 
-public class OakLog extends BlockProperties {
-    
-    public OakLog(int id){
+public class SpruceLog extends BlockProperties{
+
+    public SpruceLog(int id){
         super(id);
     }
 
@@ -26,8 +26,8 @@ public class OakLog extends BlockProperties {
         soundPack = BlockSoundPack.WOOD;
 
         final BlockModel model = new BlockModel(ChunkMeshType.SOLID)
-            .sideXZFaces(resources.getBlockRegion("oak_log"))
-            .yFaces(resources.getBlockRegion("oak_log_top"));
+            .sideXZFaces(resources.getBlockRegion("spruce_log"))
+            .yFaces(resources.getBlockRegion("spruce_log_top"));
 
         newState(
             Direction.NONE,
@@ -50,5 +50,5 @@ public class OakLog extends BlockProperties {
             BlockCursor.SOLID
         );
     }
-    
+
 }

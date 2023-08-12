@@ -11,6 +11,7 @@ import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshPackedCullingOn;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshType;
 import pize.tests.minecraftosp.client.chunk.mesh.builder.ChunkBuilder;
 import pize.tests.minecraftosp.main.Direction;
+import pize.tests.minecraftosp.main.biome.BiomeProperties;
 
 import java.util.*;
 
@@ -107,52 +108,137 @@ public class BlockModel{
     }
 
 
-    public BlockModel nxFace(Region region, IColor color){
-        nxFaces.add(new Face(Quad.getNxQuad(), region, color));
+    public BlockModel nxFace(Region region, IColor color, byte faceData){
+        nxFaces.add(
+                new Face(Quad.getNxQuad(), region, color)
+                .setFaceData(faceData)
+        );
         return this;
+    }
+
+    public BlockModel pxFace(Region region, IColor color, byte faceData){
+        pxFaces.add(
+                new Face(Quad.getPxQuad(), region, color)
+                .setFaceData(faceData)
+        );
+        return this;
+    }
+
+    public BlockModel nyFace(Region region, IColor color, byte faceData){
+        nyFaces.add(
+                new Face(Quad.getNyQuad(), region, color)
+                .setFaceData(faceData)
+        );
+        return this;
+    }
+
+    public BlockModel pyFace(Region region, IColor color, byte faceData){
+        pyFaces.add(
+                new Face(Quad.getPyQuad(), region, color)
+                .setFaceData(faceData)
+        );
+        return this;
+    }
+
+    public BlockModel nzFace(Region region, IColor color, byte faceData){
+        nzFaces.add(
+                new Face(Quad.getNzQuad(), region, color)
+                .setFaceData(faceData)
+        );
+        return this;
+    }
+
+    public BlockModel pzFace(Region region, IColor color, byte faceData){
+        pzFaces.add(
+                new Face(Quad.getPzQuad(), region, color)
+                .setFaceData(faceData)
+        );
+        return this;
+    }
+
+
+    public BlockModel nxFace(Region region, byte faceData){
+        return nxFace(region, Color.WHITE, faceData);
+    }
+
+    public BlockModel pxFace(Region region, byte faceData){
+        return pxFace(region, Color.WHITE, faceData);
+    }
+
+    public BlockModel nyFace(Region region, byte faceData){
+        return nyFace(region, Color.WHITE, faceData);
+    }
+
+    public BlockModel pyFace(Region region, byte faceData){
+        return pyFace(region, Color.WHITE, faceData);
+    }
+
+    public BlockModel nzFace(Region region, byte faceData){
+        return nzFace(region, Color.WHITE, faceData);
+    }
+
+    public BlockModel pzFace(Region region, byte faceData){
+        return pzFace(region, Color.WHITE, faceData);
+    }
+
+
+    public BlockModel nxFace(Region region, IColor color){
+        return nxFace(region, color, (byte) 0);
     }
 
     public BlockModel pxFace(Region region, IColor color){
-        pxFaces.add(new Face(Quad.getPxQuad(), region, color));
-        return this;
+        return pxFace(region, color, (byte) 0);
     }
 
     public BlockModel nyFace(Region region, IColor color){
-        nyFaces.add(new Face(Quad.getNyQuad(), region, color));
-        return this;
+        return nyFace(region, color, (byte) 0);
     }
 
     public BlockModel pyFace(Region region, IColor color){
-        pyFaces.add(new Face(Quad.getPyQuad(), region, color));
-        return this;
+        return pyFace(region, color, (byte) 0);
     }
 
     public BlockModel nzFace(Region region, IColor color){
-        nzFaces.add(new Face(Quad.getNzQuad(), region, color));
-        return this;
+        return nzFace(region, color, (byte) 0);
     }
 
     public BlockModel pzFace(Region region, IColor color){
-        pzFaces.add(new Face(Quad.getPzQuad(), region, color));
+        return pzFace(region, color, (byte) 0);
+    }
+
+
+    public BlockModel allFaces(Region region, IColor color, byte faceData){
+        nxFace(region, color, faceData);
+        pxFace(region, color, faceData);
+        nyFace(region, color, faceData);
+        pyFace(region, color, faceData);
+        nzFace(region, color, faceData);
+        pzFace(region, color, faceData);
         return this;
     }
 
     public BlockModel allFaces(Region region, IColor color){
-        nxFace(region, color);
-        pxFace(region, color);
-        nyFace(region, color);
-        pyFace(region, color);
-        nzFace(region, color);
-        pzFace(region, color);
+        return allFaces(region, color, (byte) 0);
+    }
+
+    public BlockModel allFaces(Region region, byte faceData){
+        return allFaces(region, Color.WHITE, faceData);
+    }
+
+    public BlockModel sideXZFaces(Region region, IColor color, byte faceData){
+        nxFace(region, color, faceData);
+        pxFace(region, color, faceData);
+        nzFace(region, color, faceData);
+        pzFace(region, color, faceData);
         return this;
     }
 
     public BlockModel sideXZFaces(Region region, IColor color){
-        nxFace(region, color);
-        pxFace(region, color);
-        nzFace(region, color);
-        pzFace(region, color);
-        return this;
+        return sideXZFaces(region, color, (byte) 0);
+    }
+
+    public BlockModel sideXZFaces(Region region, byte faceData){
+        return sideXZFaces(region, Color.WHITE, faceData);
     }
 
     public BlockModel sideXYFaces(Region region, IColor color){
@@ -243,12 +329,29 @@ public class BlockModel{
     }
 
 
+    public IColor pickFaceColor(Face face, BiomeProperties biome){
+        final IColor color;
+        if(face.isGrassColoring())
+            color = biome.getGrassColor();
+        else if(face.isWaterColoring())
+            color = biome.getWaterColor();
+        else
+            color = Color.WHITE;
+
+        return color;
+    }
+
+
     public void build(ChunkBuilder builder, BlockProperties block, int lx, int y, int lz){
         if(meshType == ChunkMeshType.CUSTOM){
+
             // Custom faces
             final float light = (float) builder.chunk.getLight(lx, y, lz) / MAX_LIGHT_LEVEL;
-            for(Face face: faces)
-                face.putFloats(builder.customMesh.getVerticesList(), lx, y, lz, light, light, light, light);
+            for(Face face: faces){
+                final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+                face.putFloats(builder.customMesh.getVerticesList(),  lx, y, lz,  color,  light, light, light, light);
+            }
+
         }else{
             // Solid faces
             buildSolidFaces(builder, block, lx, y, lz);
@@ -288,11 +391,13 @@ public class BlockModel{
         final float brightness3 = shadow * ao3 * light3;
         final float brightness4 = shadow * ao4 * light4;
 
+        final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+
         final ChunkMeshPackedCullingOn mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
         if(brightness2 + brightness4 > brightness1 + brightness3)
-            face.putIntsPackedFlipped(mesh.getVerticesList(), x, y, z, brightness1, brightness2, brightness3, brightness4);
+            face.putIntsPackedFlipped(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
         else
-            face.putIntsPacked(mesh.getVerticesList(), x, y, z, brightness1, brightness2, brightness3, brightness4);
+            face.putIntsPacked(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
     }
 
     private void buildPxFace(ChunkBuilder builder, Face face, int x, int y, int z){
@@ -313,11 +418,13 @@ public class BlockModel{
         final float brightness3 = shadow * ao3 * light3;
         final float brightness4 = shadow * ao4 * light4;
 
+        final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+
         final ChunkMeshPackedCullingOn mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
         if(brightness2 + brightness4 > brightness1 + brightness3)
-            face.putIntsPackedFlipped(mesh.getVerticesList(), x, y, z, brightness1, brightness2, brightness3, brightness4);
+            face.putIntsPackedFlipped(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
         else
-            face.putIntsPacked(mesh.getVerticesList(), x, y, z, brightness1, brightness2, brightness3, brightness4);
+            face.putIntsPacked(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
     }
 
     private void buildNyFace(ChunkBuilder builder, Face face, int x, int y, int z){
@@ -338,11 +445,13 @@ public class BlockModel{
         final float brightness3 = shadow * ao3 * light3;
         final float brightness4 = shadow * ao4 * light4;
 
+        final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+
         final ChunkMeshPackedCullingOn mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
         if(brightness2 + brightness4 > brightness1 + brightness3)
-            face.putIntsPackedFlipped(mesh.getVerticesList(), x, y, z, brightness1, brightness2, brightness3, brightness4);
+            face.putIntsPackedFlipped(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
         else
-            face.putIntsPacked(mesh.getVerticesList(), x, y, z, brightness1, brightness2, brightness3, brightness4);
+            face.putIntsPacked(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
     }
 
     private void buildPyFace(ChunkBuilder builder, Face face, int x, int y, int z){
@@ -363,11 +472,13 @@ public class BlockModel{
         final float brightness3 = shadow * ao3 * light3;
         final float brightness4 = shadow * ao4 * light4;
 
+        final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+
         final ChunkMeshPackedCullingOn mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
         if(brightness2 + brightness4 > brightness1 + brightness3)
-            face.putIntsPackedFlipped(mesh.getVerticesList(), x, y, z, brightness1, brightness2, brightness3, brightness4);
+            face.putIntsPackedFlipped(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
         else
-            face.putIntsPacked(mesh.getVerticesList(), x, y, z, brightness1, brightness2, brightness3, brightness4);
+            face.putIntsPacked(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
     }
 
     private void buildNzFace(ChunkBuilder builder, Face face, int x, int y, int z){
@@ -388,11 +499,13 @@ public class BlockModel{
         final float brightness3 = shadow * ao3 * light3;
         final float brightness4 = shadow * ao4 * light4;
 
+        final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+
         final ChunkMeshPackedCullingOn mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
         if(brightness2 + brightness4 > brightness1 + brightness3)
-            face.putIntsPackedFlipped(mesh.getVerticesList(), x, y, z, brightness1, brightness2, brightness3, brightness4);
+            face.putIntsPackedFlipped(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
         else
-            face.putIntsPacked(mesh.getVerticesList(), x, y, z, brightness1, brightness2, brightness3, brightness4);
+            face.putIntsPacked(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
     }
 
     private void buildPzFace(ChunkBuilder builder, Face face, int x, int y, int z){
@@ -413,11 +526,13 @@ public class BlockModel{
         final float brightness3 = shadow * ao3 * light3;
         final float brightness4 = shadow * ao4 * light4;
 
+        final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+
         final ChunkMeshPackedCullingOn mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
         if(brightness2 + brightness4 > brightness1 + brightness3)
-            face.putIntsPackedFlipped(mesh.getVerticesList(), x, y, z, brightness1, brightness2, brightness3, brightness4);
+            face.putIntsPackedFlipped(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
         else
-            face.putIntsPacked(mesh.getVerticesList(), x, y, z, brightness1, brightness2, brightness3, brightness4);
+            face.putIntsPacked(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
     }
 
 

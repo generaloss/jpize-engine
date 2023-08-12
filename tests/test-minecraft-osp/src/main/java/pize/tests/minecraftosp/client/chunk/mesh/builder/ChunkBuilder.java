@@ -9,6 +9,7 @@ import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshPackedCullingOn;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshStack;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshTranslucentCullingOn;
 import pize.tests.minecraftosp.client.level.ClientChunkManager;
+import pize.tests.minecraftosp.main.biome.Biome;
 import pize.tests.minecraftosp.main.block.BlockData;
 import pize.tests.minecraftosp.main.chunk.LevelChunk;
 import pize.tests.minecraftosp.main.chunk.LevelChunkSection;
@@ -37,6 +38,7 @@ public class ChunkBuilder{
     public ChunkMeshPackedCullingOn solidMesh;
     public ChunkMeshCullingOff customMesh;
     public ChunkMeshTranslucentCullingOn translucentMesh;
+    public Biome currentBiome;
 
     public double buildTime;
     public int verticesNum;
@@ -83,8 +85,10 @@ public class ChunkBuilder{
             for(int lx = 0; lx < SIZE; lx++){
                 state.incrementAndGet();
                 for(int lz = 0; lz < SIZE; lz++){
-                    
+
+                    currentBiome = chunk.getBiomes().getBiome(lx, lz);
                     final int height = heightmap.getHeight(lx, lz) + 1;
+
                     for(int y = 0; y < height; y++){
                         final int sectionIndex = getSectionIndex(y);
                         if(sections[sectionIndex] == null)

@@ -2,6 +2,7 @@ package pize.tests.minecraftosp.main.chunk;
 
 import pize.tests.minecraftosp.client.block.BlockProperties;
 import pize.tests.minecraftosp.client.block.Blocks;
+import pize.tests.minecraftosp.main.biome.BiomeMap;
 import pize.tests.minecraftosp.main.block.BlockData;
 import pize.tests.minecraftosp.main.chunk.storage.ChunkPos;
 import pize.tests.minecraftosp.main.chunk.storage.Heightmap;
@@ -22,6 +23,7 @@ public class LevelChunk{
     protected final LevelChunkSection[] sections;
     protected int highestSectionIndex;
     protected final Map<HeightmapType, Heightmap> heightmaps;
+    protected final BiomeMap biomes;
 
     public LevelChunk(Level level, ChunkPos position){
         this.level = level;
@@ -33,6 +35,8 @@ public class LevelChunk{
         this.heightmaps = new HashMap<>();
         for(HeightmapType type: HeightmapType.values())
             heightmaps.put(type, new Heightmap(this, type));
+
+        biomes = new BiomeMap();
     }
     
     public Level getLevel(){
@@ -205,6 +209,11 @@ public class LevelChunk{
 
         // if(getLevel() instanceof ServerLevel serverLevel)
         //     serverLevel.getServer().getPlayerList().broadcastPacket(new CBPacketLightUpdate(section));
+    }
+
+
+    public BiomeMap getBiomes(){
+        return biomes;
     }
     
     

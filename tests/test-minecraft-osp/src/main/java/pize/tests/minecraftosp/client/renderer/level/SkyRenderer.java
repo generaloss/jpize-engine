@@ -26,7 +26,9 @@ public class SkyRenderer implements Disposable{
     private final Shader sunriseShader, skydiscShader;
     private final GlVbo sunriseVbo, lightSkyVbo, darkSkyVbo;
     private final GlVao sunriseVao, lightSkyVao, darkSkyVao;
-    
+
+    private float skyBrightness;
+
     public SkyRenderer(LevelRenderer levelRenderer){
         this.levelRenderer = levelRenderer;
         
@@ -94,9 +96,13 @@ public class SkyRenderer implements Disposable{
         // Skybox
         skyViewMatrix.set(camera.getView());
         skyViewMatrix.cullPosition();
-        // skyBox.render(camera.getProjection(), skyViewMatrix);
-        
+        // [Skybox]: skyBox.render(camera.getProjection(), skyViewMatrix);
+
+        // Calc brightness
         final GameTime time = levelRenderer.getGameRenderer().getSession().getGame().getTime();
+        this.skyBrightness = calcSkyBrightness(time);
+
+        // Color
         final Color skyColor = getSkyColor();
         final Color fogColor = getFogColor();
         
@@ -168,20 +174,25 @@ public class SkyRenderer implements Disposable{
         Gl.depthMask(true);
         Gl.cullFace(Face.BACK);
     }
-    
+
+
+    private float calcSkyBrightness(GameTime time){
+        final float sin = Maths.cosDeg(time.getDays() * 360);
+        final float nor = sin * 0.5F + 0.5F;
+        final float pow = Mathc.pow(nor, 2);
+        return Maths.map(pow, 0, 1, 0.05F, 1F);
+    }
+
+    public float getSkyBrightness(){
+        return skyBrightness;
+    }
     
     public Color getFogColor(){
-        final GameTime time = levelRenderer.getGameRenderer().getSession().getGame().getTime();
-
-        return new Color(0.6, 0.75, 0.9, 0.95)
-            .mul(Maths.map(Mathc.pow(Maths.sinDeg(time.getDays() * 360), 0.5), -Maths.Sqrt2, Maths.Sqrt2, 0, 1));
+        return new Color(0.6, 0.75, 0.9, 0.95).mul(skyBrightness);
     }
     
     public Color getSkyColor(){
-        final GameTime time = levelRenderer.getGameRenderer().getSession().getGame().getTime();
-
-        return new Color(0.35, 0.6, 1, 1)
-            .mul(Maths.map(Mathc.pow(Maths.sinDeg(time.getDays() * 360), 0.5), -Maths.Sqrt2, Maths.Sqrt2, 0, 1));
+        return new Color(0.35, 0.6, 1, 1).mul(skyBrightness);
     }
 
     public float getFogStart(){

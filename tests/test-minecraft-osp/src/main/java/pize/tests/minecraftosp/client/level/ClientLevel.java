@@ -2,6 +2,7 @@ package pize.tests.minecraftosp.client.level;
 
 import pize.tests.minecraftosp.Minecraft;
 import pize.tests.minecraftosp.client.block.Blocks;
+import pize.tests.minecraftosp.main.biome.Biome;
 import pize.tests.minecraftosp.main.chunk.ChunkUtils;
 import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
 import pize.tests.minecraftosp.main.level.Level;
@@ -70,6 +71,15 @@ public class ClientLevel extends Level {
         final ClientChunk targetChunk = getBlockChunk(x, z);
         if(targetChunk != null)
             targetChunk.setLight(ChunkUtils.getLocalCoord(x), y, ChunkUtils.getLocalCoord(z), level);
+    }
+
+
+    public Biome getBiome(int x, int z){
+        final ClientChunk targetChunk = getBlockChunk(x, z);
+        if(targetChunk != null)
+            return targetChunk.getBiomes().getBiome(ChunkUtils.getLocalCoord(x), ChunkUtils.getLocalCoord(z));
+
+        return null;
     }
     
     

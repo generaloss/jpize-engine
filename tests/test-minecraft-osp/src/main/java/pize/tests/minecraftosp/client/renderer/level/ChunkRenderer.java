@@ -95,6 +95,7 @@ public class ChunkRenderer implements Disposable{
         final Options options = levelRenderer.getGameRenderer().getSession().getOptions();
         final Color fogColor = levelRenderer.getSkyRenderer().getFogColor();
         final float fogStart = levelRenderer.getSkyRenderer().getFogStart();
+        final float skyBrightness = levelRenderer.getSkyRenderer().getSkyBrightness();
         final Texture blockAtlas = levelRenderer.getGameRenderer().getSession().getResources().getBlocks();
         final GameTime gameTime = levelRenderer.getGameRenderer().getSession().getGame().getTime();
         
@@ -108,8 +109,7 @@ public class ChunkRenderer implements Disposable{
         packedChunkShader.setUniform("u_fogColor", fogColor);
         packedChunkShader.setUniform("u_fogStart", fogStart);
         packedChunkShader.setUniform("u_brightness", options.getBrightness());
-
-        packedChunkShader.setUniform("u_gameTime", gameTime.getTicks());
+        packedChunkShader.setUniform("u_skyBrightness", skyBrightness);
 
         // Custom
         customShader.bind();
@@ -121,6 +121,7 @@ public class ChunkRenderer implements Disposable{
         customShader.setUniform("u_fogColor", fogColor);
         customShader.setUniform("u_fogStart", fogStart);
         customShader.setUniform("u_brightness", options.getBrightness());
+        customShader.setUniform("u_skyBrightness", skyBrightness);
     }
     
     public int getRenderedChunks(){

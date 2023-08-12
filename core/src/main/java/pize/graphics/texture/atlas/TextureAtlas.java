@@ -36,10 +36,10 @@ public class TextureAtlas<I>{
             if(drawResult == null)
                 throw new Error("Insufficient atlas area");
             
-            int drawX = drawResult.getX() + paddingLeft;
-            int drawY = drawResult.getY() + paddingTop;
-            int drawWidth = image.pixmap.getWidth();
-            int drawHeight = image.pixmap.getHeight();
+            final int drawX = drawResult.getX() + paddingLeft;
+            final int drawY = drawResult.getY() + paddingTop;
+            final int drawWidth = image.pixmap.getWidth();
+            final int drawHeight = image.pixmap.getHeight();
             
             pixmap.drawPixmap(image.pixmap, drawX, drawY);
             

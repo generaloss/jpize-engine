@@ -21,10 +21,8 @@ void main(){
     int z = (a_packed_1 >> 14) &  31; // 5 bit - [0, 31]
     vec4 position = vec4(x, y, z, 1);
 
-    float u = float((a_packed_1 >> 19) & 15) * tileWidth;  // 4 bit - [0, 15]
-    float v = float((a_packed_1 >> 23) & 15) * tileHeight; // 4 bit - [0, 15]
-
-    int framesNum = (a_packed_1 >> 27); // 4 bit - [0, 15] - (без & 15 т.к. это и так последние 4 бита)
+    float u = float((a_packed_1 >> 19) & 63) * tileWidth;  // 6 bit - [0, 63]
+    float v = float((a_packed_1 >> 25) & 63) * tileHeight; // 6 bit - [0, 63]
 
     float r = float((a_packed_2      ) & 255) / 255; // 8 bit - [0, 255]
     float g = float((a_packed_2 >> 8 ) & 255) / 255; // 8 bit - [0, 255]

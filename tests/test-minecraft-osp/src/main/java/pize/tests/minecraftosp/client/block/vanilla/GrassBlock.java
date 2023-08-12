@@ -1,6 +1,5 @@
 package pize.tests.minecraftosp.client.block.vanilla;
 
-import pize.graphics.util.color.ImmutableColor;
 import pize.tests.minecraftosp.client.block.BlockProperties;
 import pize.tests.minecraftosp.client.block.model.BlockModel;
 import pize.tests.minecraftosp.client.block.shape.BlockCollide;
@@ -13,8 +12,6 @@ import pize.tests.minecraftosp.main.chunk.ChunkUtils;
 
 public class GrassBlock extends BlockProperties {
 
-    public static final ImmutableColor COLOR = Grass.COLOR;
-    
     public GrassBlock(int id){
         super(id);
     }
@@ -31,8 +28,8 @@ public class GrassBlock extends BlockProperties {
             Direction.NONE,
             new BlockModel(ChunkMeshType.SOLID)
                 .sideXZFaces(resources.getBlockRegion("grass_block_side"))
-                .sideXZFaces(resources.getBlockRegion("grass_block_side_overlay"), COLOR)
-                .pyFace(resources.getBlockRegion("grass_block_top"), COLOR)
+                .sideXZFaces(resources.getBlockRegion("grass_block_side_overlay"), (byte) 1)
+                .pyFace(resources.getBlockRegion("grass_block_top"), (byte) 1)
                 .nyFace(resources.getBlockRegion("dirt")),
             BlockCollide.SOLID,
             BlockCursor.SOLID

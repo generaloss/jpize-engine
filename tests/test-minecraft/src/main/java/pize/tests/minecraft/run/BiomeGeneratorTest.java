@@ -95,23 +95,20 @@ public class BiomeGeneratorTest extends AppAdapter{
         Pixmap mapPixmap = new Pixmap(size, size);
         mapPixmap.clear(1F, 1F, 1F, 1F);
 
-        FastNoiseLite heightMapNoise = new FastNoiseLite();
-        heightMapNoise.setNoiseType(FastNoiseLite.NoiseType.Perlin);
-        heightMapNoise.setFractalType(FastNoiseLite.FractalType.FBm);
-        heightMapNoise.setSeed((int) Maths.randomSeed(4));
-        heightMapNoise.setFractalOctaves(8);
-        heightMapNoise.setFrequency(0.002F);
-        heightMapNoise.setRotationType3D(FastNoiseLite.RotationType3D.ImproveXZPlanes);
+        FastNoiseLite continentalnessNoise = new FastNoiseLite();
+        continentalnessNoise.setFrequency(0.002F);
+        continentalnessNoise.setFractalType(FastNoiseLite.FractalType.FBm);
+        continentalnessNoise.setFractalOctaves(7);
 
         FastNoiseLite riverNoise = new FastNoiseLite();
-        riverNoise.setNoiseType(FastNoiseLite.NoiseType.Perlin);
+        riverNoise.setNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
         riverNoise.setFractalType(FastNoiseLite.FractalType.FBm);
         riverNoise.setSeed((int) Maths.randomSeed(4));
         riverNoise.setFractalOctaves(16);
         riverNoise.setFrequency(0.003F);
 
         FastNoiseLite temperatureNoise = new FastNoiseLite();
-        temperatureNoise.setNoiseType(FastNoiseLite.NoiseType.Perlin);
+        temperatureNoise.setNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
         temperatureNoise.setFractalType(FastNoiseLite.FractalType.FBm);
         temperatureNoise.setSeed((int) Maths.randomSeed(4));
         temperatureNoise.setFrequency(0.002F);
@@ -122,12 +119,12 @@ public class BiomeGeneratorTest extends AppAdapter{
                 float temperature = temperatureNoise.getNoise(x, z) / 2 + 0.5F;
                 //float longHeight = periodicHeightMapNoise.getNoise(x,z);
                 //longHeight = longHeight / Mathc.pow(1 - longHeight,-1.2);
-                float height = heightMapNoise.getNoise(x, z) / 2 + 0.5F;// + longHeight;
-                float oceanLevel = 0.43F;
-                float humidity = 1 - height;
-                float river = riverNoise.getNoise(x, z) / 2 + 0.5F;
+                final float height = continentalnessNoise.getNoise(x, z) / 2 + 0.5F;// + longHeight;
+                final float oceanLevel = 0.43F;
+                final float humidity = 1 - height;
+                final float river = riverNoise.getNoise(x, z) / 2 + 0.5F;
 
-                Color color = new Color(0, 0, 0, 0F);
+                final Color color = new Color(0, 0, 0, 0F);
 
                 if(height <= oceanLevel){
                     if(temperature > 0.4)

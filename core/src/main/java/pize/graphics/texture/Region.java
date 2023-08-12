@@ -114,4 +114,10 @@ public class Region{
         return new Region(this);
     }
 
+
+    @Override
+    public String toString(){
+        return "[" + u1 + ", " + v1 + "]; [" + u2 + ", " + v2 + "]";
+    }
+
 }

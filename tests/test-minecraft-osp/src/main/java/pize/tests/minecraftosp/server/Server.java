@@ -39,7 +39,7 @@ public abstract class Server implements Tickable{
     
     
     public void run(){
-        getLevelManager().createLevel(getConfiguration().getDefaultLevelName(), 43337, DefaultGenerator.getInstance()); // Create default level
+        getLevelManager().createLevel(getConfiguration().getDefaultLevelName(), 22854, DefaultGenerator.getInstance()); // Create default level
         tcpServer.run(getConfiguration().getAddress(), getConfiguration().getPort()); // Run TCP server
         
         new TickGenerator(GameTime.TICKS_PER_SECOND).startAsync(this);

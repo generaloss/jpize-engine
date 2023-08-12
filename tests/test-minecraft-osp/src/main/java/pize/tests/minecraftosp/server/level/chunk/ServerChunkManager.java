@@ -70,7 +70,7 @@ public class ServerChunkManager extends ChunkManager{
                     loadChunks();
                     unloadChunks();
                 }catch(Exception e){
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
                 
                 Thread.yield();
@@ -135,10 +135,10 @@ public class ServerChunkManager extends ChunkManager{
         
         // Fast flood fill
         for(final ChunkPos frontierPos: frontiers){
-            ensureFrontier(frontierPos.getNeighbor(-1, 0));
-            ensureFrontier(frontierPos.getNeighbor(1, 0));
-            ensureFrontier(frontierPos.getNeighbor(0, -1));
-            ensureFrontier(frontierPos.getNeighbor(0, 1));
+            ensureFrontier(frontierPos.getNeighbor(-1,  0));
+            ensureFrontier(frontierPos.getNeighbor( 1,  0));
+            ensureFrontier(frontierPos.getNeighbor( 0, -1));
+            ensureFrontier(frontierPos.getNeighbor( 0,  1));
         }
     
         frontiers.removeIf(this::isOffTheGrid);
