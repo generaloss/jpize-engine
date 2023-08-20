@@ -1,6 +1,7 @@
 package pize.tests.minecraftosp.client.chunk;
 
 import pize.math.vecmath.matrix.Matrix4f;
+import pize.tests.minecraftosp.client.block.Block;
 import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshStack;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;
@@ -13,7 +14,7 @@ import pize.tests.minecraftosp.main.chunk.storage.Heightmap;
 import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
 import pize.tests.minecraftosp.main.level.ChunkManagerUtils;
 
-public class ClientChunk extends LevelChunk {
+public class ClientChunk extends LevelChunk{
 
     private final ChunkMeshStack meshStack;
     private final Matrix4f translationMatrix;
@@ -36,44 +37,69 @@ public class ClientChunk extends LevelChunk {
     }
 
     public void updateTranslationMatrix(GameCamera camera){
-        translationMatrix.toTranslated(
-            position.globalX() - camera.getX(),
-            0,
-            position.globalZ() - camera.getZ()
-        );
+        final float relativeChunkX = position.globalX() - camera.getX();
+        final float relativeChunkZ = position.globalZ() - camera.getZ();
+        translationMatrix.toTranslated(relativeChunkX, 0, relativeChunkZ);
     }
-    
-    
-    public boolean setBlock(int lx, int y, int lz, short blockData){
-        if(!super.setBlock(lx, y, lz, blockData) || ChunkUtils.isOutOfBounds(lx, lz))
+
+
+    @Override
+    public boolean setBlockState(int lx, int y, int lz, short blockData){
+        if(!super.setBlockState(lx, y, lz, blockData) || ChunkUtils.isOutOfBounds(lx, lz))
             return false;
 
-        final Heightmap heightmapHighest = getHeightMap(HeightmapType.HIGHEST);
-        heightmapHighest.update(lx, y, lz, BlockData.getID(blockData) != Blocks.AIR.getID());
+        final boolean blockPlaced = BlockData.getID(blockData) != Blocks.AIR.getID();
+        for(Heightmap heightmap: heightmaps.values())
+            heightmap.update(lx, y, lz, blockPlaced);
+        updateMaxY();
+
         rebuild(true);
         ChunkManagerUtils.rebuildNeighborChunks(this, lx, lz);
 
-        updateMaxY();
-        
         return true;
     }
-    
-    public void setLight(int lx, int y, int lz, int level){
-        super.setLight(lx, y, lz, level);
+
+    @Override
+    public boolean setBlock(int lx, int y, int lz, Block block){
+        if(!super.setBlock(lx, y, lz, block) || ChunkUtils.isOutOfBounds(lx, lz))
+            return false;
+
+        final boolean blockPlaced = block != Blocks.AIR;
+        for(Heightmap heightmap: heightmaps.values())
+            heightmap.update(lx, y, lz, blockPlaced);
+        updateMaxY();
+
+        rebuild(true);
+        ChunkManagerUtils.rebuildNeighborChunks(this, lx, lz);
+
+        return true;
+    }
+
+    @Override
+    public void setSkyLight(int lx, int y, int lz, int level){
+        super.setSkyLight(lx, y, lz, level);
         rebuild(true);
     }
-    
-    
+
+    @Override
+    public void setBlockLight(int lx, int y, int lz, int level){
+        super.setSkyLight(lx, y, lz, level);
+        rebuild(true);
+    }
+
+
     public void rebuild(boolean important){
         getLevel().getChunkManager().rebuildChunk(this, important);
     }
-    
+
+    @Override
     public ClientLevel getLevel(){
         return (ClientLevel) level;
     }
-    
-    public ClientChunk getNeighbor(int chunkX, int chunkZ){
-        return getLevel().getChunkManager().getChunk(position.x + chunkX, position.z + chunkZ);
+
+    @Override
+    public ClientChunk getNeighborChunk(int signX, int signZ){
+        return (ClientChunk) super.getNeighborChunk(signX, signZ);
     }
 
 
@@ -83,9 +109,9 @@ public class ClientChunk extends LevelChunk {
 
     public void updateMaxY(){
         maxY = 0;
-        final Heightmap heightmapHighest = getHeightMap(HeightmapType.HIGHEST);
-        for(short height: heightmapHighest.getValues())
+        final Heightmap heightmapSurface = getHeightMap(HeightmapType.SURFACE);
+        for(short height: heightmapSurface.getValues())
             maxY = Math.max(maxY, height);
     }
-    
+
 }

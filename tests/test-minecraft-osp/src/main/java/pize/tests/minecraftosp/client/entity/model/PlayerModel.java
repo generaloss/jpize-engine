@@ -8,10 +8,9 @@ import pize.physic.Velocity3f;
 import pize.tests.minecraftosp.Minecraft;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;
 import pize.tests.minecraftosp.client.control.camera.PerspectiveType;
+import pize.tests.minecraftosp.client.entity.AbstractClientPlayer;
 import pize.tests.minecraftosp.client.options.Options;
 import pize.tests.minecraftosp.main.time.GameTime;
-import pize.tests.minecraftosp.client.entity.AbstractClientPlayer;
-import pize.tests.minecraftosp.client.level.ClientLevel;
 
 public class PlayerModel extends HumanoidModel{
     
@@ -111,7 +110,7 @@ public class PlayerModel extends HumanoidModel{
         torso.getPosition().set(player.getLerpPosition());
         head.getPosition().set(player.getLerpPosition());
         
-        final Minecraft session = ((ClientLevel) player.getLevel()).getSession();
+        final Minecraft session = player.getLevel().getGame().getSession();
         final Options options = session.getOptions();
         final GameCamera camera = session.getGame().getCamera();
         if(options.isFirstPersonModel() && camera.getPerspective() == PerspectiveType.FIRST_PERSON){
@@ -143,7 +142,7 @@ public class PlayerModel extends HumanoidModel{
             rightLeg.getRotation().pitch = 0;
         }
 
-        final GameTime gameTime = ((ClientLevel) player.getLevel()).getSession().getGame().getTime();
+        final GameTime gameTime = player.getLevel().getGame().getTime();
         final float animationTime = gameTime.getSeconds() * 2;
 
         // Animation

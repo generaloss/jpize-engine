@@ -2,19 +2,20 @@ package pize;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.opengl.GL;
 import pize.app.AppAdapter;
 import pize.app.Context;
 import pize.app.Screen;
 import pize.audio.Audio;
-import pize.graphics.gl.BlendFactor;
-import pize.graphics.gl.Gl;
-import pize.graphics.gl.Target;
 import pize.io.joystick.JoystickManager;
 import pize.io.keyboard.Keyboard;
-import pize.io.monitor.Monitor;
 import pize.io.monitor.MonitorManager;
 import pize.io.mouse.Mouse;
 import pize.io.window.Window;
+import pize.lib.gl.Gl;
+import pize.lib.gl.glenum.GlTarget;
+import pize.lib.gl.texture.GlBlendFactor;
+import pize.lib.glfw.monitor.GlfwMonitor;
 import pize.math.vecmath.vector.Vec2f;
 
 import java.util.function.BooleanSupplier;
@@ -22,23 +23,24 @@ import java.util.function.BooleanSupplier;
 public class Pize{
 
     private static Context context;
-    
-    private static void init(){
-        GLFWErrorCallback.createPrint(System.err).set();
-        GLFW.glfwInit();
-        
-        MonitorManager.init();
-        JoystickManager.init();
-    }
 
     public static void create(String title, int width, int height, boolean resizable, boolean vsync, int samples){
-        init();
-        
+        // Init GLFW
+        GLFWErrorCallback.createPrint(System.err).set();
+        GLFW.glfwInit();
+
+        // Init Managers
+        MonitorManager.init();
+        JoystickManager.init();
+
+        // Create Context
         final Window window = new Window(title, width, height, resizable, vsync, samples);
         context = new Context(window, new Keyboard(window), new Mouse(window));
 
-        Gl.enable(Target.BLEND, Target.CULL_FACE, Target.MULTISAMPLE);
-        Gl.blendFunc(BlendFactor.SRC_ALPHA, BlendFactor.ONE_MINUS_SRC_ALPHA);
+        // Init GL
+        GL.createCapabilities();
+        Gl.enable(GlTarget.BLEND, GlTarget.CULL_FACE, GlTarget.MULTISAMPLE);
+        Gl.blendFunc(GlBlendFactor.SRC_ALPHA, GlBlendFactor.ONE_MINUS_SRC_ALPHA);
     }
     
     public static void create(String title, int width, int height){
@@ -70,7 +72,7 @@ public class Pize{
         return context.getMouse();
     }
 
-    public static Monitor monitor(){
+    public static GlfwMonitor monitor(){
         return MonitorManager.getPrimary();
     }
 

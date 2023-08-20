@@ -2,15 +2,15 @@ package pize.devtests;
 
 import pize.Pize;
 import pize.app.AppAdapter;
+import pize.lib.gl.Gl;
+import pize.lib.gl.vertex.GlVertexAttr;
+import pize.lib.gl.glenum.GlTarget;
+import pize.lib.gl.type.GlType;
 import pize.graphics.camera.PerspectiveCamera;
 import pize.graphics.camera.controller.Rotation3DController;
-import pize.graphics.gl.Gl;
-import pize.graphics.gl.Target;
-import pize.graphics.gl.Type;
+import pize.graphics.mesh.IndexedMesh;
 import pize.graphics.util.BaseShader;
 import pize.graphics.util.SkyBox;
-import pize.graphics.mesh.Mesh;
-import pize.graphics.mesh.VertexAttr;
 import pize.io.glfw.Key;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
@@ -24,7 +24,7 @@ public class QuadFromNormalTest extends AppAdapter{
     PerspectiveCamera camera;
     Rotation3DController rotationController;
 
-    Mesh quadMesh;
+    IndexedMesh quadMesh;
 
     public void init(){
         // Camera
@@ -37,15 +37,15 @@ public class QuadFromNormalTest extends AppAdapter{
         shader = BaseShader.getPos3UColor();
         // Mesh
 
-        quadMesh = new Mesh(new VertexAttr(3, Type.FLOAT));
+        quadMesh = new IndexedMesh(new GlVertexAttr(3, GlType.FLOAT));
         generateFromBlockFace(new Vec3i(0, 1, 0));
-        quadMesh.setIndices(new int[]{
+        quadMesh.getIndexBuffer().setData(new int[]{
             0, 1, 2,
             2, 3, 0
         });
 
         // Disable cull face
-        Gl.disable(Target.CULL_FACE);
+        Gl.disable(GlTarget.CULL_FACE);
     }
 
     public void update(){
@@ -126,7 +126,7 @@ public class QuadFromNormalTest extends AppAdapter{
         p4.mul(0.5).add(normal);
 
         // Set vertices
-        quadMesh.setVertices(new float[]{
+        quadMesh.getBuffer().setData(new float[]{
             p1.x, p1.y, p1.z, // 0
             p2.x, p2.y, p2.z, // 1
             p3.x, p3.y, p3.z, // 2

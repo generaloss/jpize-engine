@@ -1,10 +1,10 @@
 package pize.tests.minecraftosp.client.block.shape;
 
 import pize.app.Disposable;
-import pize.graphics.gl.Primitive;
-import pize.graphics.gl.Type;
+import pize.lib.gl.tesselation.GlPrimitive;
+import pize.lib.gl.type.GlType;
 import pize.graphics.mesh.IndexedMesh;
-import pize.graphics.mesh.VertexAttr;
+import pize.lib.gl.vertex.GlVertexAttr;
 
 public class BlockCursor implements Disposable{
     
@@ -15,10 +15,10 @@ public class BlockCursor implements Disposable{
     private final IndexedMesh mesh;
     
     public BlockCursor(float[] vertices, int[] indices){
-        this.mesh = new IndexedMesh(new VertexAttr(3, Type.FLOAT));
+        this.mesh = new IndexedMesh(new GlVertexAttr(3, GlType.FLOAT));
         this.mesh.getBuffer().setData(vertices);
         this.mesh.getIndexBuffer().setData(indices);
-        this.mesh.setMode(Primitive.LINES);
+        this.mesh.setMode(GlPrimitive.LINES);
     }
     
     

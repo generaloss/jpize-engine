@@ -12,8 +12,8 @@ void main(){
     float angle = asin(position.y / hypot) / 3.1415926535897932384246 * 2;
 
     float fogMinAngle = 0;
-    float fogMaxAngle = 0.3;
-    float fogFactor = 1 - (fogMaxAngle - angle) / (fogMaxAngle - fogMinAngle);
+    float fogMaxAngle = 0.2;
+    float fogFactor = pow(1 - (fogMaxAngle - angle) / (fogMaxAngle - fogMinAngle), 0.5);
 
     color.a = fogFactor;
 

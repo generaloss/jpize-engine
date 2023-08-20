@@ -32,23 +32,33 @@ public class LevelChunkSection{
     }
     
     
-    public short getBlock(int lx, int ly, int lz){
+    public short getBlockState(int lx, int ly, int lz){
         return blocks[getIndex(lx, ly, lz)];
     }
     
-    protected void setBlock(int lx, int ly, int lz, short blockState){
+    protected void setBlockState(int lx, int ly, int lz, short blockState){
         blocks[getIndex(lx, ly, lz)] = blockState;
     }
     
     
-    public byte getLight(int lx, int ly, int lz){
-        return light[getIndex(lx, ly, lz)];
+    public int getSkyLight(int lx, int ly, int lz){
+        return light[getIndex(lx, ly, lz)] & 0xF;
     }
-    
-    protected void setLight(int lx, int ly, int lz, int level){
-        light[getIndex(lx, ly, lz)] = (byte) level;
+
+    protected void setSkyLight(int lx, int ly, int lz, int level){
+        final int blockLight = light[getIndex(lx, ly, lz)] >> 4;
+        light[getIndex(lx, ly, lz)] = (byte) ((blockLight << 4) | level);
     }
-    
+
+    public int getBlockLight(int lx, int ly, int lz){
+        return (light[getIndex(lx, ly, lz)] >> 4) & 0xF;
+    }
+
+    protected void setBlockLight(int lx, int ly, int lz, int level){
+        final int skyLight = light[getIndex(lx, ly, lz)] & 0xF;
+        light[getIndex(lx, ly, lz)] = (byte) ((level << 4) | skyLight);
+    }
+
     
     public int getBlocksNum(){
         return blocksNum;

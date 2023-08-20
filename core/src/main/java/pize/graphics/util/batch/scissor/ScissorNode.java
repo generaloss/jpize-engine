@@ -1,6 +1,6 @@
 package pize.graphics.util.batch.scissor;
 
-import pize.graphics.gl.Gl;
+import pize.lib.gl.Gl;
 
 import java.awt.*;
 

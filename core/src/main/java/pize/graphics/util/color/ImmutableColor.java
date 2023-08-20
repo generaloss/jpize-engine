@@ -11,6 +11,13 @@ public class ImmutableColor extends IColor{
         a = alpha;
     }
 
+    public ImmutableColor(float red, float green, float blue){
+        r = red;
+        g = green;
+        b = blue;
+        a = 1F;
+    }
+
     public ImmutableColor(double red, double green, double blue, double alpha){
         r = (float) red;
         g = (float) green;
@@ -18,11 +25,25 @@ public class ImmutableColor extends IColor{
         a = (float) alpha;
     }
 
+    public ImmutableColor(double red, double green, double blue){
+        r = (float) red;
+        g = (float) green;
+        b = (float) blue;
+        a = 1F;
+    }
+
     public ImmutableColor(int red, int green, int blue, int alpha){
         r = red / 255F;
         g = green / 255F;
         b = blue / 255F;
         a = alpha / 255F;
+    }
+
+    public ImmutableColor(int red, int green, int blue){
+        r = red / 255F;
+        g = green / 255F;
+        b = blue / 255F;
+        a = 1F;
     }
 
     public ImmutableColor(IColor color){

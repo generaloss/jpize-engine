@@ -1,6 +1,6 @@
 package pize.graphics.texture;
 
-import pize.graphics.gl.Filter;
+import pize.lib.gl.texture.GlFilter;
 
 import static org.lwjgl.opengl.GL33.*;
 
@@ -10,7 +10,7 @@ public class CubeMap extends GlTexture{
         super(GL_TEXTURE_CUBE_MAP);
         bind();
         
-        parameters.setFilter(Filter.LINEAR);
+        parameters.setFilter(GlFilter.LINEAR);
         
         Pixmap pixmapPx = PixmapIO.load(px);
         parameters.texImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, pixmapPx.getBuffer(), pixmapPx.getWidth(), pixmapPx.getHeight());

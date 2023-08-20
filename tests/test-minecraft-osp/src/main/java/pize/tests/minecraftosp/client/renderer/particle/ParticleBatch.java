@@ -3,10 +3,10 @@ package pize.tests.minecraftosp.client.renderer.particle;
 import pize.app.Disposable;
 import pize.files.Resource;
 import pize.graphics.camera.PerspectiveCamera;
-import pize.graphics.gl.BufUsage;
-import pize.graphics.gl.Type;
+import pize.lib.gl.buffer.GlBufUsage;
+import pize.lib.gl.type.GlType;
 import pize.graphics.mesh.QuadMesh;
-import pize.graphics.mesh.VertexAttr;
+import pize.lib.gl.vertex.GlVertexAttr;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.Shader;
@@ -40,9 +40,9 @@ public class ParticleBatch implements Disposable{
         // Buffer
         this.mesh = new QuadMesh(
                 size,
-                new VertexAttr(3, Type.FLOAT), // pos3
-                new VertexAttr(4, Type.FLOAT), // col4
-                new VertexAttr(2, Type.FLOAT)  // uv2
+                new GlVertexAttr(3, GlType.FLOAT), // pos3
+                new GlVertexAttr(4, GlType.FLOAT), // col4
+                new GlVertexAttr(2, GlType.FLOAT)  // uv2
         );
         // Vertices array
         this.vertices = new float[QUAD_VERTICES * size * mesh.getBuffer().getVertexSize()];
@@ -138,7 +138,7 @@ public class ParticleBatch implements Disposable{
             return;
         
         shader.setUniform("u_texture", lastTexture);
-        mesh.getBuffer().setData(vertices, BufUsage.STREAM_DRAW);
+        mesh.getBuffer().setData(vertices, GlBufUsage.STREAM_DRAW);
         mesh.render(particleIndex * QUAD_INDICES);
         
         vertexIndex = 0;

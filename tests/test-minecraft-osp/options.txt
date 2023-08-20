@@ -1,8 +1,8 @@
 remote.host : 0.0.0.0:22854
 player.name : GeneralPashon
 player.firstPersonModel : false
-graphics.fieldOfView : 85
-graphics.renderDistance : 16
+graphics.fieldOfView : 99
+graphics.renderDistance : 6
 graphics.maxFramerate : 0
 graphics.fullscreen : false
 graphics.showFps : true

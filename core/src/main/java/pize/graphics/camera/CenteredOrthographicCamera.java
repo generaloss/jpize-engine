@@ -40,7 +40,7 @@ public class CenteredOrthographicCamera extends Camera2D implements Resizable{
         translationMatrix.toTranslated(imaginaryX ? 0 : -position.x, imaginaryY ? 0 : -position.y, 0);
         rotationMatrix.toRotatedZ(rotation);
 
-        view.set(scalingMatrix.mul(translationMatrix).mul(rotationMatrix));
+        view.set(scalingMatrix.mul(rotationMatrix.mul(translationMatrix)));
     }
 
     @Override

@@ -1,9 +1,9 @@
 package pize.tests.minecraftosp.client.control;
 
 import pize.Pize;
-import pize.graphics.gl.Face;
-import pize.graphics.gl.Gl;
-import pize.graphics.gl.PolygonMode;
+import pize.lib.gl.tesselation.GlFace;
+import pize.lib.gl.Gl;
+import pize.lib.gl.tesselation.GlPolygonMode;
 import pize.io.glfw.Key;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
@@ -11,17 +11,19 @@ import pize.math.vecmath.vector.Vec3i;
 import pize.physic.BoundingBox3f;
 import pize.physic.BoxBody;
 import pize.tests.minecraftosp.Minecraft;
-import pize.tests.minecraftosp.client.block.BlockProperties;
+import pize.tests.minecraftosp.client.block.Block;
 import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.client.block.shape.BlockCollide;
 import pize.tests.minecraftosp.client.chat.Chat;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;
-import pize.tests.minecraftosp.client.options.KeyMapping;
-import pize.tests.minecraftosp.client.options.Options;
-import pize.tests.minecraftosp.main.block.BlockData;
-import pize.tests.minecraftosp.main.entity.Entity;
 import pize.tests.minecraftosp.client.entity.LocalPlayer;
 import pize.tests.minecraftosp.client.level.ClientLevel;
+import pize.tests.minecraftosp.client.options.KeyMapping;
+import pize.tests.minecraftosp.client.options.Options;
+import pize.tests.minecraftosp.client.renderer.infopanel.ChunkInfoRenderer;
+import pize.tests.minecraftosp.client.renderer.infopanel.InfoRenderer;
+import pize.tests.minecraftosp.main.block.BlockData;
+import pize.tests.minecraftosp.main.entity.Entity;
 import pize.tests.minecraftosp.main.net.packet.SBPacketChunkRequest;
 import pize.tests.minecraftosp.main.net.packet.SBPacketPing;
 import pize.tests.minecraftosp.main.net.packet.SBPacketPlayerBlockSet;
@@ -125,8 +127,18 @@ public class GameController{
 
         // Info Panel
         if(Key.F3.isReleased()){
-            if(!f3Plus)
-                session.getRenderer().getInfoRenderer().toggleOpen();
+            if(!f3Plus){
+                final InfoRenderer info = session.getRenderer().getInfoRenderer();
+                final ChunkInfoRenderer chunkInfo = session.getRenderer().getChunkInfoRenderer();
+
+                info.toggleOpen();
+
+                if(info.isOpen()){
+                    if(Key.LEFT_SHIFT.isPressed())
+                        chunkInfo.setOpen(true);
+                }else
+                    chunkInfo.setOpen(false);
+            }
 
             f3Plus = false;
         }
@@ -137,7 +149,7 @@ public class GameController{
             
             if(Pize.mouse().isLeftDown() || Key.U.isPressed()){
                 final Vec3i blockPos = blockRayCast.getSelectedBlockPosition();
-                level.setBlock(blockPos.x, blockPos.y, blockPos.z, Blocks.AIR.getDefaultData());
+                level.setBlock(blockPos.x, blockPos.y, blockPos.z, Blocks.AIR);
                 session.getGame().sendPacket(new SBPacketPlayerBlockSet(blockPos.x, blockPos.y, blockPos.z, Blocks.AIR.getDefaultData()));
                 
                 for(int i = 0; i < 100; i++){
@@ -151,7 +163,7 @@ public class GameController{
                 placeBlock();
             }else if(Pize.mouse().isMiddleDown()){
                 final Vec3i blockPos = blockRayCast.getSelectedBlockPosition();
-                player.holdBlock = level.getBlockProps(blockPos.x, blockPos.y, blockPos.z);
+                player.holdBlock = level.getBlockProps(blockPos.x, blockPos.y, blockPos.z).getBlock();
             }
         }
         
@@ -173,9 +185,9 @@ public class GameController{
         
         // Polygon Mode
         if(Key.F9.isDown())
-            Gl.polygonMode(Face.FRONT_AND_BACK, PolygonMode.LINE);
+            Gl.polygonMode(GlFace.FRONT_AND_BACK, GlPolygonMode.LINE);
         if(Key.F8.isDown())
-            Gl.polygonMode(Face.FRONT_AND_BACK, PolygonMode.FILL);
+            Gl.polygonMode(GlFace.FRONT_AND_BACK, GlPolygonMode.FILL);
         
         // Exit
         if(Key.ESCAPE.isDown())
@@ -191,7 +203,7 @@ public class GameController{
         final Vec3i blockPos = blockRayCast.getImaginaryBlockPosition();
         final LocalPlayer player = session.getGame().getPlayer();
         
-        final BlockProperties block = player.holdBlock;
+        final Block block = player.holdBlock;
         final int blockStates = block.getStates().size();
 
         byte blockState = 0;
@@ -220,7 +232,7 @@ public class GameController{
             }
         }
         
-        level.setBlock(blockPos.x, blockPos.y, blockPos.z, blockData);
+        level.setBlockState(blockPos.x, blockPos.y, blockPos.z, blockData);
         session.getGame().sendPacket(new SBPacketPlayerBlockSet(blockPos.x, blockPos.y, blockPos.z, blockData));
     }
     

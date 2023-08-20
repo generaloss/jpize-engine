@@ -1,10 +1,12 @@
 package pize.tests.minecraftosp.main.level;
 
-import pize.tests.minecraftosp.client.block.BlockProperties;
+import pize.tests.minecraftosp.client.block.Block;
+import pize.tests.minecraftosp.client.block.BlockProps;
 import pize.tests.minecraftosp.main.Tickable;
-import pize.tests.minecraftosp.main.entity.Entity;
 import pize.tests.minecraftosp.main.block.BlockData;
 import pize.tests.minecraftosp.main.chunk.LevelChunk;
+import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
+import pize.tests.minecraftosp.main.entity.Entity;
 
 import java.util.Collection;
 import java.util.Map;
@@ -46,23 +48,37 @@ public abstract class Level implements Tickable {
     public void removeEntity(UUID entityUUID){
         entityMap.remove(entityUUID);
     }
-    
-    
-    public abstract short getBlock(int x, int y, int z);
-    
-    public BlockProperties getBlockProps(int x, int y, int z){
-        return BlockData.getProps(getBlock(x, y, z));
+
+
+    public abstract short getBlockState(int x, int y, int z);
+
+    public int getBlockID(int x, int y, int z){
+        return BlockData.getID(getBlockState(x, y, z));
     }
+
+    public abstract Block getBlock(int x, int y, int z);
+
+    public BlockProps getBlockProps(int x, int y, int z){
+        return BlockData.getProps(getBlockState(x, y, z));
+    }
+
+
+    public abstract boolean setBlockState(int x, int y, int z, short block);
+
+    public abstract boolean setBlock(int x, int y, int z, Block block);
+
     
-    public abstract boolean setBlock(int x, int y, int z, short block);
-    
-    public abstract int getHeight(int x, int z);
-    
-    
-    public abstract void setLight(int x, int y, int z, int level);
-    
-    public abstract byte getLight(int x, int y, int z);
-    
+    public abstract int getHeight(HeightmapType heightmapType, int x, int z);
+
+
+    public abstract int getSkyLight(int x, int y, int z);
+
+    public abstract void setSkyLight(int x, int y, int z, int level);
+
+    public abstract int getBlockLight(int x, int y, int z);
+
+    public abstract void setBlockLight(int x, int y, int z, int level);
+
     
     public abstract LevelConfiguration getConfiguration();
     

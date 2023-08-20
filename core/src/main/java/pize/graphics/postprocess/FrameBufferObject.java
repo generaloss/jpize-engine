@@ -3,10 +3,10 @@ package pize.graphics.postprocess;
 import org.lwjgl.BufferUtils;
 import pize.Pize;
 import pize.app.Resizable;
-import pize.graphics.gl.Attachment;
-import pize.graphics.gl.Filter;
-import pize.graphics.gl.GlObject;
-import pize.graphics.gl.Wrap;
+import pize.lib.gl.buffer.GlAttachment;
+import pize.lib.gl.texture.GlFilter;
+import pize.lib.gl.GlObject;
+import pize.lib.gl.texture.GlWrap;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureParameters;
 import pize.graphics.util.ScreenQuad;
@@ -19,7 +19,7 @@ import static org.lwjgl.opengl.GL33.*;
 public class FrameBufferObject extends GlObject implements Resizable{
 
     private int width, height;
-    private Attachment attachment;
+    private GlAttachment attachment;
     private final Texture texture;
     private boolean draw, read;
 
@@ -29,14 +29,14 @@ public class FrameBufferObject extends GlObject implements Resizable{
         
         this.width = width;
         this.height = height;
-        attachment = Attachment.COLOR_ATTACHMENT0;
+        attachment = GlAttachment.COLOR_ATTACHMENT0;
         draw = true;
         read = true;
         
         texture = new Texture(width, height);
         texture.getParameters()
-            .setWrap(Wrap.CLAMP_TO_EDGE)
-            .setFilter(Filter.NEAREST)
+            .setWrap(GlWrap.CLAMP_TO_EDGE)
+            .setFilter(GlFilter.NEAREST)
             .setMipmapLevels(0);
     }
 
@@ -45,7 +45,7 @@ public class FrameBufferObject extends GlObject implements Resizable{
     }
 
 
-    public void setAttachment(Attachment attachment){
+    public void setAttachment(GlAttachment attachment){
         this.attachment = attachment;
     }
 

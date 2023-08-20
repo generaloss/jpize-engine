@@ -2,7 +2,7 @@ package pize.graphics.texture;
 
 import org.lwjgl.BufferUtils;
 import pize.app.Resizable;
-import pize.graphics.gl.SizedFormat;
+import pize.lib.gl.texture.GlSizedFormat;
 import pize.graphics.util.Sizable;
 import pize.graphics.util.color.Color;
 import pize.graphics.util.color.IColor;
@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 
 public class Pixmap extends Sizable implements Resizable{
 
-    public static final SizedFormat FORMAT = SizedFormat.RGBA8;
+    public static final GlSizedFormat FORMAT = GlSizedFormat.RGBA8;
     private ByteBuffer buffer;
 
     // CONSTRUCTOR

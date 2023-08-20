@@ -2,7 +2,12 @@ package pize.graphics.postprocess;
 
 import pize.Pize;
 import pize.app.Resizable;
-import pize.graphics.gl.*;
+import pize.lib.gl.GlObject;
+import pize.lib.gl.buffer.GlAttachment;
+import pize.lib.gl.texture.GlFilter;
+import pize.lib.gl.texture.GlSizedFormat;
+import pize.lib.gl.texture.GlWrap;
+import pize.lib.gl.type.GlType;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureParameters;
 
@@ -11,7 +16,7 @@ import static org.lwjgl.opengl.GL33.*;
 public class RenderBufferObject extends GlObject implements Resizable{
 
     private int width, height;
-    private Attachment attachment;
+    private GlAttachment attachment;
     private final Texture texture;
 
 
@@ -20,14 +25,14 @@ public class RenderBufferObject extends GlObject implements Resizable{
         
         this.width = width;
         this.height = height;
-        attachment = Attachment.DEPTH_ATTACHMENT;
+        attachment = GlAttachment.DEPTH_ATTACHMENT;
 
         texture = new Texture(width, height);
         texture.getParameters()
-            .setSizedFormat(SizedFormat.DEPTH_COMPONENT32)
-            .setType(Type.FLOAT)
-            .setWrap(Wrap.CLAMP_TO_EDGE)
-            .setFilter(Filter.NEAREST)
+            .setSizedFormat(GlSizedFormat.DEPTH_COMPONENT32)
+            .setType(GlType.FLOAT)
+            .setWrap(GlWrap.CLAMP_TO_EDGE)
+            .setFilter(GlFilter.NEAREST)
             .setMipmapLevels(0);
     }
 
@@ -36,7 +41,7 @@ public class RenderBufferObject extends GlObject implements Resizable{
     }
 
 
-    public void setAttachment(Attachment attachment){
+    public void setAttachment(GlAttachment attachment){
         this.attachment = attachment;
     }
 

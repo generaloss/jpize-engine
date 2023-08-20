@@ -4,7 +4,7 @@ import pize.Pize;
 import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
-import pize.tests.minecraftosp.client.block.BlockProperties;
+import pize.tests.minecraftosp.client.block.Block;
 import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.main.audio.SoundGroup;
 import pize.tests.minecraftosp.main.level.Level;
@@ -14,7 +14,7 @@ public class LocalPlayer extends AbstractClientPlayer{
     private final Vec3f moveControl;
     private float jumpDownY, lastVelocityY, fallHeight;
     
-    public BlockProperties holdBlock = Blocks.GRASS;
+    public Block holdBlock = Blocks.GRASS;
     
     public LocalPlayer(Level levelOF, String name){
         super(levelOF, name);
@@ -61,15 +61,15 @@ public class LocalPlayer extends AbstractClientPlayer{
 
         // In Water
         final Vec3f position = getPosition();
-        if(getLevel().getBlock(position.xf(), position.yf(), position.zf()) == Blocks.WATER.getID()){
+        if(getLevel().getBlockState(position.xf(), position.yf(), position.zf()) == Blocks.WATER.getID()){
             Vec3f push = new Vec3f(
                 Maths.random(0, 2) * Maths.cosDeg(getRotation().yaw),
                 1F,
                 Maths.random(0, 2) * Maths.sinDeg(getRotation().yaw)
             );
             getVelocity().add(push);
-            getLevel().getSession().getGame().getCamera().push(push);
-            Pize.execSync(() -> getLevel().getSession().getSoundPlayer().play(SoundGroup.HIT.random(), 0.3F, 1, 0, 0, 0) );
+            getLevel().getGame().getCamera().push(push);
+            Pize.execSync(() -> getLevel().getGame().getSession().getSoundPlayer().play(SoundGroup.HIT.random(), 0.3F, 1, 0, 0, 0) );
         }
 
         // Gravity

@@ -3,8 +3,8 @@ package pize.graphics.util;
 import org.lwjgl.BufferUtils;
 import pize.Pize;
 import pize.files.Resource;
-import pize.graphics.gl.Format;
-import pize.graphics.gl.Type;
+import pize.lib.gl.texture.GlFormat;
+import pize.lib.gl.type.GlType;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -22,7 +22,7 @@ public class ScreenUtils{
         final int height = Pize.getHeight();
         
         final ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4).order(ByteOrder.LITTLE_ENDIAN);
-        glReadPixels(0, 0, width, height, Format.BGRA.GL, Type.UNSIGNED_BYTE.GL, buffer);
+        glReadPixels(0, 0, width, height, GlFormat.BGRA.GL, GlType.UNSIGNED_BYTE.GL, buffer);
         
         final int[] pixels = new int[width * height];
         buffer.asIntBuffer().get(pixels);

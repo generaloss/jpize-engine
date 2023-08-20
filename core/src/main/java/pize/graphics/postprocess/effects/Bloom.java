@@ -2,7 +2,7 @@ package pize.graphics.postprocess.effects;
 
 import pize.Pize;
 import pize.files.Resource;
-import pize.graphics.gl.Gl;
+import pize.lib.gl.Gl;
 import pize.graphics.postprocess.FrameBufferObject;
 import pize.graphics.postprocess.PostProcessEffect;
 import pize.graphics.postprocess.RenderBufferObject;

@@ -6,7 +6,6 @@ import pize.graphics.util.batch.TextureBatch;
 import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec2f;
-import pize.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -195,15 +194,20 @@ public class BitmapFont implements Disposable{
     public void drawText(TextureBatch batch, String text, float x, float y){
         this.drawText(batch, text, x, y, -1);
     }
-    
+
     public void drawText(TextureBatch batch, String text, float x, float y, double width){
+        this.drawText(batch, text, x, y, width, false);
+    }
+    
+    public void drawText(TextureBatch batch, String text, float x, float y, double width, boolean invWrapY){
         if(text == null)
             return;
-        
+
+        final int wrapSign = (invWrapY ? -1 : 1);
         final float lineAdvance = getLineAdvance();
         
         float advanceX = 0;
-        float advanceY = lineHeight * StringUtils.count(text, "\n");
+        float advanceY = invWrapY ? -lineAdvance : 0;
 
         batch.setTransformOrigin(0, 0);
         batch.rotate(rotation);
@@ -224,7 +228,7 @@ public class BitmapFont implements Disposable{
             final int code = Character.codePointAt(text, i);
             
             if(code == 10){
-                advanceY -= lineAdvance;
+                advanceY += wrapSign * lineAdvance;
                 advanceX = 0;
                 continue;
             }
@@ -234,7 +238,7 @@ public class BitmapFont implements Disposable{
                 continue;
             
             if(width > 0 && (advanceX + glyph.advanceX) * scale > width){
-                advanceY -= lineAdvance;
+                advanceY += wrapSign * lineAdvance;
                 advanceX = 0;
             }
             

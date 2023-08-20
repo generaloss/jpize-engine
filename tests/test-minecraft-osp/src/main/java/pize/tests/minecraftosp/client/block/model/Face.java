@@ -7,8 +7,7 @@ import pize.graphics.util.color.ImmutableColor;
 import pize.math.vecmath.vector.Vec2f;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.minecraftosp.client.block.BlockRotation;
-
-import java.util.List;
+import pize.tests.minecraftosp.client.chunk.mesh.ChunkMesh;
 
 public class Face extends Quad{
 
@@ -23,6 +22,7 @@ public class Face extends Quad{
         this.t3 = face.t3.copy();
         this.t4 = face.t4.copy();
         this.color = new ImmutableColor(face.color);
+        this.faceData = face.faceData;
     }
 
     public Face(Quad quad, Vec2f t1, Vec2f t2, Vec2f t3, Vec2f t4, IColor color){
@@ -66,122 +66,71 @@ public class Face extends Quad{
     }
 
 
-    public void putFloats(final List<Float> floatList,
+    public void putFace(final ChunkMesh mesh,
+                        float x, float y, float z,
+                        IColor color,
+                        float ao1, float ao2, float ao3, float ao4,
+                        float sl1, float sl2, float sl3, float sl4,
+                        float bl1, float bl2, float bl3, float bl4){
+
+        if(ao2 + ao4 > ao1 + ao3)
+            putFloatsFlipped(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  sl1, sl2, sl3, sl4,  bl1, bl2, bl3, bl4);
+        else
+            putFloats(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  sl1, sl2, sl3, sl4,  bl1, bl2, bl3, bl4);
+    }
+
+    public void putFloats(final ChunkMesh mesh,
                           float x, float y, float z,
                           IColor color,
-                          float l1, float l2, float l3, float l4){
+                          float ao1, float ao2, float ao3, float ao4,
+                          float sl1, float sl2, float sl3, float sl4,
+                          float bl1, float bl2, float bl3, float bl4){
 
-        final float p1x = p1.x + x; final float p1y = p1.y + y; final float p1z = p1.z + z; // p1
-        final float p3x = p3.x + x; final float p3y = p3.y + y; final float p3z = p3.z + z; // p3
+        final float r = this.color.r() * color.r();
+        final float g = this.color.g() * color.g();
+        final float b = this.color.b() * color.b();
+        final float a = this.color.a() * color.a();
 
-        // Triangle 1
-        putVertex(floatList,  p1x     , p1y     , p1z     ,  t1.x, t1.y,  color,  l1); // 1       1 ------ 4
-        putVertex(floatList,  p2.x + x, p2.y + y, p2.z + z,  t2.x, t2.y,  color,  l2); // 2       |  ╲╲    |
-        putVertex(floatList,  p3x     , p3y     , p3z     ,  t3.x, t3.y,  color,  l3); // 3       |    ╲╲  |
-        // Triangle 2                                                                             2 ------ 3
-        putVertex(floatList,  p3x     , p3y     , p3z     ,  t3.x, t3.y,  color,  l3); // 3
-        putVertex(floatList,  p4.x + x, p4.y + y, p4.z + z,  t4.x, t4.y,  color,  l4); // 4
-        putVertex(floatList,  p1x     , p1y     , p1z     ,  t1.x, t1.y,  color,  l1); // 1
-    }
-
-    public void putFloatsFlipped(final List<Float> floatList,
-                                 float x, float y, float z,
-                                 IColor color,
-                                 float l1, float l2, float l3, float l4){
-
-        final float p4x = p4.x + x; final float p4y = p4.y + y; final float p4z = p4.z + z; // p4
-        final float p2x = p2.x + x; final float p2y = p2.y + y; final float p2z = p2.z + z; // p2
+        final float p1x = pos[0].x + x; final float p1y = pos[0].y + y; final float p1z = pos[0].z + z;
+        final float p2x = pos[1].x + x; final float p2y = pos[1].y + y; final float p2z = pos[1].z + z;
+        final float p3x = pos[2].x + x; final float p3y = pos[2].y + y; final float p3z = pos[2].z + z;
+        final float p4x = pos[3].x + x; final float p4y = pos[3].y + y; final float p4z = pos[3].z + z;
 
         // Triangle 1
-        putVertex(floatList,  p4x      , p4y    , p4z     ,  t4.x, t4.y,  color,  l4); // 4        1 ------ 4
-        putVertex(floatList,  p1.x + x, p1.y + y, p1.z + z,  t1.x, t1.y,  color,  l1); // 1        |    ╱╱  |
-        putVertex(floatList,  p2x     , p2y     , p2z     ,  t2.x, t2.y,  color,  l2); // 2        |  ╱╱    |
-        // Triangle 2                                                                              2 ------ 3
-        putVertex(floatList,  p2x     , p2y     , p2z     ,  t2.x, t2.y,  color,  l2); // 2
-        putVertex(floatList,  p3.x + x, p3.y + y, p3.z + z,  t3.x, t3.y,  color,  l3); // 3
-        putVertex(floatList,  p4x      , p4y    , p4z     ,  t4.x, t4.y,  color,  l4); // 4
+        mesh.vertex(p1x, p1y, p1z,  t1.x, t1.y,  r, g, b, a,  ao1, sl1, bl1); // 1     1 ----- 4
+        mesh.vertex(p2x, p2y, p2z,  t2.x, t2.y,  r, g, b, a,  ao2, sl2, bl2); // 2     |  ╲    |
+        mesh.vertex(p3x, p3y, p3z,  t3.x, t3.y,  r, g, b, a,  ao3, sl3, bl3); // 3     |    ╲  |
+        // Triangle 2                                                                  2 ----- 3
+        mesh.vertex(p3x, p3y, p3z,  t3.x, t3.y,  r, g, b, a,  ao3, sl3, bl3); // 3
+        mesh.vertex(p4x, p4y, p4z,  t4.x, t4.y,  r, g, b, a,  ao4, sl4, bl4); // 4
+        mesh.vertex(p1x, p1y, p1z,  t1.x, t1.y,  r, g, b, a,  ao1, sl1, bl1); // 1
     }
 
-    public void putIntsPacked(final List<Integer> intList,
-                              int x, int y, int z,
-                              IColor color,
-                              float l1, float l2, float l3, float l4){
-
-        final float p1x = p1.x + x; final float p1y = p1.y + y; final float p1z = p1.z + z; // p1
-        final float p3x = p3.x + x; final float p3y = p3.y + y; final float p3z = p3.z + z; // p3
-
-        putVertexPacked(intList,  p1x     , p1y     , p1z     ,  t1.x, t1.y,  color,  l1); // 1
-        putVertexPacked(intList,  p2.x + x, p2.y + y, p2.z + z,  t2.x, t2.y,  color,  l2); // 2
-        putVertexPacked(intList,  p3x     , p3y     , p3z     ,  t3.x, t3.y,  color,  l3); // 3
-
-        putVertexPacked(intList,  p3x     , p3y     , p3z     ,  t3.x, t3.y,  color,  l3); // 3
-        putVertexPacked(intList,  p4.x + x, p4.y + y, p4.z + z,  t4.x, t4.y,  color,  l4); // 4
-        putVertexPacked(intList,  p1x     , p1y     , p1z     ,  t1.x, t1.y,  color,  l1); // 1
-    }
-
-    public void putIntsPackedFlipped(final List<Integer> intList,
-                                     int x, int y, int z,
-                                     IColor color,
-                                     float l1, float l2, float l3, float l4){
-
-        final float p4x = p4.x + x; final float p4y = p4.y + y; final float p4z = p4.z + z; // p4
-        final float p2x = p2.x + x; final float p2y = p2.y + y; final float p2z = p2.z + z; // p2
-
-        putVertexPacked(intList,  p4x      , p4y    , p4z     ,  t4.x, t4.y,  color,  l4); // 4
-        putVertexPacked(intList,  p1.x + x, p1.y + y, p1.z + z,  t1.x, t1.y,  color,  l1); // 1
-        putVertexPacked(intList,  p2x     , p2y     , p2z     ,  t2.x, t2.y,  color,  l2); // 2
-
-        putVertexPacked(intList,  p2x     , p2y     , p2z     ,  t2.x, t2.y,  color,  l2); // 2
-        putVertexPacked(intList,  p3.x + x, p3.y + y, p3.z + z,  t3.x, t3.y,  color,  l3); // 3
-        putVertexPacked(intList,  p4x      , p4y    , p4z     ,  t4.x, t4.y,  color,  l4); // 4
-    }
-
-
-    private void putVertex(final List<Float> floatList,
-                           float x, float y, float z,
-                           float u, float v,
-                           IColor color,
-                           float light){
-        floatList.add(x);
-        floatList.add(y);
-        floatList.add(z);
-
-        floatList.add(this.color.r() * color.r() * light);
-        floatList.add(this.color.g() * color.g() * light);
-        floatList.add(this.color.b() * color.b() * light);
-        floatList.add(this.color.a() * color.a());
-
-        floatList.add(u);
-        floatList.add(v);
-    }
-
-    private void putVertexPacked(final List<Integer> intList,
+    private void putFloatsFlipped(final ChunkMesh mesh,
                                  float x, float y, float z,
-                                 float u, float v,
                                  IColor color,
-                                 float light){
-        final int mulU = 512 / 16;
-        final int mulV = 512 / 16;
+                                 float ao1, float ao2, float ao3, float ao4,
+                                 float sl1, float sl2, float sl3, float sl4,
+                                 float bl1, float bl2, float bl3, float bl4){
 
-        // Packed position
-        final int positionPacked = (
-            ((int) x      ) | // 5 bit
-            ((int) y << 5 ) | // 9 bit
-            ((int) z << 14) | // 5 bit
+        final float r = this.color.r() * color.r();
+        final float g = this.color.g() * color.g();
+        final float b = this.color.b() * color.b();
+        final float a = this.color.a() * color.a();
 
-            ((int) (u * mulU) << 19) | // 6 bit
-            ((int) (v * mulV) << 25)   // 6 bit
-        );
-        intList.add(positionPacked); // x, y, z, u, v
+        final float p1x = pos[0].x + x; final float p1y = pos[0].y + y; final float p1z = pos[0].z + z;
+        final float p2x = pos[1].x + x; final float p2y = pos[1].y + y; final float p2z = pos[1].z + z;
+        final float p3x = pos[2].x + x; final float p3y = pos[2].y + y; final float p3z = pos[2].z + z;
+        final float p4x = pos[3].x + x; final float p4y = pos[3].y + y; final float p4z = pos[3].z + z;
 
-        // Packed color
-        final int colorPacked = (
-            ((int) (this.color.r() * color.r() * light * 255)      ) | // 8 bit
-            ((int) (this.color.g() * color.g() * light * 255) << 8 ) | // 8 bit
-            ((int) (this.color.b() * color.b() * light * 255) << 16) | // 8 bit
-            ((int) (this.color.a() * color.a()         * 255) << 24)   // 8 bit
-        );
-        intList.add(colorPacked); // r, g, b, a
+        // Triangle 1
+        mesh.vertex(p4x, p4y, p4z,  t4.x, t4.y,  r, g, b, a,  ao4, sl4, bl4); // 4     1 ----- 4
+        mesh.vertex(p1x, p1y, p1z,  t1.x, t1.y,  r, g, b, a,  ao1, sl1, bl1); // 1     |    ╱  |
+        mesh.vertex(p2x, p2y, p2z,  t2.x, t2.y,  r, g, b, a,  ao2, sl2, bl2); // 2     |  ╱    |
+        // Triangle 2                                                                  2 ----- 3
+        mesh.vertex(p2x, p2y, p2z,  t2.x, t2.y,  r, g, b, a,  ao2, sl2, bl2); // 2
+        mesh.vertex(p3x, p3y, p3z,  t3.x, t3.y,  r, g, b, a,  ao3, sl3, bl3); // 3
+        mesh.vertex(p4x, p4y, p4z,  t4.x, t4.y,  r, g, b, a,  ao4, sl4, bl4); // 4
     }
 
 
@@ -190,19 +139,14 @@ public class Face extends Quad{
     }
 
     public Face rotated(BlockRotation rotation){
-        final Vec3f rp1 = p1.copy().sub(0.5).mul(rotation.getMatrix()).add(0.5);
-        final Vec3f rp2 = p2.copy().sub(0.5).mul(rotation.getMatrix()).add(0.5);
-        final Vec3f rp3 = p3.copy().sub(0.5).mul(rotation.getMatrix()).add(0.5);
-        final Vec3f rp4 = p4.copy().sub(0.5).mul(rotation.getMatrix()).add(0.5);
+        final Vec3f rp1 = pos[0].copy().sub(0.5).mul(rotation.getMatrix()).add(0.5);
+        final Vec3f rp2 = pos[1].copy().sub(0.5).mul(rotation.getMatrix()).add(0.5);
+        final Vec3f rp3 = pos[2].copy().sub(0.5).mul(rotation.getMatrix()).add(0.5);
+        final Vec3f rp4 = pos[3].copy().sub(0.5).mul(rotation.getMatrix()).add(0.5);
 
-        if(p1 == rp2){
-            return new Face(rp2, rp3, rp4, rp1, t1.copy(), t2.copy(), t3.copy(), t4.copy(), color);
-        }else if(p1 == rp3){
-            return new Face(rp3, rp4, rp1, rp2, t1.copy(), t2.copy(), t3.copy(), t4.copy(), color);
-        }else if(p1 == rp4){
-            return new Face(rp4, rp1, rp2, rp3, t1.copy(), t2.copy(), t3.copy(), t4.copy(), color);
-        }else
-            return new Face(rp1, rp2, rp3, rp4, t1.copy(), t2.copy(), t3.copy(), t4.copy(), color);
+        final Face face = new Face(rp1, rp2, rp3, rp4, t1.copy(), t2.copy(), t3.copy(), t4.copy(), color);;
+
+        return face;
     }
 
 

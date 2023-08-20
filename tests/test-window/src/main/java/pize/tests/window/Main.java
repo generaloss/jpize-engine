@@ -2,7 +2,7 @@ package pize.tests.window;
 
 import pize.Pize;
 import pize.app.AppAdapter;
-import pize.graphics.gl.Gl;
+import pize.lib.gl.Gl;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
 import pize.io.glfw.Key;

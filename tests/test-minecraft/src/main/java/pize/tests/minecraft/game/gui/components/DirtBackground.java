@@ -1,7 +1,7 @@
 package pize.tests.minecraft.game.gui.components;
 
 import pize.Pize;
-import pize.graphics.gl.Wrap;
+import pize.lib.gl.texture.GlWrap;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
@@ -14,7 +14,7 @@ public class DirtBackground extends MComponent{
     
     public DirtBackground(Session session){
         this.texture = session.getResourceManager().getTexture("options_background").getTexture();
-        this.texture.getParameters().setWrap(Wrap.REPEAT);
+        this.texture.getParameters().setWrap(GlWrap.REPEAT);
         this.texture.update();
         
         this.setSize(Constraint.pixel(1));

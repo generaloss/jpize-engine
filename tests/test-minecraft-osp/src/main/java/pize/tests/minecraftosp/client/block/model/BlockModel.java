@@ -3,14 +3,12 @@ package pize.tests.minecraftosp.client.block.model;
 import pize.graphics.texture.Region;
 import pize.graphics.util.color.Color;
 import pize.graphics.util.color.IColor;
-import pize.math.vecmath.vector.Vec3i;
-import pize.tests.minecraftosp.client.block.BlockProperties;
+import pize.tests.minecraftosp.client.block.BlockProps;
 import pize.tests.minecraftosp.client.block.BlockRotation;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMesh;
-import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshPackedCullingOn;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshType;
 import pize.tests.minecraftosp.client.chunk.mesh.builder.ChunkBuilder;
-import pize.tests.minecraftosp.main.Direction;
+import pize.tests.minecraftosp.main.Dir;
 import pize.tests.minecraftosp.main.biome.BiomeProperties;
 
 import java.util.*;
@@ -21,7 +19,7 @@ public class BlockModel{
 
     private final ChunkMeshType meshType;
     private final List<Face> faces, nxFaces, pxFaces, nyFaces, pyFaces, nzFaces, pzFaces;
-    private final Map<Direction, List<Face>> facesFromDirection;
+    private final Map<Dir, List<Face>> facesFromDirection;
     private final boolean[] transparentForNeighbors;
 
     public BlockModel(ChunkMeshType meshType){
@@ -37,13 +35,13 @@ public class BlockModel{
 
         this.facesFromDirection = new HashMap<>();
 
-        facesFromDirection.put(Direction.NEGATIVE_X, nxFaces);
-        facesFromDirection.put(Direction.POSITIVE_X, pxFaces);
-        facesFromDirection.put(Direction.NEGATIVE_Y, nyFaces);
-        facesFromDirection.put(Direction.POSITIVE_Y, pyFaces);
-        facesFromDirection.put(Direction.NEGATIVE_Z, nzFaces);
-        facesFromDirection.put(Direction.POSITIVE_Z, pzFaces);
-        facesFromDirection.put(Direction.NONE, faces);
+        facesFromDirection.put(Dir.NEGATIVE_X, nxFaces);
+        facesFromDirection.put(Dir.POSITIVE_X, pxFaces);
+        facesFromDirection.put(Dir.NEGATIVE_Y, nyFaces);
+        facesFromDirection.put(Dir.POSITIVE_Y, pyFaces);
+        facesFromDirection.put(Dir.NEGATIVE_Z, nzFaces);
+        facesFromDirection.put(Dir.POSITIVE_Z, pzFaces);
+        facesFromDirection.put(Dir.NONE, faces);
 
         this.transparentForNeighbors = new boolean[6];
     }
@@ -61,17 +59,17 @@ public class BlockModel{
     }
 
 
-    public List<Face> getDirectionFaces(Direction direction){
-        return facesFromDirection.get(direction);
+    public List<Face> getDirectionFaces(Dir dir){
+        return facesFromDirection.get(dir);
     }
 
     public List<Face> getFacesFromNormal(int x, int y, int z){
-        return getDirectionFaces(Direction.fromNormal(x, y, z));
+        return getDirectionFaces(Dir.fromNormal(x, y, z));
     }
 
 
     public boolean isFaceTransparentForNeighbors(int x, int y, int z){
-        final int index = Direction.fromNormal(x, y, z).ordinal();
+        final int index = Dir.fromNormal(x, y, z).ordinal();
         if(index > 5)
             return false;
 
@@ -94,8 +92,8 @@ public class BlockModel{
         return this;
     }
 
-    public BlockModel face(Direction direction, Face face){
-        switch(direction){
+    public BlockModel face(Dir dir, Face face){
+        switch(dir){
             case NEGATIVE_X -> nxFaces.add(face);
             case POSITIVE_X -> pxFaces.add(face);
             case NEGATIVE_Y -> nyFaces.add(face);
@@ -342,23 +340,20 @@ public class BlockModel{
     }
 
 
-    public void build(ChunkBuilder builder, BlockProperties block, int lx, int y, int lz){
-        if(meshType == ChunkMeshType.CUSTOM){
-
-            // Custom faces
-            final float light = (float) builder.chunk.getLight(lx, y, lz) / MAX_LIGHT_LEVEL;
-            for(Face face: faces){
-                final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
-                face.putFloats(builder.customMesh.getVerticesList(),  lx, y, lz,  color,  light, light, light, light);
-            }
-
-        }else{
-            // Solid faces
-            buildSolidFaces(builder, block, lx, y, lz);
+    public void build(ChunkBuilder builder, BlockProps block, int lx, int y, int lz){
+        // Custom faces
+        final float skyLight = (float) builder.chunk.getSkyLight(lx, y, lz) / MAX_LIGHT_LEVEL;
+        final float blockLight = (float) builder.chunk.getBlockLight(lx, y, lz) / MAX_LIGHT_LEVEL;
+        for(Face face: faces){
+            final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+            face.putFloats(builder.customMesh,  lx, y, lz,  color,  1, 1, 1, 1,  skyLight, skyLight, skyLight, skyLight,  blockLight, blockLight, blockLight, blockLight);
         }
+
+        // Solid faces
+        buildSolidFaces(builder, block, lx, y, lz);
     }
 
-    private void buildSolidFaces(ChunkBuilder builder, BlockProperties block, int lx, int y, int lz){
+    private void buildSolidFaces(ChunkBuilder builder, BlockProps block, int lx, int y, int lz){
         if(builder.isGenSolidFace(lx, y, lz, -1,  0,  0, block))
             for(Face face: nxFaces) buildNxFace(builder, face, lx, y, lz);
         if(builder.isGenSolidFace(lx, y, lz, +1,  0,  0, block))
@@ -374,165 +369,147 @@ public class BlockModel{
     }
 
     private void buildNxFace(ChunkBuilder builder, Face face, int x, int y, int z){
-        final float light1 = builder.getLight(x-1, y  , z,  x-1, y, z+1,  x-1, y+1, z+1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
-        final float light2 = builder.getLight(x-1, y  , z,  x-1, y, z+1,  x-1, y-1, z+1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
-        final float light3 = builder.getLight(x-1, y  , z,  x-1, y, z-1,  x-1, y-1, z-1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
-        final float light4 = builder.getLight(x-1, y  , z,  x-1, y, z-1,  x-1, y+1, z-1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
+        final float skyLight1 = builder.getSkyLight(x-1, y  , z,  x-1, y, z+1,  x-1, y+1, z+1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
+        final float skyLight2 = builder.getSkyLight(x-1, y  , z,  x-1, y, z+1,  x-1, y-1, z+1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float skyLight3 = builder.getSkyLight(x-1, y  , z,  x-1, y, z-1,  x-1, y-1, z-1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float skyLight4 = builder.getSkyLight(x-1, y  , z,  x-1, y, z-1,  x-1, y+1, z-1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
 
-        final float ao1 = builder.getAO(x-1, y+1, z,  x-1, y, z+1,  x-1, y+1, z+1,  x-1, y  , z  );
-        final float ao2 = builder.getAO(x-1, y-1, z,  x-1, y, z+1,  x-1, y-1, z+1,  x-1, y  , z  );
-        final float ao3 = builder.getAO(x-1, y-1, z,  x-1, y, z-1,  x-1, y-1, z-1,  x-1, y  , z  );
-        final float ao4 = builder.getAO(x-1, y+1, z,  x-1, y, z-1,  x-1, y+1, z-1,  x-1, y  , z  );
+        final float blockLight1 = builder.getBlockLight(x-1, y  , z,  x-1, y, z+1,  x-1, y+1, z+1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
+        final float blockLight2 = builder.getBlockLight(x-1, y  , z,  x-1, y, z+1,  x-1, y-1, z+1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float blockLight3 = builder.getBlockLight(x-1, y  , z,  x-1, y, z-1,  x-1, y-1, z-1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float blockLight4 = builder.getBlockLight(x-1, y  , z,  x-1, y, z-1,  x-1, y+1, z-1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
 
         final float shadow = 0.8F;
 
-        final float brightness1 = shadow * ao1 * light1;
-        final float brightness2 = shadow * ao2 * light2;
-        final float brightness3 = shadow * ao3 * light3;
-        final float brightness4 = shadow * ao4 * light4;
+        final float ao1 = builder.getAO(x-1, y+1, z,  x-1, y, z+1,  x-1, y+1, z+1,  x-1, y  , z  ) * shadow;
+        final float ao2 = builder.getAO(x-1, y-1, z,  x-1, y, z+1,  x-1, y-1, z+1,  x-1, y  , z  ) * shadow;
+        final float ao3 = builder.getAO(x-1, y-1, z,  x-1, y, z-1,  x-1, y-1, z-1,  x-1, y  , z  ) * shadow;
+        final float ao4 = builder.getAO(x-1, y+1, z,  x-1, y, z-1,  x-1, y+1, z-1,  x-1, y  , z  ) * shadow;
 
         final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
 
-        final ChunkMeshPackedCullingOn mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
-        if(brightness2 + brightness4 > brightness1 + brightness3)
-            face.putIntsPackedFlipped(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
-        else
-            face.putIntsPacked(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
+        final ChunkMesh mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
+        face.putFace(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
     }
 
     private void buildPxFace(ChunkBuilder builder, Face face, int x, int y, int z){
-        final float light1 = builder.getLight(x+1, y, z,  x+1, y, z-1,  x+1, y+1, z-1,  x+1, y+1, z) / MAX_LIGHT_LEVEL;
-        final float light2 = builder.getLight(x+1, y, z,  x+1, y, z-1,  x+1, y-1, z-1,  x+1, y-1, z) / MAX_LIGHT_LEVEL;
-        final float light3 = builder.getLight(x+1, y, z,  x+1, y, z+1,  x+1, y-1, z+1,  x+1, y-1, z) / MAX_LIGHT_LEVEL;
-        final float light4 = builder.getLight(x+1, y, z,  x+1, y, z+1,  x+1, y+1, z+1,  x+1, y+1, z) / MAX_LIGHT_LEVEL;
+        final float skyLight1 = builder.getSkyLight(x+1, y, z,  x+1, y, z-1,  x+1, y+1, z-1,  x+1, y+1, z  ) / MAX_LIGHT_LEVEL;
+        final float skyLight2 = builder.getSkyLight(x+1, y, z,  x+1, y, z-1,  x+1, y-1, z-1,  x+1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float skyLight3 = builder.getSkyLight(x+1, y, z,  x+1, y, z+1,  x+1, y-1, z+1,  x+1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float skyLight4 = builder.getSkyLight(x+1, y, z,  x+1, y, z+1,  x+1, y+1, z+1,  x+1, y+1, z  ) / MAX_LIGHT_LEVEL;
 
-        final float ao1 = builder.getAO(x+1, y+1, z,  x+1, y, z-1,  x+1, y+1, z-1,  x+1, y  , z  );
-        final float ao2 = builder.getAO(x+1, y-1, z,  x+1, y, z-1,  x+1, y-1, z-1,  x+1, y  , z  );
-        final float ao3 = builder.getAO(x+1, y-1, z,  x+1, y, z+1,  x+1, y-1, z+1,  x+1, y  , z  );
-        final float ao4 = builder.getAO(x+1, y+1, z,  x+1, y, z+1,  x+1, y+1, z+1,  x+1, y  , z  );
+        final float blockLight1 = builder.getBlockLight(x+1, y, z,  x+1, y, z-1,  x+1, y+1, z-1,  x+1, y+1, z  ) / MAX_LIGHT_LEVEL;
+        final float blockLight2 = builder.getBlockLight(x+1, y, z,  x+1, y, z-1,  x+1, y-1, z-1,  x+1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float blockLight3 = builder.getBlockLight(x+1, y, z,  x+1, y, z+1,  x+1, y-1, z+1,  x+1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float blockLight4 = builder.getBlockLight(x+1, y, z,  x+1, y, z+1,  x+1, y+1, z+1,  x+1, y+1, z  ) / MAX_LIGHT_LEVEL;
 
         final float shadow = 0.8F;
 
-        final float brightness1 = shadow * ao1 * light1;
-        final float brightness2 = shadow * ao2 * light2;
-        final float brightness3 = shadow * ao3 * light3;
-        final float brightness4 = shadow * ao4 * light4;
+        final float ao1 = builder.getAO(x+1, y+1, z,  x+1, y, z-1,  x+1, y+1, z-1,  x+1, y  , z  ) * shadow;
+        final float ao2 = builder.getAO(x+1, y-1, z,  x+1, y, z-1,  x+1, y-1, z-1,  x+1, y  , z  ) * shadow;
+        final float ao3 = builder.getAO(x+1, y-1, z,  x+1, y, z+1,  x+1, y-1, z+1,  x+1, y  , z  ) * shadow;
+        final float ao4 = builder.getAO(x+1, y+1, z,  x+1, y, z+1,  x+1, y+1, z+1,  x+1, y  , z  ) * shadow;
 
         final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
 
-        final ChunkMeshPackedCullingOn mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
-        if(brightness2 + brightness4 > brightness1 + brightness3)
-            face.putIntsPackedFlipped(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
-        else
-            face.putIntsPacked(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
+        final ChunkMesh mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
+        face.putFace(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
     }
 
     private void buildNyFace(ChunkBuilder builder, Face face, int x, int y, int z){
-        final float light1 = builder.getLight(x, y-1, z,  x, y-1, z+1,  x+1, y-1, z+1,  x+1, y-1, z) / MAX_LIGHT_LEVEL;
-        final float light2 = builder.getLight(x, y-1, z,  x, y-1, z-1,  x+1, y-1, z-1,  x+1, y-1, z) / MAX_LIGHT_LEVEL;
-        final float light3 = builder.getLight(x, y-1, z,  x, y-1, z-1,  x-1, y-1, z-1,  x-1, y-1, z) / MAX_LIGHT_LEVEL;
-        final float light4 = builder.getLight(x, y-1, z,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y-1, z) / MAX_LIGHT_LEVEL;
+        final float skyLight1 = builder.getSkyLight(x, y-1, z,  x, y-1, z+1,  x+1, y-1, z+1,  x+1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float skyLight2 = builder.getSkyLight(x, y-1, z,  x, y-1, z-1,  x+1, y-1, z-1,  x+1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float skyLight3 = builder.getSkyLight(x, y-1, z,  x, y-1, z-1,  x-1, y-1, z-1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float skyLight4 = builder.getSkyLight(x, y-1, z,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
 
-        final float ao1 = builder.getAO(x+1, y-1, z,  x, y-1, z+1,  x+1, y-1, z+1,  x  , y-1, z  );
-        final float ao2 = builder.getAO(x+1, y-1, z,  x, y-1, z-1,  x+1, y-1, z-1,  x  , y-1, z  );
-        final float ao3 = builder.getAO(x-1, y-1, z,  x, y-1, z-1,  x-1, y-1, z-1,  x  , y-1, z  );
-        final float ao4 = builder.getAO(x-1, y-1, z,  x, y-1, z+1,  x-1, y-1, z+1,  x  , y-1, z  );
+        final float blockLight1 = builder.getBlockLight(x, y-1, z,  x, y-1, z+1,  x+1, y-1, z+1,  x+1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float blockLight2 = builder.getBlockLight(x, y-1, z,  x, y-1, z-1,  x+1, y-1, z-1,  x+1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float blockLight3 = builder.getBlockLight(x, y-1, z,  x, y-1, z-1,  x-1, y-1, z-1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
+        final float blockLight4 = builder.getBlockLight(x, y-1, z,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
 
         final float shadow = 0.6F;
 
-        final float brightness1 = shadow * ao1 * light1;
-        final float brightness2 = shadow * ao2 * light2;
-        final float brightness3 = shadow * ao3 * light3;
-        final float brightness4 = shadow * ao4 * light4;
+        final float ao1 = builder.getAO(x+1, y-1, z,  x, y-1, z+1,  x+1, y-1, z+1,  x  , y-1, z  ) * shadow;
+        final float ao2 = builder.getAO(x+1, y-1, z,  x, y-1, z-1,  x+1, y-1, z-1,  x  , y-1, z  ) * shadow;
+        final float ao3 = builder.getAO(x-1, y-1, z,  x, y-1, z-1,  x-1, y-1, z-1,  x  , y-1, z  ) * shadow;
+        final float ao4 = builder.getAO(x-1, y-1, z,  x, y-1, z+1,  x-1, y-1, z+1,  x  , y-1, z  ) * shadow;
 
         final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
 
-        final ChunkMeshPackedCullingOn mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
-        if(brightness2 + brightness4 > brightness1 + brightness3)
-            face.putIntsPackedFlipped(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
-        else
-            face.putIntsPacked(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
+        final ChunkMesh mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
+        face.putFace(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
     }
 
     private void buildPyFace(ChunkBuilder builder, Face face, int x, int y, int z){
-        final float light1 = builder.getLight(x, y+1, z,  x, y+1, z-1,  x+1, y+1, z-1,  x+1, y+1, z) / MAX_LIGHT_LEVEL;
-        final float light2 = builder.getLight(x, y+1, z,  x, y+1, z+1,  x+1, y+1, z+1,  x+1, y+1, z) / MAX_LIGHT_LEVEL;
-        final float light3 = builder.getLight(x, y+1, z,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y+1, z) / MAX_LIGHT_LEVEL;
-        final float light4 = builder.getLight(x, y+1, z,  x, y+1, z-1,  x-1, y+1, z-1,  x-1, y+1, z) / MAX_LIGHT_LEVEL;
+        final float skyLight1 = builder.getSkyLight(x, y+1, z,  x, y+1, z-1,  x+1, y+1, z-1,  x+1, y+1, z  ) / MAX_LIGHT_LEVEL;
+        final float skyLight2 = builder.getSkyLight(x, y+1, z,  x, y+1, z+1,  x+1, y+1, z+1,  x+1, y+1, z  ) / MAX_LIGHT_LEVEL;
+        final float skyLight3 = builder.getSkyLight(x, y+1, z,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
+        final float skyLight4 = builder.getSkyLight(x, y+1, z,  x, y+1, z-1,  x-1, y+1, z-1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
 
-        final float ao1 = builder.getAO(x+1, y+1, z,  x, y+1, z-1,  x+1, y+1, z-1,  x  , y+1, z  );
-        final float ao2 = builder.getAO(x+1, y+1, z,  x, y+1, z+1,  x+1, y+1, z+1,  x  , y+1, z  );
-        final float ao3 = builder.getAO(x-1, y+1, z,  x, y+1, z+1,  x-1, y+1, z+1,  x  , y+1, z  );
-        final float ao4 = builder.getAO(x-1, y+1, z,  x, y+1, z-1,  x-1, y+1, z-1,  x  , y+1, z  );
+        final float blockLight1 = builder.getBlockLight(x, y+1, z,  x, y+1, z-1,  x+1, y+1, z-1,  x+1, y+1, z  ) / MAX_LIGHT_LEVEL;
+        final float blockLight2 = builder.getBlockLight(x, y+1, z,  x, y+1, z+1,  x+1, y+1, z+1,  x+1, y+1, z  ) / MAX_LIGHT_LEVEL;
+        final float blockLight3 = builder.getBlockLight(x, y+1, z,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
+        final float blockLight4 = builder.getBlockLight(x, y+1, z,  x, y+1, z-1,  x-1, y+1, z-1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
 
         final float shadow = 1;
 
-        final float brightness1 = shadow * ao1 * light1;
-        final float brightness2 = shadow * ao2 * light2;
-        final float brightness3 = shadow * ao3 * light3;
-        final float brightness4 = shadow * ao4 * light4;
+        final float ao1 = builder.getAO(x+1, y+1, z,  x, y+1, z-1,  x+1, y+1, z-1,  x  , y+1, z  ) * shadow;
+        final float ao2 = builder.getAO(x+1, y+1, z,  x, y+1, z+1,  x+1, y+1, z+1,  x  , y+1, z  ) * shadow;
+        final float ao3 = builder.getAO(x-1, y+1, z,  x, y+1, z+1,  x-1, y+1, z+1,  x  , y+1, z  ) * shadow;
+        final float ao4 = builder.getAO(x-1, y+1, z,  x, y+1, z-1,  x-1, y+1, z-1,  x  , y+1, z  ) * shadow;
 
         final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
 
-        final ChunkMeshPackedCullingOn mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
-        if(brightness2 + brightness4 > brightness1 + brightness3)
-            face.putIntsPackedFlipped(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
-        else
-            face.putIntsPacked(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
+        final ChunkMesh mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
+        face.putFace(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
     }
 
     private void buildNzFace(ChunkBuilder builder, Face face, int x, int y, int z){
-        final float light1 = builder.getLight(x, y, z-1,  x, y+1, z-1,  x-1, y+1, z-1,  x, y+1, z-1) / MAX_LIGHT_LEVEL;
-        final float light2 = builder.getLight(x, y, z-1,  x, y-1, z-1,  x-1, y-1, z-1,  x, y-1, z-1) / MAX_LIGHT_LEVEL;
-        final float light3 = builder.getLight(x, y, z-1,  x, y-1, z-1,  x+1, y-1, z-1,  x, y-1, z-1) / MAX_LIGHT_LEVEL;
-        final float light4 = builder.getLight(x, y, z-1,  x, y+1, z-1,  x+1, y+1, z-1,  x, y+1, z-1) / MAX_LIGHT_LEVEL;
+        final float skyLight1 = builder.getSkyLight(x, y, z-1,  x, y+1, z-1,  x-1, y+1, z-1,  x, y+1, z-1  ) / MAX_LIGHT_LEVEL;
+        final float skyLight2 = builder.getSkyLight(x, y, z-1,  x, y-1, z-1,  x-1, y-1, z-1,  x, y-1, z-1  ) / MAX_LIGHT_LEVEL;
+        final float skyLight3 = builder.getSkyLight(x, y, z-1,  x, y-1, z-1,  x+1, y-1, z-1,  x, y-1, z-1  ) / MAX_LIGHT_LEVEL;
+        final float skyLight4 = builder.getSkyLight(x, y, z-1,  x, y+1, z-1,  x+1, y+1, z-1,  x, y+1, z-1  ) / MAX_LIGHT_LEVEL;
 
-        final float ao1 = builder.getAO(x-1, y, z-1,  x, y+1, z-1,  x-1, y+1, z-1,  x  , y  , z-1);
-        final float ao2 = builder.getAO(x-1, y, z-1,  x, y-1, z-1,  x-1, y-1, z-1,  x  , y  , z-1);
-        final float ao3 = builder.getAO(x+1, y, z-1,  x, y-1, z-1,  x+1, y-1, z-1,  x  , y  , z-1);
-        final float ao4 = builder.getAO(x+1, y, z-1,  x, y+1, z-1,  x+1, y+1, z-1,  x  , y  , z-1);
+        final float blockLight1 = builder.getBlockLight(x, y, z-1,  x, y+1, z-1,  x-1, y+1, z-1,  x, y+1, z-1  ) / MAX_LIGHT_LEVEL;
+        final float blockLight2 = builder.getBlockLight(x, y, z-1,  x, y-1, z-1,  x-1, y-1, z-1,  x, y-1, z-1  ) / MAX_LIGHT_LEVEL;
+        final float blockLight3 = builder.getBlockLight(x, y, z-1,  x, y-1, z-1,  x+1, y-1, z-1,  x, y-1, z-1  ) / MAX_LIGHT_LEVEL;
+        final float blockLight4 = builder.getBlockLight(x, y, z-1,  x, y+1, z-1,  x+1, y+1, z-1,  x, y+1, z-1  ) / MAX_LIGHT_LEVEL;
 
         final float shadow = 0.7F;
 
-        final float brightness1 = shadow * ao1 * light1;
-        final float brightness2 = shadow * ao2 * light2;
-        final float brightness3 = shadow * ao3 * light3;
-        final float brightness4 = shadow * ao4 * light4;
+        final float ao1 = builder.getAO(x-1, y, z-1,  x, y+1, z-1,  x-1, y+1, z-1,  x  , y  , z-1) * shadow;
+        final float ao2 = builder.getAO(x-1, y, z-1,  x, y-1, z-1,  x-1, y-1, z-1,  x  , y  , z-1) * shadow;
+        final float ao3 = builder.getAO(x+1, y, z-1,  x, y-1, z-1,  x+1, y-1, z-1,  x  , y  , z-1) * shadow;
+        final float ao4 = builder.getAO(x+1, y, z-1,  x, y+1, z-1,  x+1, y+1, z-1,  x  , y  , z-1) * shadow;
 
         final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
 
-        final ChunkMeshPackedCullingOn mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
-        if(brightness2 + brightness4 > brightness1 + brightness3)
-            face.putIntsPackedFlipped(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
-        else
-            face.putIntsPacked(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
+        final ChunkMesh mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
+        face.putFace(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
     }
 
     private void buildPzFace(ChunkBuilder builder, Face face, int x, int y, int z){
-        final float light1 = builder.getLight(x, y, z+1,  x, y+1, z+1,  x+1, y+1, z+1,  x+1, y, z+1) / MAX_LIGHT_LEVEL;
-        final float light2 = builder.getLight(x, y, z+1,  x, y-1, z+1,  x+1, y-1, z+1,  x+1, y, z+1) / MAX_LIGHT_LEVEL;
-        final float light3 = builder.getLight(x, y, z+1,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y, z+1) / MAX_LIGHT_LEVEL;
-        final float light4 = builder.getLight(x, y, z+1,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y, z+1) / MAX_LIGHT_LEVEL;
+        final float skyLight1 = builder.getSkyLight(x, y, z+1,  x, y+1, z+1,  x+1, y+1, z+1,  x+1, y, z+1  ) / MAX_LIGHT_LEVEL;
+        final float skyLight2 = builder.getSkyLight(x, y, z+1,  x, y-1, z+1,  x+1, y-1, z+1,  x+1, y, z+1  ) / MAX_LIGHT_LEVEL;
+        final float skyLight3 = builder.getSkyLight(x, y, z+1,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y, z+1  ) / MAX_LIGHT_LEVEL;
+        final float skyLight4 = builder.getSkyLight(x, y, z+1,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y, z+1  ) / MAX_LIGHT_LEVEL;
 
-        final float ao1 = builder.getAO(x+1, y, z+1,  x, y+1, z+1,  x+1, y+1, z+1,  x  , y  , z+1);
-        final float ao2 = builder.getAO(x+1, y, z+1,  x, y-1, z+1,  x+1, y-1, z+1,  x  , y  , z+1);
-        final float ao3 = builder.getAO(x-1, y, z+1,  x, y-1, z+1,  x-1, y-1, z+1,  x  , y  , z+1);
-        final float ao4 = builder.getAO(x-1, y, z+1,  x, y+1, z+1,  x-1, y+1, z+1,  x  , y  , z+1);
+        final float blockLight1 = builder.getBlockLight(x, y, z+1,  x, y+1, z+1,  x+1, y+1, z+1,  x+1, y, z+1  ) / MAX_LIGHT_LEVEL;
+        final float blockLight2 = builder.getBlockLight(x, y, z+1,  x, y-1, z+1,  x+1, y-1, z+1,  x+1, y, z+1  ) / MAX_LIGHT_LEVEL;
+        final float blockLight3 = builder.getBlockLight(x, y, z+1,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y, z+1  ) / MAX_LIGHT_LEVEL;
+        final float blockLight4 = builder.getBlockLight(x, y, z+1,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y, z+1  ) / MAX_LIGHT_LEVEL;
 
         final float shadow = 0.7F;
 
-        final float brightness1 = shadow * ao1 * light1;
-        final float brightness2 = shadow * ao2 * light2;
-        final float brightness3 = shadow * ao3 * light3;
-        final float brightness4 = shadow * ao4 * light4;
+        final float ao1 = builder.getAO(x+1, y, z+1,  x, y+1, z+1,  x+1, y+1, z+1,  x  , y  , z+1) * shadow;
+        final float ao2 = builder.getAO(x+1, y, z+1,  x, y-1, z+1,  x+1, y-1, z+1,  x  , y  , z+1) * shadow;
+        final float ao3 = builder.getAO(x-1, y, z+1,  x, y-1, z+1,  x-1, y-1, z+1,  x  , y  , z+1) * shadow;
+        final float ao4 = builder.getAO(x-1, y, z+1,  x, y+1, z+1,  x-1, y+1, z+1,  x  , y  , z+1) * shadow;
 
         final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
 
-        final ChunkMeshPackedCullingOn mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
-        if(brightness2 + brightness4 > brightness1 + brightness3)
-            face.putIntsPackedFlipped(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
-        else
-            face.putIntsPacked(mesh.getVerticesList(),  x, y, z,  color,  brightness1, brightness2, brightness3, brightness4);
+        final ChunkMesh mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
+        face.putFace(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
     }
 
 
@@ -540,33 +517,51 @@ public class BlockModel{
         final BlockModel model = new BlockModel(meshType);
 
         for(Face face: faces)
-            model.face(face.rotated(rotation));
+            model.face(face.rotated(rotation).setFaceData(face.faceData));
 
         for(Face face: nxFaces){
-            final Vec3i normal = Direction.NEGATIVE_X.getNormal().copy().mul(rotation.getMatrix());
-            model.face(Direction.fromNormal(normal), face.rotated(rotation));
+            switch(rotation){
+                case X90 -> model.face(Dir.NEGATIVE_X, new Face(Quad.getNxQuad(),  face.t2, face.t3, face.t4, face.t1,  face.color).setFaceData(face.faceData));
+                case Y90 -> model.face(Dir.NEGATIVE_Z, new Face(Quad.getNzQuad(),  face.t1, face.t2, face.t3, face.t4,  face.color).setFaceData(face.faceData));
+                case Z90 -> model.face(Dir.POSITIVE_Y, new Face(Quad.getPyQuad(),  face.t4, face.t1, face.t2, face.t3,  face.color).setFaceData(face.faceData));
+            }
         }
         for(Face face: pxFaces){
-            final Vec3i normal = Direction.POSITIVE_X.getNormal().copy().mul(rotation.getMatrix());
-            model.face(Direction.fromNormal(normal), face.rotated(rotation));
+            switch(rotation){
+                case X90 -> model.face(Dir.POSITIVE_X, new Face(Quad.getPxQuad(),  face.t4, face.t1, face.t2, face.t3,  face.color).setFaceData(face.faceData));
+                case Y90 -> model.face(Dir.POSITIVE_Z, new Face(Quad.getPzQuad(),  face.t1, face.t2, face.t3, face.t4,  face.color).setFaceData(face.faceData));
+                case Z90 -> model.face(Dir.NEGATIVE_Y, new Face(Quad.getNyQuad(),  face.t4, face.t1, face.t2, face.t3,  face.color).setFaceData(face.faceData));
+            }
         }
 
         for(Face face: nyFaces){
-            final Vec3i normal = Direction.NEGATIVE_Y.getNormal().copy().mul(rotation.getMatrix());
-            model.face(Direction.fromNormal(normal), face.rotated(rotation));
+            switch(rotation){
+                case X90 -> model.face(Dir.POSITIVE_Z, new Face(Quad.getPzQuad(),  face.t1, face.t2, face.t3, face.t4,  face.color).setFaceData(face.faceData));
+                case Y90 -> model.face(Dir.NEGATIVE_Y, new Face(Quad.getNyQuad(),  face.t2, face.t3, face.t4, face.t1,  face.color).setFaceData(face.faceData));
+                case Z90 -> model.face(Dir.NEGATIVE_X, new Face(Quad.getNxQuad(),  face.t4, face.t1, face.t2, face.t3,  face.color).setFaceData(face.faceData));
+            }
         }
         for(Face face: pyFaces){
-            final Vec3i normal = Direction.POSITIVE_Y.getNormal().copy().mul(rotation.getMatrix());
-            model.face(Direction.fromNormal(normal), face.rotated(rotation));
+            switch(rotation){
+                case X90 -> model.face(Dir.NEGATIVE_Z, new Face(Quad.getNzQuad(),  face.t3, face.t4, face.t1, face.t2,  face.color).setFaceData(face.faceData));
+                case Y90 -> model.face(Dir.POSITIVE_Y, new Face(Quad.getPyQuad(),  face.t4, face.t1, face.t2, face.t3,  face.color).setFaceData(face.faceData));
+                case Z90 -> model.face(Dir.POSITIVE_X, new Face(Quad.getPxQuad(),  face.t4, face.t1, face.t2, face.t3,  face.color).setFaceData(face.faceData));
+            }
         }
 
         for(Face face: nzFaces){
-            final Vec3i normal = Direction.NEGATIVE_Z.getNormal().copy().mul(rotation.getMatrix());
-            model.face(Direction.fromNormal(normal), face.rotated(rotation));
+            switch(rotation){
+                case X90 -> model.face(Dir.NEGATIVE_Y, new Face(Quad.getNyQuad(),  face.t3, face.t4, face.t1, face.t2,  face.color).setFaceData(face.faceData));
+                case Y90 -> model.face(Dir.POSITIVE_X, new Face(Quad.getPxQuad(),  face.t1, face.t2, face.t3, face.t4,  face.color).setFaceData(face.faceData));
+                case Z90 -> model.face(Dir.NEGATIVE_Z, new Face(Quad.getNzQuad(),  face.t2, face.t3, face.t4, face.t1,  face.color).setFaceData(face.faceData));
+            }
         }
         for(Face face: pzFaces){
-            final Vec3i normal = Direction.POSITIVE_Z.getNormal().copy().mul(rotation.getMatrix());
-            model.face(Direction.fromNormal(normal), face.rotated(rotation));
+            switch(rotation){
+                case X90 -> model.face(Dir.POSITIVE_Y, new Face(Quad.getPyQuad(),  face.t1, face.t2, face.t3, face.t4,  face.color).setFaceData(face.faceData));
+                case Y90 -> model.face(Dir.NEGATIVE_X, new Face(Quad.getNxQuad(),  face.t1, face.t2, face.t3, face.t4,  face.color).setFaceData(face.faceData));
+                case Z90 -> model.face(Dir.POSITIVE_Z, new Face(Quad.getPzQuad(),  face.t4, face.t1, face.t2, face.t3,  face.color).setFaceData(face.faceData));
+            }
         }
 
         return model;

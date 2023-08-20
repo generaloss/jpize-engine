@@ -97,7 +97,7 @@ public class ClientGame implements Tickable{
                 level.getChunkManager().reset();
             });
         else{
-            level = new ClientLevel(session, worldName);
+            level = new ClientLevel(this, worldName);
             blockRayCast.setLevel(level);
         }
     }

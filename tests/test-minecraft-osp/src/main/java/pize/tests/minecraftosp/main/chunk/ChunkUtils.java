@@ -18,6 +18,9 @@ public class ChunkUtils{
     
     // Light
     public static final int MAX_LIGHT_LEVEL = 15;
+
+    // Structures
+    public static final int MAX_STRUCTURE_SIZE = 1; // In chunks
     
     
     public static int getIndex(int x, int y, int z){

@@ -7,10 +7,10 @@ import pize.physic.BoundingBox3f;
 import pize.physic.BoxBody;
 import pize.physic.Collider3f;
 import pize.physic.Velocity3f;
-import pize.tests.minecraftosp.client.block.BlockProperties;
+import pize.tests.minecraftosp.client.block.BlockProps;
 import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.client.block.shape.BlockCollide;
-import pize.tests.minecraftosp.main.Direction;
+import pize.tests.minecraftosp.main.Dir;
 import pize.tests.minecraftosp.main.Tickable;
 import pize.tests.minecraftosp.main.block.BlockData;
 import pize.tests.minecraftosp.main.chunk.ChunkUtils;
@@ -86,14 +86,14 @@ public abstract class Entity extends BoxBody implements Tickable {
         blockBoxes = getBlockBoxes();
         // Update is player on ground
 
-        onGround = isCollidedTo(Direction.NEGATIVE_Y);
+        onGround = isCollidedTo(Dir.NEGATIVE_Y);
     }
     
     public boolean isOnGround(){
         return onGround;
     }
     
-    public boolean isCollidedTo(Direction face){
+    public boolean isCollidedTo(Dir face){
         final Vec3f dir = new Vec3f(face.getNormal()).mul(Maths.Epsilon);
         return Collider3f.getCollidedMotion(this, dir, blockBoxes).len2() < dir.len2();
     }
@@ -127,9 +127,8 @@ public abstract class Entity extends BoxBody implements Tickable {
             for(int y = beginY; y < endY; y++)
                 for(int z = beginZ; z < endZ; z++){
 
-                    final short blockData = level.getBlock(x, y, z);
-                    final byte blockState = BlockData.getState(blockData);
-                    final BlockProperties block = BlockData.getProps(blockData);
+                    final short blockData = level.getBlockState(x, y, z);
+                    final BlockProps block = BlockData.getProps(blockData);
 
                     if(block.getID() == Blocks.AIR.getID())
                         continue;
@@ -141,7 +140,7 @@ public abstract class Entity extends BoxBody implements Tickable {
                         continue;
                     }
 
-                    final BlockCollide shape = block.getState(blockState).getCollide();
+                    final BlockCollide shape = block.getCollide();
                     if(shape == null)
                         continue;
                     

@@ -5,9 +5,9 @@ public enum MusicGroup{
     NONE(),
     MENU("mutation"),
     GAME(
-        "clark", "danny", "dry_hands", "haggstorm",
-        "living_mice", "mice_on_venus", "minecraft",
-        "subwoofer_lullaby", "sweden", "wet_hands"
+        // "clark", "danny", "dry_hands", "haggstorm",
+        // "living_mice", "mice_on_venus", "minecraft",
+        // "subwoofer_lullaby", "sweden", "wet_hands"
     );
 
     private final String[] list;

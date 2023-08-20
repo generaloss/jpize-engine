@@ -7,7 +7,7 @@ import pize.math.util.EulerAngles;
 import pize.math.vecmath.vector.Vec3f;
 import pize.physic.Velocity3f;
 import pize.tests.minecraftosp.client.ClientGame;
-import pize.tests.minecraftosp.client.block.BlockProperties;
+import pize.tests.minecraftosp.client.block.BlockProps;
 import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.client.chunk.ClientChunk;
 import pize.tests.minecraftosp.client.control.camera.perspective.CameraTarget;
@@ -108,7 +108,7 @@ public class GameCamera extends PerspectiveCamera{
         super.update();
 
         // Update is camera in water
-        final BlockProperties block = game.getLevel().getBlockProps(position.xf(), position.yf(), position.zf());
+        final BlockProps block = game.getLevel().getBlockProps(position.xf(), position.yf(), position.zf());
         inWater = block.getID() == Blocks.WATER.getID();
     }
     

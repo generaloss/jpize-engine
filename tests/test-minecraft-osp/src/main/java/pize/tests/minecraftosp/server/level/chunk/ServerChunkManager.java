@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.server.level.chunk;
 
-import pize.math.Mathc;
+import pize.graphics.util.batch.TextureBatch;
 import pize.math.vecmath.vector.Vec2f;
 import pize.tests.minecraftosp.main.chunk.storage.ChunkPos;
 import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
@@ -13,7 +13,6 @@ import pize.tests.minecraftosp.server.level.ServerLevel;
 import pize.tests.minecraftosp.server.player.ServerPlayer;
 import pize.util.time.FpsCounter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
@@ -32,8 +31,6 @@ public class ServerChunkManager extends ChunkManager{
     private final Map<ChunkPos, ServerChunk> generatingChunks;
     private final Queue<ChunkPos> loadQueue;
 
-    private final BlockPool blockPool;
-
     public final FpsCounter tps;
     
     private final ExecutorService executorService;
@@ -48,8 +45,6 @@ public class ServerChunkManager extends ChunkManager{
         allChunks = new ConcurrentHashMap<>();
         generatingChunks = new ConcurrentHashMap<>();
 
-        blockPool = new BlockPool(this);
-        
         tps = new FpsCounter();
    
         executorService = Executors.newSingleThreadExecutor(runnable->{
@@ -141,8 +136,8 @@ public class ServerChunkManager extends ChunkManager{
             ensureFrontier(frontierPos.getNeighbor( 0,  1));
         }
     
-        frontiers.removeIf(this::isOffTheGrid);
-        newFrontiers.removeIf(this::isOffTheGrid);
+        frontiers.removeIf(chunkPos -> isOffTheGrid(chunkPos, 2));
+        newFrontiers.removeIf(chunkPos -> isOffTheGrid(chunkPos, 2));
         if(newFrontiers.isEmpty())
             return;
         
@@ -152,61 +147,51 @@ public class ServerChunkManager extends ChunkManager{
     }
     
     private void ensureFrontier(ChunkPos chunkPos){
-        if(frontiers.contains(chunkPos) || isOffTheGrid(chunkPos))
+        if(frontiers.contains(chunkPos) || isOffTheGrid(chunkPos, 2))
             return;
         
         frontiers.add(chunkPos);
         newFrontiers.add(chunkPos);
     }
+
+
+    public void render(TextureBatch batch, float size){
+        for(ServerChunk chunk: generatingChunks.values()){
+            final ChunkPos position = chunk.getPosition();
+            final float grayscale = Math.min(chunk.getLifeTimeMillis() / 500F * 0.3F, 0.3F) + 0.1F;
+            batch.drawQuad(grayscale, grayscale, grayscale, 1,  position.x * size, position.z * size,  size, size);
+        }
+        for(ServerChunk chunk: allChunks.values()){
+            final ChunkPos position = chunk.getPosition();
+            batch.drawQuad(0, 0.8, 0, 1,  position.x * size, position.z * size,  size, size);
+        }
+    }
     
     
     private void loadChunks(){
+        final ChunkGenerator generator = level.getConfiguration().getGenerator();
+        if(generator == null)
+            return;
+
         // Load
         for(ChunkPos chunkPos: loadQueue){
             loadQueue.remove(chunkPos);
-            if(isOffTheGrid(chunkPos))
+            if(isOffTheGrid(chunkPos, 2))
                 continue;
 
-            // Load / Generate
-            // ServerChunk chunk = loadChunk(chunkPos);
-            // if(chunk == null)
-            generateChunk(chunkPos); // Start generate
+
+            // [In Future]: ServerChunk chunk = loadChunk(chunkPos); // Load
+            // [In Future]: if(chunk == null)
+            generateChunk(chunkPos, generator); // Start generate
         }
         // [Debug]: System.out.println("generateChunk.size() => " + generateChunks.size() + "; allChunks.size() => " + allChunks.size() + ";");
-        for(ServerChunk chunk: generatingChunks.values()){
-            if(!checkChunkDist(chunk))
-                continue;
-
-            blockPool.loadBlocksFor(chunk);
-            // Update skylight
-            chunk.getHeightMap(HeightmapType.OPAQUE).update();
-            chunk.getLevel().getLight().updateSkyLight(chunk);
-
-            // Add to list
-            addToAllChunks(chunk);
-        }
+        for(ServerChunk chunk: generatingChunks.values())
+            if(checkChunksAround(chunk))
+                decorateChunk(chunk, generator);
     }
 
-    private final ArrayList<ChunkPos> neighborsList = new ArrayList<>();
-
-    private boolean checkChunkDist(ServerChunk chunk){
-        final ChunkPos chunkPos = chunk.getPosition();
-
-        neighborsList.clear();
-
-        neighborsList.add(chunkPos.getNeighbor( 0, -1));
-        neighborsList.add(chunkPos.getNeighbor(-1, -1));
-        neighborsList.add(chunkPos.getNeighbor( 1, -1));
-
-        neighborsList.add(chunkPos.getNeighbor( 0,  0));
-        neighborsList.add(chunkPos.getNeighbor(-1,  0));
-        neighborsList.add(chunkPos.getNeighbor( 1,  0));
-
-        neighborsList.add(chunkPos.getNeighbor( 0,  1));
-        neighborsList.add(chunkPos.getNeighbor(-1,  1));
-        neighborsList.add(chunkPos.getNeighbor( 1,  1));
-
-        for(ChunkPos neighborPosition: neighborsList)
+    private boolean checkChunksAround(ServerChunk chunk){
+        for(ChunkPos neighborPosition: chunk.getNeighbors())
             if(!isChunkExists(neighborPosition))
                 return false;
 
@@ -219,23 +204,19 @@ public class ServerChunkManager extends ChunkManager{
     
     public void unloadChunks(){
         for(ServerChunk chunk: allChunks.values())
-            if(isOffTheGrid(chunk.getPosition()))
+            if(isOffTheGrid(chunk.getPosition(), 2))
                 unloadChunk(chunk);
 
         for(ServerChunk chunk: generatingChunks.values())
-            if(isOffTheGrid(chunk.getPosition(), Mathc.sqrt(1F * 2)))
+            if(isOffTheGrid(chunk.getPosition(), 2))
                 generatingChunks.remove(chunk.getPosition());
     }
     
-    public ServerChunk loadChunk(ChunkPos chunkPos){
+    private ServerChunk loadChunk(ChunkPos chunkPos){
         return null;
     }
 
-    public void generateChunk(ChunkPos chunkPos){
-        final ChunkGenerator generator = level.getConfiguration().getGenerator();
-        if(generator == null)
-            return;
-
+    private void generateChunk(ChunkPos chunkPos, ChunkGenerator generator){
         // If Generated
         if(generatingChunks.containsKey(chunkPos))
             return;
@@ -248,17 +229,39 @@ public class ServerChunkManager extends ChunkManager{
         generatingChunks.put(chunkPos, chunk);
     }
 
+    private void decorateChunk(ServerChunk chunk, ChunkGenerator generator){
+        // Decorate neighbors
+        for(ChunkPos neighborPosition: chunk.getNeighbors()){
+            ServerChunk neighbor = getGeneratingChunk(neighborPosition);
+
+            if(neighbor == null)
+                neighbor = getChunk(neighborPosition);
+            if(neighbor == null)
+                return;
+            if(neighbor.decorated)
+                continue;
+
+            neighbor.decorated = true;
+            generator.decorate(neighbor);
+        }
+        // Decorate chunk
+        chunk.decorated = true;
+        generator.decorate(chunk);
+
+        // Update skylight
+        chunk.getHeightMap(HeightmapType.LIGHT_SURFACE).update();
+        chunk.getLevel().getSkyLight().updateSkyLight(chunk);
+
+        // Add to list
+        addToAllChunks(chunk);
+    }
+
 
     public void unloadChunk(ServerChunk chunk){
         allChunks.remove(chunk.getPosition());
     }
 
-
-    public BlockPool getBlockPool(){
-        return blockPool;
-    }
-
-    public ServerChunk getProcessChunk(ChunkPos chunkPos){
+    public ServerChunk getGeneratingChunk(ChunkPos chunkPos){
         return generatingChunks.get(chunkPos);
     }
 

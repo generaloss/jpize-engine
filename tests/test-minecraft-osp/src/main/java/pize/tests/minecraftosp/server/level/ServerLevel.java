@@ -2,16 +2,19 @@ package pize.tests.minecraftosp.server.level;
 
 import pize.math.vecmath.vector.Vec2f;
 import pize.math.vecmath.vector.Vec3f;
+import pize.tests.minecraftosp.client.block.Block;
 import pize.tests.minecraftosp.client.block.Blocks;
-import pize.tests.minecraftosp.main.chunk.storage.ChunkPos;
-import pize.tests.minecraftosp.server.level.chunk.ServerChunkManager;
-import pize.tests.minecraftosp.server.player.ServerPlayer;
 import pize.tests.minecraftosp.main.audio.Sound;
+import pize.tests.minecraftosp.main.chunk.storage.ChunkPos;
 import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
 import pize.tests.minecraftosp.main.level.Level;
 import pize.tests.minecraftosp.main.net.packet.CBPacketPlaySound;
 import pize.tests.minecraftosp.server.Server;
 import pize.tests.minecraftosp.server.chunk.ServerChunk;
+import pize.tests.minecraftosp.server.level.chunk.ServerChunkManager;
+import pize.tests.minecraftosp.server.level.light.LevelBlockLight;
+import pize.tests.minecraftosp.server.level.light.LevelSkyLight;
+import pize.tests.minecraftosp.server.player.ServerPlayer;
 
 import static pize.tests.minecraftosp.main.chunk.ChunkUtils.*;
 
@@ -20,13 +23,15 @@ public class ServerLevel extends Level{
     private final Server server;
     private final ServerChunkManager chunkManager;
     private final ServerLevelConfiguration configuration;
-    private final LevelLight levelLight;
+    private final LevelSkyLight skyLight;
+    private final LevelBlockLight blockLight;
 
     public ServerLevel(Server server){
         this.server = server;
         this.chunkManager = new ServerChunkManager(this);
         this.configuration = new ServerLevelConfiguration();
-        this.levelLight = new LevelLight(this);
+        this.skyLight = new LevelSkyLight(this);
+        this.blockLight = new LevelBlockLight(this);
     }
     
     public Server getServer(){
@@ -35,59 +40,122 @@ public class ServerLevel extends Level{
     
     
     @Override
-    public short getBlock(int x, int y, int z){
+    public short getBlockState(int x, int y, int z){
         final ServerChunk targetChunk = getBlockChunk(x, z);
         if(targetChunk != null)
-            return targetChunk.getBlock(getLocalCoord(x), y, getLocalCoord(z));
+            return targetChunk.getBlockState(getLocalCoord(x), y, getLocalCoord(z));
 
         return Blocks.VOID_AIR.getDefaultData();
     }
     
     @Override
-    public boolean setBlock(int x, int y, int z, short blockData){
+    public boolean setBlockState(int x, int y, int z, short blockData){
         final ChunkPos chunkPos = new ChunkPos(getChunkPos(x), getChunkPos(z));
-        final ServerChunk targetChunk = chunkManager.getChunk(chunkPos);
+        ServerChunk targetChunk = chunkManager.getChunk(chunkPos);
 
         final int lx = getLocalCoord(x);
         final int lz = getLocalCoord(z);
 
         if(targetChunk != null)
-            return targetChunk.setBlock(lx, y, lz, blockData);
+            return targetChunk.setBlockState(lx, y, lz, blockData);
 
-        chunkManager.getBlockPool().setBlock(chunkPos, lx, y, lz, blockData);
+        targetChunk = chunkManager.getGeneratingChunk(chunkPos);
+        if(targetChunk != null)
+            return targetChunk.setBlockState(lx, y, lz, blockData);
+
         return false;
     }
 
+
     @Override
-    public int getHeight(int x, int z){
+    public Block getBlock(int x, int y, int z){
         final ServerChunk targetChunk = getBlockChunk(x, z);
         if(targetChunk != null)
-            return targetChunk.getHeightMap(HeightmapType.HIGHEST).getHeight(getLocalCoord(x), getLocalCoord(z));
+            return targetChunk.getBlock(getLocalCoord(x), y, getLocalCoord(z));
+
+        return Blocks.VOID_AIR;
+    }
+
+    @Override
+    public boolean setBlock(int x, int y, int z, Block block){
+        final ChunkPos chunkPos = new ChunkPos(getChunkPos(x), getChunkPos(z));
+        ServerChunk targetChunk = chunkManager.getChunk(chunkPos);
+
+        final int lx = getLocalCoord(x);
+        final int lz = getLocalCoord(z);
+
+        if(targetChunk != null)
+            return targetChunk.setBlock(lx, y, lz, block);
+
+        targetChunk = chunkManager.getGeneratingChunk(chunkPos);
+        if(targetChunk != null)
+            return targetChunk.setBlock(lx, y, lz, block);
+
+        return false;
+    }
+
+    public void setBlockFast(int x, int y, int z, Block block){
+        final ChunkPos chunkPos = new ChunkPos(getChunkPos(x), getChunkPos(z));
+        ServerChunk targetChunk = chunkManager.getChunk(chunkPos);
+
+        final int lx = getLocalCoord(x);
+        final int lz = getLocalCoord(z);
+
+        if(targetChunk != null)
+            targetChunk.setBlockFast(lx, y, lz, block);
+
+        targetChunk = chunkManager.getGeneratingChunk(chunkPos);
+        if(targetChunk != null)
+            targetChunk.setBlockFast(lx, y, lz, block);
+    }
+
+
+    @Override
+    public int getHeight(HeightmapType heightmapType, int x, int z){
+        final ServerChunk targetChunk = getBlockChunk(x, z);
+        if(targetChunk != null)
+            return targetChunk.getHeightMap(heightmapType).getHeight(getLocalCoord(x), getLocalCoord(z));
         
         return 0;
     }
     
     
     @Override
-    public byte getLight(int x, int y, int z){
+    public int getSkyLight(int x, int y, int z){
         final ServerChunk targetChunk = getBlockChunk(x, z);
         if(targetChunk != null)
-            return targetChunk.getLight(getLocalCoord(x), y, getLocalCoord(z));
+            return targetChunk.getSkyLight(getLocalCoord(x), y, getLocalCoord(z));
         
         return MAX_LIGHT_LEVEL;
     }
     
     @Override
-    public void setLight(int x, int y, int z, int level){
+    public void setSkyLight(int x, int y, int z, int level){
         final ServerChunk targetChunk = getBlockChunk(x, z);
         if(targetChunk != null)
-            targetChunk.setLight(getLocalCoord(x), y, getLocalCoord(z), level);
+            targetChunk.setSkyLight(getLocalCoord(x), y, getLocalCoord(z), level);
+    }
+
+    @Override
+    public int getBlockLight(int x, int y, int z){
+        final ServerChunk targetChunk = getBlockChunk(x, z);
+        if(targetChunk != null)
+            return targetChunk.getBlockLight(getLocalCoord(x), y, getLocalCoord(z));
+
+        return 0;
+    }
+
+    @Override
+    public void setBlockLight(int x, int y, int z, int level){
+        final ServerChunk targetChunk = getBlockChunk(x, z);
+        if(targetChunk != null)
+            targetChunk.setBlockLight(getLocalCoord(x), y, getLocalCoord(z), level);
     }
     
     
     public Vec3f getSpawnPosition(){
         final Vec2f spawn = getConfiguration().getWorldSpawn();
-        final int spawnY = getHeight(spawn.xf(), spawn.yf()) + 1;
+        final int spawnY = getHeight(HeightmapType.SURFACE, spawn.xf(), spawn.yf()) + 1;
         return new Vec3f(spawn.x, spawnY, spawn.y);
     }
 
@@ -113,8 +181,12 @@ public class ServerLevel extends Level{
     }
 
 
-    public LevelLight getLight(){
-        return levelLight;
+    public LevelSkyLight getSkyLight(){
+        return skyLight;
+    }
+
+    public LevelBlockLight getBlockLight(){
+        return blockLight;
     }
     
     @Override

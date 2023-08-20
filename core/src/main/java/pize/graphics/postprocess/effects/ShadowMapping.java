@@ -3,7 +3,12 @@ package pize.graphics.postprocess.effects;
 import pize.Pize;
 import pize.app.Disposable;
 import pize.files.Resource;
-import pize.graphics.gl.*;
+import pize.lib.gl.Gl;
+import pize.lib.gl.buffer.GlAttachment;
+import pize.lib.gl.texture.GlFilter;
+import pize.lib.gl.texture.GlSizedFormat;
+import pize.lib.gl.texture.GlWrap;
+import pize.lib.gl.type.GlType;
 import pize.graphics.postprocess.FrameBufferObject;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.Shader;
@@ -35,15 +40,15 @@ public class ShadowMapping implements Disposable{
 
         fbo = new FrameBufferObject(width, height);
 
-        fbo.setAttachment(Attachment.DEPTH_ATTACHMENT);
+        fbo.setAttachment(GlAttachment.DEPTH_ATTACHMENT);
         fbo.setWrite(false);
         fbo.setRead(false);
 
         fbo.getInfo()
-            .setSizedFormat(SizedFormat.DEPTH_COMPONENT32)
-            .setWrap(Wrap.CLAMP_TO_BORDER)
-            .setFilter(Filter.NEAREST)
-            .setType(Type.FLOAT)
+            .setSizedFormat(GlSizedFormat.DEPTH_COMPONENT32)
+            .setWrap(GlWrap.CLAMP_TO_BORDER)
+            .setFilter(GlFilter.NEAREST)
+            .setType(GlType.FLOAT)
             .getBorderColor().set(1F, 1F, 1F, 1F);
 
         fbo.create();

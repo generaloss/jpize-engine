@@ -6,14 +6,14 @@ import pize.math.vecmath.vector.Vec3f;
 import pize.math.vecmath.vector.Vec3i;
 import pize.physic.Ray3f;
 import pize.tests.minecraftosp.Minecraft;
-import pize.tests.minecraftosp.client.block.BlockProperties;
+import pize.tests.minecraftosp.client.block.BlockProps;
 import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.client.block.shape.BlockCursor;
-import pize.tests.minecraftosp.main.Direction;
-import pize.tests.minecraftosp.main.block.BlockData;
-import pize.tests.minecraftosp.main.chunk.ChunkUtils;
 import pize.tests.minecraftosp.client.entity.LocalPlayer;
 import pize.tests.minecraftosp.client.level.ClientLevel;
+import pize.tests.minecraftosp.main.Dir;
+import pize.tests.minecraftosp.main.block.BlockData;
+import pize.tests.minecraftosp.main.chunk.ChunkUtils;
 
 public class BlockRayCast{
     
@@ -22,9 +22,8 @@ public class BlockRayCast{
     private final Ray3f ray;
     private float length;
     private final Vec3i selectedBlock, imaginarySelectedBlock;
-    private BlockProperties selectedBlockProperties;
-    private byte selectedBlockState;
-    private Direction selectedFace;
+    private BlockProps selectedBlockProps;
+    private Dir selectedFace;
     private boolean selected;
     private ClientLevel level;
     
@@ -109,21 +108,19 @@ public class BlockRayCast{
             if(selectedBlock.y < 0 || selectedBlock.y > ChunkUtils.HEIGHT_IDX)
                 break;
             
-            final short blockData = level.getBlock(selectedBlock.x, selectedBlock.y, selectedBlock.z);
-            final byte blockState = BlockData.getState(blockData);
-            final BlockProperties block = BlockData.getProps(blockData);
+            final short blockData = level.getBlockState(selectedBlock.x, selectedBlock.y, selectedBlock.z);
+            final BlockProps block = BlockData.getProps(blockData);
 
-            if(!block.isEmpty() && block.getID() != Blocks.VOID_AIR.getID() && block.getState(blockState).getCursor() != null){
+            if(!block.isEmpty() && block.getID() != Blocks.VOID_AIR.getID() && block.getCursor() != null){
                 if(block.isSolid()){
-                    selectedFace = Direction.fromNormal(faceNormal.x, faceNormal.y, faceNormal.z);
-                    selectedBlockProperties = block;
-                    selectedBlockState = blockState;
+                    selectedFace = Dir.fromNormal(faceNormal.x, faceNormal.y, faceNormal.z);
+                    selectedBlockProps = block;
                     imaginarySelectedBlock.set(selectedBlock).add(selectedFace.getNormal());
                     selected = true;
                     
                     break;
                 }else{
-                    final BlockCursor shape = block.getState(blockState).getCursor();
+                    final BlockCursor shape = block.getCursor();
                     // final float[] vertices = shape.getMesh().getIndexedVertices();
                     // if(ray.intersects(vertices)){
                     //     selectedFace = Direction.fromNormal(faceNormal.x, faceNormal.y, faceNormal.z);
@@ -141,7 +138,7 @@ public class BlockRayCast{
     }
     
     
-    public Direction getSelectedFace(){
+    public Dir getSelectedFace(){
         return selectedFace;
     }
     
@@ -149,12 +146,8 @@ public class BlockRayCast{
         return selectedBlock;
     }
 
-    public byte getSelectedBlockState(){
-        return selectedBlockState;
-    }
-
-    public BlockProperties getSelectedBlockProps(){
-        return selectedBlockProperties;
+    public BlockProps getSelectedBlockProps(){
+        return selectedBlockProps;
     }
     
     public Vec3i getImaginaryBlockPosition(){

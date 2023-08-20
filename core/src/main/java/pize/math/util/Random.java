@@ -16,6 +16,10 @@ public class Random{
         random.setSeed(seed);
     }
 
+    public void setSeed(int seed){
+        random.setSeed(seed);
+    }
+
 
     public float random(){
         return random.nextFloat();

@@ -27,7 +27,7 @@ public class MusicPlayer implements Disposable{
 
     public void setGroup(MusicGroup group){
         source.stop();
-        if(group == MusicGroup.NONE)
+        if(group.getList().length == 0)
             return;
 
         this.group = group;

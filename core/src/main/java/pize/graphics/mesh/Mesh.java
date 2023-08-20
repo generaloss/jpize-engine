@@ -1,32 +1,34 @@
 package pize.graphics.mesh;
 
 import pize.app.Disposable;
-import pize.graphics.gl.Primitive;
+import pize.lib.gl.vertex.GlVertexAttr;
+import pize.lib.gl.tesselation.GlPrimitive;
+import pize.lib.gl.vertex.GlVertexArray;
 
 public class Mesh implements Disposable{
 
-    private final GlVao vertexArray;
-    private final GlVbo vertexBuffer;
-    private Primitive mode;
+    private final GlVertexArray vertexArray;
+    private final VertexBuffer vertexBuffer;
+    private GlPrimitive mode;
 
-    public Mesh(VertexAttr... attributes){
-        this.vertexArray = new GlVao();
-        this.vertexBuffer = new GlVbo();
+    public Mesh(GlVertexAttr... attributes){
+        this.vertexArray = new GlVertexArray();
+        this.vertexBuffer = new VertexBuffer();
         this.vertexBuffer.enableAttributes(attributes);
-        this.mode = Primitive.TRIANGLES;
+        this.mode = GlPrimitive.TRIANGLES;
     }
 
 
     public void render(){
-        vertexArray.drawArrays(vertexBuffer.getVerticesNum(), mode);
+        vertexArray.drawArrays(vertexBuffer.getVertexCount(), mode);
     }
 
-    public void setMode(Primitive mode){
+    public void setMode(GlPrimitive mode){
         this.mode = mode;
     }
 
 
-    public GlVbo getBuffer(){
+    public VertexBuffer getBuffer(){
         return vertexBuffer;
     }
 

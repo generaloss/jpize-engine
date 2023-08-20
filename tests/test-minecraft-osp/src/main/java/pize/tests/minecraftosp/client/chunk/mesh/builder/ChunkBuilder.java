@@ -1,17 +1,14 @@
 package pize.tests.minecraftosp.client.chunk.mesh.builder;
 
-import pize.tests.minecraftosp.client.block.BlockProperties;
+import pize.tests.minecraftosp.client.block.BlockProps;
 import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.client.block.model.BlockModel;
 import pize.tests.minecraftosp.client.chunk.ClientChunk;
-import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshCullingOff;
-import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshPackedCullingOn;
+import pize.tests.minecraftosp.client.chunk.mesh.ChunkMesh;
 import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshStack;
-import pize.tests.minecraftosp.client.chunk.mesh.ChunkMeshTranslucentCullingOn;
 import pize.tests.minecraftosp.client.level.ClientChunkManager;
 import pize.tests.minecraftosp.main.biome.Biome;
 import pize.tests.minecraftosp.main.block.BlockData;
-import pize.tests.minecraftosp.main.chunk.LevelChunk;
 import pize.tests.minecraftosp.main.chunk.LevelChunkSection;
 import pize.tests.minecraftosp.main.chunk.storage.Heightmap;
 import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
@@ -35,9 +32,7 @@ public class ChunkBuilder{
 
 
     public ClientChunk chunk;
-    public ChunkMeshPackedCullingOn solidMesh;
-    public ChunkMeshCullingOff customMesh;
-    public ChunkMeshTranslucentCullingOn translucentMesh;
+    public ChunkMesh solidMesh, customMesh, translucentMesh;
     public Biome currentBiome;
 
     public double buildTime;
@@ -54,30 +49,24 @@ public class ChunkBuilder{
 
 
     public boolean build(ClientChunk chunk){
-        if(state.get() != 0)
-            return false;
-        state.set(1);
-
         final Stopwatch timer = new Stopwatch().start();
 
         // Init
         this.chunk = chunk;
         this.neighborChunks = new ClientChunk[]{ // Rows - X, Columns - Z
-            chunk.getNeighbor(-1, -1), chunk.getNeighbor(0, -1) , chunk.getNeighbor(1, -1),
-            chunk.getNeighbor(-1,  0), chunk                    , chunk.getNeighbor(1,  0),
-            chunk.getNeighbor(-1,  1), chunk.getNeighbor(0,  1) , chunk.getNeighbor(1,  1)
+            chunk.getNeighborChunk(-1, -1), chunk.getNeighborChunk(0, -1) , chunk.getNeighborChunk(1, -1),
+            chunk.getNeighborChunk(-1,  0), chunk                         , chunk.getNeighborChunk(1,  0),
+            chunk.getNeighborChunk(-1,  1), chunk.getNeighborChunk(0,  1) , chunk.getNeighborChunk(1,  1)
         };
 
         // Get Meshes
         final ChunkMeshStack meshStack = chunk.getMeshStack();
-        solidMesh = meshStack.getPacked();
+        solidMesh = meshStack.getSolid();
         customMesh = meshStack.getCustom();
         translucentMesh = meshStack.getTranslucent();
 
         // Build
-        final Heightmap heightmap = chunk.getHeightMap(HeightmapType.HIGHEST);
-
-        state.incrementAndGet();
+        final Heightmap heightmapSurface = chunk.getHeightMap(HeightmapType.SURFACE);
 
         final LevelChunkSection[] sections = chunk.getSections();
 
@@ -87,27 +76,24 @@ public class ChunkBuilder{
                 for(int lz = 0; lz < SIZE; lz++){
 
                     currentBiome = chunk.getBiomes().getBiome(lx, lz);
-                    final int height = heightmap.getHeight(lx, lz) + 1;
+                    final int height = heightmapSurface.getHeight(lx, lz) + 1;
 
                     for(int y = 0; y < height; y++){
                         final int sectionIndex = getSectionIndex(y);
                         if(sections[sectionIndex] == null)
                             y += SIZE;
 
-                        final short blockData = chunk.getBlock(lx, y, lz);
-                        final BlockProperties block = BlockData.getProps(blockData);
-                        final byte blockState = BlockData.getState(blockData);
+                        final short blockData = chunk.getBlockState(lx, y, lz);
+                        final BlockProps block = BlockData.getProps(blockData);
                         if(block.isEmpty())
                             continue;
                         
-                        final BlockModel model = block.getState(blockState).getModel();
+                        final BlockModel model = block.getModel();
                         if(model != null)
                             model.build(this, block, lx, y, lz);
                     }
                 }
             }
-
-        state.set(54);
 
         // Update meshes
         verticesNum = 0;
@@ -118,34 +104,77 @@ public class ChunkBuilder{
         // Time
         buildTime = timer.getMillis();
 
-        state.set(0);
-
         return true;
     }
     
-    public boolean isGenSolidFace(int lx, int y, int lz, int normalX, int normalY, int normalZ, BlockProperties block){
+    public boolean isGenSolidFace(int lx, int y, int lz, int normalX, int normalY, int normalZ, BlockProps block){
         if(isOutOfBounds(y))
             return true;
 
-        final short neighborData = getBlock(lx + normalX, y + normalY, lz + normalZ);
-        final byte neighborState = BlockData.getState(neighborData);
-        final BlockProperties neighbor = BlockData.getProps(neighborData);
+        final BlockProps neighbor = getBlockProps(lx + normalX, y + normalY, lz + normalZ);
 
         if(neighbor.getID() == Blocks.VOID_AIR.getID())
             return false;
         
-        return (neighbor.isSolid() && neighbor.getState(neighborState).getModel().isFaceTransparentForNeighbors(-normalX, -normalY, -normalZ)) || neighbor.isEmpty() || (neighbor.isLightTranslucent() && !block.isLightTranslucent());
+        return (neighbor.isSolid() && neighbor.getModel().isFaceTransparentForNeighbors(-normalX, -normalY, -normalZ)) || neighbor.isEmpty() || (neighbor.isLightTranslucent() && !block.isLightTranslucent());
+    }
+
+
+    private void getChunk(int lx, int lz, ChunkCallback chunkCallback){
+        // Находим соседний чанк в массиве 3x3 (neighborChunks)
+        int signX = 0;
+        int signZ = 0;
+
+        if(lx > SIZE_IDX){
+            signX = 1;
+            lx -= SIZE;
+        }else if(lx < 0){
+            signX = -1;
+            lx += SIZE;
+        }
+
+        if(lz > SIZE_IDX){
+            signZ = 1;
+            lz -= SIZE;
+        }else if(lz < 0){
+            signZ = -1;
+            lz += SIZE;
+        }
+
+        final ClientChunk chunk = neighborChunks[(signZ + 1) * 3 + (signX + 1)];
+        if(chunk != null)
+            chunkCallback.invoke(chunk, lx, lz);
+    }
+
+
+    public BlockProps getBlockProps(int lx, int y, int lz){
+        return BlockData.getProps(getBlock(lx, y, lz));
+    }
+
+    public short getBlock(int lx, int y, int lz){
+        final AtomicInteger block = new AtomicInteger(Blocks.VOID_AIR.getDefaultData());
+        getChunk(lx, lz, (chunk, clx, clz) -> block.set(chunk.getBlockState(clx, y, clz)));
+        return (short) block.get();
+    }
+
+    public int getSkyLight(int lx, int y, int lz){
+        final AtomicInteger light = new AtomicInteger(MAX_LIGHT_LEVEL);
+        getChunk(lx, lz, (chunk, clx, clz) -> light.set(chunk.getSkyLight(clx, y, clz)));
+        return light.get();
+    }
+
+    public int getBlockLight(int lx, int y, int lz){
+        final AtomicInteger light = new AtomicInteger();
+        getChunk(lx, lz, (chunk, clx, clz) -> light.set(chunk.getBlockLight(clx, y, clz)));
+        return light.get();
     }
     
     
     public float getAO(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, int x4, int y4, int z4){
-        final BlockProperties block1 = getBlockProps(x1, y1, z1);
-        final BlockProperties block2 = getBlockProps(x2, y2, z2);
-        final BlockProperties block3 = getBlockProps(x3, y3, z3);
-
-        final short block4Data = getBlock(x4, y4, z4);
-        final byte block4State = BlockData.getState(block4Data);
-        final BlockProperties block4 = BlockData.getProps(block4Data);
+        final BlockProps block1 = getBlockProps(x1, y1, z1);
+        final BlockProps block2 = getBlockProps(x2, y2, z2);
+        final BlockProps block3 = getBlockProps(x3, y3, z3);
+        final BlockProps block4 = getBlockProps(x4, y4, z4);
 
         float result = 0;
         if(!(block1.isEmpty() || block1.isLightTranslucent())) result++;
@@ -156,102 +185,63 @@ public class ChunkBuilder{
         final int normalY = (y1 + y2 + y3 + y4) / 2;
         final int normalZ = (z1 + z2 + z3 + z4) / 2;
 
-        if(!(block4.isEmpty() || block4.isLightTranslucent()) || (block4.isSolid() && block4.getState(block4State).getModel().isFaceTransparentForNeighbors(normalX, normalY, normalZ))) result++;
+        if(!(block4.isEmpty() || block4.isLightTranslucent()) || (block4.isSolid() && block4.getModel().isFaceTransparentForNeighbors(normalX, normalY, normalZ))) result++;
 
         return 1 - result / 5;
     }
     
-    public float getLight(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, int x4, int y4, int z4){
+    public float getSkyLight(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, int x4, int y4, int z4){
         float result = 0;
         byte n = 0;
         
         if(getBlockProps(x1, y1, z1).isLightTranslucent()){
-            result += getLight(x1, y1, z1);
+            result += getSkyLight(x1, y1, z1);
             n++;
         }
-        
         if(getBlockProps(x2, y2, z2).isLightTranslucent()){
-            result += getLight(x2, y2, z2);
+            result += getSkyLight(x2, y2, z2);
             n++;
         }
-        
         if(getBlockProps(x3, y3, z3).isLightTranslucent()){
-            result += getLight(x3, y3, z3);
+            result += getSkyLight(x3, y3, z3);
             n++;
         }
-        
         if(getBlockProps(x4, y4, z4).isLightTranslucent()){
-            result += getLight(x4, y4, z4);
+            result += getSkyLight(x4, y4, z4);
             n++;
         }
         
         if(n == 0)
             return 0;
-        
+
         return result / n;
     }
 
+    public float getBlockLight(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, int x4, int y4, int z4){
+        float result = 0;
+        byte n = 0;
 
-    public BlockProperties getBlockProps(int lx, int y, int lz){
-        return BlockData.getProps(getBlock(lx, y, lz));
-    }
+        if(getBlockProps(x1, y1, z1).isLightTranslucent()){
+            result += getBlockLight(x1, y1, z1);
+            n++;
+        }
+        if(getBlockProps(x2, y2, z2).isLightTranslucent()){
+            result += getBlockLight(x2, y2, z2);
+            n++;
+        }
+        if(getBlockProps(x3, y3, z3).isLightTranslucent()){
+            result += getBlockLight(x3, y3, z3);
+            n++;
+        }
+        if(getBlockProps(x4, y4, z4).isLightTranslucent()){
+            result += getBlockLight(x4, y4, z4);
+            n++;
+        }
 
-    public short getBlock(int lx, int y, int lz){
-        // Находим соседний чанк в массиве 3x3
-        int signX = 0;
-        int signZ = 0;
-        
-        if(lx > SIZE_IDX){
-            signX = 1;
-            lx -= SIZE;
-        }else if(lx < 0){
-            signX = -1;
-            lx += SIZE;
-        }
-        
-        if(lz > SIZE_IDX){
-            signZ = 1;
-            lz -= SIZE;
-        }else if(lz < 0){
-            signZ = -1;
-            lz += SIZE;
-        }
-        
-        final LevelChunk chunk = neighborChunks[(signZ + 1) * 3 + (signX + 1)];
-        if(chunk == null)
-            return Blocks.VOID_AIR.getDefaultData();
-        
-        // Возвращаем блок
-        return chunk.getBlock(lx, y, lz);
-    }
-    
-    public byte getLight(int lx, int y, int lz){
-        // Находим соседний чанк в массиве 3x3 (neighborChunks)
-        int signX = 0;
-        int signZ = 0;
-        
-        if(lx > SIZE_IDX){
-            signX = 1;
-            lx -= SIZE;
-        }else if(lx < 0){
-            signX = -1;
-            lx += SIZE;
-        }
-        
-        if(lz > SIZE_IDX){
-            signZ = 1;
-            lz -= SIZE;
-        }else if(lz < 0){
-            signZ = -1;
-            lz += SIZE;
-        }
-        
-        final ClientChunk chunk = neighborChunks[(signZ + 1) * 3 + (signX + 1)];
-        if(chunk == null)
-            return MAX_LIGHT_LEVEL;
-        
-        // Возвращаем уровень света
-        return chunk.getLight(lx, y, lz);
+        if(n == 0)
+            return 0;
+
+        return result / n;
     }
 
 }

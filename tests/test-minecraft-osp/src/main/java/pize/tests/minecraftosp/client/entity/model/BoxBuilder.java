@@ -1,8 +1,8 @@
 package pize.tests.minecraftosp.client.entity.model;
 
-import pize.graphics.gl.Type;
+import pize.lib.gl.type.GlType;
 import pize.graphics.mesh.IndexedMesh;
-import pize.graphics.mesh.VertexAttr;
+import pize.lib.gl.vertex.GlVertexAttr;
 
 public class BoxBuilder{
     
@@ -20,9 +20,9 @@ public class BoxBuilder{
         this.z2 = z2;
         
         mesh = new IndexedMesh(
-                new VertexAttr(3, Type.FLOAT),
-                new VertexAttr(4, Type.FLOAT),
-                new VertexAttr(2, Type.FLOAT)
+                new GlVertexAttr(3, GlType.FLOAT),
+                new GlVertexAttr(4, GlType.FLOAT),
+                new GlVertexAttr(2, GlType.FLOAT)
         );
         vertices = new float[4 * 6 * mesh.getBuffer().getVertexSize()];
     }

@@ -156,7 +156,7 @@ public class ClientChunkManager extends ChunkManager {
     
     private void findChunks(){
         if(frontiers.isEmpty()){
-            final LocalPlayer player = level.getSession().getGame().getPlayer();
+            final LocalPlayer player = level.getGame().getPlayer();
 
             putFrontier(new ChunkPos(
                 ChunkUtils.getChunkPos(player.getPosition().xf()),
@@ -164,7 +164,7 @@ public class ClientChunkManager extends ChunkManager {
             ));
         }
         
-        for(ChunkPos frontierPos: allChunks.keySet()){
+        for(ChunkPos frontierPos: frontiers){
             ensureFrontier(frontierPos.getNeighbor(-1,  0));
             ensureFrontier(frontierPos.getNeighbor( 1,  0));
             ensureFrontier(frontierPos.getNeighbor( 0, -1));
@@ -185,7 +185,7 @@ public class ClientChunkManager extends ChunkManager {
         frontiers.add(frontierPos);
 
         if(!allChunks.containsKey(frontierPos) && !requestedChunks.containsKey(frontierPos) && toBuildQueue.stream().noneMatch(chunk -> chunk.getPosition().equals(frontierPos))){
-            getLevel().getSession().getGame().sendPacket(new SBPacketChunkRequest(frontierPos.x, frontierPos.z));
+            getLevel().getGame().sendPacket(new SBPacketChunkRequest(frontierPos.x, frontierPos.z));
             requestedChunks.put(frontierPos, System.currentTimeMillis());
         }
     }
@@ -205,13 +205,12 @@ public class ClientChunkManager extends ChunkManager {
     
     
     public void checkChunks(){
-        for(ClientChunk chunk: allChunks.values()){
+        for(ClientChunk chunk: allChunks.values())
             if(isOffTheGrid(chunk.getPosition()))
                 unloadChunk(chunk);
-        }
         
         for(Map.Entry<ChunkPos, Long> entry: requestedChunks.entrySet())
-            if(System.currentTimeMillis() - entry.getValue() > 2000)
+            if(System.currentTimeMillis() - entry.getValue() > 500)
                 requestedChunks.remove(entry.getKey());
     }
     
@@ -259,13 +258,13 @@ public class ClientChunkManager extends ChunkManager {
 
     
     private boolean isOffTheGrid(ChunkPos chunkPos){
-        final LocalPlayer player = level.getSession().getGame().getPlayer();
+        final LocalPlayer player = level.getGame().getPlayer();
         if(player == null)
             return true;
         
         return
             ChunkManagerUtils.distToChunk(chunkPos.x, chunkPos.z, player.getPosition())
-            > level.getSession().getOptions().getRenderDistance();
+            > level.getGame().getSession().getOptions().getRenderDistance();
     }
 
 }

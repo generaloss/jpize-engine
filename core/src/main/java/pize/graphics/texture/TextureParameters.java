@@ -1,8 +1,10 @@
 package pize.graphics.texture;
 
-import pize.graphics.gl.*;
-import pize.graphics.gl.Format;
-import pize.graphics.gl.SizedFormat;
+import pize.lib.gl.texture.GlFilter;
+import pize.lib.gl.texture.GlFormat;
+import pize.lib.gl.texture.GlSizedFormat;
+import pize.lib.gl.texture.GlWrap;
+import pize.lib.gl.type.GlType;
 import pize.graphics.util.color.Color;
 
 import java.nio.ByteBuffer;
@@ -11,23 +13,23 @@ import static org.lwjgl.opengl.GL46.*;
 
 public class TextureParameters{
     
-    public static Filter DEFAULT_MIN_FILTER = Filter.LINEAR_MIPMAP_LINEAR;
-    public static Filter DEFAULT_MAG_FILTER = Filter.NEAREST;
-    public static Wrap DEFAULT_WRAP_S = Wrap.CLAMP_TO_EDGE;
-    public static Wrap DEFAULT_WRAP_T = Wrap.CLAMP_TO_EDGE;
-    public static Wrap DEFAULT_WRAP_R = Wrap.CLAMP_TO_EDGE;
-    public static SizedFormat DEFAULT_FORMAT = SizedFormat.RGBA8;
-    public static Type DEFAULT_TYPE = Type.UNSIGNED_BYTE;
+    public static GlFilter DEFAULT_MIN_FILTER = GlFilter.LINEAR_MIPMAP_LINEAR;
+    public static GlFilter DEFAULT_MAG_FILTER = GlFilter.NEAREST;
+    public static GlWrap DEFAULT_WRAP_S = GlWrap.CLAMP_TO_EDGE;
+    public static GlWrap DEFAULT_WRAP_T = GlWrap.CLAMP_TO_EDGE;
+    public static GlWrap DEFAULT_WRAP_R = GlWrap.CLAMP_TO_EDGE;
+    public static GlSizedFormat DEFAULT_FORMAT = GlSizedFormat.RGBA8;
+    public static GlType DEFAULT_TYPE = GlType.UNSIGNED_BYTE;
     public static int DEFAULT_MIPMAP_LEVELS = 0;
     public static float DEFAULT_LOD_BIAS = -getMaxLodBias();
     public static float DEFAULT_ANISOTROPY_LEVELS = 0;
     
 
-    private Filter minFilter, magFilter;
-    private Wrap wrapS, wrapT, wrapR;
+    private GlFilter minFilter, magFilter;
+    private GlWrap wrapS, wrapT, wrapR;
     
-    private SizedFormat format;
-    private Type type;
+    private GlSizedFormat format;
+    private GlType type;
     private final Color borderColor;
     
     private int mipmapLevels;
@@ -84,32 +86,32 @@ public class TextureParameters{
     }
 
 
-    public Wrap getWrapS(){
+    public GlWrap getWrapS(){
         return wrapS;
     }
 
-    public Wrap getWrapT(){
+    public GlWrap getWrapT(){
         return wrapT;
     }
     
-    public Wrap getWrapR(){
+    public GlWrap getWrapR(){
         return wrapR;
     }
 
-    public TextureParameters setWrap(Wrap wrap){
+    public TextureParameters setWrap(GlWrap wrap){
         setWrap(wrap, wrap, wrap);
         
         return this;
     }
     
-    public TextureParameters setWrap(Wrap s, Wrap t){
+    public TextureParameters setWrap(GlWrap s, GlWrap t){
         wrapS = s;
         wrapT = t;
     
         return this;
     }
     
-    public TextureParameters setWrap(Wrap s, Wrap t, Wrap r){
+    public TextureParameters setWrap(GlWrap s, GlWrap t, GlWrap r){
         wrapS = s;
         wrapT = t;
         wrapR = r;
@@ -118,21 +120,21 @@ public class TextureParameters{
     }
 
 
-    public Filter getMinFilter(){
+    public GlFilter getMinFilter(){
         return minFilter;
     }
 
-    public Filter getMagFilter(){
+    public GlFilter getMagFilter(){
         return magFilter;
     }
 
-    public TextureParameters setFilter(Filter filter){
+    public TextureParameters setFilter(GlFilter filter){
         setFilter(filter, filter);
         
         return this;
     }
 
-    public TextureParameters setFilter(Filter min, Filter mag){
+    public TextureParameters setFilter(GlFilter min, GlFilter mag){
         minFilter = min;
         magFilter = mag;
     
@@ -145,27 +147,27 @@ public class TextureParameters{
     }
     
     
-    public Format getFormat(){
+    public GlFormat getFormat(){
         return format.getBase();
     }
     
     
-    public SizedFormat getSizedFormat(){
+    public GlSizedFormat getSizedFormat(){
         return format;
     }
     
-    public TextureParameters setSizedFormat(SizedFormat sizedFormat){
+    public TextureParameters setSizedFormat(GlSizedFormat sizedFormat){
         this.format = sizedFormat;
     
         return this;
     }
     
 
-    public Type getType(){
+    public GlType getType(){
         return type;
     }
 
-    public TextureParameters setType(Type type){
+    public TextureParameters setType(GlType type){
         this.type = type;
     
         return this;

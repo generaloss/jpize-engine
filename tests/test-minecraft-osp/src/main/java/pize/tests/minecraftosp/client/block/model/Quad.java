@@ -4,14 +4,14 @@ import pize.math.vecmath.vector.Vec3f;
 
 public class Quad{
 
-    protected final Vec3f p1, p2, p3, p4;
-
+    protected final Vec3f[] pos;
 
     public Quad(Vec3f p1, Vec3f p2, Vec3f p3, Vec3f p4){
-        this.p1 = p1;
-        this.p2 = p2;
-        this.p3 = p3;
-        this.p4 = p4;
+        this.pos = new Vec3f[4];
+        this.pos[0] = p1;
+        this.pos[1] = p2;
+        this.pos[2] = p3;
+        this.pos[3] = p4;
     }
 
     public Quad(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4){
@@ -24,12 +24,20 @@ public class Quad{
     }
 
     public Quad(Quad quad){
-        this(
-            quad.p1.copy(),
-            quad.p2.copy(),
-            quad.p3.copy(),
-            quad.p4.copy()
-        );
+        this.pos = new Vec3f[]{
+            quad.pos[0].copy(),
+            quad.pos[1].copy(),
+            quad.pos[2].copy(),
+            quad.pos[3].copy()
+        };
+    }
+
+    public Quad translate(float x, float y, float z){
+        this.pos[0].add(x, y, z);
+        this.pos[1].add(x, y, z);
+        this.pos[2].add(x, y, z);
+        this.pos[3].add(x, y, z);
+        return this;
     }
 
     public Quad copy(){

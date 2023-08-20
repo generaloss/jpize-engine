@@ -3,13 +3,14 @@ package pize.tests.minecraftosp.server.net;
 import pize.net.tcp.TcpConnection;
 import pize.net.tcp.packet.IPacket;
 import pize.net.tcp.packet.PacketHandler;
-import pize.tests.minecraftosp.client.block.BlockProperties;
+import pize.tests.minecraftosp.client.block.BlockProps;
 import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.main.audio.BlockSoundPack;
 import pize.tests.minecraftosp.main.block.BlockData;
 import pize.tests.minecraftosp.main.block.BlockSetType;
 import pize.tests.minecraftosp.main.chunk.ChunkUtils;
 import pize.tests.minecraftosp.main.chunk.storage.ChunkPos;
+import pize.tests.minecraftosp.main.chunk.storage.HeightmapType;
 import pize.tests.minecraftosp.main.command.source.CommandSourcePlayer;
 import pize.tests.minecraftosp.main.net.packet.*;
 import pize.tests.minecraftosp.main.text.Component;
@@ -58,15 +59,16 @@ public class PlayerGameConnection implements PacketHandler{
     
     public void handlePlayerBlockSet(SBPacketPlayerBlockSet packet){
         final ServerLevel level = player.getLevel();
-        final BlockProperties oldBlock = level.getBlockProps(packet.x, packet.y, packet.z);
-        final int oldHeight = level.getHeight(packet.x, packet.z);
+        final BlockProps oldBlock = level.getBlockProps(packet.x, packet.y, packet.z);
+        final int oldHeightLight = level.getHeight(HeightmapType.LIGHT_SURFACE, packet.x, packet.z);
 
         // Set Block on the Server //
-        final boolean result = level.setBlock(packet.x, packet.y, packet.z, packet.state);
+        final boolean result = level.setBlockState(packet.x, packet.y, packet.z, packet.state);
         if(!result)
             return;
         
-        final BlockProperties block = BlockData.getProps(packet.state);
+        final BlockProps block = BlockData.getProps(packet.state);
+        final int heightLight = level.getHeight(HeightmapType.LIGHT_SURFACE, packet.x, packet.z);
         final BlockSetType setType = BlockSetType.from(oldBlock.isEmpty(), block.isEmpty());
 
         // Send Set Block packet //
@@ -84,17 +86,27 @@ public class PlayerGameConnection implements PacketHandler{
 
         // Process grass
         if(setType == BlockSetType.DESTROY && level.getBlockProps(packet.x, packet.y + 1, packet.z).getID() == Blocks.GRASS.getID()){
-            level.setBlock(packet.x, packet.y + 1, packet.z, Blocks.AIR.getID());
+            level.setBlock(packet.x, packet.y + 1, packet.z, Blocks.AIR);
             player.sendPacket(new CBPacketBlockUpdate(packet.x, packet.y + 1, packet.z, Blocks.AIR.getDefaultData()));
-            level.playSound(Blocks.GRASS.getSoundPack().randomDestroySound(), 1, 1, packet.x + 0.5F, packet.y + 1.5F, packet.z + 0.5F);
+            level.playSound(BlockSoundPack.GRASS.randomDestroySound(), 1, 1, packet.x + 0.5F, packet.y + 1.5F, packet.z + 0.5F);
         }
 
         // Process light
         final ServerChunk chunk = level.getBlockChunk(packet.x, packet.z);
+        final int lx = ChunkUtils.getLocalCoord(packet.x);
+        final int lz = ChunkUtils.getLocalCoord(packet.z);
+
         if(block.isLightTranslucent())
-            level.getLight().destroyBlockUpdate(chunk, ChunkUtils.getLocalCoord(packet.x), packet.y, ChunkUtils.getLocalCoord(packet.z));
+            level.getSkyLight().destroyBlockUpdate(chunk, heightLight, lx, packet.y, lz);
         else
-            level.getLight().placeBlockUpdate(chunk, oldHeight, ChunkUtils.getLocalCoord(packet.x), packet.y, ChunkUtils.getLocalCoord(packet.z));
+            level.getSkyLight().placeBlockUpdate(chunk, oldHeightLight, lx, packet.y, lz);
+
+        if(block.isGlow())
+            level.getBlockLight().increase(chunk, lx, packet.y, lz, block.getLightLevel());
+        else if(oldBlock.isGlow())
+            level.getBlockLight().decrease(chunk, lx, packet.y, lz, oldBlock.getLightLevel());
+
+        level.getSkyLight().sendSections(chunk, packet.y);
     }
     
     public void handleMove(SBPacketMove packet){

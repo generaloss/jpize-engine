@@ -30,6 +30,9 @@ public class VanillaBlocks{
         resources.registerBlockRegion(BLOCK_DIR, "sand");
         resources.registerBlockRegion(BLOCK_DIR, "ice");
         resources.registerBlockRegion(BLOCK_DIR, "snow");
+        resources.registerBlockRegion(BLOCK_DIR, "cactus_side");
+        resources.registerBlockRegion(BLOCK_DIR, "cactus_top");
+        resources.registerBlockRegion(BLOCK_DIR, "cactus_bottom");
     }
 
 }

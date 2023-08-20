@@ -175,7 +175,7 @@ public class ClientConnection implements TcpListener, PacketHandler{
             
             case CBPacketBlockUpdate.PACKET_ID ->{
                 final CBPacketBlockUpdate packet = packetInfo.readPacket(new CBPacketBlockUpdate());
-                game.getLevel().setBlock(packet.x, packet.y, packet.z, packet.state);
+                game.getLevel().setBlockState(packet.x, packet.y, packet.z, packet.state);
                 for(int i = 0; i < 100; i++){
                     game.spawnParticle(game.getSession().BREAK_PARTICLE, new Vec3f(
                         packet.x + Maths.random(1F),

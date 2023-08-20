@@ -36,7 +36,7 @@ public class BlockSelectorRenderer implements Disposable{
         translationMatrix.toTranslated(new Vec3f(rayCast.getSelectedBlockPosition()).sub(camera.getX(), 0, camera.getZ()));
         shader.setUniform("u_model", translationMatrix);
         
-        final BlockCursor shape = rayCast.getSelectedBlockProps().getState(rayCast.getSelectedBlockState()).getCursor();
+        final BlockCursor shape = rayCast.getSelectedBlockProps().getCursor();
         if(shape != null)
             shape.render();
     }

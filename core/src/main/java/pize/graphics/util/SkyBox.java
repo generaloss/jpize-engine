@@ -3,10 +3,10 @@ package pize.graphics.util;
 import pize.app.Disposable;
 import pize.files.Resource;
 import pize.graphics.camera.Camera;
-import pize.graphics.gl.Gl;
-import pize.graphics.gl.Type;
+import pize.lib.gl.Gl;
+import pize.lib.gl.type.GlType;
 import pize.graphics.mesh.IndexedMesh;
-import pize.graphics.mesh.VertexAttr;
+import pize.lib.gl.vertex.GlVertexAttr;
 import pize.graphics.texture.CubeMap;
 import pize.math.vecmath.matrix.Matrix4f;
 
@@ -21,7 +21,7 @@ public class SkyBox implements Disposable{
 
         shader = new Shader(new Resource("shader/skybox/skybox.vert"), new Resource("shader/skybox/skybox.frag"));
 
-        mesh = new IndexedMesh(new VertexAttr(3, Type.FLOAT));
+        mesh = new IndexedMesh(new GlVertexAttr(3, GlType.FLOAT));
         mesh.getBuffer().setData(new float[]{
             -1, -1,  1, //0
              1, -1,  1, //1

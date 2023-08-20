@@ -62,24 +62,27 @@ public class IslandsGenerator implements ChunkGenerator{
                     
                     float continentalness3D = (continentalnessNoise.getNoise(x, y, z) + 1) * 0.5F;
                     if(continentalness3D < ((float) y / (HEIGHT - height)) * density)
-                        chunk.setBlockFast(lx, y, lz, Blocks.STONE.getDefaultData());
+                        chunk.setBlockFast(lx, y, lz, Blocks.STONE);
                 }
             }
         }
         
-        chunk.getHeightMap(HeightmapType.HIGHEST).update();
+        chunk.getHeightMap(HeightmapType.SURFACE).update();
         
         for(int lx = 0; lx < SIZE; lx++){
             for(int lz = 0; lz < SIZE; lz++){
                 
-                int height = chunk.getHeightMap(HeightmapType.HIGHEST).getHeight(lx, lz);
+                int height = chunk.getHeightMap(HeightmapType.SURFACE).getHeight(lx, lz);
                 if(height > 60)
-                    chunk.setBlockFast(lx, height, lz, Blocks.GRASS_BLOCK.getDefaultData());
+                    chunk.setBlockFast(lx, height, lz, Blocks.GRASS_BLOCK);
             }
         }
 
         // System.out.println("Gen: " + timer.getMillis());
     }
+
+    @Override
+    public void decorate(ServerChunk chunk){ }
 
     private static IslandsGenerator instance;
     

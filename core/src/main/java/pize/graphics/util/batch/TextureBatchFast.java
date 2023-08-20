@@ -2,9 +2,12 @@ package pize.graphics.util.batch;
 
 import pize.Pize;
 import pize.files.Resource;
+import pize.lib.gl.vertex.GlVertexArray;
+import pize.lib.gl.vertex.GlVertexAttr;
+import pize.graphics.mesh.VertexBuffer;
 import pize.graphics.camera.Camera;
-import pize.graphics.gl.BufUsage;
-import pize.graphics.gl.Type;
+import pize.lib.gl.buffer.GlBufUsage;
+import pize.lib.gl.type.GlType;
 import pize.graphics.mesh.*;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
@@ -26,8 +29,8 @@ public class TextureBatchFast extends Batch{
 
     public static int MAX_TEXTURE_SLOTS = glGetInteger(GL_MAX_TEXTURE_IMAGE_UNITS);
 
-    private final GlVbo vbo;
-    private final GlVao vao;
+    private final VertexBuffer vbo;
+    private final GlVertexArray vao;
     private final QuadIndexBuffer ebo;
     private final Shader shader;
 
@@ -61,9 +64,9 @@ public class TextureBatchFast extends Batch{
         this.shader = new Shader(vs, fs);
 
         // Create VAO, VBO, EBO
-        this.vao = new GlVao();
-        this.vbo = new GlVbo();
-        this.vbo.enableAttributes(new VertexAttr(2, Type.FLOAT), new VertexAttr(2, Type.FLOAT), new VertexAttr(4, Type.FLOAT, true), new VertexAttr(1, Type.FLOAT));
+        this.vao = new GlVertexArray();
+        this.vbo = new VertexBuffer();
+        this.vbo.enableAttributes(new GlVertexAttr(2, GlType.FLOAT), new GlVertexAttr(2, GlType.FLOAT), new GlVertexAttr(4, GlType.FLOAT, true), new GlVertexAttr(1, GlType.FLOAT));
         this.ebo = new QuadIndexBuffer(maxSize);
 
         this.texSlots = new int[maxTextures];
@@ -151,7 +154,7 @@ public class TextureBatchFast extends Batch{
         for(int i = 0; i < textures.size(); i++)
             textures.get(i).bind(i + 1);
 
-        vbo.setData(vertices, BufUsage.STREAM_DRAW);
+        vbo.setData(vertices, GlBufUsage.STREAM_DRAW);
         vao.drawElements(size * QUAD_INDICES);
 
         // Reset

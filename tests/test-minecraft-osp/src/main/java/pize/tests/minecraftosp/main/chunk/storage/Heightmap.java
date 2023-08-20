@@ -48,7 +48,7 @@ public class Heightmap{
         int height = getHeight(lx, lz);
         
         if(y == height && !blockPlaced)
-            for(height--; type.isOpaque.test(chunk.getBlockID(lx, height, lz)) && height >= 0; height--);
+            for(height--; type.isOpaque.test(chunk.getBlockProps(lx, height, lz)) && height >= 0; height--);
         else if(y > height && blockPlaced)
             height = y;
         
@@ -57,7 +57,7 @@ public class Heightmap{
     
     public void update(int lx, int lz){
         int height = HEIGHT;
-        for(height--; type.isOpaque.test(chunk.getBlockID(lx, height, lz)) && height >= 0; height--);
+        for(height--; type.isOpaque.test(chunk.getBlockProps(lx, height, lz)) && height >= 0; height--);
         setHeight(lx, lz, height);
     }
     

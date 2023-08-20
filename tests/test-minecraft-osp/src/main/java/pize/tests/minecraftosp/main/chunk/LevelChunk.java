@@ -1,6 +1,7 @@
 package pize.tests.minecraftosp.main.chunk;
 
-import pize.tests.minecraftosp.client.block.BlockProperties;
+import pize.tests.minecraftosp.client.block.Block;
+import pize.tests.minecraftosp.client.block.BlockProps;
 import pize.tests.minecraftosp.client.block.Blocks;
 import pize.tests.minecraftosp.main.biome.BiomeMap;
 import pize.tests.minecraftosp.main.block.BlockData;
@@ -17,17 +18,32 @@ import java.util.Map;
 import static pize.tests.minecraftosp.main.chunk.ChunkUtils.*;
 
 public class LevelChunk{
-    
+
+    public static final int NEIGHBORS_RADIUS = MAX_STRUCTURE_SIZE;
+    public static final int NEIGHBORS_DIAMETER = NEIGHBORS_RADIUS * 2 + 1;
+
     protected final Level level;
     protected final ChunkPos position;
+    protected final ChunkPos[] neighbors;
     protected final LevelChunkSection[] sections;
     protected int highestSectionIndex;
     protected final Map<HeightmapType, Heightmap> heightmaps;
     protected final BiomeMap biomes;
+    private final long spawnTimeMillis;
 
     public LevelChunk(Level level, ChunkPos position){
         this.level = level;
         this.position = position;
+
+        this.spawnTimeMillis = System.currentTimeMillis();
+
+        this.neighbors = new ChunkPos[NEIGHBORS_DIAMETER * NEIGHBORS_DIAMETER];
+        for(int i = 0; i < neighbors.length; i++){
+            final int x = i % NEIGHBORS_DIAMETER;
+            final int z = (i - x) / NEIGHBORS_DIAMETER;
+
+            neighbors[i] = position.getNeighbor(x - NEIGHBORS_RADIUS, z - NEIGHBORS_RADIUS);
+        }
         this.sections = new LevelChunkSection[16];
         this.highestSectionIndex = -1;
         
@@ -36,15 +52,20 @@ public class LevelChunk{
         for(HeightmapType type: HeightmapType.values())
             heightmaps.put(type, new Heightmap(this, type));
 
-        biomes = new BiomeMap();
+        this.biomes = new BiomeMap();
     }
     
     public Level getLevel(){
         return level;
     }
+
+
+    public long getLifeTimeMillis(){
+        return System.currentTimeMillis() - spawnTimeMillis;
+    }
     
     
-    public short getBlock(int lx, int y, int lz){
+    public short getBlockState(int lx, int y, int lz){
         if(isOutOfBounds(lx, y, lz))
             return Blocks.AIR.getDefaultData();
         
@@ -55,10 +76,10 @@ public class LevelChunk{
             return Blocks.AIR.getDefaultData();
         
         // Возвращаем блок
-        return section.getBlock(lx, getLocalCoord(y), lz);
+        return section.getBlockState(lx, getLocalCoord(y), lz);
     }
     
-    public boolean setBlock(int lx, int y, int lz, short blockData){
+    public boolean setBlockState(int lx, int y, int lz, short blockData){
         if(isOutOfBounds(lx, y, lz))
             return false;
         
@@ -91,7 +112,7 @@ public class LevelChunk{
         
         // Проверка на равенство устанавливаемого блока и текущего
         final int ly = getLocalCoord(y);
-        final int oldBlockID = BlockData.getID(section.getBlock(lx, ly, lz));
+        final int oldBlockID = BlockData.getID(section.getBlockState(lx, ly, lz));
         if(blockID == oldBlockID)
             return false;
         
@@ -102,7 +123,7 @@ public class LevelChunk{
             section.blocksNum++; // Если воздух был заменен блоком - увеличиваем на 1
         
         // УСТАНАВЛИВАЕМ БЛОК
-        section.setBlock(lx, ly, lz, blockData);
+        section.setBlockState(lx, ly, lz, blockData);
         return true;
     }
     
@@ -146,16 +167,21 @@ public class LevelChunk{
         System.arraycopy(sections, 0, this.sections, 0, sections.length);
         this.highestSectionIndex = highestSectionIndex;
     }
-    
-    
-    public BlockProperties getBlockProps(int lx, int y, int lz){
-        return BlockData.getProps(getBlock(lx, y, lz));
+
+
+    public Block getBlock(int lx, int y, int lz){
+        return BlockData.getBlock(getBlockState(lx, y, lz));
     }
-    
-    public byte getBlockID(int lx, int y, int lz){
-        return BlockData.getID(getBlock(lx, y, lz));
+
+    public BlockProps getBlockProps(int lx, int y, int lz){
+        return BlockData.getProps(getBlockState(lx, y, lz));
     }
-    
+
+    public boolean setBlock(int lx, int y, int lz, Block block){
+        return setBlockState(lx, y, lz, block.getDefaultData());
+    }
+
+
     public boolean isEmpty(){
         return highestSectionIndex == -1;
     }
@@ -181,7 +207,7 @@ public class LevelChunk{
     }
     
     
-    public byte getLight(int lx, int y, int lz){
+    public int getSkyLight(int lx, int y, int lz){
         if(isOutOfBounds(y))
             return MAX_LIGHT_LEVEL;
         
@@ -192,10 +218,24 @@ public class LevelChunk{
             return MAX_LIGHT_LEVEL;
         
         // Возвращаем блок
-        return section.getLight(lx, getLocalCoord(y), lz);
+        return section.getSkyLight(lx, getLocalCoord(y), lz);
+    }
+
+    public int getBlockLight(int lx, int y, int lz){
+        if(isOutOfBounds(y))
+            return MAX_LIGHT_LEVEL;
+
+        // Находим по Y нужную секцию
+        final int sectionIndex = getSectionIndex(y);
+        final LevelChunkSection section = getSection(sectionIndex);
+        if(section == null)
+            return MAX_LIGHT_LEVEL;
+
+        // Возвращаем блок
+        return section.getBlockLight(lx, getLocalCoord(y), lz);
     }
     
-    public void setLight(int lx, int y, int lz, int level){
+    public void setSkyLight(int lx, int y, int lz, int level){
         if(isOutOfBounds(lx, y, lz))
             return;
         
@@ -205,7 +245,23 @@ public class LevelChunk{
         if(section == null)
             section = createSection(sectionIndex);
         
-        section.setLight(lx, getLocalCoord(y), lz, level);
+        section.setSkyLight(lx, getLocalCoord(y), lz, level);
+
+        // if(getLevel() instanceof ServerLevel serverLevel)
+        //     serverLevel.getServer().getPlayerList().broadcastPacket(new CBPacketLightUpdate(section));
+    }
+
+    public void setBlockLight(int lx, int y, int lz, int level){
+        if(isOutOfBounds(lx, y, lz))
+            return;
+
+        // Находим по Y нужную секцию
+        final int sectionIndex = getSectionIndex(y);
+        LevelChunkSection section = getSection(sectionIndex);
+        if(section == null)
+            section = createSection(sectionIndex);
+
+        section.setBlockLight(lx, getLocalCoord(y), lz, level);
 
         // if(getLevel() instanceof ServerLevel serverLevel)
         //     serverLevel.getServer().getPlayerList().broadcastPacket(new CBPacketLightUpdate(section));
@@ -232,9 +288,17 @@ public class LevelChunk{
         return position.hashCode();
     }
     
-    
-    public LevelChunk getNeighbor(int chunkX, int chunkZ){
-        return level.getChunkManager().getChunk(position.x + chunkX, position.z + chunkZ);
+
+    public ChunkPos[] getNeighbors(){
+        return neighbors;
+    }
+
+    public ChunkPos getNeighbor(int signX, int signZ){
+        return neighbors[(signZ + NEIGHBORS_RADIUS) * NEIGHBORS_DIAMETER + (signX + NEIGHBORS_RADIUS)];
+    }
+
+    public LevelChunk getNeighborChunk(int signX, int signZ){
+        return level.getChunkManager().getChunk(getNeighbor(signX, signZ));
     }
     
 }

@@ -1,14 +1,17 @@
 package pize.app;
 
 import pize.audio.Audio;
-import pize.graphics.gl.Gl;
-import pize.graphics.mesh.GlVao;
-import pize.graphics.mesh.GlVbo;
-import pize.graphics.mesh.IndexBuffer;
+import pize.lib.gl.buffer.GlBuffer;
+import pize.lib.gl.shader.GlProgram;
+import pize.lib.gl.Gl;
+import pize.lib.gl.vertex.GlVertexArray;
 import pize.graphics.texture.CubeMap;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureArray;
-import pize.graphics.util.*;
+import pize.graphics.util.BaseShader;
+import pize.graphics.util.ScreenQuad;
+import pize.graphics.util.ScreenQuadShader;
+import pize.graphics.util.TextureUtils;
 import pize.io.keyboard.Keyboard;
 import pize.io.mouse.Mouse;
 import pize.io.window.Window;
@@ -21,8 +24,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BooleanSupplier;
 
-import static org.lwjgl.glfw.GLFW.glfwPollEvents;
-import static org.lwjgl.glfw.GLFW.glfwTerminate;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class Context{
 
@@ -65,7 +67,7 @@ public class Context{
         
         // Window initialization
         window.show();
-        window.addSizeCallback((int width, int height)->{
+        window.addSizeCallback((int width, int height) -> {
             listener.resize(width, height);
             Gl.viewport(width, height);
         });
@@ -101,10 +103,9 @@ public class Context{
         }
     
         // Unbind OGL objects
-        Shader.unbind();
-        GlVbo.unbind();
-        GlVao.unbind();
-        IndexBuffer.unbind();
+        GlBuffer.unbindAll();
+        GlProgram.unbind();
+        GlVertexArray.unbind();
         Texture.unbind();
         CubeMap.unbind();
         TextureArray.unbind();

@@ -4,8 +4,8 @@ import pize.Pize;
 import pize.app.Disposable;
 import pize.app.Resizable;
 import pize.files.Resource;
-import pize.graphics.gl.Gl;
-import pize.graphics.gl.Target;
+import pize.lib.gl.Gl;
+import pize.lib.gl.glenum.GlTarget;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.Framebuffer2D;
 import pize.graphics.util.Framebuffer3D;
@@ -84,7 +84,7 @@ public class LevelRenderer implements Disposable, Resizable{
         // Render world
         postFramebuffer.begin();
         {
-            Gl.enable(Target.DEPTH_TEST);
+            Gl.enable(GlTarget.DEPTH_TEST);
             
             skyRenderer.render(camera); // Sky
             chunkRenderer.render(camera); // Chunks
@@ -94,7 +94,7 @@ public class LevelRenderer implements Disposable, Resizable{
             chunkBorderRenderer.render(camera); // Chunk border
             particleBatch.render(camera); // Particles
             
-            Gl.disable(Target.DEPTH_TEST);
+            Gl.disable(GlTarget.DEPTH_TEST);
         }
         postFramebuffer.end();
         

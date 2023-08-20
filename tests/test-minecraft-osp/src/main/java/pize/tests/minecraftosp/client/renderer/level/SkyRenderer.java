@@ -2,14 +2,17 @@ package pize.tests.minecraftosp.client.renderer.level;
 
 import pize.app.Disposable;
 import pize.files.Resource;
-import pize.graphics.gl.*;
+import pize.lib.gl.Gl;
+import pize.lib.gl.vertex.GlVertexArray;
+import pize.lib.gl.vertex.GlVertexAttr;
+import pize.graphics.mesh.VertexBuffer;
+import pize.lib.gl.tesselation.GlFace;
+import pize.lib.gl.tesselation.GlPrimitive;
+import pize.lib.gl.type.GlType;
 import pize.graphics.util.BufferBuilder;
 import pize.graphics.util.Shader;
 import pize.graphics.util.SkyBox;
 import pize.graphics.util.color.Color;
-import pize.graphics.mesh.GlVao;
-import pize.graphics.mesh.VertexAttr;
-import pize.graphics.mesh.GlVbo;
 import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.matrix.Matrix4f;
@@ -24,8 +27,8 @@ public class SkyRenderer implements Disposable{
     private final Matrix4f skyViewMatrix;
     
     private final Shader sunriseShader, skydiscShader;
-    private final GlVbo sunriseVbo, lightSkyVbo, darkSkyVbo;
-    private final GlVao sunriseVao, lightSkyVao, darkSkyVao;
+    private final VertexBuffer sunriseVbo, lightSkyVbo, darkSkyVbo;
+    private final GlVertexArray sunriseVao, lightSkyVao, darkSkyVao;
 
     private float skyBrightness;
 
@@ -46,17 +49,17 @@ public class SkyRenderer implements Disposable{
         this.sunriseShader = new Shader(new Resource("shader/level/sky/sunrise.vert"), new Resource("shader/level/sky/sunrise.frag"));
         this.skydiscShader = new Shader(new Resource("shader/level/sky/skydisc.vert"), new Resource("shader/level/sky/skydisc.frag"));
         
-        this.sunriseVao = new GlVao();
-        this.sunriseVbo = new GlVbo();
-        this.sunriseVbo.enableAttributes(new VertexAttr(3, Type.FLOAT), new VertexAttr(4, Type.FLOAT)); // pos3, col4
+        this.sunriseVao = new GlVertexArray();
+        this.sunriseVbo = new VertexBuffer();
+        this.sunriseVbo.enableAttributes(new GlVertexAttr(3, GlType.FLOAT), new GlVertexAttr(4, GlType.FLOAT)); // pos3, col4
         
-        this.lightSkyVao = new GlVao();
-        this.lightSkyVbo = new GlVbo();
-        this.lightSkyVbo.enableAttributes(new VertexAttr(3, Type.FLOAT)); // pos3
+        this.lightSkyVao = new GlVertexArray();
+        this.lightSkyVbo = new VertexBuffer();
+        this.lightSkyVbo.enableAttributes(new GlVertexAttr(3, GlType.FLOAT)); // pos3
         
-        this.darkSkyVao = new GlVao();
-        this.darkSkyVbo = new GlVbo();
-        this.darkSkyVbo.enableAttributes(new VertexAttr(3, Type.FLOAT)); // pos3
+        this.darkSkyVao = new GlVertexArray();
+        this.darkSkyVbo = new VertexBuffer();
+        this.darkSkyVbo.enableAttributes(new GlVertexAttr(3, GlType.FLOAT)); // pos3
         
         buildSkyDisc(16).end(lightSkyVbo);
         buildSkyDisc(-16).end(darkSkyVbo);
@@ -108,15 +111,15 @@ public class SkyRenderer implements Disposable{
         
         Gl.depthMask(false);
         Gl.clearColor(fogColor);
-        Gl.cullFace(Face.FRONT);
+        Gl.cullFace(GlFace.FRONT);
         
         skydiscShader.bind();
         skydiscShader.setUniform("u_projection", camera.getProjection());
         skydiscShader.setUniform("u_view", skyViewMatrix);
         skydiscShader.setUniform("u_skyColor", skyColor);
-        lightSkyVao.drawArrays(lightSkyVbo.getVerticesNum(), Primitive.TRIANGLE_FAN);
+        lightSkyVao.drawArrays(lightSkyVbo.getVertexCount(), GlPrimitive.TRIANGLE_FAN);
         
-        Gl.cullFace(Face.BACK);
+        Gl.cullFace(GlFace.BACK);
         Gl.depthMask(true);
         
         
@@ -125,7 +128,7 @@ public class SkyRenderer implements Disposable{
             return;
         
         Gl.depthMask(false);
-        Gl.cullFace(Face.FRONT);
+        Gl.cullFace(GlFace.FRONT);
         
         // Render light sky
         
@@ -133,7 +136,7 @@ public class SkyRenderer implements Disposable{
         skydiscShader.setUniform("u_projection", camera.getProjection());
         skydiscShader.setUniform("u_view", skyViewMatrix);
         skydiscShader.setUniform("u_skyColor", skyColor);
-        lightSkyVao.drawArrays(lightSkyVbo.getVerticesNum(), Primitive.TRIANGLE_FAN);
+        lightSkyVao.drawArrays(lightSkyVbo.getVertexCount(), GlPrimitive.TRIANGLE_FAN);
         
         // Render sunrise
         float[] sunriseColor = getSunriseColor(Maths.frac(time.getDays()));
@@ -156,9 +159,9 @@ public class SkyRenderer implements Disposable{
             sunriseShader.bind();
             sunriseShader.setUniform("u_projection", camera.getProjection());
             sunriseShader.setUniform("u_view", skyViewMatrix);
-            sunriseVao.drawArrays(sunriseVbo.getVerticesNum(), Primitive.TRIANGLE_FAN);
+            sunriseVao.drawArrays(sunriseVbo.getVertexCount(), GlPrimitive.TRIANGLE_FAN);
             
-            System.out.println(sunriseVbo.getVerticesNum());
+            System.out.println(sunriseVbo.getVertexCount());
             
         }
         
@@ -168,11 +171,11 @@ public class SkyRenderer implements Disposable{
             skydiscShader.setUniform("u_projection", camera.getProjection());
             skydiscShader.setUniform("u_view", skyViewMatrix);
             skydiscShader.setUniform("u_skyColor", new Color(0, 0, 0, 1));
-            darkSkyVao.drawArrays(darkSkyVbo.getVerticesNum(), Primitive.TRIANGLE_FAN);
+            darkSkyVao.drawArrays(darkSkyVbo.getVertexCount(), GlPrimitive.TRIANGLE_FAN);
         }
         
         Gl.depthMask(true);
-        Gl.cullFace(Face.BACK);
+        Gl.cullFace(GlFace.BACK);
     }
 
 
@@ -180,7 +183,7 @@ public class SkyRenderer implements Disposable{
         final float sin = Maths.cosDeg(time.getDays() * 360);
         final float nor = sin * 0.5F + 0.5F;
         final float pow = Mathc.pow(nor, 2);
-        return Maths.map(pow, 0, 1, 0.05F, 1F);
+        return Maths.map(pow, 0, 1, 0.15F, 1F);
     }
 
     public float getSkyBrightness(){

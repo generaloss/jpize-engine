@@ -2,9 +2,9 @@ package pize.tests.minecraftosp.client.renderer.level;
 
 import pize.app.Disposable;
 import pize.files.Resource;
-import pize.graphics.gl.DepthFunc;
-import pize.graphics.gl.Gl;
-import pize.graphics.gl.Target;
+import pize.lib.gl.glenum.GlDepthFunc;
+import pize.lib.gl.Gl;
+import pize.lib.gl.glenum.GlTarget;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.Shader;
 import pize.graphics.util.color.Color;
@@ -21,16 +21,15 @@ import static pize.tests.minecraftosp.main.chunk.ChunkUtils.SIZE;
 public class ChunkRenderer implements Disposable{
     
     private final LevelRenderer levelRenderer;
-    private final Shader packedChunkShader, customShader;
+    private final Shader shader;
     private int renderedChunks;
     
     public ChunkRenderer(LevelRenderer levelRenderer){
         this.levelRenderer = levelRenderer;
         
-        Gl.depthFunc(DepthFunc.LEQUAL);
+        Gl.depthFunc(GlDepthFunc.LEQUAL);
 
-        packedChunkShader =  new Shader(new Resource("shader/level/chunk/solid-blocks-packed.vert"), new Resource("shader/level/chunk/solid-blocks-packed.frag"));
-        customShader = new Shader(new Resource("shader/level/chunk/custom-blocks.vert"), new Resource("shader/level/chunk/custom-blocks.frag"));
+        shader = new Shader(new Resource("shader/level/chunk/custom-blocks.vert"), new Resource("shader/level/chunk/custom-blocks.frag"));
         
         Gl.polygonOffset(1, 1); // For BlockSelector line rendering
     }
@@ -38,9 +37,9 @@ public class ChunkRenderer implements Disposable{
     
     public void render(GameCamera camera){
         setupShaders(camera);
-        Gl.enable(Target.POLYGON_OFFSET_FILL);
+        Gl.enable(GlTarget.POLYGON_OFFSET_FILL);
         renderMeshes(camera);
-        Gl.disable(Target.POLYGON_OFFSET_FILL);
+        Gl.disable(GlTarget.POLYGON_OFFSET_FILL);
     }
     
     
@@ -61,34 +60,32 @@ public class ChunkRenderer implements Disposable{
         // Atlas
         final Texture blockAtlas = levelRenderer.getGameRenderer().getSession().getResources().getBlocks();
 
-
         // Update translation matrix
         for(ClientChunk chunk: chunks)
             chunk.updateTranslationMatrix(camera);
 
         // Render custom blocks
-        Gl.disable(Target.CULL_FACE);
-        customShader.bind();
+        Gl.disable(GlTarget.CULL_FACE);
+        shader.bind();
         for(ClientChunk chunk: chunks){
-            customShader.setUniform("u_model", chunk.getTranslationMatrix());
+            shader.setUniform("u_model", chunk.getTranslationMatrix());
             chunk.getMeshStack().getCustom().render();
         }
-        Gl.enable(Target.CULL_FACE);
+        Gl.enable(GlTarget.CULL_FACE);
 
         // Render solid blocks
-        packedChunkShader.bind();
         for(ClientChunk chunk: chunks){
-            packedChunkShader.setUniform("u_model", chunk.getTranslationMatrix());
-            chunk.getMeshStack().getPacked().render();
+            shader.setUniform("u_model", chunk.getTranslationMatrix());
+            chunk.getMeshStack().getSolid().render();
         }
 
         // Render translucent blocks
-        Gl.disable(Target.CULL_FACE);
+        Gl.disable(GlTarget.CULL_FACE);
         for(ClientChunk chunk: chunks){
-            packedChunkShader.setUniform("u_model", chunk.getTranslationMatrix());
+            shader.setUniform("u_model", chunk.getTranslationMatrix());
             chunk.getMeshStack().getTranslucent().render();
         }
-        Gl.enable(Target.CULL_FACE);
+        Gl.enable(GlTarget.CULL_FACE);
     }
     
     private void setupShaders(GameCamera camera){
@@ -98,30 +95,18 @@ public class ChunkRenderer implements Disposable{
         final float skyBrightness = levelRenderer.getSkyRenderer().getSkyBrightness();
         final Texture blockAtlas = levelRenderer.getGameRenderer().getSession().getResources().getBlocks();
         final GameTime gameTime = levelRenderer.getGameRenderer().getSession().getGame().getTime();
-        
-        // Solid
-        packedChunkShader.bind();
-        packedChunkShader.setUniform("u_projection", camera.getProjection());
-        packedChunkShader.setUniform("u_view", camera.getView());
-        packedChunkShader.setUniform("u_atlas", blockAtlas);
-        
-        packedChunkShader.setUniform("u_renderDistanceBlocks", (options.getRenderDistance() - 1) * SIZE);
-        packedChunkShader.setUniform("u_fogColor", fogColor);
-        packedChunkShader.setUniform("u_fogStart", fogStart);
-        packedChunkShader.setUniform("u_brightness", options.getBrightness());
-        packedChunkShader.setUniform("u_skyBrightness", skyBrightness);
 
-        // Custom
-        customShader.bind();
-        customShader.setUniform("u_projection", camera.getProjection());
-        customShader.setUniform("u_view", camera.getView());
-        customShader.setUniform("u_atlas", blockAtlas);
+        // Shader
+        shader.bind();
+        shader.setUniform("u_projection", camera.getProjection());
+        shader.setUniform("u_view", camera.getView());
+        shader.setUniform("u_atlas", blockAtlas);
         
-        customShader.setUniform("u_renderDistanceBlocks", (options.getRenderDistance() - 1) * SIZE);
-        customShader.setUniform("u_fogColor", fogColor);
-        customShader.setUniform("u_fogStart", fogStart);
-        customShader.setUniform("u_brightness", options.getBrightness());
-        customShader.setUniform("u_skyBrightness", skyBrightness);
+        shader.setUniform("u_renderDistanceBlocks", (options.getRenderDistance() - 1) * SIZE);
+        shader.setUniform("u_fogColor", fogColor);
+        shader.setUniform("u_fogStart", fogStart);
+        shader.setUniform("u_brightness", options.getBrightness());
+        shader.setUniform("u_skyBrightness", skyBrightness);
     }
     
     public int getRenderedChunks(){
@@ -130,8 +115,7 @@ public class ChunkRenderer implements Disposable{
     
     @Override
     public void dispose(){
-        packedChunkShader.dispose();
-        customShader.dispose();
+        shader.dispose();
     }
     
 }

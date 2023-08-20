@@ -13,8 +13,16 @@ public class Color extends IColor{
         set(red, green, blue, alpha);
     }
 
+    public Color(float red, float green, float blue){
+        set(red, green, blue, 1F);
+    }
+
     public Color(double red, double green, double blue, double alpha){
         set(red, green, blue, alpha);
+    }
+
+    public Color(double red, double green, double blue){
+        set(red, green, blue, 1F);
     }
 
     public Color(int red, int green, int blue, int alpha){

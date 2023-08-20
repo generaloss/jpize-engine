@@ -30,7 +30,7 @@ public class VignetteRenderer implements Disposable{
         final ClientGame game = levelRenderer.getGameRenderer().getSession().getGame();
         final Vec3f playerPos = game.getPlayer().getPosition();
         final ClientLevel level = game.getLevel();
-        final float light = level.getLight(playerPos.xf(), playerPos.yf(), playerPos.zf());
+        final float light = level.getSkyLight(playerPos.xf(), playerPos.yf(), playerPos.zf());
         
         // Interpolation
         vignette += ((1 - light / MAX_LIGHT_LEVEL) - vignette) / 100F;

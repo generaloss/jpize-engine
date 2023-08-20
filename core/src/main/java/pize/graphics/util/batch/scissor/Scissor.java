@@ -1,7 +1,7 @@
 package pize.graphics.util.batch.scissor;
 
-import pize.graphics.gl.Gl;
-import pize.graphics.gl.Target;
+import pize.lib.gl.Gl;
+import pize.lib.gl.glenum.GlTarget;
 import pize.graphics.util.batch.TextureBatch;
 import pize.math.Maths;
 
@@ -53,8 +53,8 @@ public class Scissor{
         scissorList.put(scissor.getIndex(), scissor);
         
         batch.end();
-        if(!Gl.isEnabled(Target.SCISSOR_TEST))
-            Gl.enable(Target.SCISSOR_TEST);
+        if(!Gl.isEnabled(GlTarget.SCISSOR_TEST))
+            Gl.enable(GlTarget.SCISSOR_TEST);
         scissor.activate();
     }
     
@@ -85,8 +85,8 @@ public class Scissor{
         scissorList.put(index, scissor);
         
         batch.end();
-        if(!Gl.isEnabled(Target.SCISSOR_TEST))
-            Gl.enable(Target.SCISSOR_TEST);
+        if(!Gl.isEnabled(GlTarget.SCISSOR_TEST))
+            Gl.enable(GlTarget.SCISSOR_TEST);
         scissor.activate();
     }
     
@@ -99,8 +99,8 @@ public class Scissor{
             final ScissorNode scissor = scissorList.get(removedIndexOf);
             scissor.activate();
             
-        }else if(Gl.isEnabled(Target.SCISSOR_TEST))
-            Gl.disable(Target.SCISSOR_TEST);
+        }else if(Gl.isEnabled(GlTarget.SCISSOR_TEST))
+            Gl.disable(GlTarget.SCISSOR_TEST);
     }
     
 }

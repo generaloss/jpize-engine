@@ -1,16 +1,16 @@
 package pize.graphics.util;
 
 import pize.app.Disposable;
-import pize.graphics.gl.GlObject;
-import pize.graphics.gl.QueryTarget;
+import pize.lib.gl.GlObject;
+import pize.lib.gl.glenum.GlQueryTarget;
 
 import static org.lwjgl.opengl.GL46.*;
 
 public class Query extends GlObject implements Disposable{
     
-    private QueryTarget type;
+    private GlQueryTarget type;
     
-    public Query(QueryTarget type){
+    public Query(GlQueryTarget type){
         super(glGenQueries());
         this.type = type;
     }
@@ -38,11 +38,11 @@ public class Query extends GlObject implements Disposable{
     }
     
     
-    public QueryTarget getType(){
+    public GlQueryTarget getType(){
         return type;
     }
     
-    public void setType(QueryTarget type){
+    public void setType(GlQueryTarget type){
         this.type = type;
     }
     

@@ -1,9 +1,9 @@
 package pize.graphics.texture;
 
-import pize.graphics.gl.Format;
-import pize.graphics.gl.GlObject;
-import pize.graphics.gl.SizedFormat;
-import pize.graphics.gl.Type;
+import pize.lib.gl.texture.GlFormat;
+import pize.lib.gl.GlObject;
+import pize.lib.gl.texture.GlSizedFormat;
+import pize.lib.gl.type.GlType;
 
 import static org.lwjgl.opengl.GL33.*;
 
@@ -28,15 +28,15 @@ public abstract class GlTexture extends GlObject{
         return parameters;
     }
     
-    public Type getType(){
+    public GlType getType(){
         return parameters.getType();
     }
     
-    public Format getFormat(){
+    public GlFormat getFormat(){
         return parameters.getFormat();
     }
     
-    public SizedFormat getSizedFormat(){
+    public GlSizedFormat getSizedFormat(){
         return parameters.getSizedFormat();
     }
     

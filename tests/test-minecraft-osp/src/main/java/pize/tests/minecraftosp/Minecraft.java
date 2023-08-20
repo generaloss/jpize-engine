@@ -3,7 +3,7 @@ package pize.tests.minecraftosp;
 import pize.Pize;
 import pize.app.AppAdapter;
 import pize.files.Resource;
-import pize.graphics.gl.Gl;
+import pize.lib.gl.Gl;
 import pize.graphics.texture.Texture;
 import pize.math.Mathc;
 import pize.math.Maths;
@@ -29,6 +29,7 @@ import pize.tests.minecraftosp.main.block.BlockData;
 import pize.tests.minecraftosp.main.modification.loader.ModEntryPointType;
 import pize.tests.minecraftosp.main.modification.loader.ModLoader;
 import pize.tests.minecraftosp.main.net.PlayerProfile;
+import pize.tests.minecraftosp.main.registry.Registry;
 import pize.tests.minecraftosp.main.time.GameTime;
 import pize.tests.minecraftosp.server.IntegratedServer;
 import pize.util.Utils;
@@ -93,9 +94,7 @@ public class Minecraft extends AppAdapter{
         Pize.setFixedUpdateTPS(GameTime.TICKS_PER_SECOND);
         options.load();
         profile = new PlayerProfile(getOptions().getPlayerName());
-        
-        Blocks.init(this);
-        
+
         // Mod Loader //
         modLoader = new ModLoader();
         modLoader.loadMods(SharedConstants.MODS_PATH);
@@ -114,7 +113,11 @@ public class Minecraft extends AppAdapter{
         // Init mods //
         modLoader.initializeMods(ModEntryPointType.CLIENT);
         modLoader.initializeMods(ModEntryPointType.MAIN);
-        
+
+        // Load blocks
+        Blocks.register();
+        Registry.Block.loadBlocks(this);
+
         // Connect to server //
         Utils.delayElapsed(1000);
         clientGame.connect(address[0], Integer.parseInt(address[1]));
@@ -246,7 +249,7 @@ public class Minecraft extends AppAdapter{
 
         double x = velocity.x;
         double y = velocity.y;
-        if(BlockData.getID(level.getBlock(position.xf(), position.yf() + Mathc.signum(x), position.zf())) != 0){
+        if(BlockData.getID(level.getBlockState(position.xf(), position.yf() + Mathc.signum(x), position.zf())) != 0){
             double ny = Maths.frac(position.y) + y;
             if(ny < 0)
                 y = 0;

@@ -1,20 +1,20 @@
 package pize.tests.minecraftosp.main.chunk.storage;
 
+import pize.tests.minecraftosp.client.block.BlockProps;
 import pize.tests.minecraftosp.client.block.Blocks;
-import pize.tests.minecraftosp.main.block.BlockData;
 
 import java.util.function.Predicate;
 
 public enum HeightmapType{
 
-    HIGHEST(blockID -> blockID == Blocks.AIR.getID()),
-    OPAQUE(blockID -> BlockData.getProps(blockID).isLightTranslucent() && blockID != Blocks.WATER.getID() && blockID != Blocks.ICE.getID()),
-    SURFACE(blockID -> blockID == Blocks.AIR.getID() || blockID == Blocks.WATER.getID());
+    SURFACE(blockProps -> blockProps.getBlock() == Blocks.AIR),
+    UNDERWATER_SURFACE(blockProps -> blockProps.getBlock() == Blocks.AIR || blockProps.getBlock() == Blocks.WATER),
+    LIGHT_SURFACE(BlockProps::isLightTransparent);
+
     
+    public final Predicate<BlockProps> isOpaque;
     
-    public final Predicate<Byte> isOpaque;
-    
-    HeightmapType(Predicate<Byte> isOpaque){
+    HeightmapType(Predicate<BlockProps> isOpaque){
         this.isOpaque = isOpaque;
     }
     

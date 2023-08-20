@@ -2,16 +2,16 @@ package pize.devtests;
 
 import pize.Pize;
 import pize.app.AppAdapter;
+import pize.lib.gl.Gl;
+import pize.lib.gl.vertex.GlVertexAttr;
+import pize.lib.gl.glenum.GlTarget;
+import pize.lib.gl.tesselation.GlPrimitive;
+import pize.lib.gl.type.GlType;
 import pize.graphics.camera.PerspectiveCamera;
 import pize.graphics.camera.controller.Rotation3DController;
-import pize.graphics.gl.Gl;
-import pize.graphics.gl.Primitive;
-import pize.graphics.gl.Target;
-import pize.graphics.gl.Type;
+import pize.graphics.mesh.IndexedMesh;
 import pize.graphics.util.BaseShader;
 import pize.graphics.util.SkyBox;
-import pize.graphics.mesh.Mesh;
-import pize.graphics.mesh.VertexAttr;
 import pize.io.glfw.Key;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
@@ -26,8 +26,8 @@ public class TriangleIntersectionTest extends AppAdapter{
     Rotation3DController rotationController;
     Ray3f ray;
     
-    Mesh rayMesh;
-    Mesh mesh;
+    IndexedMesh rayMesh;
+    IndexedMesh mesh;
     
     public void init(){
         // Camera
@@ -39,25 +39,25 @@ public class TriangleIntersectionTest extends AppAdapter{
         // Shader
         shader = BaseShader.getPos3UColor();
         // Mesh
-        mesh = new Mesh(new VertexAttr(3, Type.FLOAT));
-        mesh.setVertices(new float[]{
+        mesh = new IndexedMesh(new GlVertexAttr(3, GlType.FLOAT));
+        mesh.getBuffer().setData(new float[]{
             1, 3, 0, // 0
             0, 0, 0, // 1
             3, 1, 0, // 2
         });
-        mesh.setIndices(new int[]{
+        mesh.getIndexBuffer().setData(new int[]{
             0, 1, 2
         });
         
         // Ray Mesh
-        rayMesh = new Mesh(new VertexAttr(3, Type.FLOAT));
-        rayMesh.setRenderMode(Primitive.LINES);
-        rayMesh.setIndices(new int[]{
+        rayMesh = new IndexedMesh(new GlVertexAttr(3, GlType.FLOAT));
+        rayMesh.setMode(GlPrimitive.LINES);
+        rayMesh.getIndexBuffer().setData(new int[]{
             0, 1
         });
         
         // Disable cull face
-        Gl.disable(Target.CULL_FACE);
+        Gl.disable(GlTarget.CULL_FACE);
     }
     
     public void update(){
@@ -100,7 +100,7 @@ public class TriangleIntersectionTest extends AppAdapter{
         
         final Vec3f position = camera.getPosition();
         final Vec3f v2 = position.copy().add(camera.getRotation().getDirection().mul(100));
-        rayMesh.setVertices(new float[]{
+        rayMesh.getBuffer().setData(new float[]{
             0, 0, 0, // position.x, position.y, position.z,
             v2.x, v2.y, v2.z
         });

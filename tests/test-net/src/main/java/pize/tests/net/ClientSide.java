@@ -4,7 +4,7 @@ import pize.Pize;
 import pize.app.AppAdapter;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
-import pize.graphics.gl.Gl;
+import pize.lib.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
 import pize.io.glfw.Key;
 import pize.math.vecmath.vector.Vec2f;

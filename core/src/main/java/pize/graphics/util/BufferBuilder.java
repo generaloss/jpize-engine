@@ -1,6 +1,6 @@
 package pize.graphics.util;
 
-import pize.graphics.mesh.GlVbo;
+import pize.graphics.mesh.VertexBuffer;
 import pize.graphics.texture.Region;
 import pize.graphics.util.color.IColor;
 import pize.util.ArrayUtils;
@@ -109,7 +109,7 @@ public class BufferBuilder{
     }
     
     
-    public void end(GlVbo buffer){
+    public void end(VertexBuffer buffer){
         buffer.setData(ArrayUtils.fromList(vertices));
         vertices.clear();
     }

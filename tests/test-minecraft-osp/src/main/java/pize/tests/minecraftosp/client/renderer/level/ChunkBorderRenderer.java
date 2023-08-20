@@ -2,15 +2,16 @@ package pize.tests.minecraftosp.client.renderer.level;
 
 import pize.app.Disposable;
 import pize.files.Resource;
-import pize.graphics.gl.Primitive;
-import pize.graphics.gl.Type;
+import pize.lib.gl.tesselation.GlPrimitive;
+import pize.lib.gl.type.GlType;
 import pize.graphics.mesh.IndexedMesh;
-import pize.graphics.mesh.VertexAttr;
+import pize.lib.gl.vertex.GlVertexAttr;
 import pize.graphics.util.Shader;
 import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;
 
+import static pize.tests.minecraftosp.main.chunk.ChunkUtils.HEIGHT;
 import static pize.tests.minecraftosp.main.chunk.ChunkUtils.SIZE;
 
 public class ChunkBorderRenderer implements Disposable{
@@ -26,18 +27,18 @@ public class ChunkBorderRenderer implements Disposable{
         
         this.shader = new Shader(new Resource("shader/line.vert"), new Resource("shader/line.frag"));
         
-        this.mesh = new IndexedMesh(new VertexAttr(3, Type.FLOAT));
-        this.mesh.setMode(Primitive.LINES);
+        this.mesh = new IndexedMesh(new GlVertexAttr(3, GlType.FLOAT));
+        this.mesh.setMode(GlPrimitive.LINES);
         
         this.mesh.getBuffer().setData(new float[]{
-            16, 256, 16, //0
-            0 , 256, 16, //1
-            16, 0  , 16, //2
-            0 , 0  , 16, //3
-            16, 256, 0 , //4
-            0 , 256, 0 , //5
-            16, 0  , 0 , //6
-            0 , 0  , 0 , //7
+            SIZE, HEIGHT, SIZE, //0
+            0   , HEIGHT, SIZE, //1
+            SIZE, 0     , SIZE, //2
+            0   , 0     , SIZE, //3
+            SIZE, HEIGHT, 0   , //4
+            0   , HEIGHT, 0   , //5
+            SIZE, 0     , 0   , //6
+            0   , 0     , 0   , //7
         });
         this.mesh.getIndexBuffer().setData(new int[]{
             7, 6, 6, 2, 2, 3, 3, 7, //Top

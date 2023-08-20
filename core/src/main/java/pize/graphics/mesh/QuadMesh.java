@@ -1,40 +1,42 @@
 package pize.graphics.mesh;
 
 import pize.app.Disposable;
-import pize.graphics.gl.Primitive;
+import pize.lib.gl.vertex.GlVertexAttr;
+import pize.lib.gl.tesselation.GlPrimitive;
+import pize.lib.gl.vertex.GlVertexArray;
 
 public class QuadMesh implements Disposable{
 
-    private final GlVao vertexArray;
-    private final GlVbo vertexBuffer;
+    private final GlVertexArray vertexArray;
+    private final VertexBuffer vertexBuffer;
     private final QuadIndexBuffer indexBuffer;
 
-    public QuadMesh(int size, VertexAttr... attributes){
-        this.vertexArray = new GlVao();
-        this.vertexBuffer = new GlVbo();
+    public QuadMesh(int size, GlVertexAttr... attributes){
+        this.vertexArray = new GlVertexArray();
+        this.vertexBuffer = new VertexBuffer();
         this.vertexBuffer.enableAttributes(attributes);
         this.indexBuffer = new QuadIndexBuffer(size);
     }
 
 
-    public void render(int indices, Primitive primitive){
-        vertexArray.drawElements(indices, primitive, indexBuffer.getIndicesType());
+    public void render(int indices, GlPrimitive primitive){
+        vertexArray.drawElements(indices, primitive);
     }
 
     public void render(int indices){
         vertexArray.drawElements(indices);
     }
 
-    public void render(Primitive primitive){
-        this.render(indexBuffer.getIndicesNum(), primitive);
+    public void render(GlPrimitive primitive){
+        this.render(indexBuffer.getSize(), primitive);
     }
 
     public void render(){
-        this.render(indexBuffer.getIndicesNum());
+        this.render(indexBuffer.getSize());
     }
 
 
-    public GlVbo getBuffer(){
+    public VertexBuffer getBuffer(){
         return vertexBuffer;
     }
 

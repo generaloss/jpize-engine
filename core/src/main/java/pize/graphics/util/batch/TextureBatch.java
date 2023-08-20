@@ -3,10 +3,10 @@ package pize.graphics.util.batch;
 import pize.Pize;
 import pize.files.Resource;
 import pize.graphics.camera.Camera;
-import pize.graphics.gl.BufUsage;
-import pize.graphics.gl.Type;
+import pize.lib.gl.buffer.GlBufUsage;
+import pize.lib.gl.type.GlType;
 import pize.graphics.mesh.QuadMesh;
-import pize.graphics.mesh.VertexAttr;
+import pize.lib.gl.vertex.GlVertexAttr;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
@@ -55,9 +55,9 @@ public class TextureBatch extends Batch{
         // Mesh
         this.mesh = new QuadMesh(
                 maxSize,
-                new VertexAttr(2, Type.FLOAT),
-                new VertexAttr(2, Type.FLOAT),
-                new VertexAttr(4, Type.FLOAT)
+                new GlVertexAttr(2, GlType.FLOAT),
+                new GlVertexAttr(2, GlType.FLOAT),
+                new GlVertexAttr(4, GlType.FLOAT)
         );
 
         this.vertices = new float[QUAD_VERTICES * maxSize * mesh.getBuffer().getVertexSize()];
@@ -196,7 +196,7 @@ public class TextureBatch extends Batch{
         usedShader.setUniform("u_view", viewMatrix);
         usedShader.setUniform("u_texture", lastTexture);
 
-        mesh.getBuffer().setData(vertices, BufUsage.STREAM_DRAW);
+        mesh.getBuffer().setData(vertices, GlBufUsage.STREAM_DRAW);
         mesh.render(size * QUAD_INDICES);
         
         // Reset

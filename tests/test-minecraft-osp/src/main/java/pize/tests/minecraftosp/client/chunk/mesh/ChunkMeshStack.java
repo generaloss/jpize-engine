@@ -4,33 +4,34 @@ import pize.app.Disposable;
 
 public class ChunkMeshStack implements Disposable{
     
-    private final ChunkMeshPackedCullingOn packed;
-    private final ChunkMeshCullingOff custom;
-    private final ChunkMeshTranslucentCullingOn translucent;
+    private final ChunkMesh[] meshes;
 
     public ChunkMeshStack(){
-        packed = new ChunkMeshPackedCullingOn();
-        custom = new ChunkMeshCullingOff();
-        translucent = new ChunkMeshTranslucentCullingOn();
-    }
-    
-    public ChunkMeshPackedCullingOn getPacked(){
-        return packed;
-    }
-    
-    public ChunkMeshCullingOff getCustom(){
-        return custom;
+        meshes = new ChunkMesh[]{
+            new ChunkMesh(ChunkMeshType.SOLID),
+            new ChunkMesh(ChunkMeshType.CUSTOM),
+            new ChunkMesh(ChunkMeshType.TRANSLUCENT)
+        };
     }
 
-    public ChunkMeshTranslucentCullingOn getTranslucent(){
-        return translucent;
+
+    public ChunkMesh getSolid(){
+        return meshes[0];
     }
+
+    public ChunkMesh getCustom(){
+        return meshes[1];
+    }
+
+    public ChunkMesh getTranslucent(){
+        return meshes[2];
+    }
+
 
     @Override
     public void dispose(){
-        packed.dispose();
-        custom.dispose();
-        translucent.dispose();
+        for(ChunkMesh mesh: meshes)
+            mesh.dispose();
     }
     
 }
