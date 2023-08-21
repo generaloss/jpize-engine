@@ -1,6 +1,8 @@
 package pize.io.window;
 
+import pize.io.keyboard.Keyboard;
 import pize.io.monitor.MonitorManager;
+import pize.io.mouse.Mouse;
 import pize.lib.glfw.Glfw;
 import pize.lib.glfw.glfwenum.GlfwHint;
 import pize.lib.glfw.monitor.GlfwMonitor;
@@ -11,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Window extends GlfwWindow{
+
+    private final Keyboard keyboard;
+    private final Mouse mouse;
 
     private int width, height, x, y, windowedWidth, windowedHeight, windowedX, windowedY;
     private boolean vsync, fullscreen, focused, resizable;
@@ -63,6 +68,9 @@ public class Window extends GlfwWindow{
             for(GlfwWindowSizeCallback sizeCallback: sizeCallbackList)
                 sizeCallback.invoke(w, h);
         });
+
+        this.keyboard = new Keyboard(this);
+        this.mouse = new Mouse(this);
     }
 
 
@@ -158,12 +166,30 @@ public class Window extends GlfwWindow{
     }
 
 
+    public float getContentScaleX(){
+        return contentScaleX;
+    }
+
+    public float getContentScaleY(){
+        return contentScaleY;
+    }
+
+
     public void addSizeCallback(GlfwWindowSizeCallback sizeCallback){
         sizeCallbackList.add(sizeCallback);
     }
     
     public void removeSizeCallback(GlfwWindowSizeCallback sizeCallback){
         sizeCallbackList.remove(sizeCallback);
+    }
+
+
+    public Keyboard getKeyboard(){
+        return keyboard;
+    }
+
+    public Mouse getMouse(){
+        return mouse;
     }
 
 }

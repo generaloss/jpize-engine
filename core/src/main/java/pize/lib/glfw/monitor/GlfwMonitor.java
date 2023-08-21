@@ -84,14 +84,14 @@ public class GlfwMonitor extends GlfwObject{
         return new Vec2i(width[0], height[0]);
     }
 
-    public int[] getWorkarea(){
+    public GlfwMonitorWorkarea getWorkarea(){
         final int[] x = new int[1];
         final int[] y = new int[1];
         final int[] width = new int[1];
         final int[] height = new int[1];
 
         glfwGetMonitorWorkarea(ID, x, y, width, height);
-        return new int[]{ x[0], y[0], width[0], height[0] };
+        return new GlfwMonitorWorkarea(x[0], y[0], width[0], height[0]);
     }
 
 }

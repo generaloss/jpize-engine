@@ -35,7 +35,7 @@ public class Pize{
 
         // Create Context
         final Window window = new Window(title, width, height, resizable, vsync, samples);
-        context = new Context(window, new Keyboard(window), new Mouse(window));
+        context = new Context(window);
 
         // Init GL
         GL.createCapabilities();
@@ -107,15 +107,15 @@ public class Pize{
     }
 
 
-    public static int getX(){
+    public static float getX(){
         return mouse().getX();
     }
 
-    public static int getY(){
+    public static float getY(){
         return window().getHeight() - mouse().getY();
     }
 
-    public static int getInvY(){
+    public static float getInvY(){
         return mouse().getY();
     }
 

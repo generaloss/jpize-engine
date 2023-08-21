@@ -4,7 +4,7 @@ import pize.Pize;
 import pize.lib.gl.tesselation.GlFace;
 import pize.lib.gl.Gl;
 import pize.lib.gl.tesselation.GlPolygonMode;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
 import pize.math.vecmath.vector.Vec3i;
@@ -101,6 +101,9 @@ public class GameController{
         
         /** Game **/
 
+        if(camera == null)
+            return;
+
         // F3 + ...
         if(Key.F3.isPressed()){
             // G - Chunk border
@@ -175,7 +178,7 @@ public class GameController{
         if(options.getKey(KeyMapping.ZOOM).isDown())
             camera.setZoom(10);
         else if(options.getKey(KeyMapping.ZOOM).isPressed()){
-            camera.setZoom(camera.getZoom() + Pize.mouse().getScroll() * (camera.getZoom() / 8));
+            camera.setZoom(camera.getZoom() + Pize.mouse().getScrollY() * (camera.getZoom() / 8));
         }else if(options.getKey(KeyMapping.ZOOM).isReleased())
             camera.setZoom(1);
         

@@ -63,7 +63,8 @@ public class AudioSource implements Disposable{
 
     public void setBuffer(AudioBuffer buffer){
         this.buffer = buffer;
-        alSourcei(id, AL_BUFFER, buffer.getId());
+        if(buffer != null)
+            alSourcei(id, AL_BUFFER, buffer.getId());
     }
 
 

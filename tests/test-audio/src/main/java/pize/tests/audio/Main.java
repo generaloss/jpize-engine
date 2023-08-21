@@ -6,7 +6,7 @@ import pize.audio.sound.Sound;
 import pize.audio.util.SoundGenerator;
 import pize.app.AppAdapter;
 import pize.files.Resource;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 
 public class Main extends AppAdapter{
 

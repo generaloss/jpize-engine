@@ -5,7 +5,7 @@ import pize.app.AppAdapter;
 import pize.lib.gl.Gl;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 
 public class Main extends AppAdapter{
     

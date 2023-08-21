@@ -30,8 +30,6 @@ public class Context{
 
     private final Audio audio;
     private final Window window;
-    private final Keyboard keyboard;
-    private final Mouse mouse;
 
     private final FpsCounter fpsCounter;
     private final DeltaTimeCounter renderDeltaTime, fixedUpdateDeltaTime;
@@ -44,11 +42,9 @@ public class Context{
     private boolean exitRequest;
     private final ContextTaskExecutor syncTaskExecutor;
 
-    public Context(Window window, Keyboard keyboard, Mouse mouse){
+    public Context(Window window){
         this.audio = new Audio();
         this.window = window;
-        this.keyboard = keyboard;
-        this.mouse = mouse;
 
         this.fpsCounter = new FpsCounter();
         this.fpsCounter.count();
@@ -141,8 +137,8 @@ public class Context{
         listener.render(); /* RENDER */
         
         // Reset
-        mouse.reset();
-        keyboard.reset();
+        window.getMouse().reset();
+        window.getKeyboard().reset();
         window.swapBuffers();
     }
     
@@ -192,11 +188,11 @@ public class Context{
     }
 
     public Keyboard getKeyboard(){
-        return keyboard;
+        return window.getKeyboard();
     }
 
     public Mouse getMouse(){
-        return mouse;
+        return window.getMouse();
     }
 
 

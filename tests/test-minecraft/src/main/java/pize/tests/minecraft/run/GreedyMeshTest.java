@@ -8,7 +8,7 @@ import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
 import pize.graphics.util.color.Color;
 import pize.graphics.util.color.IColor;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec2i;
 
@@ -147,8 +147,8 @@ public class GreedyMeshTest extends AppAdapter{
         if(Pize.isTouched()){
             final int color = Pize.mouse().isLeftPressed() ? 1 : 0;
 
-            int x = Pize.getX() / SIZE;
-            int y = Pize.getY() / SIZE;
+            final int x = Maths.round(Pize.getX() / SIZE);
+            final int y = Maths.round(Pize.getY() / SIZE);
 
             if(map[x][y] != color){
                 map[x][y] = color;

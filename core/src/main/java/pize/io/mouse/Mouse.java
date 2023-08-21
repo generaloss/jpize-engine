@@ -1,44 +1,43 @@
 package pize.io.mouse;
 
 import pize.Pize;
-import pize.io.glfw.Key;
-import pize.io.keyboard.Keyboard;
+import pize.io.key.Key;
 import pize.io.window.Window;
+import pize.lib.glfw.mouse.GlfwCursorMode;
+import pize.lib.glfw.mouse.GlfwMouse;
 
 import java.util.Arrays;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class Mouse{
+public class Mouse extends GlfwMouse{
 
-    private final long windowId;
     private boolean inWindow, visible;
-    private int scroll, touchDownX, touchDownY;
+    private float scrollX, scrollY, touchDownX, touchDownY;
     private final boolean[] down, pressed, released;
 
     public Mouse(Window window){
-        this.windowId = window.getID();
+        super(window);
         visible = true;
 
         down = new boolean[GLFW_MOUSE_BUTTON_LAST + 1];
         pressed = new boolean[GLFW_MOUSE_BUTTON_LAST + 1];
         released = new boolean[GLFW_MOUSE_BUTTON_LAST + 1];
 
-        glfwSetCursorEnterCallback(windowId, (long windowHandle, boolean entered)->{
-            inWindow = entered;
+        super.setCursorEnterCallback((boolean entered) -> inWindow = entered);
+
+        super.setScrollCallback((double x, double y) -> {
+            scrollX += (float) x;
+            scrollY += (float) y;
         });
 
-        glfwSetScrollCallback(windowId, (long windowHandle, double x, double y)->{
-            scroll += y;
-        });
-
-        glfwSetMouseButtonCallback(windowId, (long windowHandle, int button, int action, int mode)->{
+        super.setMouseButtonCallback((int button, int action, int mode) -> {
             if(action == GLFW_PRESS){
                 down[button] = true;
                 pressed[button] = true;
 
-                touchDownX = getX();
-                touchDownY = getY();
+                touchDownX = super.getX();
+                touchDownY = super.getY();
             }else if(action == GLFW_RELEASE){
                 released[button] = true;
                 pressed[button] = false;
@@ -47,79 +46,52 @@ public class Mouse{
     }
 
     public void reset(){
-        scroll = 0;
+        scrollX = 0;
+        scrollY = 0;
         Arrays.fill(released, false);
         Arrays.fill(down, false);
     }
 
-    public void show(boolean show){
+    public void setShow(boolean show){
         if(show == visible)
             return;
-        glfwSetInputMode(windowId, GLFW_CURSOR, show ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
+
+        super.setMode(show ? GlfwCursorMode.NORMAL : GlfwCursorMode.HIDDEN);
         visible = show;
     }
 
-    public boolean isVisible(){
+    public boolean isShow(){
         return visible;
     }
 
-    public void setPos(int x, int y){
-        glfwSetCursorPos(windowId, x, y);
+    public float getScrollX(){
+        return scrollX;
     }
 
-    public void setPosCenter(Window window){
-        glfwSetCursorPos(windowId, window.getWidth() * 0.5, window.getHeight() * 0.5);
+    public float getScrollY(){
+        return scrollY;
     }
 
-    public int getScroll(){
-        return scroll;
-    }
-
-    public long getWindowId(){
-        return windowId;
+    public long getWindowID(){
+        return windowID;
     }
 
     public boolean isInWindow(){
         return inWindow;
     }
-
-    public int[] getPos(){
-        double[] x = new double[1];
-        double[] y = new double[1];
-        glfwGetCursorPos(windowId, x, y);
-
-        return new int[]{
-            (int) x[0],
-            (int) y[0]
-        };
-    }
-
-    public int getX(){
-        final double[] x = new double[1];
-        glfwGetCursorPos(windowId, x, null);
-
-        return (int) x[0];
-    }
-
-    public int getY(){
-        final double[] y = new double[1];
-        glfwGetCursorPos(windowId, null, y);
-
-        return (int) y[0];
-    }
     
     public boolean isInBounds(double x, double y, double width, double height){
-        final int cursorX = getX();
-        final int cursorY = Pize.getY();
+        final float cursorX = Pize.getX();
+        final float cursorY = Pize.getY();
         
         return !(cursorX < x || cursorY < y || cursorX >= x + width || cursorY >= y + height);
     }
 
-    public int getTouchDownX(){
+    public float getTouchDownX(){
         return touchDownX;
     }
 
-    public int getTouchDownY(){
+    public float getTouchDownY(){
         return touchDownY;
     }
 
@@ -169,15 +141,6 @@ public class Mouse{
 
     public boolean isButtonReleased(Key button){
         return released[button.GLFW];
-    }
-
-
-    public int getScrollX(Keyboard keyboard){
-        return keyboard.isPressed(Key.LEFT_SHIFT, Key.RIGHT_SHIFT) ? scroll : 0;
-    }
-
-    public int getScrollY(Keyboard keyboard){
-        return keyboard.isPressed(Key.LEFT_SHIFT, Key.RIGHT_SHIFT) ? 0 : scroll;
     }
 
 }

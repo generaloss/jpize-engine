@@ -3,7 +3,7 @@ package pize.tests.minecraft.game.gui.screen;
 import pize.app.Disposable;
 import pize.app.Resizable;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 import pize.tests.minecraft.game.Session;
 import pize.tests.minecraft.game.gui.components.DirtBackground;
 import pize.tests.minecraft.game.gui.text.Component;

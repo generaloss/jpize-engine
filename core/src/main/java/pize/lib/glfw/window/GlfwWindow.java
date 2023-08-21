@@ -6,12 +6,15 @@ import org.lwjgl.system.MemoryUtil;
 import pize.app.Disposable;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.PixmapIO;
+import pize.io.key.Key;
+import pize.io.key.KeyState;
 import pize.lib.glfw.GlfwObject;
 import pize.lib.glfw.cursor.GlfwCursor;
 import pize.lib.glfw.glfwenum.GlfwHint;
 import pize.lib.glfw.glfwenum.GlfwInputMode;
 import pize.lib.glfw.monitor.GlfwMonitor;
 import pize.lib.glfw.window.callback.*;
+import pize.math.vecmath.vector.Vec2i;
 
 import java.nio.ByteBuffer;
 
@@ -85,6 +88,14 @@ public class GlfwWindow extends GlfwObject implements Disposable{
         glfwSetWindowSizeLimits(ID, minWidth, minHeight, maxWidth, maxHeight);
     }
 
+    public Vec2i getSize(){
+        final int[] x = new int[1];
+        final int[] y = new int[1];
+
+        glfwGetWindowSize(ID, x, y);
+        return new Vec2i(x[0], y[0]);
+    }
+
     public void setOpacity(float opacity){
         glfwSetWindowOpacity(ID, opacity);
     }
@@ -125,6 +136,12 @@ public class GlfwWindow extends GlfwObject implements Disposable{
 
     public void setClipboardString(ByteBuffer buffer){
         glfwSetClipboardString(ID, buffer);
+    }
+
+
+    public KeyState getKeyState(Key key){
+        final int state = glfwGetKey(ID, key.GLFW);
+        return KeyState.fromGLFW(state);
     }
 
 

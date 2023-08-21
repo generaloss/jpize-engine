@@ -5,7 +5,7 @@ import pize.app.AppAdapter;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 import pize.math.Maths;
 
 public class NoiseTest extends AppAdapter{

@@ -3,7 +3,7 @@ package pize.tests.minecraft.game;
 import pize.Pize;
 import pize.files.Resource;
 import pize.graphics.util.ScreenUtils;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 import pize.tests.minecraft.game.audio.AudioManager;
 import pize.tests.minecraft.game.audio.MusicManager;
 import pize.tests.minecraft.game.gui.screen.ScreenManager;

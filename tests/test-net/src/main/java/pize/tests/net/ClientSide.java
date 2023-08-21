@@ -6,7 +6,7 @@ import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.lib.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 import pize.math.vecmath.vector.Vec2f;
 import pize.net.security.KeyAES;
 import pize.net.security.PublicRSA;

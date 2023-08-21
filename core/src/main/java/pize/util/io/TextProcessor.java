@@ -4,9 +4,10 @@ import pize.Pize;
 import pize.app.Disposable;
 import pize.io.keyboard.CharCallback;
 import pize.io.keyboard.KeyCallback;
-import pize.io.glfw.Key;
-import pize.io.glfw.KeyAction;
+import pize.io.key.Key;
+import pize.io.key.KeyState;
 import pize.util.StringUtils;
+import pize.util.time.Stopwatch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +21,16 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     
     private int cursorX, cursorY;
     private boolean cursorInEnd;
+    private final Stopwatch cursorStopwatch;
     private int tabSpaces = 4;
     
     public TextProcessor(boolean newLineOnEnter){
-        active = true;
+        this.active = true;
         this.newLineOnEnter = newLineOnEnter;
-        lines = new ArrayList<>();
-        lines.add("");
-        
+        this.lines = new ArrayList<>();
+        this.lines.add("");
+        this.cursorStopwatch = new Stopwatch().start();
+
         Pize.keyboard().addCharCallback(this);
         Pize.keyboard().addKeyCallback(this);
     }
@@ -43,32 +46,42 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
             return;
         
         insertChar(character);
+        resetCursorBlinking();
     }
     
     @Override
-    public void invoke(int keyCode, KeyAction action){
-        if(!active || action == KeyAction.RELEASE)
+    public void invoke(int keyCode, KeyState action){
+        if(!active || action == KeyState.RELEASE)
             return;
-        
+
         moveCursor(keyCode);
-        
-        if(keyCode == Key.TAB.GLFW)
-            insertLine(" ".repeat(tabSpaces));
-        if(newLineOnEnter && keyCode == Key.ENTER.GLFW)
+        if(Key.LEFT_SHIFT.isPressed() && keyCode == Key.TAB.GLFW){
+            removeTab();
+            resetCursorBlinking();
+        }else if(keyCode == Key.TAB.GLFW){
+            insertTab();
+            resetCursorBlinking();
+        }
+
+        if(newLineOnEnter && keyCode == Key.ENTER.GLFW){
             newLineAndWrap();
+            resetCursorBlinking();
+        }
         
         else if(keyCode == Key.BACKSPACE.GLFW && !(cursorX == 0 && cursorY == 0)){
             if(cursorX == 0)
                 removeLineAndWrap();
             else
                 removeChar();
+
+            resetCursorBlinking();
         }
     }
     
     
     private void removeChar(){
         String line = lines.get(cursorY);
-        lines.set(cursorY, line.substring(0, cursorX - 1) + line.substring(cursorX));
+        setLine(line.substring(0, cursorX - 1) + line.substring(cursorX));
         
         cursorX--;
         currentLineLength--;
@@ -76,18 +89,26 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     
     public void insertChar(char character){
         String currentLine = lines.get(cursorY);
-        lines.set(cursorY, currentLine.substring(0, cursorX) + character + currentLine.substring(cursorX));
+        setLine(currentLine.substring(0, cursorX) + character + currentLine.substring(cursorX));
         
         cursorX++;
         currentLineLength++;
+    }
+
+    public void setLine(String line){
+        lines.set(cursorY, line);
+    }
+
+    public String getLine(){
+        return lines.get(cursorY);
     }
     
     public void insertLine(String line){
         line = line.replaceAll("\n", "");
         
-        String currentLine = lines.get(cursorY);
+        String currentLine = getLine();
         currentLine = currentLine.substring(0, cursorX) + line + currentLine.substring(cursorX);
-        lines.set(cursorY, currentLine);
+        setLine(currentLine);
         
         cursorX += line.length();
         currentLineLength += line.length();
@@ -105,11 +126,31 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
                 insertLine(lines[i]);
         }
     }
+
+    public void insertTab(){
+        insertLine(" ".repeat(tabSpaces));
+    }
+
+    public void removeTab(){
+        String line = getLine();
+        if(line.isEmpty())
+            return;
+
+        for(int i = 0; i < tabSpaces; i++){
+            if(line.charAt(0) == ' ')
+                line = line.substring(1);
+            else
+                return;
+        }
+        setLine(line);
+        cursorX = Math.max(0, cursorX - tabSpaces);
+        updateCurrentLineLength();
+    }
     
     
     public void newLineAndWrap(){
-        final String prevLine = lines.get(cursorY);
-        lines.set(cursorY, prevLine.substring(0, cursorX));
+        final String prevLine = getLine();
+        setLine(prevLine.substring(0, cursorX));
         
         lines.add(cursorY + 1, prevLine.substring(cursorX));
         cursorY++;
@@ -124,7 +165,7 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
         
         updateCurrentLineLength();
         moveCursorEnd();
-        lines.set(cursorY, lines.get(cursorY) + removedLine);
+        setLine(lines.get(cursorY) + removedLine);
         updateCurrentLineLength();
     }
     
@@ -165,10 +206,12 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     
     public void moveCursorEnd(){
         cursorX = currentLineLength;
+        resetCursorBlinking();
     }
     
     public void moveCursorHome(){
         cursorX = 0;
+        resetCursorBlinking();
     }
     
     public void moveCursorDown(){
@@ -177,6 +220,7 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
             updateCurrentLineLength();
             norCursorX();
         }
+        resetCursorBlinking();
     }
     
     public void moveCursorUp(){
@@ -185,6 +229,7 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
             updateCurrentLineLength();
             norCursorX();
         }
+        resetCursorBlinking();
     }
     
     public void moveCursorLeft(){
@@ -195,6 +240,7 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
             updateCurrentLineLength();
             moveCursorEnd();
         }
+        resetCursorBlinking();
     }
     
     public void moveCursorRight(){
@@ -205,6 +251,11 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
             updateCurrentLineLength();
             moveCursorHome();
         }
+        resetCursorBlinking();
+    }
+
+    public void resetCursorBlinking(){
+        cursorStopwatch.reset();
     }
     
     private void norCursorX(){
@@ -270,12 +321,20 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
         
         updateCurrentLineLength();
     }
+
+    public double getCursorBlinkingSeconds(){
+        return cursorStopwatch.getSeconds();
+    }
     
-    @Override
-    public String toString(){
+    public String getString(boolean inv){
         final StringJoiner joiner = new StringJoiner("\n");
-        for(String line: lines)
-            joiner.add(line);
+        if(!inv){
+            for(String line: lines)
+                joiner.add(line);
+        }else{
+            for(int i = lines.size() - 1; i >= 0; i--)
+                joiner.add(lines.get(i));
+        }
         
         return joiner.toString();
     }

@@ -12,7 +12,7 @@ import pize.graphics.camera.controller.Rotation3DController;
 import pize.graphics.mesh.IndexedMesh;
 import pize.graphics.util.BaseShader;
 import pize.graphics.util.SkyBox;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
 import pize.physic.Ray3f;

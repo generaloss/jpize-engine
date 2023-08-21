@@ -1,5 +1,6 @@
 package pize.lib.glfw;
 
+import pize.io.key.Key;
 import pize.lib.glfw.glfwenum.GlfwHint;
 
 import java.nio.ByteBuffer;
@@ -31,6 +32,22 @@ public class Glfw{
 
     public static void setVsync(boolean vSync){
         swapInterval(vSync ? 1 : 0);
+    }
+
+    public static boolean rawMouseMotionSupported(){
+        return glfwRawMouseMotionSupported();
+    }
+
+    public static String getKeyName(int key, int scancode){
+        return glfwGetKeyName(key, scancode);
+    }
+
+    public static String getKeyName(Key key){
+        return glfwGetKeyName(key.GLFW, getKeyScancode(key));
+    }
+
+    public static int getKeyScancode(Key key){
+        return glfwGetKeyScancode(key.GLFW);
     }
 
 }

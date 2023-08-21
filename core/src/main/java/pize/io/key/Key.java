@@ -1,6 +1,7 @@
-package pize.io.glfw;
+package pize.io.key;
 
 import pize.Pize;
+import pize.lib.glfw.Glfw;
 
 public enum Key{
 
@@ -146,11 +147,20 @@ public enum Key{
     }
 
     public boolean isPressed(){
-        return Pize.keyboard().isPressed(this);
+        return Pize.window().getKeyState(this) == KeyState.PRESS;
     }
 
     public boolean isReleased(){
         return Pize.keyboard().isReleased(this);
+    }
+
+
+    public String getName(){
+        return Glfw.getKeyName(this);
+    }
+
+    public String getName(int scancode){
+        return Glfw.getKeyName(this.GLFW, scancode);
     }
 
 }

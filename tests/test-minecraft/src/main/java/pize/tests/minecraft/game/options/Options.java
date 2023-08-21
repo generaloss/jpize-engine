@@ -3,7 +3,7 @@ package pize.tests.minecraft.game.options;
 import pize.Pize;
 import pize.audio.Audio;
 import pize.files.Resource;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 import pize.tests.minecraft.game.Session;
 import pize.tests.minecraft.game.gui.screen.screens.VideoSettingsScreen;
 import pize.util.io.FastReader;

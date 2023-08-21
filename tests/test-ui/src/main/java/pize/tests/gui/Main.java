@@ -13,7 +13,7 @@ import pize.gui.components.Layout;
 import pize.gui.components.NinePatchImage;
 import pize.gui.components.RegionMesh;
 import pize.gui.constraint.Constraint;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 
 public class Main extends AppAdapter{
 

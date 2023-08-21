@@ -4,7 +4,7 @@ import pize.Pize;
 import pize.app.AppAdapter;
 import pize.lib.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 import pize.math.vecmath.vector.Vec2f;
 import pize.physic.BoundingBox2f;
 import pize.physic.Collider2f;

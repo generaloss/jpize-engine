@@ -2,7 +2,7 @@ package pize.tests.drift;
 
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec2f;

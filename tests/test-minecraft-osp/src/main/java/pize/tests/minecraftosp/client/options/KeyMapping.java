@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.options;
 
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 
 public enum KeyMapping implements Option<Key>{
 

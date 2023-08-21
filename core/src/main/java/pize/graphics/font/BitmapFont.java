@@ -242,11 +242,11 @@ public class BitmapFont implements Disposable{
                 advanceX = 0;
             }
             
-            final float xOffset = (advanceX + glyph.offsetX) * scale;
-            final float yOffset = (advanceY + glyph.offsetY) * scale;
+            final float xOffset = advanceX + glyph.offsetX;
+            final float yOffset = advanceY + glyph.offsetY;
             
-            final float renderX = x + xOffset * cos - yOffset * sin - centeringOffsetX;
-            final float renderY = y + yOffset * cos + xOffset * sin - centeringOffsetY;
+            final float renderX = x + (xOffset * cos - yOffset * sin) * scale - centeringOffsetX;
+            final float renderY = y + (yOffset * cos + xOffset * sin) * scale - centeringOffsetY;
 
             glyph.render(batch, renderX, renderY);
 

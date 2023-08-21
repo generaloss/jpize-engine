@@ -31,14 +31,26 @@ Modules:
 public class Main extends AppAdapter{
 
     public static void main(String[] args){
-        Pize.create("Window Title", 1280, 720);
+        Pize.create("Window Title", 1280, 720); // Create context
         Pize.window().setIcon("icon.png");
-        Pize.run(new Main());
+        Pize.run(new Main()); // Run
     }
     
-    public Main(){ } // Init on 
+    public Main(){ } // Init on creation
     
     public void init(){ } // Init on run
+    
+    public void render(){ } // Render loop
+    
+    public void update(){ } // Update loop
+    
+    public void fixedUpdate(){ } // Fixed TPS Update loop
+    
+    public void resize(int widht, int height){ } // Calls when window resizes
+    
+    public void dispose(){ } // Exit program
+    
+}
 ```
 
 #### 1. 2D Graphics:

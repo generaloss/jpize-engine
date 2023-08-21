@@ -15,7 +15,7 @@ public class Rotation3DController{
         mouseSensitivity = 1;
         
         nextFrameRotationLock = true;
-        Pize.mouse().show(showMouse);
+        Pize.mouse().setShow(showMouse);
     }
     
     public void update(){
@@ -54,7 +54,7 @@ public class Rotation3DController{
     
     public void showMouse(boolean showMouse){
         this.showMouse = showMouse;
-        Pize.mouse().show(showMouse);
+        Pize.mouse().setShow(showMouse);
     }
     
     public void toggleShowMouse(){

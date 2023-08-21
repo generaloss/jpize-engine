@@ -80,7 +80,7 @@ public class ChatRenderer implements Disposable{
         
         // Scroll
         if(chat.isOpened() && Pize.mouse().isInBounds(chatX, openedChatY, chatWidth, chatHeight))
-            scrollMotion -= Pize.mouse().getScroll() * Pize.getDt() * lineAdvance * 10;
+            scrollMotion -= Pize.mouse().getScrollY() * Pize.getDt() * lineAdvance * 10;
         
         scroll += scrollMotion;
         scrollMotion *= 0.95;

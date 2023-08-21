@@ -2,7 +2,7 @@ package pize.tests.minecraftosp.client.options;
 
 import pize.Pize;
 import pize.files.Resource;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 import pize.tests.minecraftosp.Minecraft;
 import pize.tests.minecraftosp.main.net.PlayerProfile;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;

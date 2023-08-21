@@ -1,8 +1,8 @@
 package pize.io.keyboard;
 
 import pize.io.window.Window;
-import pize.io.glfw.Key;
-import pize.io.glfw.KeyAction;
+import pize.io.key.Key;
+import pize.io.key.KeyState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +28,7 @@ public class Keyboard{
                 return;
             
             for(KeyCallback keyCallback: keyCallbackList)
-                keyCallback.invoke(key, KeyAction.values()[action]);
+                keyCallback.invoke(key, KeyState.values()[action]);
 
             switch(action){
                 case GLFW_PRESS -> {

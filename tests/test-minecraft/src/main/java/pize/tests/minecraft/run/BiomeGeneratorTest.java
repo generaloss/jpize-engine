@@ -8,7 +8,7 @@ import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
 import pize.graphics.util.color.Color;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 import pize.math.Maths;
 import pize.math.function.FastNoiseLite;
 
@@ -52,7 +52,7 @@ public class BiomeGeneratorTest extends AppAdapter{
         if(Key.V.isDown())
             Pize.window().toggleVsync();
 
-        int scroll = Pize.mouse().getScroll();
+        final float scroll = Pize.mouse().getScrollY();
         if(scroll > 0)
             scaleMul += 0.01F * scroll;
         else if(scroll < 0)

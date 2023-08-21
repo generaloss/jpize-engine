@@ -12,8 +12,8 @@ public class ListView extends MComponent{
     protected void render(TextureBatch batch, float x, float y, float width, float height){
         batch.getScissor().begin(228, x, y, width, height);
         
-        scrollX = Maths.clamp(scrollX + Pize.mouse().getScrollX(Pize.keyboard()) * 50, -1000, 1000);
-        scrollY = Maths.clamp(scrollY + Pize.mouse().getScrollY(Pize.keyboard()) * 50, -200, 0);
+        scrollX = Maths.clamp(scrollX + Pize.mouse().getScrollX() * 50, -1000, 1000);
+        scrollY = Maths.clamp(scrollY + Pize.mouse().getScrollY() * 50, -200, 0);
         setChildShift(scrollX, -scrollY);
     }
     

@@ -6,7 +6,7 @@ import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.lib.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.glfw.Key;
+import pize.io.key.Key;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec2f;
 import pize.tests.terraria.entity.Player;
@@ -70,7 +70,7 @@ public class Main extends AppAdapter{
     }
 
     private void ctrl(){
-        int scroll = Pize.mouse().getScroll();
+        final float scroll = Pize.mouse().getScrollY();
         gameRenderer.getRenderInfo().mulScale(
             scroll < 0 ?
                 1 / Math.pow(1.1, Maths.abs(scroll)) : scroll > 0 ?
