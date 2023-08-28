@@ -1,6 +1,6 @@
 package pize.gui.components;
 
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.util.batch.TextureBatch;
 import pize.util.io.TextProcessor;

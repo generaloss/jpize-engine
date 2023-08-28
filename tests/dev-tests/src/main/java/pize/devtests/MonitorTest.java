@@ -1,15 +1,15 @@
 package pize.devtests;
 
 import pize.Pize;
-import pize.app.AppAdapter;
+import pize.io.context.ContextAdapter;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.key.Key;
-import pize.lib.gl.Gl;
-import pize.lib.glfw.monitor.GlfwMonitor;
+import pize.glfw.key.Key;
+import pize.gl.Gl;
+import pize.glfw.monitor.GlfwMonitor;
 
-public class MonitorTest extends AppAdapter{
+public class MonitorTest extends ContextAdapter{
 
     TextureBatch batch;
     BitmapFont font;
@@ -49,8 +49,6 @@ public class MonitorTest extends AppAdapter{
     }
 
     public void render(){
-        System.out.println(Pize.window().getKeyState(Key.L));
-
         if(Key.ESCAPE.isDown())
             Pize.exit();
 

@@ -1,17 +1,22 @@
 package pize.tests.window;
 
 import pize.Pize;
-import pize.app.AppAdapter;
-import pize.lib.gl.Gl;
+import pize.io.context.ContextAdapter;
+import pize.gl.Gl;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.key.Key;
+import pize.glfw.key.Key;
+import pize.io.context.ContextBuilder;
 
-public class Main extends AppAdapter{
+public class Main extends ContextAdapter{
     
     public static void main(String[] args){
-        Pize.create("Hello, Window!", 1080, 640);
-        Pize.run(new Main());
+        ContextBuilder.newContext("Hello, Window!")
+                .size(1080, 640)
+                .create()
+                .init(new Main());
+
+        Pize.runContexts();
     }
     
     

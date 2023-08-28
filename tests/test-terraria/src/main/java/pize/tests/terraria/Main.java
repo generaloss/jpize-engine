@@ -1,12 +1,13 @@
 package pize.tests.terraria;
 
 import pize.Pize;
-import pize.app.AppAdapter;
+import pize.io.context.ContextAdapter;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
-import pize.lib.gl.Gl;
+import pize.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.key.Key;
+import pize.glfw.key.Key;
+import pize.io.context.ContextBuilder;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec2f;
 import pize.tests.terraria.entity.Player;
@@ -17,12 +18,16 @@ import pize.tests.terraria.world.World;
 import static pize.tests.terraria.tile.TileType.AIR;
 import static pize.tests.terraria.tile.TileType.DIRT;
 
-public class Main extends AppAdapter{
+public class Main extends ContextAdapter{
 
     public static void main(String[] args){
-        Pize.create("Terraria", 1280, 720);
-        Pize.window().setIcon("icon.png");
-        Pize.run(new Main());
+        ContextBuilder.newContext("Terraria")
+                .size(1280, 720)
+                .icon("icon.png")
+                .create()
+                .init(new Main());
+
+        Pize.runContexts();
     }
 
 
@@ -65,12 +70,10 @@ public class Main extends AppAdapter{
             Pize.exit();
         if(Key.F11.isDown())
             Pize.window().toggleFullscreen();
-        if(Key.V.isDown())
-            Pize.window().toggleVsync();
     }
 
     private void ctrl(){
-        final float scroll = Pize.mouse().getScrollY();
+        final float scroll = Pize.mouse().getScroll();
         gameRenderer.getRenderInfo().mulScale(
             scroll < 0 ?
                 1 / Math.pow(1.1, Maths.abs(scroll)) : scroll > 0 ?

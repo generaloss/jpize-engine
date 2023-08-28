@@ -1,8 +1,8 @@
 package pize.tests.gui;
 
 import pize.Pize;
-import pize.app.AppAdapter;
-import pize.lib.gl.Gl;
+import pize.io.context.ContextAdapter;
+import pize.gl.Gl;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
 import pize.graphics.util.batch.TextureBatch;
@@ -13,14 +13,18 @@ import pize.gui.components.Layout;
 import pize.gui.components.NinePatchImage;
 import pize.gui.components.RegionMesh;
 import pize.gui.constraint.Constraint;
-import pize.io.key.Key;
+import pize.glfw.key.Key;
+import pize.io.context.ContextBuilder;
 
-public class Main extends AppAdapter{
+public class Main extends ContextAdapter{
 
     public static void main(String[] args){
-        Pize.create("Test - UI", 480, 360);
-        Pize.window().setIcon("icon.png");
-        Pize.run(new Main());
+        ContextBuilder.newContext("Test - UI")
+                .icon("icon.png")
+                .create()
+                .init(new Main());
+
+        Pize.runContexts();
     }
     
     private TextureBatch batch;

@@ -1,7 +1,7 @@
 package pize.graphics.font;
 
 import pize.graphics.texture.Region;
-import pize.graphics.util.batch.Batch;
+import pize.graphics.util.batch.TextureBatch;
 
 public class Glyph{
 
@@ -36,7 +36,7 @@ public class Glyph{
     }
 
 
-    public void render(Batch batch, float x, float y){
+    public void render(TextureBatch batch, float x, float y){
         final float scale = fontOf.getScale();
 
         batch.draw(

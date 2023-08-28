@@ -1,18 +1,20 @@
 package pize.graphics.util.batch;
 
 import pize.Pize;
+import pize.util.Disposable;
 import pize.files.Resource;
 import pize.graphics.camera.Camera;
-import pize.lib.gl.buffer.GlBufUsage;
-import pize.lib.gl.type.GlType;
+import pize.gl.buffer.GlBufUsage;
+import pize.gl.type.GlType;
 import pize.graphics.mesh.QuadMesh;
-import pize.lib.gl.vertex.GlVertexAttr;
+import pize.gl.vertex.GlVertexAttr;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
 import pize.graphics.util.Shader;
 import pize.graphics.util.TextureUtils;
 import pize.graphics.util.batch.scissor.Scissor;
+import pize.graphics.util.color.Color;
 import pize.graphics.util.color.IColor;
 import pize.math.vecmath.matrix.Matrix3f;
 import pize.math.vecmath.matrix.Matrix4f;
@@ -21,10 +23,11 @@ import pize.math.vecmath.vector.Vec2f;
 import static pize.graphics.mesh.QuadIndexBuffer.QUAD_INDICES;
 import static pize.graphics.mesh.QuadIndexBuffer.QUAD_VERTICES;
 
-public class TextureBatch extends Batch{
+public class TextureBatch implements Disposable{
 
     private final QuadMesh mesh;
     private final Shader shader;
+    private final Color color;
 
     private final Vec2f transformOrigin;
     private final Matrix3f transformMatrix, rotationMatrix, shearMatrix, scaleMatrix, flipMatrix;
@@ -62,6 +65,7 @@ public class TextureBatch extends Batch{
 
         this.vertices = new float[QUAD_VERTICES * maxSize * mesh.getBuffer().getVertexSize()];
 
+        this.color = new Color();
         this.transformOrigin = new Vec2f(0.5);
         this.transformMatrix = new Matrix3f();
         this.rotationMatrix = new Matrix3f();
@@ -71,7 +75,6 @@ public class TextureBatch extends Batch{
     }
     
     
-    @Override
     public void draw(Texture texture, float x, float y, float width, float height){
         if(size + 1 >= batchSize)
             end();
@@ -110,7 +113,6 @@ public class TextureBatch extends Batch{
         drawQuad(0, 0, 0, alpha, x, y, width, height);
     }
 
-    @Override
     public void draw(TextureRegion texReg, float x, float y, float width, float height){
         if(size + 1 >= batchSize)
             end();
@@ -125,7 +127,6 @@ public class TextureBatch extends Batch{
         size++;
     }
 
-    @Override
     public void draw(Texture texture, float x, float y, float width, float height, Region region){
         if(size + 1 >= batchSize)
             end();
@@ -139,7 +140,6 @@ public class TextureBatch extends Batch{
         size++;
     }
 
-    @Override
     public void draw(TextureRegion texReg, float x, float y, float width, float height, Region region){
         if(size + 1 >= batchSize)
             end();
@@ -185,10 +185,11 @@ public class TextureBatch extends Batch{
     }
 
 
-    public int end(){
+    public void end(){
         if(lastTexture == null || size == 0)
-            return -1;
+            return;
 
+        // Shader
         final Shader usedShader = customShader == null ? shader : customShader;
 
         usedShader.bind();
@@ -196,14 +197,13 @@ public class TextureBatch extends Batch{
         usedShader.setUniform("u_view", viewMatrix);
         usedShader.setUniform("u_texture", lastTexture);
 
+        // Render
         mesh.getBuffer().setData(vertices, GlBufUsage.STREAM_DRAW);
         mesh.render(size * QUAD_INDICES);
-        
+
         // Reset
-        final int sizeResult = size;
         size = 0;
         vertexOffset = 0;
-        return sizeResult;
     }
     
     public void useShader(Shader shader){
@@ -248,44 +248,57 @@ public class TextureBatch extends Batch{
     }
 
 
-    @Override
     public Vec2f getTransformOrigin(){
         return transformOrigin;
     }
 
-    @Override
     public void setTransformOrigin(double x, double y){
         transformOrigin.set(x, y);
     }
 
-    @Override
     public void rotate(float angle){
         rotationMatrix.toRotated(angle);
     }
 
-    @Override
     public void shear(float angleX, float angleY){
         shearMatrix.toSheared(angleX, angleY);
     }
 
-    @Override
     public void scale(float scale){
         scaleMatrix.toScaled(scale);
     }
 
-    @Override
     public void scale(float x, float y){
         scaleMatrix.toScaled(x, y);
     }
 
-    @Override
     public void flip(boolean x, boolean y){
         flipMatrix.val[Matrix3f.m00] = y ? 1 : -1;
         flipMatrix.val[Matrix3f.m11] = x ? 1 : -1;
     }
 
 
-    @Override
+    public void resetColor(){
+        color.set(1, 1, 1, 1F);
+    }
+
+    public void setColor(IColor color){
+        this.color.set(color);
+    }
+
+    public void setColor(double r, double g, double b, double a){
+        color.set(r, g, b, a);
+    }
+
+    public Color getColor(){
+        return color;
+    }
+
+    public void setAlpha(double a){
+        color.setA((float) a);
+    }
+
+
     public int size(){
         return size;
     }

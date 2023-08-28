@@ -1,9 +1,9 @@
 package pize.graphics.texture;
 
-import pize.lib.gl.texture.GlFormat;
-import pize.lib.gl.GlObject;
-import pize.lib.gl.texture.GlSizedFormat;
-import pize.lib.gl.type.GlType;
+import pize.gl.texture.GlFormat;
+import pize.gl.GlObject;
+import pize.gl.texture.GlSizedFormat;
+import pize.gl.type.GlType;
 
 import static org.lwjgl.opengl.GL33.*;
 

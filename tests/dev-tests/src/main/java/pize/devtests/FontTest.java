@@ -1,13 +1,13 @@
 package pize.devtests;
 
 import pize.Pize;
-import pize.app.AppAdapter;
+import pize.io.context.ContextAdapter;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.graphics.util.batch.TextureBatch;
-import pize.lib.gl.Gl;
+import pize.gl.Gl;
 
-public class FontTest extends AppAdapter{
+public class FontTest extends ContextAdapter{
 
     TextureBatch batch;
     BitmapFont font;

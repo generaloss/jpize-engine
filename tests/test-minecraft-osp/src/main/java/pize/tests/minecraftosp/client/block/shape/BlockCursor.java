@@ -1,10 +1,10 @@
 package pize.tests.minecraftosp.client.block.shape;
 
-import pize.app.Disposable;
-import pize.lib.gl.tesselation.GlPrimitive;
-import pize.lib.gl.type.GlType;
+import pize.util.Disposable;
+import pize.gl.tesselation.GlPrimitive;
+import pize.gl.type.GlType;
 import pize.graphics.mesh.IndexedMesh;
-import pize.lib.gl.vertex.GlVertexAttr;
+import pize.gl.vertex.GlVertexAttr;
 
 public class BlockCursor implements Disposable{
     

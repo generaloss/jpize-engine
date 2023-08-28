@@ -21,7 +21,7 @@ public class ScreenQuadShader{
         instance.shader.setUniform("u_texture", texture);
     }
 
-    private static void dispose(){ // Invoked from Context
+    private static void dispose(){ // Calls from ContextManager
         if(instance != null)
             instance.shader.dispose();
     }

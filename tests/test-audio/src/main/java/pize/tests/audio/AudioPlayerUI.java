@@ -2,9 +2,9 @@ package pize.tests.audio;
 
 import pize.Pize;
 import pize.audio.sound.Sound;
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.graphics.texture.Texture;
-import pize.lib.gl.Gl;
+import pize.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
 import pize.gui.Align;
 import pize.gui.LayoutType;

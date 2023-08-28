@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.renderer.level;
 
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.files.Resource;
 import pize.graphics.util.Shader;
 import pize.math.vecmath.matrix.Matrix4f;

@@ -1,12 +1,12 @@
 package pize.devtests;
 
 import pize.Pize;
-import pize.app.AppAdapter;
+import pize.io.context.ContextAdapter;
 import pize.graphics.texture.atlas.TextureAtlas;
-import pize.lib.gl.Gl;
+import pize.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
 
-public class AtlasTest extends AppAdapter{
+public class AtlasTest extends ContextAdapter{
     
     TextureBatch batch;
     TextureAtlas<Integer> atlas;

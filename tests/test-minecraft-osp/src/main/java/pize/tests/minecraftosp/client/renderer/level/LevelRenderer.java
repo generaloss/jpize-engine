@@ -1,11 +1,11 @@
 package pize.tests.minecraftosp.client.renderer.level;
 
 import pize.Pize;
-import pize.app.Disposable;
-import pize.app.Resizable;
+import pize.util.Disposable;
+import pize.util.Resizable;
 import pize.files.Resource;
-import pize.lib.gl.Gl;
-import pize.lib.gl.glenum.GlTarget;
+import pize.gl.Gl;
+import pize.gl.glenum.GlTarget;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.Framebuffer2D;
 import pize.graphics.util.Framebuffer3D;

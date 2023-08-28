@@ -1,14 +1,14 @@
 package pize.tests.minecraftosp.client.renderer.level;
 
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.files.Resource;
-import pize.lib.gl.Gl;
-import pize.lib.gl.vertex.GlVertexArray;
-import pize.lib.gl.vertex.GlVertexAttr;
+import pize.gl.Gl;
+import pize.gl.vertex.GlVertexArray;
+import pize.gl.vertex.GlVertexAttr;
 import pize.graphics.mesh.VertexBuffer;
-import pize.lib.gl.tesselation.GlFace;
-import pize.lib.gl.tesselation.GlPrimitive;
-import pize.lib.gl.type.GlType;
+import pize.gl.tesselation.GlFace;
+import pize.gl.tesselation.GlPrimitive;
+import pize.gl.type.GlType;
 import pize.graphics.util.BufferBuilder;
 import pize.graphics.util.Shader;
 import pize.graphics.util.SkyBox;

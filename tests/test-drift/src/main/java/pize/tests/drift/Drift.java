@@ -1,18 +1,23 @@
 package pize.tests.drift;
 
 import pize.Pize;
-import pize.app.AppAdapter;
+import pize.io.context.ContextAdapter;
 import pize.graphics.camera.CenteredOrthographicCamera;
-import pize.lib.gl.Gl;
+import pize.gl.Gl;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.key.Key;
+import pize.glfw.key.Key;
+import pize.io.context.ContextBuilder;
 
-public class Drift extends AppAdapter{
+public class Drift extends ContextAdapter{
 
     public static void main(String[] args){
-        Pize.create("Drift", 2000, 1000);
-        Pize.run(new Drift());
+        ContextBuilder.newContext("Window")
+                .size(2000, 1000)
+                .create()
+                .init(new Drift());
+
+        Pize.runContexts();
     }
 
 

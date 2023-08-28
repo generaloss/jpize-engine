@@ -1,7 +1,7 @@
 package pize.tests.minecraftosp.client.renderer.infopanel;
 
-import pize.app.Disposable;
-import pize.app.Resizable;
+import pize.util.Disposable;
+import pize.util.Resizable;
 import pize.graphics.camera.CenteredOrthographicCamera;
 import pize.graphics.util.batch.TextureBatch;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;

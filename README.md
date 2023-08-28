@@ -28,17 +28,23 @@ Modules:
 
 #### 0. Main class
 ``` java
-public class Main extends AppAdapter{
+public class App extends ContextAdapter{
 
     public static void main(String[] args){
-        Pize.create("Window Title", 1280, 720); // Create context
-        Pize.window().setIcon("icon.png");
-        Pize.run(new Main()); // Run
+        // Create window context
+        ContextBuilder.newContext("Window Title") 
+                .size(1280, 720)
+                .icon("icon.png");
+                .create() 
+                .init(new App());
+        // You can create multiple windows
+        // Run
+        Pize.runContexts(); 
     }
     
-    public Main(){ } // Init on creation
+    public App(){ } // Calls before ContextAdapter.init()
     
-    public void init(){ } // Init on run
+    public void init(){ } // Init
     
     public void render(){ } // Render loop
     
@@ -83,9 +89,10 @@ Pize.isTouchReleased();
 Pize.mouse().getScroll(); // scroll
 
 // keyboard
-Key.SPACE.isPressed();
-Key.ENTER.isDown();
-Key.ESCAPE.isReleased();
+Key.ENTER.isPressed();
+Key.BACKSPACE.isDown();
+Key.SPACE.isReleased();
+Key.ESCAPE.getName();
 
 // window
 Pize.getWidth();
@@ -93,15 +100,14 @@ Pize.getHeight();
 Pize.getAspect();
 
 // monitor
-Pize.monitor().getWidth();
-Pize.monitor().getHeight();
-Pize.monitor().getAspect();
+Pize.monitor();        // Window monitor
+Pize.primaryMonitor(); // Primary monitor
 
-// fps & Delta Time
+// FPS & Delta Time
 Pize.getFPS();
 Pize.getDt();
 Pize.setFixedUpdateTPS(update_rate);
-Pize.getUpdateDt();
+Pize.getFixedUpdateDt();
 ```
 
 #### 3. Audio:

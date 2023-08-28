@@ -94,6 +94,21 @@ public class ServerLevel extends Level{
         return false;
     }
 
+    public void setBlockDecor(int x, int y, int z, Block block){
+        final ChunkPos chunkPos = new ChunkPos(getChunkPos(x), getChunkPos(z));
+        ServerChunk targetChunk = chunkManager.getChunk(chunkPos);
+
+        final int lx = getLocalCoord(x);
+        final int lz = getLocalCoord(z);
+
+        if(targetChunk != null)
+            targetChunk.setBlockFast(lx, y, lz, block);
+
+        targetChunk = chunkManager.getGeneratingChunk(chunkPos);
+        if(targetChunk != null && !targetChunk.decorated)
+            targetChunk.setBlockFast(lx, y, lz, block);
+    }
+
     public void setBlockFast(int x, int y, int z, Block block){
         final ChunkPos chunkPos = new ChunkPos(getChunkPos(x), getChunkPos(z));
         ServerChunk targetChunk = chunkManager.getChunk(chunkPos);

@@ -2,7 +2,7 @@ package pize.tests.terraria.entity;
 
 import pize.Pize;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.key.Key;
+import pize.glfw.key.Key;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec2f;
 import pize.physic.BoundingBox2f;

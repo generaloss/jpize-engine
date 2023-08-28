@@ -1,10 +1,10 @@
 package pize.graphics.texture;
 
-import pize.lib.gl.texture.GlFilter;
-import pize.lib.gl.texture.GlFormat;
-import pize.lib.gl.texture.GlSizedFormat;
-import pize.lib.gl.texture.GlWrap;
-import pize.lib.gl.type.GlType;
+import pize.gl.texture.GlFilter;
+import pize.gl.texture.GlFormat;
+import pize.gl.texture.GlSizedFormat;
+import pize.gl.texture.GlWrap;
+import pize.gl.type.GlType;
 import pize.graphics.util.color.Color;
 
 import java.nio.ByteBuffer;

@@ -2,7 +2,7 @@ package pize.tests.minecraftosp.client.options;
 
 import pize.Pize;
 import pize.files.Resource;
-import pize.io.key.Key;
+import pize.glfw.key.Key;
 import pize.tests.minecraftosp.Minecraft;
 import pize.tests.minecraftosp.main.net.PlayerProfile;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;
@@ -189,10 +189,10 @@ public class Options{
 
     public void setMaxFrameRate(int maxFrameRate){
         this.maxFrameRate = maxFrameRate;
-        session.getFpsSync().setFps(maxFrameRate);
+        session.getFpsSync().setTPS(maxFrameRate);
 
         session.getFpsSync().enable(maxFrameRate > 0 && maxFrameRate < UNLIMITED_FPS_THRESHOLD);
-        Pize.window().setVsync(maxFrameRate == 0);
+        Pize.setVsync(maxFrameRate == 0);
     }
 
 

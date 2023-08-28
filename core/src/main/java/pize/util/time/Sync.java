@@ -1,6 +1,7 @@
 package pize.util.time;
 
 import pize.Pize;
+import pize.math.Maths;
 
 public class Sync{
 
@@ -9,7 +10,7 @@ public class Sync{
     private boolean enabled;
 
     public Sync(double fps){
-        setFps(fps);
+        setTPS(fps);
         enable(true);
     }
 
@@ -17,17 +18,35 @@ public class Sync{
         this(Pize.monitor().getRefreshRate());
     }
 
-    public void setFps(double fps){
-        frameNano = (long) (1000000000 / fps); // Время между кадрами, при [fps] количестве тпс
-        prevTime = System.nanoTime(); // Для подсчета времени между кадрами
+
+    public boolean isEnabled(){
+        return enabled;
     }
 
+    public void enable(boolean enabled){
+        this.enabled = enabled;
+    }
+
+
+    public double getTPS(){
+        return (frameNano != 0) ? Maths.NanosInSecond / frameNano : 0;
+    }
+
+    public void setTPS(double tps){
+        if(tps == 0)
+            return;
+
+        frameNano = (long) (Maths.NanosInSecond / tps); // Время между кадрами, при данном количестве тиков в секунду [tps]
+        prevTime = System.nanoTime();                   // Для подсчета времени между кадрами
+    }
+
+
     public void sync(){
-        if(!enabled)
+        if(!enabled || frameNano == 0)
             return;
 
         final long deltaNano = System.nanoTime() - prevTime; // Текущее время между кадрами
-        final long sleepNano = frameNano - deltaNano; // Время для коррекции тпс
+        final long sleepNano = frameNano - deltaNano;        // Время для коррекции количества тиков в секунду
 
         if(sleepNano > 0L){
             // Коррекция
@@ -39,14 +58,6 @@ public class Sync{
         }
 
         prevTime = System.nanoTime();
-    }
-
-    public void enable(boolean value){
-        enabled = value;
-    }
-
-    public boolean isEnabled(){
-        return enabled;
     }
 
 }

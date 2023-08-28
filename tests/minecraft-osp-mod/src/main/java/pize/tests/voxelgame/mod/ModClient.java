@@ -6,7 +6,7 @@ import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.key.Key;
+import pize.glfw.key.Key;
 import pize.tests.minecraftosp.Minecraft;
 import pize.tests.minecraftosp.main.modification.api.ClientModInitializer;
 import pize.tests.minecraftosp.main.text.Component;

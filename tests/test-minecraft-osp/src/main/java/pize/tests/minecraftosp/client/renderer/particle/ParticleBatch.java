@@ -1,12 +1,12 @@
 package pize.tests.minecraftosp.client.renderer.particle;
 
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.files.Resource;
 import pize.graphics.camera.PerspectiveCamera;
-import pize.lib.gl.buffer.GlBufUsage;
-import pize.lib.gl.type.GlType;
+import pize.gl.buffer.GlBufUsage;
+import pize.gl.type.GlType;
 import pize.graphics.mesh.QuadMesh;
-import pize.lib.gl.vertex.GlVertexAttr;
+import pize.gl.vertex.GlVertexAttr;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.Shader;

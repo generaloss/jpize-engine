@@ -1,19 +1,24 @@
 package pize.tests.physic;
 
 import pize.Pize;
-import pize.app.AppAdapter;
-import pize.lib.gl.Gl;
+import pize.io.context.ContextAdapter;
+import pize.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.key.Key;
+import pize.glfw.key.Key;
+import pize.io.context.ContextBuilder;
 import pize.math.vecmath.vector.Vec2f;
 import pize.physic.BoundingBox2f;
 import pize.physic.Collider2f;
 
-public class Main extends AppAdapter{
+public class Main extends ContextAdapter{
 
     public static void main(String[] args){
-        Pize.create("Physics", 1280, 720);
-        Pize.run(new Main());
+        ContextBuilder.newContext("Physics")
+                .size(1280, 720)
+                .create()
+                .init(new Main());
+
+        Pize.runContexts();
     }
 
 
@@ -39,8 +44,6 @@ public class Main extends AppAdapter{
             Pize.exit();
         if(Key.F11.isDown())
             Pize.window().toggleFullscreen();
-        if(Key.V.isDown())
-            Pize.window().toggleVsync();
 
         if(Pize.isTouched())
             rect1.motion().add(Pize.getCursorPos().sub(rect1.pos()).nor());

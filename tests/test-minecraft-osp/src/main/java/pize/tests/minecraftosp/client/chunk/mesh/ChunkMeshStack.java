@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.chunk.mesh;
 
-import pize.app.Disposable;
+import pize.util.Disposable;
 
 public class ChunkMeshStack implements Disposable{
     

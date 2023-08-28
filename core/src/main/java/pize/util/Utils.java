@@ -3,6 +3,7 @@ package pize.util;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.system.libc.LibCStdlib;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -54,6 +55,18 @@ public class Utils{
         try{
             socket.close();
         }catch(IOException ignored){ }
+    }
+
+    public static void close(Closeable closeable){
+        try{
+            closeable.close();
+        }catch(IOException ignored){ }
+    }
+
+    public static void close(AutoCloseable closeable){
+        try{
+            closeable.close();
+        }catch(Exception ignored){ }
     }
     
     

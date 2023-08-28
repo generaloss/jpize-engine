@@ -1,7 +1,7 @@
 package pize.graphics.mesh;
 
-import pize.lib.gl.buffer.GlBufUsage;
-import pize.lib.gl.buffer.GlIndexBuffer;
+import pize.gl.buffer.GlBufUsage;
+import pize.gl.buffer.GlIndexBuffer;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -11,6 +11,7 @@ import java.nio.ShortBuffer;
 public class IndexBuffer extends GlIndexBuffer{
 
     private GlBufUsage defaultUsage;
+    private int indexCount;
     
     public IndexBuffer(){
         this.defaultUsage = GlBufUsage.STATIC_DRAW;
@@ -21,34 +22,49 @@ public class IndexBuffer extends GlIndexBuffer{
         this.defaultUsage = defaultUsage;
     }
 
-
-    public void setData(int[] data){
-        setData(data, defaultUsage);
+    public int getIndexCount(){
+        return indexCount;
     }
 
+
     public void setData(long size){
-        allocateData(size, defaultUsage);
+        super.allocateData(size, defaultUsage);
+    }
+
+    public void setData(int[] data){
+        super.setData(data, defaultUsage);
+        indexCount = data.length;
+    }
+
+    public void setData(long[] data){
+        super.setData(data, defaultUsage);
+        indexCount = data.length;
     }
 
     public void setData(short[] data){
-        setData(data, defaultUsage);
+        super.setData(data, defaultUsage);
+        indexCount = data.length;
     }
 
 
     public void setData(IntBuffer data){
-        setData(data, defaultUsage);
+        super.setData(data, defaultUsage);
+        indexCount = data.limit();
     }
 
     public void setData(ByteBuffer data){
-        setData(data, defaultUsage);
+        super.setData(data, defaultUsage);
+        indexCount = data.limit();
     }
 
     public void setData(LongBuffer data){
-        setData(data, defaultUsage);
+        super.setData(data, defaultUsage);
+        indexCount = data.limit();
     }
 
     public void setData(ShortBuffer data){
-        setData(data, defaultUsage);
+        super.setData(data, defaultUsage);
+        indexCount = data.limit();
     }
 
 }

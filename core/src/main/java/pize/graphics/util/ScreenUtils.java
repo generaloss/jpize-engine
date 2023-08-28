@@ -3,8 +3,8 @@ package pize.graphics.util;
 import org.lwjgl.BufferUtils;
 import pize.Pize;
 import pize.files.Resource;
-import pize.lib.gl.texture.GlFormat;
-import pize.lib.gl.type.GlType;
+import pize.gl.texture.GlFormat;
+import pize.gl.type.GlType;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

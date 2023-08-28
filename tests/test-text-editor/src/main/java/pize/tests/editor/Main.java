@@ -1,23 +1,27 @@
 package pize.tests.editor;
 
 import pize.Pize;
-import pize.app.AppAdapter;
+import pize.gl.Gl;
+import pize.glfw.key.Key;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.key.Key;
-import pize.lib.gl.Gl;
-import pize.math.Maths;
+import pize.io.context.ContextAdapter;
+import pize.io.context.ContextBuilder;
 import pize.util.io.TextProcessor;
 
 import java.util.List;
 import java.util.StringJoiner;
 
-public class Main extends AppAdapter{
+public class Main extends ContextAdapter{
     
     public static void main(String[] args){
-        Pize.create("Editor", 1280, 720);
-        Pize.run(new Main());
+        ContextBuilder.newContext("Editor")
+                .size(1280, 720)
+                .create()
+                .init(new Main());
+
+        Pize.runContexts();
     }
     
     
@@ -66,7 +70,7 @@ public class Main extends AppAdapter{
         font.drawText(batch, string, 50, 10);
         
         // Draw cursor
-        if((text.getCursorBlinkingSeconds() < 1 || Maths.frac(text.getCursorBlinkingSeconds()) >= 0.5) && text.isActive()){
+        if(text.isCursorRender()){
             final String currentLine = text.getCurrentLine();
             final float cursorY = (text.getCursorY() + 1) * font.getLineAdvanceScaled() - font.getLineAdvanceScaled() * text.getLines().size();
             final float cursorX = font.getLineWidth(currentLine.substring(0, text.getCursorX()));

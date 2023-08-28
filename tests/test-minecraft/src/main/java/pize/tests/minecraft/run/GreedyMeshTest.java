@@ -1,20 +1,20 @@
 package pize.tests.minecraft.run;
 
 import pize.Pize;
-import pize.app.AppAdapter;
-import pize.lib.gl.Gl;
+import pize.io.context.ContextAdapter;
+import pize.gl.Gl;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
 import pize.graphics.util.color.Color;
 import pize.graphics.util.color.IColor;
-import pize.io.key.Key;
+import pize.glfw.key.Key;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec2i;
 
 import java.util.ArrayList;
 
-public class GreedyMeshTest extends AppAdapter{
+public class GreedyMeshTest extends ContextAdapter{
 
     private TextureBatch batch;
     private Texture voxelTexture;
@@ -121,8 +121,6 @@ public class GreedyMeshTest extends AppAdapter{
             Pize.exit();
         if(Key.F11.isDown())
             Pize.window().toggleFullscreen();
-        if(Key.V.isDown())
-            Pize.window().toggleVsync();
 
         Gl.clearColorBuffer();
         Gl.clearColor(0.4, 0.6, 1);

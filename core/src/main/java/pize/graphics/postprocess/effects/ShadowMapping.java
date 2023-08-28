@@ -1,14 +1,14 @@
 package pize.graphics.postprocess.effects;
 
 import pize.Pize;
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.files.Resource;
-import pize.lib.gl.Gl;
-import pize.lib.gl.buffer.GlAttachment;
-import pize.lib.gl.texture.GlFilter;
-import pize.lib.gl.texture.GlSizedFormat;
-import pize.lib.gl.texture.GlWrap;
-import pize.lib.gl.type.GlType;
+import pize.gl.Gl;
+import pize.gl.buffer.GlAttachment;
+import pize.gl.texture.GlFilter;
+import pize.gl.texture.GlSizedFormat;
+import pize.gl.texture.GlWrap;
+import pize.gl.type.GlType;
 import pize.graphics.postprocess.FrameBufferObject;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.Shader;

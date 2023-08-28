@@ -1,8 +1,8 @@
 package pize.graphics.util;
 
-import pize.lib.gl.type.GlType;
+import pize.gl.type.GlType;
 import pize.graphics.mesh.IndexedMesh;
-import pize.lib.gl.vertex.GlVertexAttr;
+import pize.gl.vertex.GlVertexAttr;
 
 public class ScreenQuad{
     
@@ -32,7 +32,7 @@ public class ScreenQuad{
         instance.mesh.render();
     }
 
-    private static void dispose(){ // Invoked from Context
+    private static void dispose(){ // Calls from ContextManager
         if(instance != null)
             instance.mesh.dispose();
     }

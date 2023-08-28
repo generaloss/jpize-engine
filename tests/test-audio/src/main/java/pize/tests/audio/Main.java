@@ -4,16 +4,20 @@ import pize.Pize;
 import pize.audio.io.WavFile;
 import pize.audio.sound.Sound;
 import pize.audio.util.SoundGenerator;
-import pize.app.AppAdapter;
+import pize.io.context.ContextAdapter;
 import pize.files.Resource;
-import pize.io.key.Key;
+import pize.glfw.key.Key;
+import pize.io.context.ContextBuilder;
 
-public class Main extends AppAdapter{
+public class Main extends ContextAdapter{
 
     public static void main(String[] args){
-        Pize.create("Audio", 700, 150);
-        Pize.window().setIcon("icon.png");
-        Pize.run(new Main());
+        ContextBuilder.newContext("Audio")
+                .size(700, 150)
+                .icon("icon.png").
+                create()
+                .init(new Main());
+        Pize.runContexts();
     }
 
 

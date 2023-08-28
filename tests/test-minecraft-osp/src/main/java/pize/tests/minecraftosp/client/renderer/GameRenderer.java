@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.renderer;
 
-import pize.app.AppAdapter;
+import pize.io.context.ContextAdapter;
 import pize.tests.minecraftosp.Minecraft;
 import pize.tests.minecraftosp.client.renderer.chat.ChatRenderer;
 import pize.tests.minecraftosp.client.renderer.infopanel.ChunkInfoRenderer;
@@ -8,7 +8,7 @@ import pize.tests.minecraftosp.client.renderer.infopanel.InfoRenderer;
 import pize.tests.minecraftosp.client.renderer.level.LevelRenderer;
 import pize.tests.minecraftosp.client.renderer.text.TextComponentBatch;
 
-public class GameRenderer extends AppAdapter{
+public class GameRenderer extends ContextAdapter{
     
     private final Minecraft session;
     

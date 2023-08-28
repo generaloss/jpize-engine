@@ -53,11 +53,11 @@ public class Chat{
     
     
     public String getEnteringText(){
-        return textProcessor.toString();
+        return textProcessor.getString();
     }
     
     public void enter(){
-        final String message = textProcessor.toString();
+        final String message = textProcessor.getString();
         game.sendPacket(new SBPacketChatMessage(message));
         textProcessor.clear();
         
@@ -71,8 +71,8 @@ public class Chat{
     public void historyUp(){
         if(!history.isEmpty() && historyPointer == history.size() - 1 && !history.get(history.size() - 1).equals(textProcessor.toString())){
             historyPointer++;
-            if(!textProcessor.toString().isBlank())
-                history.add(textProcessor.toString());
+            if(!textProcessor.getString().isBlank())
+                history.add(textProcessor.getString());
         }
         
         if(historyPointer - 1 < 0)

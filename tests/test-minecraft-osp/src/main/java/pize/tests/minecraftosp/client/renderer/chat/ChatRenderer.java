@@ -1,17 +1,16 @@
 package pize.tests.minecraftosp.client.renderer.chat;
 
 import pize.Pize;
-import pize.app.Disposable;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
 import pize.math.Maths;
 import pize.tests.minecraftosp.client.chat.Chat;
 import pize.tests.minecraftosp.client.chat.ChatMessage;
-import pize.tests.minecraftosp.client.renderer.text.TextComponentBatch;
 import pize.tests.minecraftosp.client.renderer.GameRenderer;
+import pize.tests.minecraftosp.client.renderer.text.TextComponentBatch;
 import pize.tests.minecraftosp.main.text.Component;
-import pize.tests.minecraftosp.main.text.ComponentText;
+import pize.util.Disposable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -74,16 +73,17 @@ public class ChatRenderer implements Disposable{
             final float cursorLineWidth = textBatch.getFont().getLineWidth(enteringText.substring(0, chat.getCursorX()));
             
             textBatch.drawComponent(new Component().text(enteringText), chatX, chatY);
-            
-            batch.drawQuad(1, 1, 1, 1, chatX + cursorLineWidth, chatY, textBatch.getFont().getScale(), lineAdvance);
+
+            if(chat.getTextProcessor().isCursorRender())
+                batch.drawQuad(1, 1, 1, 1, chatX + cursorLineWidth, chatY, textBatch.getFont().getScale(), lineAdvance);
         }
         
         // Scroll
         if(chat.isOpened() && Pize.mouse().isInBounds(chatX, openedChatY, chatWidth, chatHeight))
-            scrollMotion -= Pize.mouse().getScrollY() * Pize.getDt() * lineAdvance * 10;
+            scrollMotion -= Pize.mouse().getScroll() * Pize.getDt() * lineAdvance * 10;
         
         scroll += scrollMotion;
-        scrollMotion *= 0.95;
+        scrollMotion *= 0.95F;
         
         if(!chat.isOpened())
             scroll = 0;
@@ -116,10 +116,7 @@ public class ChatRenderer implements Disposable{
             final float lineWrapAdvanceY = textHeight - lineAdvance;
             
             final boolean isPlayer = message.getSource().isPlayer();
-            final StringBuilder messageStringBuilder = new StringBuilder();
-            for(ComponentText component: message.getComponents())
-                messageStringBuilder.append(component.toString());
-            
+
             // Render background
             batch.drawQuad(0.4 * alpha, chatX, renderChatY, chatWidth + headAdvance, textHeight);
             
@@ -139,7 +136,7 @@ public class ChatRenderer implements Disposable{
             // Render text
             textBatch.drawComponents(message.getComponents(), chatX + headAdvance, renderChatY + lineWrapAdvanceY, chatWidth, alpha);
             
-            textAdvanceY += textHeight;
+            textAdvanceY += (int) textHeight;
         }
         
         batch.end();

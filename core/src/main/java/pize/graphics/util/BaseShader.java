@@ -66,7 +66,7 @@ public class BaseShader extends Shader{
     }
     
     
-    private static void disposeShaders(){ // Invoked from Context
+    private static void disposeShaders(){ // Calls from ContextManager
         if(pos2Color != null)
             pos2Color.dispose();
         

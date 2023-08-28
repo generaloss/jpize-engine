@@ -32,8 +32,8 @@ public abstract class UIComponent<C> implements Cloneable{
         this.constraintWidth = constraintWidth;
         this.constraintHeight = constraintHeight;
 
-        childList = new HashMap<>();
-        sortedChildList = new ArrayList<>();
+        this.childList = new HashMap<>();
+        this.sortedChildList = new ArrayList<>();
 
         setLayoutType(CONSTRAINT);
         alignItems(LEFT_DOWN);
@@ -74,7 +74,7 @@ public abstract class UIComponent<C> implements Cloneable{
         
         
         // render children
-        if(sortedChildList.size() == 0)
+        if(sortedChildList.isEmpty())
             return;
 
         float shiftX = 0;

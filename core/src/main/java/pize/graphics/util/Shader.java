@@ -1,10 +1,10 @@
 package pize.graphics.util;
 
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.files.Resource;
-import pize.lib.gl.shader.GlProgram;
-import pize.lib.gl.shader.GlShader;
-import pize.lib.gl.shader.GlShaderType;
+import pize.gl.shader.GlProgram;
+import pize.gl.shader.GlShader;
+import pize.gl.shader.GlShaderType;
 import pize.graphics.texture.CubeMap;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureArray;

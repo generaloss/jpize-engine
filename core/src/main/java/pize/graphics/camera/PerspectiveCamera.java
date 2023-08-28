@@ -1,7 +1,7 @@
 package pize.graphics.camera;
 
 import pize.Pize;
-import pize.app.Resizable;
+import pize.util.Resizable;
 import pize.math.util.Frustum;
 import pize.math.vecmath.matrix.Matrix4f;
 
@@ -45,7 +45,7 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
         // Roll camera rotation
         rollMatrix.toRotatedZ(rotation.roll);
 
-        // Imaginary view matrix
+        // View matrix
         imaginaryView.toLookAt(position, rotation.getDirection());
         imaginaryView.set(rollMatrix.copy().mul(imaginaryView));
 
@@ -57,10 +57,9 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
                 imaginaryZ ? 0 : position.z,
                 rotation.getDirection()
             );
+            view.set(rollMatrix.mul(view));
         }else
-            imaginaryView.set(view);
-
-        view.set(rollMatrix.mul(view));
+            view.set(imaginaryView);
 
         // Frustum
         frustum.setFrustum(imaginaryView, projection);

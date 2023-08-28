@@ -1,7 +1,7 @@
 package pize.graphics.util.batch.scissor;
 
-import pize.lib.gl.Gl;
-import pize.lib.gl.glenum.GlTarget;
+import pize.gl.Gl;
+import pize.gl.glenum.GlTarget;
 import pize.graphics.util.batch.TextureBatch;
 import pize.math.Maths;
 

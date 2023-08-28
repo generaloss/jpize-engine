@@ -8,12 +8,17 @@ public class TickGenerator{
     public TickGenerator(float ticksPerSecond){
         sync = new Sync(ticksPerSecond);
     }
-    
-    
-    public void setTPS(float ticksPerSecond){
-        sync.setFps(ticksPerSecond);
+
+
+    public Sync getSync(){
+        return sync;
     }
-    
+
+    public void setTPS(float ticksPerSecond){
+        sync.setTPS(ticksPerSecond);
+    }
+
+
     public void start(Tickable tickable){
         interrupt = false;
         while(!Thread.interrupted() && !interrupt){

@@ -1,6 +1,6 @@
 package pize.graphics.texture;
 
-import pize.lib.gl.texture.GlFilter;
+import pize.gl.texture.GlFilter;
 
 import static org.lwjgl.opengl.GL33.*;
 

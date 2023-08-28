@@ -1,7 +1,7 @@
 package pize.audio.sound;
 
 import pize.Pize;
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.math.Mathc;
 import pize.math.vecmath.vector.Vec3f;
 import pize.util.time.Stopwatch;

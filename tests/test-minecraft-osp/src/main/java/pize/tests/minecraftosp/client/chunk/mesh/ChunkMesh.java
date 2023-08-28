@@ -1,11 +1,11 @@
 package pize.tests.minecraftosp.client.chunk.mesh;
 
 import pize.Pize;
-import pize.app.Disposable;
-import pize.lib.gl.buffer.GlBufUsage;
-import pize.lib.gl.type.GlType;
-import pize.lib.gl.vertex.GlVertexArray;
-import pize.lib.gl.vertex.GlVertexAttr;
+import pize.util.Disposable;
+import pize.gl.buffer.GlBufUsage;
+import pize.gl.type.GlType;
+import pize.gl.vertex.GlVertexArray;
+import pize.gl.vertex.GlVertexAttr;
 import pize.graphics.mesh.VertexBuffer;
 
 import java.util.ArrayList;

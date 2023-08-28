@@ -1,19 +1,24 @@
 package pize.tests.minecraft.run;
 
 import pize.Pize;
-import pize.app.AppAdapter;
-import pize.lib.gl.glenum.GlDepthFunc;
-import pize.lib.gl.Gl;
-import pize.lib.gl.glenum.GlTarget;
-import pize.tests.minecraft.game.Session;
-import pize.tests.minecraft.utils.log.Logger;
+import pize.gl.Gl;
+import pize.gl.glenum.GlDepthFunc;
+import pize.gl.glenum.GlTarget;
+import pize.io.context.ContextAdapter;
+import pize.io.context.ContextBuilder;
+import pize.tests.minecraft.Session;
+import pize.tests.minecraft.log.Logger;
 
-public class Minecraft extends AppAdapter{
+public class Minecraft extends ContextAdapter{
 
     public static void main(String[] args){
-        Pize.create("Minecraft", 925, 640);
-        Pize.window().setIcon("icon.png");
-        Pize.run(new Minecraft());
+        ContextBuilder.newContext("Minecraft")
+                .size(925, 640)
+                .icon("icon.png")
+                .create()
+                .init(new Minecraft());
+
+        Pize.runContexts();
     }
 
 
@@ -21,6 +26,8 @@ public class Minecraft extends AppAdapter{
 
     @Override
     public void init(){
+        Gl.clearColor(1, 1, 1);
+
         Gl.enable(GlTarget.DEPTH_TEST);
         Gl.depthFunc(GlDepthFunc.LEQUAL);
         Thread.currentThread().setName("Render Thread");

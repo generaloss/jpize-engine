@@ -1,96 +1,73 @@
 package pize;
 
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.opengl.GL;
-import pize.app.AppAdapter;
-import pize.app.Context;
-import pize.app.Screen;
 import pize.audio.Audio;
-import pize.io.joystick.JoystickManager;
-import pize.io.keyboard.Keyboard;
-import pize.io.monitor.MonitorManager;
-import pize.io.mouse.Mouse;
-import pize.io.window.Window;
-import pize.lib.gl.Gl;
-import pize.lib.gl.glenum.GlTarget;
-import pize.lib.gl.texture.GlBlendFactor;
-import pize.lib.glfw.monitor.GlfwMonitor;
+import pize.glfw.glfw.Glfw;
+import pize.glfw.key.MBtn;
+import pize.glfw.monitor.GlfwMonitor;
+import pize.io.Keyboard;
+import pize.io.MonitorManager;
+import pize.io.Mouse;
+import pize.io.Window;
+import pize.io.context.Context;
+import pize.io.context.ContextManager;
+import pize.io.context.Screen;
 import pize.math.vecmath.vector.Vec2f;
 
 import java.util.function.BooleanSupplier;
 
 public class Pize{
 
-    private static Context context;
-
-    public static void create(String title, int width, int height, boolean resizable, boolean vsync, int samples){
-        // Init GLFW
-        GLFWErrorCallback.createPrint(System.err).set();
-        GLFW.glfwInit();
-
-        // Init Managers
-        MonitorManager.init();
-        JoystickManager.init();
-
-        // Create Context
-        final Window window = new Window(title, width, height, resizable, vsync, samples);
-        context = new Context(window);
-
-        // Init GL
-        GL.createCapabilities();
-        Gl.enable(GlTarget.BLEND, GlTarget.CULL_FACE, GlTarget.MULTISAMPLE);
-        Gl.blendFunc(GlBlendFactor.SRC_ALPHA, GlBlendFactor.ONE_MINUS_SRC_ALPHA);
-    }
+    private static final ContextManager contextManager = ContextManager.getInstance();
     
-    public static void create(String title, int width, int height){
-        create(title, width, height, true, true, 4);
-    }
 
-    public static void run(AppAdapter listener){
-        context.begin(listener);
+    public static void runContexts(){
+        contextManager.run();
     }
 
     public static void setScreen(Screen screen){
-        context.setScreen(screen);
+        context().setScreen(screen);
     }
 
 
     public static Context context(){
-        return context;
+        return contextManager.getCurrentContext();
     }
 
     public static Window window(){
-        return context.getWindow();
+        return context().getWindow();
     }
 
     public static Keyboard keyboard(){
-        return context.getKeyboard();
+        return context().getKeyboard();
     }
 
     public static Mouse mouse(){
-        return context.getMouse();
+        return context().getMouse();
     }
 
     public static GlfwMonitor monitor(){
+        return MonitorManager.getMonitor(window().getMonitorID());
+    }
+
+    public static GlfwMonitor primaryMonitor(){
         return MonitorManager.getPrimary();
     }
 
     public static Audio audio(){
-        return context.getAudio();
+        return Audio.getInstance();
     }
 
-    
+
     public static boolean isTouchDown(){
-        return mouse().isLeftDown() || mouse().isRightDown();
+        return mouse().anyDown(MBtn.LEFT, MBtn.MIDDLE, MBtn.RIGHT);
     }
 
     public static boolean isTouched(){
-        return mouse().isLeftPressed() || mouse().isMiddlePressed() || mouse().isRightPressed();
+        return mouse().anyPressed(MBtn.LEFT, MBtn.MIDDLE, MBtn.RIGHT);
     }
 
     public static boolean isTouchReleased(){
-        return mouse().isLeftReleased() || mouse().isRightReleased();
+        return mouse().anyReleased(MBtn.LEFT, MBtn.MIDDLE, MBtn.RIGHT);
     }
 
 
@@ -124,32 +101,19 @@ public class Pize{
     }
 
 
+    public static void setVsync(boolean vsync){
+        Glfw.setVsync(vsync);
+    }
+
     public static int getFPS(){
-        return context.getFps();
+        return contextManager.getFPS();
     }
-    
+
     public static float getDt(){
-        return context.getRenderDeltaTime();
-    }
-    
-    public static float getUpdateDt(){
-        return context.getFixedUpdateDeltaTime();
-    }
-    
-    public static void setFixedUpdateTPS(float updateTPS){
-        context.setFixedUpdateTPS(updateTPS);
-    }
-    
-    
-    public static void execSync(Runnable runnable){
-        context.execSync(runnable);
+        return contextManager.getDeltaTime();
     }
 
-    public static void execIf(Runnable runnable, BooleanSupplier condition){
-        context.execIf(runnable, condition);
-    }
 
-    
     public static String getClipboardString(){
         return window().getClipboardString();
     }
@@ -159,8 +123,37 @@ public class Pize{
     }
 
 
+    public static void execSync(Runnable runnable){
+        contextManager.getSyncTaskExecutor().exec(runnable);
+    }
+
+    public static void execIf(Runnable runnable, BooleanSupplier condition){
+        contextManager.getSyncTaskExecutor().execIf(runnable, condition);
+    }
+
+    public static float getFixedUpdateDt(){
+        return context().getFixedUpdate().getDeltaTime();
+    }
+
+    public static void startFixedUpdate(float tps){
+        context().startFixedUpdate(tps);
+    }
+
+
+    public static void closeWindow(){
+        context().getWindow().setShouldClose(true);
+    }
+
+    public static void closeAllWindows(){
+        contextManager.closeAllWindows();
+    }
+
+    public static void exitWhenNoWindows(boolean exitWhenNoWindows){
+        contextManager.exitWhenNoWindows(exitWhenNoWindows);
+    }
+
     public static void exit(){
-        context.exit();
+        contextManager.exit();
     }
 
 }

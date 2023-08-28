@@ -3,7 +3,6 @@ package pize.gui.components;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureRegion;
-import pize.graphics.util.batch.Batch;
 import pize.graphics.util.batch.TextureBatch;
 import pize.gui.UIComponent;
 import pize.math.Maths;
@@ -243,7 +242,7 @@ public class NinePatchImage extends UIComponent<TextureBatch>{
 
     // PRIVATE
 
-    private Vec2f renderRegion(Batch batch, int i, int j, float x, float y, float u, float v){
+    private Vec2f renderRegion(TextureBatch batch, int i, int j, float x, float y, float u, float v){
         final Vec2f size = getElementSize(i, j);
         batch.draw(getRegion(i, j), x, y, size.x * u, size.y * v, new Region(0, 1 - v, u, 1));
 

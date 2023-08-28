@@ -1,7 +1,7 @@
 package pize.tests.minecraftosp.client.control;
 
 import pize.graphics.camera.controller.Rotation3DController;
-import pize.io.key.Key;
+import pize.glfw.key.Key;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.minecraftosp.Minecraft;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;

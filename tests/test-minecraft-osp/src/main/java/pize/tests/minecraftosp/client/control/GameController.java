@@ -1,10 +1,10 @@
 package pize.tests.minecraftosp.client.control;
 
 import pize.Pize;
-import pize.lib.gl.tesselation.GlFace;
-import pize.lib.gl.Gl;
-import pize.lib.gl.tesselation.GlPolygonMode;
-import pize.io.key.Key;
+import pize.gl.tesselation.GlFace;
+import pize.gl.Gl;
+import pize.gl.tesselation.GlPolygonMode;
+import pize.glfw.key.Key;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
 import pize.math.vecmath.vector.Vec3i;
@@ -58,11 +58,6 @@ public class GameController{
         if(Key.F11.isDown()){
             playerController.getRotationController().lockNextFrame();
             Pize.window().toggleFullscreen();
-        }
-
-        // VSync
-        if(Key.V.isDown()){
-            Pize.window().toggleVsync();
         }
         
         
@@ -178,7 +173,7 @@ public class GameController{
         if(options.getKey(KeyMapping.ZOOM).isDown())
             camera.setZoom(10);
         else if(options.getKey(KeyMapping.ZOOM).isPressed()){
-            camera.setZoom(camera.getZoom() + Pize.mouse().getScrollY() * (camera.getZoom() / 8));
+            camera.setZoom(camera.getZoom() + Pize.mouse().getScroll() * (camera.getZoom() / 8));
         }else if(options.getKey(KeyMapping.ZOOM).isReleased())
             camera.setZoom(1);
         

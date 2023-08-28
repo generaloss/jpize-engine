@@ -1,6 +1,6 @@
 package pize.graphics.font;
 
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
 import pize.math.Mathc;

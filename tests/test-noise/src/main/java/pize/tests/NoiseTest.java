@@ -1,18 +1,23 @@
 package pize.tests;
 
 import pize.Pize;
-import pize.app.AppAdapter;
+import pize.io.context.ContextAdapter;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
-import pize.io.key.Key;
+import pize.glfw.key.Key;
+import pize.io.context.ContextBuilder;
 import pize.math.Maths;
 
-public class NoiseTest extends AppAdapter{
+public class NoiseTest extends ContextAdapter{
     
     public static void main(String[] args){
-        Pize.create("Noise", 720, 720);
-        Pize.run(new NoiseTest());
+        ContextBuilder.newContext("Noise")
+                .size(720, 720)
+                .create()
+                .init(new NoiseTest());
+
+        Pize.runContexts();
     }
     
     

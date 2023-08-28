@@ -1,19 +1,24 @@
 package pize.tests.minecraftosp;
 
 import pize.Pize;
-import pize.app.AppAdapter;
-import pize.lib.gl.Gl;
+import pize.io.context.ContextAdapter;
+import pize.gl.Gl;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
+import pize.io.context.ContextBuilder;
 import pize.math.Maths;
 import pize.math.function.FastNoiseLite;
 
-public class BiomeGenerator extends AppAdapter{
+public class BiomeGenerator extends ContextAdapter{
 
     public static void main(String[] args){
-        Pize.create("Minecraft Open Source Edition", 1280, 720);
-        Pize.run(new BiomeGenerator());
+        ContextBuilder.newContext("Biome Generator")
+                .size(1280, 720)
+                .create()
+                .init(new BiomeGenerator());
+
+        Pize.runContexts();
     }
 
     private final TextureBatch batch;

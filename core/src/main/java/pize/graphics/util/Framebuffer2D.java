@@ -1,8 +1,8 @@
 package pize.graphics.util;
 
-import pize.app.Disposable;
-import pize.app.Resizable;
-import pize.lib.gl.Gl;
+import pize.util.Disposable;
+import pize.util.Resizable;
+import pize.gl.Gl;
 import pize.graphics.postprocess.FrameBufferObject;
 import pize.graphics.texture.Texture;
 

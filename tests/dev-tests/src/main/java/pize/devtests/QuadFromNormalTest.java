@@ -1,22 +1,22 @@
 package pize.devtests;
 
 import pize.Pize;
-import pize.app.AppAdapter;
-import pize.lib.gl.Gl;
-import pize.lib.gl.vertex.GlVertexAttr;
-import pize.lib.gl.glenum.GlTarget;
-import pize.lib.gl.type.GlType;
+import pize.io.context.ContextAdapter;
+import pize.gl.Gl;
+import pize.gl.vertex.GlVertexAttr;
+import pize.gl.glenum.GlTarget;
+import pize.gl.type.GlType;
 import pize.graphics.camera.PerspectiveCamera;
 import pize.graphics.camera.controller.Rotation3DController;
 import pize.graphics.mesh.IndexedMesh;
 import pize.graphics.util.BaseShader;
 import pize.graphics.util.SkyBox;
-import pize.io.key.Key;
+import pize.glfw.key.Key;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
 import pize.math.vecmath.vector.Vec3i;
 
-public class QuadFromNormalTest extends AppAdapter{
+public class QuadFromNormalTest extends ContextAdapter{
 
     SkyBox skyBox;
 
@@ -29,6 +29,7 @@ public class QuadFromNormalTest extends AppAdapter{
     public void init(){
         // Camera
         camera = new PerspectiveCamera(0.5F, 500, 70);
+        camera.setImaginaryOrigins(true, true, true);
         camera.getPosition().y += 3;
         rotationController = new Rotation3DController();
         // Skybox
@@ -51,22 +52,14 @@ public class QuadFromNormalTest extends AppAdapter{
     public void update(){
         // Exit & Fullscreen
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Pize.closeWindow();
+        if(Key.M.isDown())
+            rotationController.toggleShowMouse();
         if(Key.F11.isDown())
             Pize.window().toggleFullscreen();
 
         // Camera control
-        final Vec3f cameraMotion = new Vec3f();
-        final float yawSin = Maths.sinDeg(camera.getRotation().yaw);
-        final float yawCos = Maths.cosDeg(camera.getRotation().yaw);
-        if(Key.W.isPressed())
-            cameraMotion.add(yawCos, 0, yawSin);
-        if(Key.S.isPressed())
-            cameraMotion.add(-yawCos, 0, -yawSin);
-        if(Key.A.isPressed())
-            cameraMotion.add(-yawSin, 0, yawCos);
-        if(Key.D.isPressed())
-            cameraMotion.add(yawSin, 0, -yawCos);
+        final Vec3f cameraMotion = getCameraMotion();
         if(Key.SPACE.isPressed())
             cameraMotion.y++;
         if(Key.LEFT_SHIFT.isPressed())
@@ -77,8 +70,9 @@ public class QuadFromNormalTest extends AppAdapter{
         rotationController.update();
         camera.getRotation().set(rotationController.getRotation());
         camera.update();
-
     }
+
+
 
     public void render(){
         // Clear color
@@ -93,6 +87,22 @@ public class QuadFromNormalTest extends AppAdapter{
         shader.setMatrices(camera);
         shader.setColor(1, 0, 0);
         quadMesh.render();
+    }
+
+
+    private Vec3f getCameraMotion(){
+        final Vec3f cameraMotion = new Vec3f();
+        final float yawSin = Maths.sinDeg(camera.getRotation().yaw);
+        final float yawCos = Maths.cosDeg(camera.getRotation().yaw);
+        if(Key.W.isPressed())
+            cameraMotion.add(yawCos, 0, yawSin);
+        if(Key.S.isPressed())
+            cameraMotion.add(-yawCos, 0, -yawSin);
+        if(Key.A.isPressed())
+            cameraMotion.add(-yawSin, 0, yawCos);
+        if(Key.D.isPressed())
+            cameraMotion.add(yawSin, 0, -yawCos);
+        return cameraMotion;
     }
 
 

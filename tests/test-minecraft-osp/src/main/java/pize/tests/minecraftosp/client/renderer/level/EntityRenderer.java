@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.renderer.level;
 
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.tests.minecraftosp.main.entity.Entity;
 import pize.tests.minecraftosp.client.control.camera.GameCamera;
 import pize.tests.minecraftosp.client.entity.RemotePlayer;

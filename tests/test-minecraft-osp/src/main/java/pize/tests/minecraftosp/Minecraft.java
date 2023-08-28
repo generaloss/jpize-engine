@@ -1,10 +1,11 @@
 package pize.tests.minecraftosp;
 
 import pize.Pize;
-import pize.app.AppAdapter;
 import pize.files.Resource;
-import pize.lib.gl.Gl;
+import pize.gl.Gl;
 import pize.graphics.texture.Texture;
+import pize.io.context.ContextAdapter;
+import pize.io.context.ContextBuilder;
 import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
@@ -35,35 +36,39 @@ import pize.tests.minecraftosp.server.IntegratedServer;
 import pize.util.Utils;
 import pize.util.time.Sync;
 
-public class Minecraft extends AppAdapter{
+public class Minecraft extends ContextAdapter{
     
     public static void main(String[] args){
-        Pize.create("Minecraft Open Source Edition", 1280, 720);
-        Pize.run(getInstance());
+        ContextBuilder.newContext("Minecraft Open Source Edition")
+                .size(1280, 720)
+                .create()
+                .init(getInstance());
+        Pize.runContexts();
     }
     
     private static final String sessionToken = "54_54-iWantPizza-54_54";
 
 
-    private final GameResources gameResources;
+    private GameResources gameResources;
 
-    private final Options options;
+    private Options options;
     
-    private final Sync fpsSync;
-    private final Version version;
-    private final PlayerProfile profile;
-    private final GameController gameController;
+    private Sync fpsSync;
+    private Version version;
+    private PlayerProfile profile;
+    private GameController gameController;
     
-    private final GameRenderer clientRenderer;
+    private GameRenderer clientRenderer;
     private IntegratedServer integratedServer;
-    private final ClientGame clientGame;
-    private final SoundPlayer soundPlayer;
-    private final MusicPlayer musicPlayer;
+    private ClientGame clientGame;
+    private SoundPlayer soundPlayer;
+    private MusicPlayer musicPlayer;
     
-    private final ModLoader modLoader;
+    private ModLoader modLoader;
 
 
-    public Minecraft(){
+    @Override
+    public void init(){
         // Create Instances //
         Thread.currentThread().setName("Render-Thread");
 
@@ -76,33 +81,29 @@ public class Minecraft extends AppAdapter{
 
         // Other //
         version = new Version();
-        
+
         options = new Options(this, SharedConstants.GAME_DIR_PATH);
         fpsSync = new Sync(0);
         fpsSync.enable(false);
-        
+
         gameController = new GameController(this);
         clientRenderer = new GameRenderer(this);
         clientGame = new ClientGame(this);
         soundPlayer = new SoundPlayer(this);
         musicPlayer = new MusicPlayer(this);
-        
+
         clientRenderer.init();
         new Resource(SharedConstants.GAME_DIR_PATH, true).mkDirs();
         new Resource(SharedConstants.MODS_PATH, true).mkDirs();
-        
-        Pize.setFixedUpdateTPS(GameTime.TICKS_PER_SECOND);
+
+        Pize.startFixedUpdate(GameTime.TICKS_PER_SECOND);
         options.load();
         profile = new PlayerProfile(getOptions().getPlayerName());
 
         // Mod Loader //
         modLoader = new ModLoader();
         modLoader.loadMods(SharedConstants.MODS_PATH);
-    }
-    
-    
-    @Override
-    public void init(){
+
         // Run local server //
         final String[] address = options.getHost().split(":");
         if(address[0].equals("0.0.0.0")){

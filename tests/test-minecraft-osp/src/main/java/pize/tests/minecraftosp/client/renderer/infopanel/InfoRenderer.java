@@ -1,7 +1,7 @@
 package pize.tests.minecraftosp.client.renderer.infopanel;
 
 import pize.Pize;
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.graphics.util.batch.TextureBatch;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;

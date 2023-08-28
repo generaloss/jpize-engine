@@ -1,11 +1,14 @@
 package pize.util.io;
 
 import pize.Pize;
-import pize.app.Disposable;
-import pize.io.keyboard.CharCallback;
-import pize.io.keyboard.KeyCallback;
-import pize.io.key.Key;
-import pize.io.key.KeyState;
+import pize.math.Maths;
+import pize.util.Disposable;
+import pize.glfw.input.GlfwMod;
+import pize.glfw.input.GlfwMods;
+import pize.glfw.keyboard.callback.GlfwCharCallback;
+import pize.glfw.keyboard.callback.GlfwKeyCallback;
+import pize.glfw.key.Key;
+import pize.glfw.input.GlfwAction;
 import pize.util.StringUtils;
 import pize.util.time.Stopwatch;
 
@@ -13,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class TextProcessor implements Disposable, CharCallback, KeyCallback{
+public class TextProcessor implements Disposable, GlfwCharCallback, GlfwKeyCallback{
     
     private boolean active, newLineOnEnter;
     private final List<String> lines;
@@ -50,25 +53,30 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     }
     
     @Override
-    public void invoke(int keyCode, KeyState action){
-        if(!active || action == KeyState.RELEASE)
+    public void invoke(Key key, int scancode, GlfwAction action, GlfwMods mods){
+        if(!active || action == GlfwAction.RELEASE)
             return;
 
-        moveCursor(keyCode);
-        if(Key.LEFT_SHIFT.isPressed() && keyCode == Key.TAB.GLFW){
+        // Moving cursor
+        moveCursor(key);
+
+        // Tab
+        if(mods.has(GlfwMod.SHIFT) && key == Key.TAB){
             removeTab();
             resetCursorBlinking();
-        }else if(keyCode == Key.TAB.GLFW){
+        }else if(key == Key.TAB){
             insertTab();
             resetCursorBlinking();
         }
 
-        if(newLineOnEnter && keyCode == Key.ENTER.GLFW){
+        // New line
+        if(newLineOnEnter && key == Key.ENTER){
             newLineAndWrap();
             resetCursorBlinking();
         }
-        
-        else if(keyCode == Key.BACKSPACE.GLFW && !(cursorX == 0 && cursorY == 0)){
+
+        // Backspace
+        else if(key == Key.BACKSPACE && !(cursorX == 0 && cursorY == 0)){
             if(cursorX == 0)
                 removeLineAndWrap();
             else
@@ -189,13 +197,13 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     }
     
     
-    private void moveCursor(int keyCode){
-        if(keyCode == Key.END.GLFW  ) moveCursorEnd();
-        if(keyCode == Key.HOME.GLFW ) moveCursorHome();
-        if(keyCode == Key.UP.GLFW   ) moveCursorUp();
-        if(keyCode == Key.DOWN.GLFW ) moveCursorDown();
-        if(keyCode == Key.LEFT.GLFW ) moveCursorLeft();
-        if(keyCode == Key.RIGHT.GLFW) moveCursorRight();
+    private void moveCursor(Key key){
+        if(key == Key.END  ) moveCursorEnd();
+        if(key == Key.HOME ) moveCursorHome();
+        if(key == Key.UP   ) moveCursorUp();
+        if(key == Key.DOWN ) moveCursorDown();
+        if(key == Key.LEFT ) moveCursorLeft();
+        if(key == Key.RIGHT) moveCursorRight();
         
         cursorInEnd = (
             cursorX == currentLineLength &&
@@ -325,6 +333,10 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     public double getCursorBlinkingSeconds(){
         return cursorStopwatch.getSeconds();
     }
+
+    public boolean isCursorRender(){
+        return (getCursorBlinkingSeconds() < 1 || Maths.frac(getCursorBlinkingSeconds()) >= 0.5) && isActive();
+    }
     
     public String getString(boolean inv){
         final StringJoiner joiner = new StringJoiner("\n");
@@ -337,6 +349,10 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
         }
         
         return joiner.toString();
+    }
+
+    public String getString(){
+        return getString(false);
     }
     
     @Override

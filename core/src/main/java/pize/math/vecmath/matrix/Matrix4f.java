@@ -349,17 +349,9 @@ public class Matrix4f implements Matrix4{
     }
     
     public Matrix4f cullRotation(){
-        val[m00] = 1;
-        val[m01] = 0;
-        val[m02] = 0;
-
-        val[m10] = 0;
-        val[m11] = 1;
-        val[m12] = 0;
-
-        val[m20] = 0;
-        val[m21] = 0;
-        val[m22] = 1;
+        val[m00] = 1; val[m10] = 0; val[m20] = 0;
+        val[m01] = 0; val[m11] = 1; val[m21] = 0;
+        val[m02] = 0; val[m12] = 0; val[m22] = 1;
 
         return this;
     }

@@ -1,9 +1,9 @@
 package pize.graphics.mesh;
 
-import pize.lib.gl.buffer.GlBufUsage;
-import pize.lib.gl.buffer.GlVertexBuffer;
-import pize.lib.gl.type.GlType;
-import pize.lib.gl.vertex.GlVertexAttr;
+import pize.gl.buffer.GlBufUsage;
+import pize.gl.buffer.GlVertexBuffer;
+import pize.gl.type.GlType;
+import pize.gl.vertex.GlVertexAttr;
 
 import java.nio.*;
 

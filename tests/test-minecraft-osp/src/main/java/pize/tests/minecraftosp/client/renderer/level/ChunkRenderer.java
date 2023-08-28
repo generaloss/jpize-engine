@@ -1,10 +1,10 @@
 package pize.tests.minecraftosp.client.renderer.level;
 
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.files.Resource;
-import pize.lib.gl.glenum.GlDepthFunc;
-import pize.lib.gl.Gl;
-import pize.lib.gl.glenum.GlTarget;
+import pize.gl.glenum.GlDepthFunc;
+import pize.gl.Gl;
+import pize.gl.glenum.GlTarget;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.Shader;
 import pize.graphics.util.color.Color;

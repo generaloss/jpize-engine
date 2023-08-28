@@ -1,7 +1,7 @@
 package pize.tests.minecraftosp.client.renderer.text;
 
 import pize.Pize;
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.graphics.font.Glyph;

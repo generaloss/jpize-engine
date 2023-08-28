@@ -1,8 +1,8 @@
 package pize.tests.minecraftosp.client.entity.model;
 
-import pize.lib.gl.type.GlType;
+import pize.gl.type.GlType;
 import pize.graphics.mesh.IndexedMesh;
-import pize.lib.gl.vertex.GlVertexAttr;
+import pize.gl.vertex.GlVertexAttr;
 
 public class BoxBuilder{
     

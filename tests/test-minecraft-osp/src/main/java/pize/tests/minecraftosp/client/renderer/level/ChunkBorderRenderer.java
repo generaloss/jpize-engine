@@ -1,11 +1,11 @@
 package pize.tests.minecraftosp.client.renderer.level;
 
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.files.Resource;
-import pize.lib.gl.tesselation.GlPrimitive;
-import pize.lib.gl.type.GlType;
+import pize.gl.tesselation.GlPrimitive;
+import pize.gl.type.GlType;
 import pize.graphics.mesh.IndexedMesh;
-import pize.lib.gl.vertex.GlVertexAttr;
+import pize.gl.vertex.GlVertexAttr;
 import pize.graphics.util.Shader;
 import pize.math.vecmath.matrix.Matrix4f;
 import pize.math.vecmath.vector.Vec3f;

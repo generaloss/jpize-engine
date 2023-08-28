@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.audio;
 
-import pize.app.Disposable;
+import pize.util.Disposable;
 import pize.audio.sound.AudioBuffer;
 import pize.audio.sound.AudioSource;
 import pize.tests.minecraftosp.Minecraft;

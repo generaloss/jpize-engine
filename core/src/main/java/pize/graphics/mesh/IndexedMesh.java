@@ -1,9 +1,9 @@
 package pize.graphics.mesh;
 
-import pize.app.Disposable;
-import pize.lib.gl.vertex.GlVertexAttr;
-import pize.lib.gl.tesselation.GlPrimitive;
-import pize.lib.gl.vertex.GlVertexArray;
+import pize.util.Disposable;
+import pize.gl.vertex.GlVertexAttr;
+import pize.gl.tesselation.GlPrimitive;
+import pize.gl.vertex.GlVertexArray;
 
 public class IndexedMesh implements Disposable{
 
@@ -26,7 +26,7 @@ public class IndexedMesh implements Disposable{
     }
 
     public void render(){
-        this.render(indexBuffer.getSize());
+        this.render(indexBuffer.getIndexCount());
     }
 
     public void setMode(GlPrimitive mode){

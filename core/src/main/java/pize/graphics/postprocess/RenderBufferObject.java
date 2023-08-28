@@ -1,13 +1,13 @@
 package pize.graphics.postprocess;
 
 import pize.Pize;
-import pize.app.Resizable;
-import pize.lib.gl.GlObject;
-import pize.lib.gl.buffer.GlAttachment;
-import pize.lib.gl.texture.GlFilter;
-import pize.lib.gl.texture.GlSizedFormat;
-import pize.lib.gl.texture.GlWrap;
-import pize.lib.gl.type.GlType;
+import pize.util.Resizable;
+import pize.gl.GlObject;
+import pize.gl.buffer.GlAttachment;
+import pize.gl.texture.GlFilter;
+import pize.gl.texture.GlSizedFormat;
+import pize.gl.texture.GlWrap;
+import pize.gl.type.GlType;
 import pize.graphics.texture.Texture;
 import pize.graphics.texture.TextureParameters;
 

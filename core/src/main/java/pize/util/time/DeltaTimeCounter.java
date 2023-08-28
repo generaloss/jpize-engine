@@ -11,7 +11,7 @@ public class DeltaTimeCounter{
         lastTime = System.nanoTime();
     }
     
-    public void update(){
+    public void count(){
         final long currentTime = System.nanoTime();
         deltaTime = (currentTime - lastTime) / Maths.NanosInSecond;
         lastTime = currentTime;

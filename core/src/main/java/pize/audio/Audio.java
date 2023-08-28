@@ -1,6 +1,5 @@
 package pize.audio;
 
-import pize.app.Disposable;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALUtil;
 
@@ -11,12 +10,23 @@ import java.util.Map;
 
 import static org.lwjgl.openal.ALC11.*;
 
-public class Audio implements Disposable{
+public class Audio{
+
+    private static Audio instance;
+
+    public static void init(){
+        instance = new Audio();
+    }
+
+    public static Audio getInstance(){
+        return instance;
+    }
+
 
     private final AudioDevice currentDevice;
     private final Map<String, AudioDevice> devices;
 
-    public Audio(){
+    private Audio(){
         devices = new HashMap<>();
 
         currentDevice = new AudioDevice(getDefaultOutputDevice());
@@ -46,10 +56,9 @@ public class Audio implements Disposable{
     }
 
 
-    @Override
-    public void dispose(){
+    private static void dispose(){ // Calls from ContextManager
         alcMakeContextCurrent(0);
-        for(AudioDevice device: devices.values())
+        for(AudioDevice device: instance.devices.values())
             device.dispose();
 
         ALC.destroy();

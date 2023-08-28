@@ -1,23 +1,27 @@
 package pize.tests.minecraft.run;
 
 import pize.Pize;
-import pize.app.AppAdapter;
+import pize.gl.Gl;
+import pize.glfw.key.Key;
 import pize.graphics.camera.CenteredOrthographicCamera;
-import pize.lib.gl.Gl;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
 import pize.graphics.util.color.Color;
-import pize.io.key.Key;
+import pize.io.context.ContextAdapter;
+import pize.io.context.ContextBuilder;
 import pize.math.Maths;
 import pize.math.function.FastNoiseLite;
 
-public class BiomeGeneratorTest extends AppAdapter{
+public class BiomeGeneratorTest extends ContextAdapter{
 
     public static void main(String[] args){
-        Pize.create("Minecraft", 925, 640);
-        Pize.window().setIcon("icon.png");
-        Pize.run(new BiomeGeneratorTest());
+        ContextBuilder.newContext("Minecraft")
+                .size(925, 640)
+                .icon("icon.png")
+                .create()
+                .init(new BiomeGeneratorTest());
+        Pize.runContexts();
     }
 
     private TextureBatch batch;
@@ -49,10 +53,8 @@ public class BiomeGeneratorTest extends AppAdapter{
             Pize.exit();
         if(Key.F11.isDown())
             Pize.window().toggleFullscreen();
-        if(Key.V.isDown())
-            Pize.window().toggleVsync();
 
-        final float scroll = Pize.mouse().getScrollY();
+        final float scroll = Pize.mouse().getScroll();
         if(scroll > 0)
             scaleMul += 0.01F * scroll;
         else if(scroll < 0)

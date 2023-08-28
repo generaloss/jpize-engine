@@ -18,7 +18,7 @@ public class TextureUtils{
         return whitePixel;
     }
 
-    private static void dispose(){ // Invoked from Context
+    private static void dispose(){ // Calls from ContextManager
         if(whitePixel != null)
             whitePixel.dispose();
     }
