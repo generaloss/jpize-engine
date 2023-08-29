@@ -1,4 +1,4 @@
-# Jpize - Java Game Engine 
+# jpize - Java Game Engine 
 ### The engine focuses on being clear, simple and productive
 
 Kotlin fork: [Pizza-Engine-Kotlin](https://github.com/Raf0707/Pizza-Engine-Kotlin) by [Raf0707](https://github.com/Raf0707)
