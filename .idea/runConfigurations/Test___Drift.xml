@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Test - Drift" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="pize.tests.drift.Drift" />
+    <option name="MAIN_CLASS_NAME" value="jpize.tests.drift.Drift" />
     <module name="test-drift" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="pize.tests.drift.*" />
+        <option name="PATTERN" value="jpize.tests.drift.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

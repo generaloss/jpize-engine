@@ -16,7 +16,7 @@
 
 ---------------  S U M M A R Y ------------
 
-Command Line: -javaagent:/home/user/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/232.9559.62/lib/idea_rt.jar=45689:/home/user/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/232.9559.62/bin -Dfile.encoding=UTF-8 pize.tests.minecraft.run.Minecraft
+Command Line: -javaagent:/home/user/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/232.9559.62/lib/idea_rt.jar=45689:/home/user/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/232.9559.62/bin -Dfile.encoding=UTF-8 jpize.tests.minecraft.run.Minecraft
 
 Host: AMD Ryzen 5 2600X Six-Core Processor, 32 cores, 15G, Arch Linux
 Time: Mon Aug 28 09:30:43 2023 MSK elapsed time: 5.524568 seconds (0d 0h 0m 5s)
@@ -344,7 +344,7 @@ CodeHeap 'non-nmethods': size=5704Kb used=1668Kb max_used=1703Kb free=4035Kb
 
 Compilation events (20 events):
 Event: 5,512 Thread 0x00007f657c19f330 nmethod 1599 0x00007f6565c41590 code [0x00007f6565c41740, 0x00007f6565c41920]
-Event: 5,512 Thread 0x00007f657c19f330 1596       1       pize.graphics.util.color.Color::b (5 bytes)
+Event: 5,512 Thread 0x00007f657c19f330 1596       1       jpize.graphics.util.color.Color::b (5 bytes)
 Event: 5,512 Thread 0x00007f657c19f330 nmethod 1596 0x00007f656cfe0110 code [0x00007f656cfe02a0, 0x00007f656cfe0370]
 Event: 5,512 Thread 0x00007f657c19f330 1600       3       java.util.Spliterator::getExactSizeIfKnown (25 bytes)
 Event: 5,512 Thread 0x00007f657c19f330 nmethod 1600 0x00007f6565c41a10 code [0x00007f6565c41bc0, 0x00007f6565c41eb0]
@@ -1226,7 +1226,7 @@ ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsysca
 
 VM Arguments:
 jvm_args: -javaagent:/home/user/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/232.9559.62/lib/idea_rt.jar=45689:/home/user/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/232.9559.62/bin -Dfile.encoding=UTF-8 
-java_command: pize.tests.minecraft.run.Minecraft
+java_command: jpize.tests.minecraft.run.Minecraft
 java_class_path (initial): /home/user/Documents/lang/java/projects/Pizza-Engine/tests/test-minecraft/target/classes:/home/user/Documents/lang/java/projects/Pizza-Engine/core/target/classes:/home/user/.m2/repository/org/lwjgl/lwjgl/3.3.2/lwjgl-3.3.2.jar:/home/user/.m2/repository/org/lwjgl/lwjgl-assimp/3.3.2/lwjgl-assimp-3.3.2.jar:/home/user/.m2/repository/org/lwjgl/lwjgl-glfw/3.3.2/lwjgl-glfw-3.3.2.jar:/home/user/.m2/repository/org/lwjgl/lwjgl-openal/3.3.2/lwjgl-openal-3.3.2.jar:/home/user/.m2/repository/org/lwjgl/lwjgl-opengl/3.3.2/lwjgl-opengl-3.3.2.jar:/home/user/.m2/repository/org/lwjgl/lwjgl-stb/3.3.2/lwjgl-stb-3.3.2.jar:/home/user/.m2/repository/org/lwjgl/lwjgl/3.3.2/lwjgl-3.3.2-natives-linux.jar:/home/user/.m2/repository/org/lwjgl/lwjgl-assimp/3.3.2/lwjgl-assimp-3.3.2-natives-linux.jar:/home/user/.m2/repository/org/lwjgl/lwjgl-glfw/3.3.2/lwjgl-glfw-3.3.2-natives-linux.jar:/home/user/.m2/repository/org/lwjgl/lwjgl-openal/3.3.2/lwjgl-openal-3.3.2-natives-linux.jar:/home/user/.m2/repository/org/lwjgl/lwjgl-opengl/3.3.2/lwjgl-opengl-3.3.2-natives-linux.jar:/home/user/.m2/repository/org/lwjgl/lwjgl-stb/3.3.2/lwjgl-stb-3.3.2-natives-linux.jar:/home/user/.m2/repository/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.jar:/home/user/.m2/repository/javazoom/jlayer/1.0.1/jlayer-1.0.1.jar:/home/user/Documents/lang/java/projects/Pizza-Engine/net/target/classes:/home/user/Documents/lang/java/projects/Pizza-Engine/physic/target/classes:/home/user/Documents/lang/java/projects/Pizza-Engine/ui/target/classes
 Launcher Type: SUN_STANDARD
 

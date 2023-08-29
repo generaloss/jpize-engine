@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Test - Audio" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="pize.tests.audio.Main" />
+    <option name="MAIN_CLASS_NAME" value="jpize.tests.audio.Main" />
     <module name="test-audio" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/test-audio/src/main/resources" />
     <extension name="coverage">

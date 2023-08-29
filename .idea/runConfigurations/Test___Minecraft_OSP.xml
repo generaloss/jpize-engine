@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Test - Minecraft OSP" type="Application" factoryName="Application" singleton="false">
     <option name="ALTERNATIVE_JRE_PATH" value="17" />
-    <option name="MAIN_CLASS_NAME" value="pize.tests.minecraftosp.Minecraft" />
+    <option name="MAIN_CLASS_NAME" value="jpize.tests.minecraftosp.Minecraft" />
     <module name="test-minecraft-osp" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/test-minecraft-osp" />
     <method v="2">

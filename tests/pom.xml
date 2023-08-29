@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>jize</groupId>
+    <groupId>jpize</groupId>
     <artifactId>tests</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
@@ -29,25 +29,25 @@
     
     <dependencies>
         <dependency>
-            <groupId>jize</groupId>
+            <groupId>jpize</groupId>
             <artifactId>core</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>jize</groupId>
+            <groupId>jpize</groupId>
             <artifactId>net</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>jize</groupId>
+            <groupId>jpize</groupId>
             <artifactId>physic</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>jize</groupId>
+            <groupId>jpize</groupId>
             <artifactId>ui</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>

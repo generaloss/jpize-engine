@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="[DEV] DevTests" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="pize.devtests.Main" />
+    <option name="MAIN_CLASS_NAME" value="jpize.devtests.Main" />
     <module name="dev-tests" />
     <method v="2">
       <option name="Make" enabled="true" />

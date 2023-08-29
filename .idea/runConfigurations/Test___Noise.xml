@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Test - Noise" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="pize.tests.NoiseTest" />
+    <option name="MAIN_CLASS_NAME" value="jpize.tests.NoiseTest" />
     <module name="test-noise" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="pize.tests.*" />
+        <option name="PATTERN" value="jpize.tests.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

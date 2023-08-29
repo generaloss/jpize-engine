@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Test - Window" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="pize.tests.window.Main" />
+    <option name="MAIN_CLASS_NAME" value="jpize.tests.window.Main" />
     <module name="test-window" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="pize.tests.window.*" />
+        <option name="PATTERN" value="jpize.tests.window.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
