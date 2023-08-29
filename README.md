@@ -24,7 +24,7 @@ Modules:
 * Maths (Vectors, Matrices, Quaternion)
 * IO (Keyboard, Mouse, Monitors)
 * Files (Resources: Internal / External)
-* Utils (FastReader, FpsCounter, Sync, Stopwatch, TickGenerator, PizeInputStream, PizeOutputStream ...etc)
+* Utils (FastReader, FpsCounter, Sync, Stopwatch, TickGenerator, JpizeInputStream, JpizeOutputStream ...etc)
 
 #### 0. Main class
 ``` java
