@@ -21,7 +21,7 @@ Modules:
 ### Core:
 * Audio (OGG, MP3, WAV)
 * Graphics (2D, 3D, Fonts, Postprocessing)
-* Math (Vectors, Matrices, Quaternion)
+* Maths (Vectors, Matrices, Quaternion)
 * IO (Keyboard, Mouse, Monitors)
 * Files (Resources: Internal / External)
 * Utils (FastReader, FpsCounter, Sync, Stopwatch, TickGenerator, PizeInputStream, PizeOutputStream ...etc)
@@ -39,7 +39,7 @@ public class App extends ContextAdapter{
                 .init(new App());
         // You can create multiple windows
         // Run
-        Pize.runContexts(); 
+        Jpize.runContexts(); 
     }
     
     public App(){ } // Calls before ContextAdapter.init()
@@ -79,14 +79,14 @@ batch.end();
 #### 2. Input:
 ``` java
 // mouse
-Pize.getX(); // position
-Pize.getY();
+Jpize.getX(); // position
+Jpize.getY();
 
-Pize.isTouched(); // touch
-Pize.isTouchDown();
-Pize.isTouchReleased();
+Jpize.isTouched(); // touch
+Jpize.isTouchDown();
+Jpize.isTouchReleased();
 
-Pize.mouse().getScroll(); // scroll
+Jpize.mouse().getScroll(); // scroll
 
 // keyboard
 Key.ENTER.isPressed();
@@ -95,19 +95,19 @@ Key.SPACE.isReleased();
 Key.ESCAPE.getName();
 
 // window
-Pize.getWidth();
-Pize.getHeight();
-Pize.getAspect();
+Jpize.getWidth();
+Jpize.getHeight();
+Jpize.getAspect();
 
 // monitor
-Pize.monitor();        // Window monitor
-Pize.primaryMonitor(); // Primary monitor
+Jpize.monitor();        // Window monitor
+Jpize.primaryMonitor(); // Primary monitor
 
 // FPS & Delta Time
-Pize.getFPS();
-Pize.getDt();
-Pize.setFixedUpdateTPS(update_rate);
-Pize.getFixedUpdateDt();
+Jpize.getFPS();
+Jpize.getDt();
+Jpize.setFixedUpdateTPS(update_rate);
+Jpize.getFixedUpdateDt();
 ```
 
 #### 3. Audio:
@@ -158,7 +158,7 @@ res.mkDirsAndFile();
 res.inStream();
 res.outStream();
 
-res.getReader(); // returns pize.util.io.FastReader
+res.getReader(); // returns jpize.util.io.FastReader
 res.getWriter(); // returns PrintStream
 
 // resource (image, sound, ...etc)
@@ -210,8 +210,8 @@ class MyPacket extends IPacket<MyPacketHandler>{ // package processing can be do
         ...
     }
 
-    protected void write(PizeOutputStream outStream){ ... } // write data when sending
-    public void read(PizeInputStream inStream){ ... } // read data when receivind
+    protected void write(JpizeOutputStream outStream){ ... } // write data when sending
+    public void read(JpizeInputStream inStream){ ... } // read data when receivind
 
     public void handle(MyPacketHandler handler){ // handle this packet
         handler.handleMyPacket(this); 
