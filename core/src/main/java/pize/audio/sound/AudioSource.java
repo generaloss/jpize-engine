@@ -1,6 +1,6 @@
 package pize.audio.sound;
 
-import pize.Pize;
+import pize.Jize;
 import pize.util.Disposable;
 import pize.math.Mathc;
 import pize.math.vecmath.vector.Vec3f;
@@ -175,7 +175,7 @@ public class AudioSource implements Disposable{
         else
             stopwatch.reset().start();
 
-        Pize.execIf(() -> {
+        Jize.execIf(() -> {
             this.stop();
             callback.onStop();
         }, () -> (stopwatch.getSeconds() >= buffer.getDurationSeconds()));

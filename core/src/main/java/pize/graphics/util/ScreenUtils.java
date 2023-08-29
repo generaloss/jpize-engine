@@ -1,7 +1,7 @@
 package pize.graphics.util;
 
 import org.lwjgl.BufferUtils;
-import pize.Pize;
+import pize.Jize;
 import pize.files.Resource;
 import pize.gl.texture.GlFormat;
 import pize.gl.type.GlType;
@@ -18,8 +18,8 @@ import static org.lwjgl.opengl.GL33.glReadPixels;
 public class ScreenUtils{
 
     public static void saveScreenshot(File file, String format){
-        final int width = Pize.getWidth();
-        final int height = Pize.getHeight();
+        final int width = Jize.getWidth();
+        final int height = Jize.getHeight();
         
         final ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4).order(ByteOrder.LITTLE_ENDIAN);
         glReadPixels(0, 0, width, height, GlFormat.BGRA.GL, GlType.UNSIGNED_BYTE.GL, buffer);

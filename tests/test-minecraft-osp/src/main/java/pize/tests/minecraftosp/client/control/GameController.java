@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.control;
 
-import pize.Pize;
+import pize.Jize;
 import pize.gl.tesselation.GlFace;
 import pize.gl.Gl;
 import pize.gl.tesselation.GlPolygonMode;
@@ -57,7 +57,7 @@ public class GameController{
         // Fullscreen
         if(Key.F11.isDown()){
             playerController.getRotationController().lockNextFrame();
-            Pize.window().toggleFullscreen();
+            Jize.window().toggleFullscreen();
         }
         
         
@@ -78,9 +78,9 @@ public class GameController{
             
             if(Key.LEFT_CONTROL.isPressed()){
                 if(Key.C.isDown())
-                    Pize.setClipboardString(chat.getEnteringText());
+                    Jize.setClipboardString(chat.getEnteringText());
                 if(Key.V.isDown())
-                    chat.getTextProcessor().insertLine(Pize.getClipboardString());
+                    chat.getTextProcessor().insertLine(Jize.getClipboardString());
             }
             
             if(Key.ESCAPE.isDown())
@@ -145,7 +145,7 @@ public class GameController{
         if(blockRayCast.isSelected()){
             final LocalPlayer player = session.getGame().getPlayer();
             
-            if(Pize.mouse().isLeftDown() || Key.U.isPressed()){
+            if(Jize.mouse().isLeftDown() || Key.U.isPressed()){
                 final Vec3i blockPos = blockRayCast.getSelectedBlockPosition();
                 level.setBlock(blockPos.x, blockPos.y, blockPos.z, Blocks.AIR);
                 session.getGame().sendPacket(new SBPacketPlayerBlockSet(blockPos.x, blockPos.y, blockPos.z, Blocks.AIR.getDefaultData()));
@@ -157,9 +157,9 @@ public class GameController{
                         blockPos.z + Maths.random(1F)
                     ));
                 }
-            }else if(Pize.mouse().isRightDown() || Key.J.isPressed()){
+            }else if(Jize.mouse().isRightDown() || Key.J.isPressed()){
                 placeBlock();
-            }else if(Pize.mouse().isMiddleDown()){
+            }else if(Jize.mouse().isMiddleDown()){
                 final Vec3i blockPos = blockRayCast.getSelectedBlockPosition();
                 player.holdBlock = level.getBlockProps(blockPos.x, blockPos.y, blockPos.z).getBlock();
             }
@@ -173,7 +173,7 @@ public class GameController{
         if(options.getKey(KeyMapping.ZOOM).isDown())
             camera.setZoom(10);
         else if(options.getKey(KeyMapping.ZOOM).isPressed()){
-            camera.setZoom(camera.getZoom() + Pize.mouse().getScroll() * (camera.getZoom() / 8));
+            camera.setZoom(camera.getZoom() + Jize.mouse().getScroll() * (camera.getZoom() / 8));
         }else if(options.getKey(KeyMapping.ZOOM).isReleased())
             camera.setZoom(1);
         
@@ -189,7 +189,7 @@ public class GameController{
         
         // Exit
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Jize.exit();
 
         // Player
         playerController.update();

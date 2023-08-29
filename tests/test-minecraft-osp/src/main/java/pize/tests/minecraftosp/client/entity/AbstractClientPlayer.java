@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.entity;
 
-import pize.Pize;
+import pize.Jize;
 import pize.math.util.EulerAngles;
 import pize.math.vecmath.vector.Vec3f;
 import pize.tests.minecraftosp.client.entity.model.PlayerModel;
@@ -27,7 +27,7 @@ public class AbstractClientPlayer extends Player{
         lerpRotation = new EulerAngles();
 
         // Player model
-        Pize.execSync(()->{
+        Jize.execSync(()->{
             model = new PlayerModel(this);
         });
     }
@@ -55,7 +55,7 @@ public class AbstractClientPlayer extends Player{
     
     
     public void updateInterpolation(){
-        final float lastTickTime = (System.currentTimeMillis() - lastTime) / 1000F / Pize.getFixedUpdateDt();
+        final float lastTickTime = (System.currentTimeMillis() - lastTime) / 1000F / Jize.getFixedUpdateDt();
         lerpPosition.lerp(lastPosition, getPosition(), lastTickTime);
         lerpRotation.lerp(lastRotation, getRotation(), lastTickTime);
     }

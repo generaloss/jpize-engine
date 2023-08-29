@@ -1,6 +1,6 @@
 package pize.tests.minecraft.run;
 
-import pize.Pize;
+import pize.Jize;
 import pize.gl.Gl;
 import pize.glfw.key.Key;
 import pize.graphics.camera.CenteredOrthographicCamera;
@@ -21,7 +21,7 @@ public class BiomeGeneratorTest extends ContextAdapter{
                 .icon("icon.png")
                 .create()
                 .init(new BiomeGeneratorTest());
-        Pize.runContexts();
+        Jize.runContexts();
     }
 
     private TextureBatch batch;
@@ -32,7 +32,7 @@ public class BiomeGeneratorTest extends ContextAdapter{
 
     @Override
     public void init(){
-        SIZE = Pize.getHeight();
+        SIZE = Jize.getHeight();
 
         batch = new TextureBatch();
         camera = new CenteredOrthographicCamera();
@@ -47,14 +47,14 @@ public class BiomeGeneratorTest extends ContextAdapter{
 
     @Override
     public void render(){
-        Pize.window().setTitle("Minecraft (fps: " + Pize.getFPS() + ")");
+        Jize.window().setTitle("Minecraft (fps: " + Jize.getFPS() + ")");
 
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Jize.exit();
         if(Key.F11.isDown())
-            Pize.window().toggleFullscreen();
+            Jize.window().toggleFullscreen();
 
-        final float scroll = Pize.mouse().getScroll();
+        final float scroll = Jize.mouse().getScroll();
         if(scroll > 0)
             scaleMul += 0.01F * scroll;
         else if(scroll < 0)
@@ -72,8 +72,8 @@ public class BiomeGeneratorTest extends ContextAdapter{
         batch.draw(mapTexture, 0, 0, SIZE, SIZE);
         float map16PixelSize = SIZE / mapTexture.getHeight() * 16;
         batch.draw(cellTexture,
-                Maths.floor(((Pize.getX() + camera.getX()) - camera.getHalfWidth() ) / map16PixelSize) * map16PixelSize,
-                Maths.floor(((Pize.getY() + camera.getY()) - camera.getHalfHeight()) / map16PixelSize) * map16PixelSize,
+                Maths.floor(((Jize.getX() + camera.getX()) - camera.getHalfWidth() ) / map16PixelSize) * map16PixelSize,
+                Maths.floor(((Jize.getY() + camera.getY()) - camera.getHalfHeight()) / map16PixelSize) * map16PixelSize,
                 map16PixelSize,
                 map16PixelSize
         );

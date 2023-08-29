@@ -1,6 +1,6 @@
 package pize.graphics.postprocess.effects;
 
-import pize.Pize;
+import pize.Jize;
 import pize.files.Resource;
 import pize.gl.Gl;
 import pize.graphics.postprocess.FrameBufferObject;
@@ -19,8 +19,8 @@ public class MotionBlur implements PostProcessEffect{
 
 
     public MotionBlur(){
-        int width = Pize.getWidth();
-        int height = Pize.getHeight();
+        int width = Jize.getWidth();
+        int height = Jize.getHeight();
 
         // Frame & Render Buffer 1
         fbo1 = new FrameBufferObject(width, height);

@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextAdapter;
 import pize.gl.Gl;
 import pize.graphics.texture.Pixmap;
@@ -18,7 +18,7 @@ public class BiomeGenerator extends ContextAdapter{
                 .create()
                 .init(new BiomeGenerator());
 
-        Pize.runContexts();
+        Jize.runContexts();
     }
 
     private final TextureBatch batch;

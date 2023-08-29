@@ -1,6 +1,6 @@
 package pize.graphics.util.batch;
 
-import pize.Pize;
+import pize.Jize;
 import pize.util.Disposable;
 import pize.files.Resource;
 import pize.graphics.camera.Camera;
@@ -181,7 +181,7 @@ public class TextureBatch implements Disposable{
         if(viewMatrix == null) viewMatrix = new Matrix4f();
         if(projectionMatrix == null) projectionMatrix = new Matrix4f();
 
-        begin(projectionMatrix.toOrthographic(0, 0, Pize.getWidth(), Pize.getHeight()), viewMatrix);
+        begin(projectionMatrix.toOrthographic(0, 0, Jize.getWidth(), Jize.getHeight()), viewMatrix);
     }
 
 

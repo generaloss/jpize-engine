@@ -1,6 +1,6 @@
 package pize.devtests;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextAdapter;
 import pize.graphics.texture.atlas.TextureAtlas;
 import pize.gl.Gl;
@@ -26,7 +26,7 @@ public class AtlasTest extends ContextAdapter{
         Gl.clearColor(0.4, 0.5, 0.7);
         
         batch.begin();
-        batch.draw(atlas.getTexture(), 0, 0, Pize.getWidth(), Pize.getHeight());
+        batch.draw(atlas.getTexture(), 0, 0, Jize.getWidth(), Jize.getHeight());
         batch.end();
     }
     

@@ -1,6 +1,6 @@
 package pize.tests.net;
 
-import pize.Pize;
+import pize.Jize;
 import pize.gl.Gl;
 import pize.glfw.key.Key;
 import pize.graphics.font.BitmapFont;
@@ -31,7 +31,7 @@ public class ClientSide extends ContextAdapter implements TcpListener{
                 .create()
                 .init(new ClientSide());
 
-        Pize.runContexts();
+        Jize.runContexts();
     }
     
     private TcpClient client;
@@ -66,7 +66,7 @@ public class ClientSide extends ContextAdapter implements TcpListener{
             new PingPacket(System.nanoTime()).write(client.getConnection());
         
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Jize.exit();
         
         Gl.clearColorBuffer();
         Gl.clearColor(0.2, 0.2, 0.2, 1);

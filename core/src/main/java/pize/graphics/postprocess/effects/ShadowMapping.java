@@ -1,6 +1,6 @@
 package pize.graphics.postprocess.effects;
 
-import pize.Pize;
+import pize.Jize;
 import pize.util.Disposable;
 import pize.files.Resource;
 import pize.gl.Gl;
@@ -74,7 +74,7 @@ public class ShadowMapping implements Disposable{
 
     public void end(){
         fbo.unbind();
-        Gl.viewport(Pize.getWidth(), Pize.getHeight());
+        Gl.viewport(Jize.getWidth(), Jize.getHeight());
     }
 
     public Texture getShadowMap(){

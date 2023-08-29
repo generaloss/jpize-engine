@@ -1,6 +1,6 @@
 package pize.graphics.postprocess.effects;
 
-import pize.Pize;
+import pize.Jize;
 import pize.files.Resource;
 import pize.gl.Gl;
 import pize.graphics.postprocess.FrameBufferObject;
@@ -20,8 +20,8 @@ public class GaussianBlur implements PostProcessEffect{
     public GaussianBlur(float radius){
         this.radius = radius;
 
-        int width = Pize.getWidth();
-        int height = Pize.getHeight();
+        int width = Jize.getWidth();
+        int height = Jize.getHeight();
 
         // Frame Buffer 1 & Render Buffer
         fbo1 = new FrameBufferObject(width, height);

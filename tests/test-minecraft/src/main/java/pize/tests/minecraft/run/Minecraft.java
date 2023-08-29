@@ -1,6 +1,6 @@
 package pize.tests.minecraft.run;
 
-import pize.Pize;
+import pize.Jize;
 import pize.gl.Gl;
 import pize.gl.glenum.GlDepthFunc;
 import pize.gl.glenum.GlTarget;
@@ -18,7 +18,7 @@ public class Minecraft extends ContextAdapter{
                 .create()
                 .init(new Minecraft());
 
-        Pize.runContexts();
+        Jize.runContexts();
     }
 
 

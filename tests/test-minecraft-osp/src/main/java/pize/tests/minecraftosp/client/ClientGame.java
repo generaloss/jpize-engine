@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client;
 
-import pize.Pize;
+import pize.Jize;
 import pize.math.vecmath.vector.Vec3f;
 import pize.net.security.KeyAES;
 import pize.net.tcp.TcpClient;
@@ -92,7 +92,7 @@ public class ClientGame implements Tickable{
     
     public void createClientLevel(String worldName){
         if(level != null)
-            Pize.execSync(() ->{
+            Jize.execSync(() ->{
                 level.getConfiguration().setName(worldName);
                 level.getChunkManager().reset();
             });
@@ -125,7 +125,7 @@ public class ClientGame implements Tickable{
         client.disconnect();
         
         if(level != null)
-            Pize.execSync(()->{
+            Jize.execSync(()->{
                 System.out.println(10000);
                 level.getChunkManager().dispose();
             });

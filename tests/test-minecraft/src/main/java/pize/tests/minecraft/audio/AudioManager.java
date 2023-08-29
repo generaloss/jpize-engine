@@ -1,6 +1,6 @@
 package pize.tests.minecraft.audio;
 
-import pize.Pize;
+import pize.Jize;
 import pize.audio.sound.AudioSource;
 import pize.util.Disposable;
 import pize.tests.minecraft.Session;
@@ -49,7 +49,7 @@ public class AudioManager implements Disposable{
     }
 
     public void setDevice(String audioDevice){
-        Pize.audio().getDevice(audioDevice).makeCurrent();
+        Jize.audio().getDevice(audioDevice).makeCurrent();
         for(AudioSource audioSource: audioSources)
             if(audioSource.isPlaying()){
                 audioSource.pause();

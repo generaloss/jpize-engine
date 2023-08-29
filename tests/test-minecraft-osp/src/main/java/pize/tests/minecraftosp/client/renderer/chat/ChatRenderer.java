@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.renderer.chat;
 
-import pize.Pize;
+import pize.Jize;
 import pize.graphics.texture.Region;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
@@ -51,8 +51,8 @@ public class ChatRenderer implements Disposable{
         batch.begin();
         textBatch.setBackgroundColor(0, 0, 0, 0);
         
-        final float chatHeight = Pize.getHeight() / 2F;
-        final float chatWidth = Pize.getWidth() / 2F;
+        final float chatHeight = Jize.getHeight() / 2F;
+        final float chatWidth = Jize.getWidth() / 2F;
         final float lineAdvance = textBatch.getFont().getLineAdvanceScaled();
         
         final Chat chat = gameRenderer.getSession().getGame().getChat();
@@ -79,8 +79,8 @@ public class ChatRenderer implements Disposable{
         }
         
         // Scroll
-        if(chat.isOpened() && Pize.mouse().isInBounds(chatX, openedChatY, chatWidth, chatHeight))
-            scrollMotion -= Pize.mouse().getScroll() * Pize.getDt() * lineAdvance * 10;
+        if(chat.isOpened() && Jize.mouse().isInBounds(chatX, openedChatY, chatWidth, chatHeight))
+            scrollMotion -= Jize.mouse().getScroll() * Jize.getDt() * lineAdvance * 10;
         
         scroll += scrollMotion;
         scrollMotion *= 0.95F;

@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.options;
 
-import pize.Pize;
+import pize.Jize;
 import pize.files.Resource;
 import pize.glfw.key.Key;
 import pize.tests.minecraftosp.Minecraft;
@@ -192,7 +192,7 @@ public class Options{
         session.getFpsSync().setTPS(maxFrameRate);
 
         session.getFpsSync().enable(maxFrameRate > 0 && maxFrameRate < UNLIMITED_FPS_THRESHOLD);
-        Pize.setVsync(maxFrameRate == 0);
+        Jize.setVsync(maxFrameRate == 0);
     }
 
 
@@ -203,7 +203,7 @@ public class Options{
     public void setFullscreen(boolean fullscreen){
         this.fullscreen = fullscreen;
 
-        Pize.window().setFullscreen(fullscreen);
+        Jize.window().setFullscreen(fullscreen);
     }
 
 

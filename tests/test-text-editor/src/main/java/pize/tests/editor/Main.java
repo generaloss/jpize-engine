@@ -1,6 +1,6 @@
 package pize.tests.editor;
 
-import pize.Pize;
+import pize.Jize;
 import pize.gl.Gl;
 import pize.glfw.key.Key;
 import pize.graphics.font.BitmapFont;
@@ -21,7 +21,7 @@ public class Main extends ContextAdapter{
                 .create()
                 .init(new Main());
 
-        Pize.runContexts();
+        Jize.runContexts();
     }
     
     
@@ -42,7 +42,7 @@ public class Main extends ContextAdapter{
             text.removeLine();
 
         if(Key.LEFT_CONTROL.isPressed() && Key.V.isDown())
-            text.insertText(Pize.getClipboardString());
+            text.insertText(Jize.getClipboardString());
         
         Gl.clearColorBuffer();
         Gl.clearColor(0.2, 0.2, 0.2, 1);

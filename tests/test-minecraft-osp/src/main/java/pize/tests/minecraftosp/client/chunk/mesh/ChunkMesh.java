@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.chunk.mesh;
 
-import pize.Pize;
+import pize.Jize;
 import pize.util.Disposable;
 import pize.gl.buffer.GlBufUsage;
 import pize.gl.type.GlType;
@@ -22,7 +22,7 @@ public class ChunkMesh implements Disposable{
         this.type = type;
         this.verticesList = new ArrayList<>();
 
-        Pize.execSync(()->{
+        Jize.execSync(()->{
             vao = new GlVertexArray();
             vbo = new VertexBuffer();
             vbo.enableAttributes(
@@ -54,7 +54,7 @@ public class ChunkMesh implements Disposable{
         for(int i = 0; i < verticesList.size(); i++)
             verticesArray[i] = verticesList.get(i);
 
-        Pize.execSync(() -> vbo.setData(verticesArray, GlBufUsage.DYNAMIC_DRAW));
+        Jize.execSync(() -> vbo.setData(verticesArray, GlBufUsage.DYNAMIC_DRAW));
         verticesList.clear();
 
         return verticesArray.length;

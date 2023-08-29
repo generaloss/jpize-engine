@@ -1,6 +1,6 @@
 package pize.graphics.postprocess.effects;
 
-import pize.Pize;
+import pize.Jize;
 import pize.files.Resource;
 import pize.gl.Gl;
 import pize.graphics.postprocess.FrameBufferObject;
@@ -26,8 +26,8 @@ public class Bloom implements PostProcessEffect{
         exposure = 2F;
         gamma = 0.6F;
 
-        int width = Pize.getWidth();
-        int height = Pize.getHeight();
+        int width = Jize.getWidth();
+        int height = Jize.getHeight();
 
         // Frame Buffer 1 & Render Buffer
         colorBuffer = new FrameBufferObject(width, height);

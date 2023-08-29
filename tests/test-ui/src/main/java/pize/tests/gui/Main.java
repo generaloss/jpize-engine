@@ -1,6 +1,6 @@
 package pize.tests.gui;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextAdapter;
 import pize.gl.Gl;
 import pize.graphics.texture.Texture;
@@ -24,7 +24,7 @@ public class Main extends ContextAdapter{
                 .create()
                 .init(new Main());
 
-        Pize.runContexts();
+        Jize.runContexts();
     }
     
     private TextureBatch batch;
@@ -53,7 +53,7 @@ public class Main extends ContextAdapter{
     @Override
     public void render(){
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Jize.exit();
         
         Gl.clearColorBuffer();
         Gl.clearColor(0.08, 0.11, 0.15, 1);

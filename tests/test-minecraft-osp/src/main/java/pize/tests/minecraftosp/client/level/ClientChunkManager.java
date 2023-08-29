@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.level;
 
-import pize.Pize;
+import pize.Jize;
 import pize.tests.minecraftosp.client.chunk.ClientChunk;
 import pize.tests.minecraftosp.client.chunk.mesh.builder.ChunkBuilder;
 import pize.tests.minecraftosp.client.entity.LocalPlayer;
@@ -227,7 +227,7 @@ public class ClientChunkManager extends ChunkManager {
     
     
     public void unloadChunk(ClientChunk chunk){
-        Pize.execSync(() -> chunk.getMeshStack().dispose() );
+        Jize.execSync(() -> chunk.getMeshStack().dispose() );
         allChunks.remove(chunk.getPosition());
     }
     

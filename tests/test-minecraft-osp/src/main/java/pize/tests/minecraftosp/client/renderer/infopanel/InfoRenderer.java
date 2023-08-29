@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.renderer.infopanel;
 
-import pize.Pize;
+import pize.Jize;
 import pize.util.Disposable;
 import pize.graphics.util.batch.TextureBatch;
 import pize.math.Maths;
@@ -56,10 +56,10 @@ public class InfoRenderer implements Disposable{
     
     
     private void animate(){
-        final int width = Pize.getWidth() / 2;
+        final int width = Jize.getWidth() / 2;
         
         if(!animationEnded){
-            final float animationSpeed = Math.max(0.03F, 1 - animationTimeLine * animationTimeLine) * Pize.getDt() * 5;
+            final float animationSpeed = Math.max(0.03F, 1 - animationTimeLine * animationTimeLine) * Jize.getDt() * 5;
             
             if(open){ // open
                 animationTimeLine += animationSpeed;
@@ -126,7 +126,7 @@ public class InfoRenderer implements Disposable{
         );
         
         // FPS
-        info(new Component().color(TextColor.YELLOW).text(Pize.getFPS() + " fps"));
+        info(new Component().color(TextColor.YELLOW).text(Jize.getFPS() + " fps"));
         
         // Packets
         infoNextLine();
@@ -287,14 +287,14 @@ public class InfoRenderer implements Disposable{
     private void info(Component text){
         infoLineNum++;
         final float x = 5 + panelOffsetX;
-        final float y = Pize.getHeight() - 5 - textBatch.getFont().getLineAdvanceScaled() * infoLineNum;
+        final float y = Jize.getHeight() - 5 - textBatch.getFont().getLineAdvanceScaled() * infoLineNum;
         textBatch.drawComponent(text, x, y);
     }
     
     private void hint(Component text){
         hintLineNum++;
-        final float x = Pize.getWidth() - 5 - textBatch.getFont().getLineWidth(text.toString()) - panelOffsetX;
-        final float y = Pize.getHeight() - 5 - textBatch.getFont().getLineAdvanceScaled() * hintLineNum;
+        final float x = Jize.getWidth() - 5 - textBatch.getFont().getLineWidth(text.toString()) - panelOffsetX;
+        final float y = Jize.getHeight() - 5 - textBatch.getFont().getLineAdvanceScaled() * hintLineNum;
         textBatch.drawComponent(text, x, y);
     }
     

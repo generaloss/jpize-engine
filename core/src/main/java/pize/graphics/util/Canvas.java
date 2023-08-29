@@ -1,6 +1,6 @@
 package pize.graphics.util;
 
-import pize.Pize;
+import pize.Jize;
 import pize.util.Disposable;
 import pize.graphics.camera.OrthographicCamera;
 import pize.gl.Gl;
@@ -26,7 +26,7 @@ public class Canvas extends Pixmap implements Disposable{
     }
 
     public Canvas(){
-        this(Pize.getWidth(), Pize.getHeight());
+        this(Jize.getWidth(), Jize.getHeight());
     }
 
 
@@ -38,7 +38,7 @@ public class Canvas extends Pixmap implements Disposable{
         frameTexture.setPixmap(this);
         camera.update();
         batch.begin(camera);
-        batch.draw(frameTexture, 0, 0, Pize.getWidth(), Pize.getHeight());
+        batch.draw(frameTexture, 0, 0, Jize.getWidth(), Jize.getHeight());
         batch.end();
 
         if(cullFace)

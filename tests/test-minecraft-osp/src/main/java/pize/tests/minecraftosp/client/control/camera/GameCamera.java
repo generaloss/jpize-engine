@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.control.camera;
 
-import pize.Pize;
+import pize.Jize;
 import pize.graphics.camera.PerspectiveCamera;
 import pize.math.Maths;
 import pize.math.util.EulerAngles;
@@ -59,7 +59,7 @@ public class GameCamera extends PerspectiveCamera{
 
 
     public void update(){
-        final float deltaTime = Pize.getDt();
+        final float deltaTime = Jize.getDt();
 
         // Follow target
         if(target == null)

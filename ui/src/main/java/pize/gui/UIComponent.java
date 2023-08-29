@@ -1,6 +1,6 @@
 package pize.gui;
 
-import pize.Pize;
+import pize.Jize;
 import pize.gui.constraint.Constraint;
 import pize.gui.constraint.ConstraintType;
 import pize.gui.constraint.RelativeConstraint;
@@ -69,7 +69,7 @@ public abstract class UIComponent<C> implements Cloneable{
         
         if(this.isTouchDown())
             preGrab = true;
-        else if(Pize.isTouchReleased())
+        else if(Jize.isTouchReleased())
             preGrab = false;
         
         
@@ -121,15 +121,15 @@ public abstract class UIComponent<C> implements Cloneable{
     
     
     public boolean isTouchDown(){
-        return Pize.isTouchDown() && isHover();
+        return Jize.isTouchDown() && isHover();
     }
     
     public boolean isTouched(){
-        return Pize.isTouched() && isHover();
+        return Jize.isTouched() && isHover();
     }
     
     public boolean isTouchReleased(){
-        return Pize.isTouchReleased() && grab;
+        return Jize.isTouchReleased() && grab;
     }
     
     
@@ -287,13 +287,13 @@ public abstract class UIComponent<C> implements Cloneable{
     }
     
     private boolean checkIsHover(){
-        float mouseX = Pize.getX();
-        float mouseY = Pize.getY();
+        float mouseX = Jize.getX();
+        float mouseY = Jize.getY();
         
-        if(!Pize.window().isFocused() || mouseX < 0 || mouseX >= Pize.getWidth() || mouseY < 0 || mouseY >= Pize.getHeight())
+        if(!Jize.window().isFocused() || mouseX < 0 || mouseX >= Jize.getWidth() || mouseY < 0 || mouseY >= Jize.getHeight())
             return false;
         
-        boolean hover = Pize.mouse().isInBounds(x, y, width, height);
+        boolean hover = Jize.mouse().isInBounds(x, y, width, height);
         hover &= isChildHover(childList.values());
         
         if(parent != null)
@@ -312,8 +312,8 @@ public abstract class UIComponent<C> implements Cloneable{
     }
     
     private boolean isChildHover(Collection<UIComponent<C>> childList){
-        float mouseX = Pize.getX();
-        float mouseY = Pize.getY();
+        float mouseX = Jize.getX();
+        float mouseY = Jize.getY();
         
         boolean hover = true;
         
@@ -416,13 +416,13 @@ public abstract class UIComponent<C> implements Cloneable{
 
     private float getParentWidth(){
         if(parent == null)
-            return Pize.getWidth();
+            return Jize.getWidth();
         return parent.getWidth();
     }
 
     private float getParentHeight(){
         if(parent == null)
-            return Pize.getHeight();
+            return Jize.getHeight();
         return parent.getHeight();
     }
 

@@ -1,6 +1,6 @@
 package pize.devtests;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextBuilder;
 
 public class Main{
@@ -16,7 +16,7 @@ public class Main{
         .create().init(new TriangleIntersectionTest());
         //.create().init(new AtlasTest());
         //.create().init(new MultiThreadTest());
-        Pize.runContexts();
+        Jize.runContexts();
 
         //myMultipleWindows();
 
@@ -44,7 +44,7 @@ public class Main{
                 .create()
                 .init(new FontTest());
 
-        Pize.runContexts();
+        Jize.runContexts();
     }
     
 }

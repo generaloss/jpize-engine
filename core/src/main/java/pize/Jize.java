@@ -15,7 +15,7 @@ import pize.math.vecmath.vector.Vec2f;
 
 import java.util.function.BooleanSupplier;
 
-public class Pize{
+public class Jize{
 
     private static final ContextManager contextManager = ContextManager.getInstance();
     

@@ -1,6 +1,6 @@
 package pize.tests.physic;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextAdapter;
 import pize.gl.Gl;
 import pize.graphics.util.batch.TextureBatch;
@@ -18,7 +18,7 @@ public class Main extends ContextAdapter{
                 .create()
                 .init(new Main());
 
-        Pize.runContexts();
+        Jize.runContexts();
     }
 
 
@@ -38,15 +38,15 @@ public class Main extends ContextAdapter{
 
     @Override
     public void render(){
-        Pize.window().setTitle("Physics (fps: " + Pize.getFPS() + ")");
+        Jize.window().setTitle("Physics (fps: " + Jize.getFPS() + ")");
 
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Jize.exit();
         if(Key.F11.isDown())
-            Pize.window().toggleFullscreen();
+            Jize.window().toggleFullscreen();
 
-        if(Pize.isTouched())
-            rect1.motion().add(Pize.getCursorPos().sub(rect1.pos()).nor());
+        if(Jize.isTouched())
+            rect1.motion().add(Jize.getCursorPos().sub(rect1.pos()).nor());
         
         final Vec2f collidedMotion = Collider2f.getCollidedMotion(rect1, rect1.motion(), rect2);
         rect1.pos().add(collidedMotion);

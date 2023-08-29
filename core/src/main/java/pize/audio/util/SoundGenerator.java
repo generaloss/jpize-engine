@@ -1,7 +1,7 @@
 package pize.audio.util;
 
 import org.lwjgl.BufferUtils;
-import pize.Pize;
+import pize.Jize;
 import pize.math.Maths;
 
 import java.nio.ByteBuffer;
@@ -14,7 +14,7 @@ public class SoundGenerator{
 
 
     public SoundGenerator(){
-        sampleRate = Pize.audio().getCurrent().getFrequency();
+        sampleRate = Jize.audio().getCurrent().getFrequency();
     }
 
 

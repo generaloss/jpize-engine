@@ -1,6 +1,6 @@
 package pize.tests.minecraft.gui.components;
 
-import pize.Pize;
+import pize.Jize;
 import pize.graphics.util.batch.TextureBatch;
 import pize.gui.UIComponent;
 import pize.gui.constraint.Constraint;
@@ -34,7 +34,7 @@ public abstract class MComponent extends UIComponent<TextureBatch>{
             init();
             needInit = false;
         }
-        scale = Math.max(1, Maths.round((float) Pize.getHeight() * INTERFACE_SCALE / 20 / 50));
+        scale = Math.max(1, Maths.round((float) Jize.getHeight() * INTERFACE_SCALE / 20 / 50));
         
         if(textSizeC != null){
             if(textSizeC instanceof PixelConstraint constraint)

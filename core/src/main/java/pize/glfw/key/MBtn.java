@@ -1,6 +1,6 @@
 package pize.glfw.key;
 
-import pize.Pize;
+import pize.Jize;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -31,15 +31,15 @@ public enum MBtn{
 
 
     public boolean isDown(){
-        return Pize.mouse().isDown(this);
+        return Jize.mouse().isDown(this);
     }
 
     public boolean isPressed(){
-        return Pize.mouse().isPressed(this);
+        return Jize.mouse().isPressed(this);
     }
 
     public boolean isReleased(){
-        return Pize.mouse().isReleased(this);
+        return Jize.mouse().isReleased(this);
     }
 
 }

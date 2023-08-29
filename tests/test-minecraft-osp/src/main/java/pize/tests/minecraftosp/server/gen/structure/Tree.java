@@ -8,7 +8,7 @@ import pize.tests.minecraftosp.server.level.ServerLevel;
 
 public class Tree extends Structure{
 
-    public void generateSpruceTree(ServerChunk chunk, int x, int y, int z, Random random){
+    public void generateSpruceTree(ServerChunk chunk, boolean other, int x, int y, int z, Random random){
         final ServerLevel level = chunk.getLevel();
 
         final int logHeight = random.random(10, 16);
@@ -29,175 +29,175 @@ public class Tree extends Structure{
                 else
                     radius = random.random(0.8F, 2.2F);
 
-                circleFilledXZ(level, x, height, z, radius, Blocks.SPRUCE_LEAVES);
+                circleFilledXZ(chunk, other, level, x, height, z, radius, Blocks.SPRUCE_LEAVES);
             }
 
-            level.setBlockFast(x, height, z, Blocks.SPRUCE_LOG);
+            level.setBlockDec(chunk, other, x, height, z, Blocks.SPRUCE_LOG);
         }
 
-        level.setBlockFast(x, peak, z, Blocks.SPRUCE_LEAVES);
+        level.setBlockDec(chunk, other, x, peak, z, Blocks.SPRUCE_LEAVES);
     }
 
 
-    public void generateOakTree(ServerChunk chunk, int x, int y, int z, Random random){
+    public void generateOakTree(ServerChunk chunk, boolean other, int x, int y, int z, Random random){
         final ServerLevel level = chunk.getLevel();
 
         final int logHeight = random.random(4, 9);
         final int peak = y + logHeight;
 
         // Верхний 1
-        level.setBlockFast(x  , peak  , z  , Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak  , z  , Blocks.OAK_LEAVES);
 
         // Окружающие ствол дерева 1х4
-        level.setBlockFast(x-1, peak  , z  , Blocks.OAK_LEAVES);
-        level.setBlockFast(x-1, peak-1, z  , Blocks.OAK_LEAVES);
-        level.setBlockFast(x-1, peak-2, z  , Blocks.OAK_LEAVES);
-        level.setBlockFast(x-1, peak-3, z  , Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak  , z  , Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-1, z  , Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-2, z  , Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-3, z  , Blocks.OAK_LEAVES);
 
-        level.setBlockFast(x+1, peak  , z  , Blocks.OAK_LEAVES);
-        level.setBlockFast(x+1, peak-1, z  , Blocks.OAK_LEAVES);
-        level.setBlockFast(x+1, peak-2, z  , Blocks.OAK_LEAVES);
-        level.setBlockFast(x+1, peak-3, z  , Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak  , z  , Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-1, z  , Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-2, z  , Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-3, z  , Blocks.OAK_LEAVES);
 
-        level.setBlockFast(x  , peak  , z-1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x  , peak-1, z-1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x  , peak-2, z-1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x  , peak-3, z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak  , z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-1, z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-2, z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-3, z-1, Blocks.OAK_LEAVES);
 
-        level.setBlockFast(x  , peak  , z+1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x  , peak-1, z+1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x  , peak-2, z+1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x  , peak-3, z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak  , z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-1, z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-2, z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-3, z+1, Blocks.OAK_LEAVES);
 
         // Другие 1х3
-        level.setBlockFast(x-1, peak-1, z-1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x-1, peak-2, z-1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x-1, peak-3, z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-1, z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-2, z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-3, z-1, Blocks.OAK_LEAVES);
 
-        level.setBlockFast(x-1, peak-1, z+1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x-1, peak-2, z+1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x-1, peak-3, z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-1, z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-2, z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-3, z+1, Blocks.OAK_LEAVES);
 
-        level.setBlockFast(x+1, peak-1, z-1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x+1, peak-2, z-1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x+1, peak-3, z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-1, z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-2, z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-3, z-1, Blocks.OAK_LEAVES);
 
-        level.setBlockFast(x+1, peak-1, z+1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x+1, peak-2, z+1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x+1, peak-3, z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-1, z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-2, z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-3, z+1, Blocks.OAK_LEAVES);
 
         // Другие по краям 3х2
-        level.setBlockFast(x-2, peak-2, z-1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x-2, peak-2, z  , Blocks.OAK_LEAVES);
-        level.setBlockFast(x-2, peak-2, z+1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x-2, peak-3, z-1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x-2, peak-3, z  , Blocks.OAK_LEAVES);
-        level.setBlockFast(x-2, peak-3, z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-2, peak-2, z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-2, peak-2, z  , Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-2, peak-2, z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-2, peak-3, z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-2, peak-3, z  , Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-2, peak-3, z+1, Blocks.OAK_LEAVES);
 
-        level.setBlockFast(x+2, peak-2, z-1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x+2, peak-2, z  , Blocks.OAK_LEAVES);
-        level.setBlockFast(x+2, peak-2, z+1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x+2, peak-3, z-1, Blocks.OAK_LEAVES);
-        level.setBlockFast(x+2, peak-3, z  , Blocks.OAK_LEAVES);
-        level.setBlockFast(x+2, peak-3, z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+2, peak-2, z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+2, peak-2, z  , Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+2, peak-2, z+1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+2, peak-3, z-1, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+2, peak-3, z  , Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+2, peak-3, z+1, Blocks.OAK_LEAVES);
 
-        level.setBlockFast(x-1, peak-2, z-2, Blocks.OAK_LEAVES);
-        level.setBlockFast(x  , peak-2, z-2, Blocks.OAK_LEAVES);
-        level.setBlockFast(x+1, peak-2, z-2, Blocks.OAK_LEAVES);
-        level.setBlockFast(x-1, peak-3, z-2, Blocks.OAK_LEAVES);
-        level.setBlockFast(x  , peak-3, z-2, Blocks.OAK_LEAVES);
-        level.setBlockFast(x+1, peak-3, z-2, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-2, z-2, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-2, z-2, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-2, z-2, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-3, z-2, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-3, z-2, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-3, z-2, Blocks.OAK_LEAVES);
 
-        level.setBlockFast(x-1, peak-2, z+2, Blocks.OAK_LEAVES);
-        level.setBlockFast(x  , peak-2, z+2, Blocks.OAK_LEAVES);
-        level.setBlockFast(x+1, peak-2, z+2, Blocks.OAK_LEAVES);
-        level.setBlockFast(x-1, peak-3, z+2, Blocks.OAK_LEAVES);
-        level.setBlockFast(x  , peak-3, z+2, Blocks.OAK_LEAVES);
-        level.setBlockFast(x+1, peak-3, z+2, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-2, z+2, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-2, z+2, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-2, z+2, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-3, z+2, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-3, z+2, Blocks.OAK_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-3, z+2, Blocks.OAK_LEAVES);
 
         for(int ly = 0; ly < logHeight; ly++)
-            level.setBlockFast(x, y + ly, z, Blocks.OAK_LOG);
+            level.setBlockDec(chunk, other, x, y + ly, z, Blocks.OAK_LOG);
     }
 
 
-    public void generateBirchTree(ServerChunk chunk, int x, int y, int z, Random random){
+    public void generateBirchTree(ServerChunk chunk, boolean other, int x, int y, int z, Random random){
         final ServerLevel level = chunk.getLevel();
 
         final int logHeight = random.random(5, 10);
         final int peak = y + logHeight;
 
         // Верхний 1
-        level.setBlockFast(x  , peak  , z  , Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak  , z  , Blocks.BIRCH_LEAVES);
 
         // Окружающие ствол дерева 1х4
-        level.setBlockFast(x-1, peak  , z  , Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-1, peak-1, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-1, peak-2, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-1, peak-3, z  , Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak  , z  , Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-1, z  , Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-2, z  , Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-3, z  , Blocks.BIRCH_LEAVES);
 
-        level.setBlockFast(x+1, peak  , z  , Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+1, peak-1, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+1, peak-2, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+1, peak-3, z  , Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak  , z  , Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-1, z  , Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-2, z  , Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-3, z  , Blocks.BIRCH_LEAVES);
 
-        level.setBlockFast(x  , peak  , z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x  , peak-1, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x  , peak-2, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x  , peak-3, z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak  , z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-1, z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-2, z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-3, z-1, Blocks.BIRCH_LEAVES);
 
-        level.setBlockFast(x  , peak  , z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x  , peak-1, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x  , peak-2, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x  , peak-3, z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak  , z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-1, z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-2, z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-3, z+1, Blocks.BIRCH_LEAVES);
 
         // Другие 1х3
-        level.setBlockFast(x-1, peak-1, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-1, peak-2, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-1, peak-3, z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-1, z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-2, z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-3, z-1, Blocks.BIRCH_LEAVES);
 
-        level.setBlockFast(x-1, peak-1, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-1, peak-2, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-1, peak-3, z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-1, z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-2, z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-3, z+1, Blocks.BIRCH_LEAVES);
 
-        level.setBlockFast(x+1, peak-1, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+1, peak-2, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+1, peak-3, z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-1, z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-2, z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-3, z-1, Blocks.BIRCH_LEAVES);
 
-        level.setBlockFast(x+1, peak-1, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+1, peak-2, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+1, peak-3, z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-1, z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-2, z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-3, z+1, Blocks.BIRCH_LEAVES);
 
         // Другие по краям 3х2
-        level.setBlockFast(x-2, peak-2, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-2, peak-2, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-2, peak-2, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-2, peak-3, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-2, peak-3, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-2, peak-3, z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-2, peak-2, z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-2, peak-2, z  , Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-2, peak-2, z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-2, peak-3, z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-2, peak-3, z  , Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-2, peak-3, z+1, Blocks.BIRCH_LEAVES);
 
-        level.setBlockFast(x+2, peak-2, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+2, peak-2, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+2, peak-2, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+2, peak-3, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+2, peak-3, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+2, peak-3, z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+2, peak-2, z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+2, peak-2, z  , Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+2, peak-2, z+1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+2, peak-3, z-1, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+2, peak-3, z  , Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+2, peak-3, z+1, Blocks.BIRCH_LEAVES);
 
-        level.setBlockFast(x-1, peak-2, z-2, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x  , peak-2, z-2, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+1, peak-2, z-2, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-1, peak-3, z-2, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x  , peak-3, z-2, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+1, peak-3, z-2, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-2, z-2, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-2, z-2, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-2, z-2, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-3, z-2, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-3, z-2, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-3, z-2, Blocks.BIRCH_LEAVES);
 
-        level.setBlockFast(x-1, peak-2, z+2, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x  , peak-2, z+2, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+1, peak-2, z+2, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x-1, peak-3, z+2, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x  , peak-3, z+2, Blocks.BIRCH_LEAVES);
-        level.setBlockFast(x+1, peak-3, z+2, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-2, z+2, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-2, z+2, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-2, z+2, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x-1, peak-3, z+2, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x  , peak-3, z+2, Blocks.BIRCH_LEAVES);
+        level.setBlockDec(chunk, other, x+1, peak-3, z+2, Blocks.BIRCH_LEAVES);
 
         for(int ly = 0; ly < logHeight; ly++)
-            level.setBlockFast(x, y + ly, z, Blocks.BIRCH_LOG);
+            level.setBlockDec(chunk, other, x, y + ly, z, Blocks.BIRCH_LOG);
     }
 
 }

@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.renderer.particle;
 
-import pize.Pize;
+import pize.Jize;
 import pize.graphics.texture.Texture;
 import pize.math.Maths;
 
@@ -14,7 +14,7 @@ public enum Particles{
         .texture(new Texture("texture/block/planks.png"))
         .alphaFunc(time->1 - time)
         .animate(instance->{
-            instance.velocity.y -= Pize.getDt() * 0.5;
+            instance.velocity.y -= Jize.getDt() * 0.5;
             instance.velocity.mul(0.95);
             instance.position.add(instance.velocity);
         })

@@ -97,7 +97,7 @@ public class DefaultGenerator implements ChunkGenerator{
                 final int height = Maths.round(continentalness * 32 + 128);
 
                 for(int y = 0; y < height; y++)
-                    chunk.setBlockFast(lx, y, lz, Blocks.STONE);
+                    chunk.setBlockDec(lx, y, lz, Blocks.STONE);
 
                 final float yRange = HEIGHT_IDX - height;
                 for(int y = height; y < HEIGHT; y++){
@@ -105,7 +105,7 @@ public class DefaultGenerator implements ChunkGenerator{
                     final float continentalness3D = continentalnessNoise.getUnitNoise(x, y, z); // [0, 1]
 
                     if(Maths.quintic(erosion * continentalness3D) * 1.2F > heightK)
-                        chunk.setBlockFast(lx, y, lz, Blocks.STONE);
+                        chunk.setBlockDec(lx, y, lz, Blocks.STONE);
                     else
                         break;
                 }
@@ -179,7 +179,7 @@ public class DefaultGenerator implements ChunkGenerator{
     }
 
     @Override
-    public void decorate(ServerChunk chunk){
+    public void decorate(ServerChunk chunk, boolean other){
         final int seed = chunk.getLevel().getConfiguration().getSeed();
         final int baseX = chunk.getPosition().x * SIZE;
         final int baseZ = chunk.getPosition().z * SIZE;
@@ -197,7 +197,6 @@ public class DefaultGenerator implements ChunkGenerator{
         final BiomeMap biomes = chunk.getBiomes();
 
         /** SURFACE */
-
         for(int lx = 0; lx < SIZE; lx++){
             for(int lz = 0; lz < SIZE; lz++){
                 final int height = heightmapSurface.getHeight(lx, lz);
@@ -219,27 +218,27 @@ public class DefaultGenerator implements ChunkGenerator{
                 };
 
                 // SET SURFACE BLOCKS
-                chunk.setBlockFast(lx, height, lz, surfaceBlock);
+                chunk.setBlockDec(chunk, other, lx, height, lz, surfaceBlock);
 
                 final int subsurfaceLayerHeight = random.random(2, 5);
                 for(int y = height - subsurfaceLayerHeight; y < height; y++)
-                    chunk.setBlockFast(lx, y, lz, subsurfaceBlock);
+                    chunk.setBlockDec(chunk, other, lx, y, lz, subsurfaceBlock);
 
                 // WATER, ICE
                 switch(biome){
-                    case RIVER -> chunk.setBlockFast(lx, height, lz, Blocks.WATER);
-                    case ICE_RIVER -> chunk.setBlockFast(lx, height, lz, Blocks.ICE);
+                    case RIVER -> chunk.setBlockDec(chunk, other, lx, height, lz, Blocks.WATER);
+                    case ICE_RIVER -> chunk.setBlockDec(chunk, other, lx, height, lz, Blocks.ICE);
 
                     case SEA -> {
                         for(int y = height; y <= SEA_LEVEL; y++)
                             if(chunk.getBlock(lx, y, lz) == Blocks.AIR)
-                                chunk.setBlockFast(lx, y, lz, Blocks.WATER);
+                                chunk.setBlockDec(chunk, other, lx, y, lz, Blocks.WATER);
                     }
 
                     case ICE_SEA -> {
                         for(int y = height; y <= SEA_LEVEL; y++)
                             if(chunk.getBlock(lx, y, lz) == Blocks.AIR)
-                                chunk.setBlockFast(lx, y, lz, Blocks.ICE);
+                                chunk.setBlockDec(chunk, other, lx, y, lz, Blocks.ICE);
                     }
                 }
 
@@ -256,56 +255,54 @@ public class DefaultGenerator implements ChunkGenerator{
                 final Biome biome = biomes.getBiome(lx, lz);
 
                 switch(biome){
-                    case DESERT -> generateCactus(chunk, lx, height + 1, lz);
+                    case DESERT -> generateCactus(chunk, other, lx, height + 1, lz);
 
                     case FOREST -> {
                         if(random.randomBoolean(0.02)){
                             if(random.randomBoolean(0.7))
-                                tree.generateOakTree(chunk, x, height + 1, z, random);
+                                tree.generateOakTree(chunk, other, x, height + 1, z, random);
                             else
-                                tree.generateBirchTree(chunk, x, height + 1, z, random);
+                                tree.generateBirchTree(chunk, other, x, height + 1, z, random);
                         }
 
                         else if(random.randomBoolean(0.05))
-                            chunk.setBlockFast(lx, height + 1, lz, Blocks.GRASS);
+                            chunk.setBlockDec(chunk, other, lx, height + 1, lz, Blocks.GRASS);
                     }
 
                     case TAIGA -> {
                         if(random.randomBoolean(0.03))
-                            tree.generateSpruceTree(chunk, x, height + 1, z, random);
+                            tree.generateSpruceTree(chunk, other, x, height + 1, z, random);
 
                         else if(random.randomBoolean(0.0005))
-                            tower.generate(chunk, x, height, z, random);
+                            tower.generate(chunk, other, x, height, z, random);
 
                         else if(random.randomBoolean(0.005))
-                            chunk.setBlockFast(lx, height + 1, lz, Blocks.GRASS);
+                            chunk.setBlockDec(chunk, other, lx, height + 1, lz, Blocks.GRASS);
                     }
 
                     case SNOWY_TAIGA -> {
                         if(random.randomBoolean(0.005))
-                            tree.generateSpruceTree(chunk, x, height + 1, z, random);
+                            tree.generateSpruceTree(chunk, other, x, height + 1, z, random);
 
                         else if(random.randomBoolean(0.0005))
-                            tower.generate(chunk, x, height, z, random);
+                            tower.generate(chunk, other, x, height, z, random);
 
                         else if(random.randomBoolean(0.005))
-                            chunk.setBlockFast(lx, height + 1, lz, Blocks.GRASS);
+                            chunk.setBlockDec(chunk, other, lx, height + 1, lz, Blocks.GRASS);
                     }
                 }
 
             }
         }
 
-        heightmapSurface.update();
-
         // System.out.println("CHUNK: " + chunk.getPosition().x + ", " + chunk.getPosition().z);
     }
 
-    private void generateCactus(ServerChunk chunk, int lx, int y, int lz){
+    private void generateCactus(ServerChunk chunk, boolean other, int lx, int y, int lz){
         if(random.randomBoolean(0.005)){
             final int cactusHeight = random.random(1, 4);
             for(int i = 0; i < cactusHeight; i++)
-                chunk.setBlockFast(lx, y + i, lz, Blocks.CACTUS);
+                chunk.setBlockDec(chunk, other, lx, y + i, lz, Blocks.CACTUS);
         }
     }
     

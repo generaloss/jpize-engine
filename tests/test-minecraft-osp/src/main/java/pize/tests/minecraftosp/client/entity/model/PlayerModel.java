@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.entity.model;
 
-import pize.Pize;
+import pize.Jize;
 import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
@@ -120,7 +120,7 @@ public class PlayerModel extends HumanoidModel{
         }else
             head.setShow(true);
         
-        torso.getRotation().yaw += (-player.getLerpRotation().yaw - torso.getRotation().yaw) * Pize.getDt() * 4;
+        torso.getRotation().yaw += (-player.getLerpRotation().yaw - torso.getRotation().yaw) * Jize.getDt() * 4;
         
         head.getRotation().yaw = -player.getLerpRotation().yaw;
         head.getRotation().pitch = player.getLerpRotation().pitch;

@@ -1,6 +1,6 @@
 package pize.graphics.postprocess;
 
-import pize.Pize;
+import pize.Jize;
 import pize.util.Resizable;
 import pize.gl.GlObject;
 import pize.gl.buffer.GlAttachment;
@@ -37,7 +37,7 @@ public class RenderBufferObject extends GlObject implements Resizable{
     }
 
     public RenderBufferObject(){
-        this(Pize.getWidth(), Pize.getHeight());
+        this(Jize.getWidth(), Jize.getHeight());
     }
 
 

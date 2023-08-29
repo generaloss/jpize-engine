@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.net;
 
-import pize.Pize;
+import pize.Jize;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
 import pize.net.tcp.TcpConnection;
@@ -77,7 +77,7 @@ public class ClientConnection implements TcpListener, PacketHandler{
 
                 final Vec3f camPosition = game.getCamera().getPosition();
 
-                Pize.execSync(() ->
+                Jize.execSync(() ->
                     game.getSession().getSoundPlayer().play(
                         packet.sound,
                         packet.volume, packet.pitch,
@@ -220,7 +220,7 @@ public class ClientConnection implements TcpListener, PacketHandler{
     
     @Override
     public void disconnected(TcpConnection connection){
-        Pize.exit();
+        Jize.exit();
     }
     
 }

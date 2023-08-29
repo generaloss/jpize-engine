@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.renderer.text;
 
-import pize.Pize;
+import pize.Jize;
 import pize.util.Disposable;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
@@ -32,7 +32,7 @@ public class TextComponentBatch implements Disposable{
     
     
     public void updateScale(){
-        font.setScale(Maths.round(Pize.getHeight() / 330F));
+        font.setScale(Maths.round(Jize.getHeight() / 330F));
     }
     
     

@@ -1,6 +1,6 @@
 package pize.tests.window;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextAdapter;
 import pize.gl.Gl;
 import pize.graphics.texture.Texture;
@@ -16,7 +16,7 @@ public class Main extends ContextAdapter{
                 .create()
                 .init(new Main());
 
-        Pize.runContexts();
+        Jize.runContexts();
     }
     
     
@@ -34,11 +34,11 @@ public class Main extends ContextAdapter{
     public void render(){
         Gl.clearColorBuffer();
         batch.begin();
-        batch.draw(texture, 0, 0, Pize.getWidth(), Pize.getHeight());
+        batch.draw(texture, 0, 0, Jize.getWidth(), Jize.getHeight());
         batch.end();
         
         if(Key.ESCAPE.isPressed())
-            Pize.exit();
+            Jize.exit();
     }
     
     @Override

@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.renderer.level;
 
-import pize.Pize;
+import pize.Jize;
 import pize.util.Disposable;
 import pize.graphics.texture.Texture;
 import pize.graphics.util.batch.TextureBatch;
@@ -37,7 +37,7 @@ public class VignetteRenderer implements Disposable{
         
         // Render
         batch.setAlpha(vignette);
-        batch.draw(vignetteTexture, 0, 0, Pize.getWidth(), Pize.getHeight());
+        batch.draw(vignetteTexture, 0, 0, Jize.getWidth(), Jize.getHeight());
         batch.resetColor();
         batch.end();
     }

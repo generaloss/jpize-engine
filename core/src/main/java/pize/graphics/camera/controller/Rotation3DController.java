@@ -1,6 +1,6 @@
 package pize.graphics.camera.controller;
 
-import pize.Pize;
+import pize.Jize;
 import pize.math.util.EulerAngles;
 
 public class Rotation3DController{
@@ -15,16 +15,16 @@ public class Rotation3DController{
         mouseSensitivity = 1;
         
         nextFrameRotationLock = true;
-        Pize.mouse().setShow(showMouse);
+        Jize.mouse().setShow(showMouse);
     }
     
     public void update(){
-        if(Pize.window().isFocused() && !showMouse){
-            if(!nextFrameRotationLock && Pize.mouse().isInWindow()){
-                float x = Pize.mouse().getX();
-                float y = Pize.mouse().getY();
-                dAngX += (int) (Pize.getWidth() / 2F) - x;
-                dAngY += (int) (Pize.getHeight() / 2F) - y;
+        if(Jize.window().isFocused() && !showMouse){
+            if(!nextFrameRotationLock && Jize.mouse().isInWindow()){
+                float x = Jize.mouse().getX();
+                float y = Jize.mouse().getY();
+                dAngX += (int) (Jize.getWidth() / 2F) - x;
+                dAngY += (int) (Jize.getHeight() / 2F) - y;
                 
                 rotation.yaw += dAngX * 0.02 * mouseSensitivity;
                 rotation.pitch += dAngY * 0.02 * mouseSensitivity;
@@ -33,7 +33,7 @@ public class Rotation3DController{
                 dAngX *= 0.1;
                 dAngY *= 0.1;
             }
-            Pize.mouse().setPos(Pize.getWidth() / 2, Pize.getHeight() / 2);
+            Jize.mouse().setPos(Jize.getWidth() / 2, Jize.getHeight() / 2);
             nextFrameRotationLock = false;
         }
     }
@@ -54,7 +54,7 @@ public class Rotation3DController{
     
     public void showMouse(boolean showMouse){
         this.showMouse = showMouse;
-        Pize.mouse().setShow(showMouse);
+        Jize.mouse().setShow(showMouse);
     }
     
     public void toggleShowMouse(){

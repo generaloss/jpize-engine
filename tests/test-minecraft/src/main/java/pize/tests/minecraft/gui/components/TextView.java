@@ -1,6 +1,6 @@
 package pize.tests.minecraft.gui.components;
 
-import pize.Pize;
+import pize.Jize;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.Glyph;
 import pize.graphics.util.batch.TextureBatch;
@@ -77,7 +77,7 @@ public class TextView extends MComponent{
         if(scissor && parent != null && (widthDifference = width - parent.getWidth()) > 0){
             final float xDifference = this.x - parent.getX();
             final float relativeX = xDifference + scrollShiftX;
-            final float increment = Pize.getDt() * parent.getWidth() * widthDifference / 5000;
+            final float increment = Jize.getDt() * parent.getWidth() * widthDifference / 5000;
             final int scissorOffset = Math.round(parent.getHeight() / 20) * 2;
             
             if(scrollDir){

@@ -1,6 +1,6 @@
 package pize.devtests;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextAdapter;
 import pize.gl.Gl;
 import pize.glfw.key.Key;
@@ -16,34 +16,34 @@ public class WindowTest extends ContextAdapter{
     BitmapFont font;
 
     public void init(){
-        Pize.window().setSize(1280, 720);
+        Jize.window().setSize(1280, 720);
 
         batch = new TextureBatch();
         font = FontLoader.loadFnt("font.fnt");
         font.setScale(0.5F);
 
-        Window window = Pize.window();
+        Window window = Jize.window();
 
         window.setIconifyCallback((boolean iconify) -> {
             Stopwatch stopwatch = new Stopwatch().start();
-            Pize.execIf(window::focus, () -> stopwatch.getSeconds() > 2);
+            Jize.execIf(window::focus, () -> stopwatch.getSeconds() > 2);
         });
     }
 
     public void render(){
-        Window window = Pize.window();
+        Window window = Jize.window();
 
         window.requestAttention();
 
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Jize.exit();
         if(Key.F11.isDown())
             window.toggleFullscreen();
 
         if(Key.H.isDown()){
             window.hide();
             Stopwatch stopwatch = new Stopwatch().start();
-            Pize.execIf(window::show, () -> stopwatch.getSeconds() > 2);
+            Jize.execIf(window::show, () -> stopwatch.getSeconds() > 2);
         }
 
         String info =

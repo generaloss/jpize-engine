@@ -1,6 +1,6 @@
 package pize.devtests;
 
-import pize.Pize;
+import pize.Jize;
 import pize.gl.Gl;
 import pize.gl.glenum.GlTarget;
 import pize.gl.tesselation.GlPrimitive;
@@ -79,9 +79,9 @@ public class TriangleIntersectionTest extends ContextAdapter{
     public void update(){
         // Exit & Fullscreen
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Jize.exit();
         if(Key.F11.isDown())
-            Pize.window().toggleFullscreen();
+            Jize.window().toggleFullscreen();
 
         // Camera control
         final Vec3f cameraMotion = new Vec3f();
@@ -101,7 +101,7 @@ public class TriangleIntersectionTest extends ContextAdapter{
             cameraMotion.y--;
 
         // Camera update
-        camera.getPosition().add(cameraMotion.mul(Pize.getDt() * 2));
+        camera.getPosition().add(cameraMotion.mul(Jize.getDt() * 2));
         rotationController.update();
         camera.getRotation().set(rotationController.getRotation());
         camera.update();

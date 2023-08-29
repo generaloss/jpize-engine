@@ -1,6 +1,6 @@
 package pize.util.time;
 
-import pize.Pize;
+import pize.Jize;
 import pize.math.Maths;
 
 public class Sync{
@@ -15,7 +15,7 @@ public class Sync{
     }
 
     public Sync(){
-        this(Pize.monitor().getRefreshRate());
+        this(Jize.monitor().getRefreshRate());
     }
 
 

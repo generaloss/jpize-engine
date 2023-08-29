@@ -1,6 +1,6 @@
 package pize.graphics.camera;
 
-import pize.Pize;
+import pize.Jize;
 import pize.util.Resizable;
 import pize.math.Maths;
 import pize.math.vecmath.matrix.Matrix4f;
@@ -25,7 +25,7 @@ public class CenteredOrthographicCamera extends Camera2D implements Resizable{
     }
 
     public CenteredOrthographicCamera(){
-        this(Pize.getWidth(), Pize.getHeight());
+        this(Jize.getWidth(), Jize.getHeight());
     }
 
 

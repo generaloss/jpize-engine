@@ -1,7 +1,7 @@
 package pize.devtests;
 
 import org.lwjgl.opengl.GL;
-import pize.Pize;
+import pize.Jize;
 import pize.gl.Gl;
 import pize.glfw.glfw.Glfw;
 import pize.io.Window;
@@ -13,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public final class GlfwMultipleWindows{
 
     public static void main(String[] args){
-        final Vec2f scale = Pize.primaryMonitor().getContentScale();
+        final Vec2f scale = Jize.primaryMonitor().getContentScale();
         final List<Window> windows = new CopyOnWriteArrayList<>();
 
         for(int i = 0; i < 4; i++){

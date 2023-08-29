@@ -34,7 +34,12 @@ public class ServerChunk extends LevelChunk{
         return false;
     }
     
-    public void setBlockFast(int lx, int y, int lz, Block block){
+    public void setBlockDec(ServerChunk from, boolean others, int lx, int y, int lz, Block block){
+        if(this != from || others)
+            super.setBlock(lx, y, lz, block);
+    }
+
+    public void setBlockDec(int lx, int y, int lz, Block block){
         super.setBlock(lx, y, lz, block);
     }
 

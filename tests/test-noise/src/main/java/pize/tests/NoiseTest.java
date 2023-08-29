@@ -1,6 +1,6 @@
 package pize.tests;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextAdapter;
 import pize.graphics.texture.Pixmap;
 import pize.graphics.texture.Texture;
@@ -17,7 +17,7 @@ public class NoiseTest extends ContextAdapter{
                 .create()
                 .init(new NoiseTest());
 
-        Pize.runContexts();
+        Jize.runContexts();
     }
     
     
@@ -44,11 +44,11 @@ public class NoiseTest extends ContextAdapter{
     
     public void render(){
         batch.begin();
-        batch.draw(mapTexture, 0, 0, Pize.getWidth(), Pize.getHeight());
+        batch.draw(mapTexture, 0, 0, Jize.getWidth(), Jize.getHeight());
         batch.end();
         
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Jize.exit();
     }
     
 }

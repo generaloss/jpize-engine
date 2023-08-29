@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.renderer.level;
 
-import pize.Pize;
+import pize.Jize;
 import pize.util.Disposable;
 import pize.util.Resizable;
 import pize.files.Resource;
@@ -102,8 +102,8 @@ public class LevelRenderer implements Disposable, Resizable{
         batchFramebuffer.begin();
         {
             batch.begin();
-            final float cursorSize = Pize.getHeight() / 48F;
-            batch.draw(cursorTexture, Pize.getWidth() / 2F - cursorSize / 2, Pize.getHeight() / 2F - cursorSize / 2, cursorSize, cursorSize);
+            final float cursorSize = Jize.getHeight() / 48F;
+            batch.draw(cursorTexture, Jize.getWidth() / 2F - cursorSize / 2, Jize.getHeight() / 2F - cursorSize / 2, cursorSize, cursorSize);
             batch.end();
         }
         batchFramebuffer.end();

@@ -1,6 +1,6 @@
 package pize.tests.drift;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextAdapter;
 import pize.graphics.camera.CenteredOrthographicCamera;
 import pize.gl.Gl;
@@ -17,7 +17,7 @@ public class Drift extends ContextAdapter{
                 .create()
                 .init(new Drift());
 
-        Pize.runContexts();
+        Jize.runContexts();
     }
 
 
@@ -35,7 +35,7 @@ public class Drift extends ContextAdapter{
 
     public void update(){
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Jize.exit();
 
         car.update();
 

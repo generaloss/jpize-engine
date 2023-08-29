@@ -1,6 +1,6 @@
 package pize.tests.terraria.graphics;
 
-import pize.Pize;
+import pize.Jize;
 
 public class MapRenderInfo{
 
@@ -14,8 +14,8 @@ public class MapRenderInfo{
 
 
     public void update(){
-        int windowWidth = Pize.getWidth();
-        int windowHeight = Pize.getHeight();
+        int windowWidth = Jize.getWidth();
+        int windowHeight = Jize.getHeight();
 
         if(windowWidth > windowHeight)
             cellSize = (float) windowWidth / TILES_PER_SCREEN;

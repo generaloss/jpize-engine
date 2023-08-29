@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp.client.entity;
 
-import pize.Pize;
+import pize.Jize;
 import pize.math.Mathc;
 import pize.math.Maths;
 import pize.math.vecmath.vector.Vec3f;
@@ -69,7 +69,7 @@ public class LocalPlayer extends AbstractClientPlayer{
             );
             getVelocity().add(push);
             getLevel().getGame().getCamera().push(push);
-            Pize.execSync(() -> getLevel().getGame().getSession().getSoundPlayer().play(SoundGroup.HIT.random(), 0.3F, 1, 0, 0, 0) );
+            Jize.execSync(() -> getLevel().getGame().getSession().getSoundPlayer().play(SoundGroup.HIT.random(), 0.3F, 1, 0, 0, 0) );
         }
 
         // Gravity

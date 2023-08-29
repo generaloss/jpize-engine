@@ -1,6 +1,6 @@
 package pize.tests.audio;
 
-import pize.Pize;
+import pize.Jize;
 import pize.audio.io.WavFile;
 import pize.audio.sound.Sound;
 import pize.audio.util.SoundGenerator;
@@ -17,7 +17,7 @@ public class Main extends ContextAdapter{
                 .icon("icon.png").
                 create()
                 .init(new Main());
-        Pize.runContexts();
+        Jize.runContexts();
     }
 
 
@@ -56,7 +56,7 @@ public class Main extends ContextAdapter{
     @Override
     public void render(){
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Jize.exit();
 
         AudioPlayerUI.update();
     }

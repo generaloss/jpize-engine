@@ -1,6 +1,6 @@
 package pize.devtests;
 
-import pize.Pize;
+import pize.Jize;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
 import pize.graphics.texture.Texture;
@@ -19,15 +19,15 @@ public class LoadingTest{
                 .create().init(new LoadingWindow());
 
         new PizeRunnable(() ->
-                Pize.execSync(() -> {
+                Jize.execSync(() -> {
 
-                    Pize.closeAllWindows();
+                    Jize.closeAllWindows();
                     ContextBuilder.newContext(1280, 720, "App")
                             .create().init(new KeyboardTest());
                 })
         ).runLaterAsync(1500);
 
-        Pize.runContexts();
+        Jize.runContexts();
     }
 
     static class LoadingWindow extends ContextAdapter{
@@ -37,7 +37,7 @@ public class LoadingTest{
             final BitmapFont font = FontLoader.getDefault();
 
             batch.begin();
-            batch.draw(bg, 0, 0, Pize.getWidth(), Pize.getHeight());
+            batch.draw(bg, 0, 0, Jize.getWidth(), Jize.getHeight());
             font.drawText(batch, "Loading...", 20, 20);
             batch.end();
         }

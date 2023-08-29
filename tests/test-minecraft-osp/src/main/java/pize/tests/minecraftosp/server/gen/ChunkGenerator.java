@@ -6,7 +6,7 @@ public interface ChunkGenerator{
 
     void generate(ServerChunk chunk);
 
-    void decorate(ServerChunk chunk);
+    void decorate(ServerChunk chunk, boolean other);
 
     String getID();
     

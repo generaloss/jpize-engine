@@ -1,6 +1,6 @@
 package pize.devtests;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextAdapter;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
@@ -13,7 +13,7 @@ public class FontTest extends ContextAdapter{
     BitmapFont font;
 
     public void init(){
-        Pize.window().setSize(1280, 720);
+        Jize.window().setSize(1280, 720);
 
         batch = new TextureBatch();
         font = FontLoader.loadFnt("font.fnt");
@@ -31,7 +31,7 @@ public class FontTest extends ContextAdapter{
                 """;
 
         batch.begin();
-        font.drawText(batch, text, 0, Pize.getHeight(), Pize.getWidth(), true);
+        font.drawText(batch, text, 0, Jize.getHeight(), Jize.getWidth(), true);
         batch.end();
     }
 

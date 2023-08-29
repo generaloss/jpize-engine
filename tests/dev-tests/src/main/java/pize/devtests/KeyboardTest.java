@@ -1,6 +1,6 @@
 package pize.devtests;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextAdapter;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
@@ -20,14 +20,14 @@ public class KeyboardTest extends ContextAdapter{
         font = FontLoader.loadFnt("font.fnt");
         font.setScale(0.5F);
 
-        Pize.keyboard().setStickyKeys(true);
+        Jize.keyboard().setStickyKeys(true);
     }
 
     public void render(){
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Jize.exit();
         if(Key.F11.isDown())
-            Pize.window().toggleFullscreen();
+            Jize.window().toggleFullscreen();
 
         Gl.clearColorBuffer();
         Gl.clearColor(0.4, 0.5, 0.7);
@@ -38,7 +38,7 @@ public class KeyboardTest extends ContextAdapter{
         for(Key key: Key.values())
             if(key.isPressed())
                 pressedKeys.add(key.getName());
-        font.drawText(batch, "Pressed keys: " + pressedKeys, 0, Pize.getHeight(), Pize.getWidth(), true);
+        font.drawText(batch, "Pressed keys: " + pressedKeys, 0, Jize.getHeight(), Jize.getWidth(), true);
 
         batch.end();
     }

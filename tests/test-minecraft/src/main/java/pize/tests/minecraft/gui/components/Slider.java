@@ -1,6 +1,6 @@
 package pize.tests.minecraft.gui.components;
 
-import pize.Pize;
+import pize.Jize;
 import pize.graphics.texture.TextureRegion;
 import pize.graphics.util.batch.TextureBatch;
 import pize.gui.Align;
@@ -67,7 +67,7 @@ public class Slider extends MComponent{
         
         if(isTouchDown())
             drag = true;
-        else if(Pize.isTouchReleased())
+        else if(Jize.isTouchReleased())
             drag = false;
         
         prevValue = value;
@@ -75,7 +75,7 @@ public class Slider extends MComponent{
         if(!drag)
             return;
         
-        float mouseX = Pize.getX();
+        float mouseX = Jize.getX();
         value = Maths.clamp(( mouseX - x - handleWidth / 2 ) / ( width - handleWidth ),0,1);
         
         if(divisions > 0)

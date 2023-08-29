@@ -38,8 +38,10 @@
       <module name="delta-tests" target="17" />
       <module name="delta-tilemap" target="17" />
       <module name="delta-ui" target="17" />
+      <module name="jpize" target="17" />
       <module name="mod" target="17" />
       <module name="particle" target="17" />
+      <module name="pizza-engine" target="17" />
       <module name="PizzaEngine" target="17" />
       <module name="security" target="17" />
       <module name="sgl-core" target="17" />

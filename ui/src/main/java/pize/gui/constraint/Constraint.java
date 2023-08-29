@@ -1,6 +1,6 @@
 package pize.gui.constraint;
 
-import pize.Pize;
+import pize.Jize;
 
 import java.util.function.DoubleSupplier;
 
@@ -11,11 +11,11 @@ public abstract class Constraint{
     }
     
     public static PixelConstraint scrWidth(){
-        return pixel(Pize::getWidth);
+        return pixel(Jize::getWidth);
     }
     
     public static PixelConstraint scrHeight(){
-        return pixel(Pize::getHeight);
+        return pixel(Jize::getHeight);
     }
     
     public static RelativeConstraint matchParent(){

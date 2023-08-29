@@ -1,6 +1,6 @@
 package pize.tests.terraria;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextAdapter;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
@@ -27,7 +27,7 @@ public class Main extends ContextAdapter{
                 .create()
                 .init(new Main());
 
-        Pize.runContexts();
+        Jize.runContexts();
     }
 
 
@@ -63,17 +63,17 @@ public class Main extends ContextAdapter{
         gameRenderer.renderEntities(world.getEntities());
         player.update(world);
 
-        font.drawText(batch, "fps: " + Pize.getFPS(), 10, 10);
+        font.drawText(batch, "fps: " + Jize.getFPS(), 10, 10);
         batch.end();
 
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Jize.exit();
         if(Key.F11.isDown())
-            Pize.window().toggleFullscreen();
+            Jize.window().toggleFullscreen();
     }
 
     private void ctrl(){
-        final float scroll = Pize.mouse().getScroll();
+        final float scroll = Jize.mouse().getScroll();
         gameRenderer.getRenderInfo().mulScale(
             scroll < 0 ?
                 1 / Math.pow(1.1, Maths.abs(scroll)) : scroll > 0 ?
@@ -83,14 +83,14 @@ public class Main extends ContextAdapter{
 
         gameRenderer.getCamera().getPosition().set( player.pos().copy().add(player.rect().getCenter()) );
 
-        Vec2f touch = new Vec2f(Pize.getX(), Pize.getY())
+        Vec2f touch = new Vec2f(Jize.getX(), Jize.getY())
             .sub(gameRenderer.getCamera().getWidth() / 2F, gameRenderer.getCamera().getHeight() / 2F)
             .div(gameRenderer.getRenderInfo().getCellSize() * gameRenderer.getRenderInfo().getScale())
             .add(gameRenderer.getCamera().getPosition());
 
         MapTile tile = world.getTileMap().getTile(touch.xf(), touch.yf());
-        if(tile != null && Pize.isTouched())
-            tile.setType(Pize.mouse().isLeftPressed() ? AIR : DIRT);
+        if(tile != null && Jize.isTouched())
+            tile.setType(Jize.mouse().isLeftPressed() ? AIR : DIRT);
 
         if(player.pos().y < -100)
             player.pos().y = world.getTileMap().getHeight();

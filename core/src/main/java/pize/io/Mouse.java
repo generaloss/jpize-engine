@@ -1,6 +1,6 @@
 package pize.io;
 
-import pize.Pize;
+import pize.Jize;
 import pize.glfw.input.GlfwInputMode;
 import pize.glfw.input.GlfwAction;
 import pize.glfw.key.MBtn;
@@ -149,8 +149,8 @@ public class Mouse{
     }
     
     public boolean isInBounds(double x, double y, double width, double height){
-        final float cursorX = Pize.getX();
-        final float cursorY = Pize.getY();
+        final float cursorX = Jize.getX();
+        final float cursorY = Jize.getY();
         return !(cursorX < x || cursorY < y || cursorX >= x + width || cursorY >= y + height);
     }
 

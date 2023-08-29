@@ -1,6 +1,6 @@
 package pize.tests.minecraft.gui.screen.screens;
 
-import pize.Pize;
+import pize.Jize;
 import pize.graphics.util.batch.TextureBatch;
 import pize.gui.Align;
 import pize.gui.LayoutType;
@@ -25,7 +25,7 @@ public class IngameGUI extends Screen{
         layout.alignItems(Align.LEFT_UP);
 
         // <FPS>
-        TextView fps = new TextView(session, new Component().formattedText(Pize.getFPS() + " FPS"));
+        TextView fps = new TextView(session, new Component().formattedText(Jize.getFPS() + " FPS"));
         fps.setPosition(Constraint.relativeToHeight(0.005));
         fps.disableShadow(true);
         fps.show(session.getOptions().isShowFps());
@@ -35,7 +35,7 @@ public class IngameGUI extends Screen{
 
     @Override
     public void render(TextureBatch batch){
-        ((TextComponent) ((TextView) layout.get("fps")).getText().getComponent(0)) .setText(Pize.getFPS() + " FPS");
+        ((TextComponent) ((TextView) layout.get("fps")).getText().getComponent(0)) .setText(Jize.getFPS() + " FPS");
 
         layout.render(batch);
     }

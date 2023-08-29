@@ -1,6 +1,6 @@
 package pize.tests.minecraft.gui.components;
 
-import pize.Pize;
+import pize.Jize;
 import pize.graphics.util.batch.TextureBatch;
 import pize.gui.constraint.Constraint;
 
@@ -17,8 +17,8 @@ public class Layout extends MComponent{
     }
     
     public boolean isHoverIgnoreChildren(){
-        float mouseX = Pize.getX();
-        float mouseY = Pize.getY();
+        float mouseX = Jize.getX();
+        float mouseY = Jize.getY();
         return !(mouseX < x || mouseY < y || mouseX > x + width || mouseY > y + height);
     }
     

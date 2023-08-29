@@ -1,6 +1,6 @@
 package pize.graphics.camera;
 
-import pize.Pize;
+import pize.Jize;
 import pize.util.Resizable;
 import pize.math.util.Frustum;
 import pize.math.vecmath.matrix.Matrix4f;
@@ -13,7 +13,7 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
     private boolean imaginaryX, imaginaryY, imaginaryZ, hasImaginaryAxis;
 
     public PerspectiveCamera(double near, double far, double fieldOfView){
-        this(Pize.getWidth(), Pize.getHeight(), near, far, fieldOfView);
+        this(Jize.getWidth(), Jize.getHeight(), near, far, fieldOfView);
     }
 
     public PerspectiveCamera(int width, int height, double near, double far, double fieldOfView){

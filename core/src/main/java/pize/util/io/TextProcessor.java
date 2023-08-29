@@ -1,6 +1,6 @@
 package pize.util.io;
 
-import pize.Pize;
+import pize.Jize;
 import pize.math.Maths;
 import pize.util.Disposable;
 import pize.glfw.input.GlfwMod;
@@ -34,8 +34,8 @@ public class TextProcessor implements Disposable, GlfwCharCallback, GlfwKeyCallb
         this.lines.add("");
         this.cursorStopwatch = new Stopwatch().start();
 
-        Pize.keyboard().addCharCallback(this);
-        Pize.keyboard().addKeyCallback(this);
+        Jize.keyboard().addCharCallback(this);
+        Jize.keyboard().addKeyCallback(this);
     }
     
     public TextProcessor(){
@@ -358,8 +358,8 @@ public class TextProcessor implements Disposable, GlfwCharCallback, GlfwKeyCallb
     @Override
     public void dispose(){
         lines.clear();
-        Pize.keyboard().removeCharCallback(this);
-        Pize.keyboard().removeKeyCallback(this);
+        Jize.keyboard().removeCharCallback(this);
+        Jize.keyboard().removeKeyCallback(this);
     }
     
 }

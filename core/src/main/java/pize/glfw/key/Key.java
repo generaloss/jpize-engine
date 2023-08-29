@@ -1,6 +1,6 @@
 package pize.glfw.key;
 
-import pize.Pize;
+import pize.Jize;
 import pize.glfw.glfw.Glfw;
 
 import java.util.HashMap;
@@ -174,15 +174,15 @@ public enum Key{
 
 
     public boolean isDown(){
-        return Pize.keyboard().isDown(this);
+        return Jize.keyboard().isDown(this);
     }
 
     public boolean isPressed(){
-        return Pize.keyboard().isPressed(this);
+        return Jize.keyboard().isPressed(this);
     }
 
     public boolean isReleased(){
-        return Pize.keyboard().isReleased(this);
+        return Jize.keyboard().isReleased(this);
     }
 
 

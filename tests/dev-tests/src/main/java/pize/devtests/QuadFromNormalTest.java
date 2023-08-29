@@ -1,6 +1,6 @@
 package pize.devtests;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextAdapter;
 import pize.gl.Gl;
 import pize.gl.vertex.GlVertexAttr;
@@ -52,11 +52,11 @@ public class QuadFromNormalTest extends ContextAdapter{
     public void update(){
         // Exit & Fullscreen
         if(Key.ESCAPE.isDown())
-            Pize.closeWindow();
+            Jize.closeWindow();
         if(Key.M.isDown())
             rotationController.toggleShowMouse();
         if(Key.F11.isDown())
-            Pize.window().toggleFullscreen();
+            Jize.window().toggleFullscreen();
 
         // Camera control
         final Vec3f cameraMotion = getCameraMotion();
@@ -66,7 +66,7 @@ public class QuadFromNormalTest extends ContextAdapter{
             cameraMotion.y--;
 
         // Camera update
-        camera.getPosition().add(cameraMotion.mul(Pize.getDt() * 2));
+        camera.getPosition().add(cameraMotion.mul(Jize.getDt() * 2));
         rotationController.update();
         camera.getRotation().set(rotationController.getRotation());
         camera.update();

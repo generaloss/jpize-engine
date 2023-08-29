@@ -1,6 +1,6 @@
 package pize.tests.minecraft;
 
-import pize.Pize;
+import pize.Jize;
 import pize.files.Resource;
 import pize.graphics.util.ScreenUtils;
 import pize.glfw.key.Key;
@@ -115,7 +115,7 @@ public class Session implements Renderer{
             resourceManager.reload();
 
         if(options.getKey(KeyMapping.FULLSCREEN).isDown())
-            Pize.window().toggleFullscreen();
+            Jize.window().toggleFullscreen();
 
         if(options.getKey(KeyMapping.SCREENSHOT).isDown())
             takeScreenshot();

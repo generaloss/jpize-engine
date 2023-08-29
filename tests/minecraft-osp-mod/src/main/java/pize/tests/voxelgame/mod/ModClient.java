@@ -1,6 +1,6 @@
 package pize.tests.voxelgame.mod;
 
-import pize.Pize;
+import pize.Jize;
 import pize.files.Resource;
 import pize.graphics.font.BitmapFont;
 import pize.graphics.font.FontLoader;
@@ -34,8 +34,8 @@ public class ModClient implements ClientModInitializer{
     
     public void render(){
         batch.begin();
-        batch.draw(texture, Pize.getWidth() - 100, Pize.getHeight() - 30, 100, 30);
-        font.drawText(batch, "Mod text", Pize.getWidth() - 100, Pize.getHeight() - 30);
+        batch.draw(texture, Jize.getWidth() - 100, Jize.getHeight() - 30, 100, 30);
+        font.drawText(batch, "Mod text", Jize.getWidth() - 100, Jize.getHeight() - 30);
         batch.end();
         
         if(Key.F10.isDown()){

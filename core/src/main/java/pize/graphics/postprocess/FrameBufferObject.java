@@ -1,7 +1,7 @@
 package pize.graphics.postprocess;
 
 import org.lwjgl.BufferUtils;
-import pize.Pize;
+import pize.Jize;
 import pize.util.Resizable;
 import pize.gl.buffer.GlAttachment;
 import pize.gl.texture.GlFilter;
@@ -41,7 +41,7 @@ public class FrameBufferObject extends GlObject implements Resizable{
     }
 
     public FrameBufferObject(){
-        this(Pize.getWidth(), Pize.getHeight());
+        this(Jize.getWidth(), Jize.getHeight());
     }
 
 

@@ -242,14 +242,17 @@ public class ServerChunkManager extends ChunkManager{
                 continue;
 
             neighbor.decorated = true;
-            generator.decorate(neighbor);
+            generator.decorate(neighbor, true);
         }
         // Decorate chunk
         chunk.decorated = true;
-        generator.decorate(chunk);
+        generator.decorate(chunk, false);
+
+        // Update heightmap
+        //chunk.getHeightMap(HeightmapType.SURFACE).update();
+        chunk.getHeightMap(HeightmapType.LIGHT_SURFACE).update();
 
         // Update skylight
-        chunk.getHeightMap(HeightmapType.LIGHT_SURFACE).update();
         chunk.getLevel().getSkyLight().updateSkyLight(chunk);
 
         // Add to list

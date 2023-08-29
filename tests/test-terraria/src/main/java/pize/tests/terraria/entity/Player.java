@@ -1,6 +1,6 @@
 package pize.tests.terraria.entity;
 
-import pize.Pize;
+import pize.Jize;
 import pize.graphics.util.batch.TextureBatch;
 import pize.glfw.key.Key;
 import pize.math.Maths;
@@ -49,7 +49,7 @@ public class Player extends Entity{
 
         // Moving
 
-        float delta = Pize.getDt();
+        float delta = Jize.getDt();
 
         if(Key.A.isPressed())
             getVelocity().x -= 0.7;

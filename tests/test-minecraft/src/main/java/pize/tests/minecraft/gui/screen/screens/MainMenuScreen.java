@@ -1,6 +1,6 @@
 package pize.tests.minecraft.gui.screen.screens;
 
-import pize.Pize;
+import pize.Jize;
 import pize.files.Resource;
 import pize.graphics.camera.PerspectiveCamera;
 import pize.graphics.texture.Texture;
@@ -159,12 +159,12 @@ public class MainMenuScreen extends Screen{
     @Override
     public void render(TextureBatch batch){
         // Panorama
-        camera.getRotation().yaw -= Pize.getDt() * 2;
+        camera.getRotation().yaw -= Jize.getDt() * 2;
         camera.update();
         skyBox.render(camera);
         // Panorama Overlay
         batch.setAlpha(0.8F);
-        batch.draw(panorama_overlay, 0, 0, Pize.getWidth(), Pize.getHeight());
+        batch.draw(panorama_overlay, 0, 0, Jize.getWidth(), Jize.getHeight());
         batch.setAlpha(1F);
         
         // UI
@@ -189,7 +189,7 @@ public class MainMenuScreen extends Screen{
 
     @Override
     public void close(){
-        Pize.exit();
+        Jize.exit();
     }
 
     @Override

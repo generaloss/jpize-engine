@@ -1,6 +1,6 @@
 package pize.tests.minecraftosp;
 
-import pize.Pize;
+import pize.Jize;
 import pize.files.Resource;
 import pize.gl.Gl;
 import pize.graphics.texture.Texture;
@@ -43,7 +43,7 @@ public class Minecraft extends ContextAdapter{
                 .size(1280, 720)
                 .create()
                 .init(getInstance());
-        Pize.runContexts();
+        Jize.runContexts();
     }
     
     private static final String sessionToken = "54_54-iWantPizza-54_54";
@@ -96,7 +96,7 @@ public class Minecraft extends ContextAdapter{
         new Resource(SharedConstants.GAME_DIR_PATH, true).mkDirs();
         new Resource(SharedConstants.MODS_PATH, true).mkDirs();
 
-        Pize.startFixedUpdate(GameTime.TICKS_PER_SECOND);
+        Jize.startFixedUpdate(GameTime.TICKS_PER_SECOND);
         options.load();
         profile = new PlayerProfile(getOptions().getPlayerName());
 
@@ -239,7 +239,7 @@ public class Minecraft extends ContextAdapter{
         })
         .texture(new Texture("texture/block/grass_block_side.png"))
         .animate(instance->{
-            instance.velocity.y -= Pize.getDt() * 0.35F;
+            instance.velocity.y -= Jize.getDt() * 0.35F;
             instance.velocity.mul(0.95);
             collide(instance.position, instance.velocity);
             instance.position.add(instance.velocity);

@@ -1,6 +1,6 @@
 package pize.tests.minecraft.options;
 
-import pize.Pize;
+import pize.Jize;
 import pize.audio.Audio;
 import pize.files.Resource;
 import pize.glfw.key.Key;
@@ -25,11 +25,11 @@ public class Options{
     private int fov = 90;
     private int renderDistance = 8;
     private int mipmapLevels = 1;
-    private int maxFramerate = Pize.primaryMonitor().getRefreshRate();
+    private int maxFramerate = Jize.primaryMonitor().getRefreshRate();
     private boolean fullscreen = false;
     private boolean showFps = false;
     private float mouseSensitivity = 0.5F;
-    private String audioDevice = Pize.audio().getCurrent().getName();
+    private String audioDevice = Jize.audio().getCurrent().getName();
 
 
     public Options(Session session, String gameDirPath){
@@ -51,13 +51,13 @@ public class Options{
         
         List<String> availableAudioDevices = Audio.getAvailableDevices();
         if(availableAudioDevices != null && availableAudioDevices.contains(audioDevice))
-            Pize.audio().getDevice(audioDevice).makeCurrent();
+            Jize.audio().getDevice(audioDevice).makeCurrent();
         else{
-            audioDevice = Pize.audio().getCurrent().getName();
+            audioDevice = Jize.audio().getCurrent().getName();
             save();
         }
 
-        Pize.window().setFullscreen(fullscreen);
+        Jize.window().setFullscreen(fullscreen);
         setMaxFramerate(maxFramerate, VideoSettingsScreen.MAX_SETTING_FRAMERATE);
     }
 
@@ -196,7 +196,7 @@ public class Options{
         session.getFpsLimiter().setTPS(maxFramerate);
 
         session.getFpsLimiter().enable(maxFramerate > 0 && maxFramerate < unlimitedThreshold);
-        Pize.setVsync(maxFramerate == 0);
+        Jize.setVsync(maxFramerate == 0);
     }
 
 
@@ -207,7 +207,7 @@ public class Options{
     public void setFullscreen(boolean fullscreen){
         this.fullscreen = fullscreen;
 
-        Pize.window().setFullscreen(fullscreen);
+        Jize.window().setFullscreen(fullscreen);
     }
 
 

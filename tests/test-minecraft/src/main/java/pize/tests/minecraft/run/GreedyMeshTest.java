@@ -1,6 +1,6 @@
 package pize.tests.minecraft.run;
 
-import pize.Pize;
+import pize.Jize;
 import pize.io.context.ContextAdapter;
 import pize.gl.Gl;
 import pize.graphics.texture.Pixmap;
@@ -115,12 +115,12 @@ public class GreedyMeshTest extends ContextAdapter{
 
     @Override
     public void render(){
-        Pize.window().setTitle("Minecraft (fps: " + Pize.getFPS() + ")");
+        Jize.window().setTitle("Minecraft (fps: " + Jize.getFPS() + ")");
 
         if(Key.ESCAPE.isDown())
-            Pize.exit();
+            Jize.exit();
         if(Key.F11.isDown())
-            Pize.window().toggleFullscreen();
+            Jize.window().toggleFullscreen();
 
         Gl.clearColorBuffer();
         Gl.clearColor(0.4, 0.6, 1);
@@ -142,11 +142,11 @@ public class GreedyMeshTest extends ContextAdapter{
         if(Key.S.isDown() || Key.S.isReleased())
             System.out.println(batch.size());
 
-        if(Pize.isTouched()){
-            final int color = Pize.mouse().isLeftPressed() ? 1 : 0;
+        if(Jize.isTouched()){
+            final int color = Jize.mouse().isLeftPressed() ? 1 : 0;
 
-            final int x = Maths.round(Pize.getX() / SIZE);
-            final int y = Maths.round(Pize.getY() / SIZE);
+            final int x = Maths.round(Jize.getX() / SIZE);
+            final int y = Maths.round(Jize.getY() / SIZE);
 
             if(map[x][y] != color){
                 map[x][y] = color;
