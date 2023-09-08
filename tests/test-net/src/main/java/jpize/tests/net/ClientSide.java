@@ -28,8 +28,8 @@ public class ClientSide extends ContextAdapter implements TcpListener{
     public static void main(String[] args){
         ContextBuilder.newContext("Net - client")
                 .size(1280, 720)
-                .create()
-                .init(new ClientSide());
+                .register()
+                .setAdapter(new ClientSide());
 
         Jpize.runContexts();
     }

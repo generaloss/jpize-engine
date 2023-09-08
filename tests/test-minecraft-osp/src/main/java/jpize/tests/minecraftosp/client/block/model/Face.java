@@ -68,28 +68,43 @@ public class Face extends Quad{
 
     public void putFace(final ChunkMesh mesh,
                         float x, float y, float z,
-                        IColor color,
+                        IColor col1, IColor col2, IColor col3, IColor col4,
                         float ao1, float ao2, float ao3, float ao4,
                         float sl1, float sl2, float sl3, float sl4,
                         float bl1, float bl2, float bl3, float bl4){
 
-        if(ao2 + ao4 > ao1 + ao3)
-            putFloatsFlipped(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  sl1, sl2, sl3, sl4,  bl1, bl2, bl3, bl4);
+        if(ao2 * sl2 * bl2  +  ao4 * sl4 * bl4  >  ao1 * sl1 * bl1  +  ao3 * sl3 * bl3)
+            putFloatsFlipped(mesh,  x, y, z,  col1, col2, col3, col4,  ao1, ao2, ao3, ao4,  sl1, sl2, sl3, sl4,  bl1, bl2, bl3, bl4);
         else
-            putFloats(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  sl1, sl2, sl3, sl4,  bl1, bl2, bl3, bl4);
+            putFloats(mesh,  x, y, z,  col1, col2, col3, col4,  ao1, ao2, ao3, ao4,  sl1, sl2, sl3, sl4,  bl1, bl2, bl3, bl4);
     }
 
     public void putFloats(final ChunkMesh mesh,
                           float x, float y, float z,
-                          IColor color,
+                          IColor col1, IColor col2, IColor col3, IColor col4,
                           float ao1, float ao2, float ao3, float ao4,
                           float sl1, float sl2, float sl3, float sl4,
                           float bl1, float bl2, float bl3, float bl4){
 
-        final float r = this.color.r() * color.r();
-        final float g = this.color.g() * color.g();
-        final float b = this.color.b() * color.b();
-        final float a = this.color.a() * color.a();
+        final float r1 = this.color.r() * col1.r();
+        final float g1 = this.color.g() * col1.g();
+        final float b1 = this.color.b() * col1.b();
+        final float a1 = this.color.a() * col1.a();
+
+        final float r2 = this.color.r() * col2.r();
+        final float g2 = this.color.g() * col2.g();
+        final float b2 = this.color.b() * col2.b();
+        final float a2 = this.color.a() * col2.a();
+
+        final float r3 = this.color.r() * col3.r();
+        final float g3 = this.color.g() * col3.g();
+        final float b3 = this.color.b() * col3.b();
+        final float a3 = this.color.a() * col3.a();
+
+        final float r4 = this.color.r() * col4.r();
+        final float g4 = this.color.g() * col4.g();
+        final float b4 = this.color.b() * col4.b();
+        final float a4 = this.color.a() * col4.a();
 
         final float p1x = pos[0].x + x; final float p1y = pos[0].y + y; final float p1z = pos[0].z + z;
         final float p2x = pos[1].x + x; final float p2y = pos[1].y + y; final float p2z = pos[1].z + z;
@@ -97,26 +112,41 @@ public class Face extends Quad{
         final float p4x = pos[3].x + x; final float p4y = pos[3].y + y; final float p4z = pos[3].z + z;
 
         // Triangle 1
-        mesh.vertex(p1x, p1y, p1z,  t1.x, t1.y,  r, g, b, a,  ao1, sl1, bl1); // 1     1 ----- 4
-        mesh.vertex(p2x, p2y, p2z,  t2.x, t2.y,  r, g, b, a,  ao2, sl2, bl2); // 2     |  ╲    |
-        mesh.vertex(p3x, p3y, p3z,  t3.x, t3.y,  r, g, b, a,  ao3, sl3, bl3); // 3     |    ╲  |
-        // Triangle 2                                                                  2 ----- 3
-        mesh.vertex(p3x, p3y, p3z,  t3.x, t3.y,  r, g, b, a,  ao3, sl3, bl3); // 3
-        mesh.vertex(p4x, p4y, p4z,  t4.x, t4.y,  r, g, b, a,  ao4, sl4, bl4); // 4
-        mesh.vertex(p1x, p1y, p1z,  t1.x, t1.y,  r, g, b, a,  ao1, sl1, bl1); // 1
+        mesh.vertex(p1x, p1y, p1z,  t1.x, t1.y,  r1, g1, b1, a1,  ao1, sl1, bl1); // 1     1 ----- 4
+        mesh.vertex(p2x, p2y, p2z,  t2.x, t2.y,  r2, g2, b2, a2,  ao2, sl2, bl2); // 2     |  ╲    |
+        mesh.vertex(p3x, p3y, p3z,  t3.x, t3.y,  r3, g3, b3, a3,  ao3, sl3, bl3); // 3     |    ╲  |
+        // Triangle 2                                                                      2 ----- 3
+        mesh.vertex(p3x, p3y, p3z,  t3.x, t3.y,  r3, g3, b3, a3,  ao3, sl3, bl3); // 3
+        mesh.vertex(p4x, p4y, p4z,  t4.x, t4.y,  r4, g4, b4, a4,  ao4, sl4, bl4); // 4
+        mesh.vertex(p1x, p1y, p1z,  t1.x, t1.y,  r1, g1, b1, a1,  ao1, sl1, bl1); // 1
     }
 
     private void putFloatsFlipped(final ChunkMesh mesh,
-                                 float x, float y, float z,
-                                 IColor color,
-                                 float ao1, float ao2, float ao3, float ao4,
-                                 float sl1, float sl2, float sl3, float sl4,
-                                 float bl1, float bl2, float bl3, float bl4){
+                                  float x, float y, float z,
+                                  IColor col1, IColor col2, IColor col3, IColor col4,
+                                  float ao1, float ao2, float ao3, float ao4,
+                                  float sl1, float sl2, float sl3, float sl4,
+                                  float bl1, float bl2, float bl3, float bl4){
 
-        final float r = this.color.r() * color.r();
-        final float g = this.color.g() * color.g();
-        final float b = this.color.b() * color.b();
-        final float a = this.color.a() * color.a();
+        final float r1 = this.color.r() * col1.r();
+        final float g1 = this.color.g() * col1.g();
+        final float b1 = this.color.b() * col1.b();
+        final float a1 = this.color.a() * col1.a();
+
+        final float r2 = this.color.r() * col2.r();
+        final float g2 = this.color.g() * col2.g();
+        final float b2 = this.color.b() * col2.b();
+        final float a2 = this.color.a() * col2.a();
+
+        final float r3 = this.color.r() * col3.r();
+        final float g3 = this.color.g() * col3.g();
+        final float b3 = this.color.b() * col3.b();
+        final float a3 = this.color.a() * col3.a();
+
+        final float r4 = this.color.r() * col4.r();
+        final float g4 = this.color.g() * col4.g();
+        final float b4 = this.color.b() * col4.b();
+        final float a4 = this.color.a() * col4.a();
 
         final float p1x = pos[0].x + x; final float p1y = pos[0].y + y; final float p1z = pos[0].z + z;
         final float p2x = pos[1].x + x; final float p2y = pos[1].y + y; final float p2z = pos[1].z + z;
@@ -124,14 +154,113 @@ public class Face extends Quad{
         final float p4x = pos[3].x + x; final float p4y = pos[3].y + y; final float p4z = pos[3].z + z;
 
         // Triangle 1
-        mesh.vertex(p4x, p4y, p4z,  t4.x, t4.y,  r, g, b, a,  ao4, sl4, bl4); // 4     1 ----- 4
-        mesh.vertex(p1x, p1y, p1z,  t1.x, t1.y,  r, g, b, a,  ao1, sl1, bl1); // 1     |    ╱  |
-        mesh.vertex(p2x, p2y, p2z,  t2.x, t2.y,  r, g, b, a,  ao2, sl2, bl2); // 2     |  ╱    |
-        // Triangle 2                                                                  2 ----- 3
-        mesh.vertex(p2x, p2y, p2z,  t2.x, t2.y,  r, g, b, a,  ao2, sl2, bl2); // 2
-        mesh.vertex(p3x, p3y, p3z,  t3.x, t3.y,  r, g, b, a,  ao3, sl3, bl3); // 3
-        mesh.vertex(p4x, p4y, p4z,  t4.x, t4.y,  r, g, b, a,  ao4, sl4, bl4); // 4
+        mesh.vertex(p4x, p4y, p4z,  t4.x, t4.y,  r4, g4, b4, a4,  ao4, sl4, bl4); // 4     1 ----- 4
+        mesh.vertex(p1x, p1y, p1z,  t1.x, t1.y,  r1, g1, b1, a1,  ao1, sl1, bl1); // 1     |    ╱  |
+        mesh.vertex(p2x, p2y, p2z,  t2.x, t2.y,  r2, g2, b2, a2,  ao2, sl2, bl2); // 2     |  ╱    |
+        // Triangle 2                                                                      2 ----- 3
+        mesh.vertex(p2x, p2y, p2z,  t2.x, t2.y,  r2, g2, b2, a2,  ao2, sl2, bl2); // 2
+        mesh.vertex(p3x, p3y, p3z,  t3.x, t3.y,  r3, g3, b3, a3,  ao3, sl3, bl3); // 3
+        mesh.vertex(p4x, p4y, p4z,  t4.x, t4.y,  r4, g4, b4, a4,  ao4, sl4, bl4); // 4
     }
+
+
+    public void putFacePacked(final ChunkMesh mesh,
+                              int x, int y, int z,
+                              IColor col1, IColor col2, IColor col3, IColor col4,
+                              float ao1, float ao2, float ao3, float ao4,
+                              float sl1, float sl2, float sl3, float sl4,
+                              float bl1, float bl2, float bl3, float bl4){
+
+        if(ao2 * sl2 * bl2  +  ao4 * sl4 * bl4  >  ao1 * sl1 * bl1  +  ao3 * sl3 * bl3)
+            putPackedFlipped(mesh,  x, y, z,  col1, col2, col3, col4,  ao1, ao2, ao3, ao4,  sl1, sl2, sl3, sl4,  bl1, bl2, bl3, bl4);
+        else
+            putPacked(mesh,  x, y, z,  col1, col2, col3, col4,  ao1, ao2, ao3, ao4,  sl1, sl2, sl3, sl4,  bl1, bl2, bl3, bl4);
+    }
+
+    public void putPacked(final ChunkMesh mesh,
+                          int x, int y, int z,
+                          IColor col1, IColor col2, IColor col3, IColor col4,
+                          float ao1, float ao2, float ao3, float ao4,
+                          float sl1, float sl2, float sl3, float sl4,
+                          float bl1, float bl2, float bl3, float bl4){
+
+        final float r1 = this.color.r() * col1.r();
+        final float g1 = this.color.g() * col1.g();
+        final float b1 = this.color.b() * col1.b();
+        final float a1 = this.color.a() * col1.a();
+
+        final float r2 = this.color.r() * col2.r();
+        final float g2 = this.color.g() * col2.g();
+        final float b2 = this.color.b() * col2.b();
+        final float a2 = this.color.a() * col2.a();
+
+        final float r3 = this.color.r() * col3.r();
+        final float g3 = this.color.g() * col3.g();
+        final float b3 = this.color.b() * col3.b();
+        final float a3 = this.color.a() * col3.a();
+
+        final float r4 = this.color.r() * col4.r();
+        final float g4 = this.color.g() * col4.g();
+        final float b4 = this.color.b() * col4.b();
+        final float a4 = this.color.a() * col4.a();
+
+        final int p1x = (int) pos[0].x + x; final int p1y = (int) pos[0].y + y; final int p1z = (int) pos[0].z + z;
+        final int p2x = (int) pos[1].x + x; final int p2y = (int) pos[1].y + y; final int p2z = (int) pos[1].z + z;
+        final int p3x = (int) pos[2].x + x; final int p3y = (int) pos[2].y + y; final int p3z = (int) pos[2].z + z;
+        final int p4x = (int) pos[3].x + x; final int p4y = (int) pos[3].y + y; final int p4z = (int) pos[3].z + z;
+
+        // Triangle 1
+        mesh.vertexPacked(p1x, p1y, p1z,  t1.x, t1.y,  r1, g1, b1, a1,  ao1, sl1, bl1); // 1     1 ----- 4
+        mesh.vertexPacked(p2x, p2y, p2z,  t2.x, t2.y,  r2, g2, b2, a2,  ao2, sl2, bl2); // 2     |  ╲    |
+        mesh.vertexPacked(p3x, p3y, p3z,  t3.x, t3.y,  r3, g3, b3, a3,  ao3, sl3, bl3); // 3     |    ╲  |
+        // Triangle 2                                                                            2 ----- 3
+        mesh.vertexPacked(p3x, p3y, p3z,  t3.x, t3.y,  r3, g3, b3, a3,  ao3, sl3, bl3); // 3
+        mesh.vertexPacked(p4x, p4y, p4z,  t4.x, t4.y,  r4, g4, b4, a4,  ao4, sl4, bl4); // 4
+        mesh.vertexPacked(p1x, p1y, p1z,  t1.x, t1.y,  r1, g1, b1, a1,  ao1, sl1, bl1); // 1
+    }
+
+    private void putPackedFlipped(final ChunkMesh mesh,
+                                  int x, int y, int z,
+                                  IColor col1, IColor col2, IColor col3, IColor col4,
+                                  float ao1, float ao2, float ao3, float ao4,
+                                  float sl1, float sl2, float sl3, float sl4,
+                                  float bl1, float bl2, float bl3, float bl4){
+
+        final float r1 = this.color.r() * col1.r();
+        final float g1 = this.color.g() * col1.g();
+        final float b1 = this.color.b() * col1.b();
+        final float a1 = this.color.a() * col1.a();
+
+        final float r2 = this.color.r() * col2.r();
+        final float g2 = this.color.g() * col2.g();
+        final float b2 = this.color.b() * col2.b();
+        final float a2 = this.color.a() * col2.a();
+
+        final float r3 = this.color.r() * col3.r();
+        final float g3 = this.color.g() * col3.g();
+        final float b3 = this.color.b() * col3.b();
+        final float a3 = this.color.a() * col3.a();
+
+        final float r4 = this.color.r() * col4.r();
+        final float g4 = this.color.g() * col4.g();
+        final float b4 = this.color.b() * col4.b();
+        final float a4 = this.color.a() * col4.a();
+
+        final int p1x = (int) pos[0].x + x; final int p1y = (int) pos[0].y + y; final int p1z = (int) pos[0].z + z;
+        final int p2x = (int) pos[1].x + x; final int p2y = (int) pos[1].y + y; final int p2z = (int) pos[1].z + z;
+        final int p3x = (int) pos[2].x + x; final int p3y = (int) pos[2].y + y; final int p3z = (int) pos[2].z + z;
+        final int p4x = (int) pos[3].x + x; final int p4y = (int) pos[3].y + y; final int p4z = (int) pos[3].z + z;
+
+        // Triangle 1
+        mesh.vertexPacked(p4x, p4y, p4z,  t4.x, t4.y,  r4, g4, b4, a4,  ao4, sl4, bl4); // 4     1 ----- 4
+        mesh.vertexPacked(p1x, p1y, p1z,  t1.x, t1.y,  r1, g1, b1, a1,  ao1, sl1, bl1); // 1     |    ╱  |
+        mesh.vertexPacked(p2x, p2y, p2z,  t2.x, t2.y,  r2, g2, b2, a2,  ao2, sl2, bl2); // 2     |  ╱    |
+        // Triangle 2                                                                            2 ----- 3
+        mesh.vertexPacked(p2x, p2y, p2z,  t2.x, t2.y,  r2, g2, b2, a2,  ao2, sl2, bl2); // 2
+        mesh.vertexPacked(p3x, p3y, p3z,  t3.x, t3.y,  r3, g3, b3, a3,  ao3, sl3, bl3); // 3
+        mesh.vertexPacked(p4x, p4y, p4z,  t4.x, t4.y,  r4, g4, b4, a4,  ao4, sl4, bl4); // 4
+    }
+
 
 
     public Face copy(){

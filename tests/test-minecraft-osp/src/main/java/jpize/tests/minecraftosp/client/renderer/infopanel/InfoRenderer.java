@@ -11,7 +11,7 @@ import jpize.tests.minecraftosp.client.ClientGame;
 import jpize.tests.minecraftosp.client.audio.SoundPlayer;
 import jpize.tests.minecraftosp.client.net.ClientConnection;
 import jpize.tests.minecraftosp.main.modification.loader.Modification;
-import jpize.tests.minecraftosp.client.chunk.mesh.builder.ChunkBuilder;
+import jpize.tests.minecraftosp.client.chunk.builder.ChunkBuilder;
 import jpize.tests.minecraftosp.client.control.BlockRayCast;
 import jpize.tests.minecraftosp.client.control.camera.GameCamera;
 import jpize.tests.minecraftosp.client.entity.LocalPlayer;

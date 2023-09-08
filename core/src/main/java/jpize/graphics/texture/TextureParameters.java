@@ -1,9 +1,6 @@
 package jpize.graphics.texture;
 
-import jpize.gl.texture.GlFilter;
-import jpize.gl.texture.GlFormat;
-import jpize.gl.texture.GlSizedFormat;
-import jpize.gl.texture.GlWrap;
+import jpize.gl.texture.*;
 import jpize.gl.type.GlType;
 import jpize.graphics.util.color.Color;
 
@@ -54,35 +51,35 @@ public class TextureParameters{
     }
     
     
-    public void use(int TARGET){
-        glTexParameteri(TARGET, GL_TEXTURE_MIN_FILTER, minFilter.GL);
-        glTexParameteri(TARGET, GL_TEXTURE_MAG_FILTER, magFilter.GL);
-        glTexParameteri(TARGET, GL_TEXTURE_WRAP_S, wrapS.GL);
-        glTexParameteri(TARGET, GL_TEXTURE_WRAP_T, wrapT.GL);
-        glTexParameteri(TARGET, GL_TEXTURE_WRAP_R, wrapR.GL);
-        glTexParameterfv(TARGET, GL_TEXTURE_BORDER_COLOR, borderColor.toArray());
-        glTexParameteri(TARGET, GL_TEXTURE_MAX_LEVEL, mipmapLevels);
-        glTexParameterf(TARGET, GL_TEXTURE_LOD_BIAS, Math.min(lodBias, glGetInteger(GL_MAX_TEXTURE_LOD_BIAS)));
-        glTexParameterf(TARGET, GL_TEXTURE_MAX_ANISOTROPY, Math.min(anisotropyLevels, glGetFloat(GL_MAX_TEXTURE_MAX_ANISOTROPY)));
+    public void use(GlTexTarget target){
+        glTexParameteri (target.GL, GL_TEXTURE_MIN_FILTER, minFilter.GL);
+        glTexParameteri (target.GL, GL_TEXTURE_MAG_FILTER, magFilter.GL);
+        glTexParameteri (target.GL, GL_TEXTURE_WRAP_S, wrapS.GL);
+        glTexParameteri (target.GL, GL_TEXTURE_WRAP_T, wrapT.GL);
+        glTexParameteri (target.GL, GL_TEXTURE_WRAP_R, wrapR.GL);
+        glTexParameterfv(target.GL, GL_TEXTURE_BORDER_COLOR, borderColor.toArray());
+        glTexParameteri (target.GL, GL_TEXTURE_MAX_LEVEL, mipmapLevels);
+        glTexParameterf (target.GL, GL_TEXTURE_LOD_BIAS, Math.min(lodBias, glGetInteger(GL_MAX_TEXTURE_LOD_BIAS)));
+        glTexParameterf (target.GL, GL_TEXTURE_MAX_ANISOTROPY, Math.min(anisotropyLevels, glGetFloat(GL_MAX_TEXTURE_MAX_ANISOTROPY)));
     }
-    
-    
-    public void texImage2D(int target, ByteBuffer buffer, int width, int height){
-        texImage2D(target, buffer, width, height, 0);
-    }
-    
-    public void texImage2D(int target, ByteBuffer buffer, int width, int height, int level){
-        glTexImage2D(
-            target, level, format.GL, width, height,
-            0, format.getBase().GL, type.GL, buffer
-        );
-    }
-    
-    public void texSubImage3D(int target, ByteBuffer buffer, int width, int height, int z){
+
+
+    public void texSubImage3D(GlTexParam target, ByteBuffer buffer, int width, int height, int z){
         glTexSubImage3D(
-            target, 0, 0, 0, z, width, height, 1,
-            format.getBase().GL, type.GL, buffer
+                target.GL, 0, 0, 0, z, width, height, 1,
+                format.getBase().GL, type.GL, buffer
         );
+    }
+
+    public void texImage2D(GlTexParam target, ByteBuffer buffer, int width, int height, int level){
+        glTexImage2D(
+                target.GL, level, format.GL, width, height,
+                0, format.getBase().GL, type.GL, buffer
+        );
+    }
+
+    public void texImage2D(GlTexParam target, ByteBuffer buffer, int width, int height){
+        texImage2D(target, buffer, width, height, 0);
     }
 
 

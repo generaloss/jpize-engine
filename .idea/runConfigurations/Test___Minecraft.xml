@@ -3,7 +3,7 @@
     <option name="ALTERNATIVE_JRE_PATH" value="17" />
     <option name="MAIN_CLASS_NAME" value="jpize.tests.minecraft.run.Minecraft" />
     <module name="test-minecraft" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/test-minecraft/src/main/resources" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/test-minecraft/" />
     <method v="2">
       <option name="Make" enabled="true" />
       <option name="BuildArtifacts" enabled="true" />

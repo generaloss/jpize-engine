@@ -1,6 +1,7 @@
 package jpize.tests.minecraftosp.main.command.source;
 
 import jpize.math.vecmath.vector.Vec3f;
+import jpize.tests.minecraftosp.server.level.ServerLevel;
 import jpize.tests.minecraftosp.server.player.ServerPlayer;
 import jpize.tests.minecraftosp.main.text.Component;
 
@@ -14,6 +15,10 @@ public class CommandSourcePlayer extends CommandSource{
     
     public ServerPlayer getPlayer(){
         return player;
+    }
+
+    public ServerLevel getLevel(){
+        return player.getLevel();
     }
     
     

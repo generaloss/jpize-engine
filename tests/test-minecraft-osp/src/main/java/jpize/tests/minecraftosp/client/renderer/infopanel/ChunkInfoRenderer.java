@@ -19,7 +19,7 @@ public class ChunkInfoRenderer implements Resizable, Disposable{
 
     public ChunkInfoRenderer(GameRenderer gameRenderer){
         this.gameRenderer = gameRenderer;
-        this.batch = new TextureBatch();
+        this.batch = new TextureBatch(5000);
         this.camera = new CenteredOrthographicCamera();
     }
 
@@ -41,9 +41,9 @@ public class ChunkInfoRenderer implements Resizable, Disposable{
         camera.update();
         camera.getPosition().set(gameCam.getPosition().xz().mul(1 / 16F * size));
         camera.setRotation(-gameCam.getRotation().yaw + 90);
-        batch.begin(camera);
 
         batch.setAlpha(0.3);
+        batch.begin(camera);
 
         final Collection<ServerLevel> levels = gameRenderer.getSession().getIntegratedServer().getLevelManager().getLoadedLevels();
         for(ServerLevel level: levels)

@@ -15,7 +15,7 @@ public class CommandList{
     
     public static void registerTo(CommandDispatcher dispatcher){
         dispatcher.newCommand(Commands.literal("list")
-            .executes( CommandList::sendList)
+            .executes(CommandList::sendList)
         );
     }
     

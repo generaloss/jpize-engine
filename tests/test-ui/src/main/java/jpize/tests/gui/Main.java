@@ -21,8 +21,8 @@ public class Main extends ContextAdapter{
     public static void main(String[] args){
         ContextBuilder.newContext("Test - UI")
                 .icon("icon.png")
-                .create()
-                .init(new Main());
+                .register()
+                .setAdapter(new Main());
 
         Jpize.runContexts();
     }

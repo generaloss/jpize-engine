@@ -18,8 +18,8 @@ public class Main extends ContextAdapter{
     public static void main(String[] args){
         ContextBuilder.newContext("Editor")
                 .size(1280, 720)
-                .create()
-                .init(new Main());
+                .register()
+                .setAdapter(new Main());
 
         Jpize.runContexts();
     }

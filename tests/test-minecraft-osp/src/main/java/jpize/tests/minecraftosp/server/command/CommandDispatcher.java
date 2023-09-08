@@ -36,6 +36,7 @@ public class CommandDispatcher{
         CommandLevel.registerTo(this);
         CommandTime.registerTo(this);
         CommandShutdown.registerTo(this);
+        CommandSetBlock.registerTo(this);
     }
     
     public Server getServer(){

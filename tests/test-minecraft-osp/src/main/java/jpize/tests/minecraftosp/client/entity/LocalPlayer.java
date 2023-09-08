@@ -14,7 +14,7 @@ public class LocalPlayer extends AbstractClientPlayer{
     private final Vec3f moveControl;
     private float jumpDownY, lastVelocityY, fallHeight;
     
-    public Block holdBlock = Blocks.GRASS;
+    public Block holdBlock = Blocks.LAMP;
     
     public LocalPlayer(Level levelOF, String name){
         super(levelOF, name);

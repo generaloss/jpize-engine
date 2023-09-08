@@ -5,9 +5,10 @@ import jpize.graphics.util.color.Color;
 import jpize.graphics.util.color.IColor;
 import jpize.tests.minecraftosp.client.block.BlockProps;
 import jpize.tests.minecraftosp.client.block.BlockRotation;
+import jpize.tests.minecraftosp.client.chunk.builder.BiomeMix;
 import jpize.tests.minecraftosp.client.chunk.mesh.ChunkMesh;
 import jpize.tests.minecraftosp.client.chunk.mesh.ChunkMeshType;
-import jpize.tests.minecraftosp.client.chunk.mesh.builder.ChunkBuilder;
+import jpize.tests.minecraftosp.client.chunk.builder.ChunkBuilder;
 import jpize.tests.minecraftosp.main.Dir;
 import jpize.tests.minecraftosp.main.biome.BiomeProperties;
 
@@ -339,14 +340,26 @@ public class BlockModel{
         return color;
     }
 
+    public IColor pickFaceColor(Face face, BiomeMix biome){
+        final IColor color;
+        if(face.isGrassColoring())
+            color = biome.getGrassColor();
+        else if(face.isWaterColoring())
+            color = biome.getWaterColor();
+        else
+            color = Color.WHITE;
+
+        return color;
+    }
+
 
     public void build(ChunkBuilder builder, BlockProps block, int lx, int y, int lz){
         // Custom faces
         final float skyLight = (float) builder.chunk.getSkyLight(lx, y, lz) / MAX_LIGHT_LEVEL;
         final float blockLight = (float) builder.chunk.getBlockLight(lx, y, lz) / MAX_LIGHT_LEVEL;
         for(Face face: faces){
-            final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
-            face.putFloats(builder.customMesh,  lx, y, lz,  color,  1, 1, 1, 1,  skyLight, skyLight, skyLight, skyLight,  blockLight, blockLight, blockLight, blockLight);
+            final IColor color = pickFaceColor(face, builder.currentBiome.getProps());
+            face.putFloats(builder.customMesh,  lx, y, lz,  color, color, color, color,  1, 1, 1, 1,  skyLight, skyLight, skyLight, skyLight,  blockLight, blockLight, blockLight, blockLight);
         }
 
         // Solid faces
@@ -379,6 +392,11 @@ public class BlockModel{
         final float blockLight3 = builder.getBlockLight(x-1, y  , z,  x-1, y, z-1,  x-1, y-1, z-1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
         final float blockLight4 = builder.getBlockLight(x-1, y  , z,  x-1, y, z-1,  x-1, y+1, z-1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
 
+        final BiomeMix biomes1 = builder.getBiomeMix(x-1, z,  x-1, z+1,  x-1, z+1,  x-1, z  );
+        final BiomeMix biomes2 = builder.getBiomeMix(x-1, z,  x-1, z+1,  x-1, z+1,  x-1, z  );
+        final BiomeMix biomes3 = builder.getBiomeMix(x-1, z,  x-1, z-1,  x-1, z-1,  x-1, z  );
+        final BiomeMix biomes4 = builder.getBiomeMix(x-1, z,  x-1, z-1,  x-1, z-1,  x-1, z  );
+
         final float shadow = 0.8F;
 
         final float ao1 = builder.getAO(x-1, y+1, z,  x-1, y, z+1,  x-1, y+1, z+1,  x-1, y  , z  ) * shadow;
@@ -386,10 +404,13 @@ public class BlockModel{
         final float ao3 = builder.getAO(x-1, y-1, z,  x-1, y, z-1,  x-1, y-1, z-1,  x-1, y  , z  ) * shadow;
         final float ao4 = builder.getAO(x-1, y+1, z,  x-1, y, z-1,  x-1, y+1, z-1,  x-1, y  , z  ) * shadow;
 
-        final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+        final IColor col1 = pickFaceColor(face, biomes1);
+        final IColor col2 = pickFaceColor(face, biomes2);
+        final IColor col3 = pickFaceColor(face, biomes3);
+        final IColor col4 = pickFaceColor(face, biomes4);
 
         final ChunkMesh mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
-        face.putFace(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
+        face.putFacePacked(mesh,  x, y, z,  col1, col2, col3, col4,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
     }
 
     private void buildPxFace(ChunkBuilder builder, Face face, int x, int y, int z){
@@ -403,6 +424,11 @@ public class BlockModel{
         final float blockLight3 = builder.getBlockLight(x+1, y, z,  x+1, y, z+1,  x+1, y-1, z+1,  x+1, y-1, z  ) / MAX_LIGHT_LEVEL;
         final float blockLight4 = builder.getBlockLight(x+1, y, z,  x+1, y, z+1,  x+1, y+1, z+1,  x+1, y+1, z  ) / MAX_LIGHT_LEVEL;
 
+        final BiomeMix biomes1 = builder.getBiomeMix(x+1, z,  x+1, z-1,  x+1, z-1,  x+1, z  );
+        final BiomeMix biomes2 = builder.getBiomeMix(x+1, z,  x+1, z-1,  x+1, z-1,  x+1, z  );
+        final BiomeMix biomes3 = builder.getBiomeMix(x+1, z,  x+1, z+1,  x+1, z+1,  x+1, z  );
+        final BiomeMix biomes4 = builder.getBiomeMix(x+1, z,  x+1, z+1,  x+1, z+1,  x+1, z  );
+
         final float shadow = 0.8F;
 
         final float ao1 = builder.getAO(x+1, y+1, z,  x+1, y, z-1,  x+1, y+1, z-1,  x+1, y  , z  ) * shadow;
@@ -410,10 +436,13 @@ public class BlockModel{
         final float ao3 = builder.getAO(x+1, y-1, z,  x+1, y, z+1,  x+1, y-1, z+1,  x+1, y  , z  ) * shadow;
         final float ao4 = builder.getAO(x+1, y+1, z,  x+1, y, z+1,  x+1, y+1, z+1,  x+1, y  , z  ) * shadow;
 
-        final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+        final IColor col1 = pickFaceColor(face, biomes1);
+        final IColor col2 = pickFaceColor(face, biomes2);
+        final IColor col3 = pickFaceColor(face, biomes3);
+        final IColor col4 = pickFaceColor(face, biomes4);
 
         final ChunkMesh mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
-        face.putFace(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
+        face.putFacePacked(mesh,  x, y, z,  col1, col2, col3, col4,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
     }
 
     private void buildNyFace(ChunkBuilder builder, Face face, int x, int y, int z){
@@ -427,6 +456,11 @@ public class BlockModel{
         final float blockLight3 = builder.getBlockLight(x, y-1, z,  x, y-1, z-1,  x-1, y-1, z-1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
         final float blockLight4 = builder.getBlockLight(x, y-1, z,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y-1, z  ) / MAX_LIGHT_LEVEL;
 
+        final BiomeMix biomes1 = builder.getBiomeMix(x, z,  x, z+1,  x+1, z+1,  x+1, z  );
+        final BiomeMix biomes2 = builder.getBiomeMix(x, z,  x, z-1,  x+1, z-1,  x+1, z  );
+        final BiomeMix biomes3 = builder.getBiomeMix(x, z,  x, z-1,  x-1, z-1,  x-1, z  );
+        final BiomeMix biomes4 = builder.getBiomeMix(x, z,  x, z+1,  x-1, z+1,  x-1, z  );
+
         final float shadow = 0.6F;
 
         final float ao1 = builder.getAO(x+1, y-1, z,  x, y-1, z+1,  x+1, y-1, z+1,  x  , y-1, z  ) * shadow;
@@ -434,10 +468,13 @@ public class BlockModel{
         final float ao3 = builder.getAO(x-1, y-1, z,  x, y-1, z-1,  x-1, y-1, z-1,  x  , y-1, z  ) * shadow;
         final float ao4 = builder.getAO(x-1, y-1, z,  x, y-1, z+1,  x-1, y-1, z+1,  x  , y-1, z  ) * shadow;
 
-        final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+        final IColor col1 = pickFaceColor(face, biomes1);
+        final IColor col2 = pickFaceColor(face, biomes2);
+        final IColor col3 = pickFaceColor(face, biomes3);
+        final IColor col4 = pickFaceColor(face, biomes4);
 
         final ChunkMesh mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
-        face.putFace(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
+        face.putFacePacked(mesh,  x, y, z,  col1, col2, col3, col4,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
     }
 
     private void buildPyFace(ChunkBuilder builder, Face face, int x, int y, int z){
@@ -451,6 +488,11 @@ public class BlockModel{
         final float blockLight3 = builder.getBlockLight(x, y+1, z,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
         final float blockLight4 = builder.getBlockLight(x, y+1, z,  x, y+1, z-1,  x-1, y+1, z-1,  x-1, y+1, z  ) / MAX_LIGHT_LEVEL;
 
+        final BiomeMix biomes1 = builder.getBiomeMix(x, z,  x, z-1,  x+1, z-1,  x+1, z  );
+        final BiomeMix biomes2 = builder.getBiomeMix(x, z,  x, z+1,  x+1, z+1,  x+1, z  );
+        final BiomeMix biomes3 = builder.getBiomeMix(x, z,  x, z+1,  x-1, z+1,  x-1, z  );
+        final BiomeMix biomes4 = builder.getBiomeMix(x, z,  x, z-1,  x-1, z-1,  x-1, z  );
+
         final float shadow = 1;
 
         final float ao1 = builder.getAO(x+1, y+1, z,  x, y+1, z-1,  x+1, y+1, z-1,  x  , y+1, z  ) * shadow;
@@ -458,10 +500,13 @@ public class BlockModel{
         final float ao3 = builder.getAO(x-1, y+1, z,  x, y+1, z+1,  x-1, y+1, z+1,  x  , y+1, z  ) * shadow;
         final float ao4 = builder.getAO(x-1, y+1, z,  x, y+1, z-1,  x-1, y+1, z-1,  x  , y+1, z  ) * shadow;
 
-        final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+        final IColor col1 = pickFaceColor(face, biomes1);
+        final IColor col2 = pickFaceColor(face, biomes2);
+        final IColor col3 = pickFaceColor(face, biomes3);
+        final IColor col4 = pickFaceColor(face, biomes4);
 
         final ChunkMesh mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
-        face.putFace(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
+        face.putFacePacked(mesh,  x, y, z,  col1, col2, col3, col4,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
     }
 
     private void buildNzFace(ChunkBuilder builder, Face face, int x, int y, int z){
@@ -475,6 +520,11 @@ public class BlockModel{
         final float blockLight3 = builder.getBlockLight(x, y, z-1,  x, y-1, z-1,  x+1, y-1, z-1,  x, y-1, z-1  ) / MAX_LIGHT_LEVEL;
         final float blockLight4 = builder.getBlockLight(x, y, z-1,  x, y+1, z-1,  x+1, y+1, z-1,  x, y+1, z-1  ) / MAX_LIGHT_LEVEL;
 
+        final BiomeMix biomes1 = builder.getBiomeMix(x, z-1,  x, z-1,  x-1, z-1,  x, z-1  );
+        final BiomeMix biomes2 = builder.getBiomeMix(x, z-1,  x, z-1,  x-1, z-1,  x, z-1  );
+        final BiomeMix biomes3 = builder.getBiomeMix(x, z-1,  x, z-1,  x+1, z-1,  x, z-1  );
+        final BiomeMix biomes4 = builder.getBiomeMix(x, z-1,  x, z-1,  x+1, z-1,  x, z-1  );
+
         final float shadow = 0.7F;
 
         final float ao1 = builder.getAO(x-1, y, z-1,  x, y+1, z-1,  x-1, y+1, z-1,  x  , y  , z-1) * shadow;
@@ -482,10 +532,13 @@ public class BlockModel{
         final float ao3 = builder.getAO(x+1, y, z-1,  x, y-1, z-1,  x+1, y-1, z-1,  x  , y  , z-1) * shadow;
         final float ao4 = builder.getAO(x+1, y, z-1,  x, y+1, z-1,  x+1, y+1, z-1,  x  , y  , z-1) * shadow;
 
-        final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+        final IColor col1 = pickFaceColor(face, biomes1);
+        final IColor col2 = pickFaceColor(face, biomes2);
+        final IColor col3 = pickFaceColor(face, biomes3);
+        final IColor col4 = pickFaceColor(face, biomes4);
 
         final ChunkMesh mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
-        face.putFace(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
+        face.putFacePacked(mesh,  x, y, z,  col1, col2, col3, col4,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
     }
 
     private void buildPzFace(ChunkBuilder builder, Face face, int x, int y, int z){
@@ -499,6 +552,11 @@ public class BlockModel{
         final float blockLight3 = builder.getBlockLight(x, y, z+1,  x, y-1, z+1,  x-1, y-1, z+1,  x-1, y, z+1  ) / MAX_LIGHT_LEVEL;
         final float blockLight4 = builder.getBlockLight(x, y, z+1,  x, y+1, z+1,  x-1, y+1, z+1,  x-1, y, z+1  ) / MAX_LIGHT_LEVEL;
 
+        final BiomeMix biomes1 = builder.getBiomeMix(x, z+1,  x, z+1,  x+1, z+1,  x+1, z+1  );
+        final BiomeMix biomes2 = builder.getBiomeMix(x, z+1,  x, z+1,  x+1, z+1,  x+1, z+1  );
+        final BiomeMix biomes3 = builder.getBiomeMix(x, z+1,  x, z+1,  x-1, z+1,  x-1, z+1  );
+        final BiomeMix biomes4 = builder.getBiomeMix(x, z+1,  x, z+1,  x-1, z+1,  x-1, z+1  );
+
         final float shadow = 0.7F;
 
         final float ao1 = builder.getAO(x+1, y, z+1,  x, y+1, z+1,  x+1, y+1, z+1,  x  , y  , z+1) * shadow;
@@ -506,10 +564,13 @@ public class BlockModel{
         final float ao3 = builder.getAO(x-1, y, z+1,  x, y-1, z+1,  x-1, y-1, z+1,  x  , y  , z+1) * shadow;
         final float ao4 = builder.getAO(x-1, y, z+1,  x, y+1, z+1,  x-1, y+1, z+1,  x  , y  , z+1) * shadow;
 
-        final IColor color = pickFaceColor(face, builder.currentBiome.getBiome());
+        final IColor col1 = pickFaceColor(face, biomes1);
+        final IColor col2 = pickFaceColor(face, biomes2);
+        final IColor col3 = pickFaceColor(face, biomes3);
+        final IColor col4 = pickFaceColor(face, biomes4);
 
         final ChunkMesh mesh = meshType == ChunkMeshType.TRANSLUCENT ? builder.translucentMesh : builder.solidMesh;
-        face.putFace(mesh,  x, y, z,  color,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
+        face.putFacePacked(mesh,  x, y, z,  col1, col2, col3, col4,  ao1, ao2, ao3, ao4,  skyLight1, skyLight2, skyLight3, skyLight4,  blockLight1, blockLight2, blockLight3, blockLight4);
     }
 
 

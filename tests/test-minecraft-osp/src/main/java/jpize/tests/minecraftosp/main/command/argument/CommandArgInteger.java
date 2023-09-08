@@ -16,10 +16,15 @@ public class CommandArgInteger extends CommandArg{
         // Если количество частей меньше 1 (число), завершить парсинг
         if(args.length < 1)
             return 0;
-        
-        // устанавливаем число
-        number = Integer.parseInt(args[0]);
-        return args[0].length();
+
+        try{
+            // устанавливаем число
+            number = Integer.parseInt(args[0]);
+            return args[0].length();
+
+        }catch(Exception ignored){
+            return 0;
+        }
     }
     
     public int getInt(){

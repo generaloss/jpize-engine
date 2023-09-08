@@ -3,7 +3,7 @@ package jpize.tests.minecraftosp.server.level.light;
 import jpize.math.vecmath.vector.Vec3i;
 import jpize.tests.minecraftosp.client.block.BlockProps;
 import jpize.tests.minecraftosp.main.Dir;
-import jpize.tests.minecraftosp.server.chunk.ServerChunk;
+import jpize.tests.minecraftosp.main.chunk.LevelChunk;
 import jpize.tests.minecraftosp.server.level.ServerLevel;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -11,6 +11,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import static jpize.tests.minecraftosp.main.chunk.ChunkUtils.*;
 
 public class LevelBlockLight{
+
+
+    /**            --------- ALGORITHM ---------            **/
+
 
     private final ServerLevel level;
     private final ConcurrentLinkedQueue<LightNode> bfsIncreaseQueue, bfsDecreaseQueue;
@@ -22,127 +26,164 @@ public class LevelBlockLight{
     }
 
 
-    public synchronized void increase(ServerChunk chunk, int lx, int y, int lz, int level){
+    /** Распространение света */
+    public void increase(LevelChunk chunk, int lx, int y, int lz, int level){
         if(chunk.getBlockLight(lx, y, lz) >= level)
             return;
 
-        chunk.setBlockLight(lx, y, lz, level);
-        addIncrease(chunk, lx, y, lz, level);
-
+        addIncreaseWithLightSet(chunk, lx, y, lz, level);
         propagateIncrease();
     }
 
-    private synchronized void addIncrease(ServerChunk chunk, int lx, int y, int lz, int level){
+    private void addIncrease(LevelChunk chunk, int lx, int y, int lz, int level){
         bfsIncreaseQueue.add(new LightNode(chunk, lx, y, lz, level));
     }
 
-    private synchronized void propagateIncrease(){
-        ServerChunk neighborChunk;
+    private void addIncreaseWithLightSet(LevelChunk chunk, int lx, int y, int lz, int level){
+        chunk.setBlockLight(lx, y, lz, level);
+        addIncrease(chunk, lx, y, lz, level);
+    }
+
+    /** Алгоритм распространения света */
+    private void propagateIncrease(){
+        LevelChunk neighborChunk;
         int neighborX, neighborY, neighborZ;
         int targetLevel;
 
+        // Итерируемся по нодам в очереди
         while(!bfsIncreaseQueue.isEmpty()){
             final LightNode lightEntry = bfsIncreaseQueue.poll();
 
-            final ServerChunk chunk = lightEntry.chunk;
+            final LevelChunk chunk = lightEntry.chunk;
             final byte x = lightEntry.lx;
             final short y = lightEntry.y;
             final byte z = lightEntry.lz;
             final byte level = lightEntry.level;
 
+            // Проверка каждого из 6 блоков вокруг текущего[x, y, z]
             for(int i = 0; i < 6; i++){
-                final Vec3i normal = Dir.values()[i].getNormal();
+                // Находим нормаль
+                final Vec3i normal = Dir.getNormal3(i);
 
+                // Координаты соседнего блока
                 neighborX = x + normal.x;
                 neighborZ = z + normal.z;
 
+                // Находим чанк соседнего блока
                 if(neighborX > SIZE_IDX || neighborZ > SIZE_IDX || neighborX < 0 || neighborZ < 0){
-                    neighborChunk = getNeighborChunk(chunk, normal.x, normal.z);
+                    // Если координаты выходят за границы чанка - найти соответствующий чанк
+                    neighborChunk = chunk.getNeighborChunk(normal.x, normal.z);
                     if(neighborChunk == null)
                         continue;
 
+                    // Нормализуем координаты для найденного чанка
                     neighborX = getLocalCoord(neighborX);
                     neighborZ = getLocalCoord(neighborZ);
                 }else
+                    // Если нет - выбрать данный чанк
                     neighborChunk = chunk;
 
+                // Координата Y соседнего блока
                 neighborY = y + normal.y;
                 if(neighborY < 0 || neighborY > HEIGHT_IDX)
                     continue;
 
-                int neighborLevel = neighborChunk.getBlockLight(neighborX, neighborY, neighborZ);
+                // Узнать уровень освещенности соседнего блока
+                final int neighborLevel = neighborChunk.getBlockLight(neighborX, neighborY, neighborZ);
+
+                // Если соседний уровень равен данному, или же больше - его увеличивать не нужно, так как этот свет уже исходит от другого источника
                 if(neighborLevel >= level - 1)
                     continue;
 
+                // Находим уровень освещенности который должен быть у соседнего, учитывая непрозрачность блока
                 final BlockProps neighborProperties = neighborChunk.getBlockProps(neighborX, neighborY, neighborZ);
                 targetLevel = level - Math.max(1, neighborProperties.getOpacity());
 
-                if(targetLevel > neighborLevel){
-                    neighborChunk.setBlockLight(neighborX, neighborY, neighborZ, targetLevel);
-                    addIncrease(neighborChunk, neighborX, neighborY, neighborZ, targetLevel);
-                }
+                // Если имеет смысл - распространяем свет уже от соседнего блока
+                if(targetLevel > neighborLevel)
+                    addIncreaseWithLightSet(neighborChunk, neighborX, neighborY, neighborZ, targetLevel);
             }
         }
     }
 
 
-    public synchronized void decrease(ServerChunk chunk, int lx, int y, int lz, int level){
-        if(chunk.getBlockLight(lx, y, lz) >= level)
+    /** Удаление света */
+    public void decrease(LevelChunk chunk, int lx, int y, int lz){
+        final int level = chunk.getBlockLight(lx, y, lz);
+        if(level == 0)
             return;
 
-        chunk.setBlockLight(lx, y, lz, 0);
-        addDecrease(chunk, lx, y, lz, level);
-
+        addDecreaseWithLightSet(chunk, lx, y, lz, level);
         propagateDecrease();
     }
 
-    private synchronized void addDecrease(ServerChunk chunk, int lx, int y, int lz, int level){
+    private void addDecrease(LevelChunk chunk, int lx, int y, int lz, int level){
         bfsDecreaseQueue.add(new LightNode(chunk, lx, y, lz, level));
     }
 
-    private synchronized void propagateDecrease(){
-        ServerChunk neighborChunk;
+    private void addDecreaseWithLightSet(LevelChunk chunk, int lx, int y, int lz, int level){
+        chunk.setBlockLight(lx, y, lz, 0);
+        addDecrease(chunk, lx, y, lz, level);
+    }
+
+    /** Алгоритм удаления света **/
+    private void propagateDecrease(){
+        LevelChunk neighborChunk;
         int neighborX, neighborY, neighborZ;
 
+        // Итерируемся по нодам в очереди
         while(!bfsDecreaseQueue.isEmpty()){
             final LightNode lightEntry = bfsDecreaseQueue.poll();
 
-            final ServerChunk chunk = lightEntry.chunk;
+            final LevelChunk chunk = lightEntry.chunk;
             final byte x = lightEntry.lx;
             final short y = lightEntry.y;
             final byte z = lightEntry.lz;
             final byte level = lightEntry.level;
 
+            // Проверка каждого из 6 блоков вокруг текущего[x, y, z]
             for(int i = 0; i < 6; i++){
-                final Vec3i normal = Dir.normal3DFromIndex(i);
+                // Находим нормаль
+                final Vec3i normal = Dir.getNormal3(i);
 
+                // Координаты соседнего блока
                 neighborX = x + normal.x;
                 neighborZ = z + normal.z;
 
+                // Находим чанк соседнего блока
                 if(neighborX > SIZE_IDX || neighborZ > SIZE_IDX || neighborX < 0 || neighborZ < 0){
-                    neighborChunk = getNeighborChunk(chunk, normal.x, normal.z);
+                    // Если координаты выходят за границы чанка - найти соответствующий чанк
+                    neighborChunk = chunk.getNeighborChunk(normal.x, normal.z);
                     if(neighborChunk == null)
                         continue;
 
+                    // Нормализуем координаты для найденного чанка
                     neighborX = getLocalCoord(neighborX);
                     neighborZ = getLocalCoord(neighborZ);
                 }else
+                    // Если нет - выбрать данный чанк
                     neighborChunk = chunk;
 
+                // Координата Y соседнего блока
                 neighborY = y + normal.y;
                 if(neighborY < 0 || neighborY > HEIGHT_IDX)
                     continue;
 
-                int neighborLevel = neighborChunk.getBlockLight(neighborX, neighborY, neighborZ);
-                if(neighborLevel != 0 && level > neighborLevel){
-                    neighborChunk.setBlockLight(neighborX, neighborY, neighborZ, 0);
-
+                // Узнать уровень освещенности соседнего блока
+                final int neighborLevel = neighborChunk.getBlockLight(neighborX, neighborY, neighborZ);
+                // Если он равен 0 - уменьшать дальше нечего
+                // Если соседний уровень освещенности меньше данного - зануляем его и уменьшаем освещение с его позиции
+                if(neighborLevel != 0 && neighborLevel < level){
                     final BlockProps neighborBlock = neighborChunk.getBlockProps(neighborX, neighborY, neighborZ);
-
-                    addDecrease(neighborChunk, neighborX, neighborY, neighborZ, Math.max(level, neighborLevel + neighborBlock.getOpacity()) );
-                }else if(level <= neighborLevel)
+                    // Находим уровень света, учитывая непрозрачность блока
+                    // (всегда будет на 0-15 больше чем уровень освещенности в данном блоке)
+                    final int decreaseLevel = Math.max(level, neighborLevel + neighborBlock.getOpacity());
+                    // Math.max(0, neighborLevel - neighborBlock.getOpacity())
+                    addDecreaseWithLightSet(neighborChunk, neighborX, neighborY, neighborZ, decreaseLevel);
+                }else if(neighborLevel >= level)
+                    // Если соседний уровень равен данному, или же больше - его уменьшать нельзя, так как этот свет уже исходит от другого источника
+                    // Просто увеличиваем от него свет, так как до этого все зануляли
                     addIncrease(neighborChunk, neighborX, neighborY, neighborZ, neighborLevel);
-
             }
         }
 
@@ -150,3 +191,16 @@ public class LevelBlockLight{
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

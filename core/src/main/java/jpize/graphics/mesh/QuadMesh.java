@@ -1,11 +1,12 @@
 package jpize.graphics.mesh;
 
-import jpize.util.Disposable;
-import jpize.gl.vertex.GlVertexAttr;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.vertex.GlVertexArray;
+import jpize.gl.vertex.GlVertexAttr;
+import jpize.graphics.buffer.QuadIndexBuffer;
+import jpize.graphics.buffer.VertexBuffer;
 
-public class QuadMesh implements Disposable{
+public class QuadMesh implements IMesh{
 
     private final GlVertexArray vertexArray;
     private final VertexBuffer vertexBuffer;
@@ -28,22 +29,24 @@ public class QuadMesh implements Disposable{
     }
 
     public void render(GlPrimitive primitive){
-        this.render(indexBuffer.getSize(), primitive);
+        this.render(indexBuffer.getIndexCount(), primitive);
     }
 
+    @Override
     public void render(){
-        this.render(indexBuffer.getSize());
+        this.render(indexBuffer.getIndexCount());
     }
 
 
+    @Override
     public VertexBuffer getBuffer(){
         return vertexBuffer;
     }
 
     @Override
     public void dispose(){
-        vertexBuffer.dispose();
         vertexArray.dispose();
+        vertexBuffer.dispose();
         indexBuffer.dispose();
     }
 

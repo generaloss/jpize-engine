@@ -1,4 +1,4 @@
-package jpize.tests.minecraftosp.client.chunk.mesh.builder;
+package jpize.tests.minecraftosp.client.chunk.builder;
 
 import jpize.tests.minecraftosp.client.chunk.ClientChunk;
 

@@ -1,4 +1,4 @@
-package jpize.graphics.mesh;
+package jpize.graphics.buffer;
 
 import jpize.gl.buffer.GlBufUsage;
 import jpize.gl.buffer.GlIndexBuffer;

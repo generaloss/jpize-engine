@@ -227,7 +227,7 @@ public class BitmapFont implements Disposable{
         for(int i = 0; i < text.length(); i++){
             final int code = Character.codePointAt(text, i);
             
-            if(code == 10){
+            if(code == 10){ // \n
                 advanceY += wrapSign * lineAdvance;
                 advanceX = 0;
                 continue;
@@ -245,8 +245,8 @@ public class BitmapFont implements Disposable{
             final float xOffset = advanceX + glyph.offsetX;
             final float yOffset = advanceY + glyph.offsetY;
             
-            final float renderX = x + (xOffset * cos - yOffset * sin) * scale - centeringOffsetX;
-            final float renderY = y + (yOffset * cos + xOffset * sin) * scale - centeringOffsetY;
+            final float renderX = x + xOffset * scale;
+            final float renderY = y + yOffset * scale;
 
             glyph.render(batch, renderX, renderY);
 

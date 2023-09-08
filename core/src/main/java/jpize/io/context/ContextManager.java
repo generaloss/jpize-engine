@@ -1,8 +1,5 @@
 package jpize.io.context;
 
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.system.Platform;
 import jpize.audio.Audio;
 import jpize.gl.buffer.GlBuffer;
 import jpize.gl.shader.GlProgram;
@@ -10,6 +7,7 @@ import jpize.gl.vertex.GlVertexArray;
 import jpize.glfw.glfw.Glfw;
 import jpize.glfw.glfw.GlfwHint;
 import jpize.graphics.texture.CubeMap;
+import jpize.graphics.texture.GlTexture;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.texture.TextureArray;
 import jpize.graphics.util.BaseShader;
@@ -22,10 +20,15 @@ import jpize.io.Window;
 import jpize.util.Utils;
 import jpize.util.time.DeltaTimeCounter;
 import jpize.util.time.FpsCounter;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.system.Platform;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ContextManager{
 
@@ -44,6 +47,7 @@ public class ContextManager{
     }
 
 
+    private final List<Context> contextsToInit;
     private final Map<Long, Context> contextMap;
     private Context currentContext;
     private final SyncTaskExecutor syncTaskExecutor;
@@ -65,6 +69,7 @@ public class ContextManager{
 
 
     private ContextManager(){
+        this.contextsToInit = new CopyOnWriteArrayList<>();
         this.contextMap = new ConcurrentHashMap<>();
         this.syncTaskExecutor = new SyncTaskExecutor();
 
@@ -92,11 +97,22 @@ public class ContextManager{
 
 
     public void run(){
-        // Render
+        // Loop
         while(!Thread.interrupted()){
             if(stopRequest)
                 break;
 
+            // Init
+            for(Context context: contextsToInit){
+                if(context.adapter == null)
+                    continue;
+
+                context.init();
+                contextsToInit.remove(context);
+                contextMap.put(context.getWindow().getID(), context);
+            }
+
+            // Render
             if(!contextMap.isEmpty()){
                 // Poll events
                 Glfw.pollEvents();
@@ -110,10 +126,10 @@ public class ContextManager{
                     if(!context.isEnabled())
                         continue;
 
-                    setCurrentContext(context);
                     context.render();
                 }
             }
+            // Exit
             else if(exitWhenNoWindows)
                 break;
 
@@ -129,6 +145,7 @@ public class ContextManager{
 
         // Unbind GL objects
         GlBuffer.unbindAll();
+        GlTexture.unbindAll();
         GlProgram.unbind();
         GlVertexArray.unbind();
         Texture.unbind();
@@ -143,10 +160,8 @@ public class ContextManager{
         Utils.invokeStatic(BaseShader.class, "disposeShaders");
 
         // Dispose contexts
-        for(Context context: contextMap.values()){
-            setCurrentContext(context);
+        for(Context context: contextMap.values())
             context.dispose();
-        }
 
         GL.setCapabilities(null);
 
@@ -159,14 +174,26 @@ public class ContextManager{
     }
 
     public void closeAllWindows(){
-        for(Context context: contextMap.values()){
-            setCurrentContext(context);
+        for(Context context: contextMap.values())
             context.dispose();
-        }
+    }
+
+    public void closeOtherWindows(){
+        final Context current = currentContext;
+
+        for(Context context: contextMap.values())
+            if(context != current)
+                context.dispose();
+
+        setCurrentContext(current);
     }
 
 
-    private void setCurrentContext(Context context){
+    public Context getCurrentContext(){
+        return currentContext;
+    }
+
+    protected void setCurrentContext(Context context){
         currentContext = context;
         final Window window = context.getWindow();
         window.makeCurrent();
@@ -178,17 +205,12 @@ public class ContextManager{
         return contextMap.values();
     }
 
-    public Context getCurrentContext(){
-        return currentContext;
-    }
-
     public Context getContext(long windowID){
         return contextMap.get(windowID);
     }
 
     public void registerContext(Context context){
-        setCurrentContext(context);
-        contextMap.put(context.getWindow().getID(), context);
+        contextsToInit.add(context);
     }
 
     public void unregisterContext(Context context){

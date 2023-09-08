@@ -25,7 +25,7 @@ public enum Biome{
         this.biome = biome;
     }
 
-    public BiomeProperties getBiome(){
+    public BiomeProperties getProps(){
         return biome;
     }
 

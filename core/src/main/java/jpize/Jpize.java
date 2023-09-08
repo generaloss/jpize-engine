@@ -148,6 +148,10 @@ public class Jpize{
         contextManager.closeAllWindows();
     }
 
+    public static void closeOtherWindows(){
+        contextManager.closeOtherWindows();
+    }
+
     public static void exitWhenNoWindows(boolean exitWhenNoWindows){
         contextManager.exitWhenNoWindows(exitWhenNoWindows);
     }

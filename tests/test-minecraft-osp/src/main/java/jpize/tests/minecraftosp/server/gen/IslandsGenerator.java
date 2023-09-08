@@ -9,7 +9,7 @@ import jpize.tests.minecraftosp.server.chunk.ServerChunk;
 import static jpize.tests.minecraftosp.main.chunk.ChunkUtils.HEIGHT;
 import static jpize.tests.minecraftosp.main.chunk.ChunkUtils.SIZE;
 
-public class IslandsGenerator implements ChunkGenerator{
+public class IslandsGenerator extends ChunkGenerator{
     
     private final FastNoiseLite
         continentalnessNoise, erosionNoise, peaksValleysNoise, temperatureNoise, humidityNoise;
@@ -62,7 +62,7 @@ public class IslandsGenerator implements ChunkGenerator{
                     
                     float continentalness3D = (continentalnessNoise.getNoise(x, y, z) + 1) * 0.5F;
                     if(continentalness3D < ((float) y / (HEIGHT - height)) * density)
-                        chunk.setBlockDec(lx, y, lz, Blocks.STONE);
+                        chunk.setBlockFast(lx, y, lz, Blocks.STONE);
                 }
             }
         }
@@ -74,15 +74,12 @@ public class IslandsGenerator implements ChunkGenerator{
                 
                 int height = chunk.getHeightMap(HeightmapType.SURFACE).getHeight(lx, lz);
                 if(height > 60)
-                    chunk.setBlockDec(lx, height, lz, Blocks.GRASS_BLOCK);
+                    chunk.setBlockFast(lx, height, lz, Blocks.GRASS_BLOCK);
             }
         }
 
         // System.out.println("Gen: " + timer.getMillis());
     }
-
-    @Override
-    public void decorate(ServerChunk chunk, boolean other){ }
 
     private static IslandsGenerator instance;
     

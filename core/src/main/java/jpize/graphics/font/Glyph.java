@@ -39,16 +39,7 @@ public class Glyph{
     public void render(TextureBatch batch, float x, float y){
         final float scale = fontOf.getScale();
 
-        batch.draw(
-            fontOf.getPage(page),
-
-            x,
-            y,
-            width * scale,
-            height * scale,
-
-            region
-        );
+        batch.draw(fontOf.getPage(page), x, y, width * scale, height * scale, region);
     }
 
 }

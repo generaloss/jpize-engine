@@ -1,36 +1,41 @@
 package jpize.graphics.texture;
 
 import jpize.gl.texture.GlFilter;
+import jpize.gl.texture.GlTexParam;
+import jpize.gl.texture.GlTexTarget;
 
 import static org.lwjgl.opengl.GL33.*;
 
 public class CubeMap extends GlTexture{
     
-    public CubeMap(String px, String nx, String py, String ny, String pz, String nz){
-        super(GL_TEXTURE_CUBE_MAP);
+    public CubeMap(String positive_x, String negative_x,
+                   String positive_y, String negative_y,
+                   String positive_z, String negative_z){
+
+        super(GlTexTarget.CUBE_MAP);
         bind();
         
         parameters.setFilter(GlFilter.LINEAR);
         
-        Pixmap pixmapPx = PixmapIO.load(px);
-        parameters.texImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, pixmapPx.getBuffer(), pixmapPx.getWidth(), pixmapPx.getHeight());
+        final Pixmap pixmapPX = PixmapIO.load(positive_x);
+        parameters.texImage2D(GlTexParam.CUBE_MAP_POSITIVE_X, pixmapPX.getBuffer(), pixmapPX.getWidth(), pixmapPX.getHeight());
 
-        Pixmap pixmapNx = PixmapIO.load(nx);
-        parameters.texImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, pixmapNx.getBuffer(), pixmapNx.getWidth(), pixmapNx.getHeight());
+        final Pixmap pixmapNX = PixmapIO.load(negative_x);
+        parameters.texImage2D(GlTexParam.CUBE_MAP_NEGATIVE_X, pixmapNX.getBuffer(), pixmapNX.getWidth(), pixmapNX.getHeight());
 
-        Pixmap pixmapPy = PixmapIO.load(py);
-        parameters.texImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, pixmapPy.getBuffer(), pixmapPy.getWidth(), pixmapPy.getHeight());
+        final Pixmap pixmapPY = PixmapIO.load(positive_y);
+        parameters.texImage2D(GlTexParam.CUBE_MAP_POSITIVE_Y, pixmapPY.getBuffer(), pixmapPY.getWidth(), pixmapPY.getHeight());
 
-        Pixmap pixmapNy = PixmapIO.load(ny);
-        parameters.texImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, pixmapNy.getBuffer(), pixmapNy.getWidth(), pixmapNy.getHeight());
+        final Pixmap pixmapNY = PixmapIO.load(negative_y);
+        parameters.texImage2D(GlTexParam.CUBE_MAP_NEGATIVE_Y, pixmapNY.getBuffer(), pixmapNY.getWidth(), pixmapNY.getHeight());
 
-        Pixmap pixmapPz = PixmapIO.load(pz);
-        parameters.texImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, pixmapPz.getBuffer(), pixmapPz.getWidth(), pixmapPz.getHeight());
+        final Pixmap pixmapPZ = PixmapIO.load(positive_z);
+        parameters.texImage2D(GlTexParam.CUBE_MAP_POSITIVE_Z, pixmapPZ.getBuffer(), pixmapPZ.getWidth(), pixmapPZ.getHeight());
 
-        Pixmap pixmapNz = PixmapIO.load(nz);
-        parameters.texImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, pixmapNz.getBuffer(), pixmapNz.getWidth(), pixmapNz.getHeight());
+        final Pixmap pixmapNZ = PixmapIO.load(negative_z);
+        parameters.texImage2D(GlTexParam.CUBE_MAP_NEGATIVE_Z, pixmapNZ.getBuffer(), pixmapNZ.getWidth(), pixmapNZ.getHeight());
     
-        parameters.use(GL_TEXTURE_CUBE_MAP);
+        parameters.use(GlTexTarget.CUBE_MAP);
         genMipMap();
     }
     

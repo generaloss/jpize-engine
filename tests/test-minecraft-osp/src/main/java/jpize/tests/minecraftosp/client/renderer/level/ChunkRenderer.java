@@ -21,7 +21,7 @@ import static jpize.tests.minecraftosp.main.chunk.ChunkUtils.SIZE;
 public class ChunkRenderer implements Disposable{
     
     private final LevelRenderer levelRenderer;
-    private final Shader shader;
+    private final Shader shader, packedShader;
     private int renderedChunks;
     
     public ChunkRenderer(LevelRenderer levelRenderer){
@@ -30,7 +30,8 @@ public class ChunkRenderer implements Disposable{
         Gl.depthFunc(GlDepthFunc.LEQUAL);
 
         shader = new Shader(new Resource("shader/level/chunk/custom-blocks.vert"), new Resource("shader/level/chunk/custom-blocks.frag"));
-        
+        packedShader = new Shader(new Resource("shader/level/chunk/packed-voxel.vert"), new Resource("shader/level/chunk/packed-voxel.frag"));
+
         Gl.polygonOffset(1, 1); // For BlockSelector line rendering
     }
     
@@ -70,6 +71,13 @@ public class ChunkRenderer implements Disposable{
         for(ClientChunk chunk: chunks){
             shader.setUniform("u_model", chunk.getTranslationMatrix());
             chunk.getMeshStack().getCustom().render();
+
+            if(chunk.getMeshStack().getCustom().isHasPacked()){
+                packedShader.bind();
+                packedShader.setUniform("u_model", chunk.getTranslationMatrix());
+                chunk.getMeshStack().getCustom().renderPacked();
+                shader.bind();
+            }
         }
         Gl.enable(GlTarget.CULL_FACE);
 
@@ -77,6 +85,13 @@ public class ChunkRenderer implements Disposable{
         for(ClientChunk chunk: chunks){
             shader.setUniform("u_model", chunk.getTranslationMatrix());
             chunk.getMeshStack().getSolid().render();
+
+            if(chunk.getMeshStack().getSolid().isHasPacked()){
+                packedShader.bind();
+                packedShader.setUniform("u_model", chunk.getTranslationMatrix());
+                chunk.getMeshStack().getSolid().renderPacked();
+                shader.bind();
+            }
         }
 
         // Render translucent blocks
@@ -84,6 +99,13 @@ public class ChunkRenderer implements Disposable{
         for(ClientChunk chunk: chunks){
             shader.setUniform("u_model", chunk.getTranslationMatrix());
             chunk.getMeshStack().getTranslucent().render();
+
+            if(chunk.getMeshStack().getTranslucent().isHasPacked()){
+                packedShader.bind();
+                packedShader.setUniform("u_model", chunk.getTranslationMatrix());
+                chunk.getMeshStack().getTranslucent().renderPacked();
+                shader.bind();
+            }
         }
         Gl.enable(GlTarget.CULL_FACE);
     }
@@ -103,10 +125,24 @@ public class ChunkRenderer implements Disposable{
         shader.setUniform("u_atlas", blockAtlas);
         
         shader.setUniform("u_renderDistanceBlocks", (options.getRenderDistance() - 1) * SIZE);
+        shader.setUniform("u_fogEnabled", options.isFogEnabled());
         shader.setUniform("u_fogColor", fogColor);
         shader.setUniform("u_fogStart", fogStart);
         shader.setUniform("u_brightness", options.getBrightness());
         shader.setUniform("u_skyBrightness", skyBrightness);
+
+        // Packed Shader
+        packedShader.bind();
+        packedShader.setUniform("u_projection", camera.getProjection());
+        packedShader.setUniform("u_view", camera.getView());
+        packedShader.setUniform("u_atlas", blockAtlas);
+
+        packedShader.setUniform("u_renderDistanceBlocks", (options.getRenderDistance() - 1) * SIZE);
+        packedShader.setUniform("u_fogEnabled", options.isFogEnabled());
+        packedShader.setUniform("u_fogColor", fogColor);
+        packedShader.setUniform("u_fogStart", fogStart);
+        packedShader.setUniform("u_brightness", options.getBrightness());
+        packedShader.setUniform("u_skyBrightness", skyBrightness);
     }
     
     public int getRenderedChunks(){
@@ -116,6 +152,7 @@ public class ChunkRenderer implements Disposable{
     @Override
     public void dispose(){
         shader.dispose();
+        packedShader.dispose();
     }
     
 }

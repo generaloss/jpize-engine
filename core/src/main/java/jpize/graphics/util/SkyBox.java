@@ -16,8 +16,11 @@ public class SkyBox implements Disposable{
     private final Shader shader;
     private final IndexedMesh mesh;
     
-    public SkyBox(String px, String nx, String py, String ny, String pz, String nz){
-        cubeMap = new CubeMap(px, nx, py, ny, pz, nz);
+    public SkyBox(String positive_x, String negative_x,
+                  String positive_y, String negative_y,
+                  String positive_z, String negative_z){
+
+        cubeMap = new CubeMap(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
 
         shader = new Shader(new Resource("shader/skybox/skybox.vert"), new Resource("shader/skybox/skybox.frag"));
 

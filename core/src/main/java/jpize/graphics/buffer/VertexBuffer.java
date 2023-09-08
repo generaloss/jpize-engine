@@ -1,4 +1,4 @@
-package jpize.graphics.mesh;
+package jpize.graphics.buffer;
 
 import jpize.gl.buffer.GlBufUsage;
 import jpize.gl.buffer.GlVertexBuffer;
@@ -56,8 +56,12 @@ public class VertexBuffer extends GlVertexBuffer{
     }
 
 
-    public void setData(long size){
-        allocateData(size, defaultUsage);
+    public void allocateData(long size){
+        super.allocateData(size, defaultUsage);
+    }
+
+    public void allocateData(int size){
+        super.allocateData(size, defaultUsage);
     }
 
     public void setData(float[] data){

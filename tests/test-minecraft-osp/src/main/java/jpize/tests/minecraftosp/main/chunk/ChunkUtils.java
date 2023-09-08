@@ -62,15 +62,15 @@ public class ChunkUtils{
     
     
     public static LevelChunk getNeighborChunk(LevelChunk chunk, int x, int z){
-        return chunk.getLevel().getChunkManager().getChunk(chunk.getPosition().getNeighbor(x, z));
+        return chunk.getLevel().getChunkManager().getChunk(chunk.getNeighborPos(x, z));
     }
     
     public static ClientChunk getNeighborChunk(ClientChunk chunk, int x, int z){
-        return chunk.getLevel().getChunkManager().getChunk(chunk.getPosition().getNeighbor(x, z));
+        return chunk.getLevel().getChunkManager().getChunk(chunk.getNeighborPos(x, z));
     }
     
     public static ServerChunk getNeighborChunk(ServerChunk chunk, int x, int z){
-        return chunk.getLevel().getChunkManager().getChunk(chunk.getPosition().getNeighbor(x, z));
+        return chunk.getLevel().getChunkManager().getChunk(chunk.getNeighborPos(x, z));
     }
 
 }

@@ -8,18 +8,22 @@ import jpize.util.Disposable;
 
 public class Context implements Disposable{
 
+    private static final ContextManager contextManager = ContextManager.getInstance();
+
     private final Window window;
-    private ContextAdapter adapter;
+    protected ContextAdapter adapter;
     private final FixedUpdate fixedUpdate;
     private Screen screen;
     private boolean exitOnClose, enabled;
 
     protected Context(Window window){
+        contextManager.registerContext(this);
+
         this.window = window;
         this.exitOnClose = true;
         this.fixedUpdate = new FixedUpdate(0);
 
-        ContextManager.getInstance().registerContext(this);
+        setCurrent();
     }
 
 
@@ -41,32 +45,57 @@ public class Context implements Disposable{
     }
 
 
-    public void init(ContextAdapter adapter){
-        this.adapter = adapter;
-        this.adapter.init();
+    private Context setCurrent(){
+        final Context previous = contextManager.getCurrentContext();
+        setCurrent(this);
+        return previous;
+    }
 
-        this.window.setSizeCallback((int width, int height) -> {
-            window.makeCurrent();
-            adapter.resize(width, height);
+    private void setCurrent(Context context){
+        contextManager.setCurrentContext(context);
+    }
+
+
+    public void setAdapter(ContextAdapter adapter){
+        this.adapter = adapter;
+    }
+
+    protected void init(){
+        setCurrent();
+        if(adapter != null)
+            adapter.init();
+
+        window.setSizeCallback((int width, int height) -> {
+            final Context prev = setCurrent();
+            if(adapter != null)
+                adapter.resize(width, height);
+
             Gl.viewport(width, height);
+            setCurrent(prev);
         });
 
         setEnabled(true);
-        this.window.show();
+        window.show();
+        window.swapBuffers();
     }
-    
+
     protected void render(){
+        setCurrent();
+
         if(window.closeRequest()){
             dispose();
             return;
         }
 
-        // Render
+        // Render screen
         if(screen != null)
             screen.render();
 
-        adapter.update();
-        adapter.render();
+        // Render adapter
+        if(adapter != null){
+            adapter.update();
+            adapter.render();
+        }
         
         // Reset
         window.getMouse().reset();
@@ -109,14 +138,17 @@ public class Context implements Disposable{
 
     @Override
     public void dispose(){
+        setCurrent();
+
         window.hide();
         fixedUpdate.stop();
-        adapter.dispose();
+        if(adapter != null) adapter.dispose();
         window.dispose();
 
-        ContextManager.getInstance().unregisterContext(this);
+        contextManager.unregisterContext(this);
         if(exitOnClose)
-            ContextManager.getInstance().exit();
+            contextManager.exit();
+
     }
 
 }

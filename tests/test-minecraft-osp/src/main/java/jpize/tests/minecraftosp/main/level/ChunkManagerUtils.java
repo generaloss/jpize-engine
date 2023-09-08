@@ -91,11 +91,11 @@ public class ChunkManagerUtils{
     
     
     public static float distToChunk(int x, int z, Vec3f pos){
-        return Vec2f.len(x - pos.x / SIZE + 0.5F, z - pos.z / SIZE + 0.5F);
+        return Vec2f.len(x + 0.5F - pos.x / SIZE, z + 0.5F - pos.z / SIZE);
     }
     
     public static float distToChunk(int x, int z, Vec2f pos){
-        return Vec2f.len(x - pos.x / SIZE + 0.5F, z - pos.y / SIZE + 0.5F);
+        return Vec2f.len(x + 0.5F - pos.x / SIZE, z + 0.5F - pos.y / SIZE);
     }
     
 }

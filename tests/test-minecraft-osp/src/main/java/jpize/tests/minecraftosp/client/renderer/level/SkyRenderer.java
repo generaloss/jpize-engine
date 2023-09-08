@@ -5,7 +5,7 @@ import jpize.files.Resource;
 import jpize.gl.Gl;
 import jpize.gl.vertex.GlVertexArray;
 import jpize.gl.vertex.GlVertexAttr;
-import jpize.graphics.mesh.VertexBuffer;
+import jpize.graphics.buffer.VertexBuffer;
 import jpize.gl.tesselation.GlFace;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.type.GlType;
@@ -191,11 +191,11 @@ public class SkyRenderer implements Disposable{
     }
     
     public Color getFogColor(){
-        return new Color(0.6, 0.75, 0.9, 0.95).mul(skyBrightness);
+        return new Color(0.6, 0.75, 0.9, 0.95).mul3(skyBrightness);
     }
     
     public Color getSkyColor(){
-        return new Color(0.35, 0.6, 1, 1).mul(skyBrightness);
+        return new Color(0.35, 0.6, 1, 1).mul3(skyBrightness);
     }
 
     public float getFogStart(){

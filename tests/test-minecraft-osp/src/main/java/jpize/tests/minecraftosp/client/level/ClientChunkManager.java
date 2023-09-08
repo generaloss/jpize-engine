@@ -2,7 +2,7 @@ package jpize.tests.minecraftosp.client.level;
 
 import jpize.Jpize;
 import jpize.tests.minecraftosp.client.chunk.ClientChunk;
-import jpize.tests.minecraftosp.client.chunk.mesh.builder.ChunkBuilder;
+import jpize.tests.minecraftosp.client.chunk.builder.ChunkBuilder;
 import jpize.tests.minecraftosp.client.entity.LocalPlayer;
 import jpize.tests.minecraftosp.main.chunk.ChunkUtils;
 import jpize.tests.minecraftosp.main.chunk.storage.ChunkPos;
@@ -15,6 +15,8 @@ import jpize.util.time.FpsCounter;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.*;
+
+import static jpize.tests.minecraftosp.main.level.ChunkManagerUtils.distToChunk;
 
 public class ClientChunkManager extends ChunkManager {
 
@@ -104,14 +106,16 @@ public class ClientChunkManager extends ChunkManager {
     public void startLoadChunks(){
         thread = new Thread(() -> {
             chunksLoadIsEnd = false;
-            while(!Thread.currentThread().isInterrupted()){
-                tps.count();
-                findChunks();
-                buildChunks();
-                checkChunks();
+            try{
+                while(!Thread.currentThread().isInterrupted()){
+                    tps.count();
+                    findChunks();
+                    buildChunks();
+                    checkChunks();
 
-                Thread.yield();
-            }
+                    Thread.yield();
+                }
+            }catch(Exception ignored){ }
             chunksLoadIsEnd = true;
         }, "ClientChunkManager-Thread");
 
@@ -261,10 +265,11 @@ public class ClientChunkManager extends ChunkManager {
         final LocalPlayer player = level.getGame().getPlayer();
         if(player == null)
             return true;
-        
-        return
-            ChunkManagerUtils.distToChunk(chunkPos.x, chunkPos.z, player.getPosition())
-            > level.getGame().getSession().getOptions().getRenderDistance();
+
+        final int renderDist = level.getGame().getSession().getOptions().getRenderDistance();
+        final float distToChunk = distToChunk(chunkPos.x, chunkPos.z, player.getPosition());
+
+        return distToChunk > renderDist;
     }
 
 }

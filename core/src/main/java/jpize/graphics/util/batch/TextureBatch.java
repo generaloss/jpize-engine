@@ -1,13 +1,11 @@
 package jpize.graphics.util.batch;
 
 import jpize.Jpize;
-import jpize.util.Disposable;
 import jpize.files.Resource;
-import jpize.graphics.camera.Camera;
-import jpize.gl.buffer.GlBufUsage;
 import jpize.gl.type.GlType;
-import jpize.graphics.mesh.QuadMesh;
 import jpize.gl.vertex.GlVertexAttr;
+import jpize.graphics.camera.Camera;
+import jpize.graphics.mesh.QuadMesh;
 import jpize.graphics.texture.Region;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.texture.TextureRegion;
@@ -19,35 +17,35 @@ import jpize.graphics.util.color.IColor;
 import jpize.math.vecmath.matrix.Matrix3f;
 import jpize.math.vecmath.matrix.Matrix4f;
 import jpize.math.vecmath.vector.Vec2f;
+import jpize.util.Disposable;
 
-import static jpize.graphics.mesh.QuadIndexBuffer.QUAD_INDICES;
-import static jpize.graphics.mesh.QuadIndexBuffer.QUAD_VERTICES;
+import static jpize.graphics.buffer.QuadIndexBuffer.QUAD_INDICES;
+import static jpize.graphics.buffer.QuadIndexBuffer.QUAD_VERTICES;
 
 public class TextureBatch implements Disposable{
 
+    // Tesselation
     private final QuadMesh mesh;
     private final Shader shader;
     private final Color color;
-
-    private final Vec2f transformOrigin;
-    private final Matrix3f transformMatrix, rotationMatrix, shearMatrix, scaleMatrix, flipMatrix;
-
-    private int size, vertexOffset;
-    private final int batchSize;
-    private final float[] vertices;
-
     private Texture lastTexture;
-    private Matrix4f projectionMatrix, viewMatrix;
+    // Custom
+    private Matrix4f projectionMat, viewMat;
     private Shader customShader;
-    
-    private final Scissor scissor = new Scissor(this);
-
-    public TextureBatch(){
-        this(256);
-    }
+    // Data
+    private final int maxSize, vertexBytes;
+    private int size, vertexBufferOffset;
+    public final float[] vertexData;
+    // Transform
+    private final Vec2f transformOrigin;
+    private final Matrix3f transformMat, rotationMat, shearMat, scaleMat, flipMat;
+    private final Scissor scissor;
 
     public TextureBatch(int maxSize){
-        this.batchSize = maxSize;
+        this.maxSize = maxSize;
+        this.color = new Color();
+        this.scissor = new Scissor(this);
+        this.transformOrigin = new Vec2f(0.5);
 
         // Shader
         this.shader = new Shader(
@@ -63,114 +61,63 @@ public class TextureBatch implements Disposable{
                 new GlVertexAttr(4, GlType.FLOAT)
         );
 
-        this.vertices = new float[QUAD_VERTICES * maxSize * mesh.getBuffer().getVertexSize()];
+        // Get vertex size
+        final int vertexSize = mesh.getBuffer().getVertexSize();
+        this.vertexBytes = mesh.getBuffer().getVertexBytes();
 
-        this.color = new Color();
-        this.transformOrigin = new Vec2f(0.5);
-        this.transformMatrix = new Matrix3f();
-        this.rotationMatrix = new Matrix3f();
-        this.shearMatrix = new Matrix3f();
-        this.scaleMatrix = new Matrix3f();
-        this.flipMatrix = new Matrix3f();
-    }
-    
-    
-    public void draw(Texture texture, float x, float y, float width, float height){
-        if(size + 1 >= batchSize)
-            end();
+        // Allocate buffers
+        this.vertexData = new float[vertexSize];
+        this.mesh.getBuffer().allocateData(QUAD_VERTICES * maxSize * vertexSize);
 
-        if(texture != lastTexture){
-            end();
-            lastTexture = texture;
-        }
-
-        addTexturedQuad(x, y, width, height, 0, 0, 1, 1, color.r(), color.g(), color.b(), color.a());
-        size++;
-    }
-    
-    public void draw(Texture texture, float x, float y, float width, float height, float r, float g, float b, float a){
-        if(size + 1 >= batchSize)
-            end();
-        
-        if(texture != lastTexture){
-            end();
-            lastTexture = texture;
-        }
-        
-        addTexturedQuad(x, y, width, height, 0, 0, 1, 1, r, g, b, a);
-        size++;
-    }
-    
-    public void drawQuad(double r, double g, double b, double a, float x, float y, float width, float height){
-        draw(TextureUtils.quadTexture(), x, y, width, height, (float) r, (float) g, (float) b, (float) a);
-    }
-    
-    public void drawQuad(IColor color, float x, float y, float width, float height){
-        drawQuad(color.r(), color.g(), color.b(), color.a(), x, y, width, height);
-    }
-    
-    public void drawQuad(double alpha, float x, float y, float width, float height){
-        drawQuad(0, 0, 0, alpha, x, y, width, height);
+        // Matrices
+        this.transformMat = new Matrix3f();
+        this.rotationMat = new Matrix3f();
+        this.shearMat = new Matrix3f();
+        this.scaleMat = new Matrix3f();
+        this.flipMat = new Matrix3f();
     }
 
-    public void draw(TextureRegion texReg, float x, float y, float width, float height){
-        if(size + 1 >= batchSize)
-            end();
-        
-        final Texture texture = texReg.getTexture();
-        if(texture != lastTexture){
-            end();
-            lastTexture = texture;
-        }
-
-        addTexturedQuad(x, y, width, height, texReg.u1(), texReg.v1(), texReg.u2(), texReg.v2(), color.r(), color.g(), color.b(), color.a());
-        size++;
+    public TextureBatch(){
+        this(1024);
     }
 
-    public void draw(Texture texture, float x, float y, float width, float height, Region region){
-        if(size + 1 >= batchSize)
-            end();
 
-        if(texture != lastTexture){
-            end();
-            lastTexture = texture;
-        }
+    private void addVertex(float x, float y, float s, float t, float r, float g, float b, float a){
+        vertexData[0] = x;
+        vertexData[1] = y;
 
-        addTexturedQuad(x, y, width, height, region.u1(), region.v1(), region.u2(), region.v2(), color.r(), color.g(), color.b(), color.a());
-        size++;
+        vertexData[2] = s;
+        vertexData[3] = t;
+
+        vertexData[4] = r;
+        vertexData[5] = g;
+        vertexData[6] = b;
+        vertexData[7] = a;
+
+        mesh.getBuffer().setSubData(vertexBufferOffset, vertexData);
+        vertexBufferOffset += vertexBytes;
     }
 
-    public void draw(TextureRegion texReg, float x, float y, float width, float height, Region region){
-        if(size + 1 >= batchSize)
-            end();
+    private void addTexturedQuad(float x, float y, float width, float height, float u1, float v1, float u2, float v2, float r, float g, float b, float a){
+        final Vec2f origin = new Vec2f(width * transformOrigin.x, height * transformOrigin.y);
 
-        final Texture texture = texReg.getTexture();
-        if(texture != lastTexture){
-            end();
-            lastTexture = texture;
-        }
-        
-        final Region regionInRegion = Region.calcRegionInRegion(texReg, region);
+        transformMat.set( rotationMat.getMul(scaleMat.getMul(shearMat.getMul(flipMat))) );
 
-        addTexturedQuad(
-            x, y, width, height,
-            regionInRegion.u1(),
-            regionInRegion.v1(),
-            regionInRegion.u2(),
-            regionInRegion.v2(),
-            color.r(),
-            color.g(),
-            color.b(),
-            color.a()
-        );
+        final Vec2f vertex1 = new Vec2f(0,     0     ).sub(origin) .mul(transformMat) .add(origin).add(x, y);
+        final Vec2f vertex2 = new Vec2f(width, 0     ).sub(origin) .mul(transformMat) .add(origin).add(x, y);
+        final Vec2f vertex3 = new Vec2f(width, height).sub(origin) .mul(transformMat) .add(origin).add(x, y);
+        final Vec2f vertex4 = new Vec2f(0,     height).sub(origin) .mul(transformMat) .add(origin).add(x, y);
 
-        size++;
+        addVertex(vertex1.x, vertex1.y, u1, v2, r, g, b, a);
+        addVertex(vertex2.x, vertex2.y, u2, v2, r, g, b, a);
+        addVertex(vertex3.x, vertex3.y, u2, v1, r, g, b, a);
+        addVertex(vertex4.x, vertex4.y, u1, v1, r, g, b, a);
     }
 
 
     public void begin(Matrix4f projection, Matrix4f view){
-        projectionMatrix = projection;
-        viewMatrix = view;
+        this.projectionMat = projection;
+        this.viewMat = view;
     }
 
     public void begin(Camera camera){
@@ -178,10 +125,10 @@ public class TextureBatch implements Disposable{
     }
 
     public void begin(){
-        if(viewMatrix == null) viewMatrix = new Matrix4f();
-        if(projectionMatrix == null) projectionMatrix = new Matrix4f();
+        if(viewMat == null) viewMat = new Matrix4f();
+        if(projectionMat == null) projectionMat = new Matrix4f();
 
-        begin(projectionMatrix.toOrthographic(0, 0, Jpize.getWidth(), Jpize.getHeight()), viewMatrix);
+        begin(projectionMat.toOrthographic(0, 0, Jpize.getWidth(), Jpize.getHeight()), viewMat);
     }
 
 
@@ -190,91 +137,126 @@ public class TextureBatch implements Disposable{
             return;
 
         // Shader
-        final Shader usedShader = customShader == null ? shader : customShader;
+        final Shader usedShader = (customShader != null) ? customShader : shader;
 
         usedShader.bind();
-        usedShader.setUniform("u_projection", projectionMatrix);
-        usedShader.setUniform("u_view", viewMatrix);
+        usedShader.setUniform("u_projection", projectionMat);
+        usedShader.setUniform("u_view", viewMat);
         usedShader.setUniform("u_texture", lastTexture);
 
         // Render
-        mesh.getBuffer().setData(vertices, GlBufUsage.STREAM_DRAW);
         mesh.render(size * QUAD_INDICES);
 
         // Reset
         size = 0;
-        vertexOffset = 0;
+        vertexBufferOffset = 0;
     }
-    
+
     public void useShader(Shader shader){
         customShader = shader;
     }
-    
 
-    private void addTexturedQuad(float x, float y, float width, float height, float u1, float v1, float u2, float v2, float r, float g, float b, float a){
-        final Vec2f origin = new Vec2f(width * transformOrigin.x, height * transformOrigin.y);
 
-        transformMatrix.set( rotationMatrix.getMul(scaleMatrix.getMul(shearMatrix.getMul(flipMatrix))) );
+    public void draw(Texture texture, float x, float y, float width, float height){
+        if(size + 1 >= maxSize)
+            end();
 
-        final Vec2f vertex1 = new Vec2f(0,     0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
-        final Vec2f vertex2 = new Vec2f(width, 0     ).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
-        final Vec2f vertex3 = new Vec2f(width, height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
-        final Vec2f vertex4 = new Vec2f(0,     height).sub(origin) .mul(transformMatrix) .add(origin).add(x, y);
+        if(texture != lastTexture){
+            end();
+            lastTexture = texture;
+        }
 
-        addVertex(vertex1.x, vertex1.y, u1, v2, r, g, b, a);
-        addVertex(vertex2.x, vertex2.y, u2, v2, r, g, b, a);
-        addVertex(vertex3.x, vertex3.y, u2, v1, r, g, b, a);
-        addVertex(vertex4.x, vertex4.y, u1, v1, r, g, b, a);
-    }
+        addTexturedQuad(x, y, width, height, 0, 0, 1, 1, color.r(), color.g(), color.b(), color.a());
 
-    private void addVertex(float x, float y, float s, float t, float r, float g, float b, float a){
-        vertices[vertexOffset    ] = x;
-        vertices[vertexOffset + 1] = y;
-
-        vertices[vertexOffset + 2] = s;
-        vertices[vertexOffset + 3] = t;
-
-        vertices[vertexOffset + 4] = r;
-        vertices[vertexOffset + 5] = g;
-        vertices[vertexOffset + 6] = b;
-        vertices[vertexOffset + 7] = a;
-
-        vertexOffset += mesh.getBuffer().getVertexSize();
+        size++;
     }
     
-    
+    public void draw(TextureRegion textureRegion, float x, float y, float width, float height){
+        if(size + 1 >= maxSize)
+            end();
+
+        final Texture texture = textureRegion.getTexture();
+        if(texture != lastTexture){
+            end();
+            lastTexture = texture;
+        }
+
+        addTexturedQuad(x, y, width, height,
+                textureRegion.u1(), textureRegion.v1(), textureRegion.u2(), textureRegion.v2(),
+                color.r(), color.g(), color.b(), color.a());
+
+        size++;
+    }
+
+    public void draw(Texture texture, float x, float y, float width, float height, Region region){
+        if(size + 1 >= maxSize)
+            end();
+
+        if(texture != lastTexture){
+            end();
+            lastTexture = texture;
+        }
+
+        addTexturedQuad(x, y, width, height,
+                region.u1(), region.v1(), region.u2(), region.v2(),
+                color.r(), color.g(), color.b(), color.a());
+
+        size++;
+    }
+
+    public void draw(TextureRegion texReg, float x, float y, float width, float height, Region region){
+        if(size + 1 >= maxSize)
+            end();
+
+        final Texture texture = texReg.getTexture();
+        if(texture != lastTexture){
+            end();
+            lastTexture = texture;
+        }
+
+        final Region regionInRegion = Region.calcRegionInRegion(texReg, region);
+
+        addTexturedQuad(x, y, width, height,
+            regionInRegion.u1(), regionInRegion.v1(), regionInRegion.u2(), regionInRegion.v2(),
+            color.r(), color.g(), color.b(), color.a());
+
+        size++;
+    }
+
+    public void draw(Texture texture, float x, float y, float width, float height, float r, float g, float b, float a){
+        if(size + 1 >= maxSize)
+            end();
+
+        if(texture != lastTexture){
+            end();
+            lastTexture = texture;
+        }
+
+        addTexturedQuad(x, y, width, height, 0, 0, 1, 1, r, g, b, a);
+
+        size++;
+    }
+
+    public void drawQuad(double r, double g, double b, double a, float x, float y, float width, float height){
+        draw(TextureUtils.quadTexture(), x, y, width, height, (float) r, (float) g, (float) b, (float) a);
+    }
+
+    public void drawQuad(IColor color, float x, float y, float width, float height){
+        drawQuad(color.r(), color.g(), color.b(), color.a(), x, y, width, height);
+    }
+
+    public void drawQuad(double alpha, float x, float y, float width, float height){
+        drawQuad(0, 0, 0, alpha, x, y, width, height);
+    }
+
+
+    public int size(){
+        return size;
+    }
+
+
     public Scissor getScissor(){
         return scissor;
-    }
-
-
-    public Vec2f getTransformOrigin(){
-        return transformOrigin;
-    }
-
-    public void setTransformOrigin(double x, double y){
-        transformOrigin.set(x, y);
-    }
-
-    public void rotate(float angle){
-        rotationMatrix.toRotated(angle);
-    }
-
-    public void shear(float angleX, float angleY){
-        shearMatrix.toSheared(angleX, angleY);
-    }
-
-    public void scale(float scale){
-        scaleMatrix.toScaled(scale);
-    }
-
-    public void scale(float x, float y){
-        scaleMatrix.toScaled(x, y);
-    }
-
-    public void flip(boolean x, boolean y){
-        flipMatrix.val[Matrix3f.m00] = y ? 1 : -1;
-        flipMatrix.val[Matrix3f.m11] = x ? 1 : -1;
     }
 
 
@@ -290,6 +272,10 @@ public class TextureBatch implements Disposable{
         color.set(r, g, b, a);
     }
 
+    public void setColor(double r, double g, double b){
+        color.set(r, g, b, 1F);
+    }
+
     public Color getColor(){
         return color;
     }
@@ -299,9 +285,35 @@ public class TextureBatch implements Disposable{
     }
 
 
-    public int size(){
-        return size;
+    public Vec2f getTransformOrigin(){
+        return transformOrigin;
     }
+
+    public void setTransformOrigin(double x, double y){
+        transformOrigin.set(x, y);
+    }
+
+    public void rotate(float angle){
+        rotationMat.toRotated(angle);
+    }
+
+    public void shear(float angleX, float angleY){
+        shearMat.toSheared(angleX, angleY);
+    }
+
+    public void scale(float scale){
+        scaleMat.toScaled(scale);
+    }
+
+    public void scale(float x, float y){
+        scaleMat.toScaled(x, y);
+    }
+
+    public void flip(boolean x, boolean y){
+        flipMat.val[Matrix3f.m00] = y ? 1 : -1;
+        flipMat.val[Matrix3f.m11] = x ? 1 : -1;
+    }
+
 
     @Override
     public void dispose(){

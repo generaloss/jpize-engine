@@ -19,8 +19,8 @@ public class BiomeGeneratorTest extends ContextAdapter{
         ContextBuilder.newContext("Minecraft")
                 .size(925, 640)
                 .icon("icon.png")
-                .create()
-                .init(new BiomeGeneratorTest());
+                .register()
+                .setAdapter(new BiomeGeneratorTest());
         Jpize.runContexts();
     }
 

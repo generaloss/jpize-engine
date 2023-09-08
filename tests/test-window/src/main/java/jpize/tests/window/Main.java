@@ -13,8 +13,8 @@ public class Main extends ContextAdapter{
     public static void main(String[] args){
         ContextBuilder.newContext("Hello, Window!")
                 .size(1080, 640)
-                .create()
-                .init(new Main());
+                .register()
+                .setAdapter(new Main());
 
         Jpize.runContexts();
     }

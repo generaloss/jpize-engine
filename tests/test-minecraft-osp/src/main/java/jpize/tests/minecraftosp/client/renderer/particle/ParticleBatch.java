@@ -16,8 +16,8 @@ import jpize.math.vecmath.vector.Vec3f;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static jpize.graphics.mesh.QuadIndexBuffer.QUAD_INDICES;
-import static jpize.graphics.mesh.QuadIndexBuffer.QUAD_VERTICES;
+import static jpize.graphics.buffer.QuadIndexBuffer.QUAD_INDICES;
+import static jpize.graphics.buffer.QuadIndexBuffer.QUAD_VERTICES;
 
 public class ParticleBatch implements Disposable{
     

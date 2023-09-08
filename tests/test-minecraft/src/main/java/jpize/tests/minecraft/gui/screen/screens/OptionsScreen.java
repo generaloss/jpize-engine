@@ -115,7 +115,7 @@ public class OptionsScreen extends IOptionsScreen{
             @Override
             public void run(){
                 List<LanguageInfo> availableLanguages = session.getLanguageManager().getAvailableLanguages();
-                if(availableLanguages.size() != 0){
+                if(!availableLanguages.isEmpty()){
                     langIndex++;
                     if(langIndex >= availableLanguages.size())
                         langIndex = 0;

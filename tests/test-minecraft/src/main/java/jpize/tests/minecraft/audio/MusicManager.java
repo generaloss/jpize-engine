@@ -41,6 +41,18 @@ public class MusicManager implements Disposable{
         play();
     }
 
+    public void pause(){
+        current.pause();
+    }
+
+    public void resume(){
+        current.play();
+    }
+
+    public void setVolume(float volume){
+        current.setVolume(volume);
+    }
+
     private void play(){
         if(current != null)
             current.stop();

@@ -11,10 +11,10 @@ public class ServerLevelConfiguration extends LevelConfiguration{
     private int seed;
     
     
-    public void load(String name, int seed, ChunkGenerator generator){
+    public void load(String name, String seed, ChunkGenerator generator){
         super.load(name);
-        
-        this.seed = seed;
+
+        this.setSeed(seed);
         this.generator = generator;
         this.spawn = new Vec2f(-1858, -579).add(0.5); // [-718, -953]
     }
@@ -30,9 +30,22 @@ public class ServerLevelConfiguration extends LevelConfiguration{
     public void setWorldSpawn(double x, double z){
         spawn.set(x, z);
     }
-    
+
     public int getSeed(){
         return seed;
     }
-    
+
+    private void setSeed(String seedLiteral){
+        if(seedLiteral == null){
+            seed = 0;
+            return;
+        }
+
+        seed = seedLiteral.hashCode();
+
+        try{
+            seed = Integer.parseInt(seedLiteral);
+        }catch(Exception ignored){ }
+    }
+
 }

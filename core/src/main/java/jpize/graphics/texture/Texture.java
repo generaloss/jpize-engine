@@ -1,7 +1,9 @@
 package jpize.graphics.texture;
 
-import jpize.util.Resizable;
 import jpize.files.Resource;
+import jpize.gl.texture.GlTexParam;
+import jpize.gl.texture.GlTexTarget;
+import jpize.util.Resizable;
 
 import static org.lwjgl.opengl.GL33.*;
 
@@ -13,12 +15,12 @@ public class Texture extends GlTexture implements Resizable{
     
     
     public Texture(int width, int height){
-        super(GL_TEXTURE_2D);
+        super(GlTexTarget.TEXTURE_2D);
         resize(width, height);
     }
 
     public Texture(Pixmap pixmap){
-        super(GL_TEXTURE_2D);
+        super(GlTexTarget.TEXTURE_2D);
         this.pixmap = pixmap;
         resize(pixmap.getWidth(), pixmap.getHeight());
     }
@@ -44,8 +46,8 @@ public class Texture extends GlTexture implements Resizable{
 
     public void update(){
         bind();
-        parameters.use(GL_TEXTURE_2D);
-        parameters.texImage2D(GL_TEXTURE_2D, pixmap != null ? pixmap.getBuffer() : null, width, height);
+        parameters.use(GlTexTarget.TEXTURE_2D);
+        parameters.texImage2D(GlTexParam.TEXTURE_2D, pixmap != null ? pixmap.getBuffer() : null, width, height);
         genMipMap();
     }
 
@@ -55,11 +57,11 @@ public class Texture extends GlTexture implements Resizable{
     
         bind();
         parameters.setMipmapLevels(mipmaps.length);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, parameters.getMipmapLevels());
+        glTexParameteri(target.GL, GL_TEXTURE_MAX_LEVEL, parameters.getMipmapLevels());
         
         for(int i = 0; i < parameters.getMipmapLevels(); i++){
             Pixmap pixmap = mipmaps[i];
-            parameters.texImage2D(GL_TEXTURE_2D, pixmap.getBuffer(), pixmap.getWidth(), pixmap.getHeight(), i + 1);
+            parameters.texImage2D(GlTexParam.TEXTURE_2D, pixmap.getBuffer(), pixmap.getWidth(), pixmap.getHeight(), i + 1);
         }
     }
     
@@ -69,14 +71,14 @@ public class Texture extends GlTexture implements Resizable{
         
         bind();
         parameters.setMipmapLevels(levels);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, parameters.getMipmapLevels());
+        glTexParameteri(target.GL, GL_TEXTURE_MAX_LEVEL, parameters.getMipmapLevels());
         genMipMap();
     }
     
     protected void genMipMapManual(){
         Pixmap pixmap = this.pixmap.getMipmapped();
         for(int level = 1; level <= parameters.getMipmapLevels(); level++){
-            parameters.texImage2D(GL_TEXTURE_2D, pixmap.getBuffer(), pixmap.getWidth(), pixmap.getHeight(), level);
+            parameters.texImage2D(GlTexParam.TEXTURE_2D, pixmap.getBuffer(), pixmap.getWidth(), pixmap.getHeight(), level);
             if(level != parameters.getMipmapLevels())
                 pixmap = pixmap.getMipmapped();
         }

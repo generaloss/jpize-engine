@@ -7,7 +7,7 @@ public class ChunkMeshStack implements Disposable{
     private final ChunkMesh[] meshes;
 
     public ChunkMeshStack(){
-        meshes = new ChunkMesh[]{
+        this.meshes = new ChunkMesh[]{
             new ChunkMesh(ChunkMeshType.SOLID),
             new ChunkMesh(ChunkMeshType.CUSTOM),
             new ChunkMesh(ChunkMeshType.TRANSLUCENT)

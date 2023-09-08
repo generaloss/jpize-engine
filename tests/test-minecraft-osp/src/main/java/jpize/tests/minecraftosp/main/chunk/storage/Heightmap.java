@@ -9,7 +9,7 @@ public class Heightmap{
     private final LevelChunk chunk;
     private final HeightmapType type;
     private final short[] values;
-    
+
     public Heightmap(LevelChunk chunk, HeightmapType type){
         this.chunk = chunk;
         this.type = type;

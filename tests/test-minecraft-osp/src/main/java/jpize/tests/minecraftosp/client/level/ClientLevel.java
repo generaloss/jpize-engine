@@ -53,7 +53,7 @@ public class ClientLevel extends Level {
     public boolean setBlockState(int x, int y, int z, short state){
         final ClientChunk targetChunk = getBlockChunk(x, z);
         if(targetChunk != null)
-            return targetChunk.setBlockState(ChunkUtils.getLocalCoord(x), y, ChunkUtils.getLocalCoord(z), state);
+            return targetChunk.setBlockData(ChunkUtils.getLocalCoord(x), y, ChunkUtils.getLocalCoord(z), state);
 
         return false;
     }

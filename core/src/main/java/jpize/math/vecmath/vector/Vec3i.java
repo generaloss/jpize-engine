@@ -237,9 +237,9 @@ public class Vec3i{
     }
     
     public Vec3i add(float x, float y, float z){
-        this.x += x;
-        this.y += y;
-        this.z += z;
+        this.x += (int) x;
+        this.y += (int) y;
+        this.z += (int) z;
         return this;
     }
     
@@ -251,16 +251,16 @@ public class Vec3i{
     }
     
     public Vec3i add(double xyz){
-        x += xyz;
-        y += xyz;
-        z += xyz;
+        x += (int) xyz;
+        y += (int) xyz;
+        z += (int) xyz;
         return this;
     }
     
     public Vec3i add(float xyz){
-        x += xyz;
-        y += xyz;
-        z += xyz;
+        x += (int) xyz;
+        y += (int) xyz;
+        z += (int) xyz;
         return this;
     }
     
@@ -272,14 +272,14 @@ public class Vec3i{
     }
     
     public Vec3i add(Vec2d vector){
-        x += vector.x;
-        y += vector.y;
+        x += (int) vector.x;
+        y += (int) vector.y;
         return this;
     }
     
     public Vec3i add(Vec2f vector){
-        x += vector.x;
-        y += vector.y;
+        x += (int) vector.x;
+        y += (int) vector.y;
         return this;
     }
     
@@ -290,16 +290,16 @@ public class Vec3i{
     }
     
     public Vec3i add(Vec3d vector){
-        x += vector.x;
-        y += vector.y;
-        z += vector.z;
+        x += (int) vector.x;
+        y += (int) vector.y;
+        z += (int) vector.z;
         return this;
     }
     
     public Vec3i add(Vec3f vector){
-        x += vector.x;
-        y += vector.y;
-        z += vector.z;
+        x += (int) vector.x;
+        y += (int) vector.y;
+        z += (int) vector.z;
         return this;
     }
     
@@ -312,16 +312,16 @@ public class Vec3i{
     
     
     public Vec3i sub(double x, double y, double z){
-        this.x -= x;
-        this.y -= y;
-        this.z -= z;
+        this.x -= (int) x;
+        this.y -= (int) y;
+        this.z -= (int) z;
         return this;
     }
     
     public Vec3i sub(float x, float y, float z){
-        this.x -= x;
-        this.y -= y;
-        this.z -= z;
+        this.x -= (int) x;
+        this.y -= (int) y;
+        this.z -= (int) z;
         return this;
     }
     
@@ -333,16 +333,16 @@ public class Vec3i{
     }
     
     public Vec3i sub(double xyz){
-        x -= xyz;
-        y -= xyz;
-        z -= xyz;
+        x -= (int) xyz;
+        y -= (int) xyz;
+        z -= (int) xyz;
         return this;
     }
     
     public Vec3i sub(float xyz){
-        x -= xyz;
-        y -= xyz;
-        z -= xyz;
+        x -= (int) xyz;
+        y -= (int) xyz;
+        z -= (int) xyz;
         return this;
     }
     
@@ -354,14 +354,14 @@ public class Vec3i{
     }
     
     public Vec3i sub(Vec2d vector){
-        x -= vector.x;
-        y -= vector.y;
+        x -= (int) vector.x;
+        y -= (int) vector.y;
         return this;
     }
     
     public Vec3i sub(Vec2f vector){
-        x -= vector.x;
-        y -= vector.y;
+        x -= (int) vector.x;
+        y -= (int) vector.y;
         return this;
     }
     
@@ -372,16 +372,16 @@ public class Vec3i{
     }
     
     public Vec3i sub(Vec3d vector){
-        x -= vector.x;
-        y -= vector.y;
-        z -= vector.z;
+        x -= (int) vector.x;
+        y -= (int) vector.y;
+        z -= (int) vector.z;
         return this;
     }
 
     public Vec3i sub(Vec3f vector){
-        x -= vector.x;
-        y -= vector.y;
-        z -= vector.z;
+        x -= (int) vector.x;
+        y -= (int) vector.y;
+        z -= (int) vector.z;
         return this;
     }
 
@@ -394,16 +394,16 @@ public class Vec3i{
     
     
     public Vec3i mul(double x, double y, double z){
-        this.x *= x;
-        this.y *= y;
-        this.z *= z;
+        this.x *= (int) x;
+        this.y *= (int) y;
+        this.z *= (int) z;
         return this;
     }
     
     public Vec3i mul(float x, float y, float z){
-        this.x *= x;
-        this.y *= y;
-        this.z *= z;
+        this.x *= (int) x;
+        this.y *= (int) y;
+        this.z *= (int) z;
         return this;
     }
     
@@ -415,16 +415,16 @@ public class Vec3i{
     }
     
     public Vec3i mul(double xyz){
-        x *= xyz;
-        y *= xyz;
-        z *= xyz;
+        x *= (int) xyz;
+        y *= (int) xyz;
+        z *= (int) xyz;
         return this;
     }
     
     public Vec3i mul(float xyz){
-        x *= xyz;
-        y *= xyz;
-        z *= xyz;
+        x *= (int) xyz;
+        y *= (int) xyz;
+        z *= (int) xyz;
         return this;
     }
     
@@ -436,14 +436,14 @@ public class Vec3i{
     }
     
     public Vec3i mul(Vec2d vector){
-        x *= vector.x;
-        y *= vector.y;
+        x *= (int) vector.x;
+        y *= (int) vector.y;
         return this;
     }
     
     public Vec3i mul(Vec2f vector){
-        x *= vector.x;
-        y *= vector.y;
+        x *= (int) vector.x;
+        y *= (int) vector.y;
         return this;
     }
 
@@ -454,16 +454,16 @@ public class Vec3i{
     }
     
     public Vec3i mul(Vec3d vector){
-        x *= vector.x;
-        y *= vector.y;
-        z *= vector.z;
+        x *= (int) vector.x;
+        y *= (int) vector.y;
+        z *= (int) vector.z;
         return this;
     }
     
     public Vec3i mul(Vec3f vector){
-        x *= vector.x;
-        y *= vector.y;
-        z *= vector.z;
+        x *= (int) vector.x;
+        y *= (int) vector.y;
+        z *= (int) vector.z;
         return this;
     }
 
@@ -476,16 +476,16 @@ public class Vec3i{
 
     
     public Vec3i div(double x, double y, double z){
-        this.x /= x;
-        this.y /= y;
-        this.z /= z;
+        this.x /= (int) x;
+        this.y /= (int) y;
+        this.z /= (int) z;
         return this;
     }
     
     public Vec3i div(float x, float y, float z){
-        this.x /= x;
-        this.y /= y;
-        this.z /= z;
+        this.x /= (int) x;
+        this.y /= (int) y;
+        this.z /= (int) z;
         return this;
     }
     
@@ -497,16 +497,16 @@ public class Vec3i{
     }
     
     public Vec3i div(double xyz){
-        x /= xyz;
-        y /= xyz;
-        z /= xyz;
+        x /= (int) xyz;
+        y /= (int) xyz;
+        z /= (int) xyz;
         return this;
     }
     
     public Vec3i div(float xyz){
-        x /= xyz;
-        y /= xyz;
-        z /= xyz;
+        x /= (int) xyz;
+        y /= (int) xyz;
+        z /= (int) xyz;
         return this;
     }
     
@@ -518,14 +518,14 @@ public class Vec3i{
     }
     
     public Vec3i div(Vec2d vector){
-        x /= vector.x;
-        y /= vector.y;
+        x /= (int) vector.x;
+        y /= (int) vector.y;
         return this;
     }
     
     public Vec3i div(Vec2f vector){
-        x /= vector.x;
-        y /= vector.y;
+        x /= (int) vector.x;
+        y /= (int) vector.y;
         return this;
     }
 
@@ -536,16 +536,16 @@ public class Vec3i{
     }
     
     public Vec3i div(Vec3d vector){
-        x /= vector.x;
-        y /= vector.y;
-        z /= vector.z;
+        x /= (int) vector.x;
+        y /= (int) vector.y;
+        z /= (int) vector.z;
         return this;
     }
     
     public Vec3i div(Vec3f vector){
-        x /= vector.x;
-        y /= vector.y;
-        z /= vector.z;
+        x /= (int) vector.x;
+        y /= (int) vector.y;
+        z /= (int) vector.z;
         return this;
     }
 

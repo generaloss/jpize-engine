@@ -2,12 +2,12 @@ package jpize.tests.minecraftosp.server.gen;
 
 import jpize.tests.minecraftosp.server.chunk.ServerChunk;
 
-public interface ChunkGenerator{
+public abstract class ChunkGenerator{
 
-    void generate(ServerChunk chunk);
+    public void generate(ServerChunk chunk){ }
 
-    void decorate(ServerChunk chunk, boolean other);
+    public void decorate(ServerChunk chunk){ }
 
-    String getID();
+    public abstract String getID();
     
 }

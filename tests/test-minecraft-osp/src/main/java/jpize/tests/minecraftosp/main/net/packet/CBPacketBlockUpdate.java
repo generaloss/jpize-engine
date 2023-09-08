@@ -16,15 +16,15 @@ public class CBPacketBlockUpdate extends IPacket<PacketHandler>{
     }
     
     public int x, y, z;
-    public short state;
+    public short blockData;
     
-    public CBPacketBlockUpdate(int x, int y, int z, short state){
+    public CBPacketBlockUpdate(int x, int y, int z, short blockData){
         this();
         
         this.x = x;
         this.y = y;
         this.z = z;
-        this.state = state;
+        this.blockData = blockData;
     }
     
     
@@ -33,7 +33,7 @@ public class CBPacketBlockUpdate extends IPacket<PacketHandler>{
         stream.writeInt(x);
         stream.writeInt(y);
         stream.writeInt(z);
-        stream.writeShort(state);
+        stream.writeShort(blockData);
     }
     
     @Override
@@ -41,7 +41,7 @@ public class CBPacketBlockUpdate extends IPacket<PacketHandler>{
         x = stream.readInt();
         y = stream.readInt();
         z = stream.readInt();
-        state = stream.readShort();
+        blockData = stream.readShort();
     }
 
 }

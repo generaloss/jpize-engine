@@ -16,10 +16,10 @@ public class CommandArgPosition extends CommandArg{
         // Если количество частей меньше трех (X Y Z), завершить парсинг
         if(args.length < 3)
             return 0;
-        
+
         try{
             int parsedLength = 2; // Кол-во пробелов между X Y Z
-            
+
             // X
             float x = 0;
             if(args[0].startsWith("~")){ // Если координата относительная
@@ -30,7 +30,7 @@ public class CommandArgPosition extends CommandArg{
                 x += source.getPosition().x;
             }else
                 x = Float.parseFloat(args[0]);
-            
+
             // Y
             float y = 0;
             if(args[1].startsWith("~")){
@@ -41,7 +41,7 @@ public class CommandArgPosition extends CommandArg{
                 y += source.getPosition().y;
             }else
                 y = Float.parseFloat(args[1]);
-            
+
             // Z
             float z = 0;
             if(args[2].startsWith("~")){
@@ -52,10 +52,11 @@ public class CommandArgPosition extends CommandArg{
                 z += source.getPosition().z;
             }else
                 z = Float.parseFloat(args[2]);
-            
+
             // Если парсинг удался - устанавливаем позицию
             position = new Vec3f(x, y, z);
-            // возвращаем количество символом, которые удалось преобразовать
+
+            // Возвращаем количество символом, которые удалось преобразовать
             return args[0].length() + args[1].length() + args[2].length() + parsedLength;
         }catch(Exception e){
             return 0;

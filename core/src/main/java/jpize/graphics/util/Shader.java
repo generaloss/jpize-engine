@@ -120,6 +120,10 @@ public class Shader implements Disposable{
         program.setUniform(uniforms.get(uniformName), value);
     }
 
+    public void setUniform(String uniformName, boolean value){
+        setUniform(uniformName, value ? 1 : 0);
+    }
+
     public void setUniform(String uniformName, int[] array){
         program.setUniform(uniforms.get(uniformName), array);
     }

@@ -1,16 +1,16 @@
 package jpize.tests.minecraftosp.server.level.light;
 
-import jpize.tests.minecraftosp.server.chunk.ServerChunk;
+import jpize.tests.minecraftosp.main.chunk.LevelChunk;
 
 public class LightNode{
 
-    public final ServerChunk chunk;
+    public final LevelChunk chunk;
     public final byte lx;
     public final short y;
     public final byte lz;
     public final byte level;
 
-    public LightNode(ServerChunk chunk, int lx, int y, int lz, int level){
+    public LightNode(LevelChunk chunk, int lx, int y, int lz, int level){
         this.chunk = chunk;
         this.lx = (byte) lx;
         this.y = (short) y;

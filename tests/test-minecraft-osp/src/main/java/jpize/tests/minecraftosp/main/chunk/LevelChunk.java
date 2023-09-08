@@ -5,6 +5,7 @@ import jpize.tests.minecraftosp.client.block.BlockProps;
 import jpize.tests.minecraftosp.client.block.Blocks;
 import jpize.tests.minecraftosp.main.biome.BiomeMap;
 import jpize.tests.minecraftosp.main.block.BlockData;
+import jpize.tests.minecraftosp.main.chunk.neighbors.LevelChunkNeighbors;
 import jpize.tests.minecraftosp.main.chunk.storage.ChunkPos;
 import jpize.tests.minecraftosp.main.chunk.storage.Heightmap;
 import jpize.tests.minecraftosp.main.chunk.storage.HeightmapType;
@@ -19,12 +20,9 @@ import static jpize.tests.minecraftosp.main.chunk.ChunkUtils.*;
 
 public class LevelChunk{
 
-    public static final int NEIGHBORS_RADIUS = MAX_STRUCTURE_SIZE;
-    public static final int NEIGHBORS_DIAMETER = NEIGHBORS_RADIUS * 2 + 1;
-
     protected final Level level;
     protected final ChunkPos position;
-    protected final ChunkPos[] neighbors;
+    protected final LevelChunkNeighbors neighbors;
     protected final LevelChunkSection[] sections;
     protected int highestSectionIndex;
     protected final Map<HeightmapType, Heightmap> heightmaps;
@@ -36,14 +34,7 @@ public class LevelChunk{
         this.position = position;
 
         this.spawnTimeMillis = System.currentTimeMillis();
-
-        this.neighbors = new ChunkPos[NEIGHBORS_DIAMETER * NEIGHBORS_DIAMETER];
-        for(int i = 0; i < neighbors.length; i++){
-            final int x = i % NEIGHBORS_DIAMETER;
-            final int z = (i - x) / NEIGHBORS_DIAMETER;
-
-            neighbors[i] = position.getNeighbor(x - NEIGHBORS_RADIUS, z - NEIGHBORS_RADIUS);
-        }
+        this.neighbors = new LevelChunkNeighbors(this, 1); // 1 = MAX_STRUCTURE_SIZE
         this.sections = new LevelChunkSection[16];
         this.highestSectionIndex = -1;
         
@@ -79,7 +70,7 @@ public class LevelChunk{
         return section.getBlockState(lx, getLocalCoord(y), lz);
     }
     
-    public boolean setBlockState(int lx, int y, int lz, short blockData){
+    public boolean setBlockData(int lx, int y, int lz, short blockData){
         if(isOutOfBounds(lx, y, lz))
             return false;
         
@@ -178,7 +169,7 @@ public class LevelChunk{
     }
 
     public boolean setBlock(int lx, int y, int lz, Block block){
-        return setBlockState(lx, y, lz, block.getDefaultData());
+        return setBlockData(lx, y, lz, block.getDefaultData());
     }
 
 
@@ -271,6 +262,19 @@ public class LevelChunk{
     public BiomeMap getBiomes(){
         return biomes;
     }
+
+
+    public ChunkPos[] getNeighbors(){
+        return neighbors.array();
+    }
+
+    public ChunkPos getNeighborPos(int neighborX, int neighborZ){
+        return neighbors.getNeighborPos(neighborX, neighborZ);
+    }
+
+    public LevelChunk getNeighborChunk(int neighborX, int neighborZ){
+        return neighbors.getNeighborChunk(neighborX, neighborZ);
+    }
     
     
     @Override
@@ -286,19 +290,6 @@ public class LevelChunk{
     @Override
     public int hashCode(){
         return position.hashCode();
-    }
-    
-
-    public ChunkPos[] getNeighbors(){
-        return neighbors;
-    }
-
-    public ChunkPos getNeighbor(int signX, int signZ){
-        return neighbors[(signZ + NEIGHBORS_RADIUS) * NEIGHBORS_DIAMETER + (signX + NEIGHBORS_RADIUS)];
-    }
-
-    public LevelChunk getNeighborChunk(int signX, int signZ){
-        return level.getChunkManager().getChunk(getNeighbor(signX, signZ));
     }
     
 }

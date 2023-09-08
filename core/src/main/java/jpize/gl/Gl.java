@@ -155,6 +155,10 @@ public class Gl{
     public static void polygonMode(GlFace face, GlPolygonMode mode){
         glPolygonMode(face.GL, mode.GL);
     }
+
+    public static void polygonMode(GlPolygonMode mode){
+        polygonMode(GlFace.FRONT_AND_BACK, mode);
+    }
     
     public static void polygonOffset(float factor, float units){
         glPolygonOffset(factor, units);

@@ -3,6 +3,7 @@ package jpize.tests.minecraftosp.server;
 import jpize.net.tcp.TcpServer;
 import jpize.tests.minecraftosp.server.gen.DefaultGenerator;
 import jpize.tests.minecraftosp.server.command.CommandDispatcher;
+import jpize.tests.minecraftosp.server.gen.FlatGenerator;
 import jpize.tests.minecraftosp.server.level.LevelManager;
 import jpize.tests.minecraftosp.server.level.ServerLevel;
 import jpize.tests.minecraftosp.server.net.ServerConnectionManager;
@@ -39,7 +40,9 @@ public abstract class Server implements Tickable{
     
     
     public void run(){
-        getLevelManager().createLevel(getConfiguration().getDefaultLevelName(), 22854, DefaultGenerator.getInstance()); // Create default level
+        getLevelManager().createLevel(getConfiguration().getDefaultLevelName(), "22854", DefaultGenerator.getInstance()); // Create default level
+        getLevelManager().createLevel("flat-world", null, FlatGenerator.getInstance()); // Create flat level
+
         tcpServer.run(getConfiguration().getAddress(), getConfiguration().getPort()); // Run TCP server
         
         new TickGenerator(GameTime.TICKS_PER_SECOND).startAsync(this);

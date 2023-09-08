@@ -68,7 +68,11 @@ public class Resource{
     }
     
     public boolean mkParentDirs(){ // External only
-        return file.getParentFile().mkdirs();
+        final File parentFile = file.getParentFile();
+        if(parentFile != null)
+            return parentFile.mkdirs();
+
+        return false;
     }
     
     public boolean mkDirsAndFile(){ // External only

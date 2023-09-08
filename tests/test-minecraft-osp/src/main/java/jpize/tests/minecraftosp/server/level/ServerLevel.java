@@ -11,6 +11,7 @@ import jpize.tests.minecraftosp.main.level.Level;
 import jpize.tests.minecraftosp.main.net.packet.CBPacketPlaySound;
 import jpize.tests.minecraftosp.server.Server;
 import jpize.tests.minecraftosp.server.chunk.ServerChunk;
+import jpize.tests.minecraftosp.server.gen.pool.BlockPool;
 import jpize.tests.minecraftosp.server.level.chunk.ServerChunkManager;
 import jpize.tests.minecraftosp.server.level.light.LevelBlockLight;
 import jpize.tests.minecraftosp.server.level.light.LevelSkyLight;
@@ -25,6 +26,7 @@ public class ServerLevel extends Level{
     private final ServerLevelConfiguration configuration;
     private final LevelSkyLight skyLight;
     private final LevelBlockLight blockLight;
+    private final BlockPool blockPool;
 
     public ServerLevel(Server server){
         this.server = server;
@@ -32,6 +34,7 @@ public class ServerLevel extends Level{
         this.configuration = new ServerLevelConfiguration();
         this.skyLight = new LevelSkyLight(this);
         this.blockLight = new LevelBlockLight(this);
+        this.blockPool = new BlockPool(this);
     }
     
     public Server getServer(){
@@ -57,11 +60,11 @@ public class ServerLevel extends Level{
         final int lz = getLocalCoord(z);
 
         if(targetChunk != null)
-            return targetChunk.setBlockState(lx, y, lz, blockData);
+            return targetChunk.setBlockData(lx, y, lz, blockData);
 
         targetChunk = chunkManager.getGeneratingChunk(chunkPos);
         if(targetChunk != null)
-            return targetChunk.setBlockState(lx, y, lz, blockData);
+            return targetChunk.setBlockData(lx, y, lz, blockData);
 
         return false;
     }
@@ -94,7 +97,7 @@ public class ServerLevel extends Level{
         return false;
     }
 
-    public void setBlockDec(ServerChunk from, boolean others, int x, int y, int z, Block block){
+    public void genBlock(int x, int y, int z, Block block){
         final ChunkPos chunkPos = new ChunkPos(getChunkPos(x), getChunkPos(z));
         ServerChunk targetChunk = chunkManager.getChunk(chunkPos);
 
@@ -102,11 +105,15 @@ public class ServerLevel extends Level{
         final int lz = getLocalCoord(z);
 
         if(targetChunk != null)
-            targetChunk.setBlockDec(from, others, lx, y, lz, block);
+            targetChunk.setBlockFast(lx, y, lz, block);
 
         targetChunk = chunkManager.getGeneratingChunk(chunkPos);
         if(targetChunk != null)
-            targetChunk.setBlockDec(from, others, lx, y, lz, block);
+            targetChunk.setBlockFast(lx, y, lz, block);
+    }
+
+    public BlockPool getBlockPool(){
+        return blockPool;
     }
 
 
@@ -200,8 +207,8 @@ public class ServerLevel extends Level{
     }
     
     @Override
-    public ServerChunk getBlockChunk(int blockX, int blockZ){
-        return chunkManager.getChunk(getChunkPos(blockX), getChunkPos(blockZ));
+    public ServerChunk getBlockChunk(int blockGlobalX, int blockGlobalZ){
+        return chunkManager.getChunk(getChunkPos(blockGlobalX), getChunkPos(blockGlobalZ));
     }
     
 }

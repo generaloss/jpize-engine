@@ -7,39 +7,56 @@ import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.io.context.ContextAdapter;
 import jpize.io.context.ContextBuilder;
-import jpize.util.time.JpizeRunnable;
+import jpize.util.Utils;
 
 public class LoadingTest{
 
     public static void main(String[] args){
+        // Run Loading
         ContextBuilder
-                .newContext(640, 360)
+                .newContext("Loading App...")
+                .size(640, 360)
                 .borderless(true)
                 .exitWhenWindowClose(false)
-                .create().init(new LoadingWindow());
-
-        new JpizeRunnable(() ->
-                Jpize.execSync(() -> {
-
-                    Jpize.closeAllWindows();
-                    ContextBuilder.newContext(1280, 720, "App")
-                            .create().init(new KeyboardTest());
-                })
-        ).runLaterAsync(1500);
+                .register().setAdapter(new LoadingWindow());
 
         Jpize.runContexts();
     }
 
     static class LoadingWindow extends ContextAdapter{
-        public void init(){
-            final Texture bg = new Texture("wallpaper-16.jpg");
-            final TextureBatch batch = new TextureBatch();
-            final BitmapFont font = FontLoader.getDefault();
+        // Image, font
+        final TextureBatch batch = new TextureBatch();
+        final Texture splash = new Texture("wallpaper-16.jpg");
+        final BitmapFont font = FontLoader.getDefault();
 
+        public void init(){
+            // Render loading window
+            batch.setColor(1, 0.8, 0.9);
             batch.begin();
-            batch.draw(bg, 0, 0, Jpize.getWidth(), Jpize.getHeight());
+
+            batch.draw(splash, 0, 0, Jpize.getWidth(), Jpize.getHeight());
             font.drawText(batch, "Loading...", 20, 20);
+
             batch.end();
+            splash.dispose();
+            batch.dispose();
+
+            // Run App
+            Jpize.execSync(() ->
+                ContextBuilder.newContext("App")
+                        .size(1280, 720)
+                        .register()
+                        .setAdapter(new App())
+            );
+        }
+    }
+
+    static class App extends ContextAdapter{
+        public void init(){ // Constructor() or init()
+            // *Loading resources*
+            Utils.delayMillis(2000);
+            // Close loading window
+            Jpize.closeOtherWindows();
         }
     }
 

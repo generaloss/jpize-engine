@@ -14,8 +14,7 @@ public class LevelManager{
     
     public LevelManager(Server server){
         this.server = server;
-        
-        loadedLevels = new HashMap<>();
+        this.loadedLevels = new HashMap<>();
     }
     
     public Server getServer(){
@@ -47,7 +46,7 @@ public class LevelManager{
         System.out.println("[Server]: Loaded level '" + levelName + "'");
     }
     
-    public void createLevel(String levelName, int seed, ChunkGenerator generator){
+    public void createLevel(String levelName, String seed, ChunkGenerator generator){
         if(levelName == null || !isLevelExists(levelName) || isLevelLoaded(levelName))
             return;
         
@@ -64,7 +63,7 @@ public class LevelManager{
     }
     
     public boolean isLevelExists(String levelName){
-        return true; //: SHO? SHIZA.
+        return true; //: SHIZA.
     }
     
 }

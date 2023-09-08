@@ -1,4 +1,4 @@
-package jpize.tests.minecraftosp.client.chunk.mesh.builder;
+package jpize.tests.minecraftosp.client.chunk.builder;
 
 import jpize.tests.minecraftosp.client.block.BlockProps;
 import jpize.tests.minecraftosp.client.block.Blocks;
@@ -15,6 +15,7 @@ import jpize.tests.minecraftosp.main.chunk.storage.HeightmapType;
 import jpize.util.time.Stopwatch;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static jpize.tests.minecraftosp.main.chunk.ChunkUtils.*;
 
@@ -61,9 +62,9 @@ public class ChunkBuilder{
 
         // Get Meshes
         final ChunkMeshStack meshStack = chunk.getMeshStack();
-        solidMesh = meshStack.getSolid();
-        customMesh = meshStack.getCustom();
-        translucentMesh = meshStack.getTranslucent();
+        this.solidMesh = meshStack.getSolid();
+        this.customMesh = meshStack.getCustom();
+        this.translucentMesh = meshStack.getTranslucent();
 
         // Build
         final Heightmap heightmapSurface = chunk.getHeightMap(HeightmapType.SURFACE);
@@ -78,7 +79,7 @@ public class ChunkBuilder{
                     currentBiome = chunk.getBiomes().getBiome(lx, lz);
                     final int height = heightmapSurface.getHeight(lx, lz) + 1;
 
-                    for(int y = 0; y < height; y++){
+                    for(int y = 0; y < HEIGHT; y++){
                         final int sectionIndex = getSectionIndex(y);
                         if(sections[sectionIndex] == null)
                             y += SIZE;
@@ -168,6 +169,12 @@ public class ChunkBuilder{
         getChunk(lx, lz, (chunk, clx, clz) -> light.set(chunk.getBlockLight(clx, y, clz)));
         return light.get();
     }
+
+    public Biome getBiome(int lx, int lz){
+        AtomicReference<Biome> biome = new AtomicReference<>();
+        getChunk(lx, lz, (chunk, clx, clz) -> biome.set(chunk.getBiomes().getBiome(clx, clz)));
+        return biome.get();
+    }
     
     
     public float getAO(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, int x4, int y4, int z4){
@@ -242,6 +249,15 @@ public class ChunkBuilder{
             return 0;
 
         return result / n;
+    }
+
+    public BiomeMix getBiomeMix(int x1, int z1, int x2, int z2, int x3, int z3, int x4, int z4){
+        return new BiomeMix(
+            getBiome(x1, z1),
+            getBiome(x2, z2),
+            getBiome(x3, z3),
+            getBiome(x4, z4)
+        );
     }
 
 }

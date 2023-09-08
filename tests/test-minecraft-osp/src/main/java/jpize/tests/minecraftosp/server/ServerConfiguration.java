@@ -14,7 +14,7 @@ public class ServerConfiguration{
         port = 22854;
         address = "0.0.0.0";
         version = new Version();
-        defaultLevelName = "world1";
+        defaultLevelName = "overworld";
         maxRenderDistance = 6;
     }
     

@@ -20,6 +20,7 @@ public class Options{
     public static int DEFAULT_RENDER_DISTANCE = 14;
     public static float DEFAULT_MOUSE_SENSITIVITY = 1F;
     public static float DEFAULT_BRIGHTNESS = 0.5F;
+    public static boolean DEFAULT_FOG = true;
 
     public static int DEFAULT_MAX_FRAME_RATE = 0; // VSync
     public static boolean DEFAULT_FULLSCREEN = false;
@@ -40,6 +41,7 @@ public class Options{
     private boolean fullscreen = DEFAULT_FULLSCREEN;
     private boolean showFps = DEFAULT_SHOW_FPS;
     private float mouseSensitivity = DEFAULT_MOUSE_SENSITIVITY;
+    private boolean fog = DEFAULT_FOG;
     private float brightness = DEFAULT_BRIGHTNESS;
     private boolean firstPersonModel = DEFAULT_FIRST_PERSON_MODEL;
     
@@ -92,6 +94,7 @@ public class Options{
                             case "fullscreen" -> setFullscreen(Boolean.parseBoolean(value));
                             case "showFps" -> setShowFPS(Boolean.parseBoolean(value));
                             case "brightness" -> setBrightness(Float.parseFloat(value));
+                            case "fog" -> setFog(Boolean.parseBoolean(value));
                         }
                     }
                     case "key" -> setKey(KeyMapping.valueOf(key.toUpperCase()), Key.valueOf(value.toUpperCase()));
@@ -120,6 +123,7 @@ public class Options{
         out.println("graphics.fullscreen : " + fullscreen);
         out.println("graphics.showFps : " + showFps);
         out.println("graphics.brightness : " + brightness);
+        out.println("graphics.fog : " + fog);
 
         out.println("control.mouseSensitivity : " + mouseSensitivity);
 
@@ -222,6 +226,15 @@ public class Options{
     
     public void setBrightness(float brightness){
         this.brightness = brightness;
+    }
+
+
+    public boolean isFogEnabled(){
+        return fog;
+    }
+
+    public void setFog(boolean fog){
+        this.fog = fog;
     }
 
 

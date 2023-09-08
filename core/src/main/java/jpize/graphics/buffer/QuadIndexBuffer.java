@@ -1,4 +1,4 @@
-package jpize.graphics.mesh;
+package jpize.graphics.buffer;
 
 public class QuadIndexBuffer extends IndexBuffer{
 

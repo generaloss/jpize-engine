@@ -3,6 +3,7 @@ package jpize.graphics.texture;
 import jpize.gl.texture.GlFormat;
 import jpize.gl.GlObject;
 import jpize.gl.texture.GlSizedFormat;
+import jpize.gl.texture.GlTexTarget;
 import jpize.gl.type.GlType;
 
 import static org.lwjgl.opengl.GL33.*;
@@ -10,17 +11,17 @@ import static org.lwjgl.opengl.GL33.*;
 public abstract class GlTexture extends GlObject{
     
     protected final TextureParameters parameters;
-    protected final int TEXTURE_TYPE;
+    protected final GlTexTarget target;
     
-    public GlTexture(int TEXTURE_TYPE, TextureParameters parameters){
+    public GlTexture(GlTexTarget target, TextureParameters parameters){
         super(glGenTextures());
-        this.TEXTURE_TYPE = TEXTURE_TYPE;
+        this.target = target;
         
         this.parameters = parameters;
     }
     
-    public GlTexture(int TEXTURE_TYPE){
-        this(TEXTURE_TYPE, new TextureParameters());
+    public GlTexture(GlTexTarget target){
+        this(target, new TextureParameters());
     }
     
     
@@ -42,11 +43,11 @@ public abstract class GlTexture extends GlObject{
     
     
     protected void genMipMap(){
-        glGenerateMipmap(TEXTURE_TYPE);
+        glGenerateMipmap(target.GL);
     }
     
     public void bind(){
-        glBindTexture(TEXTURE_TYPE, ID);
+        glBindTexture(target.GL, ID);
     }
     
     
@@ -54,7 +55,12 @@ public abstract class GlTexture extends GlObject{
         glActiveTexture(GL_TEXTURE0 + num);
         bind();
     }
-    
+
+    public static void unbindAll(){
+        for(GlTexTarget target: GlTexTarget.values())
+            glBindTexture(target.GL, 0);
+    }
+
     @Override
     public void dispose(){
         glDeleteTextures(ID);

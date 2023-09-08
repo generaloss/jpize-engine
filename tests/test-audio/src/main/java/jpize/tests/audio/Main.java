@@ -14,9 +14,8 @@ public class Main extends ContextAdapter{
     public static void main(String[] args){
         ContextBuilder.newContext("Audio")
                 .size(700, 150)
-                .icon("icon.png").
-                create()
-                .init(new Main());
+                .icon("icon.png").register()
+                .setAdapter(new Main());
         Jpize.runContexts();
     }
 

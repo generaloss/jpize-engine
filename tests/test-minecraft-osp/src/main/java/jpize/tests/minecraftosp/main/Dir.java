@@ -17,7 +17,7 @@ public enum Dir{
     private final Vec3i normal;
     
     Dir(int x, int y, int z){
-        normal = new Vec3i(x, y, z);
+        this.normal = new Vec3i(x, y, z);
     }
 
     public final Vec3i getNormal(){
@@ -48,18 +48,21 @@ public enum Dir{
 
 
     private static final Vec2i[] normal2D = new Vec2i[]{
-        new Vec2i(-1,  0), new Vec2i( 1,  0), new Vec2i( 0, -1), new Vec2i( 0,  1)
+            new Vec2i(-1,  0), new Vec2i( 1,  0),
+            new Vec2i( 0, -1), new Vec2i( 0,  1)
     };
 
-    private static final Vec3i[] normal3D = new Vec3i[]{
-        NEGATIVE_X.getNormal(), POSITIVE_X.getNormal(), NEGATIVE_Y.getNormal(), POSITIVE_Y.getNormal(), NEGATIVE_Z.getNormal(), POSITIVE_Z.getNormal()
-    };
-
-    public static Vec2i normal2DFromIndex(int index){
+    public static Vec2i getNormal2(int index){
         return normal2D[index];
     }
 
-    public static Vec3i normal3DFromIndex(int index){
+    private static final Vec3i[] normal3D = new Vec3i[]{
+            NEGATIVE_X.getNormal(), POSITIVE_X.getNormal(),
+            NEGATIVE_Y.getNormal(), POSITIVE_Y.getNormal(),
+            NEGATIVE_Z.getNormal(), POSITIVE_Z.getNormal()
+    };
+
+    public static Vec3i getNormal3(int index){
         return normal3D[index];
     }
     

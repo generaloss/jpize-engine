@@ -160,7 +160,7 @@ public class FontLoader{
                     id,
 
                     quad.x0(),
-                    - quad.y0() - glyphHeight - descent,
+                    -quad.y0() - glyphHeight - descent,
                     glyphWidth,
                     glyphHeight,
 

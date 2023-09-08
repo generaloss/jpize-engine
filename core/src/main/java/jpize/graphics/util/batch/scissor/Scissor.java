@@ -4,7 +4,11 @@ import jpize.gl.Gl;
 import jpize.gl.glenum.GlTarget;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.math.Maths;
+import jpize.math.vecmath.vector.Vec2d;
+import jpize.math.vecmath.vector.Vec2f;
+import jpize.math.vecmath.vector.Vec2i;
 
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,12 +99,59 @@ public class Scissor{
         final int removedIndexOf = removedScissor.getScissorOfIndex();
         
         batch.end();
-        if(removedIndexOf != -1 && scissorList.size() != 0){
+        if(removedIndexOf != -1 && !scissorList.isEmpty()){
             final ScissorNode scissor = scissorList.get(removedIndexOf);
             scissor.activate();
             
         }else if(Gl.isEnabled(GlTarget.SCISSOR_TEST))
             Gl.disable(GlTarget.SCISSOR_TEST);
+    }
+
+
+    public boolean contains(double x, double y){
+        for(ScissorNode node: scissorList.values())
+            if(node.getRectangle().contains(x, y))
+                return true;
+
+        return false;
+    }
+
+    public boolean contains(Vec2d vec2){
+        return contains(vec2.x, vec2.y);
+    }
+
+    public boolean contains(Vec2f vec2){
+        return contains(vec2.x, vec2.y);
+    }
+
+    public boolean contains(Vec2i vec2){
+        return contains(vec2.x, vec2.y);
+    }
+
+
+    public boolean contains(double x, double y, double width, double height){
+        for(ScissorNode node: scissorList.values())
+            if(node.getRectangle().contains(x, y, width, height))
+                return true;
+
+        return false;
+    }
+
+    public boolean contains(Rectangle2D rectangle){
+        return contains(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
+    }
+
+
+    public boolean intersects(double x, double y, double width, double height){
+        for(ScissorNode node: scissorList.values())
+            if(node.getRectangle().intersects(x, y, width, height))
+                return true;
+
+        return false;
+    }
+
+    public boolean intersects(Rectangle2D rectangle){
+        return intersects(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
     }
     
 }

@@ -15,8 +15,8 @@ public class BiomeGenerator extends ContextAdapter{
     public static void main(String[] args){
         ContextBuilder.newContext("Biome Generator")
                 .size(1280, 720)
-                .create()
-                .init(new BiomeGenerator());
+                .register()
+                .setAdapter(new BiomeGenerator());
 
         Jpize.runContexts();
     }

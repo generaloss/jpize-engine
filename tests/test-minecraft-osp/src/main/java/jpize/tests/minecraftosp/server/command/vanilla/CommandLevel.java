@@ -48,7 +48,7 @@ public class CommandLevel{
     private static void createLevel(CommandContext context){
         // Level name, seed, generator Type
         final String levelName = context.getArg(0).asWord().getWord();
-        final String seedLiteral = context.getArg(1).asWord().getWord();
+        final String seed = context.getArg(1).asWord().getWord();
 
         final String generatorID = context.getArg(2).asWord().getWord();
         final ChunkGenerator generator = Generators.fromID(generatorID);
@@ -60,10 +60,6 @@ public class CommandLevel{
             sender.sendMessage(new Component().color(TextColor.DARK_RED).text("Level " + levelName + " already loaded"));
         else{
             // Parse seed
-            int seed = seedLiteral.hashCode();
-            try{
-                seed = Integer.parseInt(seedLiteral);
-            }catch(Exception ignored){ }
 
             levelManager.createLevel(levelName, seed, generator);
             context.getServer().getPlayerList().broadcastServerMessage(new Component().color(TextColor.YELLOW).text("Level '" + levelName + "' loaded"));

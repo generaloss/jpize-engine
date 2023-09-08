@@ -1,5 +1,8 @@
 package jpize.graphics.texture;
 
+import jpize.gl.texture.GlTexParam;
+import jpize.gl.texture.GlTexTarget;
+
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +15,7 @@ public class TextureArray extends GlTexture{
     private final List<Pixmap> pixmapList;
 
     public TextureArray(Pixmap... textureData){
-        super(GL_TEXTURE_2D_ARRAY);
+        super(GlTexTarget.TEXTURE_2D_ARRAY);
         bind();
         
         pixmapList = new ArrayList<>();
@@ -20,15 +23,15 @@ public class TextureArray extends GlTexture{
             Pixmap td = textureData[z];
             pixmapList.add(td);
     
-            parameters.texSubImage3D(GL_TEXTURE_2D_ARRAY, td.getBuffer(), td.getWidth(), td.getHeight(), z);
-            parameters.use(TEXTURE_TYPE);
+            parameters.texSubImage3D(GlTexParam.TEXTURE_2D_ARRAY, td.getBuffer(), td.getWidth(), td.getHeight(), z);
+            parameters.use(target);
             genMipMap();
         }
         unbind();
     }
 
     public TextureArray(BufferedImage... bufferedImage){
-        super(GL_TEXTURE_2D_ARRAY);
+        super(GlTexTarget.TEXTURE_2D_ARRAY);
         bind();
         
         pixmapList = new ArrayList<>();
@@ -36,15 +39,15 @@ public class TextureArray extends GlTexture{
             Pixmap td = PixmapIO.load(bufferedImage[z]);
             pixmapList.add(td);
     
-            parameters.texSubImage3D(GL_TEXTURE_2D_ARRAY, td.getBuffer(), td.getWidth(), td.getHeight(), z);
-            parameters.use(TEXTURE_TYPE);
+            parameters.texSubImage3D(GlTexParam.TEXTURE_2D_ARRAY, td.getBuffer(), td.getWidth(), td.getHeight(), z);
+            parameters.use(target);
             genMipMap();
         }
         unbind();
     }
 
     public TextureArray(Texture... texture){
-        super(GL_TEXTURE_2D_ARRAY);
+        super(GlTexTarget.TEXTURE_2D_ARRAY);
         bind();
         
         pixmapList = new ArrayList<>();
@@ -52,8 +55,8 @@ public class TextureArray extends GlTexture{
             Pixmap td = texture[z].getPixmap().copy();
             pixmapList.add(td);
     
-            parameters.texSubImage3D(GL_TEXTURE_2D_ARRAY, td.getBuffer(), td.getWidth(), td.getHeight(), z);
-            parameters.use(TEXTURE_TYPE);
+            parameters.texSubImage3D(GlTexParam.TEXTURE_2D_ARRAY, td.getBuffer(), td.getWidth(), td.getHeight(), z);
+            parameters.use(target);
             genMipMap();
         }
         unbind();
@@ -64,7 +67,7 @@ public class TextureArray extends GlTexture{
     }
 
     public TextureArray(boolean invY, String... file){
-        super(GL_TEXTURE_2D_ARRAY);
+        super(GlTexTarget.TEXTURE_2D_ARRAY);
         bind();
         
         pixmapList = new ArrayList<>();
@@ -73,10 +76,10 @@ public class TextureArray extends GlTexture{
             Pixmap td = PixmapIO.load(f, false, invY);
             pixmapList.add(td);
     
-            parameters.texSubImage3D(GL_TEXTURE_2D_ARRAY, td.getBuffer(), td.getWidth(), td.getHeight(), z);
+            parameters.texSubImage3D(GlTexParam.TEXTURE_2D_ARRAY, td.getBuffer(), td.getWidth(), td.getHeight(), z);
         }
         
-        parameters.use(TEXTURE_TYPE);
+        parameters.use(target);
         genMipMap();
     }
 
@@ -90,14 +93,14 @@ public class TextureArray extends GlTexture{
     }
 
     public int getWidth(){
-        if(pixmapList.size() > 0)
+        if(!pixmapList.isEmpty())
             return pixmapList.get(0).getWidth();
         else
             return -1;
     }
 
     public int getHeight(){
-        if(pixmapList.size() > 0)
+        if(!pixmapList.isEmpty())
             return pixmapList.get(0).getHeight();
         else
             return -1;

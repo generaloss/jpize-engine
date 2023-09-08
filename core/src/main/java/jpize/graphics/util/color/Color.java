@@ -2,8 +2,8 @@ package jpize.graphics.util.color;
 
 public class Color extends IColor{
     
-    public static ImmutableColor WHITE = new ImmutableColor(1, 1, 1, 1F);
-    public static ImmutableColor BLACK = new ImmutableColor(0, 0, 0, 1F);
+    public static final ImmutableColor WHITE = new ImmutableColor(1, 1, 1, 1F);
+    public static final ImmutableColor BLACK = new ImmutableColor(0, 0, 0, 1F);
     
 
     private float r, g, b, a;
@@ -93,19 +93,19 @@ public class Color extends IColor{
     }
 
 
-    public void set(float red, float green, float blue){
+    public void set3(float red, float green, float blue){
         r = red;
         g = green;
         b = blue;
     }
 
-    public void set(double red, double green, double blue){
+    public void set3(double red, double green, double blue){
         r = (float) red;
         g = (float) green;
         b = (float) blue;
     }
 
-    public void set(int red, int green, int blue){
+    public void set3(int red, int green, int blue){
         r = red / 255F;
         g = green / 255F;
         b = blue / 255F;
@@ -133,6 +133,21 @@ public class Color extends IColor{
     }
 
 
+    public Color add3(double r, double g, double b){
+        set3(
+                r() + r,
+                g() + g,
+                b() + b
+        );
+
+        return this;
+    }
+
+    public Color add3(Color color){
+        return add3(color.r, color.g, color.b);
+    }
+    
+    
     public Color mul(double r, double g, double b, double a){
         set(
             r() * r,
@@ -144,14 +159,23 @@ public class Color extends IColor{
         return this;
     }
 
-    public Color mul(double value){
-        set(
+    public Color mul3(double value){
+        set3(
             r() * value,
             g() * value,
-            b() * value,
-            a()
+            b() * value
         );
         
+        return this;
+    }
+
+    public Color div3(double value){
+        set3(
+            r() / value,
+            g() / value,
+            b() / value
+        );
+
         return this;
     }
 

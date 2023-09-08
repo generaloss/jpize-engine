@@ -1,6 +1,6 @@
 package jpize.graphics.util;
 
-import jpize.graphics.mesh.VertexBuffer;
+import jpize.graphics.buffer.VertexBuffer;
 import jpize.graphics.texture.Region;
 import jpize.graphics.util.color.IColor;
 import jpize.util.ArrayUtils;

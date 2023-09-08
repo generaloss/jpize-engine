@@ -44,8 +44,8 @@ public class ClientChunk extends LevelChunk{
 
 
     @Override
-    public boolean setBlockState(int lx, int y, int lz, short blockData){
-        if(!super.setBlockState(lx, y, lz, blockData) || ChunkUtils.isOutOfBounds(lx, lz))
+    public boolean setBlockData(int lx, int y, int lz, short blockData){
+        if(!super.setBlockData(lx, y, lz, blockData) || ChunkUtils.isOutOfBounds(lx, lz))
             return false;
 
         final boolean blockPlaced = BlockData.getID(blockData) != Blocks.AIR.getID();

@@ -97,7 +97,7 @@ public class TextComponentBatch implements Disposable{
                 final float glyphY = y + (advanceY + glyph.offsetY) * font.getScale();
                 
                 // Рендерим тень
-                batch.setColor(color.copy().mul(0.25));
+                batch.setColor(color.copy().mul3(0.25));
                 glyph.render(batch, glyphX + font.getScale(), glyphY - font.getScale());
                 // Рендерим основной символ
                 batch.setColor(color);
@@ -150,7 +150,7 @@ public class TextComponentBatch implements Disposable{
     }
     
     public void setBackgroundColor(double r, double g, double b){
-        background.set(r, g, b);
+        background.set3(r, g, b);
     }
     
     public void setBackgroundColor(IColor color){

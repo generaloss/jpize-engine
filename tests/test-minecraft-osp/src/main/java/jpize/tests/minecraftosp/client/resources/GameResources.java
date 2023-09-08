@@ -39,7 +39,7 @@ public class GameResources implements Disposable{
             blockAtlas.put(name, pixmap);
         }
 
-        blockAtlas.generate(512, 512);
+        blockAtlas.generate(32 * 16, 32 * 16);
     }
 
 

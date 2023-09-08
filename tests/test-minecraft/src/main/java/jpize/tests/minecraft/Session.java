@@ -22,7 +22,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Session implements Renderer{
     
-    public static final String GAME_DIR_PATH = System.getProperty("user.home") + "/minecraft/";
+    public static final String GAME_DIR_PATH = "";
 
     private final Options options;
     private final LanguageManager languageManager;
@@ -169,6 +169,7 @@ public class Session implements Renderer{
     public MusicManager getMusicManager(){
         return musicManager;
     }
+
 
     public AudioManager getAudioManager(){
         return audioManager;

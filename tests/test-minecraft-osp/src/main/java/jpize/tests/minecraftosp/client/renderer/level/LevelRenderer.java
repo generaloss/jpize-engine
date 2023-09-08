@@ -1,8 +1,6 @@
 package jpize.tests.minecraftosp.client.renderer.level;
 
 import jpize.Jpize;
-import jpize.util.Disposable;
-import jpize.util.Resizable;
 import jpize.files.Resource;
 import jpize.gl.Gl;
 import jpize.gl.glenum.GlTarget;
@@ -13,9 +11,11 @@ import jpize.graphics.util.ScreenQuad;
 import jpize.graphics.util.Shader;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.graphics.util.color.Color;
-import jpize.tests.minecraftosp.client.renderer.particle.ParticleBatch;
 import jpize.tests.minecraftosp.client.control.camera.GameCamera;
 import jpize.tests.minecraftosp.client.renderer.GameRenderer;
+import jpize.tests.minecraftosp.client.renderer.particle.ParticleBatch;
+import jpize.util.Disposable;
+import jpize.util.Resizable;
 
 public class LevelRenderer implements Disposable, Resizable{
 
@@ -77,7 +77,7 @@ public class LevelRenderer implements Disposable, Resizable{
 
         // Set water color is camera in water
         if(camera.isInWater())
-            screenColor.set(0.4, 0.6, 1);
+            screenColor.set3(0.4, 0.6, 1);
         else
             screenColor.reset();
         

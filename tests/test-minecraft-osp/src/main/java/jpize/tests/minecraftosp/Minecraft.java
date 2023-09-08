@@ -41,8 +41,8 @@ public class Minecraft extends ContextAdapter{
     public static void main(String[] args){
         ContextBuilder.newContext("Minecraft Open Source Edition")
                 .size(1280, 720)
-                .create()
-                .init(getInstance());
+                .register()
+                .setAdapter(getInstance());
         Jpize.runContexts();
     }
     
@@ -235,7 +235,7 @@ public class Minecraft extends ContextAdapter{
             instance.rotation = Maths.random(1, 360);
             instance.lifeTimeSeconds = Maths.random(0.5F, 2F);
             instance.velocity.set(Maths.random(-0.04F, 0.04F), Maths.random(-0.02F, 0.1F), Maths.random(-0.04F, 0.04F));
-            instance.color.set(0.6, 0.6, 0.6);
+            instance.color.set3(0.6, 0.6, 0.6);
         })
         .texture(new Texture("texture/block/grass_block_side.png"))
         .animate(instance->{

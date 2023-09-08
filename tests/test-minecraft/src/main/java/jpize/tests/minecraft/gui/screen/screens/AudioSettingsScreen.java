@@ -121,23 +121,26 @@ public class AudioSettingsScreen extends IOptionsScreen{
 
         // Device
         deviceButton.setClickListener(new Runnable(){
-            int deviceIndex = 0;
+            int deviceIndex = Audio.getAvailableDevices().indexOf(Audio.getDefaultInputDevice());
 
             @Override
             public void run(){
-                List<String> list = Audio.getAvailableDevices();
+                session.getMusicManager().pause();
+                final List<String> list = Audio.getAvailableDevices();
                 if(list != null){
                     deviceIndex++;
                     if(deviceIndex >= list.size())
                         deviceIndex = 0;
 
-                    String nextDevice = list.get(deviceIndex);
+                    final String nextDevice = list.get(deviceIndex);
 
-                    deviceButton.setText(new Component().translation("audioSettings.device", new Component().formattedText(nextDevice)));
+                    deviceButton.setText(new Component()
+                            .translation("audioSettings.device", new Component().text(nextDevice)));
 
                     session.getOptions().setAudioDevice(nextDevice);
                     session.getOptions().save();
                 }
+                session.getMusicManager().resume();
             }
         });
     }

@@ -14,8 +14,8 @@ public class NoiseTest extends ContextAdapter{
     public static void main(String[] args){
         ContextBuilder.newContext("Noise")
                 .size(720, 720)
-                .create()
-                .init(new NoiseTest());
+                .register()
+                .setAdapter(new NoiseTest());
 
         Jpize.runContexts();
     }

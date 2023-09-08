@@ -162,10 +162,11 @@ public class MainMenuScreen extends Screen{
         camera.getRotation().yaw -= Jpize.getDt() * 2;
         camera.update();
         skyBox.render(camera);
+
         // Panorama Overlay
-        batch.setAlpha(0.8F);
+        batch.setAlpha(0.8);
         batch.draw(panorama_overlay, 0, 0, Jpize.getWidth(), Jpize.getHeight());
-        batch.setAlpha(1F);
+        batch.setAlpha(1);
         
         // UI
         layout.render(batch);

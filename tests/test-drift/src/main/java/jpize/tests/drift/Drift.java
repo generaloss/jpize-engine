@@ -14,8 +14,8 @@ public class Drift extends ContextAdapter{
     public static void main(String[] args){
         ContextBuilder.newContext("Window")
                 .size(2000, 1000)
-                .create()
-                .init(new Drift());
+                .register()
+                .setAdapter(new Drift());
 
         Jpize.runContexts();
     }

@@ -3,14 +3,11 @@ package jpize.tests.minecraftosp.server.gen.structure;
 import jpize.math.util.Random;
 import jpize.tests.minecraftosp.client.block.Blocks;
 import jpize.tests.minecraftosp.main.level.structure.Structure;
-import jpize.tests.minecraftosp.server.chunk.ServerChunk;
-import jpize.tests.minecraftosp.server.level.ServerLevel;
+import jpize.tests.minecraftosp.server.gen.pool.BlockPool;
 
-public class Tree extends Structure{
+public class Tree{
 
-    public void generateSpruceTree(ServerChunk chunk, boolean other, int x, int y, int z, Random random){
-        final ServerLevel level = chunk.getLevel();
-
+    public static void generateSpruceTree(BlockPool pool, int x, int y, int z, Random random){
         final int logHeight = random.random(10, 16);
         final int peak = y + logHeight;
         final int leavesHeight = random.random(2, 5);
@@ -29,175 +26,171 @@ public class Tree extends Structure{
                 else
                     radius = random.random(0.8F, 2.2F);
 
-                circleFilledXZ(chunk, other, level, x, height, z, radius, Blocks.SPRUCE_LEAVES);
+                Structure.circleFilledXZ(pool, x, height, z, radius, Blocks.SPRUCE_LEAVES);
             }
 
-            level.setBlockDec(chunk, other, x, height, z, Blocks.SPRUCE_LOG);
+            pool.genBlock(x, height, z, Blocks.SPRUCE_LOG);
         }
 
-        level.setBlockDec(chunk, other, x, peak, z, Blocks.SPRUCE_LEAVES);
+        pool.genBlock(x, peak, z, Blocks.SPRUCE_LEAVES);
     }
 
 
-    public void generateOakTree(ServerChunk chunk, boolean other, int x, int y, int z, Random random){
-        final ServerLevel level = chunk.getLevel();
-
+    public static void generateOakTree(BlockPool pool, int x, int y, int z, Random random){
         final int logHeight = random.random(4, 9);
         final int peak = y + logHeight;
 
         // Верхний 1
-        level.setBlockDec(chunk, other, x  , peak  , z  , Blocks.OAK_LEAVES);
+        pool.genBlock(x  , peak  , z  , Blocks.OAK_LEAVES);
 
         // Окружающие ствол дерева 1х4
-        level.setBlockDec(chunk, other, x-1, peak  , z  , Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-1, z  , Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-2, z  , Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-3, z  , Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak  , z  , Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak-1, z  , Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak-2, z  , Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak-3, z  , Blocks.OAK_LEAVES);
 
-        level.setBlockDec(chunk, other, x+1, peak  , z  , Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-1, z  , Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-2, z  , Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-3, z  , Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak  , z  , Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak-1, z  , Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak-2, z  , Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak-3, z  , Blocks.OAK_LEAVES);
 
-        level.setBlockDec(chunk, other, x  , peak  , z-1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-1, z-1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-2, z-1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-3, z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x  , peak  , z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x  , peak-1, z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x  , peak-2, z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x  , peak-3, z-1, Blocks.OAK_LEAVES);
 
-        level.setBlockDec(chunk, other, x  , peak  , z+1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-1, z+1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-2, z+1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-3, z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x  , peak  , z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x  , peak-1, z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x  , peak-2, z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x  , peak-3, z+1, Blocks.OAK_LEAVES);
 
         // Другие 1х3
-        level.setBlockDec(chunk, other, x-1, peak-1, z-1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-2, z-1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-3, z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak-1, z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak-2, z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak-3, z-1, Blocks.OAK_LEAVES);
 
-        level.setBlockDec(chunk, other, x-1, peak-1, z+1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-2, z+1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-3, z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak-1, z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak-2, z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak-3, z+1, Blocks.OAK_LEAVES);
 
-        level.setBlockDec(chunk, other, x+1, peak-1, z-1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-2, z-1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-3, z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak-1, z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak-2, z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak-3, z-1, Blocks.OAK_LEAVES);
 
-        level.setBlockDec(chunk, other, x+1, peak-1, z+1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-2, z+1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-3, z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak-1, z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak-2, z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak-3, z+1, Blocks.OAK_LEAVES);
 
         // Другие по краям 3х2
-        level.setBlockDec(chunk, other, x-2, peak-2, z-1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-2, peak-2, z  , Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-2, peak-2, z+1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-2, peak-3, z-1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-2, peak-3, z  , Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-2, peak-3, z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x-2, peak-2, z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x-2, peak-2, z  , Blocks.OAK_LEAVES);
+        pool.genBlock(x-2, peak-2, z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x-2, peak-3, z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x-2, peak-3, z  , Blocks.OAK_LEAVES);
+        pool.genBlock(x-2, peak-3, z+1, Blocks.OAK_LEAVES);
 
-        level.setBlockDec(chunk, other, x+2, peak-2, z-1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+2, peak-2, z  , Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+2, peak-2, z+1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+2, peak-3, z-1, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+2, peak-3, z  , Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+2, peak-3, z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x+2, peak-2, z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x+2, peak-2, z  , Blocks.OAK_LEAVES);
+        pool.genBlock(x+2, peak-2, z+1, Blocks.OAK_LEAVES);
+        pool.genBlock(x+2, peak-3, z-1, Blocks.OAK_LEAVES);
+        pool.genBlock(x+2, peak-3, z  , Blocks.OAK_LEAVES);
+        pool.genBlock(x+2, peak-3, z+1, Blocks.OAK_LEAVES);
 
-        level.setBlockDec(chunk, other, x-1, peak-2, z-2, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-2, z-2, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-2, z-2, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-3, z-2, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-3, z-2, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-3, z-2, Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak-2, z-2, Blocks.OAK_LEAVES);
+        pool.genBlock(x  , peak-2, z-2, Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak-2, z-2, Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak-3, z-2, Blocks.OAK_LEAVES);
+        pool.genBlock(x  , peak-3, z-2, Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak-3, z-2, Blocks.OAK_LEAVES);
 
-        level.setBlockDec(chunk, other, x-1, peak-2, z+2, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-2, z+2, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-2, z+2, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-3, z+2, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-3, z+2, Blocks.OAK_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-3, z+2, Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak-2, z+2, Blocks.OAK_LEAVES);
+        pool.genBlock(x  , peak-2, z+2, Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak-2, z+2, Blocks.OAK_LEAVES);
+        pool.genBlock(x-1, peak-3, z+2, Blocks.OAK_LEAVES);
+        pool.genBlock(x  , peak-3, z+2, Blocks.OAK_LEAVES);
+        pool.genBlock(x+1, peak-3, z+2, Blocks.OAK_LEAVES);
 
         for(int ly = 0; ly < logHeight; ly++)
-            level.setBlockDec(chunk, other, x, y + ly, z, Blocks.OAK_LOG);
+            pool.genBlock(x, y + ly, z, Blocks.OAK_LOG);
     }
 
 
-    public void generateBirchTree(ServerChunk chunk, boolean other, int x, int y, int z, Random random){
-        final ServerLevel level = chunk.getLevel();
-
+    public static void generateBirchTree(BlockPool pool, int x, int y, int z, Random random){
         final int logHeight = random.random(5, 10);
         final int peak = y + logHeight;
 
         // Верхний 1
-        level.setBlockDec(chunk, other, x  , peak  , z  , Blocks.BIRCH_LEAVES);
+        pool.genBlock(x  , peak  , z  , Blocks.BIRCH_LEAVES);
 
         // Окружающие ствол дерева 1х4
-        level.setBlockDec(chunk, other, x-1, peak  , z  , Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-1, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-2, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-3, z  , Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak  , z  , Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak-1, z  , Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak-2, z  , Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak-3, z  , Blocks.BIRCH_LEAVES);
 
-        level.setBlockDec(chunk, other, x+1, peak  , z  , Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-1, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-2, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-3, z  , Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak  , z  , Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak-1, z  , Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak-2, z  , Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak-3, z  , Blocks.BIRCH_LEAVES);
 
-        level.setBlockDec(chunk, other, x  , peak  , z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-1, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-2, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-3, z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x  , peak  , z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x  , peak-1, z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x  , peak-2, z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x  , peak-3, z-1, Blocks.BIRCH_LEAVES);
 
-        level.setBlockDec(chunk, other, x  , peak  , z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-1, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-2, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-3, z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x  , peak  , z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x  , peak-1, z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x  , peak-2, z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x  , peak-3, z+1, Blocks.BIRCH_LEAVES);
 
         // Другие 1х3
-        level.setBlockDec(chunk, other, x-1, peak-1, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-2, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-3, z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak-1, z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak-2, z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak-3, z-1, Blocks.BIRCH_LEAVES);
 
-        level.setBlockDec(chunk, other, x-1, peak-1, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-2, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-3, z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak-1, z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak-2, z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak-3, z+1, Blocks.BIRCH_LEAVES);
 
-        level.setBlockDec(chunk, other, x+1, peak-1, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-2, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-3, z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak-1, z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak-2, z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak-3, z-1, Blocks.BIRCH_LEAVES);
 
-        level.setBlockDec(chunk, other, x+1, peak-1, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-2, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-3, z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak-1, z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak-2, z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak-3, z+1, Blocks.BIRCH_LEAVES);
 
         // Другие по краям 3х2
-        level.setBlockDec(chunk, other, x-2, peak-2, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-2, peak-2, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-2, peak-2, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-2, peak-3, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-2, peak-3, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-2, peak-3, z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-2, peak-2, z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-2, peak-2, z  , Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-2, peak-2, z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-2, peak-3, z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-2, peak-3, z  , Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-2, peak-3, z+1, Blocks.BIRCH_LEAVES);
 
-        level.setBlockDec(chunk, other, x+2, peak-2, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+2, peak-2, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+2, peak-2, z+1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+2, peak-3, z-1, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+2, peak-3, z  , Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+2, peak-3, z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+2, peak-2, z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+2, peak-2, z  , Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+2, peak-2, z+1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+2, peak-3, z-1, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+2, peak-3, z  , Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+2, peak-3, z+1, Blocks.BIRCH_LEAVES);
 
-        level.setBlockDec(chunk, other, x-1, peak-2, z-2, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-2, z-2, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-2, z-2, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-3, z-2, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-3, z-2, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-3, z-2, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak-2, z-2, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x  , peak-2, z-2, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak-2, z-2, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak-3, z-2, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x  , peak-3, z-2, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak-3, z-2, Blocks.BIRCH_LEAVES);
 
-        level.setBlockDec(chunk, other, x-1, peak-2, z+2, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-2, z+2, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-2, z+2, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x-1, peak-3, z+2, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x  , peak-3, z+2, Blocks.BIRCH_LEAVES);
-        level.setBlockDec(chunk, other, x+1, peak-3, z+2, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak-2, z+2, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x  , peak-2, z+2, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak-2, z+2, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x-1, peak-3, z+2, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x  , peak-3, z+2, Blocks.BIRCH_LEAVES);
+        pool.genBlock(x+1, peak-3, z+2, Blocks.BIRCH_LEAVES);
 
         for(int ly = 0; ly < logHeight; ly++)
-            level.setBlockDec(chunk, other, x, y + ly, z, Blocks.BIRCH_LOG);
+            pool.genBlock(x, y + ly, z, Blocks.BIRCH_LOG);
     }
 
 }

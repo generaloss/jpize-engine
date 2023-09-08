@@ -49,7 +49,7 @@ public class ContextBuilder{
 
 
     /** Создать <b>контекст</b> окна по заданным ранее параметрам */
-    public Context create(){
+    public Context register(){
         // Hints
         Glfw.defaultWindowHints();
         Glfw.windowHint(GlfwHint.VISIBLE, 0);

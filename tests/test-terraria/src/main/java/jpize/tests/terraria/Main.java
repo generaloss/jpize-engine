@@ -24,8 +24,8 @@ public class Main extends ContextAdapter{
         ContextBuilder.newContext("Terraria")
                 .size(1280, 720)
                 .icon("icon.png")
-                .create()
-                .init(new Main());
+                .register()
+                .setAdapter(new Main());
 
         Jpize.runContexts();
     }

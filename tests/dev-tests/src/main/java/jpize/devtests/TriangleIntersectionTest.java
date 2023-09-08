@@ -72,8 +72,8 @@ public class TriangleIntersectionTest extends ContextAdapter{
         shader.bind();
         shader.setMatrices(camera);
         shader.setColor(1, 0, 0);
-        mesh.render(3);
-        rayMesh.render(2);
+        mesh.render();
+        rayMesh.render();
     }
 
     public void update(){

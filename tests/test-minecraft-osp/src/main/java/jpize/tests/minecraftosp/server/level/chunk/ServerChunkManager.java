@@ -38,16 +38,16 @@ public class ServerChunkManager extends ChunkManager{
     public ServerChunkManager(ServerLevel level){
         this.level = level;
         
-        requestedChunks = new HashMap<>();
-        frontiers = new CopyOnWriteArrayList<>();
-        newFrontiers = new CopyOnWriteArrayList<>();
-        loadQueue = new LinkedBlockingQueue<>();
-        allChunks = new ConcurrentHashMap<>();
-        generatingChunks = new ConcurrentHashMap<>();
+        this.requestedChunks = new HashMap<>();
+        this.frontiers = new CopyOnWriteArrayList<>();
+        this.newFrontiers = new CopyOnWriteArrayList<>();
+        this.loadQueue = new LinkedBlockingQueue<>();
+        this.allChunks = new ConcurrentHashMap<>();
+        this.generatingChunks = new ConcurrentHashMap<>();
 
-        tps = new FpsCounter();
-   
-        executorService = Executors.newSingleThreadExecutor(runnable->{
+        this.tps = new FpsCounter();
+
+        this.executorService = Executors.newSingleThreadExecutor(runnable->{
             final Thread thread = new Thread(runnable, "ServerChunkManager-Thread");
             thread.setPriority(Thread.MIN_PRIORITY);
             thread.setDaemon(true);
@@ -231,26 +231,28 @@ public class ServerChunkManager extends ChunkManager{
 
     private void decorateChunk(ServerChunk chunk, ChunkGenerator generator){
         // Decorate neighbors
-        for(ChunkPos neighborPosition: chunk.getNeighbors()){
-            ServerChunk neighbor = getGeneratingChunk(neighborPosition);
+        for(ChunkPos neighborPos: chunk.getNeighbors()){
+            ServerChunk neighbor = getGeneratingChunk(neighborPos);
 
             if(neighbor == null)
-                neighbor = getChunk(neighborPosition);
+                neighbor = getChunk(neighborPos);
             if(neighbor == null)
                 return;
             if(neighbor.decorated)
                 continue;
 
             neighbor.decorated = true;
-            generator.decorate(neighbor, true);
+            generator.decorate(neighbor);
         }
         // Decorate chunk
         chunk.decorated = true;
-        generator.decorate(chunk, false);
+        generator.decorate(chunk);
+        level.getBlockPool().loadBlocksFor(chunk);
 
         // Update heightmap
         //chunk.getHeightMap(HeightmapType.SURFACE).update();
         chunk.getHeightMap(HeightmapType.LIGHT_SURFACE).update();
+        chunk.getHeightMap(HeightmapType.SURFACE).update();
 
         // Update skylight
         chunk.getLevel().getSkyLight().updateSkyLight(chunk);
@@ -291,7 +293,7 @@ public class ServerChunkManager extends ChunkManager{
         
         for(Entity entity: level.getEntities())
             if(entity instanceof ServerPlayer player)
-                if(distToChunk(chunkPos.x, chunkPos.z, player.getPosition()) <= player.getRenderDistance())
+                if(distToChunk(chunkPos.x, chunkPos.z, player.getPosition()) <= player.getRenderDistance() + renderDistanceIncrease)
                     return false;
         
         return true;

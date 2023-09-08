@@ -28,6 +28,9 @@ public class VolumeSlider extends Slider{
         float volume = getValue();
         setText(new Component().translation(soundCategory.getTranslateKey(), new Component().formattedText(String.valueOf(Maths.round(volume * 100)))));
 
+        if(soundCategory == SoundCategory.MUSIC)
+            session.getMusicManager().setVolume(volume);
+
         session.getOptions().setSoundVolume(soundCategory, volume);
         session.getOptions().save();
     }

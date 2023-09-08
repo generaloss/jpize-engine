@@ -17,21 +17,19 @@ public class Matrix4f implements Matrix4{
     /** Constructor */
     public Matrix4f(){
         val = new float[16];
-
         val[m00] = 1;
         val[m11] = 1;
         val[m22] = 1;
         val[m33] = 1;
     }
 
-    public Matrix4f(Matrix4f matrix4){
-        val = new float[16];
-        set(matrix4);
-    }
-
     public Matrix4f(float[] values){
         val = new float[16];
         set(values);
+    }
+
+    public Matrix4f(Matrix4f matrix){
+        this(matrix.val);
     }
 
 
@@ -56,18 +54,16 @@ public class Matrix4f implements Matrix4{
         val[m01] = 0; val[m11] = 1; val[m21] = 0; val[m31] = 0;
         val[m02] = 0; val[m12] = 0; val[m22] = 1; val[m32] = 0;
         val[m03] = 0; val[m13] = 0; val[m23] = 0; val[m33] = 1;
-
         return this;
     }
 
 
-    /* Translate */
+    /** Translate */
     public Matrix4f translate(float x, float y, float z){
         val[m30] += val[m00] * x + val[m10] * y + val[m20] * z;
         val[m31] += val[m01] * x + val[m11] * y + val[m21] * z;
         val[m32] += val[m02] * x + val[m12] * y + val[m22] * z;
         val[m33] += val[m03] * x + val[m13] * y + val[m23] * z;
-
         return this;
     }
 
@@ -76,7 +72,6 @@ public class Matrix4f implements Matrix4{
         val[m31] += val[m01] * x + val[m11] * y;
         val[m32] += val[m02] * x + val[m12] * y;
         val[m33] += val[m03] * x + val[m13] * y;
-
         return this;
     }
 
@@ -162,6 +157,14 @@ public class Matrix4f implements Matrix4{
         return this;
     }
 
+    public Matrix4f toScaled(float scale){
+        return toScaled(scale, scale, scale);
+    }
+
+    public Matrix4f toScaled(double scale){
+        return toScaled((float) scale);
+    }
+
     public Matrix4f toScaled(Vec3f vec3){
         return toScaled(vec3.x, vec3.y, vec3.z);
     }
@@ -184,14 +187,6 @@ public class Matrix4f implements Matrix4{
 
     public Matrix4f toScaled(Vec2i vec2){
         return toScaled(vec2.x, vec2.y);
-    }
-
-    public Matrix4f toScaled(float scale){
-        return toScaled(scale, scale, scale);
-    }
-
-    public Matrix4f toScaled(double scale){
-        return toScaled((float) scale);
     }
 
 
@@ -341,10 +336,9 @@ public class Matrix4f implements Matrix4{
 
     /** Culling */
     public Matrix4f cullPosition(){
-        val[m30] = 0;
-        val[m31] = 0;
-        val[m32] = 0;
-        
+        val[m30] = 0; // X
+        val[m31] = 0; // Y
+        val[m32] = 0; // Z
         return this;
     }
     
@@ -352,7 +346,6 @@ public class Matrix4f implements Matrix4{
         val[m00] = 1; val[m10] = 0; val[m20] = 0;
         val[m01] = 0; val[m11] = 1; val[m21] = 0;
         val[m02] = 0; val[m12] = 0; val[m22] = 1;
-
         return this;
     }
 
@@ -383,25 +376,25 @@ public class Matrix4f implements Matrix4{
 
     public static float[] mul(float[] a, float[] b){
         return new float[]{
-            a[m00] * b[m00] + a[m10] * b[m01] + a[m20] * b[m02] + a[m30] * b[m03],
-            a[m01] * b[m00] + a[m11] * b[m01] + a[m21] * b[m02] + a[m31] * b[m03],
-            a[m02] * b[m00] + a[m12] * b[m01] + a[m22] * b[m02] + a[m32] * b[m03],
-            a[m03] * b[m00] + a[m13] * b[m01] + a[m23] * b[m02] + a[m33] * b[m03],
+            a[m00] * b[m00]  +  a[m10] * b[m01]  +  a[m20] * b[m02]  +  a[m30] * b[m03],
+            a[m01] * b[m00]  +  a[m11] * b[m01]  +  a[m21] * b[m02]  +  a[m31] * b[m03],
+            a[m02] * b[m00]  +  a[m12] * b[m01]  +  a[m22] * b[m02]  +  a[m32] * b[m03],
+            a[m03] * b[m00]  +  a[m13] * b[m01]  +  a[m23] * b[m02]  +  a[m33] * b[m03],
 
-            a[m00] * b[m10] + a[m10] * b[m11] + a[m20] * b[m12] + a[m30] * b[m13],
-            a[m01] * b[m10] + a[m11] * b[m11] + a[m21] * b[m12] + a[m31] * b[m13],
-            a[m02] * b[m10] + a[m12] * b[m11] + a[m22] * b[m12] + a[m32] * b[m13],
-            a[m03] * b[m10] + a[m13] * b[m11] + a[m23] * b[m12] + a[m33] * b[m13],
+            a[m00] * b[m10]  +  a[m10] * b[m11]  +  a[m20] * b[m12]  +  a[m30] * b[m13],
+            a[m01] * b[m10]  +  a[m11] * b[m11]  +  a[m21] * b[m12]  +  a[m31] * b[m13],
+            a[m02] * b[m10]  +  a[m12] * b[m11]  +  a[m22] * b[m12]  +  a[m32] * b[m13],
+            a[m03] * b[m10]  +  a[m13] * b[m11]  +  a[m23] * b[m12]  +  a[m33] * b[m13],
 
-            a[m00] * b[m20] + a[m10] * b[m21] + a[m20] * b[m22] + a[m30] * b[m23],
-            a[m01] * b[m20] + a[m11] * b[m21] + a[m21] * b[m22] + a[m31] * b[m23],
-            a[m02] * b[m20] + a[m12] * b[m21] + a[m22] * b[m22] + a[m32] * b[m23],
-            a[m03] * b[m20] + a[m13] * b[m21] + a[m23] * b[m22] + a[m33] * b[m23],
+            a[m00] * b[m20]  +  a[m10] * b[m21]  +  a[m20] * b[m22]  +  a[m30] * b[m23],
+            a[m01] * b[m20]  +  a[m11] * b[m21]  +  a[m21] * b[m22]  +  a[m31] * b[m23],
+            a[m02] * b[m20]  +  a[m12] * b[m21]  +  a[m22] * b[m22]  +  a[m32] * b[m23],
+            a[m03] * b[m20]  +  a[m13] * b[m21]  +  a[m23] * b[m22]  +  a[m33] * b[m23],
 
-            a[m00] * b[m30] + a[m10] * b[m31] + a[m20] * b[m32] + a[m30] * b[m33],
-            a[m01] * b[m30] + a[m11] * b[m31] + a[m21] * b[m32] + a[m31] * b[m33],
-            a[m02] * b[m30] + a[m12] * b[m31] + a[m22] * b[m32] + a[m32] * b[m33],
-            a[m03] * b[m30] + a[m13] * b[m31] + a[m23] * b[m32] + a[m33] * b[m33]
+            a[m00] * b[m30]  +  a[m10] * b[m31]  +  a[m20] * b[m32]  +  a[m30] * b[m33],
+            a[m01] * b[m30]  +  a[m11] * b[m31]  +  a[m21] * b[m32]  +  a[m31] * b[m33],
+            a[m02] * b[m30]  +  a[m12] * b[m31]  +  a[m22] * b[m32]  +  a[m32] * b[m33],
+            a[m03] * b[m30]  +  a[m13] * b[m31]  +  a[m23] * b[m32]  +  a[m33] * b[m33]
         };
     }
 
