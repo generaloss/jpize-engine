@@ -149,7 +149,6 @@ public class TextureBatch implements Disposable{
 
         // Render
         mesh.render(size * QUAD_INDICES);
-        System.out.println(" flush: " + size);
 
         // Reset
         size = 0;

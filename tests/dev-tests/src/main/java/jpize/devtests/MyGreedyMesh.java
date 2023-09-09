@@ -94,7 +94,6 @@ public class MyGreedyMesh extends JpizeApplication{
         }
 
         batch.begin();
-        System.out.println("Begin {");
 
         Gl.clearColorBuffer();
         Gl.clearColor(0.2, 0.2, 0.25);
@@ -126,7 +125,6 @@ public class MyGreedyMesh extends JpizeApplication{
         }
 
         batch.end();
-        System.out.println("} End");
     }
 
 }
