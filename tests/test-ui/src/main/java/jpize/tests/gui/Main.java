@@ -1,7 +1,7 @@
 package jpize.tests.gui;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.texture.TextureRegion;
@@ -16,7 +16,7 @@ import jpize.gui.constraint.Constraint;
 import jpize.glfw.key.Key;
 import jpize.io.context.ContextBuilder;
 
-public class Main extends ContextAdapter{
+public class Main extends JpizeApplication{
 
     public static void main(String[] args){
         ContextBuilder.newContext("Test - UI")

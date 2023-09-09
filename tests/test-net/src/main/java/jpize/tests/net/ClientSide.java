@@ -6,7 +6,7 @@ import jpize.glfw.key.Key;
 import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.io.context.ContextBuilder;
 import jpize.math.vecmath.vector.Vec2f;
 import jpize.net.security.KeyAES;
@@ -23,7 +23,7 @@ import jpize.util.io.TextProcessor;
 
 import java.util.StringJoiner;
 
-public class ClientSide extends ContextAdapter implements TcpListener{
+public class ClientSide extends JpizeApplication implements TcpListener{
     
     public static void main(String[] args){
         ContextBuilder.newContext("Net - client")

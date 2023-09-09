@@ -1,7 +1,7 @@
 package jpize.tests;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.graphics.texture.Pixmap;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
@@ -9,7 +9,7 @@ import jpize.glfw.key.Key;
 import jpize.io.context.ContextBuilder;
 import jpize.math.Maths;
 
-public class NoiseTest extends ContextAdapter{
+public class NoiseTest extends JpizeApplication{
     
     public static void main(String[] args){
         ContextBuilder.newContext("Noise")

@@ -1,6 +1,6 @@
 package jpize.tests.minecraftosp.client.renderer;
 
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.tests.minecraftosp.Minecraft;
 import jpize.tests.minecraftosp.client.renderer.chat.ChatRenderer;
 import jpize.tests.minecraftosp.client.renderer.infopanel.ChunkInfoRenderer;
@@ -8,7 +8,7 @@ import jpize.tests.minecraftosp.client.renderer.infopanel.InfoRenderer;
 import jpize.tests.minecraftosp.client.renderer.level.LevelRenderer;
 import jpize.tests.minecraftosp.client.renderer.text.TextComponentBatch;
 
-public class GameRenderer extends ContextAdapter{
+public class GameRenderer extends JpizeApplication{
     
     private final Minecraft session;
     

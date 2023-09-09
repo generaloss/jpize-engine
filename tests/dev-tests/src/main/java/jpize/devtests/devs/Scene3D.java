@@ -6,12 +6,12 @@ import jpize.graphics.camera.Camera3D;
 import jpize.graphics.camera.PerspectiveCamera;
 import jpize.graphics.camera.controller.Motion3DController;
 import jpize.graphics.camera.controller.Rotation3DController;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Scene3D extends ContextAdapter{
+public class Scene3D extends JpizeApplication{
 
     private final Camera3D camera;
     private final Motion3DController motionCtrl;

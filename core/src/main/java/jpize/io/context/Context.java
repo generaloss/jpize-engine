@@ -11,7 +11,7 @@ public class Context implements Disposable{
     private static final ContextManager contextManager = ContextManager.getInstance();
 
     private final Window window;
-    protected ContextAdapter adapter;
+    protected JpizeApplication adapter;
     private final FixedUpdate fixedUpdate;
     private Screen screen;
     private boolean exitOnClose, enabled;
@@ -56,7 +56,7 @@ public class Context implements Disposable{
     }
 
 
-    public void setAdapter(ContextAdapter adapter){
+    public void setAdapter(JpizeApplication adapter){
         this.adapter = adapter;
     }
 

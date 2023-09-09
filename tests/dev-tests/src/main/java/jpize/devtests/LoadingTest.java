@@ -5,7 +5,7 @@ import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.io.context.ContextBuilder;
 import jpize.util.Utils;
 
@@ -23,7 +23,7 @@ public class LoadingTest{
         Jpize.runContexts();
     }
 
-    static class LoadingWindow extends ContextAdapter{
+    static class LoadingWindow extends JpizeApplication{
         // Image, font
         final TextureBatch batch = new TextureBatch();
         final Texture splash = new Texture("wallpaper-16.jpg");
@@ -51,7 +51,7 @@ public class LoadingTest{
         }
     }
 
-    static class App extends ContextAdapter{
+    static class App extends JpizeApplication{
         public void init(){ // Constructor() or init()
             // *Loading resources*
             Utils.delayMillis(2000);

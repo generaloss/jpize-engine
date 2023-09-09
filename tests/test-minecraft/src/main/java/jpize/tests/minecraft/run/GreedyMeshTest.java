@@ -1,7 +1,7 @@
 package jpize.tests.minecraft.run;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.graphics.texture.Pixmap;
 import jpize.graphics.texture.Texture;
@@ -14,7 +14,7 @@ import jpize.math.vecmath.vector.Vec2i;
 
 import java.util.ArrayList;
 
-public class GreedyMeshTest extends ContextAdapter{
+public class GreedyMeshTest extends JpizeApplication{
 
     private TextureBatch batch;
     private Texture voxelTexture;

@@ -1,7 +1,7 @@
 package jpize.tests.physic;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.glfw.key.Key;
@@ -10,7 +10,7 @@ import jpize.math.vecmath.vector.Vec2f;
 import jpize.physic.BoundingBox2f;
 import jpize.physic.Collider2f;
 
-public class Main extends ContextAdapter{
+public class Main extends JpizeApplication{
 
     public static void main(String[] args){
         ContextBuilder.newContext("Physics")

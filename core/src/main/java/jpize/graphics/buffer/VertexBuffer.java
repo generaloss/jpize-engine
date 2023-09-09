@@ -56,12 +56,12 @@ public class VertexBuffer extends GlVertexBuffer{
     }
 
 
-    public void allocateData(long size){
-        super.allocateData(size, defaultUsage);
+    public void allocateData(long bytes){
+        super.allocateData(bytes, defaultUsage);
     }
 
-    public void allocateData(int size){
-        super.allocateData(size, defaultUsage);
+    public void allocateData(int bytes){
+        super.allocateData(bytes, defaultUsage);
     }
 
     public void setData(float[] data){

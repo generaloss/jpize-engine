@@ -8,12 +8,12 @@ import jpize.graphics.texture.Pixmap;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.graphics.util.color.Color;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.io.context.ContextBuilder;
 import jpize.math.Maths;
 import jpize.math.function.FastNoiseLite;
 
-public class BiomeGeneratorTest extends ContextAdapter{
+public class BiomeGeneratorTest extends JpizeApplication{
 
     public static void main(String[] args){
         ContextBuilder.newContext("Minecraft")

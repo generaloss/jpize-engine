@@ -67,14 +67,14 @@ public class GlBuffer extends GlObject{
     }
 
 
-    public void allocateData(long size, GlBufUsage usage){
+    public void allocateData(long bytes, GlBufUsage usage){
         bind();
-        glBufferData(target.GL, size, usage.GL);
+        glBufferData(target.GL, bytes, usage.GL);
     }
 
-    public void allocateData(int size, GlBufUsage usage){
+    public void allocateData(int bytes, GlBufUsage usage){
         bind();
-        glBufferData(target.GL, size, usage.GL);
+        glBufferData(target.GL, bytes, usage.GL);
     }
 
     public void setData(int[] data, GlBufUsage usage){

@@ -1,7 +1,7 @@
 package jpize.tests.terraria;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.gl.Gl;
@@ -18,7 +18,7 @@ import jpize.tests.terraria.world.World;
 import static jpize.tests.terraria.tile.TileType.AIR;
 import static jpize.tests.terraria.tile.TileType.DIRT;
 
-public class Main extends ContextAdapter{
+public class Main extends JpizeApplication{
 
     public static void main(String[] args){
         ContextBuilder.newContext("Terraria")

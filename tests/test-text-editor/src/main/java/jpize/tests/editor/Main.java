@@ -6,14 +6,14 @@ import jpize.glfw.key.Key;
 import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.io.context.ContextBuilder;
 import jpize.util.io.TextProcessor;
 
 import java.util.List;
 import java.util.StringJoiner;
 
-public class Main extends ContextAdapter{
+public class Main extends JpizeApplication{
     
     public static void main(String[] args){
         ContextBuilder.newContext("Editor")

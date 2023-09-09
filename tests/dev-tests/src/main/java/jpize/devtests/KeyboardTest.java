@@ -1,7 +1,7 @@
 package jpize.devtests;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
@@ -10,7 +10,7 @@ import jpize.gl.Gl;
 
 import java.util.StringJoiner;
 
-public class KeyboardTest extends ContextAdapter{
+public class KeyboardTest extends JpizeApplication{
 
     TextureBatch batch;
     BitmapFont font;

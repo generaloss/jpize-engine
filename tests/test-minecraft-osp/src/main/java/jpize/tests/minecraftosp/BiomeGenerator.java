@@ -1,7 +1,7 @@
 package jpize.tests.minecraftosp;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.graphics.texture.Pixmap;
 import jpize.graphics.texture.Texture;
@@ -10,7 +10,7 @@ import jpize.io.context.ContextBuilder;
 import jpize.math.Maths;
 import jpize.math.function.FastNoiseLite;
 
-public class BiomeGenerator extends ContextAdapter{
+public class BiomeGenerator extends JpizeApplication{
 
     public static void main(String[] args){
         ContextBuilder.newContext("Biome Generator")

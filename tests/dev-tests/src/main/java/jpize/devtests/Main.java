@@ -23,7 +23,8 @@ public class Main{
         //new NeuralTest();
         //GlfwMultipleWindows.main(args);
         //LoadingTest.main(args);
-        GreedyMesh.main(args);
+        //GreedyMesh.main(args);
+        MyGreedyMesh.main(args);
     }
 
     private static void myMultipleWindows(){

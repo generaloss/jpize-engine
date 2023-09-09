@@ -1,7 +1,7 @@
 package jpize.devtests;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.glfw.key.Key;
 import jpize.graphics.font.BitmapFont;
@@ -10,7 +10,7 @@ import jpize.graphics.util.batch.TextureBatch;
 import jpize.io.Window;
 import jpize.util.time.Stopwatch;
 
-public class WindowTest extends ContextAdapter{
+public class WindowTest extends JpizeApplication{
 
     TextureBatch batch;
     BitmapFont font;

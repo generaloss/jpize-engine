@@ -3,7 +3,7 @@ package jpize.io.context;
 import jpize.util.Disposable;
 import jpize.util.Resizable;
 
-public abstract class ContextAdapter implements Resizable, Disposable{
+public abstract class JpizeApplication implements Resizable, Disposable{
 
     public void init(){ }
     

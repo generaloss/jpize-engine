@@ -1,12 +1,12 @@
 package jpize.devtests;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.graphics.texture.atlas.TextureAtlas;
 import jpize.gl.Gl;
 import jpize.graphics.util.batch.TextureBatch;
 
-public class AtlasTest extends ContextAdapter{
+public class AtlasTest extends JpizeApplication{
     
     TextureBatch batch;
     TextureAtlas<Integer> atlas;

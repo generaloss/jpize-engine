@@ -4,7 +4,7 @@ import jpize.Jpize;
 import jpize.files.Resource;
 import jpize.gl.Gl;
 import jpize.graphics.texture.Texture;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.io.context.ContextBuilder;
 import jpize.math.Mathc;
 import jpize.math.Maths;
@@ -36,7 +36,7 @@ import jpize.tests.minecraftosp.server.IntegratedServer;
 import jpize.util.Utils;
 import jpize.util.time.Sync;
 
-public class Minecraft extends ContextAdapter{
+public class Minecraft extends JpizeApplication{
     
     public static void main(String[] args){
         ContextBuilder.newContext("Minecraft Open Source Edition")

@@ -6,10 +6,10 @@ public class QuadIndexBuffer extends IndexBuffer{
     public static int QUAD_VERTICES = 4;
 
     public QuadIndexBuffer(int size){
-        generate(size);
+        fillBuffer(size);
     }
 
-    private void generate(int size){
+    private void fillBuffer(int size){
         final int[] indices = new int[QUAD_INDICES * size];
 
         for(int i = 0; i < size; i++){

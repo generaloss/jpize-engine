@@ -4,12 +4,12 @@ import jpize.Jpize;
 import jpize.audio.io.WavFile;
 import jpize.audio.sound.Sound;
 import jpize.audio.util.SoundGenerator;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.files.Resource;
 import jpize.glfw.key.Key;
 import jpize.io.context.ContextBuilder;
 
-public class Main extends ContextAdapter{
+public class Main extends JpizeApplication{
 
     public static void main(String[] args){
         ContextBuilder.newContext("Audio")

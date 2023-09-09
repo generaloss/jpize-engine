@@ -1,13 +1,13 @@
 package jpize.devtests;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.gl.Gl;
 
-public class FontTest extends ContextAdapter{
+public class FontTest extends JpizeApplication{
 
     TextureBatch batch;
     BitmapFont font;

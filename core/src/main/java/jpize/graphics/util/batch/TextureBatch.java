@@ -67,7 +67,7 @@ public class TextureBatch implements Disposable{
 
         // Allocate buffers
         this.vertexData = new float[vertexSize];
-        this.mesh.getBuffer().allocateData(QUAD_VERTICES * maxSize * vertexSize);
+        this.mesh.getBuffer().allocateData(QUAD_VERTICES * maxSize * vertexBytes);
 
         // Matrices
         this.transformMat = new Matrix3f();
@@ -131,9 +131,12 @@ public class TextureBatch implements Disposable{
         begin(projectionMat.toOrthographic(0, 0, Jpize.getWidth(), Jpize.getHeight()), viewMat);
     }
 
-
     public void end(){
-        if(lastTexture == null || size == 0)
+        flush();
+    }
+
+    private void flush(){
+        if(lastTexture == null || size == 0 || projectionMat == null)
             return;
 
         // Shader
@@ -146,6 +149,7 @@ public class TextureBatch implements Disposable{
 
         // Render
         mesh.render(size * QUAD_INDICES);
+        System.out.println(" flush: " + size);
 
         // Reset
         size = 0;
@@ -158,11 +162,11 @@ public class TextureBatch implements Disposable{
 
 
     public void draw(Texture texture, float x, float y, float width, float height){
-        if(size + 1 >= maxSize)
-            end();
+        if(size == maxSize)
+            flush();
 
         if(texture != lastTexture){
-            end();
+            flush();
             lastTexture = texture;
         }
 
@@ -172,12 +176,12 @@ public class TextureBatch implements Disposable{
     }
     
     public void draw(TextureRegion textureRegion, float x, float y, float width, float height){
-        if(size + 1 >= maxSize)
-            end();
+        if(size == maxSize)
+            flush();
 
         final Texture texture = textureRegion.getTexture();
         if(texture != lastTexture){
-            end();
+            flush();
             lastTexture = texture;
         }
 
@@ -189,11 +193,11 @@ public class TextureBatch implements Disposable{
     }
 
     public void draw(Texture texture, float x, float y, float width, float height, Region region){
-        if(size + 1 >= maxSize)
-            end();
+        if(size == maxSize)
+            flush();
 
         if(texture != lastTexture){
-            end();
+            flush();
             lastTexture = texture;
         }
 
@@ -205,12 +209,12 @@ public class TextureBatch implements Disposable{
     }
 
     public void draw(TextureRegion texReg, float x, float y, float width, float height, Region region){
-        if(size + 1 >= maxSize)
-            end();
+        if(size == maxSize)
+            flush();
 
         final Texture texture = texReg.getTexture();
         if(texture != lastTexture){
-            end();
+            flush();
             lastTexture = texture;
         }
 
@@ -224,11 +228,11 @@ public class TextureBatch implements Disposable{
     }
 
     public void draw(Texture texture, float x, float y, float width, float height, float r, float g, float b, float a){
-        if(size + 1 >= maxSize)
-            end();
+        if(size == maxSize)
+            flush();
 
         if(texture != lastTexture){
-            end();
+            flush();
             lastTexture = texture;
         }
 

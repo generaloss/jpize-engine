@@ -12,12 +12,12 @@ import jpize.graphics.camera.controller.Rotation3DController;
 import jpize.graphics.mesh.IndexedMesh;
 import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.SkyBox;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.math.Maths;
 import jpize.math.vecmath.vector.Vec3f;
 import jpize.physic.Ray3f;
 
-public class TriangleIntersectionTest extends ContextAdapter{
+public class TriangleIntersectionTest extends JpizeApplication{
     
     SkyBox skyBox;
     

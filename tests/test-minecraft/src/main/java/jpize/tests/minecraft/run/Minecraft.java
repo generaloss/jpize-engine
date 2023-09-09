@@ -11,12 +11,12 @@ import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.io.context.ContextBuilder;
 import jpize.tests.minecraft.Session;
 import jpize.tests.minecraft.log.Logger;
 
-public class Minecraft extends ContextAdapter{
+public class Minecraft extends JpizeApplication{
 
     public static void main(String[] args){
         //ContextBuilder
@@ -37,7 +37,7 @@ public class Minecraft extends ContextAdapter{
         Jpize.runContexts();
     }
 
-    private static class LoadingWindow extends ContextAdapter{
+    private static class LoadingWindow extends JpizeApplication{
         final TextureBatch batch  = new TextureBatch();
         final Texture      splash = new Texture("loading-splash.jpg");
         final BitmapFont   font   = FontLoader.getDefault();

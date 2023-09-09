@@ -104,7 +104,7 @@ public class ContextBuilder{
     }
 
 
-    /** Показать окно перед выполнением {@link ContextAdapter#init()} */
+    /** Показать окно перед выполнением {@link JpizeApplication#init()} */
     public ContextBuilder showBeforeInit(float r, float g, float b){
         this.initialColor = new Color(r, g, b);
         return this;
@@ -168,7 +168,7 @@ public class ContextBuilder{
     }
 
     /**
-     * Запустить {@link ContextAdapter#fixedUpdate()}
+     * Запустить {@link JpizeApplication#fixedUpdate()}
      * с заданным числом тиков в секунду
      */
     public ContextBuilder enableFixedUpdate(float fixedUpdateTPS){

@@ -1,14 +1,14 @@
 package jpize.tests.window;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.glfw.key.Key;
 import jpize.io.context.ContextBuilder;
 
-public class Main extends ContextAdapter{
+public class Main extends JpizeApplication{
     
     public static void main(String[] args){
         ContextBuilder.newContext("Hello, Window!")

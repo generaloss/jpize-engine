@@ -28,7 +28,7 @@ Modules:
 
 #### 0. Main class
 ``` java
-public class App extends ContextAdapter{
+public class App extends JpizeApplication{
 
     public static void main(String[] args){
         // Create window context

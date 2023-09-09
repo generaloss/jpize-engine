@@ -1,7 +1,7 @@
 package jpize.devtests;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.gl.vertex.GlVertexAttr;
 import jpize.gl.glenum.GlTarget;
@@ -16,7 +16,7 @@ import jpize.math.Maths;
 import jpize.math.vecmath.vector.Vec3f;
 import jpize.math.vecmath.vector.Vec3i;
 
-public class QuadFromNormalTest extends ContextAdapter{
+public class QuadFromNormalTest extends JpizeApplication{
 
     SkyBox skyBox;
 

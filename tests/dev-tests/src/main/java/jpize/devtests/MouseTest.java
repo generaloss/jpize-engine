@@ -1,7 +1,7 @@
 package jpize.devtests;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.glfw.key.Key;
 import jpize.glfw.key.MBtn;
@@ -12,7 +12,7 @@ import jpize.graphics.util.batch.TextureBatch;
 
 import java.util.StringJoiner;
 
-public class MouseTest extends ContextAdapter{
+public class MouseTest extends JpizeApplication{
 
     TextureBatch batch;
     BitmapFont font;

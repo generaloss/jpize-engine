@@ -1,7 +1,7 @@
 package jpize.tests.drift;
 
 import jpize.Jpize;
-import jpize.io.context.ContextAdapter;
+import jpize.io.context.JpizeApplication;
 import jpize.graphics.camera.CenteredOrthographicCamera;
 import jpize.gl.Gl;
 import jpize.graphics.texture.Texture;
@@ -9,7 +9,7 @@ import jpize.graphics.util.batch.TextureBatch;
 import jpize.glfw.key.Key;
 import jpize.io.context.ContextBuilder;
 
-public class Drift extends ContextAdapter{
+public class Drift extends JpizeApplication{
 
     public static void main(String[] args){
         ContextBuilder.newContext("Window")
