@@ -3,7 +3,6 @@ package jpize.tests.minecraftosp.client.block.model;
 import jpize.graphics.texture.Region;
 import jpize.graphics.util.color.Color;
 import jpize.graphics.util.color.IColor;
-import jpize.graphics.util.color.ImmutableColor;
 import jpize.math.vecmath.vector.Vec2f;
 import jpize.math.vecmath.vector.Vec3f;
 import jpize.tests.minecraftosp.client.block.BlockRotation;
@@ -12,7 +11,7 @@ import jpize.tests.minecraftosp.client.chunk.mesh.ChunkMesh;
 public class Face extends Quad{
 
     protected final Vec2f t1, t2, t3, t4;
-    protected IColor color;
+    protected Color color;
     protected byte faceData; // 0 - enable grass coloring, 1 - enable water coloring
 
     public Face(Face face){
@@ -21,7 +20,7 @@ public class Face extends Quad{
         this.t2 = face.t2.copy();
         this.t3 = face.t3.copy();
         this.t4 = face.t4.copy();
-        this.color = new ImmutableColor(face.color);
+        this.color = face.color.copy();
         this.faceData = face.faceData;
     }
 
@@ -31,7 +30,7 @@ public class Face extends Quad{
         this.t2 = t2;
         this.t3 = t3;
         this.t4 = t4;
-        this.color = color;
+        this.color = new Color(color);
     }
 
     public Face(Vec3f p1, Vec3f p2, Vec3f p3, Vec3f p4, Vec2f t1, Vec2f t2, Vec2f t3, Vec2f t4, IColor color){
@@ -259,6 +258,21 @@ public class Face extends Quad{
         mesh.vertexPacked(p2x, p2y, p2z,  t2.x, t2.y,  r2, g2, b2, a2,  ao2, sl2, bl2); // 2
         mesh.vertexPacked(p3x, p3y, p3z,  t3.x, t3.y,  r3, g3, b3, a3,  ao3, sl3, bl3); // 3
         mesh.vertexPacked(p4x, p4y, p4z,  t4.x, t4.y,  r4, g4, b4, a4,  ao4, sl4, bl4); // 4
+    }
+    
+    
+    public Face color(double r, double g, double b, double a){
+        color.set(r, g, b, a);
+        return this;
+    }
+
+    public Face color(double r, double g, double b){
+        color.set3(r, g, b);
+        return this;
+    }
+
+    public Face color(double grayScale){
+        return color(grayScale, grayScale, grayScale);
     }
 
 

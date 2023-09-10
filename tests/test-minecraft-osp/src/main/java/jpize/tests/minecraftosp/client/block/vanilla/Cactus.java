@@ -1,5 +1,6 @@
 package jpize.tests.minecraftosp.client.block.vanilla;
 
+import jpize.graphics.util.color.Color;
 import jpize.tests.minecraftosp.client.block.Block;
 import jpize.tests.minecraftosp.client.block.model.BlockModel;
 import jpize.tests.minecraftosp.client.block.model.Face;
@@ -22,12 +23,12 @@ public class Cactus extends Block{
         final float sideFaceTranslate = 1F / 16;
 
         final BlockModel model = new BlockModel(ChunkMeshType.CUSTOM)
-                .face(new Face(Quad.getNxQuad().translate( sideFaceTranslate, 0, 0), resources.getBlockRegion("cactus_side")))
-                .face(new Face(Quad.getPxQuad().translate(-sideFaceTranslate, 0, 0), resources.getBlockRegion("cactus_side")))
-                .nyFace(resources.getBlockRegion("cactus_bottom"))
+                .face(new Face(Quad.getNxQuad().translate( sideFaceTranslate, 0, 0), resources.getBlockRegion("cactus_side")).color(0.8))
+                .face(new Face(Quad.getPxQuad().translate(-sideFaceTranslate, 0, 0), resources.getBlockRegion("cactus_side")).color(0.8))
+                .nyFace(resources.getBlockRegion("cactus_bottom"), new Color(0.6, 0.6, 0.6))
                 .pyFace(resources.getBlockRegion("cactus_top"))
-                .face(new Face(Quad.getNzQuad().translate(0, 0,  sideFaceTranslate), resources.getBlockRegion("cactus_side")))
-                .face(new Face(Quad.getPzQuad().translate(0, 0, -sideFaceTranslate), resources.getBlockRegion("cactus_side")));
+                .face(new Face(Quad.getNzQuad().translate(0, 0,  sideFaceTranslate), resources.getBlockRegion("cactus_side")).color(0.7))
+                .face(new Face(Quad.getPzQuad().translate(0, 0, -sideFaceTranslate), resources.getBlockRegion("cactus_side")).color(0.7));
 
         newState()
                 .setSolid(true)

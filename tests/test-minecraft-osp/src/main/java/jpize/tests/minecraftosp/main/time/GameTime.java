@@ -3,13 +3,14 @@ package jpize.tests.minecraftosp.main.time;
 import jpize.math.Maths;
 import jpize.tests.minecraftosp.main.Tickable;
 
-public class GameTime implements Tickable {
+public class GameTime implements Tickable{
 
     public static final int TICKS_PER_SECOND = 20;
     public static final int TICKS_IN_SECOND = 20;
     public static final int SECONDS_IN_MINUTE = 60;
-    public static final int TICKS_IN_MINUTE = TICKS_IN_SECOND * SECONDS_IN_MINUTE;
     public static final int MINUTES_IN_DAY = 20;
+    public static final int SECONDS_IN_DAY = SECONDS_IN_MINUTE * MINUTES_IN_DAY;
+    public static final int TICKS_IN_MINUTE = TICKS_IN_SECOND * SECONDS_IN_MINUTE;
     public static final int TICKS_IN_DAY = TICKS_IN_MINUTE * MINUTES_IN_DAY;
 
     public static final int TIME_DAY = 1000;

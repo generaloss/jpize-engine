@@ -1,6 +1,6 @@
 language.code : en_us
-graphics.fov : 99
-graphics.renderDistance : 112
+graphics.fov : 90
+graphics.renderDistance : 1
 graphics.mipmapLevels : 1
 graphics.maxFramerate : 0
 graphics.fullscreen : false
@@ -18,7 +18,7 @@ key.fullscreen : f11
 key.screenshot : f2
 control.mouseSensitivity : 0.5
 sound.master : 1.0
-sound.music : 0.1
+sound.music : 0.14
 sound.ambient : 1.0
 sound.players : 1.0
 sound.blocks : 1.0

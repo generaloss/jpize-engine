@@ -10,7 +10,7 @@ import jpize.tests.minecraftosp.client.control.camera.GameCamera;
 import jpize.tests.minecraftosp.client.control.camera.PerspectiveType;
 import jpize.tests.minecraftosp.client.entity.AbstractClientPlayer;
 import jpize.tests.minecraftosp.client.options.Options;
-import jpize.tests.minecraftosp.main.time.GameTime;
+import jpize.tests.minecraftosp.client.time.ClientGameTime;
 
 public class PlayerModel extends HumanoidModel{
     
@@ -142,8 +142,8 @@ public class PlayerModel extends HumanoidModel{
             rightLeg.getRotation().pitch = 0;
         }
 
-        final GameTime gameTime = player.getLevel().getGame().getTime();
-        final float animationTime = gameTime.getSeconds() * 2;
+        final ClientGameTime gameTime = player.getLevel().getGame().getTime();
+        final float animationTime = gameTime.getLerpSeconds() * 8;
 
         // Animation
         final Velocity3f velocity = this.player.getVelocity();

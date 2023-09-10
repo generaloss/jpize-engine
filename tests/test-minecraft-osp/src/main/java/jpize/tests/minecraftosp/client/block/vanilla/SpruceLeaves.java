@@ -13,7 +13,7 @@ import jpize.tests.minecraftosp.main.chunk.ChunkUtils;
 
 public class SpruceLeaves extends Block{
 
-    public static final ImmutableColor COLOR = new ImmutableColor(0, 0.5, 0.2, 1);
+    public static final ImmutableColor COLOR = new ImmutableColor(0, 0.6, 0.3, 1);
 
     public SpruceLeaves(int id){
         super(id);

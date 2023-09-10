@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Test - Minecraft" type="Application" factoryName="Application">
+  <configuration default="false" name="Test - Minecraft GUI" type="Application" factoryName="Application">
     <option name="ALTERNATIVE_JRE_PATH" value="17" />
     <option name="MAIN_CLASS_NAME" value="jpize.tests.minecraft.run.Minecraft" />
     <module name="test-minecraft" />

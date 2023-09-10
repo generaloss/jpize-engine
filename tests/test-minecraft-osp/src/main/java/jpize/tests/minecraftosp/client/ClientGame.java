@@ -8,6 +8,7 @@ import jpize.net.tcp.packet.IPacket;
 import jpize.tests.minecraftosp.Minecraft;
 import jpize.tests.minecraftosp.client.chat.Chat;
 import jpize.tests.minecraftosp.client.net.ClientConnection;
+import jpize.tests.minecraftosp.client.time.ClientGameTime;
 import jpize.tests.minecraftosp.main.Tickable;
 import jpize.tests.minecraftosp.client.control.camera.GameCamera;
 import jpize.tests.minecraftosp.client.control.BlockRayCast;
@@ -29,7 +30,7 @@ public class ClientGame implements Tickable{
     private final Chat chat;
     private final KeyAES encryptKey;
     private final BlockRayCast blockRayCast;
-    private final GameTime time;
+    private final ClientGameTime time;
     
     private ClientLevel level;
     private LocalPlayer player;
@@ -44,7 +45,7 @@ public class ClientGame implements Tickable{
         
         blockRayCast = new BlockRayCast(session, 2000);
         chat = new Chat(this);
-        time = new GameTime();
+        time = new ClientGameTime(this);
     }
     
     public Minecraft getSession(){
@@ -162,7 +163,7 @@ public class ClientGame implements Tickable{
         return chat;
     }
     
-    public final GameTime getTime(){
+    public final ClientGameTime getTime(){
         return time;
     }
     

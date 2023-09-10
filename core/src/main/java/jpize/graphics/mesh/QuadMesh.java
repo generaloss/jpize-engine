@@ -34,7 +34,8 @@ public class QuadMesh implements IMesh{
 
     @Override
     public void render(){
-        this.render(indexBuffer.getIndexCount());
+        final int indicesCount = (int) (vertexBuffer.getSize() / vertexBuffer.getVertexBytes() * 1.5);
+        this.render(indicesCount);
     }
 
 

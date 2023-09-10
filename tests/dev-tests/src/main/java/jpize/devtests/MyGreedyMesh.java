@@ -2,14 +2,14 @@ package jpize.devtests;
 
 import jpize.Jpize;
 import jpize.gl.Gl;
-import jpize.graphics.font.FontLoader;
-import jpize.graphics.texture.Texture;
+import jpize.gl.type.GlType;
+import jpize.gl.vertex.GlVertexAttr;
+import jpize.glfw.key.Key;
+import jpize.graphics.camera.OrthographicCamera;
+import jpize.graphics.mesh.QuadMesh;
+import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.gui.Align;
-import jpize.gui.components.Image;
-import jpize.gui.components.Layout;
-import jpize.gui.components.TextView;
-import jpize.gui.constraint.Constraint;
+import jpize.graphics.util.color.Color;
 import jpize.io.context.ContextBuilder;
 import jpize.io.context.JpizeApplication;
 import jpize.math.Maths;
@@ -17,114 +17,114 @@ import jpize.math.Maths;
 public class MyGreedyMesh extends JpizeApplication{
 
     public static void main(String[] args){
-        ContextBuilder.newContext(1280, 720, "My Greedy Meshing")
+        ContextBuilder.newContext(1440, 1280, "My Greedy Meshing")
+                .resizable(false)
                 .register().setAdapter(new MyGreedyMesh());
 
         Jpize.runContexts();
     }
 
-
-    TextureBatch batch = new TextureBatch(2048);
-    Layout layout = new Layout();
-    Texture tile1 = new Texture("texture11.png");
-    Texture tile2 = new Texture("texture17.png");
-    Image button1 = new Image(tile1);
-    Image button2 = new Image(tile2);
-    Texture button3d = new Texture("texture2.png");
-    Texture button3h = new Texture("texture1.png");
-    Image button3 = new Image(button3d);
-    TextView selectedText = new TextView("selected: 1", FontLoader.getDefault());
-
-    int gridSize = 64;
-
     int selectedTile = 1;
-    Texture[] tileTexture = new Texture[]{ null, tile1, tile2 };
-    int[][] tiles = new int[gridSize][gridSize];
+    int gridSize = 32;
+    int[][] tiles;
+    int size, x, y;
+
+    QuadMesh mesh;
+    BaseShader shader;
+    OrthographicCamera camera;
+    TextureBatch batch;
+    Color[] tileColors = new Color[]{ new Color(0.7, 1, 0.7), new Color(0, 0.7, 0.7) };
 
     public void init(){
-        button1.setSize(Constraint.pixel(100));
-        button2.setSize(Constraint.pixel(100));
-        button3.setSize(Constraint.pixel(100));
+        batch = new TextureBatch(32);
 
-        button1.setPosition(Constraint.pixel(10));
-        button2.setPosition(Constraint.pixel(120), Constraint.pixel(10));
-        button3.setPosition(Constraint.pixel(10), Constraint.pixel(10));
-        button3.alignSelf(Align.RIGHT_UP);
-
-        button1.getColor().set3(0.9, 1, 0.9);
-        button2.getColor().set3(0.5, 0.5, 0.5);
-
-        selectedText.setPosition(Constraint.pixel(340), Constraint.pixel(-10));
-        selectedText.setSize(Constraint.pixel(200), Constraint.pixel(10));
-
-        layout.alignItems(Align.LEFT_UP);
-        layout.put("button1", button1);
-        layout.put("button2", button2);
-        layout.put("button3", button3);
-        layout.put("selectedText", selectedText);
-
+        tiles = new int[gridSize][gridSize];
         for(int i = 0; i < gridSize; i++)
             for(int j = 0; j < gridSize; j++)
                 tiles[i][j] = Maths.random(1, 2);
+
+        size = (Jpize.getHeight() - 100) / gridSize;
+        x = Jpize.getWidth() / 2 - size * gridSize / 2;
+        y = 50;
+
+        camera = new OrthographicCamera();
+        shader = BaseShader.getPos2Color();
+        mesh = new QuadMesh(
+                gridSize * gridSize,
+                new GlVertexAttr(2, GlType.FLOAT), // position
+                new GlVertexAttr(4, GlType.FLOAT)  // color
+        );
+
+        //greedy();
     }
 
-    public void render(){
-        if(layout.get("button1").isTouchDown()){
-            selectedTile = 1;
-            ((Image) layout.get("button1")).getColor().set3(0.9, 1, 0.9);
-            ((Image) layout.get("button2")).getColor().set3(0.5, 0.5, 0.5);
-            selectedText.setText("selected: 1");
-        }
-        if(layout.get("button2").isTouchDown()){
-            selectedTile = 2;
-            ((Image) layout.get("button1")).getColor().set3(0.5, 0.5, 0.5);
-            ((Image) layout.get("button2")).getColor().set3(0.9, 1, 0.9);
-            selectedText.setText("selected: 2");
-        }
-        if(layout.get("button3").isHover()){
-            ((Image) layout.get("button3")).setTexture(button3h);
-        }else{
-            ((Image) layout.get("button3")).setTexture(button3d);
-        }
-        if(layout.get("button3").isTouchDown()){
-            int tile = Maths.random(1, 2);
-            for(int i = 0; i < gridSize; i++)
-                for(int j = 0; j < gridSize; j++)
-                    tiles[i][j] = tile;
-        }
-
-        batch.begin();
-
-        Gl.clearColorBuffer();
-        Gl.clearColor(0.2, 0.2, 0.25);
-
-        layout.render(batch);
-
-        int size = (Jpize.getHeight() - 100) / gridSize;
-        int x = Jpize.getWidth() / 2 - size * gridSize / 2;
-        int y = 50;
-
+    private void greedy(){
+        quads = 0;
         for(int i = 0; i < gridSize; i++){
             for(int j = 0; j < gridSize; j++){
                 int tile = tiles[i][j];
-
-                Texture texture = tileTexture[tile];
-                batch.draw(texture, x + i * size, y + j * size, size, size);
+                Color color = tileColors[tile - 1];
+                quad(x + i * size, y + j * size, size, size, color);
             }
         }
+    }
+
+    int quads = 0;
+
+    private void quad(int x, int y, int width, int height, Color color){
+        int offset = quads * (2 + 4) * 4 * GlType.FLOAT.getSize();
+        float[] quadVertices = {
+                x        , y + height, color.r(), color.g(), color.b(), color.a(),
+                x        , y         , color.r(), color.g(), color.b(), color.a(),
+                x + width, y         , color.r(), color.g(), color.b(), color.a(),
+                x + width, y + height, color.r(), color.g(), color.b(), color.a()
+        };
+        mesh.getBuffer().setSubData(offset, quadVertices);
+        quads++;
+    }
 
 
-        if(Jpize.mouse().isInBounds(x, y, size * gridSize, size * gridSize)){
-            int i = Maths.floor((Jpize.getX() - x) / size);
-            int j = Maths.floor((Jpize.getY() - y) / size);
+    public void update(){
+        // Exit
+        if(Key.ESCAPE.isDown()) Jpize.exit();
+        // Select
+        if(Key.NUM_1.isDown()) selectedTile = 1;
+        if(Key.NUM_2.isDown()) selectedTile = 2;
+        // Clear
+        if(Key.C.isDown())
+            for(int i = 0; i < gridSize; i++)
+                for(int j = 0; j < gridSize; j++)
+                    tiles[i][j] = 2;
 
-            if(Jpize.isTouched())
-                tiles[i][j] = selectedTile;
+        camera.update();
+    }
 
-            batch.drawQuad(1, 1, 1, 0.3, x + i * size, y + j * size, size, size);
-        }
+    public void render(){
+        Gl.clearColorBuffer();
+        Gl.clearColor(0.2, 0.2, 0.25);
 
-        batch.end();
+        shader.bind();
+        shader.setMatrices(camera);
+        mesh.render();
+
+        // batch.begin();
+        // if(Jpize.mouse().isInBounds(x, y, size * gridSize, size * gridSize)){
+        //     int i = Maths.floor((Jpize.getX() - x) / size);
+        //     int j = Maths.floor((Jpize.getY() - y) / size);
+
+        //     if(Jpize.isTouched())
+        //         tiles[i][j] = selectedTile;
+
+        //     batch.drawQuad(1, 1, 1, 0.3, x + i * size, y + j * size, size, size);
+        // }
+        // batch.end();
+    }
+
+
+    public void dispose(){
+        batch.dispose();
+        shader.dispose();
+        mesh.dispose();
     }
 
 }

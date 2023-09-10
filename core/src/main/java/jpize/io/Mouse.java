@@ -83,6 +83,10 @@ public class Mouse{
         glfwMouse.setCursorMode(show ? GlfwCursorMode.NORMAL : GlfwCursorMode.HIDDEN);
     }
 
+    public void setEnabled(boolean enable){
+        glfwMouse.setCursorMode(enable ? GlfwCursorMode.NORMAL : GlfwCursorMode.DISABLED);
+    }
+
     public void show(){
         glfwMouse.setCursorMode(GlfwCursorMode.NORMAL);
     }

@@ -13,7 +13,7 @@ import jpize.tests.minecraftosp.main.chunk.ChunkUtils;
 
 public class OakLeaves extends Block{
 
-    public static final ImmutableColor COLOR = new ImmutableColor(0.25, 0.8, 0.15);
+    public static final ImmutableColor COLOR = new ImmutableColor(0.35, 0.75, 0.3);
 
     public OakLeaves(int id){
         super(id);

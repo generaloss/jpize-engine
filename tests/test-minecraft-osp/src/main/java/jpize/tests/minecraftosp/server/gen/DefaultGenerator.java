@@ -1,7 +1,6 @@
 package jpize.tests.minecraftosp.server.gen;
 
 import jpize.math.Mathc;
-import jpize.math.Maths;
 import jpize.math.function.FastNoiseLite;
 import jpize.math.util.Random;
 import jpize.tests.minecraftosp.client.block.Block;
@@ -16,11 +15,11 @@ import jpize.tests.minecraftosp.server.gen.structure.Cactus;
 import jpize.tests.minecraftosp.server.gen.structure.Tower;
 import jpize.tests.minecraftosp.server.gen.structure.Tree;
 
-import static jpize.tests.minecraftosp.main.chunk.ChunkUtils.*;
+import static jpize.tests.minecraftosp.main.chunk.ChunkUtils.SIZE;
 
 public class DefaultGenerator extends ChunkGenerator{
     
-    private static final int SEA_LEVEL = 120;
+    private static final int SEA_LEVEL = 64;
 
     private final FastNoiseLite
         continentalnessNoise, erosionNoise, peaksValleysNoise, temperatureNoise, humidityNoise, riverNoise;
@@ -38,7 +37,7 @@ public class DefaultGenerator extends ChunkGenerator{
 
         continentalnessNoise.setFrequency(0.002F); // FIX
         continentalnessNoise.setFractalType(FastNoiseLite.FractalType.FBm);
-        continentalnessNoise.setFractalOctaves(12);
+        continentalnessNoise.setFractalOctaves(9);
 
         humidityNoise.setFrequency(0.0004F); // FIX
         humidityNoise.setFractalType(FastNoiseLite.FractalType.FBm);
@@ -84,28 +83,45 @@ public class DefaultGenerator extends ChunkGenerator{
 
         /** GENERATE SURFACE */
 
+        //for(int lx = 0; lx < SIZE; lx++){
+        //    final int x = lx + baseX;
+        //    for(int lz = 0; lz < SIZE; lz++){
+        //        final int z = lz + baseZ;
+
+        //        final float erosion = erosionNoise.getUnitNoise(x, z); // [0, 1]
+        //        final float continentalness = Mathc.pow((continentalnessNoise.getNoise(x, z) - 0.4), 3);
+        //        final float height = SEA_LEVEL + continentalness * 32;
+
+        //        for(int y = 0; y < height; y++)
+        //            chunk.setBlockFast(lx, y, lz, Blocks.STONE);
+
+        //        final float yRange = HEIGHT_IDX - height;
+        //        for(float y = height; y < HEIGHT; y++){
+        //            final float heightK = y / yRange; // [0, 1]
+        //            final float continentalness3D = continentalnessNoise.getUnitNoise(x, y, z); // [0, 1]
+
+        //            if(Maths.cubic(erosion * continentalness3D) * 1.2 > heightK)
+        //                chunk.setBlockFast(lx, Maths.round(y), lz, Blocks.STONE);
+        //            else
+        //                break;
+        //        }
+        //    }
+        //}
+
         for(int lx = 0; lx < SIZE; lx++){
             final int x = lx + baseX;
             for(int lz = 0; lz < SIZE; lz++){
                 final int z = lz + baseZ;
+                final float continentalness = Mathc.pow((continentalnessNoise.getNoise(x, z) - 0.3), 3);
+                float height = SEA_LEVEL + continentalness * 32;
 
-                final float erosion = erosionNoise.getUnitNoise(x, z); // [0, 1]
-                final float continentalness = Mathc.pow((continentalnessNoise.getNoise(x, z) - 0.4), 3);
-                final int height = Maths.round(continentalness * 32 + 128);
+                float mountains = 0;
+                for(int y = 0; y < 32; y++)
+                    mountains += continentalnessNoise.getNoise(x, height + y, z) / 32;
 
+                height += mountains * 32;
                 for(int y = 0; y < height; y++)
                     chunk.setBlockFast(lx, y, lz, Blocks.STONE);
-
-                final float yRange = HEIGHT_IDX - height;
-                for(int y = height; y < HEIGHT; y++){
-                    final float heightK = (y - height) / yRange; // [0, 1]
-                    final float continentalness3D = continentalnessNoise.getUnitNoise(x, y, z); // [0, 1]
-
-                    if(Maths.quintic(erosion * continentalness3D) * 1.2F > heightK)
-                        chunk.setBlockFast(lx, y, lz, Blocks.STONE);
-                    else
-                        break;
-                }
             }
         }
 
@@ -272,16 +288,24 @@ public class DefaultGenerator extends ChunkGenerator{
 
         for(int lx = 0; lx < SIZE; lx++){
             final int x = lx + baseX;
+            boolean prevCactusGen = false;
+
             for(int lz = 0; lz < SIZE; lz++){
                 final int z = lz + baseZ;
+
                 final int height = heightmapSurface.getHeight(lx, lz);
                 final Biome biome = biomes.getBiome(lx, lz);
 
                 switch(biome){
-                    case DESERT -> Cactus.generate(pool, x, height + 1, z, random);
+                    case DESERT -> {
+                        if(random.randomBoolean(0.008) && !prevCactusGen){
+                            Cactus.generate(pool, x, height + 1, z, random);
+                            prevCactusGen = true;
+                        }
+                    }
 
                     case FOREST -> {
-                        if(random.randomBoolean(0.02)){
+                        if(random.randomBoolean(0.008)){
                             if(random.randomBoolean(0.7))
                                 Tree.generateOakTree(pool, x, height + 1, z, random);
                             else
@@ -290,7 +314,7 @@ public class DefaultGenerator extends ChunkGenerator{
                     }
 
                     case TAIGA -> {
-                        if(random.randomBoolean(0.03))
+                        if(random.randomBoolean(0.01))
                             Tree.generateSpruceTree(pool, x, height + 1, z, random);
 
                         else if(random.randomBoolean(0.0005))
@@ -298,7 +322,7 @@ public class DefaultGenerator extends ChunkGenerator{
                     }
 
                     case SNOWY_TAIGA -> {
-                        if(random.randomBoolean(0.005))
+                        if(random.randomBoolean(0.003))
                             Tree.generateSpruceTree(pool, x, height + 1, z, random);
 
                         else if(random.randomBoolean(0.0005))

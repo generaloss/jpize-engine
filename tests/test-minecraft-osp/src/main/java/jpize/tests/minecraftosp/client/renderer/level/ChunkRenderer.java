@@ -1,9 +1,8 @@
 package jpize.tests.minecraftosp.client.renderer.level;
 
-import jpize.util.Disposable;
 import jpize.files.Resource;
-import jpize.gl.glenum.GlDepthFunc;
 import jpize.gl.Gl;
+import jpize.gl.glenum.GlDepthFunc;
 import jpize.gl.glenum.GlTarget;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.Shader;
@@ -13,6 +12,7 @@ import jpize.tests.minecraftosp.client.control.camera.GameCamera;
 import jpize.tests.minecraftosp.client.level.ClientLevel;
 import jpize.tests.minecraftosp.client.options.Options;
 import jpize.tests.minecraftosp.main.time.GameTime;
+import jpize.util.Disposable;
 
 import java.util.Collection;
 
@@ -29,8 +29,14 @@ public class ChunkRenderer implements Disposable{
         
         Gl.depthFunc(GlDepthFunc.LEQUAL);
 
-        shader = new Shader(new Resource("shader/level/chunk/custom-blocks.vert"), new Resource("shader/level/chunk/custom-blocks.frag"));
-        packedShader = new Shader(new Resource("shader/level/chunk/packed-voxel.vert"), new Resource("shader/level/chunk/packed-voxel.frag"));
+        this.shader = new Shader(
+                new Resource("shader/level/chunk/custom-blocks.vert"),
+                new Resource("shader/level/chunk/custom-blocks.frag")
+        );
+        this.packedShader = new Shader(
+                new Resource("shader/level/chunk/packed-voxel.vert"),
+                new Resource("shader/level/chunk/packed-voxel.frag")
+        );
 
         Gl.polygonOffset(1, 1); // For BlockSelector line rendering
     }

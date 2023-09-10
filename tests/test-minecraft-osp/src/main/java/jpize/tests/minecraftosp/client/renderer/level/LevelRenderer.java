@@ -23,6 +23,7 @@ public class LevelRenderer implements Disposable, Resizable{
     
     // Renderers
     private final SkyRenderer skyRenderer;
+    private final CloudsRenderer cloudsRenderer;
     private final ChunkRenderer chunkRenderer;
     private final ChunkBorderRenderer chunkBorderRenderer;
     private final BlockSelectorRenderer blockSelectorRenderer;
@@ -44,6 +45,7 @@ public class LevelRenderer implements Disposable, Resizable{
         
         // Renderers
         this.skyRenderer = new SkyRenderer(this); // Sky
+        this.cloudsRenderer = new CloudsRenderer(this);
         this.chunkRenderer = new ChunkRenderer(this); // Chunks
         this.chunkBorderRenderer = new ChunkBorderRenderer(this); // Chunk Border (F3 + G)
         this.blockSelectorRenderer = new BlockSelectorRenderer(this); // Block Selector
@@ -55,7 +57,7 @@ public class LevelRenderer implements Disposable, Resizable{
         // Postprocessing
         this.batch = new TextureBatch();
         this.batchFramebuffer = new Framebuffer2D();
-        this.cursorTexture = new Texture("texture/cursor.png");
+        this.cursorTexture = new Texture("texture/gui/cursor.png");
         this.postShader = new Shader(new Resource("shader/post.vert"), new Resource("shader/post.frag"));
         this.postFramebuffer = new Framebuffer3D();
         this.screenColor = new Color();
@@ -87,6 +89,7 @@ public class LevelRenderer implements Disposable, Resizable{
             Gl.enable(GlTarget.DEPTH_TEST);
             
             skyRenderer.render(camera); // Sky
+            cloudsRenderer.render(camera); // Clouds
             chunkRenderer.render(camera); // Chunks
             playerRenderer.render(camera); // Player
             entityRenderer.render(camera); // Entities
@@ -129,6 +132,7 @@ public class LevelRenderer implements Disposable, Resizable{
     public void dispose(){
         // Renderers
         skyRenderer.dispose();
+        cloudsRenderer.dispose();
         chunkRenderer.dispose();
         chunkBorderRenderer.dispose();
         blockSelectorRenderer.dispose();
@@ -148,7 +152,11 @@ public class LevelRenderer implements Disposable, Resizable{
     public final SkyRenderer getSkyRenderer(){
         return skyRenderer;
     }
-    
+
+    public final CloudsRenderer getCloudsRenderer(){
+        return cloudsRenderer;
+    }
+
     public final ChunkRenderer getChunkRenderer(){
         return chunkRenderer;
     }

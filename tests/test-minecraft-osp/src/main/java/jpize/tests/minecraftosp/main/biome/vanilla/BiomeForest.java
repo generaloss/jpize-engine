@@ -5,7 +5,7 @@ import jpize.tests.minecraftosp.main.biome.BiomeProperties;
 public class BiomeForest extends BiomeProperties{
 
     public BiomeForest(){
-        grassColor.set3(0.43, 0.75, 0.3);
+        grassColor.set3(0.45, 0.725, 0.35);
         waterColor.set3(0, 0.4, 0.9);
         hillsMul = 1.4F;
         erosionMul = 1.2F;

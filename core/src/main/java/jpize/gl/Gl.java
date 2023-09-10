@@ -96,6 +96,15 @@ public class Gl{
     }
 
 
+    public static void enableCullFace(){
+        enable(GlTarget.CULL_FACE);
+    }
+
+    public static void disableCullFace(){
+        disable(GlTarget.CULL_FACE);
+    }
+
+
     public static void blendFunc(GlBlendFactor sFactor, GlBlendFactor dFactor){
         glBlendFunc(sFactor.GL, dFactor.GL);
     }

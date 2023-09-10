@@ -133,115 +133,115 @@ public class GlBuffer extends GlObject{
     }
 
 
-    public void setSubData(long offset, int[] data){
+    public void setSubData(long offsetBytes, int[] data){
         bind();
-        glBufferSubData(target.GL, offset, data);
+        glBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void setSubData(long offset, long[] data){
+    public void setSubData(long offsetBytes, long[] data){
         bind();
-        glBufferSubData(target.GL, offset, data);
+        glBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void setSubData(long offset, float[] data){
+    public void setSubData(long offsetBytes, float[] data){
         bind();
-        glBufferSubData(target.GL, offset, data);
+        glBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void setSubData(long offset, short[] data){
+    public void setSubData(long offsetBytes, short[] data){
         bind();
-        glBufferSubData(target.GL, offset, data);
+        glBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void setSubData(long offset, double[] data){
+    public void setSubData(long offsetBytes, double[] data){
         bind();
-        glBufferSubData(target.GL, offset, data);
+        glBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void setSubData(long offset, IntBuffer data){
+    public void setSubData(long offsetBytes, IntBuffer data){
         bind();
-        glBufferSubData(target.GL, offset, data);
+        glBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void setSubData(long offset, ByteBuffer data){
+    public void setSubData(long offsetBytes, ByteBuffer data){
         bind();
-        glBufferSubData(target.GL, offset, data);
+        glBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void setSubData(long offset, LongBuffer data){
+    public void setSubData(long offsetBytes, LongBuffer data){
         bind();
-        glBufferSubData(target.GL, offset, data);
+        glBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void setSubData(long offset, FloatBuffer data){
+    public void setSubData(long offsetBytes, FloatBuffer data){
         bind();
-        glBufferSubData(target.GL, offset, data);
+        glBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void setSubData(long offset, ShortBuffer data){
+    public void setSubData(long offsetBytes, ShortBuffer data){
         bind();
-        glBufferSubData(target.GL, offset, data);
+        glBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void setSubData(long offset, DoubleBuffer data){
+    public void setSubData(long offsetBytes, DoubleBuffer data){
         bind();
-        glBufferSubData(target.GL, offset, data);
+        glBufferSubData(target.GL, offsetBytes, data);
     }
 
 
-    public void getSubData(long offset, int[] data){
+    public void getSubData(long offsetBytes, int[] data){
         bind();
-        glGetBufferSubData(target.GL, offset, data);
+        glGetBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void getSubData(long offset, long[] data){
+    public void getSubData(long offsetBytes, long[] data){
         bind();
-        glGetBufferSubData(target.GL, offset, data);
+        glGetBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void getSubData(long offset, float[] data){
+    public void getSubData(long offsetBytes, float[] data){
         bind();
-        glGetBufferSubData(target.GL, offset, data);
+        glGetBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void getSubData(long offset, short[] data){
+    public void getSubData(long offsetBytes, short[] data){
         bind();
-        glGetBufferSubData(target.GL, offset, data);
+        glGetBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void getSubData(long offset, double[] data){
+    public void getSubData(long offsetBytes, double[] data){
         bind();
-        glGetBufferSubData(target.GL, offset, data);
+        glGetBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void getSubData(long offset, IntBuffer data){
+    public void getSubData(long offsetBytes, IntBuffer data){
         bind();
-        glGetBufferSubData(target.GL, offset, data);
+        glGetBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void getSubData(long offset, ByteBuffer data){
+    public void getSubData(long offsetBytes, ByteBuffer data){
         bind();
-        glGetBufferSubData(target.GL, offset, data);
+        glGetBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void getSubData(long offset, LongBuffer data){
+    public void getSubData(long offsetBytes, LongBuffer data){
         bind();
-        glGetBufferSubData(target.GL, offset, data);
+        glGetBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void getSubData(long offset, FloatBuffer data){
+    public void getSubData(long offsetBytes, FloatBuffer data){
         bind();
-        glGetBufferSubData(target.GL, offset, data);
+        glGetBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void getSubData(long offset, ShortBuffer data){
+    public void getSubData(long offsetBytes, ShortBuffer data){
         bind();
-        glGetBufferSubData(target.GL, offset, data);
+        glGetBufferSubData(target.GL, offsetBytes, data);
     }
 
-    public void getSubData(long offset, DoubleBuffer data){
+    public void getSubData(long offsetBytes, DoubleBuffer data){
         bind();
-        glGetBufferSubData(target.GL, offset, data);
+        glGetBufferSubData(target.GL, offsetBytes, data);
     }
 
 

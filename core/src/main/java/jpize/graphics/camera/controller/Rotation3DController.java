@@ -15,25 +15,25 @@ public class Rotation3DController{
         mouseSensitivity = 1;
         
         nextFrameRotationLock = true;
-        Jpize.mouse().setShow(showMouse);
+        Jpize.mouse().disable();
     }
     
     public void update(){
         if(Jpize.window().isFocused() && !showMouse){
             if(!nextFrameRotationLock && Jpize.mouse().isInWindow()){
-                float x = Jpize.mouse().getX();
-                float y = Jpize.mouse().getY();
+                float x = Jpize.getX();
+                float y = Jpize.getInvY();
                 dAngX += (int) (Jpize.getWidth() / 2F) - x;
                 dAngY += (int) (Jpize.getHeight() / 2F) - y;
                 
-                rotation.yaw += dAngX * 0.02 * mouseSensitivity;
-                rotation.pitch += dAngY * 0.02 * mouseSensitivity;
+                rotation.yaw += dAngX * 0.02F * mouseSensitivity;
+                rotation.pitch += dAngY * 0.02F * mouseSensitivity;
                 rotation.clampPitch90();
             
-                dAngX *= 0.1;
-                dAngY *= 0.1;
+                dAngX *= 0.1F;
+                dAngY *= 0.1F;
             }
-            Jpize.mouse().setPos(Jpize.getWidth() / 2, Jpize.getHeight() / 2);
+            Jpize.mouse().toCenter();
             nextFrameRotationLock = false;
         }
     }
@@ -54,7 +54,7 @@ public class Rotation3DController{
     
     public void showMouse(boolean showMouse){
         this.showMouse = showMouse;
-        Jpize.mouse().setShow(showMouse);
+        Jpize.mouse().setEnabled(showMouse);
     }
     
     public void toggleShowMouse(){

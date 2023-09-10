@@ -19,7 +19,7 @@ public class VignetteRenderer implements Disposable{
     public VignetteRenderer(LevelRenderer levelRenderer){
         this.levelRenderer = levelRenderer;
         
-        vignetteTexture = new Texture("texture/vignette.png");
+        vignetteTexture = new Texture("texture/misc/vignette.png");
     }
     
     

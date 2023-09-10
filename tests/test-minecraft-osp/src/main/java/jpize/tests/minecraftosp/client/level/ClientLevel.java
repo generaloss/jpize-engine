@@ -12,31 +12,31 @@ import jpize.tests.minecraftosp.main.level.Level;
 
 import static jpize.tests.minecraftosp.main.chunk.ChunkUtils.MAX_LIGHT_LEVEL;
 
-public class ClientLevel extends Level {
-    
+public class ClientLevel extends Level{
+
     private final ClientGame game;
     private final ClientChunkManager chunkManager;
     private final ClientLevelConfiguration configuration;
-    
+
     public ClientLevel(ClientGame game, String levelName){
         this.game = game;
         this.chunkManager = new ClientChunkManager(this);
         this.configuration = new ClientLevelConfiguration();
-        
+
         configuration.load(levelName);
     }
-    
+
     public ClientGame getGame(){
         return game;
     }
-    
-    
+
+
     @Override
     public short getBlockState(int x, int y, int z){
         final ClientChunk targetChunk = getBlockChunk(x, z);
         if(targetChunk != null)
             return targetChunk.getBlockState(ChunkUtils.getLocalCoord(x), y, ChunkUtils.getLocalCoord(z));
-        
+
         return Blocks.VOID_AIR.getDefaultData();
     }
 
@@ -66,13 +66,13 @@ public class ClientLevel extends Level {
 
         return false;
     }
-    
+
     @Override
     public int getHeight(HeightmapType heightmapType, int x, int z){
         final ClientChunk targetChunk = getBlockChunk(x, z);
         if(targetChunk != null)
             return targetChunk.getHeightMap(heightmapType).getHeight(ChunkUtils.getLocalCoord(x), ChunkUtils.getLocalCoord(z));
-        
+
         return 0;
     }
 
@@ -82,10 +82,10 @@ public class ClientLevel extends Level {
         final ClientChunk targetChunk = getBlockChunk(x, z);
         if(targetChunk != null)
             return targetChunk.getSkyLight(ChunkUtils.getLocalCoord(x), y, ChunkUtils.getLocalCoord(z));
-        
+
         return MAX_LIGHT_LEVEL;
     }
-    
+
     @Override
     public void setSkyLight(int x, int y, int z, int level){
         final ClientChunk targetChunk = getBlockChunk(x, z);
@@ -125,21 +125,21 @@ public class ClientLevel extends Level {
 
         return null;
     }
-    
-    
+
+
     @Override
     public ClientLevelConfiguration getConfiguration(){
         return configuration;
     }
-    
+
     @Override
     public ClientChunkManager getChunkManager(){
         return chunkManager;
     }
-    
+
     @Override
     public ClientChunk getBlockChunk(int blockX, int blockZ){
         return chunkManager.getChunk(ChunkUtils.getChunkPos(blockX), ChunkUtils.getChunkPos(blockZ));
     }
-    
+
 }
