@@ -101,7 +101,7 @@ public class ChunkRenderer implements Disposable{
         }
 
         // Render translucent blocks
-        Gl.disable(GlTarget.CULL_FACE);
+        //Gl.disable(GlTarget.CULL_FACE);
         for(ClientChunk chunk: chunks){
             shader.setUniform("u_model", chunk.getTranslationMatrix());
             chunk.getMeshStack().getTranslucent().render();
@@ -113,7 +113,7 @@ public class ChunkRenderer implements Disposable{
                 shader.bind();
             }
         }
-        Gl.enable(GlTarget.CULL_FACE);
+        //Gl.enable(GlTarget.CULL_FACE);
     }
     
     private void setupShaders(GameCamera camera){

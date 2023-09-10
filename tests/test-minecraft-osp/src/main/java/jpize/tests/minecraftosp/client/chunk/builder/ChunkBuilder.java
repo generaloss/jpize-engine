@@ -79,7 +79,7 @@ public class ChunkBuilder{
                     currentBiome = chunk.getBiomes().getBiome(lx, lz);
                     final int height = heightmapSurface.getHeight(lx, lz) + 1;
 
-                    for(int y = 0; y < HEIGHT; y++){
+                    for(int y = 0; y < height; y++){
                         final int sectionIndex = getSectionIndex(y);
                         if(sections[sectionIndex] == null)
                             y += SIZE;

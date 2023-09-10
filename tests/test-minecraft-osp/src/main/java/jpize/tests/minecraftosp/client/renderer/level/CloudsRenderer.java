@@ -39,8 +39,8 @@ public class CloudsRenderer implements Disposable{
         renderDistance = options.getRenderDistance() + 1;
 
         this.shader = new Shader(
-                new Resource("shader/level/clouds/clouds.vert"),
-                new Resource("shader/level/clouds/clouds.frag")
+                new Resource("shader/level/sky/clouds.vert"),
+                new Resource("shader/level/sky/clouds.frag")
         );
 
         final int size = (renderDistance * 2 + 1) * ChunkUtils.SIZE;

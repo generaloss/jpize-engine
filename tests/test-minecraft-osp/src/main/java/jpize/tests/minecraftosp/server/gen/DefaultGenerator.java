@@ -1,6 +1,7 @@
 package jpize.tests.minecraftosp.server.gen;
 
 import jpize.math.Mathc;
+import jpize.math.Maths;
 import jpize.math.function.FastNoiseLite;
 import jpize.math.util.Random;
 import jpize.tests.minecraftosp.client.block.Block;
@@ -20,6 +21,8 @@ import static jpize.tests.minecraftosp.main.chunk.ChunkUtils.SIZE;
 public class DefaultGenerator extends ChunkGenerator{
     
     private static final int SEA_LEVEL = 64;
+    private static final float RIVER_MIN = 0.48F;
+    private static final float RIVER_MAX = 0.52F;
 
     private final FastNoiseLite
         continentalnessNoise, erosionNoise, peaksValleysNoise, temperatureNoise, humidityNoise, riverNoise;
@@ -56,8 +59,8 @@ public class DefaultGenerator extends ChunkGenerator{
         temperatureNoise.setFractalOctaves(14);
 
         riverNoise.setFractalType(FastNoiseLite.FractalType.FBm);
-        riverNoise.setFractalOctaves(10);
-        riverNoise.setFrequency(0.0005F); // FIX
+        riverNoise.setFractalOctaves(9);
+        riverNoise.setFrequency(0.0035F); // FIX
 
         random = new Random();
     }
@@ -83,44 +86,58 @@ public class DefaultGenerator extends ChunkGenerator{
 
         /** GENERATE SURFACE */
 
-        //for(int lx = 0; lx < SIZE; lx++){
-        //    final int x = lx + baseX;
-        //    for(int lz = 0; lz < SIZE; lz++){
-        //        final int z = lz + baseZ;
-
-        //        final float erosion = erosionNoise.getUnitNoise(x, z); // [0, 1]
-        //        final float continentalness = Mathc.pow((continentalnessNoise.getNoise(x, z) - 0.4), 3);
-        //        final float height = SEA_LEVEL + continentalness * 32;
-
-        //        for(int y = 0; y < height; y++)
-        //            chunk.setBlockFast(lx, y, lz, Blocks.STONE);
-
-        //        final float yRange = HEIGHT_IDX - height;
-        //        for(float y = height; y < HEIGHT; y++){
-        //            final float heightK = y / yRange; // [0, 1]
-        //            final float continentalness3D = continentalnessNoise.getUnitNoise(x, y, z); // [0, 1]
-
-        //            if(Maths.cubic(erosion * continentalness3D) * 1.2 > heightK)
-        //                chunk.setBlockFast(lx, Maths.round(y), lz, Blocks.STONE);
-        //            else
-        //                break;
-        //        }
-        //    }
-        //}
-
         for(int lx = 0; lx < SIZE; lx++){
             final int x = lx + baseX;
             for(int lz = 0; lz < SIZE; lz++){
+                // Calculate base height
                 final int z = lz + baseZ;
                 final float continentalness = Mathc.pow((continentalnessNoise.getNoise(x, z) - 0.3), 3);
                 float height = SEA_LEVEL + continentalness * 32;
 
-                float mountains = 0;
-                for(int y = 0; y < 32; y++)
-                    mountains += continentalnessNoise.getNoise(x, height + y, z) / 32;
+                // Detail base height
+                float detail = 0;
+                for(int y = 0; y < 24; y++)
+                    detail += continentalnessNoise.getNoise(x, height + y, z) / 32;
 
-                height += mountains * 32;
-                for(int y = 0; y < height; y++)
+                height += detail * 48;
+
+                // Search rivers around and smooth
+                if(height > SEA_LEVEL){
+                    float river = riverNoise.getNoise(x, z) / 2 + 0.5F;
+                    if(river > RIVER_MIN && river < RIVER_MAX){
+
+                        final float range = RIVER_MAX - RIVER_MIN;
+                        final float cp = (RIVER_MAX + RIVER_MIN) / 2;
+                        final float t = Math.abs(river - cp) / range * 2;
+                        height = Maths.lerp(SEA_LEVEL - 2, SEA_LEVEL, t);
+
+                    }else{
+
+                        final int transitionRadius = 6;
+
+                        float minRiverDistance = 100;
+                        for(int i = lx - transitionRadius; i <= lx + transitionRadius; i++){
+                            for(int j = lz - transitionRadius; j <= lz + transitionRadius; j++){
+
+                                river = riverNoise.getNoise(i + baseX, j + baseZ) / 2 + 0.5F;
+                                if(river > RIVER_MIN && river < RIVER_MAX){
+
+                                    final float distance = Mathc.sqrt((i - lx) * (i - lx) + (j - lz) * (j - lz));
+                                    minRiverDistance = Math.min(minRiverDistance, distance);
+                                }
+                            }
+                        }
+                        if(minRiverDistance != 100){
+                            final float min = Math.min(SEA_LEVEL, height);
+                            final float max = Math.max(SEA_LEVEL, height);
+                            final float t = Maths.quintic(Math.min(1, minRiverDistance / transitionRadius));
+                            height = Maths.lerp(min, max, t);
+                        }
+                    }
+                }
+
+                // Fill stone blocks
+                for(int y = 0; y <= height; y++)
                     chunk.setBlockFast(lx, y, lz, Blocks.STONE);
             }
         }
@@ -141,17 +158,17 @@ public class DefaultGenerator extends ChunkGenerator{
                 final float river = riverNoise.getNoise(x, z) / 2 + 0.5F;
 
                 final Biome biome;
-                if(height < SEA_LEVEL){ // OCEAN
-                    if(temperature < 0.3)
-                        biome = Biome.ICE_SEA;
-                    else
-                        biome = Biome.SEA;
-
-                }else if(river > 0.49 && river < 0.5){ // RIVER
+                if(river > RIVER_MIN && river < RIVER_MAX){ // RIVER
                     if(temperature < 0.3)
                         biome = Biome.ICE_RIVER;
                     else
                         biome = Biome.RIVER;
+
+                }else if(height < SEA_LEVEL){ // OCEAN
+                    if(temperature < 0.3)
+                        biome = Biome.ICE_SEA;
+                    else
+                        biome = Biome.SEA;
 
                 }else if(height <= SEA_LEVEL + 7 * peaksValleysNoise.getNoise(x, z)){ // BEACH
                     if(temperature < 0.3)
@@ -204,7 +221,7 @@ public class DefaultGenerator extends ChunkGenerator{
                 final Block surfaceBlock = switch(biome){
                     case DESERT, BEACH, SNOWY_BEACH -> Blocks.SAND;
                     case SNOWY_TAIGA -> Blocks.SNOWY_GRASS_BLOCK;
-                    case RIVER, ICE_RIVER, SEA -> Blocks.DIRT;
+                    case RIVER, ICE_RIVER, SEA, ICE_SEA -> Blocks.DIRT;
                     default -> Blocks.GRASS_BLOCK;
                 };
                 final Block subsurfaceBlock = switch(biome){
@@ -221,16 +238,12 @@ public class DefaultGenerator extends ChunkGenerator{
 
                 // WATER, ICE
                 switch(biome){
-                    case RIVER -> chunk.setBlockFast(lx, height, lz, Blocks.WATER);
-                    case ICE_RIVER -> chunk.setBlockFast(lx, height, lz, Blocks.ICE);
-
-                    case SEA -> {
+                    case RIVER, SEA -> {
                         for(int y = height; y <= SEA_LEVEL; y++)
                             if(chunk.getBlock(lx, y, lz) == Blocks.AIR)
                                 chunk.setBlockFast(lx, y, lz, Blocks.WATER);
                     }
-
-                    case ICE_SEA -> {
+                    case ICE_RIVER, ICE_SEA -> {
                         for(int y = height; y <= SEA_LEVEL; y++)
                             if(chunk.getBlock(lx, y, lz) == Blocks.AIR)
                                 chunk.setBlockFast(lx, y, lz, Blocks.ICE);
