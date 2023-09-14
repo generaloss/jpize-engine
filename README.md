@@ -255,8 +255,8 @@ void received(byte[] bytes, TcpConnection sender){
 
 #### 1. Collider Example:
 ``` java
-BoxBody body_1 = new BoxBody( new BoundingBox3f(-1,-1,-1,  1, 1, 1) ); // 2x2x2 box
-BoxBody body_2 = new BoxBody( new BoundingBox3f(-1,-1,-1,  1, 1, 1) ); // another box
+BoxBody body_1 = new BoxBody( new AxisAlignedBox(-1,-1,-1,  1, 1, 1) ); // 2x2x2 box
+BoxBody body_2 = new BoxBody( new AxisAlignedBox(-1,-1,-1,  1, 1, 1) ); // another box
 
 body_1.getPosition().set(-5F, 0, 0);
 

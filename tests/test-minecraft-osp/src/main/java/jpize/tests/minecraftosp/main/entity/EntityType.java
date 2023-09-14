@@ -1,6 +1,6 @@
 package jpize.tests.minecraftosp.main.entity;
 
-import jpize.physic.BoundingBox3f;
+import jpize.physic.AxisAlignedBox;
 import jpize.tests.minecraftosp.main.level.Level;
 
 import java.util.HashMap;
@@ -14,15 +14,15 @@ public class EntityType<T extends Entity>{
         return entityMap.get(entityID);
     }
     
-    public static final EntityType<Player> PLAYER = new EntityType<>(level->new Player(level, ""), 1, new BoundingBox3f(-0.3, 0, -0.3, 0.3, 1.8, 0.3), false);
+    public static final EntityType<Player> PLAYER = new EntityType<>(level->new Player(level, ""), 1, new AxisAlignedBox(-0.3, 0, -0.3, 0.3, 1.8, 0.3), false);
     
     
     private final EntityFactory<T> factory;
     private final int entityID;
-    private final BoundingBox3f boundingBox;
+    private final AxisAlignedBox boundingBox;
     private final boolean summonable;
     
-    public EntityType(EntityFactory<T> factory, int entityID, BoundingBox3f boundingBox, boolean summonable){
+    public EntityType(EntityFactory<T> factory, int entityID, AxisAlignedBox boundingBox, boolean summonable){
         this.factory = factory;
         this.entityID = entityID;
         this.boundingBox = boundingBox;
@@ -35,7 +35,7 @@ public class EntityType<T extends Entity>{
         return entityID;
     }
     
-    public BoundingBox3f getBoundingBox(){
+    public AxisAlignedBox getBoundingBox(){
         return boundingBox;
     }
     

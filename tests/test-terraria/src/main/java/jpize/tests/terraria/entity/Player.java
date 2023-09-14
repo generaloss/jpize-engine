@@ -5,7 +5,7 @@ import jpize.graphics.util.batch.TextureBatch;
 import jpize.glfw.key.Key;
 import jpize.math.Maths;
 import jpize.math.vecmath.vector.Vec2f;
-import jpize.physic.BoundingBox2f;
+import jpize.physic.AxisAlignedRect;
 import jpize.physic.Collider2f;
 import jpize.physic.RectBody;
 import jpize.tests.terraria.map.MapTile;
@@ -17,12 +17,12 @@ import java.util.List;
 
 public class Player extends Entity{
 
-    private static final BoundingBox2f TILE_BOUNDING_RECT = new BoundingBox2f(0, 0, 1, 1);
+    private static final AxisAlignedRect TILE_BOUNDING_RECT = new AxisAlignedRect(0, 0, 1, 1);
 
     private final List<RectBody> rectList;
 
     public Player(){
-        super(new BoundingBox2f(0, 0, 2, 3));
+        super(new AxisAlignedRect(0, 0, 2, 3));
         rectList = new ArrayList<>();
         getVelocity().setMax(50);
     }

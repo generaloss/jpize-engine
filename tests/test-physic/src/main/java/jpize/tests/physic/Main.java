@@ -7,7 +7,7 @@ import jpize.graphics.util.batch.TextureBatch;
 import jpize.io.context.ContextBuilder;
 import jpize.io.context.JpizeApplication;
 import jpize.math.vecmath.vector.Vec2f;
-import jpize.physic.BoundingBox2f;
+import jpize.physic.AxisAlignedRect;
 import jpize.physic.Collider2f;
 
 public class Main extends JpizeApplication{
@@ -28,10 +28,10 @@ public class Main extends JpizeApplication{
     public void init(){
         batch = new TextureBatch();
 
-        rect1 = new DynamicRect(new BoundingBox2f(-25, -25, 25, 25));
+        rect1 = new DynamicRect(new AxisAlignedRect(-25, -25, 25, 25));
         rect1.motion().setMax(50);
 
-        rect2 = new DynamicRect(new BoundingBox2f(-100, -100, 100, 100));
+        rect2 = new DynamicRect(new AxisAlignedRect(-100, -100, 100, 100));
         rect2.getPosition().add(600, 400);
     }
 

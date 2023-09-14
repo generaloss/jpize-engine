@@ -4,10 +4,10 @@ import jpize.math.vecmath.vector.Vec2f;
 
 public class RectBody{
 
-    private final BoundingBox2f rect;
+    private final AxisAlignedRect rect;
     private final Vec2f position;
 
-    public RectBody(BoundingBox2f rect){
+    public RectBody(AxisAlignedRect rect){
         this.rect = rect;
         position = new Vec2f();
     }
@@ -27,7 +27,7 @@ public class RectBody{
     }
 
 
-    public BoundingBox2f rect(){
+    public AxisAlignedRect rect(){
         return rect;
     }
 

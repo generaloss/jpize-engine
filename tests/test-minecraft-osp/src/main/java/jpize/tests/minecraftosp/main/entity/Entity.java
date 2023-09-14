@@ -3,7 +3,7 @@ package jpize.tests.minecraftosp.main.entity;
 import jpize.math.Maths;
 import jpize.math.util.EulerAngles;
 import jpize.math.vecmath.vector.Vec3f;
-import jpize.physic.BoundingBox3f;
+import jpize.physic.AxisAlignedBox;
 import jpize.physic.BoxBody;
 import jpize.physic.Collider3f;
 import jpize.physic.Velocity3f;
@@ -144,7 +144,7 @@ public abstract class Entity extends BoxBody implements Tickable {
                     if(shape == null)
                         continue;
                     
-                    for(BoundingBox3f boundingBox: shape.getBoxes()){
+                    for(AxisAlignedBox boundingBox: shape.getBoxes()){
                         final BoxBody box = new BoxBody(boundingBox);
                         box.getPosition().set(x, y, z);
                         

@@ -2,22 +2,22 @@ package jpize.physic;
 
 import jpize.math.vecmath.vector.Vec2f;
 
-public class BoundingBox2f {
+public class AxisAlignedRect{
 
     private final Vec2f min, max;
 
 
-    public BoundingBox2f(double minX, double minY, double maxX, double maxY){
+    public AxisAlignedRect(double minX, double minY, double maxX, double maxY){
         this.min = new Vec2f(minX, minY);
         this.max = new Vec2f(maxX, maxY);
     }
 
-    public BoundingBox2f(Vec2f min, Vec2f max){
+    public AxisAlignedRect(Vec2f min, Vec2f max){
         this.min = min;
         this.max = max;
     }
 
-    public BoundingBox2f(BoundingBox2f box){
+    public AxisAlignedRect(AxisAlignedRect box){
         min = box.min.copy();
         max = box.max.copy();
     }
@@ -33,7 +33,7 @@ public class BoundingBox2f {
         this.max.set(max);
     }
     
-    public void resize(BoundingBox2f box){
+    public void resize(AxisAlignedRect box){
         resize(box.min, box.max);
     }
 
@@ -99,8 +99,8 @@ public class BoundingBox2f {
     }
 
 
-    public BoundingBox2f copy(){
-        return new BoundingBox2f(this);
+    public AxisAlignedRect copy(){
+        return new AxisAlignedRect(this);
     }
 
 }
