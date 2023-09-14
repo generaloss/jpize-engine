@@ -1,18 +1,18 @@
-package jpize.physic;
+package jpize.physic.axisaligned.rect;
 
 import jpize.math.vecmath.vector.Vec2f;
 
-public class RectBody{
+public class AARectBody{
 
-    private final AxisAlignedRect rect;
+    private final AARect rect;
     private final Vec2f position;
 
-    public RectBody(AxisAlignedRect rect){
+    public AARectBody(AARect rect){
         this.rect = rect;
         position = new Vec2f();
     }
 
-    public RectBody(RectBody body){
+    public AARectBody(AARectBody body){
         rect = body.rect.copy();
         position = body.getPosition().copy();
     }
@@ -27,7 +27,7 @@ public class RectBody{
     }
 
 
-    public AxisAlignedRect rect(){
+    public AARect rect(){
         return rect;
     }
 
@@ -36,8 +36,8 @@ public class RectBody{
     }
 
 
-    public RectBody copy(){
-        return new RectBody(this);
+    public AARectBody copy(){
+        return new AARectBody(this);
     }
 
 }

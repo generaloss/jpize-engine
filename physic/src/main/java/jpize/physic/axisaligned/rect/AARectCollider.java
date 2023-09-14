@@ -1,10 +1,10 @@
-package jpize.physic;
+package jpize.physic.axisaligned.rect;
 
 import jpize.math.vecmath.vector.Vec2f;
 
-public class Collider2f{
+public class AARectCollider{
 
-    public static Vec2f getCollidedMovement(Vec2f movement, RectBody body1, RectBody... otherBodies){
+    public static Vec2f getCollidedMovement(Vec2f movement, AARectBody body1, AARectBody... otherBodies){
         // If movement == 0, return 0
         if(movement.isZero())
             return movement;
@@ -22,9 +22,9 @@ public class Collider2f{
     }
 
 
-    private static float minMovementX(float movementX, RectBody body1, RectBody[] otherBodies){
+    private static float minMovementX(float movementX, AARectBody body1, AARectBody[] otherBodies){
         // Iterate other bodies
-        for(RectBody body2: otherBodies){
+        for(AARectBody body2: otherBodies){
             if(movementX == 0)
                 break;
 
@@ -34,8 +34,8 @@ public class Collider2f{
         return movementX;
     }
 
-    private static float minMovementY(float movementY, RectBody body1, RectBody[] otherBodies){
-        for(RectBody body2: otherBodies){
+    private static float minMovementY(float movementY, AARectBody body1, AARectBody[] otherBodies){
+        for(AARectBody body2: otherBodies){
             if(movementY == 0)
                 break;
 
@@ -45,7 +45,7 @@ public class Collider2f{
     }
 
 
-    private static float distX(float movementX, RectBody body1, RectBody body2){
+    private static float distX(float movementX, AARectBody body1, AARectBody body2){
         // Ensure that the bodies intersect on the other axis and that collision is possible
         if(body1.getMax().y > body2.getMin().y &&
            body1.getMin().y < body2.getMax().y){
@@ -80,7 +80,7 @@ public class Collider2f{
         return movementX;
     }
     
-    private static float distY(float movementY, RectBody body1, RectBody body2){
+    private static float distY(float movementY, AARectBody body1, AARectBody body2){
         if(body1.getMax().x > body2.getMin().x &&
            body1.getMin().x < body2.getMax().x){
 

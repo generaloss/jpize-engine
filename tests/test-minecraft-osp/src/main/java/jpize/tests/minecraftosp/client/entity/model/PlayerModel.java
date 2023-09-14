@@ -4,7 +4,7 @@ import jpize.Jpize;
 import jpize.math.Mathc;
 import jpize.math.Maths;
 import jpize.math.vecmath.vector.Vec3f;
-import jpize.physic.Velocity3f;
+import jpize.physic.utils.Velocity3f;
 import jpize.tests.minecraftosp.Minecraft;
 import jpize.tests.minecraftosp.client.control.camera.GameCamera;
 import jpize.tests.minecraftosp.client.control.camera.PerspectiveType;

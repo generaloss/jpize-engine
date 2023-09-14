@@ -1,4 +1,4 @@
-package jpize.physic;
+package jpize.physic.utils;
 
 import jpize.math.vecmath.vector.Vec2f;
 

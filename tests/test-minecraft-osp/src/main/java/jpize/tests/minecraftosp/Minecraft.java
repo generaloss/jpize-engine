@@ -9,7 +9,7 @@ import jpize.io.context.JpizeApplication;
 import jpize.math.Mathc;
 import jpize.math.Maths;
 import jpize.math.vecmath.vector.Vec3f;
-import jpize.physic.Velocity3f;
+import jpize.physic.utils.Velocity3f;
 import jpize.tests.minecraftosp.client.ClientGame;
 import jpize.tests.minecraftosp.client.audio.MusicGroup;
 import jpize.tests.minecraftosp.client.audio.MusicPlayer;

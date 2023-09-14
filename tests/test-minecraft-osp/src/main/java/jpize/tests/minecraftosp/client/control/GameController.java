@@ -8,8 +8,8 @@ import jpize.glfw.key.Key;
 import jpize.math.Maths;
 import jpize.math.vecmath.vector.Vec3f;
 import jpize.math.vecmath.vector.Vec3i;
-import jpize.physic.AxisAlignedBox;
-import jpize.physic.BoxBody;
+import jpize.physic.axisaligned.box.AABox;
+import jpize.physic.axisaligned.box.AABoxBody;
 import jpize.tests.minecraftosp.Minecraft;
 import jpize.tests.minecraftosp.client.block.Block;
 import jpize.tests.minecraftosp.client.block.Blocks;
@@ -213,12 +213,12 @@ public class GameController{
         final BlockCollide collideShape = block.getState(blockState).getCollide();
         if(collideShape != null){
             
-            final AxisAlignedBox[] blockBoxes = collideShape.getBoxes();
-            final BoxBody blockBox = new BoxBody(new Vec3f(blockPos));
+            final AABox[] blockBoxes = collideShape.getBoxes();
+            final AABoxBody blockBox = new AABoxBody(new Vec3f(blockPos));
             final Collection<Entity> entities = session.getGame().getLevel().getEntities();
             
             // Check intersect with player & entity
-            for(AxisAlignedBox box: blockBoxes){
+            for(AABox box: blockBoxes){
                 blockBox.getBoundingBox().resize(box);
                 
                 if(player.intersects(blockBox))

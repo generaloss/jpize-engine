@@ -7,7 +7,7 @@ import jpize.net.tcp.packet.PacketHandler;
 import jpize.tests.minecraftosp.server.player.ServerPlayer;
 import jpize.util.io.JpizeInputStream;
 import jpize.util.io.JpizeOutputStream;
-import jpize.physic.Velocity3f;
+import jpize.physic.utils.Velocity3f;
 
 import java.io.IOException;
 import java.util.UUID;

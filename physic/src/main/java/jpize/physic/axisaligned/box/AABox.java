@@ -1,23 +1,23 @@
-package jpize.physic;
+package jpize.physic.axisaligned.box;
 
 import jpize.math.vecmath.vector.Vec3f;
 
-public class AxisAlignedBox{
+public class AABox{
     
     private final Vec3f min, max;
     
     
-    public AxisAlignedBox(double minX, double minY, double minZ, double maxX, double maxY, double maxZ){
+    public AABox(double minX, double minY, double minZ, double maxX, double maxY, double maxZ){
         this.min = new Vec3f(minX, minY, minZ);
         this.max = new Vec3f(maxX, maxY, maxZ);
     }
     
-    public AxisAlignedBox(Vec3f min, Vec3f max){
+    public AABox(Vec3f min, Vec3f max){
         this.min = min;
         this.max = max;
     }
     
-    public AxisAlignedBox(AxisAlignedBox box){
+    public AABox(AABox box){
         this.min = box.min.copy();
         this.max = box.max.copy();
     }
@@ -33,7 +33,7 @@ public class AxisAlignedBox{
         this.max.set(max);
     }
     
-    public void resize(AxisAlignedBox box){
+    public void resize(AABox box){
         resize(box.min, box.max);
     }
     
@@ -107,8 +107,8 @@ public class AxisAlignedBox{
     }
     
     
-    public AxisAlignedBox copy(){
-        return new AxisAlignedBox(this);
+    public AABox copy(){
+        return new AABox(this);
     }
     
 }

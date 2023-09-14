@@ -4,7 +4,7 @@ import jpize.graphics.texture.Region;
 import jpize.graphics.util.color.Color;
 import jpize.math.Maths;
 import jpize.math.vecmath.vector.Vec3f;
-import jpize.physic.Velocity3f;
+import jpize.physic.utils.Velocity3f;
 
 public class ParticleInstance{
     

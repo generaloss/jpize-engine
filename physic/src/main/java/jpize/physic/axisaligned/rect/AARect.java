@@ -1,23 +1,23 @@
-package jpize.physic;
+package jpize.physic.axisaligned.rect;
 
 import jpize.math.vecmath.vector.Vec2f;
 
-public class AxisAlignedRect{
+public class AARect{
 
     private final Vec2f min, max;
 
 
-    public AxisAlignedRect(double minX, double minY, double maxX, double maxY){
+    public AARect(double minX, double minY, double maxX, double maxY){
         this.min = new Vec2f(minX, minY);
         this.max = new Vec2f(maxX, maxY);
     }
 
-    public AxisAlignedRect(Vec2f min, Vec2f max){
+    public AARect(Vec2f min, Vec2f max){
         this.min = min;
         this.max = max;
     }
 
-    public AxisAlignedRect(AxisAlignedRect box){
+    public AARect(AARect box){
         min = box.min.copy();
         max = box.max.copy();
     }
@@ -33,7 +33,7 @@ public class AxisAlignedRect{
         this.max.set(max);
     }
     
-    public void resize(AxisAlignedRect box){
+    public void resize(AARect box){
         resize(box.min, box.max);
     }
 
@@ -99,8 +99,8 @@ public class AxisAlignedRect{
     }
 
 
-    public AxisAlignedRect copy(){
-        return new AxisAlignedRect(this);
+    public AARect copy(){
+        return new AARect(this);
     }
 
 }

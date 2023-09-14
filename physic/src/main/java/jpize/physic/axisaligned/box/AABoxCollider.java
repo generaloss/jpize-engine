@@ -1,10 +1,10 @@
-package jpize.physic;
+package jpize.physic.axisaligned.box;
 
 import jpize.math.vecmath.vector.Vec3f;
 
-public class Collider3f{
+public class AABoxCollider{
 
-    public static Vec3f getCollidedMovement(Vec3f movement, BoxBody body1, BoxBody... otherBodies){
+    public static Vec3f getCollidedMovement(Vec3f movement, AABoxBody body1, AABoxBody... otherBodies){
         // If movement == 0, return 0
         if(movement.isZero())
             return movement;
@@ -24,9 +24,9 @@ public class Collider3f{
     }
 
 
-    private static float minMovementX(float movementX, BoxBody body1, BoxBody[] otherBodies){
+    private static float minMovementX(float movementX, AABoxBody body1, AABoxBody[] otherBodies){
         // Iterate other bodies
-        for(BoxBody body2: otherBodies){
+        for(AABoxBody body2: otherBodies){
             if(movementX == 0)
                 break;
 
@@ -36,8 +36,8 @@ public class Collider3f{
         return movementX;
     }
 
-    private static float minMovementY(float movementY, BoxBody body1, BoxBody[] otherBodies){
-        for(BoxBody body2: otherBodies){
+    private static float minMovementY(float movementY, AABoxBody body1, AABoxBody[] otherBodies){
+        for(AABoxBody body2: otherBodies){
             if(movementY == 0)
                 break;
 
@@ -46,8 +46,8 @@ public class Collider3f{
         return movementY;
     }
 
-    private static float minMovementZ(float movementZ, BoxBody body1, BoxBody[] otherBodies){
-        for(BoxBody body2: otherBodies){
+    private static float minMovementZ(float movementZ, AABoxBody body1, AABoxBody[] otherBodies){
+        for(AABoxBody body2: otherBodies){
             if(movementZ == 0)
                 break;
 
@@ -57,7 +57,7 @@ public class Collider3f{
     }
 
 
-    private static float distX(float movementX, BoxBody body1, BoxBody body2){
+    private static float distX(float movementX, AABoxBody body1, AABoxBody body2){
         // Ensure that the bodies intersect on the other axes and that collision is possible
         if(body2.getMax().y > body1.getMin().y && body2.getMin().y < body1.getMax().y &&
            body2.getMax().z > body1.getMin().z && body2.getMin().z < body1.getMax().z){
@@ -92,7 +92,7 @@ public class Collider3f{
         return movementX;
     }
     
-    private static float distY(float movementY, BoxBody body1, BoxBody body2){
+    private static float distY(float movementY, AABoxBody body1, AABoxBody body2){
         if(body2.getMax().x > body1.getMin().x && body2.getMin().x < body1.getMax().x &&
            body2.getMax().z > body1.getMin().z && body2.getMin().z < body1.getMax().z){
 
@@ -117,7 +117,7 @@ public class Collider3f{
         return movementY;
     }
     
-    private static float distZ(float movementZ, BoxBody body1, BoxBody body2){
+    private static float distZ(float movementZ, AABoxBody body1, AABoxBody body2){
         if(body2.getMax().x > body1.getMin().x && body2.getMin().x < body1.getMax().x &&
            body2.getMax().y > body1.getMin().y && body2.getMin().y < body1.getMax().y){
 

@@ -1,14 +1,14 @@
 package jpize.tests.physic;
 
-import jpize.physic.AxisAlignedRect;
-import jpize.physic.RectBody;
-import jpize.physic.Velocity2f;
+import jpize.physic.axisaligned.rect.AARect;
+import jpize.physic.axisaligned.rect.AARectBody;
+import jpize.physic.utils.Velocity2f;
 
-public class DynamicRect extends RectBody{
+public class DynamicRect extends AARectBody{
 
     private final Velocity2f velocity;
 
-    public DynamicRect(AxisAlignedRect rect){
+    public DynamicRect(AARect rect){
         super(rect);
 
         velocity = new Velocity2f();

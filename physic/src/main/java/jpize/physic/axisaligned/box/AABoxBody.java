@@ -1,30 +1,30 @@
-package jpize.physic;
+package jpize.physic.axisaligned.box;
 
 import jpize.math.vecmath.vector.Vec3f;
 
-public class BoxBody{
+public class AABoxBody{
 
-    private final AxisAlignedBox boundingBox;
+    private final AABox boundingBox;
     private final Vec3f position;
     
-    public BoxBody(){
-        this(new AxisAlignedBox(0, 0, 0, 0, 0, 0), new Vec3f());
+    public AABoxBody(){
+        this(new AABox(0, 0, 0, 0, 0, 0), new Vec3f());
     }
     
-    public BoxBody(Vec3f position){
-        this(new AxisAlignedBox(0, 0, 0, 0, 0, 0), position);
+    public AABoxBody(Vec3f position){
+        this(new AABox(0, 0, 0, 0, 0, 0), position);
     }
     
-    public BoxBody(AxisAlignedBox box){
+    public AABoxBody(AABox box){
         this(box, new Vec3f());
     }
     
-    public BoxBody(AxisAlignedBox box, Vec3f position){
+    public AABoxBody(AABox box, Vec3f position){
         this.boundingBox = box;
         this.position = position;
     }
     
-    public BoxBody(BoxBody body){
+    public AABoxBody(AABoxBody body){
         this(body.getBoundingBox().copy(), body.getPosition().copy());
     }
     
@@ -38,7 +38,7 @@ public class BoxBody{
     }
 
 
-    public AxisAlignedBox getBoundingBox(){
+    public AABox getBoundingBox(){
         return boundingBox;
     }
 
@@ -47,7 +47,7 @@ public class BoxBody{
     }
     
     
-    public boolean intersects(BoxBody body){
+    public boolean intersects(AABoxBody body){
         return (
             (this.getMin().x < body.getMax().x && this.getMax().x > body.getMin().x) &&
             (this.getMin().y < body.getMax().y && this.getMax().y > body.getMin().y) &&
@@ -56,8 +56,8 @@ public class BoxBody{
     }
 
 
-    public BoxBody copy(){
-        return new BoxBody(this);
+    public AABoxBody copy(){
+        return new AABoxBody(this);
     }
 
 }

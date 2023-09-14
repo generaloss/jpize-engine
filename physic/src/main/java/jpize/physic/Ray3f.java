@@ -2,6 +2,7 @@ package jpize.physic;
 
 import jpize.math.Maths;
 import jpize.math.vecmath.vector.Vec3f;
+import jpize.physic.axisaligned.box.AABoxBody;
 
 public class Ray3f{
     
@@ -47,7 +48,7 @@ public class Ray3f{
     }
     
     
-    public boolean intersects(BoxBody box){
+    public boolean intersects(AABoxBody box){
         final Vec3f min = box.getMin();
         final Vec3f max = box.getMax();
         

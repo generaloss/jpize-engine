@@ -1,15 +1,15 @@
 package jpize.tests.terraria.entity;
 
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.physic.AxisAlignedRect;
-import jpize.physic.Velocity2f;
-import jpize.physic.RectBody;
+import jpize.physic.axisaligned.rect.AARect;
+import jpize.physic.utils.Velocity2f;
+import jpize.physic.axisaligned.rect.AARectBody;
 
-public abstract class Entity extends RectBody{
+public abstract class Entity extends AARectBody{
 
     private final Velocity2f velocity;
 
-    public Entity(AxisAlignedRect rect){
+    public Entity(AARect rect){
         super(rect);
 
         velocity = new Velocity2f();

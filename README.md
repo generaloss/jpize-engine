@@ -250,18 +250,18 @@ void received(byte[] bytes, TcpConnection sender){
 ```
 
 ### Physic:
-* AABB Collider (2D, 3D)
+* Axis-Aligned Box & Rect Collider
 * Utils (Velocity, Body)
 
-#### 1. Collider Example:
+#### 1. AABB Collider Example:
 ``` java
-BoxBody body_1 = new BoxBody( new AxisAlignedBox(-1,-1,-1,  1, 1, 1) ); // 2x2x2 box
-BoxBody body_2 = new BoxBody( new AxisAlignedBox(-1,-1,-1,  1, 1, 1) ); // another box
+AABoxBody body_1 = new AABoxBody( new AABox(-1,-1,-1,  1, 1, 1) ); // 2x2x2 axis-aligned box
+AABoxBody body_2 = new AABoxBody( new AABox(-1,-1,-1,  1, 1, 1) ); // another axis-aligned box
 
 body_1.getPosition().set(-5F, 0, 0);
 
 Vec3f b1_velocity = new Vec3f(10F, 0, 0);
-velocity = Collider3f.getCollidedMovement(b1_velocity, body_1, body_2);
+velocity = AABoxCollider.getCollidedMovement(b1_velocity, body_1, body_2);
 
 body_1.getPosition().add( b1_velocity ); // box will be move only 3 units
 ```

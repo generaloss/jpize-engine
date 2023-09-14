@@ -3,10 +3,10 @@ package jpize.tests.minecraftosp.main.entity;
 import jpize.math.Maths;
 import jpize.math.util.EulerAngles;
 import jpize.math.vecmath.vector.Vec3f;
-import jpize.physic.AxisAlignedBox;
-import jpize.physic.BoxBody;
-import jpize.physic.Collider3f;
-import jpize.physic.Velocity3f;
+import jpize.physic.axisaligned.box.AABox;
+import jpize.physic.axisaligned.box.AABoxBody;
+import jpize.physic.axisaligned.box.AABoxCollider;
+import jpize.physic.utils.Velocity3f;
 import jpize.tests.minecraftosp.client.block.BlockProps;
 import jpize.tests.minecraftosp.client.block.Blocks;
 import jpize.tests.minecraftosp.client.block.shape.BlockCollide;
@@ -19,7 +19,7 @@ import jpize.tests.minecraftosp.main.level.Level;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public abstract class Entity extends BoxBody implements Tickable {
+public abstract class Entity extends AABoxBody implements Tickable {
     
     private Level level;
     private final EntityType<?> entityType;
@@ -27,7 +27,7 @@ public abstract class Entity extends BoxBody implements Tickable {
     private final Velocity3f velocity;
     private UUID uuid;
     
-    private BoxBody[] blockBoxes;
+    private AABoxBody[] blockBoxes;
     private boolean onGround;
     
     public Entity(EntityType<?> entityType, Level level){
@@ -95,17 +95,17 @@ public abstract class Entity extends BoxBody implements Tickable {
     
     public boolean isCollidedTo(Dir face){
         final Vec3f dir = new Vec3f(face.getNormal()).mul(Maths.Epsilon);
-        return Collider3f.getCollidedMovement(dir, this, blockBoxes).len2() < dir.len2();
+        return AABoxCollider.getCollidedMovement(dir, this, blockBoxes).len2() < dir.len2();
     }
     
     public boolean isCollidedTo(Vec3f direction){
         final Vec3f dir = direction.copy().nor().mul(Maths.Epsilon);
-        return Collider3f.getCollidedMovement(dir, this, blockBoxes).len2() < dir.len2();
+        return AABoxCollider.getCollidedMovement(dir, this, blockBoxes).len2() < dir.len2();
     }
     
     /** Get Bounding Boxes of blocks around Entity */
-    private BoxBody[] getBlockBoxes(){
-        final ArrayList<BoxBody> blockBoxes = new ArrayList<>();
+    private AABoxBody[] getBlockBoxes(){
+        final ArrayList<AABoxBody> blockBoxes = new ArrayList<>();
         
         final Velocity3f velocity = getVelocity();
         final Vec3f min = this.getMin();
@@ -134,7 +134,7 @@ public abstract class Entity extends BoxBody implements Tickable {
                         continue;
 
                     if(block.getID() == Blocks.VOID_AIR.getID()){
-                        final BoxBody box = new BoxBody(BlockCollide.SOLID.getBoxes()[0]);
+                        final AABoxBody box = new AABoxBody(BlockCollide.SOLID.getBoxes()[0]);
                         box.getPosition().set(x, y, z);
                         blockBoxes.add(box);
                         continue;
@@ -144,22 +144,22 @@ public abstract class Entity extends BoxBody implements Tickable {
                     if(shape == null)
                         continue;
                     
-                    for(AxisAlignedBox boundingBox: shape.getBoxes()){
-                        final BoxBody box = new BoxBody(boundingBox);
+                    for(AABox boundingBox: shape.getBoxes()){
+                        final AABoxBody box = new AABoxBody(boundingBox);
                         box.getPosition().set(x, y, z);
                         
                         blockBoxes.add(box);
                     }
                 }
         
-        return blockBoxes.toArray(new BoxBody[0]);
+        return blockBoxes.toArray(new AABoxBody[0]);
     }
     
     protected Vec3f moveEntity(Vec3f motion){
         if(blockBoxes == null)
             return null;
         
-        final Vec3f collidedMove = Collider3f.getCollidedMovement(motion, this, blockBoxes);
+        final Vec3f collidedMove = AABoxCollider.getCollidedMovement(motion, this, blockBoxes);
         getPosition().add(collidedMove);
         
         return collidedMove;

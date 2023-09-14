@@ -7,8 +7,8 @@ import jpize.graphics.util.batch.TextureBatch;
 import jpize.io.context.ContextBuilder;
 import jpize.io.context.JpizeApplication;
 import jpize.math.vecmath.vector.Vec2f;
-import jpize.physic.AxisAlignedRect;
-import jpize.physic.Collider2f;
+import jpize.physic.axisaligned.rect.AARect;
+import jpize.physic.axisaligned.rect.AARectCollider;
 
 public class Main extends JpizeApplication{
 
@@ -28,10 +28,10 @@ public class Main extends JpizeApplication{
     public void init(){
         batch = new TextureBatch();
 
-        rect1 = new DynamicRect(new AxisAlignedRect(-25, -25, 25, 25));
+        rect1 = new DynamicRect(new AARect(-25, -25, 25, 25));
         rect1.motion().setMax(50);
 
-        rect2 = new DynamicRect(new AxisAlignedRect(-100, -100, 100, 100));
+        rect2 = new DynamicRect(new AARect(-100, -100, 100, 100));
         rect2.getPosition().add(600, 400);
     }
 
@@ -47,7 +47,7 @@ public class Main extends JpizeApplication{
         if(Jpize.isTouched())
             rect1.motion().add(Jpize.getCursorPos().sub(rect1.getPosition()).nor());
 
-        final Vec2f collidedMotion = Collider2f.getCollidedMovement(rect1.motion(), rect1, rect2);
+        final Vec2f collidedMotion = AARectCollider.getCollidedMovement(rect1.motion(), rect1, rect2);
         rect1.getPosition().add(collidedMotion);
         rect1.motion().clampToMax().reduce(0.3).collidedAxesToZero(collidedMotion);
 

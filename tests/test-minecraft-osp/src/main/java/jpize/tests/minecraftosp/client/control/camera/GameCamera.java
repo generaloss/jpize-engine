@@ -5,7 +5,7 @@ import jpize.graphics.camera.PerspectiveCamera;
 import jpize.math.Maths;
 import jpize.math.util.EulerAngles;
 import jpize.math.vecmath.vector.Vec3f;
-import jpize.physic.Velocity3f;
+import jpize.physic.utils.Velocity3f;
 import jpize.tests.minecraftosp.client.ClientGame;
 import jpize.tests.minecraftosp.client.block.BlockProps;
 import jpize.tests.minecraftosp.client.block.Blocks;
