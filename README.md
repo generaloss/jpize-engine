@@ -261,9 +261,9 @@ BoxBody body_2 = new BoxBody( new BoundingBox3f(-1,-1,-1,  1, 1, 1) ); // anothe
 body_1.getPosition().set(-5F, 0, 0);
 
 Vec3f b1_velocity = new Vec3f(10F, 0, 0);
-velocity = Collider3f.getCollidedMotion(body_1, b1_velocity, body_2);
+velocity = Collider3f.getCollidedMovement(b1_velocity, body_1, body_2);
 
-body_1.getPosition().add( b1_velocity ); // box will move only 3 units
+body_1.getPosition().add( b1_velocity ); // box will be move only 3 units
 ```
 
 ### UI:
