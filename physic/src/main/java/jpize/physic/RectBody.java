@@ -14,7 +14,7 @@ public class RectBody{
 
     public RectBody(RectBody body){
         rect = body.rect.copy();
-        position = body.pos().copy();
+        position = body.getPosition().copy();
     }
 
 
@@ -31,7 +31,7 @@ public class RectBody{
         return rect;
     }
 
-    public Vec2f pos(){
+    public Vec2f getPosition(){
         return position;
     }
 

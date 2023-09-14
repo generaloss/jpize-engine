@@ -4,92 +4,142 @@ import jpize.math.vecmath.vector.Vec3f;
 
 public class Collider3f{
 
-    public static Vec3f getCollidedMotion(BoxBody body, Vec3f motion, BoxBody... boxes){
-        if(motion.isZero())
-            return motion;
+    public static Vec3f getCollidedMovement(Vec3f movement, BoxBody body1, BoxBody... otherBodies){
+        // If movement == 0, return 0
+        if(movement.isZero())
+            return movement;
 
-        body = body.copy();
+        // Copy body for safe addition to body.position.X & Y for correct calculation movementY & Z
+        body1 = body1.copy();
 
-        float x = motion.x;
-        for(BoxBody box: boxes)
-            if(x != 0)
-                x = distX(x, body, box);
-        body.getPosition().x += x;
-        
-        float y = motion.y;
-        for(BoxBody box: boxes)
-            if(y != 0)
-                y = distY(y, body, box);
-        body.getPosition().y += y;
-        
-        float z = motion.z;
-        for(BoxBody box: boxes)
-            if(z != 0)
-                z = distZ(z, body, box);
-        body.getPosition().z += z;
+        // Calculate
+        final float movementX = minMovementX(movement.x, body1, otherBodies);
+        body1.getPosition().x += movementX;
+        final float movementY = minMovementY(movement.y, body1, otherBodies);
+        body1.getPosition().y += movementY;
+        final float movementZ = minMovementZ(movement.z, body1, otherBodies);
 
-        return new Vec3f(x, y, z);
+        // Return calculated movement
+        return new Vec3f(movementX, movementY, movementZ);
     }
 
 
-    private static float distX(float motion, BoxBody body, BoxBody box){
-        if(motion == 0)
-            return 0;
-        if(box.getMax().y > body.getMin().y && box.getMin().y < body.getMax().y && box.getMax().z > body.getMin().z && box.getMin().z < body.getMax().z)
-            if(motion > 0){
-                float min = Math.min(box.getMin().x, box.getMax().x);
-                float max = Math.max(body.getMin().x, body.getMax().x);
-                float offset = min - max;
-                if(offset >= 0 && motion > offset)
-                    return offset;
+    private static float minMovementX(float movementX, BoxBody body1, BoxBody[] otherBodies){
+        // Iterate other bodies
+        for(BoxBody body2: otherBodies){
+            if(movementX == 0)
+                break;
+
+            // Minimize movement
+            movementX = distX(movementX, body1, body2);
+        }
+        return movementX;
+    }
+
+    private static float minMovementY(float movementY, BoxBody body1, BoxBody[] otherBodies){
+        for(BoxBody body2: otherBodies){
+            if(movementY == 0)
+                break;
+
+            movementY = distY(movementY, body1, body2);
+        }
+        return movementY;
+    }
+
+    private static float minMovementZ(float movementZ, BoxBody body1, BoxBody[] otherBodies){
+        for(BoxBody body2: otherBodies){
+            if(movementZ == 0)
+                break;
+
+            movementZ = distZ(movementZ, body1, body2);
+        }
+        return movementZ;
+    }
+
+
+    private static float distX(float movementX, BoxBody body1, BoxBody body2){
+        // Ensure that the bodies intersect on the other axes and that collision is possible
+        if(body2.getMax().y > body1.getMin().y && body2.getMin().y < body1.getMax().y &&
+           body2.getMax().z > body1.getMin().z && body2.getMin().z < body1.getMax().z){
+
+            // When moving positively:
+            if(movementX > 0){
+                // Find body1 and body2 sides between which the distance to the collision is calculated
+                final float body1Side = Math.max(body1.getMin().x, body1.getMax().x);
+                final float body2Side = Math.min(body2.getMin().x, body2.getMax().x);
+                final float distance = body2Side - body1Side;
+
+                // If the collision distance is less than planned to move them
+                if(distance >= 0 && distance < movementX)
+                    // Return the distance as a move
+                    return distance;
+
+            // When moving negatively:
             }else{
-                float min = Math.min(body.getMin().x, body.getMax().x);
-                float max = Math.max(box.getMin().x, box.getMax().x);
-                float offset = max - min;
-                if(offset <= 0 && motion < offset)
-                    return offset;
+                // Find body1 and body2 sides between which the distance to the collision is calculated
+                final float body1Side = Math.min(body1.getMin().x, body1.getMax().x);
+                final float body2Side = Math.max(body2.getMin().x, body2.getMax().x);
+                final float distance = body2Side - body1Side;
+
+                // If the collision distance is less than planned to move them (-distance < -movementX  =  distance > movementX)
+                if(distance <= 0 && distance > movementX)
+                    // Return the distance as a move
+                    return distance;
             }
-        return motion;
+        }
+
+        // If the movementX is less than the collision distance - do nothing
+        return movementX;
     }
     
-    private static float distY(float motion, BoxBody body, BoxBody box){
-        if(motion == 0)
-            return 0;
-        if(box.getMax().x > body.getMin().x && box.getMin().x < body.getMax().x && box.getMax().z > body.getMin().z && box.getMin().z < body.getMax().z)
-            if(motion > 0){
-                float min = Math.min(box.getMin().y, box.getMax().y);
-                float max = Math.max(body.getMin().y, body.getMax().y);
-                float offset = min - max;
-                if(offset >= 0 && motion > offset)
-                    return offset;
+    private static float distY(float movementY, BoxBody body1, BoxBody body2){
+        if(body2.getMax().x > body1.getMin().x && body2.getMin().x < body1.getMax().x &&
+           body2.getMax().z > body1.getMin().z && body2.getMin().z < body1.getMax().z){
+
+            if(movementY > 0){
+                final float body1Side = Math.max(body1.getMin().y, body1.getMax().y);
+                final float body2Side = Math.min(body2.getMin().y, body2.getMax().y);
+                final float distance = body2Side - body1Side;
+
+                if(distance >= 0 && distance < movementY)
+                    return distance;
+
             }else{
-                float min = Math.min(body.getMin().y, body.getMax().y);
-                float max = Math.max(box.getMin().y, box.getMax().y);
-                float offset = max - min;
-                if(offset <= 0 && motion < offset)
-                    return offset;
+                final float body1Side = Math.min(body1.getMin().y, body1.getMax().y);
+                final float body2Side = Math.max(body2.getMin().y, body2.getMax().y);
+                final float distance = body2Side - body1Side;
+
+                if(distance <= 0 && distance > movementY)
+                    return distance;
             }
-        return motion;
+        }
+
+        return movementY;
     }
     
-    private static float distZ(float motion, BoxBody body, BoxBody box){
-        if(motion == 0)
-            return 0;
-        if(box.getMax().x > body.getMin().x && box.getMin().x < body.getMax().x && box.getMax().y > body.getMin().y && box.getMin().y < body.getMax().y)
-            if(motion > 0){
-                float min = Math.min(box.getMin().z, box.getMax().z);
-                float max = Math.max(body.getMin().z, body.getMax().z);
-                float offset = min - max;
-                if(offset >= 0 && motion > offset)
-                    return offset;
+    private static float distZ(float movementZ, BoxBody body1, BoxBody body2){
+        if(body2.getMax().x > body1.getMin().x && body2.getMin().x < body1.getMax().x &&
+           body2.getMax().y > body1.getMin().y && body2.getMin().y < body1.getMax().y){
+
+            if(movementZ > 0){
+                final float body1Side = Math.max(body1.getMin().z, body1.getMax().z);
+                final float body2Side = Math.min(body2.getMin().z, body2.getMax().z);
+                final float distance = body2Side - body1Side;
+
+                if(distance >= 0 && distance < movementZ)
+                    return distance;
+
             }else{
-                float min = Math.min(body.getMin().z, body.getMax().z);
-                float max = Math.max(box.getMin().z, box.getMax().z);
-                float offset = max - min;
-                if(offset <= 0 && motion < offset)
-                    return offset;
+                final float body1Side = Math.min(body1.getMin().z, body1.getMax().z);
+                final float body2Side = Math.max(body2.getMin().z, body2.getMax().z);
+                final float distance = body2Side - body1Side;
+
+                if(distance <= 0 && distance > movementZ)
+                    return distance;
             }
-        return motion;
+        }
+
+        return movementZ;
     }
 
 }

@@ -22,6 +22,18 @@ public class Vec3d{
     public Vec3d(int x, int y, int z){
         set(x, y, z);
     }
+
+    public Vec3d(double x, double y){
+        set(x, y);
+    }
+
+    public Vec3d(float x, float y){
+        set(x, y);
+    }
+
+    public Vec3d(int x, int y){
+        set(x, y);
+    }
     
     public Vec3d(double xyz){
         set(xyz);
@@ -338,6 +350,27 @@ public class Vec3d{
         this.z = z;
         return this;
     }
+
+    public Vec3d set(double x, double y){
+        this.x = x;
+        this.y = y;
+        this.z = 0;
+        return this;
+    }
+
+    public Vec3d set(float x, float y){
+        this.x = x;
+        this.y = y;
+        this.z = 0;
+        return this;
+    }
+
+    public Vec3d set(int x, int y){
+        this.x = x;
+        this.y = y;
+        this.z = 0;
+        return this;
+    }
     
     public Vec3d set(double xyz){
         x = xyz;
@@ -359,6 +392,27 @@ public class Vec3d{
         z = xyz;
         return this;
     }
+
+    public Vec3d set(Vec3d vector){
+        x = vector.x;
+        y = vector.y;
+        z = vector.z;
+        return this;
+    }
+
+    public Vec3d set(Vec3f vector){
+        x = vector.x;
+        y = vector.y;
+        z = vector.z;
+        return this;
+    }
+
+    public Vec3d set(Vec3i vector){
+        x = vector.x;
+        y = vector.y;
+        z = vector.z;
+        return this;
+    }
     
     public Vec3d set(Vec2d vector){
         x = vector.x;
@@ -378,27 +432,6 @@ public class Vec3d{
         x = vector.x;
         y = vector.y;
         z = 0;
-        return this;
-    }
-    
-    public Vec3d set(Vec3d vector){
-        x = vector.x;
-        y = vector.y;
-        z = vector.z;
-        return this;
-    }
-    
-    public Vec3d set(Vec3f vector){
-        x = vector.x;
-        y = vector.y;
-        z = vector.z;
-        return this;
-    }
-    
-    public Vec3d set(Vec3i vector){
-        x = vector.x;
-        y = vector.y;
-        z = vector.z;
         return this;
     }
     

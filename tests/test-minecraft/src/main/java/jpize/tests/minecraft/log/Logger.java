@@ -9,7 +9,7 @@ public class Logger{
     private final PrintStream out,err;
     private final DateTimeFormatter dateTimeFormatter;
 
-    private Logger(PrintStream out,PrintStream err){
+    private Logger(PrintStream out, PrintStream err){
         this.out = out;
         this.err = err;
         dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -20,7 +20,7 @@ public class Logger{
     }
 
     private Logger(){
-        this(System.out,System.err);
+        this(System.out, System.err);
     }
 
 
@@ -45,23 +45,23 @@ public class Logger{
     }
 
 
-    public void trace(String trace,Object object){
+    public void trace(String trace, Object object){
         out.println( getLogPrefix(LogLevel.TRACE) + trace.replaceAll("\\{}",object.toString()) );
     }
 
-    public void debug(String debug,Object object){
+    public void debug(String debug, Object object){
         out.println( getLogPrefix(LogLevel.DEBUG) + debug.replaceAll("\\{}",object.toString()) );
     }
 
-    public void info(String info,Object object){
+    public void info(String info, Object object){
         out.println( getLogPrefix(LogLevel.INFO) + info.replaceAll("\\{}",object.toString()) );
     }
 
-    public void warn(String warn,Object object){
+    public void warn(String warn, Object object){
         out.println( getLogPrefix(LogLevel.WARN) + warn.replaceAll("\\{}",object.toString()) );
     }
 
-    public void error(String error,Object object){
+    public void error(String error, Object object){
         err.println( getLogPrefix(LogLevel.ERROR) + error.replaceAll("\\{}",object.toString()) );
     }
 

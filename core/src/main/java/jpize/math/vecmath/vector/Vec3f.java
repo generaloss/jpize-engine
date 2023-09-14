@@ -23,6 +23,18 @@ public class Vec3f{
     public Vec3f(int x, int y, int z){
         set(x, y, z);
     }
+
+    public Vec3f(double x, double y){
+        set(x, y);
+    }
+
+    public Vec3f(float x, float y){
+        set(x, y);
+    }
+
+    public Vec3f(int x, int y){
+        set(x, y);
+    }
     
     public Vec3f(double xyz){
         set(xyz);
@@ -382,6 +394,27 @@ public class Vec3f{
         this.z = z;
         return this;
     }
+
+    public Vec3f set(double x, double y){
+        this.x = (float) x;
+        this.y = (float) y;
+        this.z = 0;
+        return this;
+    }
+
+    public Vec3f set(float x, float y){
+        this.x = x;
+        this.y = y;
+        this.z = 0;
+        return this;
+    }
+
+    public Vec3f set(int x, int y){
+        this.x = x;
+        this.y = y;
+        this.z = 0;
+        return this;
+    }
     
     public Vec3f set(double xyz){
         x = (float) xyz;
@@ -404,27 +437,6 @@ public class Vec3f{
         return this;
     }
     
-    public Vec3f set(Vec2d vector){
-        x = (float) vector.x;
-        y = (float) vector.y;
-        z = 0;
-        return this;
-    }
-    
-    public Vec3f set(Vec2f vector){
-        x = vector.x;
-        y = vector.y;
-        z = 0;
-        return this;
-    }
-    
-    public Vec3f set(Vec2i vector){
-        x = vector.x;
-        y = vector.y;
-        z = 0;
-        return this;
-    }
-    
     public Vec3f set(Vec3d vector){
         x = (float) vector.x;
         y = (float) vector.y;
@@ -443,6 +455,27 @@ public class Vec3f{
         x = vector.x;
         y = vector.y;
         z = vector.z;
+        return this;
+    }
+
+    public Vec3f set(Vec2d vector){
+        x = (float) vector.x;
+        y = (float) vector.y;
+        z = 0;
+        return this;
+    }
+
+    public Vec3f set(Vec2f vector){
+        x = vector.x;
+        y = vector.y;
+        z = 0;
+        return this;
+    }
+
+    public Vec3f set(Vec2i vector){
+        x = vector.x;
+        y = vector.y;
+        z = 0;
         return this;
     }
     

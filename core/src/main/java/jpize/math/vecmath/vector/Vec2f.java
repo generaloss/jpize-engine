@@ -19,6 +19,10 @@ public class Vec2f{
     public Vec2f(float x, float y){
         set(x, y);
     }
+
+    public Vec2f(int x, int y){
+        set(x, y);
+    }
     
     public Vec2f(double xy){
         set(xy);
@@ -27,7 +31,23 @@ public class Vec2f{
     public Vec2f(float xy){
         set(xy);
     }
-    
+
+    public Vec2f(int xy){
+        set(xy);
+    }
+
+    public Vec2f(Vec3d vector){
+        set(vector);
+    }
+
+    public Vec2f(Vec3f vector){
+        set(vector);
+    }
+
+    public Vec2f(Vec3i vector){
+        set(vector);
+    }
+
     public Vec2f(Vec2d vector){
         set(vector);
     }
@@ -35,15 +55,11 @@ public class Vec2f{
     public Vec2f(Vec2f vector){
         set(vector);
     }
-    
-    public Vec2f(Vec3d vector){
+
+    public Vec2f(Vec2i vector){
         set(vector);
     }
-    
-    public Vec2f(Vec3f vector){
-        set(vector);
-    }
-    
+
     
     /**             POINT             */
     
@@ -284,6 +300,24 @@ public class Vec2f{
         y = xy;
         return this;
     }
+
+    public Vec2f set(Vec3d vector){
+        x = (float) vector.x;
+        y = (float) vector.y;
+        return this;
+    }
+
+    public Vec2f set(Vec3f vector){
+        x = vector.x;
+        y = vector.y;
+        return this;
+    }
+
+    public Vec2f set(Vec3i vector){
+        x = vector.x;
+        y = vector.y;
+        return this;
+    }
     
     public Vec2f set(Vec2d vector){
         x = (float) vector.x;
@@ -303,24 +337,6 @@ public class Vec2f{
         return this;
     }
     
-    public Vec2f set(Vec3d vector){
-        x = (float) vector.x;
-        y = (float) vector.y;
-        return this;
-    }
-    
-    public Vec2f set(Vec3f vector){
-        x = vector.x;
-        y = vector.y;
-        return this;
-    }
-    
-    public Vec2f set(Vec3i vector){
-        x = vector.x;
-        y = vector.y;
-        return this;
-    }
-    
     
     public Vec2f add(double x, double y){
         this.x += x;
@@ -329,6 +345,12 @@ public class Vec2f{
     }
     
     public Vec2f add(float x, float y){
+        this.x += x;
+        this.y += y;
+        return this;
+    }
+
+    public Vec2f add(int x, int y){
         this.x += x;
         this.y += y;
         return this;
@@ -345,7 +367,31 @@ public class Vec2f{
         y += xy;
         return this;
     }
-    
+
+    public Vec2f add(int xy){
+        x += xy;
+        y += xy;
+        return this;
+    }
+
+    public Vec2f add(Vec3d vector){
+        x += vector.x;
+        y += vector.y;
+        return this;
+    }
+
+    public Vec2f add(Vec3f vector){
+        x += vector.x;
+        y += vector.y;
+        return this;
+    }
+
+    public Vec2f add(Vec3i vector){
+        x += vector.x;
+        y += vector.y;
+        return this;
+    }
+
     public Vec2f add(Vec2d vector){
         x += vector.x;
         y += vector.y;
@@ -357,14 +403,8 @@ public class Vec2f{
         y += vector.y;
         return this;
     }
-    
-    public Vec2f add(Vec3d vector){
-        x += vector.x;
-        y += vector.y;
-        return this;
-    }
-    
-    public Vec2f add(Vec3f vector){
+
+    public Vec2f add(Vec2i vector){
         x += vector.x;
         y += vector.y;
         return this;

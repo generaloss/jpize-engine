@@ -1,5 +1,5 @@
 language.code : en_us
-graphics.fov : 90
+graphics.fov : 60
 graphics.renderDistance : 1
 graphics.mipmapLevels : 1
 graphics.maxFramerate : 0

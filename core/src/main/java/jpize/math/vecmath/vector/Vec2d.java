@@ -19,7 +19,11 @@ public class Vec2d{
     public Vec2d(float x, float y){
         set(x, y);
     }
-    
+
+    public Vec2d(int x, int y){
+        set(x, y);
+    }
+
     public Vec2d(double xy){
         set(xy);
     }
@@ -27,7 +31,23 @@ public class Vec2d{
     public Vec2d(float xy){
         set(xy);
     }
-    
+
+    public Vec2d(int xy){
+        set(xy);
+    }
+
+    public Vec2d(Vec3d vector){
+        set(vector);
+    }
+
+    public Vec2d(Vec3f vector){
+        set(vector);
+    }
+
+    public Vec2d(Vec3i vector){
+        set(vector);
+    }
+
     public Vec2d(Vec2d vector){
         set(vector);
     }
@@ -35,15 +55,11 @@ public class Vec2d{
     public Vec2d(Vec2f vector){
         set(vector);
     }
-    
-    public Vec2d(Vec3d vector){
+
+    public Vec2d(Vec2i vector){
         set(vector);
     }
-    
-    public Vec2d(Vec3f vector){
-        set(vector);
-    }
-    
+
     
     /**             POINT             */
     
@@ -265,6 +281,12 @@ public class Vec2d{
         this.y = y;
         return this;
     }
+
+    public Vec2d set(int x, int y){
+        this.x = x;
+        this.y = y;
+        return this;
+    }
     
     public Vec2d set(double xy){
         x = xy;
@@ -275,6 +297,30 @@ public class Vec2d{
     public Vec2d set(float xy){
         x = xy;
         y = xy;
+        return this;
+    }
+
+    public Vec2d set(int xy){
+        x = xy;
+        y = xy;
+        return this;
+    }
+
+    public Vec2d set(Vec3d vector){
+        x = vector.x;
+        y = vector.y;
+        return this;
+    }
+
+    public Vec2d set(Vec3f vector){
+        x = vector.x;
+        y = vector.y;
+        return this;
+    }
+
+    public Vec2d set(Vec3i vector){
+        x = vector.x;
+        y = vector.y;
         return this;
     }
     
@@ -291,24 +337,6 @@ public class Vec2d{
     }
     
     public Vec2d set(Vec2i vector){
-        x = vector.x;
-        y = vector.y;
-        return this;
-    }
-    
-    public Vec2d set(Vec3d vector){
-        x = vector.x;
-        y = vector.y;
-        return this;
-    }
-    
-    public Vec2d set(Vec3f vector){
-        x = vector.x;
-        y = vector.y;
-        return this;
-    }
-    
-    public Vec2d set(Vec3i vector){
         x = vector.x;
         y = vector.y;
         return this;

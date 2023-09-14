@@ -1,11 +1,11 @@
 package jpize.tests.physic;
 
 import jpize.Jpize;
-import jpize.io.context.JpizeApplication;
 import jpize.gl.Gl;
-import jpize.graphics.util.batch.TextureBatch;
 import jpize.glfw.key.Key;
+import jpize.graphics.util.batch.TextureBatch;
 import jpize.io.context.ContextBuilder;
+import jpize.io.context.JpizeApplication;
 import jpize.math.vecmath.vector.Vec2f;
 import jpize.physic.BoundingBox2f;
 import jpize.physic.Collider2f;
@@ -17,7 +17,6 @@ public class Main extends JpizeApplication{
                 .size(1280, 720)
                 .register()
                 .setAdapter(new Main());
-
         Jpize.runContexts();
     }
 
@@ -33,7 +32,7 @@ public class Main extends JpizeApplication{
         rect1.motion().setMax(50);
 
         rect2 = new DynamicRect(new BoundingBox2f(-100, -100, 100, 100));
-        rect2.pos().add(600, 400);
+        rect2.getPosition().add(600, 400);
     }
 
     @Override
@@ -46,10 +45,10 @@ public class Main extends JpizeApplication{
             Jpize.window().toggleFullscreen();
 
         if(Jpize.isTouched())
-            rect1.motion().add(Jpize.getCursorPos().sub(rect1.pos()).nor());
-        
-        final Vec2f collidedMotion = Collider2f.getCollidedMotion(rect1, rect1.motion(), rect2);
-        rect1.pos().add(collidedMotion);
+            rect1.motion().add(Jpize.getCursorPos().sub(rect1.getPosition()).nor());
+
+        final Vec2f collidedMotion = Collider2f.getCollidedMovement(rect1.motion(), rect1, rect2);
+        rect1.getPosition().add(collidedMotion);
         rect1.motion().clampToMax().reduce(0.3).collidedAxesToZero(collidedMotion);
 
         Gl.clearColorBuffer();

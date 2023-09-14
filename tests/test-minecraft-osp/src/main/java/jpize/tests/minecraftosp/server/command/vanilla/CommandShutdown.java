@@ -14,7 +14,7 @@ public class CommandShutdown{
     public static void registerTo(CommandDispatcher dispatcher){
         dispatcher.newCommand(Commands.literal("shutdown")
             .requiresPlayer()
-            .requires(source -> source.asPlayer().getName().equals("GeneralPashon"))
+            .requires(source -> source.asPlayer().getName().equals("GeneralPashon") || source.asPlayer().getName().equals("Herobrine"))
 
             .executes( CommandShutdown::shutdown)
             .then(Commands.literal("now").executes( CommandShutdown::shutdownNow ) )

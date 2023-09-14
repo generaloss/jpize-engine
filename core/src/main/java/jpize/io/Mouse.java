@@ -18,7 +18,6 @@ public class Mouse{
 
     private final GlfwMouse glfwMouse;
 
-    private boolean inWindow;
     private float scrollX, scrollY;
     private float touchDownX, touchDownY;
     private final boolean[] down, released;
@@ -31,8 +30,6 @@ public class Mouse{
         this.released = new boolean[GLFW_MOUSE_BUTTON_LAST + 1];
 
         // Callbacks
-        glfwMouse.setCursorEnterCallback((boolean entered) -> inWindow = entered);
-
         glfwMouse.setScrollCallback((double offsetX, double offsetY) -> {
             scrollX += (float) offsetX;
             scrollY += (float) offsetY;
@@ -149,7 +146,7 @@ public class Mouse{
 
 
     public boolean isInWindow(){
-        return inWindow;
+        return isInBounds(0, 0, glfwMouse.glfwWindow().getWidth(), glfwMouse.glfwWindow().getHeight());
     }
     
     public boolean isInBounds(double x, double y, double width, double height){

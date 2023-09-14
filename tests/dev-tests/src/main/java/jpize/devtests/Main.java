@@ -7,15 +7,15 @@ public class Main{
     
     public static void main(String[] args){
         //ContextBuilder.newContext(1300, 1300, "Dev-Test")
-        //.create().init(new KeyboardTest());
-        //.create().init(new MouseTest());
-        //.create().init(new WindowTest());
-        //.create().init(new MonitorTest());
-        //.create().init(new FontTest());
-        //.create().init(new QuadFromNormalTest());
-        //.create().init(new TriangleIntersectionTest());
-        //.create().init(new AtlasTest());
-        //.create().init(new MultiThreadTest());
+        //.newContext().register().setAdapter(new KeyboardTest());
+        //.newContext().register().setAdapter(new MouseTest());
+        //.newContext().register().setAdapter(new WindowTest());
+        //.newContext().register().setAdapter(new MonitorTest());
+        //.newContext().register().setAdapter(new FontTest());
+        //.newContext().register().setAdapter(new QuadFromNormalTest());
+        //.newContext().register().setAdapter(new TriangleIntersectionTest());
+        //.newContext().register().setAdapter(new AtlasTest());
+        //.newContext().register().setAdapter(new MultiThreadTest());
         //Jpize.runContexts();
 
         //myMultipleWindows();
@@ -24,7 +24,8 @@ public class Main{
         //GlfwMultipleWindows.main(args);
         //LoadingTest.main(args);
         //GreedyMesh.main(args);
-        MyGreedyMesh.main(args);
+        MyGreedyMesh2D.main(args);
+        //MyGreedyMesh3D.main(args);
     }
 
     private static void myMultipleWindows(){

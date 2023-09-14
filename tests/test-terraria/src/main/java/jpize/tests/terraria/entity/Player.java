@@ -29,7 +29,7 @@ public class Player extends Entity{
 
 
     public void render(TextureBatch batch){
-        batch.drawQuad(1, 1, 1, 1,  pos().x, pos().y, rect().getWidth(), rect().getHeight());
+        batch.drawQuad(1, 1, 1, 1,  getPosition().x, getPosition().y, rect().getWidth(), rect().getHeight());
         
         for(RectBody r: rectList)
             batch.drawQuad(1, 0, 0, 0.5,  r.getMin().x, r.getMin().y, r.rect().getWidth(), r.rect().getHeight());
@@ -60,14 +60,14 @@ public class Player extends Entity{
 
         if(isCollideDown && !isCollideUp){
             RectBody rectBody = this.copy();
-            rectBody.pos().y++;
+            rectBody.getPosition().y++;
 
             if(
                 (getVelocity().x > 0 && isCollideRight
-                && !Collider2f.getCollidedMotion(rectBody, new Vec2f(Float.MIN_VALUE, 0), rects).isZero())
+                && !Collider2f.getCollidedMovement(new Vec2f(Float.MIN_VALUE, 0), rectBody, rects).isZero())
             ||
                 (getVelocity().x < 0 && isCollideLeft
-                && !Collider2f.getCollidedMotion(rectBody, new Vec2f(-Float.MIN_VALUE, 0), rects).isZero()
+                && !Collider2f.getCollidedMovement(new Vec2f(-Float.MIN_VALUE, 0), rectBody, rects).isZero()
             ))
                 getVelocity().y = 21;
         }
@@ -83,17 +83,17 @@ public class Player extends Entity{
 
         Vec2f motion = getVelocity().copy().mul(delta);
         rects = getRects(tileMap, motion, 0);
-        Vec2f collidedVel = Collider2f.getCollidedMotion(this, motion, rects);
+        Vec2f collidedVel = Collider2f.getCollidedMovement(motion, this, rects);
 
         getVelocity().reduce(0.5);
         getVelocity().collidedAxesToZero(collidedVel);
         getVelocity().clampToMax();
 
-        pos().add(collidedVel);
+        getPosition().add(collidedVel);
     }
 
     public boolean isCollide(float x, float y, RectBody[] rects){
-        return Collider2f.getCollidedMotion(this, new Vec2f(x, y), rects).isZero();
+        return Collider2f.getCollidedMovement(new Vec2f(x, y), this, rects).isZero();
     }
 
     public RectBody[] getRects(WorldMap map, Vec2f vel, float padding){
@@ -104,7 +104,7 @@ public class Player extends Entity{
                 MapTile tile = map.getTile(i, j);
                 if(tile != null && tile.getType().collidable){
                     RectBody body = new RectBody(TILE_BOUNDING_RECT);
-                    body.pos().set(i, j);
+                    body.getPosition().set(i, j);
                     rectList.add(body);
                 }
             }

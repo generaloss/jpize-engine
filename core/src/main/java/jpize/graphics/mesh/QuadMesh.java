@@ -11,25 +11,23 @@ public class QuadMesh implements IMesh{
     private final GlVertexArray vertexArray;
     private final VertexBuffer vertexBuffer;
     private final QuadIndexBuffer indexBuffer;
+    private GlPrimitive mode;
 
     public QuadMesh(int size, GlVertexAttr... attributes){
         this.vertexArray = new GlVertexArray();
         this.vertexBuffer = new VertexBuffer();
         this.vertexBuffer.enableAttributes(attributes);
         this.indexBuffer = new QuadIndexBuffer(size);
+        this.mode = GlPrimitive.TRIANGLES;
     }
 
-
-    public void render(int indices, GlPrimitive primitive){
-        vertexArray.drawElements(indices, primitive);
+    public void setMode(GlPrimitive mode){
+        this.mode = mode;
     }
+
 
     public void render(int indices){
-        vertexArray.drawElements(indices);
-    }
-
-    public void render(GlPrimitive primitive){
-        this.render(indexBuffer.getIndexCount(), primitive);
+        vertexArray.drawElements(indices, mode);
     }
 
     @Override

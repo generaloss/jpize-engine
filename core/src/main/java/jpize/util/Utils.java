@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.*;
+import java.util.function.BooleanSupplier;
 
 public class Utils{
 
@@ -72,7 +73,13 @@ public class Utils{
     
     public static void delayElapsed(long millis){
         final long current = System.currentTimeMillis();
-        while(System.currentTimeMillis() - current < millis);
+        while(System.currentTimeMillis() - current < millis)
+            Thread.onSpinWait();
+    }
+
+    public static void waitFor(BooleanSupplier supplier){
+        while(supplier.getAsBoolean())
+            Thread.onSpinWait();
     }
 
 

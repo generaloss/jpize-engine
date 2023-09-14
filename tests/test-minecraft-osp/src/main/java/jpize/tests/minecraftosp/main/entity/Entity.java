@@ -95,12 +95,12 @@ public abstract class Entity extends BoxBody implements Tickable {
     
     public boolean isCollidedTo(Dir face){
         final Vec3f dir = new Vec3f(face.getNormal()).mul(Maths.Epsilon);
-        return Collider3f.getCollidedMotion(this, dir, blockBoxes).len2() < dir.len2();
+        return Collider3f.getCollidedMovement(dir, this, blockBoxes).len2() < dir.len2();
     }
     
     public boolean isCollidedTo(Vec3f direction){
         final Vec3f dir = direction.copy().nor().mul(Maths.Epsilon);
-        return Collider3f.getCollidedMotion(this, dir, blockBoxes).len2() < dir.len2();
+        return Collider3f.getCollidedMovement(dir, this, blockBoxes).len2() < dir.len2();
     }
     
     /** Get Bounding Boxes of blocks around Entity */
@@ -159,7 +159,7 @@ public abstract class Entity extends BoxBody implements Tickable {
         if(blockBoxes == null)
             return null;
         
-        final Vec3f collidedMove = Collider3f.getCollidedMotion(this, motion, blockBoxes);
+        final Vec3f collidedMove = Collider3f.getCollidedMovement(motion, this, blockBoxes);
         getPosition().add(collidedMove);
         
         return collidedMove;

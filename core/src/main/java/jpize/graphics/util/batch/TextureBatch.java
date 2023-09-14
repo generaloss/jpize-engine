@@ -103,15 +103,15 @@ public class TextureBatch implements Disposable{
 
         transformMat.set( rotationMat.getMul(scaleMat.getMul(shearMat.getMul(flipMat))) );
 
-        final Vec2f vertex1 = new Vec2f(0,     0     ).sub(origin) .mul(transformMat) .add(origin).add(x, y);
-        final Vec2f vertex2 = new Vec2f(width, 0     ).sub(origin) .mul(transformMat) .add(origin).add(x, y);
-        final Vec2f vertex3 = new Vec2f(width, height).sub(origin) .mul(transformMat) .add(origin).add(x, y);
-        final Vec2f vertex4 = new Vec2f(0,     height).sub(origin) .mul(transformMat) .add(origin).add(x, y);
+        final Vec2f vertex1 = new Vec2f(0,     height).sub(origin) .mul(transformMat) .add(origin).add(x, y);
+        final Vec2f vertex2 = new Vec2f(0,     0     ).sub(origin) .mul(transformMat) .add(origin).add(x, y);
+        final Vec2f vertex3 = new Vec2f(width, 0     ).sub(origin) .mul(transformMat) .add(origin).add(x, y);
+        final Vec2f vertex4 = new Vec2f(width, height).sub(origin) .mul(transformMat) .add(origin).add(x, y);
 
-        addVertex(vertex1.x, vertex1.y, u1, v2, r, g, b, a);
-        addVertex(vertex2.x, vertex2.y, u2, v2, r, g, b, a);
-        addVertex(vertex3.x, vertex3.y, u2, v1, r, g, b, a);
-        addVertex(vertex4.x, vertex4.y, u1, v1, r, g, b, a);
+        addVertex(vertex1.x, vertex1.y, u1, v1, r, g, b, a);
+        addVertex(vertex2.x, vertex2.y, u1, v2, r, g, b, a);
+        addVertex(vertex3.x, vertex3.y, u2, v2, r, g, b, a);
+        addVertex(vertex4.x, vertex4.y, u2, v1, r, g, b, a);
     }
 
 

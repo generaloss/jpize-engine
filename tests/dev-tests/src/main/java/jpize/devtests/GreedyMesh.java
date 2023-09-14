@@ -141,13 +141,12 @@ public class GreedyMesh extends Scene3D{
                 /*
                  * Here we're keeping track of the side that we're meshing.
                  */
-                if(d == 0){
+                if(d == 0)
                     side = backFace ? WEST : EAST;
-                }else if(d == 1){
+                else if(d == 1)
                     side = backFace ? BOTTOM : TOP;
-                }else{
+                else
                     side = backFace ? SOUTH : NORTH;
-                }
 
                 /*
                  * We move through the dimension from front to back

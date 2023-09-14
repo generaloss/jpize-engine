@@ -7,20 +7,52 @@ import java.util.Objects;
 public class Vec2i{
     
     public Vec2i(){ }
-    
+
+    public Vec2i(double x, double y){
+        set(x, y);
+    }
+
+    public Vec2i(float x, float y){
+        set(x, y);
+    }
+
     public Vec2i(int x, int y){
         set(x, y);
     }
-    
+
+    public Vec2i(double xy){
+        set(xy);
+    }
+
+    public Vec2i(float xy){
+        set(xy);
+    }
+
     public Vec2i(int xy){
         set(xy);
     }
-    
-    public Vec2i(Vec2i vector){
+
+    public Vec2i(Vec3d vector){
         set(vector);
     }
-    
+
+    public Vec2i(Vec3f vector){
+        set(vector);
+    }
+
     public Vec2i(Vec3i vector){
+        set(vector);
+    }
+
+    public Vec2i(Vec2d vector){
+        set(vector);
+    }
+
+    public Vec2i(Vec2f vector){
+        set(vector);
+    }
+
+    public Vec2i(Vec2i vector){
         set(vector);
     }
     
@@ -173,27 +205,75 @@ public class Vec2i{
     /**             TUPLE             */
     
     public int x, y;
-    
-    
+
+
+    public Vec2i set(double x, double y){
+        this.x = (int) x;
+        this.y = (int) y;
+        return this;
+    }
+
+    public Vec2i set(float x, float y){
+        this.x = (int) x;
+        this.y = (int) y;
+        return this;
+    }
+
     public Vec2i set(int x, int y){
         this.x = x;
         this.y = y;
         return this;
     }
-    
+
+    public Vec2i set(double xy){
+        x = (int) xy;
+        y = (int) xy;
+        return this;
+    }
+
+    public Vec2i set(float xy){
+        x = (int) xy;
+        y = (int) xy;
+        return this;
+    }
+
     public Vec2i set(int xy){
         x = xy;
         y = xy;
         return this;
     }
-    
-    public Vec2i set(Vec2i vector){
+
+    public Vec2i set(Vec3d vector){
+        x = (int) vector.x;
+        y = (int) vector.y;
+        return this;
+    }
+
+    public Vec2i set(Vec3f vector){
+        x = (int) vector.x;
+        y = (int) vector.y;
+        return this;
+    }
+
+    public Vec2i set(Vec3i vector){
         x = vector.x;
         y = vector.y;
         return this;
     }
-    
-    public Vec2i set(Vec3i vector){
+
+    public Vec2i set(Vec2d vector){
+        x = (int) vector.x;
+        y = (int) vector.y;
+        return this;
+    }
+
+    public Vec2i set(Vec2f vector){
+        x = (int) vector.x;
+        y = (int) vector.y;
+        return this;
+    }
+
+    public Vec2i set(Vec2i vector){
         x = vector.x;
         y = vector.y;
         return this;

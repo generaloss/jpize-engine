@@ -12,19 +12,63 @@ public class Vec3i{
     
     
     public Vec3i(){ }
-    
+
+    public Vec3i(double x, double y, double z){
+        set(x, y, z);
+    }
+
+    public Vec3i(float x, float y, float z){
+        set(x, y, z);
+    }
+
     public Vec3i(int x, int y, int z){
         set(x, y, z);
     }
-    
+
+    public Vec3i(double x, double y){
+        set(x, y);
+    }
+
+    public Vec3i(float x, float y){
+        set(x, y);
+    }
+
+    public Vec3i(int x, int y){
+        set(x, y);
+    }
+
+    public Vec3i(double xyz){
+        set(xyz);
+    }
+
+    public Vec3i(float xyz){
+        set(xyz);
+    }
+
     public Vec3i(int xyz){
         set(xyz);
     }
-    
+
+    public Vec3i(Vec3d vector){
+        set(vector);
+    }
+
+    public Vec3i(Vec3f vector){
+        set(vector);
+    }
+
     public Vec3i(Vec3i vector){
         set(vector);
     }
-    
+
+    public Vec3i(Vec2d vector){
+        set(vector);
+    }
+
+    public Vec3i(Vec2f vector){
+        set(vector);
+    }
+
     public Vec3i(Vec2i vector){
         set(vector);
     }
@@ -198,33 +242,110 @@ public class Vec3i{
     /**             TUPLE             */
     
     public int x, y, z;
-    
-    
+
+
+    public Vec3i set(double x, double y, double z){
+        this.x = (int) x;
+        this.y = (int) y;
+        this.z = (int) z;
+        return this;
+    }
+
+    public Vec3i set(float x, float y, float z){
+        this.x = (int) x;
+        this.y = (int) y;
+        this.z = (int) z;
+        return this;
+    }
+
     public Vec3i set(int x, int y, int z){
         this.x = x;
         this.y = y;
         this.z = z;
         return this;
     }
-    
+
+    public Vec3i set(double x, double y){
+        this.x = (int) x;
+        this.y = (int) y;
+        this.z = 0;
+        return this;
+    }
+
+    public Vec3i set(float x, float y){
+        this.x = (int) x;
+        this.y = (int) y;
+        this.z = 0;
+        return this;
+    }
+
+    public Vec3i set(int x, int y){
+        this.x = x;
+        this.y = y;
+        this.z = 0;
+        return this;
+    }
+
+    public Vec3i set(double xyz){
+        x = (int) xyz;
+        y = (int) xyz;
+        z = (int) xyz;
+        return this;
+    }
+
+    public Vec3i set(float xyz){
+        x = (int) xyz;
+        y = (int) xyz;
+        z = (int) xyz;
+        return this;
+    }
+
     public Vec3i set(int xyz){
         x = xyz;
         y = xyz;
         z = xyz;
         return this;
     }
-    
-    public Vec3i set(Vec2i vector){
-        x = vector.x;
-        y = vector.y;
-        z = 0;
+
+    public Vec3i set(Vec3d vector){
+        x = (int) vector.x;
+        y = (int) vector.y;
+        z = (int) vector.z;
         return this;
     }
-    
+
+    public Vec3i set(Vec3f vector){
+        x = (int) vector.x;
+        y = (int) vector.y;
+        z = (int) vector.z;
+        return this;
+    }
+
     public Vec3i set(Vec3i vector){
         x = vector.x;
         y = vector.y;
         z = vector.z;
+        return this;
+    }
+
+    public Vec3i set(Vec2d vector){
+        x = (int) vector.x;
+        y = (int) vector.y;
+        z = 0;
+        return this;
+    }
+
+    public Vec3i set(Vec2f vector){
+        x = (int) vector.x;
+        y = (int) vector.y;
+        z = 0;
+        return this;
+    }
+
+    public Vec3i set(Vec2i vector){
+        x = vector.x;
+        y = vector.y;
+        z = 0;
         return this;
     }
     

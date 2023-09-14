@@ -44,7 +44,7 @@ public class Main extends JpizeApplication{
         world = new World(300, 100);
 
         player = new Player();
-        player.pos().set(world.getTileMap().getWidth() / 2F - 1.5F, world.getTileMap().getHeight());
+        player.getPosition().set(world.getTileMap().getWidth() / 2F - 1.5F, world.getTileMap().getHeight());
         world.getEntities().add(player);
 
         batch = new TextureBatch();
@@ -81,7 +81,7 @@ public class Main extends JpizeApplication{
                 : 1
         );
 
-        gameRenderer.getCamera().getPosition().set( player.pos().copy().add(player.rect().getCenter()) );
+        gameRenderer.getCamera().getPosition().set( player.getPosition().copy().add(player.rect().getCenter()) );
 
         Vec2f touch = new Vec2f(Jpize.getX(), Jpize.getY())
             .sub(gameRenderer.getCamera().getWidth() / 2F, gameRenderer.getCamera().getHeight() / 2F)
@@ -92,8 +92,8 @@ public class Main extends JpizeApplication{
         if(tile != null && Jpize.isTouched())
             tile.setType(Jpize.mouse().isLeftPressed() ? AIR : DIRT);
 
-        if(player.pos().y < -100)
-            player.pos().y = world.getTileMap().getHeight();
+        if(player.getPosition().y < -100)
+            player.getPosition().y = world.getTileMap().getHeight();
     }
 
     @Override

@@ -112,6 +112,9 @@ public class ContextManager{
                 contextMap.put(context.getWindow().getID(), context);
             }
 
+            // Sync tasks
+            syncTaskExecutor.executeTasks();
+
             // Render
             if(!contextMap.isEmpty()){
                 // Poll events
@@ -132,9 +135,6 @@ public class ContextManager{
             // Exit
             else if(exitWhenNoWindows)
                 break;
-
-            // Sync tasks
-            syncTaskExecutor.executeTasks();
         }
 
         stop();
