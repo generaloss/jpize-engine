@@ -8,7 +8,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <groupId>tests</groupId>
+    <groupId>pizza-engine.tests</groupId>
     <artifactId>dev-tests</artifactId>
 
 </project>

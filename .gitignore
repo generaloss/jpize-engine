@@ -3,8 +3,9 @@
 /particle/target/
 /physic/target/
 /ui/target/
+
+/tests/dev-tests/target/
 /tests/test-audio/target/
-/tests/test-minecraft/target/
 /tests/test-model-3d/target/
 /tests/test-particle/target/
 /tests/test-physic/target/
@@ -14,6 +15,9 @@
 /tests/test-text-editor/target/
 /tests/test-window/target/
 /tests/test-noise/target/
-/tests/test-minecraft-osp/target/
-/tests/test-minecraft-osp/minecraft-osp-mod/target/
 /tests/test-drift/target/
+
+/tests/test-minecraft-ui/target/
+/tests/test-minecraft-open-source-edition/target/
+/tests/test-minecraft-open-source-edition-server/target/
+/tests/test-minecraft-open-source-edition-mod/target/

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
@@ -9,6 +10,7 @@
         <option value="$PROJECT_DIR$/tests/test-minecraft-oss/minecraft-oss-mod/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-minecraft-osp/minecraft-osp-mod/pom.xml" />
         <option value="$PROJECT_DIR$/tests/minecraft-osp-mod/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/minecraft-open-source-edition-mod/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

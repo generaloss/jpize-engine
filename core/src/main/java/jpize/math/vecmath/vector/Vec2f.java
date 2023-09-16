@@ -112,6 +112,21 @@ public class Vec2f{
         final double dy = y1 - y2;
         return Mathc.sqrt(dx * dx + dy * dy);
     }
+
+
+    public Vec2f min(Vec2f vector){
+        return new Vec2f(
+            Math.min(x, vector.x),
+            Math.min(y, vector.y)
+        );
+    }
+
+    public Vec2f max(Vec2f vector){
+        return new Vec2f(
+            Math.max(x, vector.x),
+            Math.max(y, vector.y)
+        );
+    }
     
     
     /**             VECTOR             */
@@ -243,6 +258,11 @@ public class Vec2f{
         set(x * cos - y * sin, x * sin + y * cos);
         
         return this;
+    }
+
+
+    public float area(){
+        return x * y;
     }
     
     

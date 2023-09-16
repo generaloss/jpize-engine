@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="minecraft-osp-mod">
-    <output-path>$PROJECT_DIR$/tests/test-minecraft-osp/mods</output-path>
-    <root id="archive" name="minecraft-osp-mod.jar">
-      <element id="module-output" name="minecraft-osp-mod" />
-    </root>
-  </artifact>
-</component>

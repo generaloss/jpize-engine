@@ -101,6 +101,21 @@ public class Vec2i{
         
         return Mathc.sqrt(dx * dx + dy * dy);
     }
+
+
+    public Vec2i min(Vec2i vector){
+        return new Vec2i(
+            Math.min(x, vector.x),
+            Math.min(y, vector.y)
+        );
+    }
+
+    public Vec2i max(Vec2i vector){
+        return new Vec2i(
+            Math.max(x, vector.x),
+            Math.max(y, vector.y)
+        );
+    }
     
     
     /**             VECTOR             */
@@ -173,6 +188,11 @@ public class Vec2i{
     
     public Vec2i crs(){
         return new Vec2i(y, -x);
+    }
+
+
+    public int area(){
+        return x * y;
     }
     
     

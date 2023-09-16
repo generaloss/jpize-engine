@@ -1,5 +1,6 @@
 package jpize.graphics.mesh;
 
+import jpize.gl.buffer.GlBufUsage;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.vertex.GlVertexArray;
 import jpize.gl.vertex.GlVertexAttr;
@@ -13,16 +14,26 @@ public class QuadMesh implements IMesh{
     private final QuadIndexBuffer indexBuffer;
     private GlPrimitive mode;
 
-    public QuadMesh(int size, GlVertexAttr... attributes){
+    public QuadMesh(int maxSize, GlBufUsage bufferUsage, GlVertexAttr... attributes){
         this.vertexArray = new GlVertexArray();
         this.vertexBuffer = new VertexBuffer();
+        this.vertexBuffer.setDefaultUsage(bufferUsage);
         this.vertexBuffer.enableAttributes(attributes);
-        this.indexBuffer = new QuadIndexBuffer(size);
+        this.indexBuffer = new QuadIndexBuffer(maxSize, bufferUsage);
         this.mode = GlPrimitive.TRIANGLES;
+    }
+
+    public QuadMesh(int maxSize, GlVertexAttr... attributes){
+        this(maxSize, GlBufUsage.STATIC_DRAW, attributes);
     }
 
     public void setMode(GlPrimitive mode){
         this.mode = mode;
+    }
+
+
+    public void setMaxQuads(int maxQuads, GlBufUsage bufferUsage){
+        indexBuffer.setMaxQuads(maxQuads, bufferUsage);
     }
 
 

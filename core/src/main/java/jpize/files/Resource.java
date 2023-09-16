@@ -1,6 +1,8 @@
 package jpize.files;
 
 import jpize.util.io.FastReader;
+import jpize.util.io.JpizeInputStream;
+import jpize.util.io.JpizeOutputStream;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -107,8 +109,16 @@ public class Resource{
             throw new RuntimeException("File does not exists: " + file);
         }
     }
-    
-    
+
+
+    public JpizeOutputStream getJpizeOut(){
+        return new JpizeOutputStream(outStream());
+    }
+
+    public JpizeInputStream getJpizeIn(){
+        return new JpizeInputStream(inStream());
+    }
+
     public FastReader getReader(){
         return new FastReader(inStream());
     }
@@ -116,6 +126,7 @@ public class Resource{
     public PrintStream getWriter(){
         return new PrintStream(outStream());
     }
+
     
     public String readString(){
         try(final InputStream in = inStream()){

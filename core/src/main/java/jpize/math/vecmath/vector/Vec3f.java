@@ -123,6 +123,23 @@ public class Vec3f{
 
         return Mathc.sqrt(dx * dx + dy * dy + dz * dz);
     }
+
+
+    public Vec3f min(Vec3f vector){
+        return new Vec3f(
+            Math.min(x, vector.x),
+            Math.min(y, vector.y),
+            Math.min(z, vector.z)
+        );
+    }
+
+    public Vec3f max(Vec3f vector){
+        return new Vec3f(
+            Math.max(x, vector.x),
+            Math.max(y, vector.y),
+            Math.max(z, vector.z)
+        );
+    }
     
     
     /**             VECTOR             */
@@ -340,6 +357,11 @@ public class Vec3f{
         z = Maths.ceil(z);
         
         return this;
+    }
+
+
+    public float volume(){
+        return x * y * z;
     }
     
     
@@ -820,41 +842,50 @@ public class Vec3f{
         );
         return this;
     }
-    
-    
-    public int x(){
-        return Maths.round(x);
+
+
+    public Vec3d castDouble(){
+        return new Vec3d(this);
     }
-    
-    public int y(){
-        return Maths.round(y);
+
+    public Vec3i castInt(){
+        return new Vec3i(this);
     }
+
     
-    public int z(){
-        return Maths.round(z);
-    }
-    
-    public int xf(){
+    public int xFloor(){
         return Maths.floor(x);
     }
     
-    public int yf(){
+    public int yFloor(){
         return Maths.floor(y);
     }
     
-    public int zf(){
+    public int zFloor(){
         return Maths.floor(z);
     }
-    
-    public int xc(){
+
+    public int xRound(){
+        return Maths.round(x);
+    }
+
+    public int yRound(){
+        return Maths.round(y);
+    }
+
+    public int zRound(){
+        return Maths.round(z);
+    }
+
+    public int xCeil(){
         return Maths.ceil(x);
     }
     
-    public int yc(){
+    public int yCeil(){
         return Maths.ceil(y);
     }
     
-    public int zc(){
+    public int zCeil(){
         return Maths.ceil(z);
     }
     

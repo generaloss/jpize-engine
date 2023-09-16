@@ -105,6 +105,21 @@ public class Vec2d{
         
         return Math.sqrt(dx * dx + dy * dy);
     }
+
+
+    public Vec2d min(Vec2d vector){
+        return new Vec2d(
+            Math.min(x, vector.x),
+            Math.min(y, vector.y)
+        );
+    }
+
+    public Vec2d max(Vec2d vector){
+        return new Vec2d(
+            Math.max(x, vector.x),
+            Math.max(y, vector.y)
+        );
+    }
     
     
     /**             VECTOR             */
@@ -236,6 +251,11 @@ public class Vec2d{
         set(x * cos - y * sin, x * sin + y * cos);
         
         return this;
+    }
+
+
+    public double area(){
+        return x * y;
     }
     
     

@@ -9,11 +9,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="test-minecraft-osp" />
         <module name="test-audio" />
         <module name="dev-tests" />
-        <module name="test-minecraft" />
-        <module name="minecraft-osp-mod" />
+        <module name="test-minecraft-open-source-edition-mod" />
         <module name="test-physic" />
         <module name="test-text-editor" />
         <module name="test-window" />
@@ -24,9 +22,12 @@
         <module name="test-minecraf-osp" />
         <module name="test-noise" />
         <module name="ui" />
+        <module name="test-minecraft-open-source-edition-server" />
         <module name="test-ui" />
+        <module name="test-minecraft-open-source-edition" />
         <module name="net" />
         <module name="physic" />
+        <module name="test-minecraft-ui" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -42,6 +43,7 @@
       <module name="mod" target="17" />
       <module name="particle" target="17" />
       <module name="pizza-engine" target="17" />
+      <module name="pizza-engine.tests" target="17" />
       <module name="PizzaEngine" target="17" />
       <module name="security" target="17" />
       <module name="sgl-core" target="17" />

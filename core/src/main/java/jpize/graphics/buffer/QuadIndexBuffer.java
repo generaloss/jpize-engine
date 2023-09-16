@@ -1,31 +1,52 @@
 package jpize.graphics.buffer;
 
+import jpize.gl.buffer.GlBufUsage;
+import jpize.gl.type.GlType;
+
 public class QuadIndexBuffer extends IndexBuffer{
 
     public static int QUAD_INDICES = 6;
     public static int QUAD_VERTICES = 4;
 
-    public QuadIndexBuffer(int size){
-        fillBuffer(size);
+    private int maxQuads;
+
+    public QuadIndexBuffer(int maxQuads, GlBufUsage bufferUsage){
+        super.setDefaultUsage(bufferUsage);
+        setMaxQuads(maxQuads, bufferUsage);
     }
 
-    private void fillBuffer(int size){
-        final int[] indices = new int[QUAD_INDICES * size];
+    public QuadIndexBuffer(int maxQuads){
+        this(maxQuads, GlBufUsage.STATIC_DRAW);
+    }
 
-        for(int i = 0; i < size; i++){
-            int indexQuadOffset = QUAD_INDICES * i;
-            int vertexQuadOffset = QUAD_VERTICES * i;
+    public void setMaxQuads(int maxQuads, GlBufUsage bufferUsage){
+        this.maxQuads = maxQuads;
 
-            indices[indexQuadOffset    ] = vertexQuadOffset;
-            indices[indexQuadOffset + 1] = vertexQuadOffset + 1;
-            indices[indexQuadOffset + 2] = vertexQuadOffset + 2;
+        // Allocate GL buffer
+        final int typeSize = GlType.INT.getSize();
+        super.allocateData(maxQuads * QUAD_INDICES * typeSize, bufferUsage);
+        final int[] quadIndices = new int[QUAD_INDICES];
 
-            indices[indexQuadOffset + 3] = vertexQuadOffset + 2;
-            indices[indexQuadOffset + 4] = vertexQuadOffset + 3;
-            indices[indexQuadOffset + 5] = vertexQuadOffset;
+        // Set data
+        for(int i = 0; i < maxQuads; i++){
+            final int indexQuadOffset = QUAD_INDICES * i * typeSize;
+            final int vertexQuadOffset = QUAD_VERTICES * i;
+
+            // Triangle 1
+            quadIndices[0] = vertexQuadOffset;
+            quadIndices[1] = vertexQuadOffset + 1;
+            quadIndices[2] = vertexQuadOffset + 2;
+            // Triangle 2
+            quadIndices[3] = vertexQuadOffset + 2;
+            quadIndices[4] = vertexQuadOffset + 3;
+            quadIndices[5] = vertexQuadOffset;
+
+            super.setSubData(indexQuadOffset, quadIndices);
         }
-
-        super.setData(indices);
     }
 
+    public int getMaxQuads(){
+        return maxQuads;
+    }
+    
 }

@@ -13,7 +13,7 @@
     </properties>
 
     <modules>
-        <module>test-minecraft</module>
+        <module>test-minecraft-ui</module>
         <module>test-audio</module>
         <module>test-ui</module>
         <module>test-physic</module>
@@ -24,7 +24,8 @@
         <module>test-window</module>
         <module>dev-tests</module>
         <module>test-drift</module>
-        <module>test-minecraft-osp</module>
+        <module>test-minecraft-open-source-edition</module>
+        <module>test-minecraft-open-source-edition-server</module>
     </modules>
     
     <dependencies>

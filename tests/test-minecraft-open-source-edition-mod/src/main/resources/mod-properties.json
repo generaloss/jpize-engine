@@ -1,0 +1,13 @@
+{
+  "name": "Test Modification",
+  "id": "test-mod",
+  "version": "1.0",
+  "description": "Adds some stuff",
+  "authors": [ "GeneralPashon" ],
+  "icon": "icon.png",
+  "entrypoints": {
+    "main": "jpize.tests.minecraftose.mod.ModMain",
+    "client": "jpize.tests.minecraftose.mod.ModClient",
+    "server": "jpize.tests.minecraftose.mod.ModServer"
+  }
+}

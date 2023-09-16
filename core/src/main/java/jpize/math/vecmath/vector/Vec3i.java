@@ -124,6 +124,23 @@ public class Vec3i{
         
         return Mathc.sqrt(dx * dx + dy * dy + dz * dz);
     }
+
+
+    public Vec3i min(Vec3i vector){
+        return new Vec3i(
+            Math.min(x, vector.x),
+            Math.min(y, vector.y),
+            Math.min(z, vector.z)
+        );
+    }
+
+    public Vec3i max(Vec3i vector){
+        return new Vec3i(
+            Math.max(x, vector.x),
+            Math.max(y, vector.y),
+            Math.max(z, vector.z)
+        );
+    }
     
     
     /**             VECTOR             */
@@ -197,6 +214,11 @@ public class Vec3i{
         );
 
         return this;
+    }
+
+
+    public int volume(){
+        return x * y * z;
     }
 
     
@@ -689,6 +711,15 @@ public class Vec3i{
             Maths.round( (x * matrix[m20]) + (y * matrix[m21]) + (z * matrix[m22]) + matrix[m23] )
         );
         return this;
+    }
+
+
+    public Vec3f castFloat(){
+        return new Vec3f(this);
+    }
+
+    public Vec3d castDouble(){
+        return new Vec3d(this);
     }
 
     
