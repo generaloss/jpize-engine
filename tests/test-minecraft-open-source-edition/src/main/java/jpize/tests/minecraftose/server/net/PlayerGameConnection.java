@@ -96,15 +96,15 @@ public class PlayerGameConnection implements PacketHandler{
         final int lx = ChunkUtils.getLocalCoord(packet.x);
         final int lz = ChunkUtils.getLocalCoord(packet.z);
 
-        //if(block.isLightTranslucent())
-        //    level.getSkyLight().destroyBlockUpdate(chunk, heightLight, lx, packet.y, lz);
-        //else
-        //    level.getSkyLight().placeBlockUpdate(chunk, oldHeightLight, lx, packet.y, lz);
+        if(block.isLightTranslucent())
+            level.getSkyLight().destroyBlockUpdate(chunk, heightLight, lx, packet.y, lz);
+        else
+            level.getSkyLight().placeBlockUpdate(chunk, oldHeightLight, lx, packet.y, lz);
 
         if(block.isGlow())
             level.getBlockLight().increase(chunk, lx, packet.y, lz, block.getLightLevel());
-        //else if(oldBlock.isGlow())
-        //    level.getBlockLight().decrease(chunk, lx, packet.y, lz);
+        else if(oldBlock.isGlow())
+            level.getBlockLight().decrease(chunk, lx, packet.y, lz);
 
         level.getSkyLight().sendSections(chunk, packet.y);
     }
