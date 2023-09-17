@@ -3,7 +3,7 @@ package jpize.tests.minecraftose.server.player;
 import jpize.math.vecmath.vector.Vec3f;
 import jpize.net.tcp.TcpConnection;
 import jpize.net.tcp.packet.IPacket;
-import jpize.tests.minecraftose.main.net.packet.*;
+import jpize.tests.minecraftose.main.net.packet.clientbound.*;
 import jpize.tests.minecraftose.main.text.Component;
 import jpize.tests.minecraftose.main.text.TextColor;
 import jpize.tests.minecraftose.server.Server;
@@ -64,7 +64,7 @@ public class PlayerList{
         
         // Add ServerPlayer to list
         final ServerPlayer serverPlayer = new ServerPlayer(level, connection, name);
-        server.getConnectionManager().setPacketHandler(connection, serverPlayer.getConnectionAdapter());
+        server.getConnectionManager().setHandlerForConnection(connection, serverPlayer.getConnectionAdapter());
         serverPlayer.teleport(level, spawnPosition);
         
         playerMap.put(name, serverPlayer);

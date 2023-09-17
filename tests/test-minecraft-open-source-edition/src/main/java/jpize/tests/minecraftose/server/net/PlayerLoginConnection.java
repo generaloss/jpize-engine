@@ -4,10 +4,14 @@ import jpize.net.security.KeyAES;
 import jpize.net.tcp.TcpConnection;
 import jpize.net.tcp.packet.PacketHandler;
 import jpize.tests.minecraftose.main.net.PlayerProfile;
-import jpize.tests.minecraftose.main.net.packet.*;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketDisconnect;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketEncryptStart;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketAuth;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketEncryptEnd;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketLogin;
 import jpize.tests.minecraftose.server.Server;
 
-public class PlayerLoginConnection implements PacketHandler{
+public class PlayerLoginConnection extends PacketHandler{
     
     private final Server server;
     private final TcpConnection connection;
@@ -21,7 +25,7 @@ public class PlayerLoginConnection implements PacketHandler{
     }
     
     
-    public void handleLogin(SBPacketLogin packet){
+    public void login(SBPacketLogin packet){
         profileName = packet.profileName;
         versionID = packet.clientVersionID;
         
@@ -43,12 +47,12 @@ public class PlayerLoginConnection implements PacketHandler{
         new CBPacketEncryptStart(server.getConnectionManager().getRsaKey().getPublic()).write(connection);
     }
     
-    public void handleEncryptEnd(SBPacketEncryptEnd packet){
+    public void encryptEnd(SBPacketEncryptEnd packet){
         final KeyAES decryptedClientKey = new KeyAES(server.getConnectionManager().getRsaKey().decrypt(packet.encryptedClientKey));
         connection.encode(decryptedClientKey);
     }
     
-    public void handleAuth(SBPacketAuth packet){
+    public void auth(SBPacketAuth packet){
         if(!"54_54-iWantPizza-54_54".equals(packet.accountSessionToken)){
             new CBPacketDisconnect("Invalid session").write(connection);
             return;

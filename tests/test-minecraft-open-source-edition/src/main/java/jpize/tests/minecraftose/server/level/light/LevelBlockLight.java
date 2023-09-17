@@ -27,7 +27,7 @@ public class LevelBlockLight{
 
 
     /** Распространение света */
-    public void increase(LevelChunk chunk, int lx, int y, int lz, int level){
+    public synchronized void increase(LevelChunk chunk, int lx, int y, int lz, int level){
         if(chunk.getBlockLight(lx, y, lz) >= level)
             return;
 
@@ -35,17 +35,17 @@ public class LevelBlockLight{
         propagateIncrease();
     }
 
-    private void addIncrease(LevelChunk chunk, int lx, int y, int lz, int level){
+    private synchronized void addIncrease(LevelChunk chunk, int lx, int y, int lz, int level){
         bfsIncreaseQueue.add(new LightNode(chunk, lx, y, lz, level));
     }
 
-    private void addIncreaseWithLightSet(LevelChunk chunk, int lx, int y, int lz, int level){
+    private synchronized void addIncreaseWithLightSet(LevelChunk chunk, int lx, int y, int lz, int level){
         chunk.setBlockLight(lx, y, lz, level);
         addIncrease(chunk, lx, y, lz, level);
     }
 
     /** Алгоритм распространения света */
-    private void propagateIncrease(){
+    private synchronized void propagateIncrease(){
         LevelChunk neighborChunk;
         int neighborX, neighborY, neighborZ;
         int targetLevel;
@@ -108,7 +108,7 @@ public class LevelBlockLight{
 
 
     /** Удаление света */
-    public void decrease(LevelChunk chunk, int lx, int y, int lz){
+    public synchronized void decrease(LevelChunk chunk, int lx, int y, int lz){
         final int level = chunk.getBlockLight(lx, y, lz);
         if(level == 0)
             return;
@@ -117,17 +117,17 @@ public class LevelBlockLight{
         propagateDecrease();
     }
 
-    private void addDecrease(LevelChunk chunk, int lx, int y, int lz, int level){
+    private synchronized void addDecrease(LevelChunk chunk, int lx, int y, int lz, int level){
         bfsDecreaseQueue.add(new LightNode(chunk, lx, y, lz, level));
     }
 
-    private void addDecreaseWithLightSet(LevelChunk chunk, int lx, int y, int lz, int level){
+    private synchronized void addDecreaseWithLightSet(LevelChunk chunk, int lx, int y, int lz, int level){
         chunk.setBlockLight(lx, y, lz, 0);
         addDecrease(chunk, lx, y, lz, level);
     }
 
     /** Алгоритм удаления света **/
-    private void propagateDecrease(){
+    private synchronized void propagateDecrease(){
         LevelChunk neighborChunk;
         int neighborX, neighborY, neighborZ;
 

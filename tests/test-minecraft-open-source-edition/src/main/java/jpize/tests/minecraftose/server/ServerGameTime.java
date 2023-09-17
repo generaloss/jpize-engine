@@ -1,7 +1,7 @@
 package jpize.tests.minecraftose.server;
 
 import jpize.tests.minecraftose.main.time.GameTime;
-import jpize.tests.minecraftose.main.net.packet.CBPacketTime;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketTime;
 
 public class ServerGameTime extends GameTime{
     

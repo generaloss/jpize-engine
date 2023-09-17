@@ -6,7 +6,7 @@ import jpize.tests.minecraftose.main.command.CommandContext;
 import jpize.tests.minecraftose.main.command.argument.CommandArg;
 import jpize.tests.minecraftose.main.command.builder.Commands;
 import jpize.tests.minecraftose.main.command.source.CommandSource;
-import jpize.tests.minecraftose.main.net.packet.CBPacketBlockUpdate;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketBlockUpdate;
 import jpize.tests.minecraftose.main.registry.Registry;
 import jpize.tests.minecraftose.main.text.Component;
 import jpize.tests.minecraftose.main.text.TextColor;

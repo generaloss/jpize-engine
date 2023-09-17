@@ -6,7 +6,7 @@ public class AABoxCollider{
 
     public static Vec3f getCollidedMovement(Vec3f movement, AABoxBody body1, AABoxBody... otherBodies){
         // If movement == 0, return 0
-        if(movement.isZero())
+        if(movement.isZero() || otherBodies == null)
             return movement;
 
         // Copy body for safe addition to body.position.X & Y for correct calculation movementY & Z

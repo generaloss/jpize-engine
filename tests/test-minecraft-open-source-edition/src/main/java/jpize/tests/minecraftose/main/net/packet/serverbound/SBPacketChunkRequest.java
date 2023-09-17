@@ -1,4 +1,4 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.serverbound;
 
 import jpize.net.tcp.packet.IPacket;
 import jpize.tests.minecraftose.server.net.PlayerGameConnection;
@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class SBPacketChunkRequest extends IPacket<PlayerGameConnection>{
     
-    public static final int PACKET_ID = 12;
+    public static final byte PACKET_ID = 12;
     
     public SBPacketChunkRequest(){
         super(PACKET_ID);
@@ -38,8 +38,8 @@ public class SBPacketChunkRequest extends IPacket<PlayerGameConnection>{
     }
     
     @Override
-    public void handle(PlayerGameConnection packetHandler){
-        packetHandler.handleChunkRequest(this);
+    public void handle(PlayerGameConnection handler){
+        handler.chunkRequest(this);
     }
     
 }

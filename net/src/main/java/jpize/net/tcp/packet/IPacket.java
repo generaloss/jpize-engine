@@ -6,7 +6,7 @@ import jpize.util.io.JpizeOutputStream;
 
 import java.io.IOException;
 
-public abstract class IPacket<L extends PacketHandler>{
+public abstract class IPacket<H extends PacketHandler>{
     
     private final byte packetID;
     
@@ -38,6 +38,6 @@ public abstract class IPacket<L extends PacketHandler>{
     
     abstract public void read(JpizeInputStream stream) throws IOException; // For a receiver
     
-    public void handle(L packetListener){ }
+    abstract public void handle(H handler);
     
 }

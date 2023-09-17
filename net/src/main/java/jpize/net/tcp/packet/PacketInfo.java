@@ -6,19 +6,19 @@ import java.io.IOException;
 
 public class PacketInfo{
     
-    private final int packetID;
+    private final byte packetID;
     private final JpizeInputStream dataStream;
     
-    public PacketInfo(int packetID, JpizeInputStream inStream){
+    public PacketInfo(byte packetID, JpizeInputStream inStream){
         this.packetID = packetID;
         this.dataStream = inStream;
     }
     
-    public int getPacketID(){
+    public byte getPacketID(){
         return packetID;
     }
     
-    public <P extends IPacket> P readPacket(P packet){
+    public <P extends IPacket<?>> P readPacket(P packet){
         try{
             packet.read(dataStream);
         }catch(IOException e){

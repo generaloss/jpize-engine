@@ -1,19 +1,19 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.clientbound;
 
 import jpize.net.tcp.packet.IPacket;
+import jpize.tests.minecraftose.client.net.ClientConnection;
 import jpize.tests.minecraftose.main.entity.Player;
-import jpize.tests.minecraftose.server.net.PlayerGameConnection;
 import jpize.util.io.JpizeInputStream;
 import jpize.util.io.JpizeOutputStream;
 
 import java.io.IOException;
 import java.util.UUID;
 
-public class SBPacketPlayerSneaking extends IPacket<PlayerGameConnection>{
+public class CBPacketPlayerSneaking extends IPacket<ClientConnection>{
     
-    public static final int PACKET_ID = 16;
+    public static final byte PACKET_ID = 17;
     
-    public SBPacketPlayerSneaking(){
+    public CBPacketPlayerSneaking(){
         super(PACKET_ID);
     }
     
@@ -21,7 +21,7 @@ public class SBPacketPlayerSneaking extends IPacket<PlayerGameConnection>{
     public UUID playerUUID;
     public boolean sneaking;
     
-    public SBPacketPlayerSneaking(Player player){
+    public CBPacketPlayerSneaking(Player player){
         this();
         this.playerUUID = player.getUUID();
         this.sneaking = player.isSneaking();
@@ -39,10 +39,10 @@ public class SBPacketPlayerSneaking extends IPacket<PlayerGameConnection>{
         playerUUID = stream.readUUID();
         sneaking = stream.readBoolean();
     }
-    
+
     @Override
-    public void handle(PlayerGameConnection packetHandler){
-        packetHandler.handleSneaking(this);
+    public void handle(ClientConnection handler){
+        handler.playerSneaking(this);
     }
     
 }

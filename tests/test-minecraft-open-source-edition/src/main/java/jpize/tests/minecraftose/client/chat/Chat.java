@@ -3,8 +3,8 @@ package jpize.tests.minecraftose.client.chat;
 import jpize.tests.minecraftose.client.ClientGame;
 import jpize.tests.minecraftose.main.chat.MessageSource;
 import jpize.tests.minecraftose.main.chat.MessageSourceOther;
-import jpize.tests.minecraftose.main.net.packet.CBPacketChatMessage;
-import jpize.tests.minecraftose.main.net.packet.SBPacketChatMessage;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketChatMessage;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketChatMessage;
 import jpize.tests.minecraftose.main.text.Component;
 import jpize.util.io.TextProcessor;
 

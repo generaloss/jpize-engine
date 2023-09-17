@@ -1,7 +1,7 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.clientbound;
 
 import jpize.net.tcp.packet.IPacket;
-import jpize.net.tcp.packet.PacketHandler;
+import jpize.tests.minecraftose.client.net.ClientConnection;
 import jpize.tests.minecraftose.main.chat.MessageSource;
 import jpize.tests.minecraftose.main.chat.MessageSourcePlayer;
 import jpize.tests.minecraftose.main.chat.MessageSourceServer;
@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CBPacketChatMessage extends IPacket<PacketHandler>{
+public class CBPacketChatMessage extends IPacket<ClientConnection>{
     
-    public static final int PACKET_ID = 18;
+    public static final byte PACKET_ID = 18;
     
     public CBPacketChatMessage(){
         super(PACKET_ID);
@@ -89,6 +89,11 @@ public class CBPacketChatMessage extends IPacket<PacketHandler>{
                 stream.readUTF()
             )
         );
+    }
+
+    @Override
+    public void handle(ClientConnection handler){
+        handler.chatMessage(this);
     }
     
 }

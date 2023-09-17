@@ -27,20 +27,20 @@ public abstract class Server implements Tickable{
     private final ServerGameTime gameTime;
     
     public Server(){
-        configuration = new ServerConfiguration();
+        this.configuration = new ServerConfiguration();
         
-        connectionManager = new ServerConnectionManager(this);
-        tcpServer = new TcpServer(connectionManager);
+        this.connectionManager = new ServerConnectionManager(this);
+        this.tcpServer = new TcpServer(connectionManager);
         
-        playerList = new PlayerList(this);
-        levelManager = new LevelManager(this);
-        commandDispatcher = new CommandDispatcher(this);
-        gameTime = new ServerGameTime(this);
+        this.playerList = new PlayerList(this);
+        this.levelManager = new LevelManager(this);
+        this.commandDispatcher = new CommandDispatcher(this);
+        this.gameTime = new ServerGameTime(this);
     }
     
     
     public void run(){
-        final long seed = 61128216; //Maths.randomSeed(8);
+        final long seed = 61128216; // Maths.randomSeed(8);
         getLevelManager().createLevel(getConfiguration().getDefaultLevelName(), String.valueOf(seed), DefaultGenerator.getInstance()); // Create overworld level
         getLevelManager().createLevel("flat-world", "FLAT", FlatGenerator.getInstance()); // Create flat-world level
 

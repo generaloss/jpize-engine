@@ -9,7 +9,7 @@ import jpize.math.vecmath.vector.Vec3i;
 import jpize.tests.minecraftose.Minecraft;
 import jpize.tests.minecraftose.client.ClientGame;
 import jpize.tests.minecraftose.client.audio.SoundPlayer;
-import jpize.tests.minecraftose.client.net.ClientConnection;
+import jpize.tests.minecraftose.client.net.ClientConnectionManager;
 import jpize.tests.minecraftose.main.modification.loader.Modification;
 import jpize.tests.minecraftose.client.chunk.builder.ChunkBuilder;
 import jpize.tests.minecraftose.client.control.BlockRayCast;
@@ -131,7 +131,7 @@ public class InfoRenderer implements Disposable{
         // Packets
         infoNextLine();
         info(TextColor.GRAY, "Packets sent", TextColor.YELLOW, ClientGame.tx);
-        info(TextColor.GRAY, "Packets received", TextColor.YELLOW, ClientConnection.rx);
+        info(TextColor.GRAY, "Packets received", TextColor.YELLOW, ClientConnectionManager.rx);
         
         // Position
         infoNextLine();

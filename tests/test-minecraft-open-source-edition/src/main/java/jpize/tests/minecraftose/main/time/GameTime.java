@@ -20,10 +20,25 @@ public class GameTime implements Tickable{
 
 
     private long ticks;
+    private boolean dayLightCycle;
+
+    public GameTime(){
+        this.dayLightCycle = true;
+    }
+
+    public boolean isDayLightCycle(){
+        return dayLightCycle;
+    }
+
+    public void setDayLightCycle(boolean dayLightCycle){
+        this.dayLightCycle = dayLightCycle;
+    }
+
 
     @Override
     public void tick(){
-        ticks++;
+        if(dayLightCycle)
+            ticks++;
     }
     
     

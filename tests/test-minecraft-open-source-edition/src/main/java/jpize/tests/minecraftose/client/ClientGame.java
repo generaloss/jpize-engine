@@ -7,7 +7,7 @@ import jpize.net.tcp.TcpClient;
 import jpize.net.tcp.packet.IPacket;
 import jpize.tests.minecraftose.Minecraft;
 import jpize.tests.minecraftose.client.chat.Chat;
-import jpize.tests.minecraftose.client.net.ClientConnection;
+import jpize.tests.minecraftose.client.net.ClientConnectionManager;
 import jpize.tests.minecraftose.client.time.ClientGameTime;
 import jpize.tests.minecraftose.main.Tickable;
 import jpize.tests.minecraftose.client.control.camera.GameCamera;
@@ -17,8 +17,8 @@ import jpize.tests.minecraftose.client.level.ClientLevel;
 import jpize.tests.minecraftose.client.renderer.particle.Particle;
 import jpize.tests.minecraftose.client.renderer.particle.ParticleBatch;
 import jpize.tests.minecraftose.main.time.GameTime;
-import jpize.tests.minecraftose.main.net.packet.SBPacketLogin;
-import jpize.tests.minecraftose.main.net.packet.SBPacketMove;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketLogin;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketMove;
 
 public class ClientGame implements Tickable{
     
@@ -27,6 +27,7 @@ public class ClientGame implements Tickable{
     
     private final Minecraft session;
     private final TcpClient client;
+    private final ClientConnectionManager connectionManager;
     private final Chat chat;
     private final KeyAES encryptKey;
     private final BlockRayCast blockRayCast;
@@ -39,13 +40,14 @@ public class ClientGame implements Tickable{
     
     public ClientGame(Minecraft session){
         this.session = session;
+
+        this.connectionManager = new ClientConnectionManager(this);
+        this.client = new TcpClient(connectionManager);
+        this.encryptKey = new KeyAES(256);
         
-        client = new TcpClient(new ClientConnection(this));
-        encryptKey = new KeyAES(256);
-        
-        blockRayCast = new BlockRayCast(session, 2000);
-        chat = new Chat(this);
-        time = new ClientGameTime(this);
+        this.blockRayCast = new BlockRayCast(session, 2000);
+        this.chat = new Chat(this);
+        this.time = new ClientGameTime(this);
     }
     
     public Minecraft getSession(){
@@ -64,7 +66,7 @@ public class ClientGame implements Tickable{
     public void tick(){
         if(level == null || player == null)
             return;
-        
+
         time.tick();
         player.tick();
         level.tick();
@@ -77,8 +79,8 @@ public class ClientGame implements Tickable{
         if(time.getTicks() % GameTime.TICKS_IN_SECOND == 0){
             tx = txCounter;
             txCounter = 0;
-            ClientConnection.rx = ClientConnection.rxCounter;
-            ClientConnection.rxCounter = 0;
+            ClientConnectionManager.rx = ClientConnectionManager.rxCounter;
+            ClientConnectionManager.rxCounter = 0;
         }
     }
     

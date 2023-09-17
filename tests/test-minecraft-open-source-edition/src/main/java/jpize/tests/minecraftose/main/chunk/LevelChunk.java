@@ -22,7 +22,7 @@ public class LevelChunk{
 
     protected final Level level;
     protected final ChunkPos position;
-    protected final LevelChunkNeighbors neighbors;
+    protected final LevelChunkNeighbors neighbors1, neighbors2;
     protected final LevelChunkSection[] sections;
     protected int highestSectionIndex;
     protected final Map<HeightmapType, Heightmap> heightmaps;
@@ -34,7 +34,8 @@ public class LevelChunk{
         this.position = position;
 
         this.spawnTimeMillis = System.currentTimeMillis();
-        this.neighbors = new LevelChunkNeighbors(this, 1); // 1 = MAX_STRUCTURE_SIZE
+        this.neighbors1 = new LevelChunkNeighbors(this, 1); // Decorate chunks
+        this.neighbors2 = new LevelChunkNeighbors(this, 2); // Illuminate chunks
         this.sections = new LevelChunkSection[16];
         this.highestSectionIndex = -1;
         
@@ -264,16 +265,20 @@ public class LevelChunk{
     }
 
 
-    public ChunkPos[] getNeighbors(){
-        return neighbors.array();
+    public ChunkPos[] getNeighbors1(){
+        return neighbors1.array();
+    }
+
+    public ChunkPos[] getNeighbors2(){
+        return neighbors2.array();
     }
 
     public ChunkPos getNeighborPos(int neighborX, int neighborZ){
-        return neighbors.getNeighborPos(neighborX, neighborZ);
+        return neighbors1.getNeighborPos(neighborX, neighborZ);
     }
 
     public LevelChunk getNeighborChunk(int neighborX, int neighborZ){
-        return neighbors.getNeighborChunk(neighborX, neighborZ);
+        return neighbors1.getNeighborChunk(neighborX, neighborZ);
     }
     
     

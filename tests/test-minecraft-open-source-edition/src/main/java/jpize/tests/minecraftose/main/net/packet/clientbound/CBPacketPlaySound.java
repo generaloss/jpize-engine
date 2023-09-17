@@ -1,17 +1,17 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.clientbound;
 
 import jpize.math.vecmath.vector.Vec3f;
 import jpize.net.tcp.packet.IPacket;
-import jpize.net.tcp.packet.PacketHandler;
+import jpize.tests.minecraftose.client.net.ClientConnection;
 import jpize.tests.minecraftose.main.audio.Sound;
 import jpize.util.io.JpizeInputStream;
 import jpize.util.io.JpizeOutputStream;
 
 import java.io.IOException;
 
-public class CBPacketPlaySound extends IPacket<PacketHandler>{
+public class CBPacketPlaySound extends IPacket<ClientConnection>{
 
-    public static final int PACKET_ID = 23;
+    public static final byte PACKET_ID = 23;
 
     public CBPacketPlaySound(){
         super(PACKET_ID);
@@ -54,6 +54,11 @@ public class CBPacketPlaySound extends IPacket<PacketHandler>{
         x = stream.readFloat();
         y = stream.readFloat();
         z = stream.readFloat();
+    }
+
+    @Override
+    public void handle(ClientConnection handler){
+        handler.playSound(this);
     }
 
 }

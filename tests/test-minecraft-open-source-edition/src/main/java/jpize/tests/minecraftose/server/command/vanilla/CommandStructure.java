@@ -6,7 +6,7 @@ import jpize.math.vecmath.vector.Vec3i;
 import jpize.tests.minecraftose.main.command.CommandContext;
 import jpize.tests.minecraftose.main.command.argument.CommandArg;
 import jpize.tests.minecraftose.main.command.builder.Commands;
-import jpize.tests.minecraftose.main.net.packet.CBPacketBlockUpdate;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketBlockUpdate;
 import jpize.tests.minecraftose.main.text.Component;
 import jpize.tests.minecraftose.main.text.TextColor;
 import jpize.tests.minecraftose.server.command.CommandDispatcher;
@@ -68,7 +68,7 @@ public class CommandStructure{
         final String name = context.getArg(2).asWord().getWord();
 
         final Vec3i start = begin.min(end);
-        final Vec3i size = begin.copy().sub(end).abs();
+        final Vec3i size = begin.copy().sub(end).abs().add(1);
 
         // File
         try{
@@ -107,14 +107,14 @@ public class CommandStructure{
             final JpizeInputStream inStream = file.getJpizeIn();
 
             // Read
-            final Vec3i size = inStream.readVec3i().add(1);
+            final Vec3i size = inStream.readVec3i();
 
             for(int x = 0; x < size.x; x++)
                 for(int y = 0; y < size.y; y++)
                     for(int z = 0; z < size.z; z++){
                         final short block = inStream.readShort();
-                        level.setBlockState(x + start.x, y + start.y, z + start.z, block);
-                        playerList.broadcastPacket(new CBPacketBlockUpdate(x + start.x, y + start.y, z + start.z, block));
+                        if(level.setBlockState(x + start.x, y + start.y, z + start.z, block))
+                            playerList.broadcastPacket(new CBPacketBlockUpdate(x + start.x, y + start.y, z + start.z, block));
                     }
 
         }catch(IOException e){

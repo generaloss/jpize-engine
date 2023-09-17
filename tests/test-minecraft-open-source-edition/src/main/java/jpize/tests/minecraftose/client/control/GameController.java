@@ -24,9 +24,9 @@ import jpize.tests.minecraftose.client.renderer.infopanel.ChunkInfoRenderer;
 import jpize.tests.minecraftose.client.renderer.infopanel.InfoRenderer;
 import jpize.tests.minecraftose.main.block.BlockData;
 import jpize.tests.minecraftose.main.entity.Entity;
-import jpize.tests.minecraftose.main.net.packet.SBPacketChunkRequest;
-import jpize.tests.minecraftose.main.net.packet.SBPacketPing;
-import jpize.tests.minecraftose.main.net.packet.SBPacketPlayerBlockSet;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketChunkRequest;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketPing;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketPlayerBlockSet;
 
 import java.util.Collection;
 

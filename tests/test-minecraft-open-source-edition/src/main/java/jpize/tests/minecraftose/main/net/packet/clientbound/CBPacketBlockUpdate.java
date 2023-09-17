@@ -1,15 +1,15 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.clientbound;
 
 import jpize.net.tcp.packet.IPacket;
-import jpize.net.tcp.packet.PacketHandler;
+import jpize.tests.minecraftose.client.net.ClientConnection;
 import jpize.util.io.JpizeInputStream;
 import jpize.util.io.JpizeOutputStream;
 
 import java.io.IOException;
 
-public class CBPacketBlockUpdate extends IPacket<PacketHandler>{
+public class CBPacketBlockUpdate extends IPacket<ClientConnection>{
     
-    public static final int PACKET_ID = 10;
+    public static final byte PACKET_ID = 10;
     
     public CBPacketBlockUpdate(){
         super(PACKET_ID);
@@ -42,6 +42,11 @@ public class CBPacketBlockUpdate extends IPacket<PacketHandler>{
         y = stream.readInt();
         z = stream.readInt();
         blockData = stream.readShort();
+    }
+
+    @Override
+    public void handle(ClientConnection handler){
+        handler.blockUpdate(this);
     }
 
 }

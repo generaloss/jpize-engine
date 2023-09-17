@@ -10,7 +10,7 @@ import jpize.tests.minecraftose.client.control.camera.PerspectiveType;
 import jpize.tests.minecraftose.client.options.KeyMapping;
 import jpize.tests.minecraftose.client.options.Options;
 import jpize.tests.minecraftose.client.entity.LocalPlayer;
-import jpize.tests.minecraftose.main.net.packet.SBPacketPlayerSneaking;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketPlayerSneaking;
 import jpize.util.time.Stopwatch;
 
 public class PlayerController{

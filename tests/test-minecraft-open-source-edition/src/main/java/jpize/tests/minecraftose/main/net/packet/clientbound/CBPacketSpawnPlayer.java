@@ -1,53 +1,57 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.clientbound;
 
 import jpize.math.util.EulerAngles;
 import jpize.math.vecmath.vector.Vec3f;
 import jpize.net.tcp.packet.IPacket;
-import jpize.net.tcp.packet.PacketHandler;
-import jpize.tests.minecraftose.main.entity.Entity;
-import jpize.tests.minecraftose.main.entity.EntityType;
+import jpize.tests.minecraftose.client.net.ClientConnection;
+import jpize.tests.minecraftose.server.player.ServerPlayer;
 import jpize.util.io.JpizeInputStream;
 import jpize.util.io.JpizeOutputStream;
 
 import java.io.IOException;
 import java.util.UUID;
 
-public class CBPacketSpawnEntity extends IPacket<PacketHandler>{
-
-    public static final int PACKET_ID = 14;
-
-    public CBPacketSpawnEntity(){
+public class CBPacketSpawnPlayer extends IPacket<ClientConnection>{
+    
+    public static final byte PACKET_ID = 15;
+    
+    public CBPacketSpawnPlayer(){
         super(PACKET_ID);
     }
     
-    public EntityType<?> type;
     public UUID uuid;
     public Vec3f position;
     public EulerAngles rotation;
-
-    public CBPacketSpawnEntity(Entity entity){
+    public String playerName;
+    
+    public CBPacketSpawnPlayer(ServerPlayer player){
         this();
-        type = entity.getEntityType();
-        uuid = entity.getUUID();
-        position = entity.getPosition();
-        rotation = entity.getRotation();
+        this.uuid = player.getUUID();
+        this.position = player.getPosition();
+        this.rotation = player.getRotation();
+        this.playerName = player.getName();
     }
-
-
+    
+    
     @Override
     protected void write(JpizeOutputStream stream) throws IOException{
-        stream.writeInt(type.getID());
         stream.writeUTF(uuid.toString());
         stream.writeVec3f(position);
         stream.writeEulerAngles(rotation);
+        stream.writeUTF(playerName);
     }
-
+    
     @Override
     public void read(JpizeInputStream stream) throws IOException{
-        type = EntityType.fromEntityID(stream.readInt());
         uuid = UUID.fromString(stream.readUTF());
         position = stream.readVec3f();
         rotation = stream.readEulerAngles();
+        playerName = stream.readUTF();
+    }
+
+    @Override
+    public void handle(ClientConnection handler){
+        handler.spawnPlayer(this);
     }
     
 }

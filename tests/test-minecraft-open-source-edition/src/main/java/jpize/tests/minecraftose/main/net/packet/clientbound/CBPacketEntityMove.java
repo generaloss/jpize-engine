@@ -1,54 +1,59 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.clientbound;
 
 import jpize.math.util.EulerAngles;
 import jpize.math.vecmath.vector.Vec3f;
 import jpize.net.tcp.packet.IPacket;
-import jpize.tests.minecraftose.client.entity.LocalPlayer;
-import jpize.tests.minecraftose.server.net.PlayerGameConnection;
+import jpize.physic.utils.Velocity3f;
+import jpize.tests.minecraftose.client.net.ClientConnection;
+import jpize.tests.minecraftose.server.player.ServerPlayer;
 import jpize.util.io.JpizeInputStream;
 import jpize.util.io.JpizeOutputStream;
-import jpize.physic.utils.Velocity3f;
 
 import java.io.IOException;
+import java.util.UUID;
 
-public class SBPacketMove extends IPacket<PlayerGameConnection>{
-    
-    public static final int PACKET_ID = 9;
-    
-    public SBPacketMove(){
+public class CBPacketEntityMove extends IPacket<ClientConnection>{
+
+    public static final byte PACKET_ID = 9;
+
+    public CBPacketEntityMove(){
         super(PACKET_ID);
     }
-    
-    
+
+
+    public UUID uuid;
     public Vec3f position;
     public EulerAngles rotation;
     public Velocity3f velocity;
-    
-    public SBPacketMove(LocalPlayer localPlayer){
+
+    public CBPacketEntityMove(ServerPlayer serverPlayer){
         this();
-        position = localPlayer.getPosition();
-        rotation = localPlayer.getRotation();
-        velocity = localPlayer.getVelocity();
+        uuid = serverPlayer.getUUID();
+        position = serverPlayer.getPosition();
+        rotation = serverPlayer.getRotation();
+        velocity = serverPlayer.getVelocity();
     }
-    
-    
+
+
     @Override
     protected void write(JpizeOutputStream stream) throws IOException{
+        stream.writeUUID(uuid);
         stream.writeVec3f(position);
         stream.writeEulerAngles(rotation);
         stream.writeVec3f(velocity);
     }
-    
+
     @Override
     public void read(JpizeInputStream stream) throws IOException{
+        uuid = stream.readUUID();
         position = stream.readVec3f();
         rotation = stream.readEulerAngles();
         velocity = new Velocity3f(stream.readVec3f());
     }
-    
+
     @Override
-    public void handle(PlayerGameConnection packetHandler){
-        packetHandler.handleMove(this);
+    public void handle(ClientConnection handler){
+        handler.entityMove(this);
     }
-    
+
 }

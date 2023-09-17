@@ -4,223 +4,183 @@ import jpize.Jpize;
 import jpize.math.Maths;
 import jpize.math.vecmath.vector.Vec3f;
 import jpize.net.tcp.TcpConnection;
-import jpize.net.tcp.TcpListener;
+import jpize.net.tcp.packet.IPacket;
 import jpize.net.tcp.packet.PacketHandler;
-import jpize.net.tcp.packet.PacketInfo;
-import jpize.net.tcp.packet.Packets;
 import jpize.tests.minecraftose.client.ClientGame;
 import jpize.tests.minecraftose.client.chunk.ClientChunk;
 import jpize.tests.minecraftose.client.entity.LocalPlayer;
 import jpize.tests.minecraftose.client.entity.RemotePlayer;
 import jpize.tests.minecraftose.main.chat.MessageSourceServer;
 import jpize.tests.minecraftose.main.entity.Entity;
-import jpize.tests.minecraftose.main.net.packet.*;
+import jpize.tests.minecraftose.main.net.packet.clientbound.*;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketAuth;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketEncryptEnd;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketRenderDistance;
 import jpize.tests.minecraftose.main.text.Component;
 
-public class ClientConnection implements TcpListener, PacketHandler{
-    
+public class ClientConnection extends PacketHandler{
+
     private final ClientGame game;
-    
+    private TcpConnection connection;
+
     public ClientConnection(ClientGame game){
         this.game = game;
     }
-    
+
     public ClientGame getGame(){
         return game;
     }
-    
-    
-    public static int rx;
-    public static int rxCounter;
-    
-    
-    @Override
-    public void received(byte[] bytes, TcpConnection sender){
-        final PacketInfo packetInfo = Packets.getPacketInfo(bytes);
-        if(packetInfo == null)
+
+    public TcpConnection getConnection(){
+        return connection;
+    }
+
+    public void setConnection(TcpConnection connection){
+        this.connection = connection;
+    }
+
+    public void sendPacket(IPacket<?> packet){
+        game.sendPacket(packet);
+    }
+
+
+
+    public void time(CBPacketTime packet){
+        game.getTime().setTicks(packet.gameTimeTicks);
+    }
+
+    public void teleportPlayer(CBPacketTeleportPlayer packet){
+        final LocalPlayer localPlayer = game.getPlayer();
+        if(localPlayer == null)
             return;
-        rxCounter++;
-        switch(packetInfo.getPacketID()){
-            
-            // Login
-            case CBPacketDisconnect.PACKET_ID ->{
-                final CBPacketDisconnect packet = packetInfo.readPacket(new CBPacketDisconnect());
-                
-                game.disconnect();
-                System.out.println("[Client]: Connection closed: " + packet.reasonComponent);
-            }
-            
-            case CBPacketEncryptStart.PACKET_ID ->{
-                final CBPacketEncryptStart packet = packetInfo.readPacket(new CBPacketEncryptStart());
-                
-                byte[] encryptedClientKey = packet.publicServerKey.encrypt(game.getEncryptKey().getKey().getEncoded());
-                new SBPacketEncryptEnd(encryptedClientKey).write(sender);
-                
-                sender.encode(game.getEncryptKey());// * шифрование *
-                
-                new SBPacketAuth(game.getSession().getSessionToken()).write(sender);
-            }
-            
-            // Game
-            case CBPacketSpawnInfo.PACKET_ID ->{
-                final CBPacketSpawnInfo packet = packetInfo.readPacket(new CBPacketSpawnInfo());
-                
-                game.createClientLevel(packet.levelName);
-                game.spawnPlayer(packet.position);
-                game.getLevel().getChunkManager().startLoadChunks();
-                
-                game.sendPacket(new SBPacketRenderDistance(game.getSession().getOptions().getRenderDistance()));
-            }
 
-            case CBPacketPlaySound.PACKET_ID -> {
-                final CBPacketPlaySound packet = packetInfo.readPacket(new CBPacketPlaySound());
+        // Load another level
+        if(!packet.levelName.equals(localPlayer.getLevel().getConfiguration().getName())){
+            game.createClientLevel(packet.levelName);
+            game.getLevel().getChunkManager().startLoadChunks();
+            localPlayer.setLevel(game.getLevel());
+        }
 
-                final Vec3f camPosition = game.getCamera().getPosition();
+        localPlayer.getPosition().set(packet.position);
+        localPlayer.getRotation().set(packet.rotation);
+    }
 
-                Jpize.execSync(() ->
-                    game.getSession().getSoundPlayer().play(
-                        packet.sound,
-                        packet.volume, packet.pitch,
-                        packet.x - camPosition.x,
-                        packet.y - camPosition.y,
-                        packet.z - camPosition.z
-                    )
-                );
-            }
-            
-            case CBPacketTime.PACKET_ID -> {
-                final CBPacketTime packet = packetInfo.readPacket(new CBPacketTime());
+    public void spawnPlayer(CBPacketSpawnPlayer packet){
+        final RemotePlayer remotePlayer = new RemotePlayer(game.getLevel(), packet.playerName);
+        remotePlayer.getPosition().set(packet.position);
+        remotePlayer.getRotation().set(packet.rotation);
+        remotePlayer.setUUID(packet.uuid);
 
-                game.getTime().setTicks(packet.gameTimeTicks);
-            }
-            
-            case CBPacketAbilities.PACKET_ID -> {
-                final CBPacketAbilities packet = packetInfo.readPacket(new CBPacketAbilities());
+        game.getLevel().addEntity(remotePlayer);
+    }
 
-                game.getPlayer().setFlyEnabled(packet.flyEnabled);
-            }
-            
-            case CBPacketTeleportPlayer.PACKET_ID ->{
-                final CBPacketTeleportPlayer packet = packetInfo.readPacket(new CBPacketTeleportPlayer());
-                
-                final LocalPlayer localPlayer = game.getPlayer();
-                if(localPlayer == null)
-                    break;
-                
-                // Load another level
-                if(!packet.levelName.equals(localPlayer.getLevel().getConfiguration().getName())){
-                    game.createClientLevel(packet.levelName);
-                    game.getLevel().getChunkManager().startLoadChunks();
-                    localPlayer.setLevel(game.getLevel());
-                }
-                
-                localPlayer.getPosition().set(packet.position);
-                localPlayer.getRotation().set(packet.rotation);
-            }
-            
-            case CBPacketChatMessage.PACKET_ID ->{
-                final CBPacketChatMessage packet = packetInfo.readPacket(new CBPacketChatMessage());
-                game.getChat().putMessage(packet);
-            }
-            
-            case CBPacketPlayerSneaking.PACKET_ID ->{
-                final CBPacketPlayerSneaking packet = packetInfo.readPacket(new CBPacketPlayerSneaking());
-                
-                final Entity targetEntity = game.getLevel().getEntity(packet.playerUUID);
-                if(targetEntity instanceof RemotePlayer player)
-                    player.setSneaking(packet.sneaking);
-            }
-            
-            case CBPacketEntityMove.PACKET_ID ->{
-                final CBPacketEntityMove packet = packetInfo.readPacket(new CBPacketEntityMove());
+    public void spawnInfo(CBPacketSpawnInfo packet){
+        game.createClientLevel(packet.levelName);
+        game.spawnPlayer(packet.position);
+        game.getLevel().getChunkManager().startLoadChunks();
 
-                Entity targetEntity = game.getLevel().getEntity(packet.uuid);
-                if(targetEntity == null && game.getPlayer().getUUID() == packet.uuid)
-                    targetEntity = game.getPlayer();
-                
-                if(targetEntity != null){
-                    targetEntity.getPosition().set(packet.position);
-                    targetEntity.getRotation().set(packet.rotation);
-                    targetEntity.getVelocity().set(packet.velocity);
-                }
-            }
+        sendPacket(new SBPacketRenderDistance(game.getSession().getOptions().getRenderDistance()));
+    }
 
-            case CBPacketSpawnEntity.PACKET_ID ->{
-                final CBPacketSpawnEntity packet = packetInfo.readPacket(new CBPacketSpawnEntity());
+    public void spawnEntity(CBPacketSpawnEntity packet){
+        final Entity entity = packet.type.createEntity(game.getLevel());
+        entity.getPosition().set(packet.position);
+        entity.getRotation().set(packet.rotation);
+        entity.setUUID(packet.uuid);
 
-                final Entity entity = packet.type.createEntity(game.getLevel());
-                entity.getPosition().set(packet.position);
-                entity.getRotation().set(packet.rotation);
-                entity.setUUID(packet.uuid);
+        game.getLevel().addEntity(entity);
+    }
 
-                game.getLevel().addEntity(entity);
-            }
-            
-            case CBPacketRemoveEntity.PACKET_ID ->{
-                final CBPacketRemoveEntity packet = packetInfo.readPacket(new CBPacketRemoveEntity());
-                
-                game.getLevel().removeEntity(packet.uuid);
-            }
-            
-            case CBPacketSpawnPlayer.PACKET_ID ->{
-                final CBPacketSpawnPlayer packet = packetInfo.readPacket(new CBPacketSpawnPlayer());
-                
-                final RemotePlayer remotePlayer = new RemotePlayer(game.getLevel(), packet.playerName);
-                remotePlayer.getPosition().set(packet.position);
-                remotePlayer.getRotation().set(packet.rotation);
-                remotePlayer.setUUID(packet.uuid);
-                
-                game.getLevel().addEntity(remotePlayer);
-            }
-            
-            case CBPacketBlockUpdate.PACKET_ID ->{
-                final CBPacketBlockUpdate packet = packetInfo.readPacket(new CBPacketBlockUpdate());
-                game.getLevel().setBlockState(packet.x, packet.y, packet.z, packet.blockData);
-                for(int i = 0; i < 100; i++){
-                    game.spawnParticle(game.getSession().BREAK_PARTICLE, new Vec3f(
-                        packet.x + Maths.random(1F),
-                        packet.y + Maths.random(1F),
-                        packet.z + Maths.random(1F)
-                    ));
-                }
-            }
-            
-            case CBPacketChunk.PACKET_ID ->{
-                final CBPacketChunk packet = packetInfo.readPacket(new CBPacketChunk());
-                game.getLevel().getChunkManager().receivedChunk(packet);
-            }
+    public void removeEntity(CBPacketRemoveEntity packet){
+        game.getLevel().removeEntity(packet.uuid);
+    }
 
-            case CBPacketLightUpdate.PACKET_ID ->{
-                final CBPacketLightUpdate packet = packetInfo.readPacket(new CBPacketLightUpdate());
+    public void pong(CBPacketPong packet){
+        final String message = "Ping - " + String.format("%.5f", (System.nanoTime() - packet.timeNanos) / Maths.NanosInSecond) + " ms";
+        game.getChat().putMessage(new MessageSourceServer(), new Component().text(message));
+        System.out.println("[Client]: " + message);
+    }
 
-                final ClientChunk chunk = game.getLevel().getChunkManager().getChunk(packet.position.x, packet.position.z);
-                if(chunk == null)
-                    return;
+    public void playSound(CBPacketPlaySound packet){
+        final Vec3f camPosition = game.getCamera().getPosition();
 
-                final byte[] chunkLight = chunk.getSection(packet.position.y).light;
-                System.arraycopy(packet.light, 0, chunkLight, 0, chunkLight.length);
+        Jpize.execSync(() ->
+            game.getSession().getSoundPlayer().play(
+                packet.sound,
+                packet.volume, packet.pitch,
+                packet.x - camPosition.x,
+                packet.y - camPosition.y,
+                packet.z - camPosition.z
+            )
+        );
+    }
 
-                chunk.rebuild(true);
-            }
-            
-            // Ping
-            case CBPacketPong.PACKET_ID -> {
-                final CBPacketPong packet = packetInfo.readPacket(new CBPacketPong());
-                
-                final String message = "Ping - " + String.format("%.5f", (System.nanoTime() - packet.timeNanos) / Maths.NanosInSecond) + " ms";
-                game.getChat().putMessage(new MessageSourceServer(), new Component().text(message));
-                System.out.println("[Client]: " + message);
-            }
-            
+    public void playerSneaking(CBPacketPlayerSneaking packet){
+        final Entity targetEntity = game.getLevel().getEntity(packet.playerUUID);
+        if(targetEntity instanceof RemotePlayer player)
+            player.setSneaking(packet.sneaking);
+    }
+
+    public void lightUpdate(CBPacketLightUpdate packet){
+        final ClientChunk chunk = game.getLevel().getChunkManager().getChunk(packet.position.x, packet.position.z);
+        if(chunk == null)
+            return;
+
+        final byte[] chunkLight = chunk.getSection(packet.position.y).light;
+        System.arraycopy(packet.light, 0, chunkLight, 0, chunkLight.length);
+
+        chunk.rebuild(true);
+    }
+
+    public void entityMove(CBPacketEntityMove packet){
+        Entity targetEntity = game.getLevel().getEntity(packet.uuid);
+        if(targetEntity == null && game.getPlayer().getUUID() == packet.uuid)
+            targetEntity = game.getPlayer();
+
+        if(targetEntity != null){
+            targetEntity.getPosition().set(packet.position);
+            targetEntity.getRotation().set(packet.rotation);
+            targetEntity.getVelocity().set(packet.velocity);
         }
     }
-    
-    @Override
-    public void connected(TcpConnection connection){ }
-    
-    @Override
-    public void disconnected(TcpConnection connection){
-        Jpize.exit();
+
+    public void encryptStart(CBPacketEncryptStart packet){
+        byte[] encryptedClientKey = packet.publicServerKey.encrypt(game.getEncryptKey().getKey().getEncoded());
+        sendPacket( new SBPacketEncryptEnd(encryptedClientKey) );
+
+        connection.encode(game.getEncryptKey());// * шифрование *
+
+        sendPacket(new SBPacketAuth(game.getSession().getSessionToken()));
     }
-    
+
+    public void disconnect(CBPacketDisconnect packet){
+        game.disconnect();
+        System.out.println("[Client]: Connection closed: " + packet.reasonComponent);
+    }
+
+    public void chunk(CBPacketChunk packet){
+        game.getLevel().getChunkManager().receivedChunk(packet);
+    }
+
+    public void chatMessage(CBPacketChatMessage packet){
+        game.getChat().putMessage(packet);
+    }
+
+    public void blockUpdate(CBPacketBlockUpdate packet){
+        game.getLevel().setBlockState(packet.x, packet.y, packet.z, packet.blockData);
+
+
+        if(packet.blockData == 0)
+            for(int i = 0; i < 100; i++)
+                game.spawnParticle(game.getSession().BREAK_PARTICLE, new Vec3f(
+                    packet.x + Maths.random(1F),
+                    packet.y + Maths.random(1F),
+                    packet.z + Maths.random(1F)
+                ));
+    }
+
+    public void abilities(CBPacketAbilities packet){
+        game.getPlayer().setFlyEnabled(packet.flyEnabled);
+    }
+
 }

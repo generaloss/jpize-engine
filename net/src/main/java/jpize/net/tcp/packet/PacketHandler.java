@@ -1,3 +1,3 @@
 package jpize.net.tcp.packet;
 
-public interface PacketHandler{ }
+public abstract class PacketHandler{ }

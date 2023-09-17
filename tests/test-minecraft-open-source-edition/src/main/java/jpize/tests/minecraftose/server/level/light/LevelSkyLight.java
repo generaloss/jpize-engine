@@ -3,13 +3,12 @@ package jpize.tests.minecraftose.server.level.light;
 import jpize.math.vecmath.vector.Vec2i;
 import jpize.math.vecmath.vector.Vec3i;
 import jpize.tests.minecraftose.client.block.BlockProps;
-import jpize.tests.minecraftose.client.block.Blocks;
 import jpize.tests.minecraftose.main.Dir;
 import jpize.tests.minecraftose.main.chunk.LevelChunk;
 import jpize.tests.minecraftose.main.chunk.storage.ChunkPos;
 import jpize.tests.minecraftose.main.chunk.storage.Heightmap;
 import jpize.tests.minecraftose.main.chunk.storage.HeightmapType;
-import jpize.tests.minecraftose.main.net.packet.CBPacketLightUpdate;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketLightUpdate;
 import jpize.tests.minecraftose.server.chunk.ServerChunk;
 import jpize.tests.minecraftose.server.level.ServerLevel;
 
@@ -34,7 +33,7 @@ public class LevelSkyLight{
 
 
     /** Распространение света */
-    public void increase(LevelChunk chunk, int lx, int y, int lz, int level){
+    public synchronized void increase(LevelChunk chunk, int lx, int y, int lz, int level){
         if(chunk.getSkyLight(lx, y, lz) >= level)
             return;
 
@@ -42,17 +41,17 @@ public class LevelSkyLight{
         propagateIncrease();
     }
 
-    private void addIncrease(LevelChunk chunk, int lx, int y, int lz, int level){
+    private synchronized void addIncrease(LevelChunk chunk, int lx, int y, int lz, int level){
         bfsIncreaseQueue.add(new LightNode(chunk, lx, y, lz, level));
     }
 
-    private void addIncreaseWithLightSet(LevelChunk chunk, int lx, int y, int lz, int level){
+    private synchronized void addIncreaseWithLightSet(LevelChunk chunk, int lx, int y, int lz, int level){
         chunk.setSkyLight(lx, y, lz, level);
         addIncrease(chunk, lx, y, lz, level);
     }
 
     /** Алгоритм распространения света */
-    private void propagateIncrease(){
+    private synchronized void propagateIncrease(){
         LevelChunk neighborChunk;
         int neighborLX, neighborY, neighborLZ;
         int targetLevel;
@@ -115,7 +114,7 @@ public class LevelSkyLight{
 
 
     /** Удаление света */
-    public void decrease(LevelChunk chunk, int lx, int y, int lz){
+    public synchronized void decrease(LevelChunk chunk, int lx, int y, int lz){
         final int level = chunk.getSkyLight(lx, y, lz);
         if(level == 0)
             return;
@@ -124,22 +123,24 @@ public class LevelSkyLight{
         propagateDecrease();
     }
 
-    private void addDecrease(LevelChunk chunk, int lx, int y, int lz, int level){
+    private synchronized void addDecrease(LevelChunk chunk, int lx, int y, int lz, int level){
         bfsDecreaseQueue.add(new LightNode(chunk, lx, y, lz, level));
     }
 
-    private void addDecreaseWithLightSet(LevelChunk chunk, int lx, int y, int lz, int level){
+    private synchronized void addDecreaseWithLightSet(LevelChunk chunk, int lx, int y, int lz, int level){
         chunk.setSkyLight(lx, y, lz, 0);
         addDecrease(chunk, lx, y, lz, level);
     }
 
     /** Алгоритм удаления света **/
-    private void propagateDecrease(){
+    private synchronized void propagateDecrease(){
         LevelChunk neighborChunk;
         int neighborLX, neighborY, neighborLZ;
 
         // Итерируемся по нодам в очереди
+        int num = 0;
         while(!bfsDecreaseQueue.isEmpty()){
+            num++;
             final LightNode lightEntry = bfsDecreaseQueue.poll();
 
             final LevelChunk chunk = lightEntry.chunk;
@@ -178,22 +179,27 @@ public class LevelSkyLight{
 
                 // Узнать уровень освещенности соседнего блока
                 final int neighborLevel = neighborChunk.getSkyLight(neighborLX, neighborY, neighborLZ);
+
                 // Если он равен 0 - уменьшать дальше нечего
+                if(neighborLevel == 0)
+                    continue;
+
                 // Если соседний уровень освещенности меньше данного - зануляем его и уменьшаем освещение с его позиции
-                if(neighborLevel != 0 && neighborLevel < level){
+                if(neighborLevel < level){
                     final BlockProps neighborBlock = neighborChunk.getBlockProps(neighborLX, neighborY, neighborLZ);
                     // Находим уровень света, учитывая непрозрачность блока
                     // (всегда будет на 0-15 больше чем уровень освещенности в данном блоке)
                     final int decreaseLevel = Math.max(level, neighborLevel + neighborBlock.getOpacity());
                     // Math.max(0, neighborLevel - neighborBlock.getOpacity())
                     addDecreaseWithLightSet(neighborChunk, neighborLX, neighborY, neighborLZ, decreaseLevel);
-                }else if(neighborLevel >= level)
+                }else
                     // Если соседний уровень равен данному, или же больше - его уменьшать нельзя, так как этот свет уже исходит от другого источника
                     // Просто увеличиваем от него свет, так как до этого все зануляли
                     addIncrease(neighborChunk, neighborLX, neighborY, neighborLZ, neighborLevel);
 
             }
         }
+        System.out.println("DECREASED NUM: " + num);
 
         propagateIncrease();
     }
@@ -234,8 +240,8 @@ public class LevelSkyLight{
                 continue;
 
             // Debug
-            sideChunk.setBlock(sideLocalX, height, sideLocalZ, Blocks.GLASS);
-            sideChunk.setBlock(sideLocalX, sideHeight - 1, sideLocalZ, Blocks.GLASS);
+            // sideChunk.setBlock(sideLocalX, height, sideLocalZ, Blocks.GLASS);
+            // sideChunk.setBlock(sideLocalX, sideHeight - 1, sideLocalZ, Blocks.GLASS);
 
             // Заполняем пробел светом (места под деревьями, открытые пещеры, и др.)
             for(int checkY = height; checkY < sideHeight; checkY++){
@@ -281,7 +287,7 @@ public class LevelSkyLight{
         final int height = heightmapLight.getHeight(lx, lz) + 1;
 
         for(int y = height; y < HEIGHT; y++)
-            addIncrease(chunk, lx, y, lz, MAX_LIGHT_LEVEL);
+            addIncreaseWithLightSet(chunk, lx, y, lz, MAX_LIGHT_LEVEL);
         propagateIncrease();
 
         // updateSideSkyLight(chunk, lx, lz);
@@ -291,21 +297,23 @@ public class LevelSkyLight{
     public void placeBlockUpdate(ServerChunk chunk, int oldHeight, int lx, int y, int lz){
         System.out.println("y: " + y + ", oldY: " + oldHeight);
         for(int i = y; i > oldHeight; i--)
-            decrease(chunk, lx, i, lz);
+            addDecreaseWithLightSet(chunk, lx, i, lz, chunk.getSkyLight(lx, y, lz));
+
+        propagateDecrease();
     }
 
     public void destroyBlockUpdate(ServerChunk chunk, int newHeight, int lx, int y, int lz){
         for(int i = y; i > newHeight; i--)
             increase(chunk, lx, y, lz, MAX_LIGHT_LEVEL);
 
-        // updateSkyLight(chunk, lx, lz);
+        updateSkyLight(chunk, lx, lz);
 
-        /*
+
         ServerChunk neighborChunk;
         int neighborX, neighborY, neighborZ;
 
         for(int i = 0; i < 6; i++){
-            final Vec3i normal = Direction.normal3DFromIndex(i);
+            final Vec3i normal = Dir.getNormal3(i);
 
             neighborX = lx + normal.x;
             neighborZ = lz + normal.z;
@@ -324,13 +332,13 @@ public class LevelSkyLight{
             if(neighborY < 0 || neighborY > HEIGHT_IDX)
                 continue;
 
-            final int neighborLevel = neighborChunk.getLight(neighborX, neighborY, neighborZ);
+            final int neighborLevel = neighborChunk.getSkyLight(neighborX, neighborY, neighborZ);
             if(neighborLevel > 1){
                 addIncrease(neighborChunk, neighborX, neighborY, neighborZ, neighborLevel);
                 propagateIncrease();
             }
         }
-        */
+
     }
 
 

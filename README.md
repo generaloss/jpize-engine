@@ -200,10 +200,18 @@ client.send("Hello, World!".getBytes()); // send 'Hello, World!'
 
 #### 2. Packet Example:
 ``` java
-// packet
-class MyPacket extends IPacket<MyPacketHandler>{ // package processing can be done without MyPacketHandler if you write PacketHandler instead
+// Packets Handler
+class MyPacketHandler extends PacketHandler{
+    public void handleMyPacket(MyPacket packet){ ... }
+    public void handleAnotherPacket(AnotherPacket packet){ ... }
+}
+
+// Packet
+class MyPacket extends IPacket<MyPacketHandler>{ // MyPacketHandler
+    public static final byte PACKET_ID = /*Your packet ID*/;
+    
     public MyPacket(){
-        super(MY_PACKET_ID);
+        super(PACKET_ID);
     }
     public MyPacket(some_data){
         this();
@@ -218,11 +226,7 @@ class MyPacket extends IPacket<MyPacketHandler>{ // package processing can be do
     }
 }
 
-// packets handler
-class MyPacketHandler implements PacketHandler{
-    public void handleMyPacket(MyPacket packet){ ... }
-    public void handleAnotherPacket(AnotherPacket packet){ ... }
-}
+
 
 // packet sending
 TcpClient client = ...;
@@ -232,20 +236,13 @@ new MyPacket(some_data).write(connection);
 
 // packet receiving
 MyPacketHandler handler = ...;
+// register packets
+PacketDispatcher packetDispatcher = new PacketDispatcher();
+packetDispatcher.register(MyPacket     .PACKET_ID, MyPacket     .class);
+packetDispatcher.register(AnotherPacket.PACKET_ID, AnotherPacket.class);
 ...
 void received(byte[] bytes, TcpConnection sender){
-    PacketInfo packetInfo = Packets.getPacketInfo(bytes);
-    if(packetInfo == null) return;
-
-    switch(packetInfo.getPacketID()){
-        // MyPacket
-        case MyPacket.MY_PACKET_ID -> packetInfo.readPacket(new MyPacket()) .handle(handler);
-        // AnotherPacket
-        case AnotherPacket.MY_PACKET_ID -> { // without packet handler
-            AnotherPacket packet = packetInfo.readPacket(new AnotherPacket());
-            ...
-        }
-    }
+    packetDispatcher.handlePacket(bytes, handler);
 }
 ```
 

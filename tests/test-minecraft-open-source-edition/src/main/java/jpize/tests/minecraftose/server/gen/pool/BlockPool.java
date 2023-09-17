@@ -1,7 +1,6 @@
 package jpize.tests.minecraftose.server.gen.pool;
 
 import jpize.tests.minecraftose.client.block.Block;
-import jpize.tests.minecraftose.client.block.Blocks;
 import jpize.tests.minecraftose.main.chunk.storage.ChunkPos;
 import jpize.tests.minecraftose.server.chunk.ServerChunk;
 import jpize.tests.minecraftose.server.level.ServerLevel;
@@ -31,7 +30,7 @@ public class BlockPool{
             return;
 
         for(ChunkBlock block: blocks)
-            if(chunk.getBlock(block.lx, block.y, block.lz) == Blocks.AIR)
+            //if(chunk.getBlock(block.lx, block.y, block.lz) == Blocks.AIR)
                 chunk.setBlockDataFast(block.lx, block.y, block.lz, block.blockData);
 
         chunkPools.remove(chunk.getPosition());

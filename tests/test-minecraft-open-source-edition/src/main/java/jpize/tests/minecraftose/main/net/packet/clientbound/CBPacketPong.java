@@ -1,24 +1,24 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.clientbound;
 
 import jpize.net.tcp.packet.IPacket;
-import jpize.net.tcp.packet.PacketHandler;
+import jpize.tests.minecraftose.client.net.ClientConnection;
 import jpize.util.io.JpizeInputStream;
 import jpize.util.io.JpizeOutputStream;
 
 import java.io.IOException;
 
-public class SBPacketPing extends IPacket<PacketHandler>{
+public class CBPacketPong extends IPacket<ClientConnection>{
     
-    public static final int PACKET_ID = 7;
+    public static final byte PACKET_ID = 7;
     
-    public SBPacketPing(){
+    public CBPacketPong(){
         super(PACKET_ID);
     }
     
     
     public long timeNanos;
     
-    public SBPacketPing(long timeNanos){
+    public CBPacketPong(long timeNanos){
         this();
         this.timeNanos = timeNanos;
     }
@@ -33,5 +33,11 @@ public class SBPacketPing extends IPacket<PacketHandler>{
     public void read(JpizeInputStream stream) throws IOException{
         timeNanos = stream.readLong();
     }
+
+    @Override
+    public void handle(ClientConnection handler){
+        handler.pong(this);
+    }
     
 }
+

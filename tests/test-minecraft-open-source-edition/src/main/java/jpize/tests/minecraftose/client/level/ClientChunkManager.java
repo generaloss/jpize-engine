@@ -8,8 +8,8 @@ import jpize.tests.minecraftose.main.chunk.ChunkUtils;
 import jpize.tests.minecraftose.main.chunk.storage.ChunkPos;
 import jpize.tests.minecraftose.main.level.ChunkManager;
 import jpize.tests.minecraftose.main.level.ChunkManagerUtils;
-import jpize.tests.minecraftose.main.net.packet.CBPacketChunk;
-import jpize.tests.minecraftose.main.net.packet.SBPacketChunkRequest;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketChunk;
+import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketChunkRequest;
 import jpize.util.time.FpsCounter;
 
 import java.util.Collection;

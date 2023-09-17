@@ -1,7 +1,7 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.clientbound;
 
 import jpize.net.tcp.packet.IPacket;
-import jpize.net.tcp.packet.PacketHandler;
+import jpize.tests.minecraftose.client.net.ClientConnection;
 import jpize.tests.minecraftose.main.chunk.ChunkUtils;
 import jpize.tests.minecraftose.main.chunk.LevelChunkSection;
 import jpize.tests.minecraftose.main.chunk.storage.SectionPos;
@@ -10,9 +10,9 @@ import jpize.util.io.JpizeOutputStream;
 
 import java.io.IOException;
 
-public class CBPacketLightUpdate extends IPacket<PacketHandler>{
+public class CBPacketLightUpdate extends IPacket<ClientConnection>{
 
-    public static final int PACKET_ID = 24;
+    public static final byte PACKET_ID = 24;
 
     public CBPacketLightUpdate(){
         super(PACKET_ID);
@@ -38,6 +38,11 @@ public class CBPacketLightUpdate extends IPacket<PacketHandler>{
     public void read(JpizeInputStream stream) throws IOException{
         position = new SectionPos(stream.readVec3i());
         light = stream.readNBytes(ChunkUtils.VOLUME);
+    }
+
+    @Override
+    public void handle(ClientConnection handler){
+        handler.lightUpdate(this);
     }
 
 }

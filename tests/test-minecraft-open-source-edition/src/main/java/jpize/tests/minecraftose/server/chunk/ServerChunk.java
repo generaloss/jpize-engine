@@ -1,6 +1,7 @@
 package jpize.tests.minecraftose.server.chunk;
 
 import jpize.tests.minecraftose.client.block.Block;
+import jpize.tests.minecraftose.client.block.BlockProps;
 import jpize.tests.minecraftose.client.block.Blocks;
 import jpize.tests.minecraftose.main.block.BlockData;
 import jpize.tests.minecraftose.main.chunk.LevelChunk;
@@ -28,6 +29,7 @@ public class ServerChunk extends LevelChunk{
             final boolean blockPlaced = BlockData.getID(blockData) != Blocks.AIR.getID();
             for(Heightmap heightmap: heightmaps.values())
                 heightmap.update(lx, y, lz, blockPlaced);
+
             return true;
         }
 
@@ -46,11 +48,19 @@ public class ServerChunk extends LevelChunk{
 
     @Override
     public boolean setBlock(int lx, int y, int lz, Block block){
+        final BlockProps oldBlock = super.getBlockProps(lx, y, lz);
+
         final boolean result = super.setBlock(lx, y, lz, block);
         if(result){
-            //+ final boolean blockPlaced = block != Blocks.AIR;
-            //+ for(Heightmap heightmap: heightmaps.values())
-            //+     heightmap.update(lx, y, lz, blockPlaced);
+            final boolean blockPlaced = block != Blocks.AIR;
+            for(Heightmap heightmap: heightmaps.values())
+                heightmap.update(lx, y, lz, blockPlaced);
+
+            if(block.getState(0).isGlow())
+                getLevel().getBlockLight().increase(this, lx, y, lz, block.getState(0).getLightLevel());
+            else if(oldBlock.isGlow())
+                getLevel().getBlockLight().decrease(this, lx, y, lz);
+
             return true;
         }
 

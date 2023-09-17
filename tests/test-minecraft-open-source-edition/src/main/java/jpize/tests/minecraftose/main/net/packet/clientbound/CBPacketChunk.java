@@ -1,9 +1,9 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.clientbound;
 
 import jpize.net.tcp.packet.IPacket;
-import jpize.net.tcp.packet.PacketHandler;
 import jpize.tests.minecraftose.client.chunk.ClientChunk;
 import jpize.tests.minecraftose.client.level.ClientLevel;
+import jpize.tests.minecraftose.client.net.ClientConnection;
 import jpize.tests.minecraftose.main.biome.Biome;
 import jpize.tests.minecraftose.main.chunk.ChunkUtils;
 import jpize.tests.minecraftose.main.chunk.LevelChunk;
@@ -20,9 +20,9 @@ import java.util.*;
 
 import static jpize.tests.minecraftose.main.chunk.ChunkUtils.AREA;
 
-public class CBPacketChunk extends IPacket<PacketHandler>{
+public class CBPacketChunk extends IPacket<ClientConnection>{
     
-    public static final int PACKET_ID = 2;
+    public static final byte PACKET_ID = 2;
     
     
     private ChunkPos position;
@@ -153,6 +153,11 @@ public class CBPacketChunk extends IPacket<PacketHandler>{
         final short[] values = stream.readShortArray();
         
         readHeightmaps.put(type, values);
+    }
+
+    @Override
+    public void handle(ClientConnection handler){
+        handler.chunk(this);
     }
     
 }

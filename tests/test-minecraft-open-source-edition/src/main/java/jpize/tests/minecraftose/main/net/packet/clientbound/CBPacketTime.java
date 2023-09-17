@@ -1,15 +1,15 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.clientbound;
 
 import jpize.net.tcp.packet.IPacket;
-import jpize.net.tcp.packet.PacketHandler;
+import jpize.tests.minecraftose.client.net.ClientConnection;
 import jpize.util.io.JpizeInputStream;
 import jpize.util.io.JpizeOutputStream;
 
 import java.io.IOException;
 
-public class CBPacketTime extends IPacket<PacketHandler>{
+public class CBPacketTime extends IPacket<ClientConnection>{
     
-    public static final int PACKET_ID = 22;
+    public static final byte PACKET_ID = 22;
     
     public CBPacketTime(){
         super(PACKET_ID);
@@ -32,6 +32,11 @@ public class CBPacketTime extends IPacket<PacketHandler>{
     @Override
     public void read(JpizeInputStream stream) throws IOException{
         gameTimeTicks = stream.readLong();
+    }
+
+    @Override
+    public void handle(ClientConnection handler){
+        handler.time(this);
     }
     
 }

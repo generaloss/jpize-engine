@@ -12,7 +12,11 @@ import jpize.tests.minecraftose.main.chunk.ChunkUtils;
 import jpize.tests.minecraftose.main.chunk.storage.ChunkPos;
 import jpize.tests.minecraftose.main.chunk.storage.HeightmapType;
 import jpize.tests.minecraftose.main.command.source.CommandSourcePlayer;
-import jpize.tests.minecraftose.main.net.packet.*;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketBlockUpdate;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketEntityMove;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketPlayerSneaking;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketPong;
+import jpize.tests.minecraftose.main.net.packet.serverbound.*;
 import jpize.tests.minecraftose.main.text.Component;
 import jpize.tests.minecraftose.main.text.TextColor;
 import jpize.tests.minecraftose.server.Server;
@@ -20,7 +24,7 @@ import jpize.tests.minecraftose.server.chunk.ServerChunk;
 import jpize.tests.minecraftose.server.level.ServerLevel;
 import jpize.tests.minecraftose.server.player.ServerPlayer;
 
-public class PlayerGameConnection implements PacketHandler{
+public class PlayerGameConnection extends PacketHandler{
     
     private final ServerPlayer player;
     private final Server server;
@@ -48,7 +52,7 @@ public class PlayerGameConnection implements PacketHandler{
     }
     
     
-    public void handleChunkRequest(SBPacketChunkRequest packet){
+    public void chunkRequest(SBPacketChunkRequest packet){
         final ServerLevel level = player.getLevel();
         
         level.getChunkManager().requestedChunk(
@@ -57,7 +61,7 @@ public class PlayerGameConnection implements PacketHandler{
         );
     }
     
-    public void handlePlayerBlockSet(SBPacketPlayerBlockSet packet){
+    public void playerBlockSet(SBPacketPlayerBlockSet packet){
         final ServerLevel level = player.getLevel();
         final BlockProps oldBlock = level.getBlockProps(packet.x, packet.y, packet.z);
         final int oldHeightLight = level.getHeight(HeightmapType.LIGHT_SURFACE, packet.x, packet.z);
@@ -109,7 +113,7 @@ public class PlayerGameConnection implements PacketHandler{
         level.getSkyLight().sendSections(chunk, packet.y);
     }
     
-    public void handleMove(SBPacketMove packet){
+    public void move(SBPacketMove packet){
         player.getPosition().set(packet.position);
         player.getRotation().set(packet.rotation);
         player.getVelocity().set(packet.velocity);
@@ -117,23 +121,27 @@ public class PlayerGameConnection implements PacketHandler{
         server.getPlayerList().broadcastPacketLevelExcept(player.getLevel(), new CBPacketEntityMove(player), player);
     }
     
-    public void handleRenderDistance(SBPacketRenderDistance packet){
+    public void renderDistance(SBPacketRenderDistance packet){
         player.setRenderDistance(packet.renderDistance);
     }
     
-    public void handleSneaking(SBPacketPlayerSneaking packet){
+    public void sneaking(SBPacketPlayerSneaking packet){
         player.setSneaking(packet.sneaking);
         
         server.getPlayerList().broadcastPacketExcept(new CBPacketPlayerSneaking(player), player);
     }
     
-    public void handleChatMessage(SBPacketChatMessage packet){
+    public void chatMessage(SBPacketChatMessage packet){
         String message = packet.message;
         
         if(message.startsWith("/"))
             server.getCommandDispatcher().executeCommand(message.substring(1), commandSource);
         else
             player.sendToChat(new Component().color(TextColor.DARK_GREEN).text("<" + player.getName() + "> ").reset().text(packet.message));
+    }
+
+    public void ping(SBPacketPing packet){
+        sendPacket(new CBPacketPong(packet.timeNanos));
     }
     
 }

@@ -58,7 +58,6 @@ public class Structure{
 
                         final short block = inStream.readShort();
                         pool.setBlockData(x + i, y + j, z + k, block);
-
                     }
 
         }catch(IOException e){

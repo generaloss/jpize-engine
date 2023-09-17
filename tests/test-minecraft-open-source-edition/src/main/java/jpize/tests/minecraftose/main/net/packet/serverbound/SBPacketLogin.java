@@ -1,4 +1,4 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.serverbound;
 
 import jpize.net.tcp.packet.IPacket;
 import jpize.tests.minecraftose.server.net.PlayerLoginConnection;
@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class SBPacketLogin extends IPacket<PlayerLoginConnection>{
     
-    public static final int PACKET_ID = 6;
+    public static final byte PACKET_ID = 6;
     
     public SBPacketLogin(){
         super(PACKET_ID);
@@ -39,8 +39,8 @@ public class SBPacketLogin extends IPacket<PlayerLoginConnection>{
     }
     
     @Override
-    public void handle(PlayerLoginConnection packetHandler){
-        packetHandler.handleLogin(this);
+    public void handle(PlayerLoginConnection handler){
+        handler.login(this);
     }
     
 }

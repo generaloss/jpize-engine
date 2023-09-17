@@ -1,6 +1,6 @@
 package jpize.tests.minecraftose.server.command.vanilla;
 
-import jpize.tests.minecraftose.main.net.packet.CBPacketDisconnect;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketDisconnect;
 import jpize.tests.minecraftose.main.text.Component;
 import jpize.tests.minecraftose.main.text.TextColor;
 import jpize.tests.minecraftose.main.command.CommandContext;

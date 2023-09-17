@@ -1,4 +1,4 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.serverbound;
 
 import jpize.net.tcp.packet.IPacket;
 import jpize.tests.minecraftose.server.net.PlayerGameConnection;
@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class SBPacketPlayerBlockSet extends IPacket<PlayerGameConnection>{
     
-    public static final int PACKET_ID = 11;
+    public static final byte PACKET_ID = 11;
     
     public SBPacketPlayerBlockSet(){
         super(PACKET_ID);
@@ -45,8 +45,8 @@ public class SBPacketPlayerBlockSet extends IPacket<PlayerGameConnection>{
     }
     
     @Override
-    public void handle(PlayerGameConnection packetHandler){
-        packetHandler.handlePlayerBlockSet(this);
+    public void handle(PlayerGameConnection handler){
+        handler.playerBlockSet(this);
     }
     
 }

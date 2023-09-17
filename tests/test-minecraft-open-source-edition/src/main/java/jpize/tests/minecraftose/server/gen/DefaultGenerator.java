@@ -38,9 +38,9 @@ public class DefaultGenerator extends ChunkGenerator{
         humidityNoise = new FastNoiseLite();
         riverNoise = new FastNoiseLite();
 
-        continentalnessNoise.setFrequency(0.002F); // FIX
+        continentalnessNoise.setFrequency(0.0002F); // FIX
         continentalnessNoise.setFractalType(FastNoiseLite.FractalType.FBm);
-        continentalnessNoise.setFractalOctaves(9);
+        continentalnessNoise.setFractalOctaves(12);
 
         humidityNoise.setFrequency(0.0004F); // FIX
         humidityNoise.setFractalType(FastNoiseLite.FractalType.FBm);
@@ -210,7 +210,10 @@ public class DefaultGenerator extends ChunkGenerator{
         /** SURFACE */
 
         for(int lx = 0; lx < SIZE; lx++){
+            final int x = lx + baseX;
             for(int lz = 0; lz < SIZE; lz++){
+                final int z = lz + baseZ;
+
                 final int height = heightmapSurface.getHeight(lx, lz);
                 final Biome biome = biomes.getBiome(lx, lz);
 
@@ -221,7 +224,11 @@ public class DefaultGenerator extends ChunkGenerator{
                 final Block surfaceBlock = switch(biome){
                     case DESERT, BEACH, SNOWY_BEACH -> Blocks.SAND;
                     case SNOWY_TAIGA -> Blocks.SNOWY_GRASS_BLOCK;
-                    case TAIGA -> Blocks.PODZOL;
+                    case TAIGA -> {
+                        if(peaksValleysNoise.getNoise(x, z) < 0.2)
+                            yield Blocks.PODZOL;
+                        yield Blocks.GRASS_BLOCK;
+                    }
                     case RIVER, ICE_RIVER, SEA, ICE_SEA -> Blocks.DIRT;
                     default -> Blocks.GRASS_BLOCK;
                 };
@@ -316,7 +323,7 @@ public class DefaultGenerator extends ChunkGenerator{
                             Cactus.generate(pool, x, height + 1, z, random);
                             prevCactusGen = true;
                         }else if(random.randomBoolean(0.00005))
-                            MiniTemple.generate(pool, x, height + 1, z, random);
+                            MiniTemple.generate(pool, x, height, z, random);
                     }
 
                     case FOREST -> {
@@ -326,7 +333,7 @@ public class DefaultGenerator extends ChunkGenerator{
                             else
                                 Tree.generateBirchTree(pool, x, height + 1, z, random);
                         }else if(random.randomBoolean(0.00002))
-                            House.generate(pool, x, height + 1, z, random);
+                            House.generate(pool, x, height, z, random);
                     }
 
                     case TAIGA -> {

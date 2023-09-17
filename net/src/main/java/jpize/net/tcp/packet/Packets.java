@@ -13,7 +13,7 @@ public class Packets{
                 return null;
             
             final JpizeInputStream stream = new JpizeInputStream(new ByteArrayInputStream(data));
-            int packetID = stream.readByte();
+            final byte packetID = stream.readByte();
             
             return new PacketInfo(packetID, stream);
         }catch(IOException e){

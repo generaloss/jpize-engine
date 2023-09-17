@@ -1,16 +1,16 @@
-package jpize.tests.minecraftose.main.net.packet;
+package jpize.tests.minecraftose.main.net.packet.clientbound;
 
 import jpize.net.security.PublicRSA;
 import jpize.net.tcp.packet.IPacket;
-import jpize.net.tcp.packet.PacketHandler;
+import jpize.tests.minecraftose.client.net.ClientConnection;
 import jpize.util.io.JpizeInputStream;
 import jpize.util.io.JpizeOutputStream;
 
 import java.io.IOException;
 
-public class CBPacketEncryptStart extends IPacket<PacketHandler>{
+public class CBPacketEncryptStart extends IPacket<ClientConnection>{
     
-    public static final int PACKET_ID = 5;
+    public static final byte PACKET_ID = 5;
     
     public CBPacketEncryptStart(){
         super(PACKET_ID);
@@ -33,6 +33,11 @@ public class CBPacketEncryptStart extends IPacket<PacketHandler>{
     @Override
     public void read(JpizeInputStream stream) throws IOException{
         publicServerKey = new PublicRSA(stream.readAllBytes());
+    }
+
+    @Override
+    public void handle(ClientConnection handler){
+        handler.encryptStart(this);
     }
     
 }

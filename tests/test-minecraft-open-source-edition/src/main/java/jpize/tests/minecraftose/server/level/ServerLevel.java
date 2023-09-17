@@ -8,7 +8,7 @@ import jpize.tests.minecraftose.main.audio.Sound;
 import jpize.tests.minecraftose.main.chunk.storage.ChunkPos;
 import jpize.tests.minecraftose.main.chunk.storage.HeightmapType;
 import jpize.tests.minecraftose.main.level.Level;
-import jpize.tests.minecraftose.main.net.packet.CBPacketPlaySound;
+import jpize.tests.minecraftose.main.net.packet.clientbound.CBPacketPlaySound;
 import jpize.tests.minecraftose.server.Server;
 import jpize.tests.minecraftose.server.chunk.ServerChunk;
 import jpize.tests.minecraftose.server.gen.pool.BlockPool;

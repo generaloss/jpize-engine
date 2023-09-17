@@ -6,7 +6,7 @@ public class AARectCollider{
 
     public static Vec2f getCollidedMovement(Vec2f movement, AARectBody body1, AARectBody... otherBodies){
         // If movement == 0, return 0
-        if(movement.isZero())
+        if(movement.isZero() || otherBodies == null)
             return movement;
 
         // Copy body for safe addition to body.position.X for correct calculation movementY
