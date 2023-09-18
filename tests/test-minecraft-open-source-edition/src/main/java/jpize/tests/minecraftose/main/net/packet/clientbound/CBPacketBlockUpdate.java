@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class CBPacketBlockUpdate extends IPacket<ClientConnection>{
     
-    public static final byte PACKET_ID = 10;
+    public static final int PACKET_ID = 10;
     
     public CBPacketBlockUpdate(){
         super(PACKET_ID);
@@ -29,7 +29,7 @@ public class CBPacketBlockUpdate extends IPacket<ClientConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeInt(x);
         stream.writeInt(y);
         stream.writeInt(z);

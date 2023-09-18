@@ -22,7 +22,7 @@ import static jpize.tests.minecraftose.main.chunk.ChunkUtils.AREA;
 
 public class CBPacketChunk extends IPacket<ClientConnection>{
     
-    public static final byte PACKET_ID = 2;
+    public static final int PACKET_ID = 2;
     
     
     private ChunkPos position;
@@ -60,7 +60,7 @@ public class CBPacketChunk extends IPacket<ClientConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         // Chunk position
         stream.writeInt(position.x);
         stream.writeInt(position.z);

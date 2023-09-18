@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class SBPacketRenderDistance extends IPacket<PlayerGameConnection>{
     
-    public static final byte PACKET_ID = 8;
+    public static final int PACKET_ID = 8;
     
     public SBPacketRenderDistance(){
         super(PACKET_ID);
@@ -25,7 +25,7 @@ public class SBPacketRenderDistance extends IPacket<PlayerGameConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeInt(renderDistance);
     }
     

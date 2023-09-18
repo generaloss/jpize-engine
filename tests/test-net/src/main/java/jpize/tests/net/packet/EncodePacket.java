@@ -1,17 +1,18 @@
 package jpize.tests.net.packet;
 
 import jpize.net.tcp.packet.IPacket;
+import jpize.tests.net.handler.MyPacketHandler;
 import jpize.util.io.JpizeInputStream;
 import jpize.util.io.JpizeOutputStream;
 
 import java.io.IOException;
 
-public class EncodePacket extends IPacket{
+public class EncodePacket extends IPacket<MyPacketHandler>{
     
-    public static final int PACKET_TYPE_ID = 83;
+    public static final int PACKET_ID = 0;
     
     public EncodePacket(){
-        super(PACKET_TYPE_ID);
+        super(PACKET_ID);
     }
     
     
@@ -28,13 +29,18 @@ public class EncodePacket extends IPacket{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeByteArray(key);
     }
     
     @Override
     public void read(JpizeInputStream stream) throws IOException{
         key = stream.readByteArray();
+    }
+
+    @Override
+    public void handle(MyPacketHandler handler){
+        handler.encode(this);
     }
     
 }

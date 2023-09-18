@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class CBPacketSpawnEntity extends IPacket<ClientConnection>{
 
-    public static final byte PACKET_ID = 14;
+    public static final int PACKET_ID = 14;
 
     public CBPacketSpawnEntity(){
         super(PACKET_ID);
@@ -35,7 +35,7 @@ public class CBPacketSpawnEntity extends IPacket<ClientConnection>{
 
 
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeInt(type.getID());
         stream.writeUTF(uuid.toString());
         stream.writeVec3f(position);

@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class CBPacketPlaySound extends IPacket<ClientConnection>{
 
-    public static final byte PACKET_ID = 23;
+    public static final int PACKET_ID = 23;
 
     public CBPacketPlaySound(){
         super(PACKET_ID);
@@ -37,7 +37,7 @@ public class CBPacketPlaySound extends IPacket<ClientConnection>{
 
 
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeByte(sound.ordinal());
         stream.writeFloat(volume);
         stream.writeFloat(pitch);

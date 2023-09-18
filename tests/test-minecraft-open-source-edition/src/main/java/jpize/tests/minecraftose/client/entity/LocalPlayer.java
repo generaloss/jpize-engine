@@ -50,10 +50,10 @@ public class LocalPlayer extends AbstractClientPlayer{
 
         if(isFlying()){
             if(isSneaking())
-                getVelocity().y -= 0.05F;
+                getVelocity().y -= 0.2F;
             
             if(isJumping())
-                getVelocity().y += 0.05F;
+                getVelocity().y += 0.2F;
             
             if(!isFlyEnabled())
                 setFlying(false);
@@ -77,25 +77,32 @@ public class LocalPlayer extends AbstractClientPlayer{
             getVelocity().y -= 0.08F;
         
         // Reduce Vertical Motion
-        getVelocity().y *= 0.98F;
+        if(isFlying())
+            getVelocity().y *= 0.6F;
+        else
+            getVelocity().y *= 0.98F;
         
         
         /** -------- Horizontal Move -------- */
         
         // Movement multiplier
         float movementMul = 0.98F; // Default
-        if(isSneaking() && !isFlying())
-            movementMul *= 0.3; // Sneaking
-        if(isSprinting())
-            movementMul *= 1.3; // Sprinting
-        if(isFlying())
-            movementMul *= 10; // Flying
+        if(isFlying()){
+            movementMul *= 3;
+            if(isSprinting())
+                movementMul *= 5F; // Sprinting
+        }else{
+            if(isSneaking())
+                movementMul *= 0.3F; // Sneaking
+            if(isSprinting())
+                movementMul *= 1.3F; // Sprinting
+        }
         
         
         // Slipperiness multiplier
         float slipperinessMul = 1; // Air
         if(isOnGround())
-            slipperinessMul *= 0.6; // Ground
+            slipperinessMul *= 0.6F; // Ground
         
         // Reduce Last Motion
         final float reduceHorizontal = slipperinessMul * 0.91F;

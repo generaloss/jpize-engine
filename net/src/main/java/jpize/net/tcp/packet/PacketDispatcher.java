@@ -5,14 +5,14 @@ import java.util.HashMap;
 
 public class PacketDispatcher{
 
-    private final HashMap<Byte, Class<? extends IPacket<? extends PacketHandler>>> packetClassMap;
+    private final HashMap<Short, Class<? extends IPacket<? extends PacketHandler>>> packetClassMap;
 
     public PacketDispatcher(){
         packetClassMap = new HashMap<>();
     }
 
-    public void register(byte packetID, Class<? extends IPacket<? extends PacketHandler>> packetClass){
-        packetClassMap.put(packetID, packetClass);
+    public void register(int packetID, Class<? extends IPacket<? extends PacketHandler>> packetClass){
+        packetClassMap.put((short) packetID, packetClass);
     }
 
 

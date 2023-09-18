@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class SBPacketChatMessage extends IPacket<PlayerGameConnection>{
     
-    public static final byte PACKET_ID = 19;
+    public static final int PACKET_ID = 19;
     
     public SBPacketChatMessage(){
         super(PACKET_ID);
@@ -25,7 +25,7 @@ public class SBPacketChatMessage extends IPacket<PlayerGameConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeUTF(message);
     }
     

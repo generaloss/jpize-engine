@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class CBPacketAbilities extends IPacket<ClientConnection>{
     
-    public static final byte PACKET_ID = 21;
+    public static final int PACKET_ID = 21;
     
     public CBPacketAbilities(){
         super(PACKET_ID);
@@ -25,7 +25,7 @@ public class CBPacketAbilities extends IPacket<ClientConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeBoolean(flyEnabled);
     }
     

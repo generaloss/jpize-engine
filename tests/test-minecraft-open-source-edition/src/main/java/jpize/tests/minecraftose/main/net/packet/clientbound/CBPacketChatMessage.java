@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CBPacketChatMessage extends IPacket<ClientConnection>{
     
-    public static final byte PACKET_ID = 18;
+    public static final int PACKET_ID = 18;
     
     public CBPacketChatMessage(){
         super(PACKET_ID);
@@ -45,7 +45,7 @@ public class CBPacketChatMessage extends IPacket<ClientConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         // Write source
         stream.writeByte(source.getSource().ordinal());
         if(source.getSource() == MessageSources.PLAYER)

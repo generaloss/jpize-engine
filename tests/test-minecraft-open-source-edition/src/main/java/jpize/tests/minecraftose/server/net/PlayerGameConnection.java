@@ -24,7 +24,7 @@ import jpize.tests.minecraftose.server.chunk.ServerChunk;
 import jpize.tests.minecraftose.server.level.ServerLevel;
 import jpize.tests.minecraftose.server.player.ServerPlayer;
 
-public class PlayerGameConnection extends PacketHandler{
+public class PlayerGameConnection implements PacketHandler{
     
     private final ServerPlayer player;
     private final Server server;
@@ -48,7 +48,7 @@ public class PlayerGameConnection extends PacketHandler{
     }
     
     public void sendPacket(IPacket<?> packet){
-        packet.write(connection);
+        connection.send(packet);
     }
     
     

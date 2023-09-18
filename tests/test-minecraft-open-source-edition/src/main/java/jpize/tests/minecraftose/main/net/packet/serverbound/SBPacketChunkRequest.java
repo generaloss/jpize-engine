@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class SBPacketChunkRequest extends IPacket<PlayerGameConnection>{
     
-    public static final byte PACKET_ID = 12;
+    public static final int PACKET_ID = 12;
     
     public SBPacketChunkRequest(){
         super(PACKET_ID);
@@ -26,7 +26,7 @@ public class SBPacketChunkRequest extends IPacket<PlayerGameConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeInt(chunkX);
         stream.writeInt(chunkZ);
     }

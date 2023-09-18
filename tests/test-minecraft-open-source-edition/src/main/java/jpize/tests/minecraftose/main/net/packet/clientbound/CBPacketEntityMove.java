@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class CBPacketEntityMove extends IPacket<ClientConnection>{
 
-    public static final byte PACKET_ID = 9;
+    public static final int PACKET_ID = 9;
 
     public CBPacketEntityMove(){
         super(PACKET_ID);
@@ -36,7 +36,7 @@ public class CBPacketEntityMove extends IPacket<ClientConnection>{
 
 
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeUUID(uuid);
         stream.writeVec3f(position);
         stream.writeEulerAngles(rotation);

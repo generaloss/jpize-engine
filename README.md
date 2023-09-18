@@ -201,14 +201,14 @@ client.send("Hello, World!".getBytes()); // send 'Hello, World!'
 #### 2. Packet Example:
 ``` java
 // Packets Handler
-class MyPacketHandler extends PacketHandler{
+class MyPacketHandler implements PacketHandler{
     public void handleMyPacket(MyPacket packet){ ... }
     public void handleAnotherPacket(AnotherPacket packet){ ... }
 }
 
 // Packet
 class MyPacket extends IPacket<MyPacketHandler>{ // MyPacketHandler
-    public static final byte PACKET_ID = /*Your packet ID*/;
+    public static final int PACKET_ID = /*Your packet ID*/;
     
     public MyPacket(){
         super(PACKET_ID);
@@ -218,7 +218,7 @@ class MyPacket extends IPacket<MyPacketHandler>{ // MyPacketHandler
         ...
     }
 
-    protected void write(JpizeOutputStream outStream){ ... } // write data when sending
+    public void write(JpizeOutputStream outStream){ ... } // write data when sending
     public void read(JpizeInputStream inStream){ ... } // read data when receivind
 
     public void handle(MyPacketHandler handler){ // handle this packet
@@ -229,10 +229,8 @@ class MyPacket extends IPacket<MyPacketHandler>{ // MyPacketHandler
 
 
 // packet sending
-TcpClient client = ...;
-TcpConnection connection = client.getConnection();
-
-new MyPacket(some_data).write(connection);
+TcpConnection connection = ...;
+connection.send(new MyPacket(some_data));
 
 // packet receiving
 MyPacketHandler handler = ...;

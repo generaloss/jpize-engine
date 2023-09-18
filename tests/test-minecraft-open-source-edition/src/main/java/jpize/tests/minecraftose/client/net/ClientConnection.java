@@ -18,7 +18,7 @@ import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketEncryptEnd;
 import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketRenderDistance;
 import jpize.tests.minecraftose.main.text.Component;
 
-public class ClientConnection extends PacketHandler{
+public class ClientConnection implements PacketHandler{
 
     private final ClientGame game;
     private TcpConnection connection;

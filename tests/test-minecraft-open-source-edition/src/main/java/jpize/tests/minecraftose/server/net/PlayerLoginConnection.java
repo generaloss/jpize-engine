@@ -11,7 +11,7 @@ import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketEncryptEnd;
 import jpize.tests.minecraftose.main.net.packet.serverbound.SBPacketLogin;
 import jpize.tests.minecraftose.server.Server;
 
-public class PlayerLoginConnection extends PacketHandler{
+public class PlayerLoginConnection implements PacketHandler{
     
     private final Server server;
     private final TcpConnection connection;
@@ -30,21 +30,21 @@ public class PlayerLoginConnection extends PacketHandler{
         versionID = packet.clientVersionID;
         
         if(versionID != server.getConfiguration().getVersion().getID()){
-            new CBPacketDisconnect("Server not available on your game version").write(connection);
+            connection.send(new CBPacketDisconnect("Server not available on your game version"));
             return;
         }
         
         if(PlayerProfile.isNameInvalid(profileName)){
-            new CBPacketDisconnect("Invalid player name").write(connection);
+            connection.send(new CBPacketDisconnect("Invalid player name"));
             return;
         }
         
         if(server.getPlayerList().isPlayerOnline(profileName)){
-            new CBPacketDisconnect("Player with your nickname already plays on the server").write(connection);
+            connection.send(new CBPacketDisconnect("Player with your nickname already plays on the server"));
             return;
         }
-        
-        new CBPacketEncryptStart(server.getConnectionManager().getRsaKey().getPublic()).write(connection);
+
+        connection.send(new CBPacketEncryptStart(server.getConnectionManager().getRsaKey().getPublic()));
     }
     
     public void encryptEnd(SBPacketEncryptEnd packet){
@@ -54,7 +54,7 @@ public class PlayerLoginConnection extends PacketHandler{
     
     public void auth(SBPacketAuth packet){
         if(!"54_54-iWantPizza-54_54".equals(packet.accountSessionToken)){
-            new CBPacketDisconnect("Invalid session").write(connection);
+            connection.send(new CBPacketDisconnect("Invalid session"));
             return;
         }
         

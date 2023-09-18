@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class SBPacketMove extends IPacket<PlayerGameConnection>{
     
-    public static final byte PACKET_ID = 9;
+    public static final int PACKET_ID = 9;
     
     public SBPacketMove(){
         super(PACKET_ID);
@@ -33,7 +33,7 @@ public class SBPacketMove extends IPacket<PlayerGameConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeVec3f(position);
         stream.writeEulerAngles(rotation);
         stream.writeVec3f(velocity);

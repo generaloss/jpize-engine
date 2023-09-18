@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class SBPacketPing extends IPacket<PlayerGameConnection>{
     
-    public static final byte PACKET_ID = 7;
+    public static final int PACKET_ID = 7;
     
     public SBPacketPing(){
         super(PACKET_ID);
@@ -25,7 +25,7 @@ public class SBPacketPing extends IPacket<PlayerGameConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeLong(timeNanos);
     }
     

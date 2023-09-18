@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class CBPacketPlayerSneaking extends IPacket<ClientConnection>{
     
-    public static final byte PACKET_ID = 17;
+    public static final int PACKET_ID = 17;
     
     public CBPacketPlayerSneaking(){
         super(PACKET_ID);
@@ -29,7 +29,7 @@ public class CBPacketPlayerSneaking extends IPacket<ClientConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeUUID(playerUUID);
         stream.writeBoolean(sneaking);
     }

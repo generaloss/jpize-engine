@@ -1,17 +1,18 @@
 package jpize.tests.net.packet;
 
 import jpize.net.tcp.packet.IPacket;
+import jpize.tests.net.handler.MyPacketHandler;
 import jpize.util.io.JpizeInputStream;
 import jpize.util.io.JpizeOutputStream;
 
 import java.io.*;
 
-public class MessagePacket extends IPacket{
+public class MessagePacket extends IPacket<MyPacketHandler>{
     
-    public static final int PACKET_TYPE_ID = 54;
+    public static final int PACKET_ID = 1;
     
     public MessagePacket(){
-        super(PACKET_TYPE_ID);
+        super(PACKET_ID);
     }
     
     
@@ -28,13 +29,18 @@ public class MessagePacket extends IPacket{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeUTF(message);
     }
     
     @Override
     public void read(JpizeInputStream stream) throws IOException{
         message = stream.readUTF();
+    }
+
+    @Override
+    public void handle(MyPacketHandler handler){
+        handler.message(this);
     }
     
 }

@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class CBPacketLightUpdate extends IPacket<ClientConnection>{
 
-    public static final byte PACKET_ID = 24;
+    public static final int PACKET_ID = 24;
 
     public CBPacketLightUpdate(){
         super(PACKET_ID);
@@ -29,7 +29,7 @@ public class CBPacketLightUpdate extends IPacket<ClientConnection>{
 
 
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeVec3i(position);
         stream.write(light);
     }

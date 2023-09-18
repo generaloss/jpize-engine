@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class CBPacketSpawnInfo extends IPacket<ClientConnection>{
     
-    public static final byte PACKET_ID = 13;
+    public static final int PACKET_ID = 13;
     
     public CBPacketSpawnInfo(){
         super(PACKET_ID);
@@ -29,7 +29,7 @@ public class CBPacketSpawnInfo extends IPacket<ClientConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeUTF(levelName);
         stream.writeVec3f(position);
     }

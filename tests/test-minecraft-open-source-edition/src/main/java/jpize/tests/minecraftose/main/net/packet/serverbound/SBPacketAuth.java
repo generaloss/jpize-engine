@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class SBPacketAuth extends IPacket<PlayerLoginConnection>{
     
-    public static final byte PACKET_ID = 1;
+    public static final int PACKET_ID = 1;
     
     public SBPacketAuth(){
         super(PACKET_ID);
@@ -25,7 +25,7 @@ public class SBPacketAuth extends IPacket<PlayerLoginConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeUTF(accountSessionToken);
     }
     

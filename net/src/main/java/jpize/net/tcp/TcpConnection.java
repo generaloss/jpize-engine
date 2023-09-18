@@ -1,6 +1,7 @@
 package jpize.net.tcp;
 
 import jpize.net.security.KeyAES;
+import jpize.net.tcp.packet.IPacket;
 import jpize.util.io.JpizeOutputStream;
 import jpize.util.Utils;
 
@@ -74,6 +75,18 @@ public class TcpConnection{
         
         data.write(dataStream);
         send(byteStream);
+    }
+
+    public void send(IPacket packet){
+        send(dataStream->{
+            try{
+                dataStream.writeShort(packet.getPacketID());
+                packet.write(dataStream);
+                // System.out.println("Write packet " + packetID + " (size: " + dataStream.size() + ")");
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        });
     }
     
     

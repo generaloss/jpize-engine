@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class SBPacketEncryptEnd extends IPacket<PlayerLoginConnection>{
     
-    public static final byte PACKET_ID = 4;
+    public static final int PACKET_ID = 4;
     
     public SBPacketEncryptEnd(){
         super(PACKET_ID);
@@ -25,7 +25,7 @@ public class SBPacketEncryptEnd extends IPacket<PlayerLoginConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeByteArray(encryptedClientKey);
     }
     

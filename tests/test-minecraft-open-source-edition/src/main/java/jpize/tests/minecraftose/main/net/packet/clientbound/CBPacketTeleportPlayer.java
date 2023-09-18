@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class CBPacketTeleportPlayer extends IPacket<ClientConnection>{
     
-    public static final byte PACKET_ID = 20;
+    public static final int PACKET_ID = 20;
     
     public CBPacketTeleportPlayer(){
         super(PACKET_ID);
@@ -31,7 +31,7 @@ public class CBPacketTeleportPlayer extends IPacket<ClientConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeUTF(levelName);
         stream.writeVec3f(position);
         stream.writeEulerAngles(rotation);

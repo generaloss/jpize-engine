@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class CBPacketEncryptStart extends IPacket<ClientConnection>{
     
-    public static final byte PACKET_ID = 5;
+    public static final int PACKET_ID = 5;
     
     public CBPacketEncryptStart(){
         super(PACKET_ID);
@@ -26,7 +26,7 @@ public class CBPacketEncryptStart extends IPacket<ClientConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.write(publicServerKey.getKey().getEncoded());
     }
     

@@ -6,16 +6,16 @@ import jpize.glfw.key.Key;
 import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.io.context.JpizeApplication;
 import jpize.io.context.ContextBuilder;
+import jpize.io.context.JpizeApplication;
 import jpize.math.vecmath.vector.Vec2f;
 import jpize.net.security.KeyAES;
 import jpize.net.security.PublicRSA;
 import jpize.net.tcp.TcpClient;
 import jpize.net.tcp.TcpConnection;
 import jpize.net.tcp.TcpListener;
-import jpize.net.tcp.packet.PacketInfo;
-import jpize.net.tcp.packet.Packets;
+import jpize.net.tcp.packet.PacketDispatcher;
+import jpize.tests.net.handler.MyPacketHandler;
 import jpize.tests.net.packet.EncodePacket;
 import jpize.tests.net.packet.MessagePacket;
 import jpize.tests.net.packet.PingPacket;
@@ -33,10 +33,12 @@ public class ClientSide extends JpizeApplication implements TcpListener{
 
         Jpize.runContexts();
     }
-    
+
     private TcpClient client;
     private KeyAES key;
-    
+    private MyPacketHandler handler;
+    private PacketDispatcher dispatcher;
+
     private TextureBatch batch;
     private BitmapFont font;
     private TextProcessor text;
@@ -47,23 +49,73 @@ public class ClientSide extends JpizeApplication implements TcpListener{
         font = FontLoader.loadFnt("default.fnt");
         font.setScale(3);
         text = new TextProcessor(false);
-        
+
+        // Create handler with methods for handle packets (EncodePacket, MessagePacket, PingPacket)
+        handler = new MyPacketHandler(){
+            public void encode(EncodePacket packet){
+                final PublicRSA serverKey = new PublicRSA(packet.getKey());
+                System.out.println("   server's public key received");
+
+                client.getConnection().send(new EncodePacket(serverKey.encrypt(key.getKey().getEncoded())));
+                System.out.println("   send encrypted key");
+
+                client.getConnection().encode(key);
+                System.out.println("   encoded with key (hash): " + key.getKey().hashCode());
+
+                client.getConnection().send(new PingPacket(System.nanoTime()));
+            }
+
+            public void message(MessagePacket packet){
+                System.out.println("   message: " + packet.getMessage());
+            }
+
+            public void ping(PingPacket packet){
+                System.out.println("   ping: " + ((System.nanoTime() - packet.getTime()) / 1000000F) + " ms");
+            }
+        };
+
+        // Register packets
+        dispatcher = new PacketDispatcher();
+        dispatcher.register(EncodePacket .PACKET_ID, EncodePacket .class);
+        dispatcher.register(MessagePacket.PACKET_ID, MessagePacket.class);
+        dispatcher.register(PingPacket   .PACKET_ID, PingPacket   .class);
+
+        // Key for encoding
         key = new KeyAES(256);
+
+        // Connect to the Server
         client = new TcpClient(this);
         client.connect("localhost", 5454);
-        
         client.getConnection().setTcpNoDelay(true);
+    }
+
+    @Override
+    public void received(byte[] bytes, TcpConnection sender){
+        // Handle packet with handler
+        dispatcher.handlePacket(bytes, handler);
+    }
+
+    @Override
+    public void connected(TcpConnection connection){
+        System.out.println("Connected {");
+    }
+
+    @Override
+    public void disconnected(TcpConnection connection){
+        System.out.println("   Client disconnected\n}");
     }
     
     @Override
     public void render(){
+        final TcpConnection connection = client.getConnection();
+
         if(Key.ENTER.isDown()){
-            new MessagePacket(text.getString()).write(client.getConnection());
+            connection.send(new MessagePacket(text.getString()));
             text.removeLine();
         }
         
         if(Key.LEFT_CONTROL.isPressed() && Key.P.isDown())
-            new PingPacket(System.nanoTime()).write(client.getConnection());
+            connection.send(new PingPacket(System.nanoTime()));
         
         if(Key.ESCAPE.isDown())
             Jpize.exit();
@@ -102,58 +154,6 @@ public class ClientSide extends JpizeApplication implements TcpListener{
         text.dispose();
         batch.dispose();
         font.dispose();
-    }
-    
-    
-    @Override
-    public void received(byte[] bytes, TcpConnection sender){
-        try{
-            final PacketInfo packetInfo = Packets.getPacketInfo(bytes);
-            if(packetInfo == null){
-                System.out.println("   received not packet");
-                return;
-            }
-            
-            switch(packetInfo.getPacketID()){
-                case MessagePacket.PACKET_TYPE_ID -> {
-                    final MessagePacket packet = packetInfo.readPacket(new MessagePacket());
-                    System.out.println("   message: " + packet.getMessage());
-                }
-                
-                case PingPacket.PACKET_TYPE_ID -> {
-                    final PingPacket packet = packetInfo.readPacket(new PingPacket());
-                    System.out.println("   ping: " + ((System.nanoTime() - packet.getTime()) / 1000000F) + " ms");
-                }
-                
-                case EncodePacket.PACKET_TYPE_ID -> {
-                    final EncodePacket packet = packetInfo.readPacket(new EncodePacket());
-                    
-                    final PublicRSA serverKey = new PublicRSA(packet.getKey());
-                    System.out.println("   server's public key received");
-                    
-                    new EncodePacket(serverKey.encrypt(key.getKey().getEncoded())).write(sender);
-                    System.out.println("   send encrypted key");
-                    
-                    sender.encode(key);
-                    System.out.println("   encoded with key (hash): " + key.getKey().hashCode());
-                    
-                    new PingPacket(System.nanoTime()).write(client.getConnection());
-                }
-            }
-            
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-    
-    @Override
-    public void connected(TcpConnection connection){
-        System.out.println("Connected {");
-    }
-    
-    @Override
-    public void disconnected(TcpConnection connection){
-        System.out.println("   Client disconnected\n}");
     }
     
 }

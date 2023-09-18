@@ -120,7 +120,7 @@ public class ClientGame implements Tickable{
     
     
     public void sendPacket(IPacket<?> packet){
-        packet.write(client.getConnection());
+        client.getConnection().send(packet);
         txCounter++;
     }
     

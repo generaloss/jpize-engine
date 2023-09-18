@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class CBPacketRemoveEntity extends IPacket<ClientConnection>{
     
-    public static final byte PACKET_ID = 16;
+    public static final int PACKET_ID = 16;
     
     public CBPacketRemoveEntity(){
         super(PACKET_ID);
@@ -27,7 +27,7 @@ public class CBPacketRemoveEntity extends IPacket<ClientConnection>{
     
     
     @Override
-    protected void write(JpizeOutputStream stream) throws IOException{
+    public void write(JpizeOutputStream stream) throws IOException{
         stream.writeUTF(uuid.toString());
     }
     
