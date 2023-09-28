@@ -10,12 +10,16 @@
         <option value="$PROJECT_DIR$/tests/test-minecraft-osp/minecraft-osp-mod/pom.xml" />
         <option value="$PROJECT_DIR$/tests/minecraft-osp-mod/pom.xml" />
         <option value="$PROJECT_DIR$/tests/minecraft-open-source-edition-mod/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-minecraft-open-source-edition-mod/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-minecraft-open-source-edition/server/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-minecraft-open-source-edition/modification/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/particle/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-minecraf-osp/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-minecraft-open-source-edition-launcher/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-minecraft-osp-old/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-model-3d/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-particle/pom.xml" />

@@ -14,19 +14,19 @@ public class SoundGenerator{
 
 
     public SoundGenerator(){
-        sampleRate = Jpize.audio().getCurrent().getFrequency();
+        this.sampleRate = Jpize.audio().getCurrent().getFrequency();
     }
 
 
     public ByteBuffer sin(double frequency, double seconds){
-        int samples = Maths.round(seconds * sampleRate);
-        ByteBuffer buffer = BufferUtils.createByteBuffer(samples * bitsPerSample / 8 * channels);
+        final int samples = Maths.round(seconds * sampleRate);
+        final ByteBuffer buffer = BufferUtils.createByteBuffer(samples * bitsPerSample / 8 * channels);
 
         double sinPos = 0;
-        double sinPosInc = frequency / sampleRate;
+        final double sinPosInc = frequency / sampleRate;
 
         for(int i = 0; i < samples; i++){
-            float sample = Maths.round(Byte.MAX_VALUE * Math.sin(sinPos * Maths.PI2));
+            final float sample = Maths.round(Byte.MAX_VALUE * Math.sin(sinPos * Maths.PI2));
             for(int j = 0; j < channels; j++)
                 switch(bitsPerSample){
                     case 16 -> buffer.putShort((short) sample);
@@ -43,15 +43,15 @@ public class SoundGenerator{
     }
 
     public ByteBuffer sinDown(double frequency, double seconds){
-        int samples = Maths.round(seconds * sampleRate);
-        ByteBuffer buffer = BufferUtils.createByteBuffer(samples * bitsPerSample / 8 * channels);
+        final int samples = Maths.round(seconds * sampleRate);
+        final ByteBuffer buffer = BufferUtils.createByteBuffer(samples * bitsPerSample / 8 * channels);
 
         double sinPos = 0;
         double sinPosInc = frequency / sampleRate;
-        double offset = sinPosInc / samples;
+        final double offset = sinPosInc / samples;
 
         for(int i = 0; i < samples; i++){
-            float sample = Maths.round(Byte.MAX_VALUE * Math.sin(sinPos * Maths.PI2));
+            final float sample = Maths.round(Byte.MAX_VALUE * Math.sin(sinPos * Maths.PI2));
             for(int j = 0; j < channels; j++)
                 switch(bitsPerSample){
                     case 16 -> buffer.putShort((short) sample);
@@ -101,7 +101,7 @@ public class SoundGenerator{
         final ByteBuffer buffer = BufferUtils.createByteBuffer(size * bitsPerSample / 8 * channels);
 
         double sinPos = 0;
-        double sinPosInc = frequency / sampleRate;
+        final double sinPosInc = frequency / sampleRate;
 
         for(int i = 0; i < size; i++){
             final float sample = Maths.round(Byte.MAX_VALUE * Math.signum(Math.sin(sinPos * Maths.PI2)));

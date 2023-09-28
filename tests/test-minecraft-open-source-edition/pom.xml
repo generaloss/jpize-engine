@@ -9,6 +9,11 @@
 
     <groupId>pizza-engine.tests</groupId>
     <artifactId>test-minecraft-open-source-edition</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>game</module>
+        <module>launcher</module>
+    </modules>
 
     <dependencies>
         <dependency>

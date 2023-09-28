@@ -1,22 +1,24 @@
 package jpize.devtests;
 
 import jpize.Jpize;
+import jpize.devtests.midi.MidiTest;
 import jpize.io.context.ContextBuilder;
 
 public class Main{
     
     public static void main(String[] args){
-        //ContextBuilder.newContext(1300, 1300, "Dev-Test")
-        //.newContext().register().setAdapter(new KeyboardTest());
-        //.newContext().register().setAdapter(new MouseTest());
-        //.newContext().register().setAdapter(new WindowTest());
-        //.newContext().register().setAdapter(new MonitorTest());
-        //.newContext().register().setAdapter(new FontTest());
-        //.newContext().register().setAdapter(new QuadFromNormalTest());
-        //.newContext().register().setAdapter(new TriangleIntersectionTest());
-        //.newContext().register().setAdapter(new AtlasTest());
-        //.newContext().register().setAdapter(new MultiThreadTest());
-        //Jpize.runContexts();
+        ContextBuilder.newContext(1300, 1300, "Dev-Test")
+        //.register().setAdapter(new KeyboardTest());
+        //.register().setAdapter(new MouseTest());
+        //.register().setAdapter(new WindowTest());
+        //.register().setAdapter(new MonitorTest());
+        //.register().setAdapter(new FontTest());
+        //.register().setAdapter(new QuadFromNormalTest());
+        //.register().setAdapter(new TriangleIntersectionTest());
+        //.register().setAdapter(new AtlasTest());
+        //.register().setAdapter(new MultiThreadTest());
+        .register().setAdapter(new MidiTest());
+        Jpize.runContexts();
 
         //myMultipleWindows();
 
@@ -24,7 +26,7 @@ public class Main{
         //GlfwMultipleWindows.main(args);
         //LoadingTest.main(args);
         //GreedyMesh.main(args);
-        MyGreedyMesh2D.main(args);
+        //MyGreedyMesh2D.main(args);
         //MyGreedyMesh3D.main(args);
     }
 

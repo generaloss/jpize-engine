@@ -20,7 +20,7 @@ public class Rotation3DController{
     
     public void update(){
         if(Jpize.window().isFocused() && !showMouse){
-            if(!nextFrameRotationLock && Jpize.mouse().isInWindow()){
+            if(!nextFrameRotationLock){
                 float x = Jpize.getX();
                 float y = Jpize.getInvY();
                 dAngX += (int) (Jpize.getWidth() / 2F) - x;

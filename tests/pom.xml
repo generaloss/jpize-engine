@@ -25,7 +25,6 @@
         <module>dev-tests</module>
         <module>test-drift</module>
         <module>test-minecraft-open-source-edition</module>
-        <module>test-minecraft-open-source-edition-server</module>
     </modules>
     
     <dependencies>

@@ -54,7 +54,7 @@ public class AudioDevice implements Disposable{
     }
 
 
-    public long getId(){
+    public long getID(){
         return id;
     }
 

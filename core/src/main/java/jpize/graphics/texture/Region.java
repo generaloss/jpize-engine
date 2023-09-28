@@ -55,6 +55,25 @@ public class Region{
     }
 
 
+    public Region extrude(float x, float y){
+        u2 = u1 + width * x;
+        v2 = v1 + height * y;
+
+        return this;
+    }
+
+    public Region translate(float x, float y){
+        x *= width;
+        y *= height;
+        u1 += x;
+        v1 += y;
+        u2 += x;
+        v2 += y;
+
+        return this;
+    }
+
+
     public float u1(){
         return u1;
     }

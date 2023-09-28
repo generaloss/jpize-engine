@@ -18,6 +18,7 @@
 /tests/test-drift/target/
 
 /tests/test-minecraft-ui/target/
-/tests/test-minecraft-open-source-edition/target/
-/tests/test-minecraft-open-source-edition-server/target/
-/tests/test-minecraft-open-source-edition-mod/target/
+/tests/test-minecraft-open-source-edition/game/target/
+/tests/test-minecraft-open-source-edition/modification/target/
+/tests/test-minecraft-open-source-edition/launcher/target/
+/tests/test-minecraft-open-source-edition/server/target/

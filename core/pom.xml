@@ -13,7 +13,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
-    
+
     <profiles>
         <profile>
             <id>lwjgl-natives-linux-amd64</id>
@@ -64,7 +64,9 @@
             </properties>
         </profile>
     </profiles>
-    
+
+
+
     <dependencyManagement>
         <dependencies>
             <dependency>

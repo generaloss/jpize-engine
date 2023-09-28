@@ -4,6 +4,7 @@ import jpize.Jpize;
 import jpize.util.Disposable;
 import jpize.math.Mathc;
 import jpize.math.vecmath.vector.Vec3f;
+import jpize.util.Utils;
 import jpize.util.time.Stopwatch;
 
 import static org.lwjgl.openal.AL11.*;
@@ -200,6 +201,10 @@ public class AudioSource implements Disposable{
             return;
 
         stopwatch.resume();
+    }
+
+    public void waitForStop(){
+        Utils.waitFor(this::isStopped);
     }
 
 

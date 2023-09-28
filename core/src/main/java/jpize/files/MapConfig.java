@@ -60,6 +60,10 @@ public class MapConfig{
         return map.getOrDefault(key, defaultValue);
     }
 
+    public Resource getResource(){
+        return resource;
+    }
+
     public void setResource(Resource resource){
         this.resource = resource;
     }

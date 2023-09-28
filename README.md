@@ -7,9 +7,28 @@ Kotlin fork: [Pizza-Engine-Kotlin](https://github.com/Raf0707/Pizza-Engine-Kotli
 
 ## Tests
 #### Minecraft Open Source Edition
-![Optional Text](tests/test-minecraft-osp/preview.png)
+![Optional Text](tests/test-minecraft-open-source-edition/preview.png)
 
 ## Getting Started
+
+Maven:
+```
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>com.github.GeneralPashon</groupId>
+        <artifactId>Jpize-engine</artifactId>
+        <version>v23.10.1</version>
+    </dependency>
+</dependencies>
+```
+
 Repository contains examples in 'tests' module
 
 Modules:
@@ -283,4 +302,4 @@ batch.end();
 ```
 
 ## Bugs and Feedback
-For bugs, questions and discussions please use the [GitHub Issues](https://github.com/GeneralPashon/Pizza-Engine/issues).
+For bugs, questions and discussions please use the [GitHub Issues](https://github.com/GeneralPashon/Jpize-engine/issues).

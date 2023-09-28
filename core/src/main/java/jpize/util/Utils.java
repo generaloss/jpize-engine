@@ -77,6 +77,10 @@ public class Utils{
             Thread.onSpinWait();
     }
 
+    public static void delayElapsed(float seconds){
+        delayElapsed((long) (seconds * 1000));
+    }
+
     public static void waitFor(BooleanSupplier supplier){
         while(supplier.getAsBoolean())
             Thread.onSpinWait();

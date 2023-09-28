@@ -26,12 +26,16 @@
     <file url="file://$PROJECT_DIR$/tests/test-drift/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraf-osp/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraf-osp/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition-mod/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition-mod/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition-server/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition-server/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition-launcher/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition-launcher/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/game/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/game/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/launcher/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/launcher/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/modification/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/modification/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp-old/minecraft-osp-mod/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp-old/minecraft-osp-mod/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp-old/src/main/java" charset="UTF-8" />

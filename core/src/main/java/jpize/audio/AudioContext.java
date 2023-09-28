@@ -13,12 +13,12 @@ public class AudioContext implements Disposable{
 
     public AudioContext(AudioDevice device){
         this.device = device;
-        id = alcCreateContext(device.getId(), new int[]{ 0 });
+        id = alcCreateContext(device.getID(), new int[]{ 0 });
 
         long currentContext = alcGetCurrentContext();
 
         alcMakeContextCurrent(id);
-        AL.createCapabilities(ALC.createCapabilities(device.getId()));
+        AL.createCapabilities(ALC.createCapabilities(device.getID()));
 
         alcMakeContextCurrent(currentContext);
     }

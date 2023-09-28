@@ -9,11 +9,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="server" />
+        <module name="game" />
         <module name="test-audio" />
         <module name="dev-tests" />
-        <module name="test-minecraft-open-source-edition-mod" />
         <module name="test-physic" />
         <module name="test-text-editor" />
+        <module name="modification" />
         <module name="test-window" />
         <module name="test-terraria" />
         <module name="test-drift" />
@@ -22,12 +24,11 @@
         <module name="test-minecraf-osp" />
         <module name="test-noise" />
         <module name="ui" />
-        <module name="test-minecraft-open-source-edition-server" />
         <module name="test-ui" />
-        <module name="test-minecraft-open-source-edition" />
         <module name="net" />
         <module name="physic" />
         <module name="test-minecraft-ui" />
+        <module name="launcher" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -39,6 +40,9 @@
       <module name="delta-tests" target="17" />
       <module name="delta-tilemap" target="17" />
       <module name="delta-ui" target="17" />
+      <module name="game (1)" target="17" />
+      <module name="game (2)" target="17" />
+      <module name="game (3)" target="1.5" />
       <module name="jize" target="17" />
       <module name="mod" target="17" />
       <module name="particle" target="17" />
@@ -49,6 +53,7 @@
       <module name="sgl-core" target="17" />
       <module name="test-android" target="1.6" />
       <module name="test-minecraf-osp" target="17" />
+      <module name="test-minecraft-open-source-edition-launcher" target="17" />
       <module name="test-minecraft-osp-old" target="17" />
       <module name="test-model-3d" target="17" />
       <module name="test-particle" target="17" />

@@ -2,7 +2,7 @@
   <artifact type="jar" name="minecraft-open-source-edition-mod">
     <output-path>$PROJECT_DIR$/tests/test-minecraft-open-source-edition/mods</output-path>
     <root id="archive" name="test-modification.jar">
-      <element id="module-output" name="test-minecraft-open-source-edition-mod" />
+      <element id="module-output" name="modification" />
     </root>
   </artifact>
 </component>
