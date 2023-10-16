@@ -24,7 +24,7 @@ Maven:
     <dependency>
         <groupId>com.github.GeneralPashon</groupId>
         <artifactId>Jpize-engine</artifactId>
-        <version>v23.10.1</version>
+        <version>v23.10.2</version>
     </dependency>
 </dependencies>
 ```
