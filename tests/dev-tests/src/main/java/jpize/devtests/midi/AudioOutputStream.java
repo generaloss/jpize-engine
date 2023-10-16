@@ -51,7 +51,7 @@ public class AudioOutputStream{
         final AudioStreamBuffer buffer = getRenderBuffer();
 
         buffer.updateData(channels, sampleRate);
-        source.queueBuffer(buffer.audioBuffer);
+        source.setBuffer(buffer.audioBuffer);
         source.play();
     }
 

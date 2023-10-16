@@ -19,6 +19,7 @@ public class AudioStreamBuffer{
     }
 
     public void updateData(int channels, int sampleRate){
+        this.audioBuffer = new AudioBuffer();
         audioBuffer = new AudioBuffer();
         audioBuffer.setData(dataBuffer, channels, sampleRate);
     }

@@ -21,8 +21,8 @@ public class FastReader{
     public FastReader(InputStream inputStream){
         this.inputStream = inputStream;
 
-        buffer = new byte[BUFFER_SIZE];
-        charBuffer = new char[128];
+        this.buffer = new byte[BUFFER_SIZE];
+        this.charBuffer = new char[128];
     }
 
     public FastReader(){

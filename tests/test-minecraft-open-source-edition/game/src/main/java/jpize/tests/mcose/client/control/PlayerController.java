@@ -7,6 +7,7 @@ import jpize.tests.mcose.client.control.camera.GameCamera;
 import jpize.tests.mcose.client.control.camera.HorizontalMoveController;
 import jpize.tests.mcose.client.control.camera.PerspectiveType;
 import jpize.tests.mcose.client.entity.LocalPlayer;
+import jpize.tests.mcose.client.level.ClientLevel;
 import jpize.tests.mcose.client.options.KeyMapping;
 import jpize.tests.mcose.client.options.Options;
 import jpize.tests.mcose.main.Tickable;
@@ -36,7 +37,11 @@ public class PlayerController implements Tickable{
     public void update(){
         if(player == null)
             return;
-        final Minecraft session = player.getLevel().getGame().getSession();
+        final ClientLevel level = player.getLevel();
+        if(level == null)
+            return;
+
+        final Minecraft session = level.getGame().getSession();
         final Options options = session.getOptions();
 
         // Rotation

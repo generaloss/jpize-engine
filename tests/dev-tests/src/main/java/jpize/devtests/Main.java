@@ -1,7 +1,6 @@
 package jpize.devtests;
 
 import jpize.Jpize;
-import jpize.devtests.midi.MidiTest;
 import jpize.io.context.ContextBuilder;
 
 public class Main{
@@ -12,12 +11,12 @@ public class Main{
         //.register().setAdapter(new MouseTest());
         //.register().setAdapter(new WindowTest());
         //.register().setAdapter(new MonitorTest());
-        //.register().setAdapter(new FontTest());
+        .register().setAdapter(new TextTest());
         //.register().setAdapter(new QuadFromNormalTest());
         //.register().setAdapter(new TriangleIntersectionTest());
         //.register().setAdapter(new AtlasTest());
         //.register().setAdapter(new MultiThreadTest());
-        .register().setAdapter(new MidiTest());
+        //.register().setAdapter(new MidiTest());
         Jpize.runContexts();
 
         //myMultipleWindows();
@@ -47,7 +46,7 @@ public class Main{
                 .size(720, 480)
                 .exitWhenWindowClose(false)
                 .register()
-                .setAdapter(new FontTest());
+                .setAdapter(new TextTest());
 
         Jpize.runContexts();
     }

@@ -1,10 +1,9 @@
 package jpize.tests.mcose.client.renderer.text;
 
 import jpize.Jpize;
-import jpize.util.Disposable;
 import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
-import jpize.graphics.font.Glyph;
+import jpize.graphics.font.glyph.Glyph;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.graphics.util.color.Color;
 import jpize.graphics.util.color.IColor;
@@ -13,6 +12,7 @@ import jpize.math.vecmath.vector.Vec2f;
 import jpize.tests.mcose.main.text.Component;
 import jpize.tests.mcose.main.text.ComponentText;
 import jpize.tests.mcose.main.text.TextStyle;
+import jpize.util.Disposable;
 
 import java.util.List;
 
@@ -82,7 +82,7 @@ public class TextComponentBatch implements Disposable{
                 }
                 
                 // Глиф
-                final Glyph glyph = font.getGlyph(code);
+                final Glyph glyph = font.getGlyphs().get(code);
                 if(glyph == null)
                     continue;
                 
@@ -93,15 +93,15 @@ public class TextComponentBatch implements Disposable{
                 }
                 
                 // Координаты глифа
-                final float glyphX = x + (advanceX + glyph.offsetX) * font.getScale();
-                final float glyphY = y + (advanceY + glyph.offsetY) * font.getScale();
+                final float glyphX = x + (advanceX + glyph.offset.x) * font.getScale();
+                final float glyphY = y + (advanceY + glyph.offset.y) * font.getScale();
                 
                 // Рендерим тень
                 batch.setColor(color.copy().mul3(0.25));
-                glyph.render(batch, glyphX + font.getScale(), glyphY - font.getScale());
+                glyph.render(batch, glyphX + font.getScale(), glyphY - font.getScale(), font.getScale());
                 // Рендерим основной символ
                 batch.setColor(color);
-                glyph.render(batch, glyphX, glyphY);
+                glyph.render(batch, glyphX, glyphY, font.getScale());
                 
                 advanceX += glyph.advanceX;
             }

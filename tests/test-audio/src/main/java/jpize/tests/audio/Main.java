@@ -12,8 +12,7 @@ import jpize.io.context.ContextBuilder;
 public class Main extends JpizeApplication{
 
     public static void main(String[] args){
-        ContextBuilder.newContext("Audio")
-                .size(700, 150)
+        ContextBuilder.newContext(700, 150, "Audio")
                 .icon("icon.png").register()
                 .setAdapter(new Main());
         Jpize.runContexts();

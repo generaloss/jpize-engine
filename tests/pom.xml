@@ -13,18 +13,18 @@
     </properties>
 
     <modules>
-        <module>test-minecraft-ui</module>
+        <module>dev-tests</module>
         <module>test-audio</module>
-        <module>test-ui</module>
+        <module>test-drift</module>
+        <module>test-minecraft-open-source-edition</module>
+        <module>test-minecraft-ui</module>
+        <module>test-net</module>
+        <module>test-noise</module>
         <module>test-physic</module>
         <module>test-terraria</module>
         <module>test-text-editor</module>
-        <module>test-noise</module>
-        <module>test-net</module>
+        <module>test-ui</module>
         <module>test-window</module>
-        <module>dev-tests</module>
-        <module>test-drift</module>
-        <module>test-minecraft-open-source-edition</module>
     </modules>
     
     <dependencies>

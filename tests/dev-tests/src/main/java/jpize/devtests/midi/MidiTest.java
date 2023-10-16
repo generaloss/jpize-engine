@@ -3,6 +3,7 @@ package jpize.devtests.midi;
 import jpize.io.context.JpizeApplication;
 import jpize.math.Mathc;
 import jpize.math.Maths;
+import jpize.util.Utils;
 
 public class MidiTest extends JpizeApplication{
 
@@ -13,7 +14,7 @@ public class MidiTest extends JpizeApplication{
     final NoteChannel noteChannel = new NoteChannel();
     final MidiKeyboard keyboard = new MidiKeyboard();
 
-    final AudioOutputStream output = new AudioOutputStream(SAMPLE_RATE, CHANNELS, 1024 * 8);
+    final AudioOutputStream output = new AudioOutputStream(SAMPLE_RATE, CHANNELS, 512);
 
     public MidiTest(){
         keyboard.registerNoteChannel(noteChannel);
@@ -28,7 +29,7 @@ public class MidiTest extends JpizeApplication{
             if(!noteChannel.isEmpty())
                 output.render();
 
-            //Utils.delayElapsed(output.getRenderBuffer().audioBuffer.getDurationSeconds());
+            Utils.delayElapsed(output.getRenderBuffer().audioBuffer.getDurationSeconds());
 
             output.swapBuffers();
         }
@@ -43,7 +44,7 @@ public class MidiTest extends JpizeApplication{
             final short[] buffer = output.getWriteBuffer().dataBuffer;
 
             for(int j = 0; j < buffer.length; j += CHANNELS){
-                final short sample = (short) (Short.MAX_VALUE * Maths.round(Mathc.sin(sinPos * Maths.PI2)) / pressedNotes.length);
+                final short sample = (short) (Short.MAX_VALUE * Mathc.sin(sinPos * Maths.PI2) / pressedNotes.length);
                 buffer[j] += sample;
 
                 sinPos += sinPosInc;

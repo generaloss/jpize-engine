@@ -2,7 +2,7 @@ package jpize.tests.minecraft.gui.components;
 
 import jpize.Jpize;
 import jpize.graphics.font.BitmapFont;
-import jpize.graphics.font.Glyph;
+import jpize.graphics.font.glyph.Glyph;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.graphics.util.color.Color;
 import jpize.gui.UIComponent;
@@ -178,14 +178,14 @@ public class TextView extends MComponent{
                     continue;
                 }
                 
-                final Glyph glyph = font.getGlyph(code);
+                final Glyph glyph = font.getGlyphs().get(code);
                 if(glyph == null)
                     continue;
 
                 // Calculate glyph render position
 
-                final float xOffset = (advanceX + glyph.offsetX) * scale + scrollShiftX;
-                final float yOffset = (advanceY + glyph.offsetY) * scale;
+                final float xOffset = (advanceX + glyph.offset.x) * scale + scrollShiftX;
+                final float yOffset = (advanceY + glyph.offset.y) * scale;
 
                 final float renderX = x + xOffset * cos - yOffset * sin - centeringOffsetX;
                 final float renderY = y + yOffset * cos + xOffset * sin - centeringOffsetY;
@@ -197,22 +197,23 @@ public class TextView extends MComponent{
 
                 if(!disableShadow && !blocked){
                     batch.setColor(color.r() * 0.25, color.g() * 0.25, color.b() * 0.25, color.a());
-                    glyph.render(batch, (renderX + shadowOffsetX), (renderY + shadowOffsetY));
+                    glyph.render(batch, (renderX + shadowOffsetX), (renderY + shadowOffsetY), scale);
 
                     if(bold)
                         glyph.render(batch,
                             renderX + cos * scale * BOLD_OFFSET + shadowOffsetX,
-                            renderY + sin * scale * BOLD_OFFSET + shadowOffsetY
+                            renderY + sin * scale * BOLD_OFFSET + shadowOffsetY,
+                            scale
                         );
                 }
 
                 // Render glyph
 
                 batch.setColor(color);
-                glyph.render(batch, renderX, renderY);
+                glyph.render(batch, renderX, renderY, scale);
 
                 if(bold)
-                    glyph.render(batch, renderX + cos * scale, renderY + sin * scale);
+                    glyph.render(batch, renderX + cos * scale, renderY + sin * scale, scale);
 
                 // AdvanceX increase num
                 
@@ -287,11 +288,11 @@ public class TextView extends MComponent{
                     continue;
                 }
 
-                Glyph glyph = font.getGlyph(code);
+                Glyph glyph = font.getGlyphs().get(code);
                 if(glyph == null)
                     continue;
 
-                advanceX += glyph.advanceX + (style.bold ? BOLD_OFFSET : 0);
+                advanceX += (int) (glyph.advanceX + (style.bold ? BOLD_OFFSET : 0));
 
                 maxX = Math.max(maxX, advanceX);
             }

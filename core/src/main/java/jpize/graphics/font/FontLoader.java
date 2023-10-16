@@ -1,6 +1,9 @@
 package jpize.graphics.font;
 
 import jpize.files.Resource;
+import jpize.graphics.font.glyph.Glyph;
+import jpize.graphics.font.glyph.GlyphMap;
+import jpize.graphics.font.glyph.GlyphPages;
 import jpize.graphics.texture.Pixmap;
 import jpize.graphics.texture.Region;
 import jpize.graphics.texture.Texture;
@@ -19,58 +22,65 @@ import java.nio.IntBuffer;
 import java.nio.file.Path;
 
 import static org.lwjgl.stb.STBTruetype.*;
-import static org.lwjgl.system.MemoryStack.stackPush;
 
 public class FontLoader{
 
     private static BitmapFont defaultFont;
 
+    public static BitmapFont getDefault(){
+        if(defaultFont == null)
+            defaultFont = loadTrueType("font/OpenSans-Regular.ttf", 64, FontCharset.DEFAULT_ENG_RUS);
+
+        return defaultFont;
+    }
+
 
     public static BitmapFont loadFnt(String filepath){
-        BitmapFont font = new BitmapFont();
+        final BitmapFont font = new BitmapFont();
+        final GlyphMap glyphs = font.getGlyphs();
+        final GlyphPages pages = font.getPages();
 
-        FastReader reader = new Resource(filepath).getReader();
+        final FastReader reader = new Resource(filepath).getReader();
 
         while(reader.hasNext()){
-            String[] tokens = reader.nextLine().trim().split("\\s+");
+            final String[] tokens = reader.nextLine().trim().split("\\s+");
 
             switch(tokens[0].toLowerCase()){
                 case "info" -> font.setItalic(Integer.parseInt(getValue(tokens[4])) == 1);
                 case "common" -> font.setLineHeight(Integer.parseInt(getValue(tokens[1])));
                 case "page" -> {
-                    int id = Integer.parseInt(getValue(tokens[1]));
+                    final int id = Integer.parseInt(getValue(tokens[1]));
 
-                    String relativeTexturePath = getValue(tokens[2]).replace("\"", "");
-                    
-                    Path path = Path.of(filepath);
-                    font.addPage(id, new Texture(new Resource(
+                    final String relativeTexturePath = getValue(tokens[2]).replace("\"", "");
+
+                    final Path path = Path.of(filepath);
+                    pages.add(id, new Texture(new Resource(
                         path.getParent() == null ?
                             relativeTexturePath :
                             Path.of(path.getParent() + "/" + relativeTexturePath).normalize().toString()
                     )));
                 }
                 case "char" -> {
-                    int id = Integer.parseInt(getValue(tokens[1]));
+                    final int code = Integer.parseInt(getValue(tokens[1]));
 
-                    int page = Integer.parseInt(getValue(tokens[9]));
-                    Texture pageTexture = font.getPage(page);
+                    final int page = Integer.parseInt(getValue(tokens[9]));
+                    final Texture pageTexture = pages.get(page);
 
-                    float s0 = (float) Integer.parseInt(getValue(tokens[2])) / pageTexture.getWidth();
-                    float t0 = (float) Integer.parseInt(getValue(tokens[3])) / pageTexture.getHeight();
-                    float s1 = (float) Integer.parseInt(getValue(tokens[4])) / pageTexture.getWidth() + s0;
-                    float t1 = (float) Integer.parseInt(getValue(tokens[5])) / pageTexture.getHeight() + t0;
+                    final float s0 = (float) Integer.parseInt(getValue(tokens[2])) / pageTexture.getWidth();
+                    final float t0 = (float) Integer.parseInt(getValue(tokens[3])) / pageTexture.getHeight();
+                    final float s1 = (float) Integer.parseInt(getValue(tokens[4])) / pageTexture.getWidth() + s0;
+                    final float t1 = (float) Integer.parseInt(getValue(tokens[5])) / pageTexture.getHeight() + t0;
 
-                    int offsetX = Integer.parseInt(getValue(tokens[6]));
-                    int offsetY = Integer.parseInt(getValue(tokens[7]));
-                    int advanceX = Integer.parseInt(getValue(tokens[8]));
+                    final int offsetX = Integer.parseInt(getValue(tokens[6]));
+                    final int offsetY = Integer.parseInt(getValue(tokens[7]));
+                    final int advanceX = Integer.parseInt(getValue(tokens[8]));
 
-                    Region regionOnTexture = new Region(s0, t0, s1, t1);
-                    float glyphHeight = regionOnTexture.getHeightPx(font.getPage(page));
-                    float glyphWidth = regionOnTexture.getWidthPx(font.getPage(page));
+                    final Region regionOnTexture = new Region(s0, t0, s1, t1);
+                    final float glyphHeight = regionOnTexture.getHeightPx(pages.get(page));
+                    final float glyphWidth = regionOnTexture.getWidthPx(pages.get(page));
 
-                    font.addGlyph(new Glyph(
-                        font,
-                        id,
+                    glyphs.add(new Glyph(
+                        code,
 
                         offsetX,
                         font.getLineHeight() - offsetY - glyphHeight,
@@ -79,7 +89,8 @@ public class FontLoader{
 
                         regionOnTexture,
                         advanceX,
-                        page
+                        page,
+                        pages
                     ));
                 }
             }
@@ -96,14 +107,16 @@ public class FontLoader{
 
     public static BitmapFont loadTrueType(String filepath, int size, FontCharset charset){
         final BitmapFont font = new BitmapFont();
+        final GlyphMap glyphs = font.getGlyphs();
+        final GlyphPages pages = font.getPages();
         font.setLineHeight(size);
 
-        int width = size * charset.size();
-        int height = size * 3;
+        final int width = size * charset.size();
+        final int height = size * 3;
         
         final ByteBuffer data;
         try(final InputStream inStream = new Resource(filepath).inStream()){
-            byte[] bytes = inStream.readAllBytes();
+            final byte[] bytes = inStream.readAllBytes();
             data = BufferUtils.createByteBuffer(bytes.length);
             data.put(bytes);
             data.flip();
@@ -112,7 +125,7 @@ public class FontLoader{
         }
 
         final ByteBuffer bitmap = BufferUtils.createByteBuffer(width * height);
-        STBTTBakedChar.Buffer charData = STBTTBakedChar.malloc(charset.getLastChar() + 1);
+        final STBTTBakedChar.Buffer charData = STBTTBakedChar.malloc(charset.getLastChar() + 1);
         stbtt_BakeFontBitmap(data, size, bitmap, width, height, charset.getFirstChar(), charData);
 
         final ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
@@ -125,10 +138,10 @@ public class FontLoader{
         buffer.flip();
 
         final Texture texture = new Texture(new Pixmap(buffer, width, height));
-        font.addPage(0, texture);
+        pages.add(0, texture);
 
         // STB
-        try(final MemoryStack stack = stackPush()){
+        try(final MemoryStack stack = MemoryStack.stackPush()){
             // Creating font
             final STBTTFontinfo fontInfo = STBTTFontinfo.create();
             stbtt_InitFont(fontInfo, data);
@@ -141,13 +154,13 @@ public class FontLoader{
             final STBTTAlignedQuad quad = STBTTAlignedQuad.malloc(stack);
 
             for(int i = 0; i < charset.size(); i++){
-                int id = charset.charAt(i);
+                final int code = charset.charAt(i);
 
                 // Getting advanceX
                 final FloatBuffer advanceXBuffer = stack.floats(0);
                 final FloatBuffer advanceYBuffer = stack.floats(0);
-                stbtt_GetBakedQuad(charData, width, height, id - charset.getFirstChar(), advanceXBuffer, advanceYBuffer, quad, false);
-                float advanceX = advanceXBuffer.get();
+                stbtt_GetBakedQuad(charData, width, height, code - charset.getFirstChar(), advanceXBuffer, advanceYBuffer, quad, false);
+                final float advanceX = advanceXBuffer.get();
 
                 // Calculating glyph Region on the texture & glyph Width and Height
                 final Region regionOnTexture = new Region(quad.s0(), quad.t0(), quad.s1(), quad.t1());
@@ -155,9 +168,8 @@ public class FontLoader{
                 float glyphWidth = quad.x1() - quad.x0();
 
                 // Adding Glyph to the font
-                font.addGlyph(new Glyph(
-                    font,
-                    id,
+                glyphs.add(new Glyph(
+                    code,
 
                     quad.x0(),
                     -quad.y0() - glyphHeight - descent,
@@ -166,7 +178,8 @@ public class FontLoader{
 
                     regionOnTexture,
                     advanceX,
-                    0
+                    0,
+                    pages
                 ));
             }
         }
@@ -176,13 +189,6 @@ public class FontLoader{
 
     public static BitmapFont loadTrueType(String filePath, int size){
         return loadTrueType(filePath, size, FontCharset.DEFAULT);
-    }
-
-
-    public static BitmapFont getDefault(){
-        if(defaultFont == null)
-            defaultFont = loadTrueType("font/OpenSans-Regular.ttf", 32);
-        return defaultFont;
     }
 
 }

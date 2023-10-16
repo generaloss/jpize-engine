@@ -250,13 +250,41 @@ public class Vec2f{
     public Vec2f rotDeg(double degrees){
         return rotRad(degrees * Maths.ToRad);
     }
-    
+
     public Vec2f rotRad(double radians){
         float cos = Mathc.cos(radians);
         float sin = Mathc.sin(radians);
-        
-        set(x * cos - y * sin, x * sin + y * cos);
-        
+
+        set(
+            x * cos - y * sin,
+            x * sin + y * cos
+        );
+
+        return this;
+    }
+
+    public Vec2f rotDeg(double degrees, Vec2f origin){
+        return rotRad(degrees * Maths.ToRad, origin);
+    }
+
+    public Vec2f rotDeg(double degrees, float originX, float originY){
+        return rotRad(degrees * Maths.ToRad, originX, originY);
+    }
+
+    public Vec2f rotRad(double radians, Vec2f origin){
+        return rotRad(radians, origin.x, origin.y);
+    }
+
+    public Vec2f rotRad(double radians, float originX, float originY){
+        float cos = Mathc.cos(radians);
+        float sin = Mathc.sin(radians);
+
+        sub(originX, originY);
+        set(
+            x * cos - y * sin + originX,
+            x * sin + y * cos + originY
+        );
+
         return this;
     }
 

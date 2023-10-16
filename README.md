@@ -51,14 +51,13 @@ public class App extends JpizeApplication{
 
     public static void main(String[] args){
         // Create window context
-        ContextBuilder.newContext("Window Title") 
-                .size(1280, 720)
-                .icon("icon.png");
+        ContextBuilder.newContext(1280, 720, "Window Title")
+                .icon("icon.png")
                 .create() 
                 .init(new App());
-        // You can create multiple windows
+        // Also you can create multiple windows
         // Run
-        Jpize.runContexts(); 
+        Jpize.runContexts();
     }
     
     public App(){ } // Calls before ContextAdapter.init()
@@ -289,8 +288,8 @@ body_1.getPosition().add( b1_velocity ); // box will be move only 3 units
 ``` java
 // init
 Layout layout = new Layout();
-layout.setLayoutType( LayoutType.HORIZONTAL );
-layout.alignItems( Align.CENTER );
+layout.setLayoutType(LayoutType.HORIZONTAL);
+layout.alignItems(Align.CENTER);
 
 Image image = new Image(image_texture);
 layout.put("image_id", image);

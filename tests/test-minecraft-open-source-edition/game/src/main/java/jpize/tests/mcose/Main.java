@@ -11,7 +11,7 @@ import java.util.Map;
 public class Main{
 
     public static PlayerProfile profile;
-    public static String sessionToken = "54_54-iWantPizza-54_54";
+    public static String sessionToken;
     public static String gameDir;
 
     public static void main(String[] args){
@@ -19,7 +19,7 @@ public class Main{
         final Map<String, String> argsMap = mapArgs(args);
 
         profile = new PlayerProfile(argsMap.getOrDefault("username", PlayerProfile.genFunnyName()));
-        sessionToken = argsMap.get("sessionToken");
+        sessionToken = argsMap.getOrDefault("sessionToken", "54_54-iWantPizza-54_54");
         gameDir = argsMap.get("gameDir");
 
         final int width = Integer.parseInt(argsMap.getOrDefault("width", "1280"));

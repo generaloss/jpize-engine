@@ -12,8 +12,7 @@ import jpize.io.context.ContextBuilder;
 public class Drift extends JpizeApplication{
 
     public static void main(String[] args){
-        ContextBuilder.newContext("Window")
-                .size(2000, 1000)
+        ContextBuilder.newContext(2000, 1000, "Window")
                 .register()
                 .setAdapter(new Drift());
 
