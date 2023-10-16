@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="jpize-physic">
+    <output-path>$PROJECT_DIR$/out/</output-path>
+    <root id="archive" name="jpize-physic.jar">
+      <element id="module-output" name="physic" />
+    </root>
+  </artifact>
+</component>
