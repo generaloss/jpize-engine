@@ -19,10 +19,10 @@ Maven:
 </repositories>
 
 <dependencies>
-    <!-- https://jitpack.io/#GeneralPashon/Jpize-engine -->
+    <!-- https://jitpack.io/#GeneralPashon/jpize-engine -->
     <dependency>
         <groupId>com.github.GeneralPashon</groupId>
-        <artifactId>Jpize-engine</artifactId>
+        <artifactId>jpize-engine</artifactId>
         <version>v23.10.4</version>
     </dependency>
 </dependencies>
