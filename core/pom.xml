@@ -6,7 +6,7 @@
 
     <groupId>jpize</groupId>
     <artifactId>core</artifactId>
-    <version>1.0.0</version>
+    <version>23.10.4</version>
     
     <properties>
         <lwjgl.version>3.3.2</lwjgl.version>

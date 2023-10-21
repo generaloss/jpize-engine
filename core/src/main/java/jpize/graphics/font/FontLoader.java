@@ -171,7 +171,6 @@ public class FontLoader{
                 final Region regionOnTexture = new Region(quad.s0(), quad.t0(), quad.s1(), quad.t1());
                 float glyphHeight = quad.y1() - quad.y0();
                 float glyphWidth = quad.x1() - quad.x0();
-                System.out.println((char) code + " : " + glyphWidth + " | " + glyphHeight + " / " + height);
 
                 // Adding Glyph to the font
                 glyphs.add(new Glyph(

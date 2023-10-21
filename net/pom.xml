@@ -6,7 +6,7 @@
 
     <groupId>jpize</groupId>
     <artifactId>net</artifactId>
-    <version>1.0.0</version>
+    <version>23.10.4</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>jpize</groupId>
             <artifactId>core</artifactId>
-            <version>1.0.0</version>
+            <version>23.10.4</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

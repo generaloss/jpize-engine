@@ -3,6 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dev-tests/src/test/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dev-tests/src/test/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/net/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/net/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/particle/src/main/java" charset="UTF-8" />
@@ -13,8 +15,6 @@
     <file url="file://$PROJECT_DIR$/security/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/dev-tests/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/dev-tests/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-android/src/main/java" charset="UTF-8" />
@@ -28,14 +28,6 @@
     <file url="file://$PROJECT_DIR$/tests/test-minecraf-osp/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition-launcher/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition-launcher/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/game/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/game/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/launcher/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/launcher/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/modification/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/modification/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/server/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tests/test-minecraft-open-source-edition/server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp-old/minecraft-osp-mod/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp-old/minecraft-osp-mod/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tests/test-minecraft-osp-old/src/main/java" charset="UTF-8" />
@@ -72,5 +64,6 @@
     <file url="file://$PROJECT_DIR$/tilemap/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ui/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ui/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../minecraft-open-source-edition/server/src/main/resources" charset="UTF-8" />
   </component>
 </project>

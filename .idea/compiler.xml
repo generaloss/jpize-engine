@@ -9,26 +9,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="server" />
-        <module name="game" />
-        <module name="test-audio" />
         <module name="dev-tests" />
-        <module name="test-physic" />
-        <module name="test-text-editor" />
-        <module name="modification" />
-        <module name="test-window" />
-        <module name="test-terraria" />
-        <module name="test-drift" />
         <module name="core" />
-        <module name="test-net" />
         <module name="test-minecraf-osp" />
-        <module name="test-noise" />
         <module name="ui" />
-        <module name="test-ui" />
         <module name="net" />
         <module name="physic" />
-        <module name="test-minecraft-ui" />
-        <module name="launcher" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -40,26 +26,42 @@
       <module name="delta-tests" target="17" />
       <module name="delta-tilemap" target="17" />
       <module name="delta-ui" target="17" />
+      <module name="game" target="17" />
       <module name="game (1)" target="17" />
       <module name="game (2)" target="17" />
       <module name="game (3)" target="1.5" />
       <module name="jize" target="17" />
+      <module name="launcher" target="17" />
       <module name="mod" target="17" />
+      <module name="modification" target="17" />
       <module name="particle" target="17" />
       <module name="pizza-engine" target="17" />
       <module name="pizza-engine.tests" target="17" />
       <module name="PizzaEngine" target="17" />
       <module name="security" target="17" />
+      <module name="server" target="17" />
       <module name="sgl-core" target="17" />
       <module name="test-android" target="1.6" />
+      <module name="test-audio" target="17" />
+      <module name="test-drift" target="17" />
       <module name="test-minecraf-osp" target="17" />
+      <module name="test-minecraft-open-source-edition" target="17" />
       <module name="test-minecraft-open-source-edition-launcher" target="17" />
       <module name="test-minecraft-osp-old" target="17" />
+      <module name="test-minecraft-ui" target="17" />
       <module name="test-model-3d" target="17" />
+      <module name="test-net" target="17" />
+      <module name="test-noise" target="17" />
       <module name="test-particle" target="17" />
+      <module name="test-physic" target="17" />
       <module name="test-project-vostok" target="17" />
+      <module name="test-terraria" target="17" />
+      <module name="test-text-editor" target="17" />
+      <module name="test-ui" target="17" />
       <module name="test-vg" target="17" />
       <module name="test-win" target="17" />
+      <module name="test-window" target="17" />
+      <module name="tests" target="17" />
       <module name="tilemap" target="17" />
       <module name="vg" target="17" />
     </bytecodeTargetLevel>

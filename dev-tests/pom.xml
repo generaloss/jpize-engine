@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.generalpashon</groupId>
+        <artifactId>jpize-engine</artifactId>
+        <version>23.10.4</version>
+    </parent>
+
+    <groupId>pizza-engine.tests</groupId>
+    <artifactId>dev-tests</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>jpize</groupId>
+            <artifactId>core</artifactId>
+            <version>23.10.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>jpize</groupId>
+            <artifactId>net</artifactId>
+            <version>23.10.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>jpize</groupId>
+            <artifactId>physic</artifactId>
+            <version>23.10.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>jpize</groupId>
+            <artifactId>ui</artifactId>
+            <version>23.10.4</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+</project>

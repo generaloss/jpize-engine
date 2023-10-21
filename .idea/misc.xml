@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
@@ -18,14 +19,25 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/particle/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-audio/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-drift/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-minecraf-osp/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-minecraft-open-source-edition-launcher/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-minecraft-osp-old/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-minecraft-ui/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-model-3d/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-net/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-noise/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-particle/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-physic/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-terraria/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-text-editor/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-ui/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-vg/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-voxel-game/mod/pom.xml" />
         <option value="$PROJECT_DIR$/tests/test-win/pom.xml" />
+        <option value="$PROJECT_DIR$/tests/test-window/pom.xml" />
         <option value="$PROJECT_DIR$/tests/vg/pom.xml" />
       </set>
     </option>
