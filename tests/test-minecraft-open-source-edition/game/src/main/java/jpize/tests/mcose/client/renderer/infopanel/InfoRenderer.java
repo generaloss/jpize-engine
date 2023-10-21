@@ -1,6 +1,7 @@
 package jpize.tests.mcose.client.renderer.infopanel;
 
 import jpize.Jpize;
+import jpize.graphics.font.BitmapFont;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.math.Maths;
 import jpize.math.vecmath.vector.Vec3f;
@@ -287,16 +288,20 @@ public class InfoRenderer implements Disposable{
     }
     
     private void info(Component text){
+        final BitmapFont font = textBatch.getFont();
+
         infoLineNum++;
         final float x = 5 + panelOffsetX;
-        final float y = Jpize.getHeight() - 5 - textBatch.getFont().getLineAdvanceScaled() * infoLineNum;
+        final float y = Jpize.getHeight() - 5 - font.getOptions().getAdvanceScaled() * infoLineNum;
         textBatch.drawComponent(text, x, y);
     }
     
     private void hint(Component text){
+        final BitmapFont font = textBatch.getFont();
+
         hintLineNum++;
         final float x = Jpize.getWidth() - 5 - textBatch.getFont().getLineWidth(text.toString()) - panelOffsetX;
-        final float y = Jpize.getHeight() - 5 - textBatch.getFont().getLineAdvanceScaled() * hintLineNum;
+        final float y = Jpize.getHeight() - 5 - font.getOptions().getAdvanceScaled() * hintLineNum;
         textBatch.drawComponent(text, x, y);
     }
     

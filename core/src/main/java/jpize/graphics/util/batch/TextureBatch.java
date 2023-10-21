@@ -37,6 +37,7 @@ public class TextureBatch implements Disposable{
     private int size, vertexBufferOffset;
     public final float[] vertexData;
     // Transform
+    private float translateX, translateY;
     private final Vec2f transformOrigin;
     private final Matrix3f transformMat, rotationMat, shearMat, scaleMat, flipMat;
     private final Scissor scissor;
@@ -101,12 +102,12 @@ public class TextureBatch implements Disposable{
     private void addTexturedQuad(float x, float y, float width, float height, float u1, float v1, float u2, float v2, float r, float g, float b, float a){
         final Vec2f origin = new Vec2f(width * transformOrigin.x, height * transformOrigin.y);
 
-        transformMat.set( rotationMat.getMul(scaleMat.getMul(shearMat.getMul(flipMat))) );
+        transformMat.set(rotationMat.getMul(scaleMat.getMul(shearMat.getMul(flipMat))));
 
-        final Vec2f vertex1 = new Vec2f(0,     height).sub(origin) .mul(transformMat) .add(origin).add(x, y);
-        final Vec2f vertex2 = new Vec2f(0,     0     ).sub(origin) .mul(transformMat) .add(origin).add(x, y);
-        final Vec2f vertex3 = new Vec2f(width, 0     ).sub(origin) .mul(transformMat) .add(origin).add(x, y);
-        final Vec2f vertex4 = new Vec2f(width, height).sub(origin) .mul(transformMat) .add(origin).add(x, y);
+        final Vec2f vertex1 = new Vec2f(0,     height).sub(origin) .mul(transformMat) .add(origin).add(x + translateX, y + translateY);
+        final Vec2f vertex2 = new Vec2f(0,     0     ).sub(origin) .mul(transformMat) .add(origin).add(x + translateX, y + translateY);
+        final Vec2f vertex3 = new Vec2f(width, 0     ).sub(origin) .mul(transformMat) .add(origin).add(x + translateX, y + translateY);
+        final Vec2f vertex4 = new Vec2f(width, height).sub(origin) .mul(transformMat) .add(origin).add(x + translateX, y + translateY);
 
         addVertex(vertex1.x, vertex1.y, u1, v1, r, g, b, a);
         addVertex(vertex2.x, vertex2.y, u1, v2, r, g, b, a);
@@ -296,15 +297,20 @@ public class TextureBatch implements Disposable{
         transformOrigin.set(x, y);
     }
 
-    public void rotate(float angle){
+    public void translate(float x, float y){
+        translateX = x;
+        translateY = y;
+    }
+
+    public void rotate(double angle){
         rotationMat.toRotated(angle);
     }
 
-    public void shear(float angleX, float angleY){
+    public void shear(double angleX, double angleY){
         shearMat.toSheared(angleX, angleY);
     }
 
-    public void scale(float scale){
+    public void scale(double scale){
         scaleMat.toScaled(scale);
     }
 

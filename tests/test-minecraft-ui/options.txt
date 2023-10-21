@@ -17,10 +17,10 @@ key.zoom : c
 key.fullscreen : f11
 key.screenshot : f2
 control.mouseSensitivity : 0.5
-sound.master : 1.0
-sound.music : 0.19
+sound.master : 0.06
+sound.music : 1.0
 sound.ambient : 1.0
 sound.players : 1.0
 sound.blocks : 1.0
 sound.weather : 0.14
-audio.device : Scarlett Solo USB Аналоговый стерео
+audio.device : Scarlett Solo USB Direct Scarlett Solo USB

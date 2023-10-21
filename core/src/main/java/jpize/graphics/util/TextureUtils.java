@@ -1,6 +1,6 @@
 package jpize.graphics.util;
 
-import jpize.graphics.texture.Pixmap;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 import jpize.graphics.texture.Texture;
 
 public class TextureUtils{
@@ -9,8 +9,8 @@ public class TextureUtils{
 
     public static Texture quadTexture(){
         if(whitePixel == null){
-            Pixmap whitePixelPixmap = new Pixmap(1, 1);
-            whitePixelPixmap.setPixel(0, 0, 1, 1, 1, 1D);
+            final PixmapRGBA whitePixelPixmap = new PixmapRGBA(1, 1);
+            whitePixelPixmap.setPixel(0, 0, 1D, 1D, 1D, 1D);
 
             whitePixel = new Texture(whitePixelPixmap);
         }

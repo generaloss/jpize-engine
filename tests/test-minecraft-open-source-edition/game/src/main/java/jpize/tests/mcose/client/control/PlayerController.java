@@ -40,6 +40,8 @@ public class PlayerController implements Tickable{
         final ClientLevel level = player.getLevel();
         if(level == null)
             return;
+        if(level.getGame().getChat().isOpened())
+            return;
 
         final Minecraft session = level.getGame().getSession();
         final Options options = session.getOptions();

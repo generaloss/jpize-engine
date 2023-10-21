@@ -22,7 +22,7 @@ void main(){
     vec4 fragColor = color * texture(u_atlas, uv);
     if(fragColor.a <= 0)
         discard;
-    // fragColor.rgb *= light.x * max(light.y * u_skyBrightness, light.z);
+    fragColor.rgb *= light.x * max(light.y * u_skyBrightness, light.z);
 
     // Fog
     if(u_fogEnabled){

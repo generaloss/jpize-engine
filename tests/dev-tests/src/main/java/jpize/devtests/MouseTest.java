@@ -19,8 +19,10 @@ public class MouseTest extends JpizeApplication{
 
     public void init(){
         batch = new TextureBatch();
+
         font = FontLoader.loadFnt("font.fnt");
         font.setScale(0.5F);
+        font.getOptions().textAreaWidth = Jpize.getWidth();
 
         GlfwCursor cursor = new GlfwCursor("texture15.png");
         Jpize.mouse().setCursor(cursor);
@@ -52,13 +54,13 @@ public class MouseTest extends JpizeApplication{
 
         batch.begin();
 
-        font.drawText(batch, info, 0, Jpize.getHeight(), Jpize.getWidth(), true);
+        font.drawText(batch, info, 0, Jpize.getHeight());
 
         StringJoiner pressedKeys = new StringJoiner(", ");
         for(MBtn button: MBtn.values())
             if(button.isPressed())
                 pressedKeys.add(button.getName());
-        font.drawText(batch, "Pressed buttons: " + pressedKeys, 0, 0, Jpize.getWidth(), false);
+        font.drawText(batch, "Pressed buttons: " + pressedKeys, 0, 0);
 
         batch.end();
     }

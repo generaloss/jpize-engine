@@ -1,12 +1,12 @@
 package jpize.graphics.texture.atlas;
 
-import jpize.graphics.texture.Pixmap;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 
 import java.awt.*;
 
 public class TextureAtlasNode{
     
-    private Pixmap imagePixmap;
+    private PixmapRGBA imagePixmap;
     private final Rectangle rectangle;
     private TextureAtlasNode child1, child2;
 
@@ -36,7 +36,7 @@ public class TextureAtlasNode{
     }
 
 
-    public TextureAtlasNode insert(Pixmap imagePixmap, int paddingLeft, int paddingTop, int paddingRight, int paddingBottom){
+    public TextureAtlasNode insert(PixmapRGBA imagePixmap, int paddingLeft, int paddingTop, int paddingRight, int paddingBottom){
         final int x = this.getX();
         final int y = this.getY();
         final int width  = this.getWidth();

@@ -141,7 +141,7 @@ public class Matrix3f implements Matrix3{
 
 
     /** To Sheared */
-    public Matrix3f toSheared(float degreesX, float degreesY){
+    public Matrix3f toSheared(double degreesX, double degreesY){
         identity();
         val[m10] = Maths.tanDeg(degreesX);
         val[m01] = Maths.tanDeg(degreesY);

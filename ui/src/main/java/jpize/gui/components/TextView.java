@@ -35,9 +35,9 @@ public class TextView extends UIComponent<TextureBatch>{
 
         // Calculate a True Text Gravity
 
-        Vec2f bounds = font.getBounds(text);
-        float renderX = x - bounds.x;// * (gravityOffsetX / parentWidth );
-        float renderY = y - bounds.y;// * (gravityOffsetY / parentHeight);
+        final Vec2f bounds = font.getBounds(text);
+        final float renderX = x - bounds.x;// * (gravityOffsetX / parentWidth );
+        final float renderY = y - bounds.y;// * (gravityOffsetY / parentHeight);
 
         // Render
 

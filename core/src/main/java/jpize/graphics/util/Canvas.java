@@ -5,11 +5,11 @@ import jpize.util.Disposable;
 import jpize.graphics.camera.OrthographicCamera;
 import jpize.gl.Gl;
 import jpize.gl.glenum.GlTarget;
-import jpize.graphics.texture.Pixmap;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
 
-public class Canvas extends Pixmap implements Disposable{
+public class Canvas extends PixmapRGBA implements Disposable{
 
     private final TextureBatch batch;
     private final OrthographicCamera camera;

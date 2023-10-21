@@ -45,7 +45,7 @@ public class CenteredOrthographicCamera extends Camera2D implements Resizable{
 
     @Override
     public void resize(int width, int height){
-        if(super.match(width, height))
+        if(super.matchSize(width, height))
             return;
     
         setSize(width, height);

@@ -47,7 +47,7 @@ public class OrthographicCamera extends Camera2D implements Resizable{
 
     @Override
     public void resize(int width, int height){
-        if(match(width, height))
+        if(matchSize(width, height))
             return;
     
         setSize(width, height);

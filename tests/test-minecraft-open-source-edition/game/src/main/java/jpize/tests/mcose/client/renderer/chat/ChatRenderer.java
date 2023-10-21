@@ -1,6 +1,7 @@
 package jpize.tests.mcose.client.renderer.chat;
 
 import jpize.Jpize;
+import jpize.graphics.font.BitmapFont;
 import jpize.graphics.texture.Region;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
@@ -53,29 +54,32 @@ public class ChatRenderer implements Disposable{
         
         final float chatHeight = Jpize.getHeight() / 2F;
         final float chatWidth = Jpize.getWidth() / 2F;
-        final float lineAdvance = textBatch.getFont().getLineAdvanceScaled();
+        final BitmapFont font = textBatch.getFont();
+        final float scale = font.getScale();
+        final float lineAdvance = font.getOptions().getAdvance() * scale;
         
         final Chat chat = gameRenderer.getSession().getGame().getChat();
         final List<ChatMessage> messages = chat.getMessages();
         
         final float openedChatY = chatY + (chat.isOpened() ? lineAdvance + 10 : 0);
         float chatMessagesHeight = 0;
+        font.getOptions().textAreaWidth = chatWidth;
         for(ChatMessage message: messages)
-            chatMessagesHeight += textBatch.getFont().getBounds(message.getComponents().toString(), chatWidth).y;
+            chatMessagesHeight += font.getBounds(message.getComponents().toString()).y;
         
         // Enter
         if(chat.isOpened()){
             final String enteringText = chat.getEnteringText();
-            final float lineWidth = textBatch.getFont().getLineWidth(enteringText);
+            final float lineWidth = font.getLineWidth(enteringText);
             
-            batch.drawQuad(0.4, chatX, chatY, Math.max(lineWidth, chatWidth), lineAdvance);
+            batch.drawQuad(0.4, chatX, chatY + font.getDescentScaled(), Math.max(lineWidth, chatWidth), lineAdvance);
             
-            final float cursorLineWidth = textBatch.getFont().getLineWidth(enteringText.substring(0, chat.getCursorX()));
+            final float cursorLineWidth = font.getLineWidth(enteringText.substring(0, chat.getCursorX()));
             
             textBatch.drawComponent(new Component().text(enteringText), chatX, chatY);
 
             if(chat.getTextProcessor().isCursorRender())
-                batch.drawQuad(1, 1, 1, 1, chatX + cursorLineWidth, chatY, textBatch.getFont().getScale(), lineAdvance);
+                batch.drawQuad(1, 1, 1, 1, chatX + cursorLineWidth, chatY + font.getDescentScaled(), scale, lineAdvance);
         }
         
         // Scroll
@@ -97,8 +101,9 @@ public class ChatRenderer implements Disposable{
         final float headDrawX = (headAdvance - headSize) / 2;
         final float headDrawY = (lineAdvance - headSize) / 2;
         
-        batch.getScissor().begin(0, chatX, openedChatY, chatWidth + headAdvance, chatHeight); // Scissors begin
-        
+        batch.getScissor().begin(0, chatX, openedChatY + font.getDescentScaled(), chatWidth + headAdvance, chatHeight); // Scissors begin
+        font.getOptions().textAreaWidth = chatWidth + headAdvance;
+
         int textAdvanceY = 0;
         for(int i = messages.size() - 1; i >= 0; i--){
             final ChatMessage message = messages.get(i);
@@ -111,14 +116,14 @@ public class ChatRenderer implements Disposable{
                     continue;
             }
             
-            final float textHeight = textBatch.getFont().getTextHeight(message.getComponents().toString(), chatWidth + headAdvance);
+            final float textHeight = textBatch.getFont().getTextHeight(message.getComponents().toString());
             final float renderChatY = openedChatY + textAdvanceY + scroll;
             final float lineWrapAdvanceY = textHeight - lineAdvance;
             
             final boolean isPlayer = message.getSource().isPlayer();
 
             // Render background
-            batch.drawQuad(0.4 * alpha, chatX, renderChatY, chatWidth + headAdvance, textHeight);
+            batch.drawQuad(0.4 * alpha, chatX, renderChatY + font.getDescentScaled(), chatWidth + headAdvance, textHeight);
             
             // Render head
             if(isPlayer){
@@ -129,7 +134,7 @@ public class ChatRenderer implements Disposable{
                 batch.draw(skin, chatX + headDrawX, renderChatY + lineWrapAdvanceY + headDrawY, headSize, headSize, headRegion);
                 
                 batch.setTransformOrigin(0.5, 0.5);
-                batch.scale(1.1F);
+                batch.scale(1.1);
                 batch.draw(skin, chatX + headDrawX, renderChatY + lineWrapAdvanceY + headDrawY, headSize, headSize, hatRegion);
                 batch.scale(1);
             }

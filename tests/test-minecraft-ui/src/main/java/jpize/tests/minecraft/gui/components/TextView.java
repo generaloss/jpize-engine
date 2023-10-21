@@ -101,7 +101,7 @@ public class TextView extends MComponent{
 
     @Override
     public void render(TextureBatch batch, float x, float y, float width, float height){
-        if(font == null || components.size() == 0)
+        if(font == null || components.isEmpty())
             return;
         
         // Rotate glyphs on batch
@@ -192,7 +192,7 @@ public class TextView extends MComponent{
 
                 // Render shadow
 
-                batch.shear(italic ? BitmapFont.ITALIC_ANGLE : 0, 0);
+                batch.shear(italic ? font.getOptions().italicAngle : 0, 0);
                 batch.setColor(color);
 
                 if(!disableShadow && !blocked){
@@ -256,7 +256,7 @@ public class TextView extends MComponent{
         
         // End
 
-        font.setRotation(0);
+        font.getOptions().rotation = 0;
 
         batch.rotate(0);
         batch.shear(0, 0);

@@ -5,7 +5,7 @@ import jpize.audio.sound.AudioBuffer;
 import jpize.audio.sound.Sound;
 import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontCharset;
-import jpize.graphics.texture.Pixmap;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.texture.TextureRegion;
 import jpize.tests.minecraft.log.Logger;
@@ -24,7 +24,7 @@ public class ResourceManager implements Disposable{
     public ResourceManager(){
         resources = new HashMap<>();
 
-        Pixmap unknownPixmap = new Pixmap(2, 2);
+        PixmapRGBA unknownPixmap = new PixmapRGBA(2, 2);
         unknownPixmap.clear(1, 0, 1, 1F);
         unknownPixmap.setPixel(0, 0, 0, 0, 0, 1F);
         unknownPixmap.setPixel(1, 1, 0, 0, 0, 1F);

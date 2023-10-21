@@ -4,7 +4,7 @@ import jpize.Jpize;
 import jpize.gl.Gl;
 import jpize.glfw.key.Key;
 import jpize.graphics.camera.CenteredOrthographicCamera;
-import jpize.graphics.texture.Pixmap;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.graphics.util.color.Color;
@@ -39,7 +39,7 @@ public class BiomeGeneratorTest extends JpizeApplication{
         camera.getPosition().add(SIZE / 2F);
         generate(16 * 100);
 
-        Pixmap cellPixmap = new Pixmap(16, 16);
+        PixmapRGBA cellPixmap = new PixmapRGBA(16, 16);
         cellPixmap.clear(1, 1, 1, 1F);
         cellPixmap.fill(1, 1, 14, 14, 0, 0, 0, 0F);
         cellTexture = new Texture(cellPixmap);
@@ -94,7 +94,7 @@ public class BiomeGeneratorTest extends JpizeApplication{
 
 
     private void generate(int size){
-        Pixmap mapPixmap = new Pixmap(size, size);
+        PixmapRGBA mapPixmap = new PixmapRGBA(size, size);
         mapPixmap.clear(1F, 1F, 1F, 1F);
 
         FastNoiseLite continentalnessNoise = new FastNoiseLite();

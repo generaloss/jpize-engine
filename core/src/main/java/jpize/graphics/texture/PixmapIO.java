@@ -1,6 +1,7 @@
 package jpize.graphics.texture;
 
 import jpize.files.Resource;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -9,11 +10,11 @@ import java.nio.ByteBuffer;
 
 public class PixmapIO{
 
-    public static Pixmap load(BufferedImage bufferedImage, boolean invX, boolean invY){
+    public static PixmapRGBA load(BufferedImage bufferedImage, boolean invX, boolean invY){
         final int width = bufferedImage.getWidth();
         final int height = bufferedImage.getHeight();
         
-        final Pixmap pixmap = new Pixmap(width, height);
+        final PixmapRGBA pixmap = new PixmapRGBA(width, height);
         final ByteBuffer buffer = pixmap.getBuffer();
         
         final int[] pixels = new int[width * height];
@@ -35,12 +36,12 @@ public class PixmapIO{
         return pixmap;
     }
 
-    public static Pixmap load(BufferedImage bufferedImage){
+    public static PixmapRGBA load(BufferedImage bufferedImage){
         return load(bufferedImage, false, false);
     }
 
 
-    public static Pixmap load(Resource res, boolean invX, boolean invY){
+    public static PixmapRGBA load(Resource res, boolean invX, boolean invY){
         try{
             return load(ImageIO.read(res.inStream()), invX, invY);
         }catch(IOException e){
@@ -48,21 +49,21 @@ public class PixmapIO{
         }
     }
 
-    public static Pixmap load(Resource res){
+    public static PixmapRGBA load(Resource res){
         return load(res, false, false);
     }
 
 
-    public static Pixmap load(String filepath, boolean invX, boolean invY){
+    public static PixmapRGBA load(String filepath, boolean invX, boolean invY){
         return load(new Resource(filepath), invX, invY);
     }
 
-    public static Pixmap load(String filepath){
+    public static PixmapRGBA load(String filepath){
         return load(filepath, false, false);
     }
     
     
-    public static void save(Pixmap pixmap, OutputStream output){
+    public static void save(PixmapRGBA pixmap, OutputStream output){
         final BufferedImage bufferedImage = new BufferedImage(pixmap.getWidth(), pixmap.getHeight(), BufferedImage.TYPE_INT_ARGB);
         for(int x = 0; x < pixmap.getWidth(); x++)
             for(int y = 0; y < pixmap.getHeight(); y++)
@@ -75,7 +76,7 @@ public class PixmapIO{
         }
     }
     
-    public static void save(Pixmap pixmap, File output){
+    public static void save(PixmapRGBA pixmap, File output){
         try{
             save(pixmap, new FileOutputStream(output));
         }catch(FileNotFoundException e){
@@ -83,7 +84,7 @@ public class PixmapIO{
         }
     }
     
-    public static void save(Pixmap pixmap, String filepath){
+    public static void save(PixmapRGBA pixmap, String filepath){
         final Resource resource = new Resource(filepath, true);
         resource.mkParentDirs();
         resource.create();

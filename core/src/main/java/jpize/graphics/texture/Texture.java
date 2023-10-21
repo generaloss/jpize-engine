@@ -3,6 +3,8 @@ package jpize.graphics.texture;
 import jpize.files.Resource;
 import jpize.gl.texture.GlTexParam;
 import jpize.gl.texture.GlTexTarget;
+import jpize.graphics.texture.pixmap.Pixmap;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 import jpize.util.Resizable;
 
 import static org.lwjgl.opengl.GL33.*;
@@ -21,8 +23,7 @@ public class Texture extends GlTexture implements Resizable{
 
     public Texture(Pixmap pixmap){
         super(GlTexTarget.TEXTURE_2D);
-        this.pixmap = pixmap;
-        resize(pixmap.getWidth(), pixmap.getHeight());
+        setPixmap(pixmap);
     }
 
     public Texture(String filepath){
@@ -76,23 +77,27 @@ public class Texture extends GlTexture implements Resizable{
     }
     
     protected void genMipMapManual(){
-        Pixmap pixmap = this.pixmap.getMipmapped();
-        for(int level = 1; level <= parameters.getMipmapLevels(); level++){
-            parameters.texImage2D(GlTexParam.TEXTURE_2D, pixmap.getBuffer(), pixmap.getWidth(), pixmap.getHeight(), level);
-            if(level != parameters.getMipmapLevels())
-                pixmap = pixmap.getMipmapped();
+        if(pixmap instanceof PixmapRGBA pixmap4){
+
+            PixmapRGBA pixmap = pixmap4.getMipmapped();
+            for(int level = 1; level <= parameters.getMipmapLevels(); level++){
+                parameters.texImage2D(GlTexParam.TEXTURE_2D, pixmap.getBuffer(), pixmap.getWidth(), pixmap.getHeight(), level);
+                if(level != parameters.getMipmapLevels())
+                    pixmap = pixmap.getMipmapped();
+            }
+
         }
     }
 
     public Texture setPixmap(Pixmap pixmap){
         if(this.pixmap == null)
-            return this;
-        
-        this.pixmap.set(pixmap);
-        this.width = pixmap.getWidth();
-        this.height = pixmap.getHeight();
-        update();
-        
+            this.pixmap = pixmap;
+        else
+            this.pixmap.set(pixmap);
+
+        parameters.setSizedFormat(pixmap.getFormat());
+        resize(pixmap.getWidth(), pixmap.getHeight());
+
         return this;
     }
     

@@ -3,7 +3,9 @@ package jpize.gl.texture;
 import static org.lwjgl.opengl.GL33.*;
 
 public enum GlFormat{
-    
+
+    ALPHA           (GL_ALPHA          , 1),
+
     RED             (GL_RED            , 1),
     RED_INTEGER     (GL_RED_INTEGER    , 1),
 

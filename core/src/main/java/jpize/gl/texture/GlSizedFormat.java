@@ -5,6 +5,11 @@ import static org.lwjgl.opengl.GL46.*;
 public enum GlSizedFormat{
 
     // COLOR
+    ALPHA4         (GL_ALPHA4        , GlFormat.ALPHA),
+    ALPHA8         (GL_ALPHA8        , GlFormat.ALPHA),
+    ALPHA12        (GL_ALPHA12       , GlFormat.ALPHA),
+    ALPHA16        (GL_ALPHA16       , GlFormat.ALPHA),
+
     R8	           (GL_R8	         , GlFormat.RED),
     R8_SNORM	   (GL_R8_SNORM	     , GlFormat.RED),
     R16	           (GL_R16	         , GlFormat.RED),

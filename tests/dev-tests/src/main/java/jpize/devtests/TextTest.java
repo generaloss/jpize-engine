@@ -1,12 +1,12 @@
 package jpize.devtests;
 
 import jpize.Jpize;
+import jpize.gl.Gl;
 import jpize.glfw.key.Key;
-import jpize.io.context.JpizeApplication;
 import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.gl.Gl;
+import jpize.io.context.JpizeApplication;
 import jpize.util.io.TextProcessor;
 
 public class TextTest extends JpizeApplication{
@@ -21,6 +21,8 @@ public class TextTest extends JpizeApplication{
 
         font = FontLoader.getDefault();
         font.setScale(1);
+        font.getOptions().textAreaWidth = Jpize.getWidth();
+        font.getOptions().invLineWrap = true;
 
         processor = new TextProcessor();
         processor.insertText("1) I want pizza\n");
@@ -44,22 +46,22 @@ public class TextTest extends JpizeApplication{
         batch.begin();
 
         // Render text 1
-        font.setRotation(rotation);
+        font.getOptions().rotation = rotation;
+        font.getOptions().italic = false;
         batch.setColor(0.5, 0.2, 0.3);
-        font.drawText(batch, processor.getString(), 500, 500, -1, true);
+        font.drawText(batch, processor.getString(), 500, 500);
 
         final String text2 =
                 """
                 public static void main
-                i want pizza
-                third line
                 что-то на русском
                 """;
 
         // Render text2
         batch.resetColor();
-        font.setRotation(0);
-        font.drawText(batch, text2, 0, Jpize.getHeight(), Jpize.getWidth(), true);
+        font.getOptions().rotation = 0;
+        font.getOptions().italic = true;
+        font.drawText(batch, text2, 0, Jpize.getHeight());
 
         batch.end();
     }

@@ -4,7 +4,7 @@ import jpize.util.Disposable;
 import jpize.audio.sound.AudioBuffer;
 import jpize.audio.sound.AudioLoader;
 import jpize.files.Resource;
-import jpize.graphics.texture.Pixmap;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 import jpize.graphics.texture.PixmapIO;
 import jpize.graphics.texture.Region;
 import jpize.graphics.texture.Texture;
@@ -35,7 +35,7 @@ public class GameResources implements Disposable{
 
         for(Resource resource: blocksToLoadList){
             final String name = resource.getSimpleName();
-            final Pixmap pixmap = PixmapIO.load(resource);
+            final PixmapRGBA pixmap = PixmapIO.load(resource);
             blockAtlas.put(name, pixmap);
         }
 

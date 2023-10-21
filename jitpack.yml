@@ -1,5 +1,0 @@
-include:
-  - core
-  - net
-  - physic
-  - ui

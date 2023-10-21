@@ -45,7 +45,7 @@ public class Window extends GlfwWindow{
 
     private void initContextGL(){
         GL.createCapabilities();
-        Gl.enable(GlTarget.BLEND, GlTarget.CULL_FACE, GlTarget.MULTISAMPLE);
+        Gl.enable(GlTarget.BLEND, GlTarget.CULL_FACE);
         Gl.blendFunc(GlBlendFactor.SRC_ALPHA, GlBlendFactor.ONE_MINUS_SRC_ALPHA);
     }
 

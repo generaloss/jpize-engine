@@ -3,6 +3,7 @@ package jpize.graphics.texture;
 import jpize.gl.texture.GlFilter;
 import jpize.gl.texture.GlTexParam;
 import jpize.gl.texture.GlTexTarget;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 
 import static org.lwjgl.opengl.GL33.*;
 
@@ -17,22 +18,22 @@ public class CubeMap extends GlTexture{
         
         parameters.setFilter(GlFilter.LINEAR);
         
-        final Pixmap pixmapPX = PixmapIO.load(positive_x);
+        final PixmapRGBA pixmapPX = PixmapIO.load(positive_x);
         parameters.texImage2D(GlTexParam.CUBE_MAP_POSITIVE_X, pixmapPX.getBuffer(), pixmapPX.getWidth(), pixmapPX.getHeight());
 
-        final Pixmap pixmapNX = PixmapIO.load(negative_x);
+        final PixmapRGBA pixmapNX = PixmapIO.load(negative_x);
         parameters.texImage2D(GlTexParam.CUBE_MAP_NEGATIVE_X, pixmapNX.getBuffer(), pixmapNX.getWidth(), pixmapNX.getHeight());
 
-        final Pixmap pixmapPY = PixmapIO.load(positive_y);
+        final PixmapRGBA pixmapPY = PixmapIO.load(positive_y);
         parameters.texImage2D(GlTexParam.CUBE_MAP_POSITIVE_Y, pixmapPY.getBuffer(), pixmapPY.getWidth(), pixmapPY.getHeight());
 
-        final Pixmap pixmapNY = PixmapIO.load(negative_y);
+        final PixmapRGBA pixmapNY = PixmapIO.load(negative_y);
         parameters.texImage2D(GlTexParam.CUBE_MAP_NEGATIVE_Y, pixmapNY.getBuffer(), pixmapNY.getWidth(), pixmapNY.getHeight());
 
-        final Pixmap pixmapPZ = PixmapIO.load(positive_z);
+        final PixmapRGBA pixmapPZ = PixmapIO.load(positive_z);
         parameters.texImage2D(GlTexParam.CUBE_MAP_POSITIVE_Z, pixmapPZ.getBuffer(), pixmapPZ.getWidth(), pixmapPZ.getHeight());
 
-        final Pixmap pixmapNZ = PixmapIO.load(negative_z);
+        final PixmapRGBA pixmapNZ = PixmapIO.load(negative_z);
         parameters.texImage2D(GlTexParam.CUBE_MAP_NEGATIVE_Z, pixmapNZ.getBuffer(), pixmapNZ.getWidth(), pixmapNZ.getHeight());
     
         parameters.use(GlTexTarget.CUBE_MAP);

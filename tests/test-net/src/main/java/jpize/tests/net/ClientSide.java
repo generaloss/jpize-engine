@@ -137,13 +137,14 @@ public class ClientSide extends JpizeApplication implements TcpListener{
         
         // Draw text
         font.drawText(batch, text.getString(), 50, 10);
+        final float lineAdvance = font.getOptions().getAdvanceScaled();
         
         // Draw cursor
         if(text.isCursorRender()){
             final String currentLine = text.getCurrentLine();
-            final float cursorY = font.getBounds(text.getString()).y - (text.getCursorY() + 1) * font.getLineAdvanceScaled();
+            final float cursorY = font.getBounds(text.getString()).y - (text.getCursorY() + 1) * lineAdvance;
             final float cursorX = font.getLineWidth(currentLine.substring(0, text.getCursorX()));
-            batch.drawQuad(1, 1, 1, 1,  50 + cursorX, 10 + cursorY, 2, font.getLineAdvanceScaled());
+            batch.drawQuad(1, 1, 1, 1,  50 + cursorX, 10 + cursorY, 2, lineAdvance);
         }
         
         batch.end();

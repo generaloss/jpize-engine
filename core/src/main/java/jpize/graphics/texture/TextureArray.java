@@ -2,6 +2,7 @@ package jpize.graphics.texture;
 
 import jpize.gl.texture.GlTexParam;
 import jpize.gl.texture.GlTexTarget;
+import jpize.graphics.texture.pixmap.Pixmap;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

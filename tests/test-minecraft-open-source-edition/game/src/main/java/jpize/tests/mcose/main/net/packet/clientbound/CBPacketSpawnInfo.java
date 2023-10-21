@@ -19,12 +19,14 @@ public class CBPacketSpawnInfo extends IPacket<ClientPacketHandler>{
     
     public String levelName;
     public Vec3f position;
+    public long gameTime;
     
-    public CBPacketSpawnInfo(String levelName, Vec3f position){
+    public CBPacketSpawnInfo(String levelName, Vec3f position, long gameTime){
         this();
         
         this.levelName = levelName;
         this.position = position;
+        this.gameTime = gameTime;
     }
     
     
@@ -32,12 +34,14 @@ public class CBPacketSpawnInfo extends IPacket<ClientPacketHandler>{
     public void write(JpizeOutputStream stream) throws IOException{
         stream.writeUTF(levelName);
         stream.writeVec3f(position);
+        stream.writeLong(gameTime);
     }
     
     @Override
     public void read(JpizeInputStream stream) throws IOException{
         levelName = stream.readUTF();
         position = stream.readVec3f();
+        gameTime = stream.readLong();
     }
 
     @Override

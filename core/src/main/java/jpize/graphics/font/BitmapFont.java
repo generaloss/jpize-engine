@@ -5,60 +5,27 @@ import jpize.graphics.font.glyph.GlyphMap;
 import jpize.graphics.font.glyph.GlyphPages;
 import jpize.graphics.font.glyph.GlyphSprite;
 import jpize.graphics.util.batch.TextureBatch;
+import jpize.math.Maths;
 import jpize.math.vecmath.vector.Vec2f;
 import jpize.util.Disposable;
 
 public class BitmapFont implements Disposable{
 
-    public static final float ITALIC_ANGLE = 15;
-
+    private final FontInfo info;
     private final GlyphPages pages;
     private final GlyphMap glyphs;
-    private int lineHeight;
-    private float scale, rotation, lineGaps;
-    private boolean italic;
+    private final FontRenderOptions options;
 
-    protected BitmapFont(){
-        this.pages = new GlyphPages();
-        this.glyphs = new GlyphMap();
-        this.scale = 1;
+    protected BitmapFont(FontInfo info, GlyphPages pages, GlyphMap glyphs){
+        this.info = info;
+        this.pages = pages;
+        this.glyphs = glyphs;
+        this.options = new FontRenderOptions(this);
     }
 
-    public float getScale(){
-        return scale;
+    public FontInfo getInfo(){
+        return info;
     }
-
-    public void setScale(float scale){
-        this.scale = scale;
-    }
-
-
-    public float getRotation(){
-        return rotation;
-    }
-
-    public void setRotation(float rotation){
-        this.rotation = rotation;
-    }
-
-
-    public boolean isItalic(){
-        return italic;
-    }
-
-    public void setItalic(boolean italic){
-        this.italic = italic;
-    }
-    
-    
-    public float getLineGaps(){
-        return lineGaps;
-    }
-    
-    public void setLineGaps(float lineGaps){
-        this.lineGaps = lineGaps;
-    }
-
 
     public GlyphMap getGlyphs(){
         return glyphs;
@@ -68,83 +35,85 @@ public class BitmapFont implements Disposable{
         return pages;
     }
 
+    public FontRenderOptions getOptions(){
+        return options;
+    }
+
 
     public float getLineHeight(){
-        return lineHeight;
+        return info.getHeight();
     }
 
-    public float getLineHeightScaled(){
-        return lineHeight * scale;
-    }
-
-    public void setLineHeight(int lineHeight){
-        this.lineHeight = lineHeight;
+    public float getDescentScaled(){
+        return info.getDescent() * options.scale;
     }
 
 
-    public float getLineAdvance(){
-        return lineHeight + lineGaps;
+    public float getScale(){
+        return options.scale;
     }
 
-    public float getLineAdvanceScaled(){
-        return getLineAdvance() * scale;
+    public void setScale(float scale){
+        options.scale = scale;
     }
 
     
-    public Vec2f getBounds(String text, double textAreaWidth){
+    public Vec2f getBounds(String text){
         float width = 0;
         float height = 0;
 
-        for(GlyphSprite glyph: glyphIterable(text, 0, 0, textAreaWidth, false)){
-            width = Math.max(width, glyph.getX() + glyph.getWidth());
-            height = Math.max(height, glyph.getY() + glyph.getHeight() + lineGaps * scale);
+        for(GlyphSprite glyph: iterableText(text)){
+            final float glyphX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
+            final float glyphY = Maths.abs(glyph.getY() + info.getDescent() + glyph.getHeight()) - info.getDescent();
+
+            width = Math.max(width, glyphX);
+            height = Math.max(height, glyphY);
         }
 
         return new Vec2f(width, height);
     }
 
-    public Vec2f getBounds(String text){
-        return this.getBounds(text, -1);
-    }
-
-
     public float getLineWidth(String line){
         float width = 0;
-        for(GlyphSprite glyph: glyphIterable(line))
-            width = Math.max(width, glyph.getX() + glyph.getWidth());
+        for(GlyphSprite glyph: iterableText(line)){
+            final float glyphX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
+            width = Math.max(width, glyphX);
+        }
 
         return width;
     }
 
-
-    public float getTextHeight(String text, double textAreaWidth){
+    public float getTextHeight(String text){
         float height = 0;
-        for(GlyphSprite glyph: glyphIterable(text, 0, 0, textAreaWidth, false))
-            height = Math.max(height, glyph.getY() + glyph.getHeight());
-
+        for(GlyphSprite glyph: iterableText(text)){
+            final float glyphY = Maths.abs(glyph.getY() + info.getDescent() + glyph.getHeight()) - info.getDescent();
+            height = Math.max(height, glyphY);
+        }
         return height;
     }
 
-    public Vec2f getTextHeight(String text){
-        return this.getBounds(text, -1);
-    }
 
-
-    public void drawText(TextureBatch batch, String text, float x, float y, double textAreaWidth, boolean invWrapY){
+    public void drawText(TextureBatch batch, String text, float x, float y){
         if(text == null)
             return;
 
         batch.setTransformOrigin(0, 0);
-        batch.rotate(rotation);
-        batch.shear(italic ? ITALIC_ANGLE : 0, 0);
+        batch.rotate(options.rotation);
+        batch.shear(options.getItalicAngle(), 0);
 
-        final Vec2f centerPos = getBounds(text, textAreaWidth).mul(0.5, 0.5);
-        if(invWrapY)
-            centerPos.y *= -1;
+        final Vec2f centerPos = getBounds(text).mul(options.rotateOrigin);
+        centerPos.y *= options.getLineWrapSign();
 
-        for(GlyphSprite sprite: glyphIterable(text, 0, 0, textAreaWidth, invWrapY)){
+        final float descent = getDescentScaled();
+
+        for(GlyphSprite sprite: iterableText(text)){
+            if((char) sprite.getCode() == ' ')
+                continue;
+
             final Vec2f renderPos = new Vec2f(sprite.getX(), sprite.getY());
-            renderPos.sub(centerPos).rotDeg(rotation).add(centerPos).add(x, y);
+            renderPos.y -= descent;
+            renderPos.sub(centerPos).rotDeg(options.rotation).add(centerPos).add(x, y);
+            renderPos.y += descent;
             sprite.render(batch, renderPos.x, renderPos.y);
         }
 
@@ -152,34 +121,9 @@ public class BitmapFont implements Disposable{
         batch.shear(0, 0);
     }
 
-    public void drawText(TextureBatch batch, String text, float x, float y, double width){
-        this.drawText(batch, text, x, y, width, false);
-    }
 
-    public void drawText(TextureBatch batch, String text, float x, float y){
-        this.drawText(batch, text, x, y, -1);
-    }
-
-
-    public Iterable<GlyphSprite> glyphIterable(String text, float x, float y, double textAreaWidth, boolean invLineWrap){
-        return () -> new GlyphIterator(
-            glyphs,
-            text,
-            x, y,
-            getLineAdvance(),
-            scale,
-            1, 1,
-            textAreaWidth,
-            invLineWrap
-        );
-    }
-
-    public Iterable<GlyphSprite> glyphIterable(String text, float x, float y){
-        return glyphIterable(text, x, y, -1, false);
-    }
-
-    public Iterable<GlyphSprite> glyphIterable(String text){
-        return glyphIterable(text, 0, 0);
+    public Iterable<GlyphSprite> iterableText(String text){
+        return () -> new GlyphIterator(glyphs, options, text, 1, 1);
     }
 
 

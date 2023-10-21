@@ -32,8 +32,10 @@ public class Main extends JpizeApplication{
     @Override
     public void init(){
         batch = new TextureBatch();
-        font = FontLoader.getDefault();
         text = new TextProcessor(true);
+
+        font = FontLoader.getDefault();
+        font.setScale(0.5F);
     }
     
     @Override
@@ -59,7 +61,7 @@ public class Main extends JpizeApplication{
             
             // Draw line background
             final float lineWidth = font.getLineWidth(lines.get(i));
-            final float advance = font.getLineAdvanceScaled();
+            final float advance = font.getOptions().getAdvanceScaled();
             batch.drawQuad(0.1, 0.15, 0.2, 1,  50, 10 + (lines.size() - 1 - i) * advance,  lineWidth, advance);
             batch.drawQuad(0.3, 0.45, 0.5, 1,  0 , 10 + (lines.size() - 1 - i) * advance,  50, advance);
         }
@@ -72,9 +74,9 @@ public class Main extends JpizeApplication{
         // Draw cursor
         if(text.isCursorRender()){
             final String currentLine = text.getCurrentLine();
-            final float cursorY = (text.getCursorY() + 1) * font.getLineAdvanceScaled() - font.getLineAdvanceScaled() * text.getLines().size();
+            final float cursorY = (text.getCursorY() + 1) * font.getOptions().getAdvanceScaled() - font.getOptions().getAdvanceScaled() * text.getLines().size();
             final float cursorX = font.getLineWidth(currentLine.substring(0, text.getCursorX()));
-            batch.drawQuad(1, 1, 1, 1,  50 + cursorX, 10 - cursorY, 2, font.getLineAdvanceScaled());
+            batch.drawQuad(1, 1, 1, 1,  50 + cursorX, 10 - cursorY, 2, font.getOptions().getAdvanceScaled());
         }
         
         batch.end();

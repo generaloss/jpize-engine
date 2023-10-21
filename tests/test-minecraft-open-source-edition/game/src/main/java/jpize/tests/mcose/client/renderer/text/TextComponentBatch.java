@@ -24,10 +24,11 @@ public class TextComponentBatch implements Disposable{
     
     public TextComponentBatch(){
         this.batch = new TextureBatch(1024);
+        this.background = new Color();
+
         this.font = FontLoader.loadFnt("font/minecraft/default.fnt");
-        font.setScale(3);
-        font.setLineGaps(1);
-        background = new Color();
+        this.font.setScale(3);
+        this.font.getOptions().lineGaps = 1;
     }
     
     
@@ -39,9 +40,11 @@ public class TextComponentBatch implements Disposable{
     public void drawComponents(List<ComponentText> components, float x, float y, float width, float alpha){
         // Подготовим batch и font
         batch.begin();
+
+        final float scale = font.getScale();
         
         // Позиция следующего символа
-        final float lineAdvance = font.getLineAdvance();
+        final float lineAdvance = font.getOptions().getAdvance();
         
         float advanceX = 0;
         float advanceY = 0;
@@ -87,21 +90,21 @@ public class TextComponentBatch implements Disposable{
                     continue;
                 
                 // Перенос на новую строку если текст не вмещается в заданную ширину
-                if(width > 0 && (advanceX + glyph.advanceX) * font.getScale() >= width){
+                if(width > 0 && (advanceX + glyph.advanceX) * scale >= width){
                     advanceX = 0;
                     advanceY -= lineAdvance;
                 }
                 
                 // Координаты глифа
-                final float glyphX = x + (advanceX + glyph.offset.x) * font.getScale();
-                final float glyphY = y + (advanceY + glyph.offset.y) * font.getScale();
+                final float glyphX = x + (advanceX + glyph.offset.x) * scale;
+                final float glyphY = y + (advanceY + glyph.offset.y) * scale;
                 
                 // Рендерим тень
                 batch.setColor(color.copy().mul3(0.25));
-                glyph.render(batch, glyphX + font.getScale(), glyphY - font.getScale(), font.getScale());
+                glyph.render(batch, glyphX + scale, glyphY - scale, scale);
                 // Рендерим основной символ
                 batch.setColor(color);
-                glyph.render(batch, glyphX, glyphY, font.getScale());
+                glyph.render(batch, glyphX, glyphY, scale);
                 
                 advanceX += glyph.advanceX;
             }

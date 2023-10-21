@@ -3,7 +3,7 @@ package jpize.tests.minecraft.run;
 import jpize.Jpize;
 import jpize.io.context.JpizeApplication;
 import jpize.gl.Gl;
-import jpize.graphics.texture.Pixmap;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.graphics.util.color.Color;
@@ -34,7 +34,7 @@ public class GreedyMeshTest extends JpizeApplication{
     public void init(){
         batch = new TextureBatch(5000);
 
-        Pixmap voxelPixmap = new Pixmap(16, 16);
+        PixmapRGBA voxelPixmap = new PixmapRGBA(16, 16);
         voxelPixmap.fill(0, 0, 15, 15, 1, 1, 1, 1F);
 
         voxelPixmap.fill(0, 0, 0, 15, 0, 0, 0, 1F);

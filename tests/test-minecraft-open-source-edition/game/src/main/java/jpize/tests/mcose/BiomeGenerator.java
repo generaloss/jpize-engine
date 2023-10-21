@@ -3,7 +3,7 @@ package jpize.tests.mcose;
 import jpize.Jpize;
 import jpize.io.context.JpizeApplication;
 import jpize.gl.Gl;
-import jpize.graphics.texture.Pixmap;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.io.context.ContextBuilder;
@@ -49,7 +49,7 @@ public class BiomeGenerator extends JpizeApplication{
 
     
     public void init(){
-        final Pixmap map = new Pixmap(1024, 1024);
+        final PixmapRGBA map = new PixmapRGBA(1024, 1024);
         
         for(int x = 0; x < map.getWidth(); x++){
             for(int y = 0; y < map.getHeight(); y++){

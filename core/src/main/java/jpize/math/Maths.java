@@ -255,4 +255,9 @@ public class Maths{
                 out[o] += in[i] * w[i];
     }
 
+
+    public static byte toByteRange(double a){
+        return (byte) ((int) (a * 255) & 0xFF);
+    }
+
 }

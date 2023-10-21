@@ -65,6 +65,7 @@ public class ClientPacketHandler implements PacketHandler{
 
     public void spawnInfo(CBPacketSpawnInfo packet){
         game.createClientLevel(packet.levelName);
+        game.getTime().setTicks(packet.gameTime);
         game.getPlayer().setLevel(game.getLevel());
         game.getPlayer().getPosition().set(packet.position);
         game.getLevel().getChunkManager().startLoadChunks();

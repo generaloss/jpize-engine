@@ -2,7 +2,7 @@ package jpize.tests;
 
 import jpize.Jpize;
 import jpize.io.context.JpizeApplication;
-import jpize.graphics.texture.Pixmap;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.glfw.key.Key;
@@ -29,7 +29,7 @@ public class NoiseTest extends JpizeApplication{
         batch = new TextureBatch();
         noise = new MyNoise();
         
-        final Pixmap pixmap = new Pixmap(2048, 2048);
+        final PixmapRGBA pixmap = new PixmapRGBA(2048, 2048);
         for(int x = 0; x < pixmap.getWidth(); x++){
             for(int y = 0; y < pixmap.getHeight(); y++){
                 float grayscale = OpenSimplex2S.noise2_ImproveX(22854, x / 256F, y / 256F);

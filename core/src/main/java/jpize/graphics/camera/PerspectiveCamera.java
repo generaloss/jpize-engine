@@ -67,7 +67,7 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
 
     @Override
     public void resize(int width, int height){
-        if(match(width, height))
+        if(matchSize(width, height))
             return;
     
         setSize(width, height);

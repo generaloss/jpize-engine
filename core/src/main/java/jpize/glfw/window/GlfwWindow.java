@@ -11,7 +11,7 @@ import jpize.glfw.monitor.GlfwMonitor;
 import jpize.glfw.mouse.GlfwMouse;
 import jpize.glfw.object.GlfwObjectLong;
 import jpize.glfw.window.callback.*;
-import jpize.graphics.texture.Pixmap;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 import jpize.graphics.texture.PixmapIO;
 import jpize.io.MonitorManager;
 import jpize.math.vecmath.vector.Vec2f;
@@ -255,7 +255,7 @@ public class GlfwWindow extends GlfwObjectLong implements Disposable{
     }
 
 
-    public void setIcon(Pixmap pixmap){
+    public void setIcon(PixmapRGBA pixmap){
         final GLFWImage image = GLFWImage.malloc();
         final GLFWImage.Buffer iconBuffer = GLFWImage.malloc(1);
         image.set(pixmap.getWidth(), pixmap.getHeight(), pixmap.getBuffer());

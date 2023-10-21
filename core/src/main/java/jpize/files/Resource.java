@@ -3,8 +3,10 @@ package jpize.files;
 import jpize.util.io.FastReader;
 import jpize.util.io.JpizeInputStream;
 import jpize.util.io.JpizeOutputStream;
+import org.lwjgl.BufferUtils;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,6 +150,25 @@ public class Resource{
     public void appendString(CharSequence string){
         writeString(readString() + string);
     }
+
+
+    public byte[] readBytes(){
+        try(InputStream inStream = inStream()){
+            return inStream.readAllBytes();
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ByteBuffer readByteBuffer(){
+        final byte[] bytes = readBytes();
+
+        final ByteBuffer buffer = BufferUtils.createByteBuffer(bytes.length);
+        buffer.put(bytes);
+        buffer.flip();
+
+        return buffer;
+    }
     
     
     public String getName(){
@@ -243,6 +264,22 @@ public class Resource{
     
     public static String readString(String filepath){
         return readString(filepath, false);
+    }
+
+    public static byte[] readBytes(String filepath, boolean external){
+        return new Resource(filepath, external).readBytes();
+    }
+
+    public static byte[] readBytes(String filepath){
+        return readBytes(filepath, false);
+    }
+
+    public static ByteBuffer readByteBuffer(String filepath, boolean external){
+        return new Resource(filepath, external).readByteBuffer();
+    }
+
+    public static ByteBuffer readByteBuffer(String filepath){
+        return readByteBuffer(filepath, false);
     }
     
 }

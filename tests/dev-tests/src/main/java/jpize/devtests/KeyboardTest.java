@@ -17,8 +17,11 @@ public class KeyboardTest extends JpizeApplication{
 
     public void init(){
         batch = new TextureBatch();
+
         font = FontLoader.loadFnt("font.fnt");
         font.setScale(0.5F);
+        font.getOptions().textAreaWidth = Jpize.getWidth();
+        font.getOptions().invLineWrap = true;
 
         Jpize.keyboard().setStickyKeys(true);
     }
@@ -38,7 +41,8 @@ public class KeyboardTest extends JpizeApplication{
         for(Key key: Key.values())
             if(key.isPressed())
                 pressedKeys.add(key.getName());
-        font.drawText(batch, "Pressed keys: " + pressedKeys, 0, Jpize.getHeight(), Jpize.getWidth(), true);
+
+        font.drawText(batch, "Pressed keys: " + pressedKeys, 0, Jpize.getHeight());
 
         batch.end();
     }

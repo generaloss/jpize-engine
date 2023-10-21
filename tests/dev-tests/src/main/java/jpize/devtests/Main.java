@@ -11,12 +11,13 @@ public class Main{
         //.register().setAdapter(new MouseTest());
         //.register().setAdapter(new WindowTest());
         //.register().setAdapter(new MonitorTest());
-        .register().setAdapter(new TextTest());
         //.register().setAdapter(new QuadFromNormalTest());
         //.register().setAdapter(new TriangleIntersectionTest());
         //.register().setAdapter(new AtlasTest());
         //.register().setAdapter(new MultiThreadTest());
         //.register().setAdapter(new MidiTest());
+        //.register().setAdapter(new FontDemo());
+        .register().setAdapter(new TextTest());
         Jpize.runContexts();
 
         //myMultipleWindows();

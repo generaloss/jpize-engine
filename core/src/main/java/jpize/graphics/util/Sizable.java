@@ -29,11 +29,11 @@ public abstract class Sizable{
         return (float) width / height;
     }
     
-    public boolean match(Sizable sizable){
+    public boolean matchSize(Sizable sizable){
         return sizable.width == width && sizable.height == height;
     }
     
-    public boolean match(int width, int height){
+    public boolean matchSize(int width, int height){
         return this.width == width && this.height == height;
     }
     

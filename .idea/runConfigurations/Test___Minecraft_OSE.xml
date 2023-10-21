@@ -2,7 +2,7 @@
   <configuration default="false" name="Test - Minecraft OSE" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="jpize.tests.mcose.Main" />
     <module name="game" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/test-minecraft-open-source-edition/game/src/main/java/jpize/tests/mcose" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/test-minecraft-open-source-edition/launcher/mcose" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

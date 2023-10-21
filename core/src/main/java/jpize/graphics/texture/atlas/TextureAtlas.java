@@ -1,7 +1,7 @@
 package jpize.graphics.texture.atlas;
 
 import jpize.files.Resource;
-import jpize.graphics.texture.Pixmap;
+import jpize.graphics.texture.pixmap.PixmapRGBA;
 import jpize.graphics.texture.PixmapIO;
 import jpize.graphics.texture.Region;
 import jpize.graphics.texture.Texture;
@@ -25,7 +25,7 @@ public class TextureAtlas<I>{
             image -> (atlasHalfPerimeter - image.halfPerimeter)
         ));
         
-        final Pixmap pixmap = new Pixmap(width, height);
+        final PixmapRGBA pixmap = new PixmapRGBA(width, height);
         
         final TextureAtlasNode root = new TextureAtlasNode(0, 0, width - paddingLeft, height - paddingTop);
         regions = new HashMap<>(images.size());
@@ -68,7 +68,7 @@ public class TextureAtlas<I>{
     }
     
     
-    public void put(I identifier, Pixmap pixmap){
+    public void put(I identifier, PixmapRGBA pixmap){
         images.add(new Image<>(pixmap, identifier));
     }
     
@@ -101,11 +101,11 @@ public class TextureAtlas<I>{
 
     private static class Image<K>{
 
-        public final Pixmap pixmap;
+        public final PixmapRGBA pixmap;
         public final K identifier; // Indexing for regions
         public final int halfPerimeter;
 
-        public Image(Pixmap pixmap, K identifier){
+        public Image(PixmapRGBA pixmap, K identifier){
             this.pixmap = pixmap;
             this.identifier = identifier;
             halfPerimeter = pixmap.getWidth() + pixmap.getHeight();

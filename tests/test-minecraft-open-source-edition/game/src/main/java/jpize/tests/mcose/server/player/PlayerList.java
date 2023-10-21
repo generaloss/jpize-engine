@@ -72,7 +72,7 @@ public class PlayerList{
         // Send packets to player
         final PlayerGameConnection connectionAdapter = serverPlayer.getConnectionAdapter();
         
-        connection.send(new CBPacketSpawnInfo(level.getConfiguration().getName(), spawnPosition)); // spawn init info
+        connection.send(new CBPacketSpawnInfo(level.getConfiguration().getName(), spawnPosition, server.getGameTime().getTicks())); // spawn init info
         connection.send(new CBPacketAbilities(false)); // abilities
         
         for(ServerPlayer anotherPlayer: playerMap.values())

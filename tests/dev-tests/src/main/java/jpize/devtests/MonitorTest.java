@@ -21,6 +21,8 @@ public class MonitorTest extends JpizeApplication{
         batch = new TextureBatch();
         font = FontLoader.loadFnt("font.fnt");
         font.setScale(0.5F);
+        font.getOptions().textAreaWidth = Jpize.getWidth();
+        font.getOptions().invLineWrap = true;
 
         buildInfo();
     }
@@ -56,7 +58,7 @@ public class MonitorTest extends JpizeApplication{
         Gl.clearColor(0.4, 0.5, 0.7);
 
         batch.begin();
-        font.drawText(batch, info, 0, Jpize.getHeight(), Jpize.getWidth(), true);
+        font.drawText(batch, info, 0, Jpize.getHeight());
         batch.end();
     }
 
