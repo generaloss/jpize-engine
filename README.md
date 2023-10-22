@@ -1,11 +1,16 @@
 # jpize - Java Game Engine 
 ### The engine focuses on being clear, simple and productive
 
-## Fork
+## Projects & demos
+[Demo Repository](https://github.com/GeneralPashon/jpize-demos)
+
+[Minecraft Open Source Edition](https://github.com/GeneralPashon/Minecraft-Open-Source-Edition)
+
+## Forks
 
 Kotlin fork: [Pizza-Engine-Kotlin](https://github.com/Raf0707/Pizza-Engine-Kotlin) by [Raf0707](https://github.com/Raf0707)
 
-С++ version (InDev): [Pizza-Engine-C++](https://github.com/GeneralPashon/Pizza-Engine-Cpp)
+С++ version (In Dev): [Pizza-Engine-C++](https://github.com/GeneralPashon/Pizza-Engine-Cpp)
 
 ## Getting Started
 
@@ -27,8 +32,6 @@ Maven:
     </dependency>
 </dependencies>
 ```
-
-Repository contains examples in 'tests' module
 
 Modules:
 * Core
