@@ -28,7 +28,7 @@ Maven:
     <dependency>
         <groupId>com.github.GeneralPashon</groupId>
         <artifactId>jpize-engine</artifactId>
-        <version>v23.10.4</version>
+        <version>v23.10.5</version>
     </dependency>
 </dependencies>
 ```

@@ -6,7 +6,7 @@
 
     <groupId>jpize</groupId>
     <artifactId>physic</artifactId>
-    <version>23.10.4</version>
+    <version>23.10.5</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>jpize</groupId>
             <artifactId>core</artifactId>
-            <version>23.10.4</version>
+            <version>23.10.5</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

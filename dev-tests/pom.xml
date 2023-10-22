@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.generalpashon</groupId>
         <artifactId>jpize-engine</artifactId>
-        <version>23.10.4</version>
+        <version>23.10.5</version>
     </parent>
 
     <groupId>pizza-engine.tests</groupId>
@@ -15,25 +15,25 @@
         <dependency>
             <groupId>jpize</groupId>
             <artifactId>core</artifactId>
-            <version>23.10.4</version>
+            <version>23.10.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>jpize</groupId>
             <artifactId>net</artifactId>
-            <version>23.10.4</version>
+            <version>23.10.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>jpize</groupId>
             <artifactId>physic</artifactId>
-            <version>23.10.4</version>
+            <version>23.10.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>jpize</groupId>
             <artifactId>ui</artifactId>
-            <version>23.10.4</version>
+            <version>23.10.5</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
