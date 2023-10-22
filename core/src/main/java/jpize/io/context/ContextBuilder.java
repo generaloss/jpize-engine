@@ -44,7 +44,6 @@ public class ContextBuilder{
     private float opacity = 1F;
     private Window shared = null;
     private Vec2i position = null;
-    private float fixedUpdateTPS = 0;
     private Color initialColor = null;
 
 
@@ -77,7 +76,6 @@ public class ContextBuilder{
         // Context
         final Context context = new Context(window);
         context.setExitOnClose(exitOnClose);
-        context.startFixedUpdate(fixedUpdateTPS);
 
         return context;
     }
@@ -164,15 +162,6 @@ public class ContextBuilder{
     /** Включить альфа-канал для фреймбуфера */
     public ContextBuilder transparentFramebuffer(boolean transparentFramebuffer){
         this.transparentFramebuffer = transparentFramebuffer;
-        return this;
-    }
-
-    /**
-     * Запустить {@link JpizeApplication#fixedUpdate()}
-     * с заданным числом тиков в секунду
-     */
-    public ContextBuilder enableFixedUpdate(float fixedUpdateTPS){
-        this.fixedUpdateTPS = fixedUpdateTPS;
         return this;
     }
 

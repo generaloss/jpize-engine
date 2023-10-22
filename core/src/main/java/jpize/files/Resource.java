@@ -113,31 +113,23 @@ public class Resource{
     }
 
 
-    public JpizeOutputStream getJpizeOut(){
-        return new JpizeOutputStream(outStream());
-    }
-
     public JpizeInputStream getJpizeIn(){
         return new JpizeInputStream(inStream());
+    }
+
+    public JpizeOutputStream getJpizeOut(){
+        return new JpizeOutputStream(outStream());
     }
 
     public FastReader getReader(){
         return new FastReader(inStream());
     }
-    
+
     public PrintStream getWriter(){
         return new PrintStream(outStream());
     }
 
-    
-    public String readString(){
-        try(final InputStream in = inStream()){
-            return new String(in.readAllBytes());
-        }catch(IOException e){
-            throw new RuntimeException(e);
-        }
-    }
-    
+
     public void writeString(String string){
         try(final FileOutputStream out = outStream()){
             out.write(string.getBytes());
@@ -146,11 +138,19 @@ public class Resource{
             throw new RuntimeException(e);
         }
     }
-    
+
     public void appendString(CharSequence string){
         writeString(readString() + string);
     }
 
+
+    public String readString(){
+        try(final InputStream in = inStream()){
+            return new String(in.readAllBytes());
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+    }
 
     public byte[] readBytes(){
         try(InputStream inStream = inStream()){
@@ -218,7 +218,7 @@ public class Resource{
     }
     
     public Resource getChild(String name){
-        if(getPath().length() == 0)
+        if(getPath().isEmpty())
             return new Resource(name, external, classLoader);
         
         return new Resource(new File(file, name), external, classLoader);

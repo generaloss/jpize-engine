@@ -12,7 +12,6 @@ public class Context implements Disposable{
 
     private final Window window;
     protected JpizeApplication adapter;
-    private final FixedUpdate fixedUpdate;
     private Screen screen;
     private boolean exitOnClose, enabled;
 
@@ -21,7 +20,6 @@ public class Context implements Disposable{
 
         this.window = window;
         this.exitOnClose = true;
-        this.fixedUpdate = new FixedUpdate(0);
 
         setCurrent();
     }
@@ -109,18 +107,6 @@ public class Context implements Disposable{
         this.screen = screen;
         this.screen.show();
     }
-
-
-    public FixedUpdate getFixedUpdate(){
-        return fixedUpdate;
-    }
-
-    public void startFixedUpdate(float tps){
-        fixedUpdate.setTPS(tps);
-        fixedUpdate.start(() -> {
-            adapter.fixedUpdate();
-        });
-    }
     
 
     public Window getWindow(){
@@ -141,7 +127,6 @@ public class Context implements Disposable{
         setCurrent();
 
         window.hide();
-        fixedUpdate.stop();
         if(adapter != null) adapter.dispose();
         window.dispose();
 

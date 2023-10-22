@@ -2,7 +2,7 @@ package jpize.graphics.font;
 
 import jpize.math.vecmath.vector.Vec2f;
 
-public class FontRenderOptions{
+public class FontOptions{
 
     private final BitmapFont font;
 
@@ -16,7 +16,7 @@ public class FontRenderOptions{
     public boolean invLineWrap;
     public final Vec2f rotateOrigin;
 
-    public FontRenderOptions(BitmapFont font){
+    public FontOptions(BitmapFont font){
         this.font = font;
 
         this.scale = 1;

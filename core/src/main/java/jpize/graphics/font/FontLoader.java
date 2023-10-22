@@ -34,7 +34,7 @@ public class FontLoader{
     }
 
 
-    public static BitmapFont loadFnt(String filepath){
+    public static BitmapFont loadFnt(Resource resource){
         final GlyphPages pages = new GlyphPages();
         final GlyphMap glyphs = new GlyphMap();
 
@@ -44,7 +44,7 @@ public class FontLoader{
 
         boolean italic = false;
 
-        final FastReader reader = new Resource(filepath).getReader();
+        final FastReader reader = resource.getReader();
 
         while(reader.hasNext()){
             final String[] tokens = reader.nextLine().trim().split("\\s+");
@@ -61,7 +61,7 @@ public class FontLoader{
 
                     final String relativeTexturePath = getValue(tokens[2]).replace("\"", "");
 
-                    final Path path = Path.of(filepath);
+                    final Path path = resource.getFile().toPath();
                     pages.add(id, new Texture(new Resource(
                         path.getParent() == null ?
                             relativeTexturePath :
@@ -111,13 +111,17 @@ public class FontLoader{
         return font;
     }
 
+    public static BitmapFont loadFnt(String filepath){
+        return loadFnt(new Resource(filepath));
+    }
+
 
     private static String getValue(String token){
         return token.split("=")[1];
     }
 
 
-    public static BitmapFont loadTrueType(String filepath, int height, FontCharset charset){
+    public static BitmapFont loadTrueType(Resource resource, int size, FontCharset charset){
         final GlyphPages pages = new GlyphPages();
         final GlyphMap glyphs = new GlyphMap();
 
@@ -125,13 +129,13 @@ public class FontLoader{
         float descent;
 
         // Pixmap
-        final int bitmapWidth = height * charset.size();
-        final int bitmapHeight = height * 3;
+        final int bitmapWidth = size * charset.size();
+        final int bitmapHeight = size * 3;
 
         final PixmapA pixmap = new PixmapA(bitmapWidth, bitmapHeight);
-        final ByteBuffer fontFileData = Resource.readByteBuffer(filepath);
+        final ByteBuffer fontFileData = resource.readByteBuffer();
         final STBTTBakedChar.Buffer charData = STBTTBakedChar.malloc(charset.getLastChar() + 1);
-        stbtt_BakeFontBitmap(fontFileData, height, pixmap.getBuffer(), bitmapWidth, bitmapHeight, charset.getFirstChar(), charData);
+        stbtt_BakeFontBitmap(fontFileData, size, pixmap.getBuffer(), bitmapWidth, bitmapHeight, charset.getFirstChar(), charData);
 
         // Texture
         final Texture texture = new Texture(pixmap.toPixmapRGBA());
@@ -151,7 +155,7 @@ public class FontLoader{
 
             stbtt_GetFontVMetrics(fontInfo, ascentBuffer, descentBuffer, null);
 
-            final float pixelScale = stbtt_ScaleForPixelHeight(fontInfo, height);
+            final float pixelScale = stbtt_ScaleForPixelHeight(fontInfo, size);
             ascent = ascentBuffer.get() * pixelScale;
             descent = descentBuffer.get() * pixelScale;
 
@@ -189,8 +193,16 @@ public class FontLoader{
             }
         }
 
-        final FontInfo info = new FontInfo(height, ascent, descent);
+        final FontInfo info = new FontInfo(size, ascent, descent);
         return new BitmapFont(info, pages, glyphs);
+    }
+
+    public static BitmapFont loadTrueType(String filepath, int size, FontCharset charset){
+        return loadTrueType(new Resource(filepath), size, charset);
+    }
+
+    public static BitmapFont loadTrueType(Resource resource, int size){
+        return loadTrueType(resource, size, FontCharset.DEFAULT);
     }
 
     public static BitmapFont loadTrueType(String filePath, int size){

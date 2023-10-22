@@ -8,9 +8,9 @@
 
 ## Forks
 
-Kotlin fork: [Pizza-Engine-Kotlin](https://github.com/Raf0707/Pizza-Engine-Kotlin) by [Raf0707](https://github.com/Raf0707)
+[Kotlin Fork](https://github.com/Raf0707/Pizza-Engine-Kotlin) by [Raf0707](https://github.com/Raf0707)
 
-С++ version (In Dev): [Pizza-Engine-C++](https://github.com/GeneralPashon/Pizza-Engine-Cpp)
+[C++ Version](https://github.com/GeneralPashon/Pizza-Engine-Cpp) (In Dev)
 
 ## Getting Started
 
@@ -55,14 +55,14 @@ public class App extends JpizeApplication{
         // Create window context
         ContextBuilder.newContext(1280, 720, "Window Title")
                 .icon("icon.png")
-                .create() 
-                .init(new App());
-        // Also you can create multiple windows
-        // Run
+                .register()
+                .setAdapter(new App());
+                
+        // Run created contexts
         Jpize.runContexts();
     }
     
-    public App(){ } // Calls before ContextAdapter.init()
+    public App(){ } // Constructor calls before init()
     
     public void init(){ } // Init
     
@@ -70,11 +70,9 @@ public class App extends JpizeApplication{
     
     public void update(){ } // Update loop
     
-    public void fixedUpdate(){ } // Fixed TPS Update loop
-    
     public void resize(int widht, int height){ } // Calls when window resizes
     
-    public void dispose(){ } // Exit program
+    public void dispose(){ } // Exit app
     
 }
 ```
@@ -96,38 +94,65 @@ batch.draw(texture, x, y, width, height);
 batch.end();
 ```
 
+#### 1. Fonts:
+``` java
+// load
+BitmapFont font = FontLoader.getDefault();
+
+BitmapFont font = FontLoader.loadFnt(path_or_resource);
+
+BitmapFont font = FontLoader.loadTrueType(path_or_resource, size);
+BitmapFont font = FontLoader.loadTrueType(path_or_resource, size, charset);
+
+// options
+FontOptions options = font.getOptions();
+
+options.scale = 1.5F;
+options.rotation = 45;
+options.italic = true;
+options.invLineWrap = true;
+
+// bounds
+float width = font.getLineWidth(line);
+float height = font.getTextHeight(text);
+Vec2f bounds = font.getBounds(text);
+
+// render
+font.drawText(batch, text, x, y)
+```
+
 #### 2. Input:
 ``` java
 // mouse
-Jpize.getX(); // position
-Jpize.getY();
+Jpize.getX()  // position
+Jpize.getY()
 
-Jpize.isTouched(); // touch
-Jpize.isTouchDown();
-Jpize.isTouchReleased();
+Jpize.isTouched()    // touch
+Jpize.isTouchDown()
+Jpize.isTouchReleased()
 
-Jpize.mouse().getScroll(); // scroll
+Jpize.mouse().getScroll()  // scroll
 
 // keyboard
-Key.ENTER.isPressed();
-Key.BACKSPACE.isDown();
-Key.SPACE.isReleased();
-Key.ESCAPE.getName();
+Key.ENTER.isPressed()
+Key.BACKSPACE.isDown()
+Key.SPACE.isReleased()
+Key.ESCAPE.getName()
 
 // window
-Jpize.getWidth();
-Jpize.getHeight();
-Jpize.getAspect();
+Jpize.getWidth()
+Jpize.getHeight()
+Jpize.getAspect()
 
 // monitor
-Jpize.monitor();        // Window monitor
-Jpize.primaryMonitor(); // Primary monitor
+Jpize.monitor()         // window monitor
+Jpize.primaryMonitor()  // primary monitor
 
 // FPS & Delta Time
-Jpize.getFPS();
-Jpize.getDt();
-Jpize.setFixedUpdateTPS(update_rate);
-Jpize.getFixedUpdateDt();
+Jpize.getFPS()
+Jpize.getDt()
+Jpize.setFixedUpdateTPS(update_rate)
+Jpize.getFixedUpdateDt()
 ```
 
 #### 3. Audio:
@@ -156,39 +181,50 @@ source.play();
 Resource res = new Resource(path, true); // external
 Resource res = new Resource(path); // internal
 
-res.isExternal();
-res.isInternal();
+res.isExternal()
+res.isInternal()
 
-// text
-Resource text = new Resource("file.txt");
-text.writeString("write text");
-text.appendString("append text");
-text.readString();
 
-// file
+// as file
 Resource res = new Resource("file.ext");
 
-res.getExtension(); // returns 'ext'
-res.getSimpleName(); // returns 'file'
+res.getExtension()  // returns 'ext' of 'file.ext'
+res.getSimpleName() // returns 'file' of 'file.ext'
 
-res.getFile();
-res.exists();
-res.mkDirsAndFile();
+res.getFile()
+res.exists()
 
-res.inStream();
-res.outStream();
+res.mkDirsAndFile()
+res.mkParentDirs()
 
-res.getReader(); // returns jpize.util.io.FastReader
-res.getWriter(); // returns PrintStream
+// io
+res.inStream()
+res.outStream()
 
-// resource (image, sound, ...etc)
+res.getJpizeIn()  // JpizeInputStream
+res.getJpizeOut() // JpizeOutputStream
+
+res.getReader()  // FastReader
+res.getWriter()  // PrintStream
+
+// write/read
+res.writeString(text)
+res.appendString(text)
+
+res.readString()
+res.readBytes()
+res.readByteBuffer()  // ByteBuffer
+
+
+// resources (images, sounds, fonts, ...etc)
 Resource res = new Resource( ... );
 
 new Texture(res);
 new Sound(res);
-PixmapIO.load(res);
 new Shader(res_vert, res_frag);
 AudioLoader.load(audio_buffer, res);
+FontLoader.loadFnt(res);
+PixmapIO.load(res);
 ```
 
 ### Net:
@@ -222,7 +258,9 @@ client.send("Hello, World!".getBytes()); // send 'Hello, World!'
 ``` java
 // Packets Handler
 class MyPacketHandler implements PacketHandler{
+
     public void handleMyPacket(MyPacket packet){ ... }
+    
     public void handleAnotherPacket(AnotherPacket packet){ ... }
 }
 
@@ -245,7 +283,6 @@ class MyPacket extends IPacket<MyPacketHandler>{ // MyPacketHandler
         handler.handleMyPacket(this); 
     }
 }
-
 
 
 // packet sending

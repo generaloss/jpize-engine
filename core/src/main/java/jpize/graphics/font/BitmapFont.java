@@ -14,13 +14,13 @@ public class BitmapFont implements Disposable{
     private final FontInfo info;
     private final GlyphPages pages;
     private final GlyphMap glyphs;
-    private final FontRenderOptions options;
+    private final FontOptions options;
 
     protected BitmapFont(FontInfo info, GlyphPages pages, GlyphMap glyphs){
         this.info = info;
         this.pages = pages;
         this.glyphs = glyphs;
-        this.options = new FontRenderOptions(this);
+        this.options = new FontOptions(this);
     }
 
     public FontInfo getInfo(){
@@ -35,7 +35,7 @@ public class BitmapFont implements Disposable{
         return pages;
     }
 
-    public FontRenderOptions getOptions(){
+    public FontOptions getOptions(){
         return options;
     }
 

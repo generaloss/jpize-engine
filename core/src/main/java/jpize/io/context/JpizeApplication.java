@@ -6,13 +6,11 @@ import jpize.util.Resizable;
 public abstract class JpizeApplication implements Resizable, Disposable{
 
     public void init(){ }
-    
-    public void render(){ }
-    
+
     public void update(){ }
-    
-    public void fixedUpdate(){ }
-    
+
+    public void render(){ }
+
     @Override
     public void resize(int width, int height){ }
     

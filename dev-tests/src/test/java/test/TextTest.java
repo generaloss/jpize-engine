@@ -36,7 +36,7 @@ public class TextTest extends JpizeApplication{
         if(Key.ESCAPE.isDown())
             Jpize.exit();
 
-        rotation++;
+        rotation += Jpize.getDt() * 50;
     }
 
     public void render(){

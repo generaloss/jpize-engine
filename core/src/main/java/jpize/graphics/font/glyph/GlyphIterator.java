@@ -1,6 +1,6 @@
 package jpize.graphics.font.glyph;
 
-import jpize.graphics.font.FontRenderOptions;
+import jpize.graphics.font.FontOptions;
 import jpize.math.vecmath.vector.Vec2f;
 
 import java.util.Iterator;
@@ -8,7 +8,7 @@ import java.util.Iterator;
 public class GlyphIterator implements Iterator<GlyphSprite>{
 
     private final GlyphMap glyphs;
-    private final FontRenderOptions options;
+    private final FontOptions options;
     private final CharSequence text;
     private final int size;
     private final Vec2f advanceK;
@@ -17,7 +17,7 @@ public class GlyphIterator implements Iterator<GlyphSprite>{
     private float advanceX;
     private float advanceY;
 
-    public GlyphIterator(GlyphMap glyphs, FontRenderOptions options, CharSequence text, float advanceKX, float advanceKY){
+    public GlyphIterator(GlyphMap glyphs, FontOptions options, CharSequence text, float advanceKX, float advanceKY){
         this.glyphs = glyphs;
         this.options = options;
         this.text = textWithoutNullGlyphs(text);

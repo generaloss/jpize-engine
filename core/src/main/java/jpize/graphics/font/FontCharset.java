@@ -4,7 +4,7 @@ public class FontCharset{
 
     public static final FontCharset SPECIAL_SYMBOLS = new FontCharset("~`!@#$%^&*()-_+={}[]|\\/:;\"'<>,.? ");
     public static final FontCharset NUMBERS = new FontCharset("0123456789");
-    public static final FontCharset ENG = new FontCharset("ABCDEFGHIJKLMNOPQRSTUVWXYabcdefghijklmnopqrstuvwxyz");
+    public static final FontCharset ENG = new FontCharset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
     public static final FontCharset RUS = new FontCharset("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя");
     public static final FontCharset DEFAULT = new FontCharset(SPECIAL_SYMBOLS.toString() + NUMBERS + ENG);
     public static final FontCharset DEFAULT_ENG_RUS = new FontCharset(SPECIAL_SYMBOLS.toString() + NUMBERS + ENG + RUS);

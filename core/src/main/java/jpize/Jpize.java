@@ -131,14 +131,6 @@ public class Jpize{
         contextManager.getSyncTaskExecutor().execIf(runnable, condition);
     }
 
-    public static float getFixedUpdateDt(){
-        return context().getFixedUpdate().getDeltaTime();
-    }
-
-    public static void startFixedUpdate(float tps){
-        context().startFixedUpdate(tps);
-    }
-
 
     public static void closeWindow(){
         context().getWindow().setShouldClose(true);
@@ -152,7 +144,7 @@ public class Jpize{
         contextManager.closeOtherWindows();
     }
 
-    public static void exitWhenNoWindows(boolean exitWhenNoWindows){
+    public static void exitOnWindowsClosed(boolean exitWhenNoWindows){
         contextManager.exitWhenNoWindows(exitWhenNoWindows);
     }
 

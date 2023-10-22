@@ -13,12 +13,10 @@ public class LoadingTest{
 
     public static void main(String[] args){
         // Run Loading
-        ContextBuilder
-                .newContext("Loading App...")
-                .size(640, 360)
-                .borderless(true)
-                .exitWhenWindowClose(false)
-                .register().setAdapter(new LoadingWindow());
+        ContextBuilder.newContext(640, 360, "Loading App...")
+            .borderless(true)
+            .exitWhenWindowClose(false)
+            .register().setAdapter(new LoadingWindow());
 
         Jpize.runContexts();
     }
@@ -43,10 +41,9 @@ public class LoadingTest{
 
             // Run App
             Jpize.execSync(() ->
-                ContextBuilder.newContext("App")
-                        .size(1280, 720)
-                        .register()
-                        .setAdapter(new App())
+                ContextBuilder.newContext(1280, 720, "App")
+                    .register()
+                    .setAdapter(new App())
             );
         }
     }
