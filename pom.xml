@@ -19,6 +19,7 @@
         <module>physic</module>
         <module>ui</module>
         <module>dev-tests</module>
+        <module>tilemap</module>
     </modules>
 
 </project>

@@ -4,19 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>jpize</groupId>
-    <artifactId>ui</artifactId>
-    <version>23.10.5</version>
+    <parent>
+        <groupId>com.generalpashon</groupId>
+        <artifactId>jpize-engine</artifactId>
+        <version>23.10.5</version>
+    </parent>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <groupId>jpize-engine</groupId>
+    <artifactId>ui</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>jpize</groupId>
+            <groupId>jpize-engine</groupId>
             <artifactId>core</artifactId>
             <version>23.10.5</version>
             <scope>compile</scope>

@@ -3,18 +3,20 @@
   <component name="CompilerConfiguration">
     <excludeFromCompile>
       <directory url="file://$PROJECT_DIR$/tests/test-text-editor/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/tilemap/src/main/resources/archetype-resources" includeSubdirectories="true" />
     </excludeFromCompile>
     <annotationProcessing>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="dev-tests" />
         <module name="core" />
         <module name="test-minecraf-osp" />
+        <module name="dev-tests" />
         <module name="ui" />
         <module name="net" />
         <module name="physic" />
+        <module name="tilemap" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -62,7 +64,6 @@
       <module name="test-win" target="17" />
       <module name="test-window" target="17" />
       <module name="tests" target="17" />
-      <module name="tilemap" target="17" />
       <module name="vg" target="17" />
     </bytecodeTargetLevel>
   </component>

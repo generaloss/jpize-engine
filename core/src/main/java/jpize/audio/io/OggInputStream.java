@@ -20,31 +20,31 @@ public class OggInputStream extends InputStream{
 
     private final static int BUFFER_SIZE = 512;
 
-    private int convsize = BUFFER_SIZE * 4;
-    private byte[] convbuffer;
-    private InputStream input;
-    private Info oggInfo = new Info(); // struct that stores all the static vorbis bitstream settings
+    private int convSize = BUFFER_SIZE * 4;
+    private final byte[] convBuffer;
+    private final InputStream input;
+    private final Info oggInfo = new Info(); // struct that stores all the static vorbis bitstream settings
     private boolean endOfStream;
 
-    private SyncState syncState = new SyncState(); // sync and verify incoming physical bitstream
-    private StreamState streamState = new StreamState(); // take physical pages, weld into a logical stream of packets
-    private Page page = new Page(); // one Ogg bitstream page. Vorbis packets are inside
-    private Packet packet = new Packet(); // one raw packet of data for decode
+    private final SyncState syncState = new SyncState(); // sync and verify incoming physical bitstream
+    private final StreamState streamState = new StreamState(); // take physical pages, weld into a logical stream of packets
+    private final Page page = new Page(); // one Ogg bitstream page. Vorbis packets are inside
+    private final Packet packet = new Packet(); // one raw packet of data for decode
 
-    private Comment comment = new Comment(); // struct that stores all the bitstream user comments
-    private DspState dspState = new DspState(); // central working state for the packet->PCM decoder
-    private Block vorbisBlock = new Block(dspState); // local working space for packet->PCM decode
+    private final Comment comment = new Comment(); // struct that stores all the bitstream user comments
+    private final DspState dspState = new DspState(); // central working state for the packet->PCM decoder
+    private final Block vorbisBlock = new Block(dspState); // local working space for packet->PCM decode
 
-    byte[] buffer;
-    int bytes = 0;
-    boolean bigEndian = ByteOrder.nativeOrder().equals(ByteOrder.BIG_ENDIAN);
-    boolean endOfBitStream = true;
-    boolean inited = false;
+    private byte[] buffer;
+    private int bytes = 0;
+    private final boolean bigEndian = ByteOrder.nativeOrder().equals(ByteOrder.BIG_ENDIAN);
+    private boolean endOfBitStream = true;
+    private boolean initialized = false;
 
     private int readIndex;
-    private byte[] outBuffer;
+    private final byte[] outBuffer;
     private int outIndex;
-    private int total;
+    private final int total;
 
     public OggInputStream(InputStream input){
         this(input, null);
@@ -52,10 +52,10 @@ public class OggInputStream extends InputStream{
 
     public OggInputStream(InputStream input, OggInputStream previousStream){
         if(previousStream == null){
-            convbuffer = new byte[convsize];
+            convBuffer = new byte[convSize];
             outBuffer = new byte[4096 * 500];
         }else{
-            convbuffer = previousStream.convbuffer;
+            convBuffer = previousStream.convBuffer;
             outBuffer = previousStream.outBuffer;
         }
 
@@ -212,7 +212,7 @@ public class OggInputStream extends InputStream{
             syncState.wrote(bytes);
         }
 
-        convsize = BUFFER_SIZE / oggInfo.channels;
+        convSize = BUFFER_SIZE / oggInfo.channels;
 
         // OK, got and parsed all three headers. Initialize the Vorbis
         // packet->PCM decoder.
@@ -237,8 +237,8 @@ public class OggInputStream extends InputStream{
                 endOfBitStream = false;
             }
 
-            if(!inited){
-                inited = true;
+            if(!initialized){
+                initialized = true;
                 return;
             }
 
@@ -281,7 +281,7 @@ public class OggInputStream extends InputStream{
                                 while((samples = dspState.synthesis_pcmout(_pcm, _index)) > 0){
                                     float[][] pcm = _pcm[0];
                                     // boolean clipflag = false;
-                                    int bout = (samples < convsize ? samples : convsize);
+                                    int bout = Math.min(samples, convSize);
 
                                     // convert floats to 16 bit signed ints (host order) and
                                     // interleave
@@ -302,11 +302,11 @@ public class OggInputStream extends InputStream{
                                                 val = val | 0x8000;
 
                                             if(bigEndian){
-                                                convbuffer[ptr] = (byte) (val >>> 8);
-                                                convbuffer[ptr + 1] = (byte) (val);
+                                                convBuffer[ptr] = (byte) (val >>> 8);
+                                                convBuffer[ptr + 1] = (byte) (val);
                                             }else{
-                                                convbuffer[ptr] = (byte) (val);
-                                                convbuffer[ptr + 1] = (byte) (val >>> 8);
+                                                convBuffer[ptr] = (byte) (val);
+                                                convBuffer[ptr + 1] = (byte) (val >>> 8);
                                             }
                                             ptr += 2 * (oggInfo.channels);
                                         }
@@ -316,7 +316,7 @@ public class OggInputStream extends InputStream{
                                     if(outIndex + bytesToWrite > outBuffer.length){
                                         throw new RuntimeException("Ogg block too big to be buffered: " + bytesToWrite + ", " + (outBuffer.length - outIndex));
                                     }else{
-                                        System.arraycopy(convbuffer, 0, outBuffer, outIndex, bytesToWrite);
+                                        System.arraycopy(convBuffer, 0, outBuffer, outIndex, bytesToWrite);
                                         outIndex += bytesToWrite;
                                     }
 

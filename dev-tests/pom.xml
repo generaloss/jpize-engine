@@ -8,30 +8,30 @@
         <version>23.10.5</version>
     </parent>
 
-    <groupId>pizza-engine.tests</groupId>
+    <groupId>jpize-engine</groupId>
     <artifactId>dev-tests</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>jpize</groupId>
+            <groupId>jpize-engine</groupId>
             <artifactId>core</artifactId>
             <version>23.10.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>jpize</groupId>
+            <groupId>jpize-engine</groupId>
             <artifactId>net</artifactId>
             <version>23.10.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>jpize</groupId>
+            <groupId>jpize-engine</groupId>
             <artifactId>physic</artifactId>
             <version>23.10.5</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>jpize</groupId>
+            <groupId>jpize-engine</groupId>
             <artifactId>ui</artifactId>
             <version>23.10.5</version>
             <scope>compile</scope>
