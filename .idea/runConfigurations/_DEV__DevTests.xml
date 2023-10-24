@@ -2,6 +2,7 @@
   <configuration default="false" name="[DEV] DevTests" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="test.Main" />
     <module name="dev-tests" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/dev-tests" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

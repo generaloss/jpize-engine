@@ -13,9 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteOrder;
 
-/**
- * @author kevin
- */
+/** @author kevin */
 public class OggInputStream extends InputStream{
 
     private final static int BUFFER_SIZE = 512;
@@ -46,17 +44,13 @@ public class OggInputStream extends InputStream{
     private int outIndex;
     private final int total;
 
-    public OggInputStream(InputStream input){
-        this(input, null);
-    }
-
-    public OggInputStream(InputStream input, OggInputStream previousStream){
-        if(previousStream == null){
+    public OggInputStream(InputStream input, OggInputStream prevOggStream){
+        if(prevOggStream == null){
             convBuffer = new byte[convSize];
             outBuffer = new byte[4096 * 500];
         }else{
-            convBuffer = previousStream.convBuffer;
-            outBuffer = previousStream.outBuffer;
+            convBuffer = prevOggStream.convBuffer;
+            outBuffer = prevOggStream.outBuffer;
         }
 
         this.input = input;
@@ -67,6 +61,10 @@ public class OggInputStream extends InputStream{
         }
 
         init();
+    }
+
+    public OggInputStream(InputStream input){
+        this(input, null);
     }
 
 

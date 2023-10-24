@@ -38,6 +38,7 @@ public class ContextBuilder{
     private boolean fullscreen = false;
     private boolean transparentFramebuffer = false;
     private boolean exitOnClose = true;
+    private boolean showWindowOnInit = true;
     private boolean borderless = false;
 
     private int samples = 1;
@@ -76,6 +77,7 @@ public class ContextBuilder{
         // Context
         final Context context = new Context(window);
         context.setExitOnClose(exitOnClose);
+        context.setShowWindowOnInit(showWindowOnInit);
 
         return context;
     }
@@ -156,6 +158,12 @@ public class ContextBuilder{
     /** Остановить программу в случае закрытия окна */
     public ContextBuilder exitWhenWindowClose(boolean exitOnClose){
         this.exitOnClose = exitOnClose;
+        return this;
+    }
+
+    /** Показать окно при инициализации */
+    public ContextBuilder showOnInit(boolean showWindowOnInit){
+        this.showWindowOnInit = showWindowOnInit;
         return this;
     }
 

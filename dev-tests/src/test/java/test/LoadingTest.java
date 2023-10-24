@@ -24,7 +24,7 @@ public class LoadingTest{
     static class LoadingWindow extends JpizeApplication{
         // Image, font
         final TextureBatch batch = new TextureBatch();
-        final Texture splash = new Texture("wallpaper-16.jpg");
+        final Texture splash = new Texture("background.jpg");
         final BitmapFont font = FontLoader.getDefault();
 
         public void init(){

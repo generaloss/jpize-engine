@@ -16,18 +16,64 @@ public class JpizeInputStream extends DataInputStream{
         super(in);
     }
     
-    public short[] readShortArray() throws IOException{
-        final byte[] bytes = readByteArray();
-        
-        final short[] shortArray = new short[bytes.length / 2];
-        for(int i = 0; i < shortArray.length; i++)
-            shortArray[i] = (short) (bytes[i * 2] & 0xFF << 8 | (bytes[i * 2 + 1] & 0xFF));
-        
-        return shortArray;
-    }
-    
     public byte[] readByteArray() throws IOException{
         return readNBytes(readInt());
+    }
+
+    public short[] readShortArray() throws IOException{
+        final byte[] bytes = readByteArray();
+
+        final short[] shortArray = new short[bytes.length / 2];
+        for(int i = 0; i < shortArray.length; i++){
+            int index = i * 2;
+
+            shortArray[i] = (short) (
+                (bytes[index++] & 0xFF) << 8 |
+                (bytes[index  ] & 0xFF)
+            );
+        }
+
+        return shortArray;
+    }
+
+    public int[] readIntArray() throws IOException{
+        final byte[] bytes = readByteArray();
+
+        final int[] intArray = new int[bytes.length / 4];
+        for(int i = 0; i < intArray.length; i++){
+            int index = i * 4;
+
+            intArray[i] = (
+                (bytes[index++] & 0xFF) << 24 |
+                (bytes[index++] & 0xFF) << 16 |
+                (bytes[index++] & 0xFF) << 8  |
+                (bytes[index  ] & 0xFF)
+            );
+        }
+
+        return intArray;
+    }
+
+    public long[] readLongArray() throws IOException{
+        final byte[] bytes = readByteArray();
+
+        final long[] longArray = new long[bytes.length / 8];
+        for(int i = 0; i < longArray.length; i++){
+            int index = i * 8;
+
+            longArray[i] = (
+                ((long) bytes[index++] & 0xFF) << 56 |
+                ((long) bytes[index++] & 0xFF) << 48 |
+                ((long) bytes[index++] & 0xFF) << 40 |
+                ((long) bytes[index++] & 0xFF) << 32 |
+                ((long) bytes[index++] & 0xFF) << 24 |
+                (       bytes[index++] & 0xFF) << 16 |
+                (       bytes[index++] & 0xFF) << 8  |
+                (       bytes[index  ] & 0xFF)
+            );
+        }
+
+        return longArray;
     }
 
 

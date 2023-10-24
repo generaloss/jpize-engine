@@ -103,6 +103,10 @@ public class GlfwWindow extends GlfwObjectLong implements Disposable{
     }
 
 
+    public boolean isVisible(){
+        return getAttribute(GlfwHint.VISIBLE) == 1;
+    }
+
     public void show(){
         glfwShowWindow(ID);
     }

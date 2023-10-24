@@ -15,20 +15,56 @@ public class JpizeOutputStream extends DataOutputStream{
         super(out);
     }
     
+    public void writeByteArray(byte[] byteArray) throws IOException{
+        writeInt(byteArray.length);
+        write(byteArray);
+    }
+
     public void writeShortArray(short[] shortArray) throws IOException{
         final byte[] bytes = new byte[shortArray.length * 2];
         for(int i = 0; i < shortArray.length; i++){
             final short j = shortArray[i];
-            bytes[i * 2] = (byte) (j >> 8 & 0xFF);
-            bytes[i * 2 + 1] = (byte) (j & 0xFF);
+
+            int index = i * 2;
+            bytes[index++] = (byte) (j >> 8 & 0xFF);
+            bytes[index  ] = (byte) (j & 0xFF);
         }
-        
+
         writeByteArray(bytes);
     }
-    
-    public void writeByteArray(byte[] byteArray) throws IOException{
-        writeInt(byteArray.length);
-        write(byteArray);
+
+    public void writeIntArray(int[] intArray) throws IOException{
+        final byte[] bytes = new byte[intArray.length * 4];
+        for(int i = 0; i < intArray.length; i++){
+            final int j = intArray[i];
+
+            int index = i * 4;
+            bytes[index++] = (byte) (j >> 24 & 0xFF);
+            bytes[index++] = (byte) (j >> 16 & 0xFF);
+            bytes[index++] = (byte) (j >> 8  & 0xFF);
+            bytes[index  ] = (byte) (j       & 0xFF);
+        }
+
+        writeByteArray(bytes);
+    }
+
+    public void writeLongArray(long[] longArray) throws IOException{
+        final byte[] bytes = new byte[longArray.length * 8];
+        for(int i = 0; i < longArray.length; i++){
+            final long j = longArray[i];
+
+            int index = i * 8;
+            bytes[index++] = (byte) (j >> 56 & 0xFF);
+            bytes[index++] = (byte) (j >> 48 & 0xFF);
+            bytes[index++] = (byte) (j >> 40 & 0xFF);
+            bytes[index++] = (byte) (j >> 32 & 0xFF);
+            bytes[index++] = (byte) (j >> 24 & 0xFF);
+            bytes[index++] = (byte) (j >> 16 & 0xFF);
+            bytes[index++] = (byte) (j >> 8  & 0xFF);
+            bytes[index  ] = (byte) (j       & 0xFF);
+        }
+
+        writeByteArray(bytes);
     }
 
 

@@ -13,13 +13,14 @@ public class Context implements Disposable{
     private final Window window;
     protected JpizeApplication adapter;
     private Screen screen;
-    private boolean exitOnClose, enabled;
+    private boolean exitOnClose, enabled, showWindowOnInit;
 
     protected Context(Window window){
         contextManager.registerContext(this);
 
         this.window = window;
         this.exitOnClose = true;
+        this.showWindowOnInit = true;
 
         setCurrent();
     }
@@ -33,6 +34,14 @@ public class Context implements Disposable{
         this.exitOnClose = exitOnClose;
     }
 
+
+    public boolean isShowWindowOnInit(){
+        return showWindowOnInit;
+    }
+
+    public void setShowWindowOnInit(boolean showWindowOnInit){
+        this.showWindowOnInit = showWindowOnInit;
+    }
 
     public boolean isEnabled(){
         return enabled;
@@ -73,8 +82,10 @@ public class Context implements Disposable{
         });
 
         setEnabled(true);
-        window.show();
-        window.swapBuffers();
+        if(showWindowOnInit){
+            window.show();
+            window.swapBuffers();
+        }
     }
 
     protected void render(){
@@ -92,13 +103,16 @@ public class Context implements Disposable{
         // Render adapter
         if(adapter != null){
             adapter.update();
-            adapter.render();
+            if(window.isVisible())
+                adapter.render();
         }
         
         // Reset
         window.getMouse().reset();
         window.getKeyboard().reset();
-        window.swapBuffers();
+
+        if(window.isVisible())
+            window.swapBuffers();
     }
     
 

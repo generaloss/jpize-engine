@@ -5,8 +5,8 @@ import jpize.io.context.ContextBuilder;
 
 public class Main{
     
-    public static void main(String[] args){
-        ContextBuilder.newContext(1300, 1300, "Dev-Test")
+    public static void main(String[] args) throws Throwable{
+        //ContextBuilder.newContext(1300, 1300, "Dev-Test")
         //.register().setAdapter(new KeyboardTest());
         //.register().setAdapter(new MouseTest());
         //.register().setAdapter(new WindowTest());
@@ -16,8 +16,10 @@ public class Main{
         //.register().setAdapter(new AtlasTest());
         //.register().setAdapter(new MidiTest());
         //.register().setAdapter(new FontDemo());
-        .register().setAdapter(new TextTest());
-        Jpize.runContexts();
+        //.register().setAdapter(new TextTest());
+        //.register().setAdapter(new AudioTest());
+        //.register().setAdapter(new TilemapTest());
+        //Jpize.runContexts();
 
         //myMultipleWindows();
         //new NeuralTest();
@@ -26,6 +28,7 @@ public class Main{
         //GreedyMesh.main(args);
         //MyGreedyMesh2D.main(args);
         //MyGreedyMesh3D.main(args);
+        IoTest.main(args);
     }
 
     private static void myMultipleWindows(){
