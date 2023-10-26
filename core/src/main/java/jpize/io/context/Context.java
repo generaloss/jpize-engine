@@ -84,6 +84,7 @@ public class Context implements Disposable{
         setEnabled(true);
         if(showWindowOnInit){
             window.show();
+            Gl.viewport(window.getWidth(), window.getHeight()); // Windows bug fix
             window.swapBuffers();
         }
     }

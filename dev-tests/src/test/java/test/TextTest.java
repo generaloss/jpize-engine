@@ -17,6 +17,8 @@ public class TextTest extends JpizeApplication{
 
     public void init(){
         Jpize.window().setSize(1280, 720);
+        Gl.clearColor(0.4, 0.5, 0.7);
+
         batch = new TextureBatch();
 
         font = FontLoader.getDefault();
@@ -41,7 +43,6 @@ public class TextTest extends JpizeApplication{
 
     public void render(){
         Gl.clearColorBuffer();
-        Gl.clearColor(0.4, 0.5, 0.7);
 
         batch.begin();
 

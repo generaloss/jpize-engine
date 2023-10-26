@@ -73,11 +73,9 @@ public class QuadFromNormalTest extends JpizeApplication{
     }
 
 
-
     public void render(){
-        // Clear color
+        // Clear buffer
         Gl.clearColorBuffer();
-        Gl.clearColor(0.2, 0.2, 0.22);
 
         // Render skybox
         skyBox.render(camera);

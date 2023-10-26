@@ -63,8 +63,7 @@ public class TriangleIntersectionTest extends JpizeApplication{
     public void render(){
         // Clear color
         Gl.clearColorDepthBuffers();
-        Gl.clearColor(0.2, 0.2, 0.22);
-        
+
         // Render skybox
         skyBox.render(camera);
         

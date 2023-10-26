@@ -24,7 +24,13 @@ public class Resource{
     }
     
     public Resource(String filepath, boolean external, Class<?> classLoader){
-        this(new File((!external ? "/" : "") + filepath), external, classLoader);
+        filepath = osGeneralizePath(filepath);
+        if(!external && !filepath.startsWith("/"))
+            filepath = "/" + filepath;
+
+        this.external = external;
+        this.file = new File(filepath);
+        this.classLoader = classLoader;
     }
     
     // Parent child
@@ -231,7 +237,7 @@ public class Resource{
     
     
     public String getPath(){
-        return file.getPath().replace("\\", "/");
+        return osGeneralizePath(file.getPath());
     }
     
     public String getAbsolutePath(){
@@ -280,6 +286,10 @@ public class Resource{
 
     public static ByteBuffer readByteBuffer(String filepath){
         return readByteBuffer(filepath, false);
+    }
+    
+    public static String osGeneralizePath(String path){
+        return path.replace("\\", "/");
     }
     
 }

@@ -16,9 +16,10 @@ public class KeyboardTest extends JpizeApplication{
     BitmapFont font;
 
     public void init(){
+        Gl.clearColor(0.4, 0.5, 0.7);
         batch = new TextureBatch();
 
-        font = FontLoader.loadFnt("font.fnt");
+        font = FontLoader.loadFnt("fonts/font.fnt");
         font.setScale(0.5F);
         font.getOptions().textAreaWidth = Jpize.getWidth();
         font.getOptions().invLineWrap = true;
@@ -26,15 +27,15 @@ public class KeyboardTest extends JpizeApplication{
         Jpize.keyboard().setStickyKeys(true);
     }
 
-    public void render(){
+    public void update(){
         if(Key.ESCAPE.isDown())
             Jpize.exit();
         if(Key.F11.isDown())
             Jpize.window().toggleFullscreen();
+    }
 
+    public void render(){
         Gl.clearColorBuffer();
-        Gl.clearColor(0.4, 0.5, 0.7);
-
         batch.begin();
 
         StringJoiner pressedKeys = new StringJoiner(", ");

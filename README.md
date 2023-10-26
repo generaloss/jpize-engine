@@ -28,7 +28,7 @@ Maven:
     <dependency>
         <groupId>com.github.GeneralPashon</groupId>
         <artifactId>jpize-engine</artifactId>
-        <version>v23.10.6</version>
+        <version>v23.10.7</version>
     </dependency>
 </dependencies>
 ```
@@ -82,6 +82,7 @@ public class App extends JpizeApplication{
 TextureBatch batch = new TextureBatch(); // canvas for textures
 Texture texture = new Texture("texture.png");
 
+Gl.clearColorBuffer();
 batch.begin();
 
 // rotate, shear and scale for subsequent textures

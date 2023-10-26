@@ -59,14 +59,16 @@ public class FontLoader{
                 case "page" -> {
                     final int id = Integer.parseInt(getValue(tokens[1]));
 
-                    final String relativeTexturePath = getValue(tokens[2]).replace("\"", "");
-
                     final Path path = resource.getFile().toPath();
-                    pages.add(id, new Texture(new Resource(
-                        path.getParent() == null ?
-                            relativeTexturePath :
-                            Path.of(path.getParent() + "/" + relativeTexturePath).normalize().toString()
-                    )));
+                    String relativeTexturePath = getValue(tokens[2]).replace("\"", "");
+
+                    if(path.getParent() != null){
+                        final String parentPath = Resource.osGeneralizePath(path.getParent().toString());
+                        relativeTexturePath = Path.of(parentPath + "/" + relativeTexturePath).normalize().toString();
+                    }
+
+                    final Resource textureResource = new Resource(relativeTexturePath);
+                    pages.add(id, new Texture(textureResource));
                 }
                 case "char" -> {
                     final int code = Integer.parseInt(getValue(tokens[1]));

@@ -17,11 +17,11 @@ public class MonitorTest extends JpizeApplication{
 
     public void init(){
         Jpize.window().setSize(1280, 720);
+        Gl.clearColor(0.4, 0.5, 0.7);
 
         batch = new TextureBatch();
-        font = FontLoader.loadFnt("font.fnt");
+        font = FontLoader.loadFnt("fonts/font.fnt");
         font.setScale(0.5F);
-        font.getOptions().textAreaWidth = Jpize.getWidth();
         font.getOptions().invLineWrap = true;
 
         buildInfo();
@@ -29,7 +29,7 @@ public class MonitorTest extends JpizeApplication{
 
     private void buildInfo(){
         StringBuilder builder = new StringBuilder();
-        GlfwMonitor monitor = Jpize.monitor();
+        GlfwMonitor monitor = Jpize.primaryMonitor();
 
         builder.append("ID: " + monitor.getID() + "\n");
         builder.append("Name: " + monitor.getName() + "\n");
@@ -50,13 +50,15 @@ public class MonitorTest extends JpizeApplication{
         info = builder.toString();
     }
 
-    public void render(){
+    public void update(){
         if(Key.ESCAPE.isDown())
             Jpize.exit();
 
-        Gl.clearColorBuffer();
-        Gl.clearColor(0.4, 0.5, 0.7);
+        font.getOptions().textAreaWidth = Jpize.getWidth();
+    }
 
+    public void render(){
+        Gl.clearColorBuffer();
         batch.begin();
         font.drawText(batch, info, 0, Jpize.getHeight());
         batch.end();

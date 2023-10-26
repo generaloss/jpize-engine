@@ -16,7 +16,7 @@ public class AtlasTest extends JpizeApplication{
         atlas = new TextureAtlas<>();
         
         for(int i = 1; i <= 25; i++)
-            atlas.put(i, "texture" + i + ".png");
+            atlas.put(i, "textures/texture" + i + ".png");
         
         atlas.generate(128, 128, 1);
     }

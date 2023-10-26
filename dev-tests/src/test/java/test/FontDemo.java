@@ -67,7 +67,7 @@ public class FontDemo extends JpizeApplication{
 
         this.text = "I want pizza.\naaa";
 
-        final ByteBuffer fontFileData = Resource.readByteBuffer("OpenSans-Regular.ttf");
+        final ByteBuffer fontFileData = Resource.readByteBuffer("fonts/OpenSans-Regular.ttf");
 
         info = STBTTFontinfo.create();
         if(!stbtt_InitFont(info, fontFileData)){

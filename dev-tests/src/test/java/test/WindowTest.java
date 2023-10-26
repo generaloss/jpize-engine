@@ -17,12 +17,12 @@ public class WindowTest extends JpizeApplication{
 
     public void init(){
         Jpize.window().setSize(1280, 720);
+        Gl.clearColor(0.4, 0.5, 0.7);
 
         batch = new TextureBatch();
 
-        font = FontLoader.loadFnt("font.fnt");
+        font = FontLoader.loadFnt("fonts/font.fnt");
         font.setScale(0.5F);
-        font.getOptions().textAreaWidth = Jpize.getWidth();
         font.getOptions().invLineWrap = true;
 
         Window window = Jpize.window();
@@ -33,15 +33,15 @@ public class WindowTest extends JpizeApplication{
         });
     }
 
-    public void render(){
+    public void update(){
         Window window = Jpize.window();
-
-        window.requestAttention();
 
         if(Key.ESCAPE.isDown())
             Jpize.exit();
         if(Key.F11.isDown())
             window.toggleFullscreen();
+        if(Key.A.isDown())
+            window.requestAttention();
 
         if(Key.H.isDown()){
             window.hide();
@@ -49,6 +49,11 @@ public class WindowTest extends JpizeApplication{
             Jpize.execIf(window::show, () -> stopwatch.getSeconds() > 2);
         }
 
+        font.getOptions().textAreaWidth = Jpize.getWidth();
+    }
+
+    public void render(){
+        Window window = Jpize.window();
         String info =
                 "Clipboard string: " + window.getClipboardString() + "\n"
                 + "Size: " + window.getSize() + "\n"
@@ -57,10 +62,10 @@ public class WindowTest extends JpizeApplication{
                 + "Content scale: " + window.getContentScale() + "\n"
                 + "Monitor ID: " + window.getMonitorID() + "\n"
                 + "Position: " + window.getPos() + "\n"
-                + "\nPress H to hide window in 3 seconds";
+                + "\nPress H to hide window in 3 seconds"
+                + "\nPress A to require attention";
 
         Gl.clearColorBuffer();
-        Gl.clearColor(0.4, 0.5, 0.7);
         batch.begin();
         font.drawText(batch, info, 0, window.getHeight());
         batch.end();

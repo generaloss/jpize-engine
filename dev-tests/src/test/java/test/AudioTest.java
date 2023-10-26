@@ -9,7 +9,7 @@ public class AudioTest extends JpizeApplication{
     public void init(){
         Jpize.context().setShowWindowOnInit(false);
 
-        Sound sound = new Sound("MyMusic.ogg");
+        Sound sound = new Sound("audio/MyMusic.ogg");
         sound.play(Jpize::exit);
     }
 
