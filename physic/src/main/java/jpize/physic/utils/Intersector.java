@@ -3,6 +3,24 @@ package jpize.physic.utils;
 import jpize.math.vecmath.vector.Vec3f;
 
 public class Intersector{
+
+    public static boolean isOverlapping1D(float min1, float max1, float min2, float max2){
+        return min1 <= max2 && max1 >= min2;
+    }
+
+    public static boolean isOverlapping2D(float min1X, float min1Y, float max1X, float max1Y,
+                                          float min2X, float min2Y, float max2X, float max2Y){
+
+        return isOverlapping1D(min1X, max1X, min2X, max2X) &&
+                isOverlapping1D(min1Y, max1Y, min2Y, max2Y);
+    }
+
+    public static boolean isOverlapping3D(float min1X, float min1Y, float min1Z, float max1X, float max1Y, float max1Z,
+                                          float min2X, float min2Y, float min2Z, float max2X, float max2Y, float max2Z){
+
+        return isOverlapping2D(min1X, min1Y, max1X, max1Y, min2X, min2Y, max2X, max2Y) &&
+                isOverlapping1D(min1Z, max1Z, min2Z, max2Z);
+    }
     
     
     public static Vec3f lineQuad(Vec3f q1, Vec3f q2, Vec3f p1, Vec3f p2, Vec3f p3, Vec3f p4){

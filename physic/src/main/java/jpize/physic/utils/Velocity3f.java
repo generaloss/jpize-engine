@@ -17,46 +17,52 @@ public class Velocity3f extends Vec3f{
     }
     
     
+    public Velocity3f zeroAxesToZero(Vec3f collidedVelocity){
+        if(collidedVelocity == null)
+            return this;
+
+        if(x != 0 && collidedVelocity.x == 0)
+            x = 0;
+        if(y != 0 && collidedVelocity.y == 0)
+            y = 0;
+        if(z != 0 && collidedVelocity.z == 0)
+            z = 0;
+        return this;
+    }
+
     public Velocity3f collidedAxesToZero(Vec3f collidedVelocity){
         if(collidedVelocity == null)
             return this;
-        
-        if(x != 0 && collidedVelocity.x == 0)
+
+        if((x > 0 && collidedVelocity.x < x) || (x < 0 && collidedVelocity.x > x))
             x = 0;
-        
-        if(y != 0 && collidedVelocity.y == 0)
+        if((y > 0 && collidedVelocity.y < y) || (y < 0 && collidedVelocity.y > y))
             y = 0;
-        
-        if(z != 0 && collidedVelocity.z == 0)
+        if((z > 0 && collidedVelocity.z < z) || (z < 0 && collidedVelocity.z > z))
             z = 0;
-        
         return this;
     }
-    
+
     public Velocity3f clampToMax(boolean clampX, boolean clampY, boolean clampZ){
         final Vec3f normalized = copy().nor().abs();
-        
         if(clampX){
             if(x > max * normalized.x)
                 x = max * normalized.x;
             else if(x < -max * normalized.x)
                 x = -max * normalized.x;
         }
-        
         if(clampY){
             if(y > max * normalized.y)
                 y = max * normalized.y;
             else if(y < -max * normalized.y)
                 y = -max * normalized.y;
         }
-        
         if(clampZ){
             if(z > max * normalized.z)
                 z = max * normalized.z;
             else if(z < -max * normalized.z)
                 z = -max * normalized.z;
         }
-        
         return this;
     }
     
@@ -74,8 +80,8 @@ public class Velocity3f extends Vec3f{
     
     public Velocity3f reduce(double reduceX, double reduceY, double reduceZ){
         final Vec3f normalized = copy().nor().abs();
-        
         float r;
+
         if(reduceX != 0){
             r = (float) reduceX * normalized.x;
             if(x > 0){

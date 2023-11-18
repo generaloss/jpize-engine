@@ -22,26 +22,87 @@ public class AudioSource extends AlSource{
     }
 
 
+    public void setGain(double gain){
+        super.setGain((float) gain);
+    }
+
+    public void setMaxGain(double maxGain){
+        super.setMaxGain((float) maxGain);
+    }
+
+    public void setMinGain(double minGain){
+        super.setMinGain((float) minGain);
+    }
+
+    public void setConeOuterGain(double coneOuterGain){
+        super.setConeOuterGain((float) coneOuterGain);
+    }
+
+    public void setConeInnerAngle(double coneInnerAngle){
+        super.setConeInnerAngle((float) coneInnerAngle);
+    }
+
+    public void setConeOuterAngle(double coneOuterAngle){
+        super.setConeOuterAngle((float) coneOuterAngle);
+    }
+
     public void setPitch(double pitch){
         super.setPitch((float) pitch);
     }
 
-    public void setOffset(double seconds){
+    public void setSecOffset(double seconds){
         super.setSecOffset((float) seconds);
+    }
+
+    public void setSampleOffset(double seconds){
+        super.setSampleOffset((float) seconds);
+    }
+
+    public void setByteOffset(double seconds){
+        super.setByteOffset((float) seconds);
     }
 
 
     public void setPosition(Vec3f position){
-        alSource3f(ID, AL_POSITION, position.x, position.y, position.z);
+        super.setPosition(position.x, position.y, position.z);
     }
 
-    public void setVelocity(Vec3f speed){
-        alSource3f(ID, AL_VELOCITY, speed.x, speed.y, speed.z);
+    public void setPosition(double x, double y, double z){
+        super.setPosition((float) x, (float) y, (float) z);
+    }
+
+    public void setVelocity(Vec3f velocity){
+        super.setVelocity(velocity.x, velocity.y, velocity.z);
+    }
+
+    public void setVelocity(double x, double y, double z){
+        super.setVelocity((float) x, (float) y, (float) z);
+    }
+
+    public void setDirection(Vec3f direction){
+        super.setVelocity(direction.x, direction.y, direction.z);
+    }
+
+    public void setDirection(double x, double y, double z){
+        super.setDirection((float) x, (float) y, (float) z);
+    }
+
+
+    public void setRolloffFactor(double rolloffFactor){
+        super.setRolloffFactor((float) rolloffFactor);
+    }
+
+    public void setMaxDistance(double maxDistance){
+        super.setMaxDistance((float) maxDistance);
+    }
+
+    public void setReferenceDistance(double referenceDistance){
+        super.setReferenceDistance((float) referenceDistance);
     }
 
 
     public void setPan(float pan){
-        alSource3f(ID, AL_POSITION, Mathc.cos((pan - 1) * Math.PI / 2), 0, Mathc.sin((pan + 1) * Math.PI / 2));
+        super.setPosition(Mathc.cos((pan - 1) * Math.PI / 2), 0, Mathc.sin((pan + 1) * Math.PI / 2));
     }
 
 

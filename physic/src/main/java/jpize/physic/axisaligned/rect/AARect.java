@@ -18,8 +18,8 @@ public class AARect{
     }
 
     public AARect(AARect box){
-        min = box.min.copy();
-        max = box.max.copy();
+        this.min = box.min.copy();
+        this.max = box.max.copy();
     }
 
 

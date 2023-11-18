@@ -399,6 +399,8 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
 
         if(startY == endY){
             final String line = getLine(startY);
+            if(line == null)
+                return "";
 
             final int startX = Maths.clamp(Math.min(x1, x2), 0, line.length());
             final int endX = Maths.clamp(Math.max(x1, x2), 0, line.length());
