@@ -29,25 +29,6 @@
 
 # Getting Started
 
-*Maven:*
-```
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-
-<dependencies>
-    <!-- https://jitpack.io/#GeneralPashon/jpize-engine -->
-    <dependency>
-        <groupId>com.github.GeneralPashon</groupId>
-        <artifactId>jpize-engine</artifactId>
-        <version>v23.11.2</version>
-    </dependency>
-</dependencies>
-```
-
 ---
 
 ## Modules:
