@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="net">
+    <output-path>$PROJECT_DIR$/out</output-path>
+    <root id="archive" name="jpize-net-.jar">
+      <element id="module-output" name="net" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>net.generalpashon</groupId>
+        <artifactId>jpize-engine</artifactId>
+        <version>23.11.2</version>
+    </parent>
+
+    <groupId>jpize-engine</groupId>
+    <artifactId>core</artifactId>
+
+    <profiles>
+        <profile><id>lwjgl-natives-linux-amd64</id><activation><os><family>unix</family><arch>amd64</arch></os></activation><properties><lwjgl.natives>natives-linux</lwjgl.natives></properties></profile>
+        <profile><id>lwjgl-natives-macos-x86_64</id><activation><os><family>mac</family><arch>x86_64</arch></os></activation><properties><lwjgl.natives>natives-macos</lwjgl.natives></properties></profile>
+        <profile><id>lwjgl-natives-windows-amd64</id><activation><os><family>windows</family><arch>amd64</arch></os></activation><properties><lwjgl.natives>natives-windows</lwjgl.natives></properties></profile>
+    </profiles>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.lwjgl</groupId>
+                <artifactId>lwjgl-bom</artifactId>
+                <version>3.3.3</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- LWJGL -->
+        <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId></dependency>
+        <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-assimp</artifactId></dependency>
+        <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-openal</artifactId></dependency>
+        <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-opengl</artifactId></dependency>
+        <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-stb</artifactId></dependency>
+        <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId><classifier>${lwjgl.natives}</classifier></dependency>
+        <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-assimp</artifactId><classifier>${lwjgl.natives}</classifier></dependency>
+        <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-openal</artifactId><classifier>${lwjgl.natives}</classifier></dependency>
+        <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-opengl</artifactId><classifier>${lwjgl.natives}</classifier></dependency>
+        <dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-stb</artifactId><classifier>${lwjgl.natives}</classifier></dependency>
+        <!-- Jorbis (OGG) -->
+        <dependency>
+            <groupId>org.jcraft</groupId>
+            <artifactId>jorbis</artifactId>
+            <version>0.0.17</version>
+        </dependency>
+        <!-- JLayer (MP3) -->
+        <dependency>
+            <groupId>javazoom</groupId>
+            <artifactId>jlayer</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <!-- SDL -->
+        <dependency>
+            <groupId>io.github.libsdl4j</groupId>
+            <artifactId>libsdl4j</artifactId>
+            <version>2.28.4-1.6</version>
+        </dependency>
+    </dependencies>
+
+</project>
