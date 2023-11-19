@@ -7,7 +7,7 @@
     <parent>
         <groupId>net.generalpashon</groupId>
         <artifactId>jpize-engine</artifactId>
-        <version>23.11.2</version>
+        <version>23.11.3</version>
     </parent>
 
     <groupId>jpize-engine</groupId>

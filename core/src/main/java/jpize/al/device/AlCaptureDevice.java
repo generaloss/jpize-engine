@@ -25,6 +25,11 @@ public class AlCaptureDevice extends AlAbstractDevice {
     }
 
 
+    public int getCaptureSamples(){
+        return alcGetInteger(ID, ALC_CAPTURE_SAMPLES);
+    }
+
+
     public void getSamples(short[] buffer, int samples){
         alcCaptureSamples(ID, buffer, samples);
     }
@@ -55,31 +60,31 @@ public class AlCaptureDevice extends AlAbstractDevice {
 
 
     public void getSamples(short[] buffer){
-        getSamples(buffer, super.getSamples());
+        getSamples(buffer, getCaptureSamples());
     }
 
     public void getSamples(int[] buffer){
-        getSamples(buffer, super.getSamples());
+        getSamples(buffer, getCaptureSamples());
     }
 
     public void getSamples(float[] buffer){
-        getSamples(buffer, super.getSamples());
+        getSamples(buffer, getCaptureSamples());
     }
 
     public void getSamples(ByteBuffer buffer){
-        getSamples(buffer, super.getSamples());
+        getSamples(buffer, getCaptureSamples());
     }
 
     public void getSamples(ShortBuffer buffer){
-        getSamples(buffer, super.getSamples());
+        getSamples(buffer, getCaptureSamples());
     }
 
     public void getSamples(IntBuffer buffer){
-        getSamples(buffer, super.getSamples());
+        getSamples(buffer, getCaptureSamples());
     }
 
     public void getSamples(FloatBuffer buffer){
-        getSamples(buffer, super.getSamples());
+        getSamples(buffer, getCaptureSamples());
     }
 
 

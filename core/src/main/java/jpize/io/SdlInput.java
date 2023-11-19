@@ -8,10 +8,7 @@ import io.github.libsdl4j.api.keyboard.SDL_Keysym;
 import io.github.libsdl4j.api.keyboard.SdlKeyboard;
 import io.github.libsdl4j.api.mouse.SDL_Button;
 import io.github.libsdl4j.api.mouse.SdlMouse;
-import io.github.libsdl4j.api.rect.SDL_Rect;
 import io.github.libsdl4j.api.scancode.SdlScancodeConst;
-import io.github.libsdl4j.api.video.SDL_DisplayMode;
-import io.github.libsdl4j.api.video.SdlVideo;
 import jpize.io.context.Context;
 import jpize.math.vecmath.vector.Vec2i;
 import jpize.sdl.input.Btn;
@@ -148,14 +145,6 @@ public class SdlInput{
     public void toCenter(){
         final Window window = context.getWindow();
         setPos(window.getWidth() / 2, window.getHeight() / 2);
-    }
-
-    public void toGlobalCenter(){
-        final SDL_DisplayMode mode = new SDL_DisplayMode();
-        SDL_Rect rect = new SDL_Rect();
-        SdlVideo.SDL_GetDisplayBounds(0, rect);
-        setPos(rect.w / 2, rect.h / 2);
-        System.out.println(rect.x + ", " + rect.y + ", " + rect.w + ", " + rect.h);
     }
 
 

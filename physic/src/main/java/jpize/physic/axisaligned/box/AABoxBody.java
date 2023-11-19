@@ -53,9 +53,9 @@ public class AABoxBody{
     
     public boolean intersects(AABoxBody body){
         return (
-                (getMin().x <= body.getMax().x && getMax().x >= body.getMin().x) &&
-                (getMin().y <= body.getMax().y && getMax().y >= body.getMin().y) &&
-                (getMin().z <= body.getMax().z && getMax().z >= body.getMin().z)
+                (getMin().x < body.getMax().x && getMax().x > body.getMin().x) &&
+                (getMin().y < body.getMax().y && getMax().y > body.getMin().y) &&
+                (getMin().z < body.getMax().z && getMax().z > body.getMin().z)
         );
     }
 

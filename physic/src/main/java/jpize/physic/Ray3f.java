@@ -1,6 +1,5 @@
 package jpize.physic;
 
-import jpize.math.Maths;
 import jpize.math.vecmath.vector.Vec3f;
 import jpize.physic.axisaligned.box.AABoxBody;
 
@@ -70,7 +69,7 @@ public class Ray3f{
         final Vec3f normal = direction.copy().crs(edge20);
         final float det = edge10.copy().dot(normal);
         
-        if(det < Maths.Epsilon)
+        if(det < 1E-5)
             return -1;
         
         final float invDet = 1 / det;

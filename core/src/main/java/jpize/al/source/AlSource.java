@@ -42,11 +42,11 @@ public class AlSource extends AlObjectInt{
 
 
     public boolean isLooping(){
-        return alGetSourcei(ID, AL_LOOPING) == 1;
+        return alGetSourcei(ID, AL_LOOPING) == AL_TRUE;
     }
 
     public void setLooping(boolean looping){
-        alSourcei(ID, AL_LOOPING, looping ? 1 : 0);
+        alSourcei(ID, AL_LOOPING, looping ? AL_TRUE : AL_FALSE);
     }
 
 
@@ -141,11 +141,11 @@ public class AlSource extends AlObjectInt{
 
 
     public boolean isRelative(boolean relative){
-        return alGetSourcei(ID, AL_SOURCE_RELATIVE) == 1;
+        return alGetSourcei(ID, AL_SOURCE_RELATIVE) == AL_TRUE;
     }
 
     public void setRelative(boolean relative){
-        alSourcei(ID, AL_SOURCE_RELATIVE, relative ? 1 : 0);
+        alSourcei(ID, AL_SOURCE_RELATIVE, relative ? AL_TRUE : AL_FALSE);
     }
 
 

@@ -53,8 +53,8 @@ public class AARectBody{
 
     public boolean intersects(AARectBody body){
         return (
-                (this.getMin().x <= body.getMax().x && this.getMax().x >= body.getMin().x) &&
-                (this.getMin().y <= body.getMax().y && this.getMax().y >= body.getMin().y)
+                (this.getMin().x < body.getMax().x && this.getMax().x > body.getMin().x) &&
+                (this.getMin().y < body.getMax().y && this.getMax().y > body.getMin().y)
         );
     }
 

@@ -36,7 +36,6 @@ public class Rotation3DController{
 
     
     public void update(){
-        System.out.println(Jpize.input().getDx() + " : " + Jpize.input().getDy());
         if(Jpize.window().isInputFocus() && enabled){
             if(!lockNextFrame){
                 targetYaw -= Jpize.input().getDx() * speed;

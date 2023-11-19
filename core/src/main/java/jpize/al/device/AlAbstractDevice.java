@@ -66,9 +66,6 @@ public abstract class AlAbstractDevice extends AlObjectLong{
         return alcGetInteger(ID, ALC_SYNC);
     }
 
-    public int getSamples(){
-        return alcGetInteger(ID, ALC_CAPTURE_SAMPLES);
-    }
 
     public int getFrequency(){
         return alcGetInteger(ID, ALC_FREQUENCY);

@@ -2,7 +2,6 @@ package jpize.math;
 
 public class Maths{
 
-    public static final float Epsilon = 1E-19F;
     public static final float PI = (float) Math.PI;
     public static final float PI2 = PI * 2;
     public static final float HalfPI = PI / 2;
