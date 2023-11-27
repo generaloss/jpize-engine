@@ -2,6 +2,7 @@
   <configuration default="false" name="Test - Main" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="test.Main" />
     <module name="tests" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/src/main/resources" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="test.*" />

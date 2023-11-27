@@ -2,11 +2,10 @@ package jpize.math.vecmath.vector;
 
 import jpize.math.Mathc;
 import jpize.math.Maths;
+import jpize.math.vecmath.matrix.Matrix3;
 import jpize.math.vecmath.matrix.Matrix3f;
 
 import java.util.Objects;
-
-import static jpize.math.vecmath.matrix.Matrix3.*;
 
 public class Vec2d{
     
@@ -108,17 +107,19 @@ public class Vec2d{
 
 
     public Vec2d min(Vec2d vector){
-        return new Vec2d(
-            Math.min(x, vector.x),
-            Math.min(y, vector.y)
-        );
+        return new Vec2d(Math.min(x, vector.x), Math.min(y, vector.y));
     }
 
     public Vec2d max(Vec2d vector){
-        return new Vec2d(
-            Math.max(x, vector.x),
-            Math.max(y, vector.y)
-        );
+        return new Vec2d(Math.max(x, vector.x), Math.max(y, vector.y));
+    }
+
+    public Vec2d min(Vec2d a, Vec2d b){
+        return set(Math.min(a.x, b.x), Math.min(a.y, b.y));
+    }
+
+    public Vec2d max(Vec2d a, Vec2d b){
+        return set(Math.max(a.x, b.x), Math.max(a.y, b.y));
     }
     
     
@@ -171,13 +172,13 @@ public class Vec2d{
     }
     
     public double dot(Vec2f vector){
-        return x * vector.x + y * vector.y;
+        return this.x * vector.x + this.y * vector.y;
     }
     
     public double dot(Vec2d vector){
-        return x * vector.x + y * vector.y;
+        return this.x * vector.x + this.y * vector.y;
     }
-    
+
     
     public double crs(float x, float y){
         return this.x * y - this.y * x;
@@ -262,20 +263,20 @@ public class Vec2d{
     public Vec2d copy(){
         return new Vec2d(this);
     }
-    
-    
+
+
     public static double crs(Vec2d a, Vec2d b){
         return a.x * b.y - a.y * b.x;
     }
-    
+
     public static double crs(double x1, double y1, double x2, double y2){
         return x1 * y2 - y1 * x2;
     }
-    
+
     public static double dot(Vec2d a, Vec2d b){
         return a.x * b.x + a.y * b.y;
     }
-    
+
     public static double dot(double x1, double y1, double x2, double y2){
         return x1 * x2 + y1 * y2;
     }
@@ -398,6 +399,12 @@ public class Vec2d{
         y += vector.y;
         return this;
     }
+
+    public Vec2d add(Vec2i vector){
+        x += vector.x;
+        y += vector.y;
+        return this;
+    }
     
     public Vec2d add(Vec3d vector){
         x += vector.x;
@@ -409,6 +416,36 @@ public class Vec2d{
         x += vector.x;
         y += vector.y;
         return this;
+    }
+
+    public Vec2d add(Vec3i vector){
+        x += vector.x;
+        y += vector.y;
+        return this;
+    }
+
+    public Vec2d add(Vec2d a, Vec2d b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec2d add(Vec2f a, Vec2f b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec2d add(Vec2i a, Vec2i b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec2d add(Vec3d a, Vec3d b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec2d add(Vec3f a, Vec3f b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec2d add(Vec3i a, Vec3i b){
+        return set(a.x + b.x, a.y + b.y);
     }
     
     
@@ -447,6 +484,12 @@ public class Vec2d{
         y -= vector.y;
         return this;
     }
+
+    public Vec2d sub(Vec2i vector){
+        x -= vector.x;
+        y -= vector.y;
+        return this;
+    }
     
     public Vec2d sub(Vec3d vector){
         x -= vector.x;
@@ -458,6 +501,32 @@ public class Vec2d{
         x -= vector.x;
         y -= vector.y;
         return this;
+    }
+
+    public Vec2d sub(Vec3i vector){
+        x -= vector.x;
+        y -= vector.y;
+        return this;
+    }
+
+    public Vec2d sub(Vec2d a, Vec2d b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec2d sub(Vec2f a, Vec2f b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec2d sub(Vec2i a, Vec2i b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec2d sub(Vec3d a, Vec3d b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec2d sub(Vec3i a, Vec3i b){
+        return set(a.x - b.x, a.y - b.y);
     }
     
     
@@ -496,6 +565,12 @@ public class Vec2d{
         y *= vector.y;
         return this;
     }
+
+    public Vec2d mul(Vec2i vector){
+        x *= vector.x;
+        y *= vector.y;
+        return this;
+    }
     
     public Vec2d mul(Vec3d vector){
         x *= vector.x;
@@ -507,6 +582,36 @@ public class Vec2d{
         x *= vector.x;
         y *= vector.y;
         return this;
+    }
+
+    public Vec2d mul(Vec3i vector){
+        x *= vector.x;
+        y *= vector.y;
+        return this;
+    }
+
+    public Vec2d mul(Vec2d a, Vec2d b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec2d mul(Vec2f a, Vec2f b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec2d mul(Vec2i a, Vec2i b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec2d mul(Vec3d a, Vec3d b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec2d mul(Vec3f a, Vec3f b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec2d mul(Vec3i a, Vec3i b){
+        return set(a.x * b.x, a.y * b.y);
     }
     
     
@@ -545,6 +650,12 @@ public class Vec2d{
         y /= vector.y;
         return this;
     }
+
+    public Vec2d div(Vec2i vector){
+        x /= vector.x;
+        y /= vector.y;
+        return this;
+    }
     
     public Vec2d div(Vec3d vector){
         x /= vector.x;
@@ -557,16 +668,49 @@ public class Vec2d{
         y /= vector.y;
         return this;
     }
-    
-    
-    public Vec2d mul(Matrix3f matrix){
-        set(
-            x * matrix.val[m00] + y * matrix.val[m10],
-            x * matrix.val[m01] + y * matrix.val[m11]
-        );
+
+    public Vec2d div(Vec3i vector){
+        x /= vector.x;
+        y /= vector.y;
         return this;
     }
-    
+
+    public Vec2d div(Vec2d a, Vec2d b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec2d div(Vec2f a, Vec2f b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec2d div(Vec2i a, Vec2i b){
+        return set((double) a.x / b.x, (double) a.y / b.y);
+    }
+
+    public Vec2d div(Vec3d a, Vec3d b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec2d div(Vec3f a, Vec3f b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec2d div(Vec3i a, Vec3i b){
+        return set((double) a.x / b.x, (double) a.y / b.y);
+    }
+
+
+    public Vec2d mulMat3(float[] matrix){
+        return set(
+            x * matrix[Matrix3.m00] + y * matrix[Matrix3.m10] + matrix[Matrix3.m20],
+            x * matrix[Matrix3.m01] + y * matrix[Matrix3.m11] + matrix[Matrix3.m21]
+        );
+    }
+
+    public Vec2d mulMat3(Matrix3f matrix){
+        return mulMat3(matrix.val);
+    }
+
     
     public int x(){
         return Maths.round(x);

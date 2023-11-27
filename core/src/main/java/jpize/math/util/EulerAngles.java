@@ -6,9 +6,11 @@ import jpize.math.vecmath.matrix.Matrix4f;
 import jpize.math.vecmath.vector.Vec3d;
 import jpize.math.vecmath.vector.Vec3f;
 
+import java.util.Objects;
+
 public class EulerAngles{
 
-    public float pitch, yaw, roll;
+    public float yaw, pitch, roll;
     
     public EulerAngles(){ }
 
@@ -125,6 +127,29 @@ public class EulerAngles{
     
     public EulerAngles copy(){
         return new EulerAngles(this);
+    }
+
+
+    @Override
+    public String toString(){
+        return yaw + ", " + pitch + ", " + roll;
+    }
+
+
+    @Override
+    public boolean equals(Object object){
+        if(this == object)
+            return true;
+        if(object == null || getClass() != object.getClass())
+            return false;
+
+        final EulerAngles eulerAngles = (EulerAngles) object;
+        return this.yaw == eulerAngles.yaw && this.pitch == eulerAngles.pitch && this.roll == eulerAngles.roll;
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(yaw, pitch, roll);
     }
 
 }

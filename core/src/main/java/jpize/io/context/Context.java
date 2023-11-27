@@ -95,6 +95,17 @@ public class Context implements Disposable{
             Gl.viewport(window.getWidth(), window.getHeight()); // Windows bug fix
             window.swapBuffers();
         }
+
+        callbacks.addWinResizedCallback((window, width, height) -> {
+            final Context prev = setCurrent();
+            if(adapter != null)
+                adapter.resize(width, height);
+
+            Gl.viewport(width, height);
+            setCurrent(prev);
+        });
+
+        callbacks.addWinCloseCallback((window) -> dispose());
     }
 
     protected void render(){
@@ -113,18 +124,6 @@ public class Context implements Disposable{
 
         if(window.isShown())
             window.swapBuffers();
-    }
-
-    protected void resize(){
-        final int width = window.getWidth();
-        final int height = window.getHeight();
-
-        final Context prev = setCurrent();
-        if(adapter != null)
-            adapter.resize(width, height);
-
-        Gl.viewport(width, height);
-        setCurrent(prev);
     }
     
 

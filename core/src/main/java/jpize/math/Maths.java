@@ -255,6 +255,40 @@ public class Maths{
     }
 
 
+    public static int max(int a, int b, int c){
+        return Math.max(Math.max(a, b), c);
+    }
+
+    public static long max(long a, long b, long c){
+        return Math.max(Math.max(a, b), c);
+    }
+
+    public static float max(float a, float b, float c){
+        return Math.max(Math.max(a, b), c);
+    }
+
+    public static double max(double a, double b, double c){
+        return Math.max(Math.max(a, b), c);
+    }
+
+
+    public static int min(int a, int b, int c){
+        return Math.min(Math.min(a, b), c);
+    }
+
+    public static long min(long a, long b, long c){
+        return Math.min(Math.min(a, b), c);
+    }
+
+    public static float min(float a, float b, float c){
+        return Math.min(Math.min(a, b), c);
+    }
+
+    public static double min(double a, double b, double c){
+        return Math.min(Math.min(a, b), c);
+    }
+
+
     public static byte toByteRange(double a){
         return (byte) ((int) (a * 255) & 0xFF);
     }

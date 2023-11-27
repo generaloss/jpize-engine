@@ -1,11 +1,12 @@
 package jpize.math.vecmath.vector;
 
 import jpize.math.Maths;
+import jpize.math.vecmath.matrix.Matrix3;
+import jpize.math.vecmath.matrix.Matrix3f;
+import jpize.math.vecmath.matrix.Matrix4;
 import jpize.math.vecmath.matrix.Matrix4f;
 
 import java.util.Objects;
-
-import static jpize.math.vecmath.matrix.Matrix3.*;
 
 public class Vec3d{
     
@@ -125,19 +126,19 @@ public class Vec3d{
 
 
     public Vec3d min(Vec3d vector){
-        return new Vec3d(
-            Math.min(x, vector.x),
-            Math.min(y, vector.y),
-            Math.min(z, vector.z)
-        );
+        return new Vec3d(Math.min(x, vector.x), Math.min(y, vector.y), Math.min(z, vector.z));
     }
 
     public Vec3d max(Vec3d vector){
-        return new Vec3d(
-            Math.max(x, vector.x),
-            Math.max(y, vector.y),
-            Math.max(z, vector.z)
-        );
+        return new Vec3d(Math.max(x, vector.x), Math.max(y, vector.y), Math.max(z, vector.z));
+    }
+
+    public Vec3d min(Vec3d a, Vec3d b){
+        return set(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
+    }
+
+    public Vec3d max(Vec3d a, Vec3d b){
+        return set(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
     }
     
     
@@ -213,63 +214,75 @@ public class Vec3d{
 
     
     public Vec3d crs(float x, float y, float z){
-        set(
+        return set(
             this.y * z - this.z * y,
             this.z * x - this.x * z,
             this.x * y - this.y * x
         );
-        
-        return this;
     }
     
     public Vec3d crs(double x, double y, double z){
-        set(
+        return set(
             this.y * z - this.z * y,
             this.z * x - this.x * z,
             this.x * y - this.y * x
         );
-        
-        return this;
     }
 
     public Vec3d crs(int x, int y, int z){
-        set(
+        return set(
             this.y * z - this.z * y,
             this.z * x - this.x * z,
             this.x * y - this.y * x
         );
-
-        return this;
     }
     
     public Vec3d crs(Vec3f vector){
-        set(
+        return set(
             y * vector.z - z * vector.y,
             z * vector.x - x * vector.z,
             x * vector.y - y * vector.x
         );
-
-        return this;
     }
     
     public Vec3d crs(Vec3d vector){
-        set(
+        return set(
             y * vector.z - z * vector.y,
             z * vector.x - x * vector.z,
             x * vector.y - y * vector.x
         );
-        
-        return this;
     }
 
     public Vec3d crs(Vec3i vector){
-        set(
+        return set(
             y * vector.z - z * vector.y,
             z * vector.x - x * vector.z,
             x * vector.y - y * vector.x
         );
+    }
 
-        return this;
+    public Vec3d crs(Vec3f a, Vec3f b){
+        return set(
+            a.y * b.z - a.z * b.y,
+            a.z * b.x - a.x * b.z,
+            a.x * b.y - a.y * b.x
+        );
+    }
+
+    public Vec3d crs(Vec3d a, Vec3d b){
+        return set(
+            a.y * b.z - a.z * b.y,
+            a.z * b.x - a.x * b.z,
+            a.x * b.y - a.y * b.x
+        );
+    }
+
+    public Vec3d crs(Vec3i a, Vec3i b){
+        return set(
+            a.y * b.z - a.z * b.y,
+            a.z * b.x - a.x * b.z,
+            a.x * b.y - a.y * b.x
+        );
     }
     
     
@@ -277,7 +290,6 @@ public class Vec3d{
         x = Maths.frac(x);
         y = Maths.frac(y);
         z = Maths.frac(z);
-        
         return this;
     }
     
@@ -307,7 +319,6 @@ public class Vec3d{
         x = Maths.round(x);
         y = Maths.round(y);
         z = Maths.round(z);
-        
         return this;
     }
     
@@ -315,7 +326,6 @@ public class Vec3d{
         x = Maths.ceil(x);
         y = Maths.ceil(y);
         z = Maths.ceil(z);
-        
         return this;
     }
 
@@ -328,11 +338,7 @@ public class Vec3d{
     public Vec3d copy(){
         return new Vec3d(this);
     }
-    
-    
-    public static Vec3d crs(Vec3d a, Vec3d b){
-        return new Vec3d(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
-    }
+
     
     public static Vec3d crs(double x1, double y1, double z1, double x2, double y2, double z2){
         return new Vec3d(y1 * z2 - z1 * y2, z1 * x2 - x1 * z2, x1 * y2 - y1 * x2);
@@ -542,6 +548,30 @@ public class Vec3d{
         z += vector.z;
         return this;
     }
+
+    public Vec3d add(Vec2d a, Vec2d b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec3d add(Vec2f a, Vec2f b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec3d add(Vec2i a, Vec2i b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec3d add(Vec3d a, Vec3d b){
+        return set(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
+
+    public Vec3d add(Vec3f a, Vec3f b){
+        return set(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
+
+    public Vec3d add(Vec3i a, Vec3i b){
+        return set(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
     
     
     public Vec3d sub(double x, double y, double z){
@@ -623,6 +653,30 @@ public class Vec3d{
         y -= vector.y;
         z -= vector.z;
         return this;
+    }
+
+    public Vec3d sub(Vec2d a, Vec2d b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec3d sub(Vec2f a, Vec2f b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec3d sub(Vec2i a, Vec2i b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec3d sub(Vec3d a, Vec3d b){
+        return set(a.x - b.x, a.y - b.y, a.z - b.z);
+    }
+
+    public Vec3d sub(Vec3f a, Vec3f b){
+        return set(a.x - b.x, a.y - b.y, a.z - b.z);
+    }
+
+    public Vec3d sub(Vec3i a, Vec3i b){
+        return set(a.x - b.x, a.y - b.y, a.z - b.z);
     }
     
     
@@ -706,6 +760,30 @@ public class Vec3d{
         z *= vector.z;
         return this;
     }
+
+    public Vec3d mul(Vec2d a, Vec2d b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec3d mul(Vec2f a, Vec2f b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec3d mul(Vec2i a, Vec2i b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec3d mul(Vec3d a, Vec3d b){
+        return set(a.x * b.x, a.y * b.y, a.z * b.z);
+    }
+
+    public Vec3d mul(Vec3f a, Vec3f b){
+        return set(a.x * b.x, a.y * b.y, a.z * b.z);
+    }
+
+    public Vec3d mul(Vec3i a, Vec3i b){
+        return set(a.x * b.x, a.y * b.y, a.z * b.z);
+    }
     
     
     public Vec3d div(double x, double y, double z){
@@ -788,15 +866,54 @@ public class Vec3d{
         z /= vector.z;
         return this;
     }
-    
-    
-    public Vec3d mul(Matrix4f matrix){
-        set(
-            x * matrix.val[m00] + y * matrix.val[m10] + z * matrix.val[m20],
-            x * matrix.val[m01] + y * matrix.val[m11] + z * matrix.val[m21],
-            x * matrix.val[m01] + y * matrix.val[m11] + z * matrix.val[m21]
+
+    public Vec3d div(Vec2d a, Vec2d b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec3d div(Vec2f a, Vec2f b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec3d div(Vec2i a, Vec2i b){
+        return set((double) a.x / b.x, (double) a.y / b.y);
+    }
+
+    public Vec3d div(Vec3d a, Vec3d b){
+        return set(a.x / b.x, a.y / b.y, a.z / b.z);
+    }
+
+    public Vec3d div(Vec3f a, Vec3f b){
+        return set(a.x / b.x, a.y / b.y, a.z / b.z);
+    }
+
+    public Vec3d div(Vec3i a, Vec3i b){
+        return set((double) a.x / b.x, (double) a.y / b.y, (double) a.z / b.z);
+    }
+
+
+    public Vec3d mulMat4(float[] matrix){
+        return set(
+            x * matrix[Matrix4.m00]  +  y * matrix[Matrix4.m10]  +  z * matrix[Matrix4.m20]  +  matrix[Matrix4.m30],
+            x * matrix[Matrix4.m01]  +  y * matrix[Matrix4.m11]  +  z * matrix[Matrix4.m21]  +  matrix[Matrix4.m31],
+            x * matrix[Matrix4.m02]  +  y * matrix[Matrix4.m12]  +  z * matrix[Matrix4.m22]  +  matrix[Matrix4.m32]
         );
-        return this;
+    }
+
+    public Vec3d mulMat4(Matrix4f matrix){
+        return mulMat4(matrix.val);
+    }
+
+    public Vec3d mulMat3(float[] matrix){
+        return set(
+            x * matrix[Matrix3.m00]  +  y * matrix[Matrix3.m10]  +  z * matrix[Matrix3.m20],
+            x * matrix[Matrix3.m01]  +  y * matrix[Matrix3.m11]  +  z * matrix[Matrix3.m21],
+            x * matrix[Matrix3.m02]  +  y * matrix[Matrix3.m12]  +  z * matrix[Matrix3.m22]
+        );
+    }
+
+    public Vec3d mulMat3(Matrix3f matrix){
+        return mulMat3(matrix.val);
     }
 
 

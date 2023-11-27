@@ -16,6 +16,7 @@ import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.ScreenQuad;
 import jpize.graphics.util.ScreenQuadShader;
 import jpize.graphics.util.TextureUtils;
+import jpize.io.Window;
 import jpize.sdl.Sdl;
 import jpize.sdl.input.KeyAction;
 import jpize.util.Utils;
@@ -200,12 +201,29 @@ public class ContextManager{
                     if(context == null)
                         continue;
 
+                    final Window window = context.getWindow();
                     switch(event.window.event){
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED -> context.resize();
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_CLOSE -> context.dispose();
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_SHOWN -> context.getCallbacks().invokeWinShownCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_HIDDEN -> context.getCallbacks().invokeWinHiddenCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_EXPOSED -> context.getCallbacks().invokeWinExposedCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_MOVED -> context.getCallbacks().invokeWinMovedCallbacks(window, event.window.data1, event.window.data2);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED -> context.getCallbacks().invokeWinResizedCallbacks(window, event.window.data1, event.window.data2);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_SIZE_CHANGED -> context.getCallbacks().invokeWinSizeChangedCallbacks(window, event.window.data1, event.window.data2);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_MINIMIZED -> context.getCallbacks().invokeWinMinimizedCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_MAXIMIZED -> context.getCallbacks().invokeWinMaximizedCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_RESTORED -> context.getCallbacks().invokeWinRestoredCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_ENTER -> context.getCallbacks().invokeWinEnterCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_LEAVE -> context.getCallbacks().invokeWinLeaveCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_FOCUS_GAINED -> context.getCallbacks().invokeWinFocusGainedCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_FOCUS_LOST -> context.getCallbacks().invokeWinFocusLostCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_CLOSE -> context.getCallbacks().invokeWinCloseCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_TAKE_FOCUS -> context.getCallbacks().invokeWinTakeFocusCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_HIT_TEST -> context.getCallbacks().invokeWinHitTestCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_ICCPROF_CHANGED -> context.getCallbacks().invokeWinIccProfChangedCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_DISPLAY_CHANGE -> context.getCallbacks().invokeWinDisplayChangeCallbacks(window, event.window.data1);
                     }
-
                 }
+
             }
         }
     }

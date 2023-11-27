@@ -23,8 +23,8 @@ public class SdlRenderer implements Disposable{
     }
 
 
-    public void setDrawColor(int r, int g, int b, int a){
-        SdlRender.SDL_SetRenderDrawColor(rendererSDL, (byte) r, (byte) g, (byte) b, (byte) a);
+    public void setDrawColor(double r, double g, double b, double a){
+        SdlRender.SDL_SetRenderDrawColor(rendererSDL, (byte) (r * 255), (byte) (g * 255), (byte) (b * 255), (byte) (a * 255));
     }
 
     public void clear(){

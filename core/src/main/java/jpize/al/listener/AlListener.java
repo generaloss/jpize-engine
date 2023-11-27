@@ -52,8 +52,16 @@ public class AlListener {
         alListenerfv(AL_ORIENTATION, new float[]{ atX, atY, atZ, upX, upY, upZ });
     }
 
+    public static void setOrientation(float atX, float atY, float atZ){
+        setOrientation(atX, atY, atZ, 0, 1, 0);
+    }
+
     public static void setOrientation(Vec3f at, Vec3f up){
         setOrientation(at.x, at.y, at.z, up.x, up.y, up.z);
+    }
+
+    public static void setOrientation(Vec3f at){
+        setOrientation(at.x, at.y, at.z);
     }
 
 }

@@ -316,8 +316,8 @@ public class Matrix4f implements Matrix4{
 
 
     public Matrix4f toLookAt(float posX, float posY, float posZ, Vec3f direction){
-        tmp_camLeft.set( Vec3f.crs(UP, direction).nor() );
-        tmp_camUp.set( Vec3f.crs(direction, tmp_camLeft).nor() );
+        tmp_camLeft.crs(UP, direction).nor();
+        tmp_camUp.crs(direction, tmp_camLeft).nor();
 
         return toLookAt(posX, posY, posZ, tmp_camLeft, tmp_camUp, direction);
     }
@@ -327,8 +327,8 @@ public class Matrix4f implements Matrix4{
     }
 
     public Matrix4f toLookAt(Vec3f direction){
-        tmp_camLeft.set( Vec3f.crs(UP, direction).nor() );
-        tmp_camUp.set( Vec3f.crs(direction, tmp_camLeft).nor() );
+        tmp_camLeft.crs(UP, direction).nor();
+        tmp_camUp.crs(direction, tmp_camLeft).nor();
         
         return toLookAt(tmp_camLeft, tmp_camUp, direction);
     }

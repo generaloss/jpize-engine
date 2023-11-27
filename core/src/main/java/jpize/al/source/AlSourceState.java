@@ -7,7 +7,9 @@ public enum AlSourceState{
     INITIAL(AL_INITIAL),
     PLAYING(AL_PLAYING),
     PAUSED (AL_PAUSED ),
-    STOPPED(AL_STOPPED);
+    STOPPED(AL_STOPPED),
+
+    NONE(0);
 
     public final int AL;
 
@@ -17,6 +19,8 @@ public enum AlSourceState{
 
 
     public static AlSourceState fromAL(int AL){
+        if(AL == 0)
+            return NONE;
         return values()[AL - AL_INITIAL];
     }
 

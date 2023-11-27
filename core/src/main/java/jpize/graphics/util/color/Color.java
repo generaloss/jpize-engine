@@ -25,10 +25,6 @@ public class Color extends IColor{
         set(red, green, blue, 1F);
     }
 
-    public Color(int red, int green, int blue, int alpha){
-        set(red, green, blue, alpha);
-    }
-
     public Color(IColor color){
         set(color);
     }
@@ -77,7 +73,7 @@ public class Color extends IColor{
         a = (float) alpha;
     }
 
-    public void set(int red, int green, int blue, int alpha){
+    public void setInt(int red, int green, int blue, int alpha){
         r = red / 255F;
         g = green / 255F;
         b = blue / 255F;
@@ -105,7 +101,7 @@ public class Color extends IColor{
         b = (float) blue;
     }
 
-    public void set3(int red, int green, int blue){
+    public void set3Int(int red, int green, int blue){
         r = red / 255F;
         g = green / 255F;
         b = blue / 255F;
@@ -194,7 +190,7 @@ public class Color extends IColor{
     }
 
     public void reset(){
-        set(1, 1, 1, 1F);
+        set(1, 1, 1, 1);
     }
 
     public Color inverse(){
@@ -208,6 +204,11 @@ public class Color extends IColor{
 
     public Color copy(){
         return new Color(this);
+    }
+
+
+    public static Color newInt(int red, int green, int blue, int alpha){
+        return new Color(red / 255F, green / 255F, blue / 255F, alpha / 255F);
     }
 
 }

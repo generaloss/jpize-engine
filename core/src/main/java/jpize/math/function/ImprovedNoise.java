@@ -11,12 +11,13 @@ public final class ImprovedNoise{
         int Z = (int) Math.floor(z) & 255;
     
         // Hash coordinates of the 8 cube corners
-        int A  = p[X] + Y;
-        int AA = p[A] + Z;
-        int AB = p[A + 1] + Z;
-        int B  = p[X + 1] + Y;
-        int BA = p[B] + Z;
-        int BB = p[B + 1] + Z;
+        int A  = Y + p[X];
+        int AA = Z + p[A];
+        int AB = Z + p[A + 1];
+
+        int B  = Y + p[X + 1];
+        int BA = Z + p[B];
+        int BB = Z + p[B + 1];
     
         x -= Math.floor(x); // Find relative x ,y , z
         y -= Math.floor(y); // of point in cube

@@ -104,10 +104,10 @@ public class TextureBatch implements Disposable{
 
         transformMat.set(rotationMat.getMul(scaleMat.getMul(shearMat.getMul(flipMat))));
 
-        final Vec2f vertex1 = new Vec2f(0,     height).sub(origin) .mul(transformMat) .add(origin).add(x + translateX, y + translateY);
-        final Vec2f vertex2 = new Vec2f(0,     0     ).sub(origin) .mul(transformMat) .add(origin).add(x + translateX, y + translateY);
-        final Vec2f vertex3 = new Vec2f(width, 0     ).sub(origin) .mul(transformMat) .add(origin).add(x + translateX, y + translateY);
-        final Vec2f vertex4 = new Vec2f(width, height).sub(origin) .mul(transformMat) .add(origin).add(x + translateX, y + translateY);
+        final Vec2f vertex1 = new Vec2f(0,     height).sub(origin) .mulMat3(transformMat) .add(origin).add(x + translateX, y + translateY);
+        final Vec2f vertex2 = new Vec2f(0,     0     ).sub(origin) .mulMat3(transformMat) .add(origin).add(x + translateX, y + translateY);
+        final Vec2f vertex3 = new Vec2f(width, 0     ).sub(origin) .mulMat3(transformMat) .add(origin).add(x + translateX, y + translateY);
+        final Vec2f vertex4 = new Vec2f(width, height).sub(origin) .mulMat3(transformMat) .add(origin).add(x + translateX, y + translateY);
 
         addVertex(vertex1.x, vertex1.y, u1, v1, r, g, b, a);
         addVertex(vertex2.x, vertex2.y, u1, v2, r, g, b, a);
@@ -241,16 +241,16 @@ public class TextureBatch implements Disposable{
         size++;
     }
 
-    public void drawQuad(double r, double g, double b, double a, float x, float y, float width, float height){
+    public void drawRect(double r, double g, double b, double a, float x, float y, float width, float height){
         draw(TextureUtils.quadTexture(), x, y, width, height, (float) r, (float) g, (float) b, (float) a);
     }
 
-    public void drawQuad(IColor color, float x, float y, float width, float height){
-        drawQuad(color.r(), color.g(), color.b(), color.a(), x, y, width, height);
+    public void drawRect(IColor color, float x, float y, float width, float height){
+        drawRect(color.r(), color.g(), color.b(), color.a(), x, y, width, height);
     }
 
-    public void drawQuad(double alpha, float x, float y, float width, float height){
-        drawQuad(0, 0, 0, alpha, x, y, width, height);
+    public void drawRect(double alpha, float x, float y, float width, float height){
+        drawRect(0, 0, 0, alpha, x, y, width, height);
     }
 
 

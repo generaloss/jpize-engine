@@ -2,11 +2,12 @@ package jpize.math.vecmath.vector;
 
 import jpize.math.Mathc;
 import jpize.math.Maths;
+import jpize.math.vecmath.matrix.Matrix3;
+import jpize.math.vecmath.matrix.Matrix3f;
+import jpize.math.vecmath.matrix.Matrix4;
 import jpize.math.vecmath.matrix.Matrix4f;
 
 import java.util.Objects;
-
-import static jpize.math.vecmath.matrix.Matrix4.*;
 
 public class Vec3f{
     
@@ -126,19 +127,19 @@ public class Vec3f{
 
 
     public Vec3f min(Vec3f vector){
-        return new Vec3f(
-            Math.min(x, vector.x),
-            Math.min(y, vector.y),
-            Math.min(z, vector.z)
-        );
+        return new Vec3f(Math.min(x, vector.x), Math.min(y, vector.y), Math.min(z, vector.z));
     }
 
     public Vec3f max(Vec3f vector){
-        return new Vec3f(
-            Math.max(x, vector.x),
-            Math.max(y, vector.y),
-            Math.max(z, vector.z)
-        );
+        return new Vec3f(Math.max(x, vector.x), Math.max(y, vector.y), Math.max(z, vector.z));
+    }
+
+    public Vec3f min(Vec3f a, Vec3f b){
+        return set(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
+    }
+
+    public Vec3f max(Vec3f a, Vec3f b){
+        return set(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
     }
     
     
@@ -214,63 +215,75 @@ public class Vec3f{
 
     
     public Vec3f crs(float x, float y, float z){
-        set(
+        return set(
             this.y * z - this.z * y,
             this.z * x - this.x * z,
             this.x * y - this.y * x
         );
-        
-        return this;
     }
     
     public Vec3f crs(double x, double y, double z){
-        set(
+        return set(
             this.y * z - this.z * y,
             this.z * x - this.x * z,
             this.x * y - this.y * x
         );
-        
-        return this;
     }
 
     public Vec3f crs(int x, int y, int z){
-        set(
+        return set(
             this.y * z - this.z * y,
             this.z * x - this.x * z,
             this.x * y - this.y * x
         );
-
-        return this;
     }
     
     public Vec3f crs(Vec3f vector){
-        set(
+        return set(
             y * vector.z - z * vector.y,
             z * vector.x - x * vector.z,
             x * vector.y - y * vector.x
         );
-        
-        return this;
     }
     
     public Vec3f crs(Vec3d vector){
-        set(
+        return set(
             y * vector.z - z * vector.y,
             z * vector.x - x * vector.z,
             x * vector.y - y * vector.x
         );
-        
-        return this;
     }
 
     public Vec3f crs(Vec3i vector){
-        set(
+        return set(
             y * vector.z - z * vector.y,
             z * vector.x - x * vector.z,
             x * vector.y - y * vector.x
         );
+    }
 
-        return this;
+    public Vec3f crs(Vec3f a, Vec3f b){
+        return set(
+            a.y * b.z - a.z * b.y,
+            a.z * b.x - a.x * b.z,
+            a.x * b.y - a.y * b.x
+        );
+    }
+
+    public Vec3f crs(Vec3d a, Vec3d b){
+        return set(
+            a.y * b.z - a.z * b.y,
+            a.z * b.x - a.x * b.z,
+            a.x * b.y - a.y * b.x
+        );
+    }
+
+    public Vec3f crs(Vec3i a, Vec3i b){
+        return set(
+            a.y * b.z - a.z * b.y,
+            a.z * b.x - a.x * b.z,
+            a.x * b.y - a.y * b.x
+        );
     }
 
 
@@ -372,11 +385,7 @@ public class Vec3f{
     public Vec3f copy(){
         return new Vec3f(this);
     }
-    
-    
-    public static Vec3f crs(Vec3f a, Vec3f b){
-        return new Vec3f(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
-    }
+
     
     public static Vec3f crs(float x1, float y1, float z1, float x2, float y2, float z2){
         return new Vec3f(y1 * z2 - z1 * y2, z1 * x2 - x1 * z2, x1 * y2 - y1 * x2);
@@ -424,14 +433,12 @@ public class Vec3f{
     public Vec3f set(double x, double y){
         this.x = (float) x;
         this.y = (float) y;
-        this.z = 0;
         return this;
     }
 
     public Vec3f set(float x, float y){
         this.x = x;
         this.y = y;
-        this.z = 0;
         return this;
     }
 
@@ -487,21 +494,18 @@ public class Vec3f{
     public Vec3f set(Vec2d vector){
         x = (float) vector.x;
         y = (float) vector.y;
-        z = 0;
         return this;
     }
 
     public Vec3f set(Vec2f vector){
         x = vector.x;
         y = vector.y;
-        z = 0;
         return this;
     }
 
     public Vec3f set(Vec2i vector){
         x = vector.x;
         y = vector.y;
-        z = 0;
         return this;
     }
     
@@ -586,6 +590,30 @@ public class Vec3f{
         z += vector.z;
         return this;
     }
+
+    public Vec3f add(Vec2d a, Vec2d b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec3f add(Vec2f a, Vec2f b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec3f add(Vec2i a, Vec2i b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec3f add(Vec3d a, Vec3d b){
+        return set(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
+
+    public Vec3f add(Vec3f a, Vec3f b){
+        return set(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
+
+    public Vec3f add(Vec3i a, Vec3i b){
+        return set(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
     
     
     public Vec3f sub(double x, double y, double z){
@@ -667,6 +695,30 @@ public class Vec3f{
         y -= vector.y;
         z -= vector.z;
         return this;
+    }
+
+    public Vec3f sub(Vec2d a, Vec2d b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec3f sub(Vec2f a, Vec2f b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec3f sub(Vec2i a, Vec2i b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec3f sub(Vec3d a, Vec3d b){
+        return set(a.x - b.x, a.y - b.y, a.z - b.z);
+    }
+
+    public Vec3f sub(Vec3f a, Vec3f b){
+        return set(a.x - b.x, a.y - b.y, a.z - b.z);
+    }
+
+    public Vec3f sub(Vec3i a, Vec3i b){
+        return set(a.x - b.x, a.y - b.y, a.z - b.z);
     }
     
     
@@ -750,6 +802,30 @@ public class Vec3f{
         z *= vector.z;
         return this;
     }
+
+    public Vec3f mul(Vec2d a, Vec2d b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec3f mul(Vec2f a, Vec2f b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec3f mul(Vec2i a, Vec2i b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec3f mul(Vec3d a, Vec3d b){
+        return set(a.x * b.x, a.y * b.y, a.z * b.z);
+    }
+
+    public Vec3f mul(Vec3f a, Vec3f b){
+        return set(a.x * b.x, a.y * b.y, a.z * b.z);
+    }
+
+    public Vec3f mul(Vec3i a, Vec3i b){
+        return set(a.x * b.x, a.y * b.y, a.z * b.z);
+    }
     
     
     public Vec3f div(double x, double y, double z){
@@ -832,19 +908,54 @@ public class Vec3f{
         z /= vector.z;
         return this;
     }
-    
-    
-    public Vec3f mul(Matrix4f matrix){
-        return mul(matrix.val);
+
+    public Vec3f div(Vec2d a, Vec2d b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec3f div(Vec2f a, Vec2f b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec3f div(Vec2i a, Vec2i b){
+        return set((float) a.x / b.x, (float) a.y / b.y);
+    }
+
+    public Vec3f div(Vec3d a, Vec3d b){
+        return set(a.x / b.x, a.y / b.y, a.z / b.z);
+    }
+
+    public Vec3f div(Vec3f a, Vec3f b){
+        return set(a.x / b.x, a.y / b.y, a.z / b.z);
+    }
+
+    public Vec3f div(Vec3i a, Vec3i b){
+        return set((float) a.x / b.x, (float) a.y / b.y, (float) a.z / b.z);
     }
     
-    public Vec3f mul(float[] matrix){
-        set(
-            x * matrix[m00]  +  y * matrix[m01]  +  z * matrix[m02]  +  matrix[m03],
-            x * matrix[m10]  +  y * matrix[m11]  +  z * matrix[m12]  +  matrix[m13],
-            x * matrix[m20]  +  y * matrix[m21]  +  z * matrix[m22]  +  matrix[m23]
+    
+    public Vec3f mulMat4(float[] matrix){
+        return set(
+            x * matrix[Matrix4.m00]  +  y * matrix[Matrix4.m10]  +  z * matrix[Matrix4.m20]  +  matrix[Matrix4.m30],
+            x * matrix[Matrix4.m01]  +  y * matrix[Matrix4.m11]  +  z * matrix[Matrix4.m21]  +  matrix[Matrix4.m31],
+            x * matrix[Matrix4.m02]  +  y * matrix[Matrix4.m12]  +  z * matrix[Matrix4.m22]  +  matrix[Matrix4.m32]
         );
-        return this;
+    }
+
+    public Vec3f mulMat4(Matrix4f matrix){
+        return mulMat4(matrix.val);
+    }
+
+    public Vec3f mulMat3(float[] matrix){
+        return set(
+            x * matrix[Matrix3.m00]  +  y * matrix[Matrix3.m10]  +  z * matrix[Matrix3.m20],
+            x * matrix[Matrix3.m01]  +  y * matrix[Matrix3.m11]  +  z * matrix[Matrix3.m21],
+            x * matrix[Matrix3.m02]  +  y * matrix[Matrix3.m12]  +  z * matrix[Matrix3.m22]
+        );
+    }
+
+    public Vec3f mulMat3(Matrix3f matrix){
+        return mulMat3(matrix.val);
     }
 
 

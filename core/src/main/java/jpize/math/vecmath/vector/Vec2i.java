@@ -104,17 +104,19 @@ public class Vec2i{
 
 
     public Vec2i min(Vec2i vector){
-        return new Vec2i(
-            Math.min(x, vector.x),
-            Math.min(y, vector.y)
-        );
+        return new Vec2i(Math.min(x, vector.x), Math.min(y, vector.y));
     }
 
     public Vec2i max(Vec2i vector){
-        return new Vec2i(
-            Math.max(x, vector.x),
-            Math.max(y, vector.y)
-        );
+        return new Vec2i(Math.max(x, vector.x), Math.max(y, vector.y));
+    }
+
+    public Vec2i min(Vec2i a, Vec2i b){
+        return set(Math.min(a.x, b.x), Math.min(a.y, b.y));
+    }
+
+    public Vec2i max(Vec2i a, Vec2i b){
+        return set(Math.max(a.x, b.x), Math.max(a.y, b.y));
     }
     
     
@@ -323,7 +325,12 @@ public class Vec2i{
         y += (int) vector.y;
         return this;
     }
-    
+    public Vec2i add(Vec2i vector){
+        x += vector.x;
+        y += vector.y;
+        return this;
+    }
+
     public Vec2i add(Vec3d vector){
         x += (int) vector.x;
         y += (int) vector.y;
@@ -335,8 +342,38 @@ public class Vec2i{
         y += (int) vector.y;
         return this;
     }
+
+    public Vec2i add(Vec3i vector){
+        x += vector.x;
+        y += vector.y;
+        return this;
+    }
+
+    public Vec2i add(Vec2d a, Vec2d b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec2i add(Vec2f a, Vec2f b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec2i add(Vec2i a, Vec2i b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec2i add(Vec3d a, Vec3d b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec2i add(Vec3f a, Vec3f b){
+        return set(a.x + b.x, a.y + b.y);
+    }
     
-    
+    public Vec2i add(Vec3i a, Vec3i b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+
     public Vec2i sub(int x, int y){
         this.x -= x;
         this.y -= y;
@@ -361,6 +398,12 @@ public class Vec2i{
         return this;
     }
     
+    public Vec2i sub(Vec2i vector){
+        x -= vector.x;
+        y -= vector.y;
+        return this;
+    }
+
     public Vec2i sub(Vec3d vector){
         x -= (int) vector.x;
         y -= (int) vector.y;
@@ -372,8 +415,38 @@ public class Vec2i{
         y -= (int) vector.y;
         return this;
     }
-    
-    
+
+    public Vec2i sub(Vec3i vector){
+        x -= vector.x;
+        y -= vector.y;
+        return this;
+    }
+
+    public Vec2i sub(Vec2d a, Vec2d b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec2i sub(Vec2f a, Vec2f b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec2i sub(Vec2i a, Vec2i b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec2i sub(Vec3d a, Vec3d b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec2i sub(Vec3f a, Vec3f b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec2i sub(Vec3i a, Vec3i b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+
     public Vec2i mul(int x, int y){
         this.x *= x;
         this.y *= y;
@@ -398,6 +471,12 @@ public class Vec2i{
         return this;
     }
     
+    public Vec2i mul(Vec2i vector){
+        x *= vector.x;
+        y *= vector.y;
+        return this;
+    }
+
     public Vec2i mul(Vec3d vector){
         x *= (int) vector.x;
         y *= (int) vector.y;
@@ -409,8 +488,38 @@ public class Vec2i{
         y *= (int) vector.y;
         return this;
     }
+
+    public Vec2i mul(Vec3i vector){
+        x *= vector.x;
+        y *= vector.y;
+        return this;
+    }
+
+    public Vec2i mul(Vec2d a, Vec2d b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec2i mul(Vec2f a, Vec2f b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec2i mul(Vec2i a, Vec2i b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec2i mul(Vec3d a, Vec3d b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec2i mul(Vec3f a, Vec3f b){
+        return set(a.x * b.x, a.y * b.y);
+    }
     
-    
+    public Vec2i mul(Vec3i a, Vec3i b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+
     public Vec2i div(int x, int y){
         this.x /= x;
         this.y /= y;
@@ -435,6 +544,12 @@ public class Vec2i{
         return this;
     }
     
+    public Vec2i div(Vec2i vector){
+        x /= vector.x;
+        y /= vector.y;
+        return this;
+    }
+
     public Vec2i div(Vec3d vector){
         x /= (int) vector.x;
         y /= (int) vector.y;
@@ -446,8 +561,38 @@ public class Vec2i{
         y /= (int) vector.y;
         return this;
     }
+
+    public Vec2i div(Vec3i vector){
+        x /= vector.x;
+        y /= vector.y;
+        return this;
+    }
+
+    public Vec2i div(Vec2d a, Vec2d b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec2i div(Vec2f a, Vec2f b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec2i div(Vec2i a, Vec2i b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec2i div(Vec3d a, Vec3d b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec2i div(Vec3f a, Vec3f b){
+        return set(a.x / b.x, a.y / b.y);
+    }
     
-    
+    public Vec2i div(Vec3i a, Vec3i b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+
     @Override
     public String toString(){
         return x + ", " + y;

@@ -5,10 +5,7 @@ import jpize.al.device.AlDevice;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALUtil;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.lwjgl.openal.ALC11.*;
 
@@ -50,7 +47,7 @@ public class AudioDeviceManager{
         if(!devices.containsKey(name)){
             final List<String> availableDevices = getAvailableDevices();
 
-            if(availableDevices != null && availableDevices.contains(name)){
+            if(availableDevices.contains(name)){
                 final AlDevice device = new AlDevice(Al.getDefaultDeviceSpecifier());
                 devices.put(name, device);
             }
@@ -70,10 +67,8 @@ public class AudioDeviceManager{
 
 
     public static List<String> getAvailableDevices(){
-        if(alcIsExtensionPresent(0, "ALC_ENUMERATION_EXT"))
-            return ALUtil.getStringList(0, ALC_CAPTURE_DEVICE_SPECIFIER);
-        else
-            return null;
+        final List<String> devicesList = ALUtil.getStringList(0, ALC_CAPTURE_DEVICE_SPECIFIER);
+        return (devicesList == null) ? Collections.emptyList() : devicesList;
     }
 
 }

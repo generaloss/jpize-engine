@@ -43,7 +43,7 @@ public class TextureParameters{
         
         this.format = DEFAULT_FORMAT;
         this.type = DEFAULT_TYPE;
-        this.borderColor = new Color(0, 0, 0, 0F);
+        this.borderColor = new Color(0, 0, 0, 0);
     
         this.mipmapLevels = DEFAULT_MIPMAP_LEVELS;
         this.lodBias = DEFAULT_LOD_BIAS;

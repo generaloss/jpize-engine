@@ -127,19 +127,19 @@ public class Vec3i{
 
 
     public Vec3i min(Vec3i vector){
-        return new Vec3i(
-            Math.min(x, vector.x),
-            Math.min(y, vector.y),
-            Math.min(z, vector.z)
-        );
+        return new Vec3i(Math.min(x, vector.x), Math.min(y, vector.y), Math.min(z, vector.z));
     }
 
     public Vec3i max(Vec3i vector){
-        return new Vec3i(
-            Math.max(x, vector.x),
-            Math.max(y, vector.y),
-            Math.max(z, vector.z)
-        );
+        return new Vec3i(Math.max(x, vector.x), Math.max(y, vector.y), Math.max(z, vector.z));
+    }
+
+    public Vec3i min(Vec3i a, Vec3i b){
+        return set(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
+    }
+
+    public Vec3i max(Vec3i a, Vec3i b){
+        return set(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
     }
     
     
@@ -215,13 +215,19 @@ public class Vec3i{
     }
 
     public Vec3i crs(Vec3i vector){
-        set(
+        return set(
             y * vector.z - z * vector.y,
             z * vector.x - x * vector.z,
             x * vector.y - y * vector.x
         );
+    }
 
-        return this;
+    public Vec3i crs(Vec3i a, Vec3i b){
+        return set(
+            a.y * b.z - a.z * b.y,
+            a.z * b.x - a.x * b.z,
+            a.x * b.y - a.y * b.x
+        );
     }
 
 
@@ -247,10 +253,6 @@ public class Vec3i{
         return new Vec3i(this);
     }
 
-
-    public static Vec3i crs(Vec3i a, Vec3i b){
-        return new Vec3i(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
-    }
 
     public static Vec3i crs(int x1, int y1, int z1, int x2, int y2, int z2){
         return new Vec3i(y1 * z2 - z1 * y2, z1 * x2 - x1 * z2, x1 * y2 - y1 * x2);
@@ -298,14 +300,12 @@ public class Vec3i{
     public Vec3i set(double x, double y){
         this.x = (int) x;
         this.y = (int) y;
-        this.z = 0;
         return this;
     }
 
     public Vec3i set(float x, float y){
         this.x = (int) x;
         this.y = (int) y;
-        this.z = 0;
         return this;
     }
 
@@ -361,21 +361,18 @@ public class Vec3i{
     public Vec3i set(Vec2d vector){
         x = (int) vector.x;
         y = (int) vector.y;
-        z = 0;
         return this;
     }
 
     public Vec3i set(Vec2f vector){
         x = (int) vector.x;
         y = (int) vector.y;
-        z = 0;
         return this;
     }
 
     public Vec3i set(Vec2i vector){
         x = vector.x;
         y = vector.y;
-        z = 0;
         return this;
     }
     
@@ -460,6 +457,30 @@ public class Vec3i{
         z += vector.z;
         return this;
     }
+
+    public Vec3i add(Vec2d a, Vec2d b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec3i add(Vec2f a, Vec2f b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec3i add(Vec2i a, Vec2i b){
+        return set(a.x + b.x, a.y + b.y);
+    }
+
+    public Vec3i add(Vec3d a, Vec3d b){
+        return set(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
+
+    public Vec3i add(Vec3f a, Vec3f b){
+        return set(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
+
+    public Vec3i add(Vec3i a, Vec3i b){
+        return set(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
     
     
     public Vec3i sub(double x, double y, double z){
@@ -541,6 +562,30 @@ public class Vec3i{
         y -= vector.y;
         z -= vector.z;
         return this;
+    }
+
+    public Vec3i sub(Vec2d a, Vec2d b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec3i sub(Vec2f a, Vec2f b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec3i sub(Vec2i a, Vec2i b){
+        return set(a.x - b.x, a.y - b.y);
+    }
+
+    public Vec3i sub(Vec3d a, Vec3d b){
+        return set(a.x - b.x, a.y - b.y, a.z - b.z);
+    }
+
+    public Vec3i sub(Vec3f a, Vec3f b){
+        return set(a.x - b.x, a.y - b.y, a.z - b.z);
+    }
+
+    public Vec3i sub(Vec3i a, Vec3i b){
+        return set(a.x - b.x, a.y - b.y, a.z - b.z);
     }
     
     
@@ -625,6 +670,30 @@ public class Vec3i{
         return this;
     }
 
+    public Vec3i mul(Vec2d a, Vec2d b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec3i mul(Vec2f a, Vec2f b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec3i mul(Vec2i a, Vec2i b){
+        return set(a.x * b.x, a.y * b.y);
+    }
+
+    public Vec3i mul(Vec3d a, Vec3d b){
+        return set(a.x * b.x, a.y * b.y, a.z * b.z);
+    }
+
+    public Vec3i mul(Vec3f a, Vec3f b){
+        return set(a.x * b.x, a.y * b.y, a.z * b.z);
+    }
+
+    public Vec3i mul(Vec3i a, Vec3i b){
+        return set(a.x * b.x, a.y * b.y, a.z * b.z);
+    }
+
     
     public Vec3i div(double x, double y, double z){
         this.x /= (int) x;
@@ -705,6 +774,30 @@ public class Vec3i{
         y /= vector.y;
         z /= vector.z;
         return this;
+    }
+
+    public Vec3i div(Vec2d a, Vec2d b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec3i div(Vec2f a, Vec2f b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec3i div(Vec2i a, Vec2i b){
+        return set(a.x / b.x, a.y / b.y);
+    }
+
+    public Vec3i div(Vec3d a, Vec3d b){
+        return set(a.x / b.x, a.y / b.y, a.z / b.z);
+    }
+
+    public Vec3i div(Vec3f a, Vec3f b){
+        return set(a.x / b.x, a.y / b.y, a.z / b.z);
+    }
+
+    public Vec3i div(Vec3i a, Vec3i b){
+        return set(a.x / b.x, a.y / b.y, a.z / b.z);
     }
 
 

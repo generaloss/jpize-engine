@@ -120,7 +120,6 @@ public class Vec4d{
         this.x = x;
         this.y = y;
         this.z = z;
-        this.w = 0;
         return this;
     }
 
@@ -128,7 +127,6 @@ public class Vec4d{
         this.x = x;
         this.y = y;
         this.z = z;
-        this.w = 0;
         return this;
     }
 
@@ -136,31 +134,24 @@ public class Vec4d{
         this.x = x;
         this.y = y;
         this.z = z;
-        this.w = 0;
         return this;
     }
 
     public Vec4d set(double x, double y){
         this.x = x;
         this.y = y;
-        this.z = 0;
-        this.w = 0;
         return this;
     }
 
     public Vec4d set(float x, float y){
         this.x = x;
         this.y = y;
-        this.z = 0;
-        this.w = 0;
         return this;
     }
 
     public Vec4d set(int x, int y){
         this.x = x;
         this.y = y;
-        this.z = 0;
-        this.w = 0;
         return this;
     }
 
@@ -236,24 +227,18 @@ public class Vec4d{
     public Vec4d set(Vec2d vector){
         x = vector.x;
         y = vector.y;
-        z = 0;
-        w = 0;
         return this;
     }
 
     public Vec4d set(Vec2f vector){
         x = vector.x;
         y = vector.y;
-        z = 0;
-        w = 0;
         return this;
     }
 
     public Vec4d set(Vec2i vector){
         x = vector.x;
         y = vector.y;
-        z = 0;
-        w = 0;
         return this;
     }
     
