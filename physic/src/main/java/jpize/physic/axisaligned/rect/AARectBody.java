@@ -1,6 +1,7 @@
 package jpize.physic.axisaligned.rect;
 
 import jpize.math.vecmath.vector.Vec2f;
+import jpize.physic.utils.Intersector;
 
 public class AARectBody{
 
@@ -51,11 +52,8 @@ public class AARectBody{
     }
 
 
-    public boolean intersects(AARectBody body){
-        return (
-                (this.getMin().x < body.getMax().x && this.getMax().x > body.getMin().x) &&
-                (this.getMin().y < body.getMax().y && this.getMax().y > body.getMin().y)
-        );
+    public boolean isIntersectsRect(AARectBody rect){
+        return Intersector.isAARectIntersectAARect(this, rect);
     }
 
 

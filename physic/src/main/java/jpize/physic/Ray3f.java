@@ -53,11 +53,11 @@ public class Ray3f{
 
 
     public float getIntersectionAabb(AABoxBody box){
-        return Intersector.getRayIntersectionAabb(this, box);
+        return Intersector.getRayIntersectionAABox(this, box);
     }
 
     public boolean isIntersectAabb(AABoxBody box){
-        return Intersector.isRayIntersectAabb(this, box);
+        return Intersector.isRayIntersectAABox(this, box);
     }
 
     public float getIntersectionTriangle(Vec3f vertex1, Vec3f vertex2, Vec3f vertex3){

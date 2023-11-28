@@ -11,7 +11,7 @@ public class AARectCollider{
         body1.getPosition().add(movement);
 
         for(AARectBody body2: otherBodies)
-            if(body1.intersects(body2))
+            if(body1.isIntersectsRect(body2))
                 return true;
 
         return false;
@@ -22,7 +22,7 @@ public class AARectCollider{
         body1.getPosition().add(movement);
 
         for(AARectBody body2: otherBodies)
-            if(body1.intersects(body2))
+            if(body1.isIntersectsRect(body2))
                 return true;
 
         return false;

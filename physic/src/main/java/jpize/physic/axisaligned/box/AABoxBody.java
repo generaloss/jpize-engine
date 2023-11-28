@@ -1,6 +1,7 @@
 package jpize.physic.axisaligned.box;
 
 import jpize.math.vecmath.vector.Vec3f;
+import jpize.physic.utils.Intersector;
 
 public class AABoxBody{
 
@@ -51,12 +52,8 @@ public class AABoxBody{
     }
     
     
-    public boolean intersects(AABoxBody body){
-        return (
-                (getMin().x < body.getMax().x && getMax().x > body.getMin().x) &&
-                (getMin().y < body.getMax().y && getMax().y > body.getMin().y) &&
-                (getMin().z < body.getMax().z && getMax().z > body.getMin().z)
-        );
+    public boolean isIntersectsBox(AABoxBody box){
+        return Intersector.isAABoxIntersectAABox(this, box);
     }
 
 
