@@ -241,6 +241,41 @@ public class TextureBatch implements Disposable{
         size++;
     }
 
+    public void draw(Texture texture, float x, float y, float width, float height, Region region, float r, float g, float b, float a){
+        if(size == maxSize)
+            flush();
+
+        if(texture != lastTexture){
+            flush();
+            lastTexture = texture;
+        }
+
+        addTexturedQuad(x, y, width, height,
+            region.u1(), region.v1(), region.u2(), region.v2(),
+            r, g, b, a);
+
+        size++;
+    }
+
+    public void draw(TextureRegion texReg, float x, float y, float width, float height, Region region, float r, float g, float b, float a){
+        if(size == maxSize)
+            flush();
+
+        final Texture texture = texReg.getTexture();
+        if(texture != lastTexture){
+            flush();
+            lastTexture = texture;
+        }
+
+        final Region regionInRegion = Region.calcRegionInRegion(texReg, region);
+
+        addTexturedQuad(x, y, width, height,
+            regionInRegion.u1(), regionInRegion.v1(), regionInRegion.u2(), regionInRegion.v2(),
+            r, g, b, a);
+
+        size++;
+    }
+
     public void drawRect(double r, double g, double b, double a, float x, float y, float width, float height){
         draw(TextureUtils.quadTexture(), x, y, width, height, (float) r, (float) g, (float) b, (float) a);
     }
@@ -285,7 +320,7 @@ public class TextureBatch implements Disposable{
     }
 
     public void setAlpha(double a){
-        color.setA((float) a);
+        color.setA(a);
     }
 
 

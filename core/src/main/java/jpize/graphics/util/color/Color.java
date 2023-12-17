@@ -1,10 +1,10 @@
 package jpize.graphics.util.color;
 
 public class Color extends IColor{
-    
-    public static final ImmutableColor WHITE = new ImmutableColor(1, 1, 1, 1F);
-    public static final ImmutableColor BLACK = new ImmutableColor(0, 0, 0, 1F);
-    
+
+    public static final ImmutableColor WHITE = new ImmutableColor(1, 1, 1, 1);
+    public static final ImmutableColor BLACK = new ImmutableColor(0, 0, 0, 1);
+
 
     private float r, g, b, a;
 
@@ -59,52 +59,58 @@ public class Color extends IColor{
     }
 
 
-    public void set(float red, float green, float blue, float alpha){
+    public Color set(float red, float green, float blue, float alpha){
         r = red;
         g = green;
         b = blue;
         a = alpha;
+        return this;
     }
 
-    public void set(double red, double green, double blue, double alpha){
+    public Color set(double red, double green, double blue, double alpha){
         r = (float) red;
         g = (float) green;
         b = (float) blue;
         a = (float) alpha;
+        return this;
     }
 
-    public void setInt(int red, int green, int blue, int alpha){
+    public Color setInt(int red, int green, int blue, int alpha){
         r = red / 255F;
         g = green / 255F;
         b = blue / 255F;
         a = alpha / 255F;
+        return this;
     }
 
-    public void set(float[] color){
-        set(color[0], color[1], color[2], color[3]);
+    public Color set(float[] color){
+        return set(color[0], color[1], color[2], color[3]);
     }
 
-    public void set(IColor color){
-        set(color.r(), color.g(), color.b(), color.a());
+    public Color set(IColor color){
+        return set(color.r(), color.g(), color.b(), color.a());
     }
 
 
-    public void set3(float red, float green, float blue){
+    public Color set3(float red, float green, float blue){
         r = red;
         g = green;
         b = blue;
+        return this;
     }
 
-    public void set3(double red, double green, double blue){
+    public Color set3(double red, double green, double blue){
         r = (float) red;
         g = (float) green;
         b = (float) blue;
+        return this;
     }
 
-    public void set3Int(int red, int green, int blue){
+    public Color set3Int(int red, int green, int blue){
         r = red / 255F;
         g = green / 255F;
         b = blue / 255F;
+        return this;
     }
 
 
@@ -129,21 +135,32 @@ public class Color extends IColor{
     }
 
 
-    public Color add3(double r, double g, double b){
-        set3(
-                r() + r,
-                g() + g,
-                b() + b
-        );
+    public Color setR(double r){
+        return setR((float) r);
+    }
 
-        return this;
+    public Color setG(double g){
+        return setG((float) g);
+    }
+
+    public Color setB(double b){
+        return setB((float) b);
+    }
+
+    public Color setA(double a){
+        return setA((float) a);
+    }
+
+
+    public Color add3(double r, double g, double b){
+        return set3(r() + r, g() + g, b() + b);
     }
 
     public Color add3(Color color){
         return add3(color.r, color.g, color.b);
     }
-    
-    
+
+
     public Color mul(double r, double g, double b, double a){
         set(
             r() * r,
@@ -151,7 +168,7 @@ public class Color extends IColor{
             b() * b,
             a() * a
         );
-        
+
         return this;
     }
 
@@ -161,7 +178,7 @@ public class Color extends IColor{
             g() * value,
             b() * value
         );
-        
+
         return this;
     }
 
@@ -189,16 +206,20 @@ public class Color extends IColor{
         return this;
     }
 
-    public void reset(){
-        set(1, 1, 1, 1);
+    public Color reset(){
+        return set(1, 1, 1, 1);
     }
 
-    public Color inverse(){
+    public Color inverse3(){
         r = 1 - r;
         g = 1 - g;
         b = 1 - b;
-        
         return this;
+    }
+
+    public Color inverse4(){
+        a = 1 - a;
+        return inverse3();
     }
 
 
@@ -209,6 +230,10 @@ public class Color extends IColor{
 
     public static Color newInt(int red, int green, int blue, int alpha){
         return new Color(red / 255F, green / 255F, blue / 255F, alpha / 255F);
+    }
+
+    public static Color newInt(int red, int green, int blue){
+        return newInt(red, green, blue, 255);
     }
 
 }

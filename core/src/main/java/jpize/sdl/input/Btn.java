@@ -31,5 +31,10 @@ public enum Btn{
     public boolean isReleased(){
         return Jpize.input().isButtonReleased(this);
     }
+
+
+    public static Btn fromSDL(int SDL){
+        return values()[SDL - LEFT.SDL];
+    }
     
 }

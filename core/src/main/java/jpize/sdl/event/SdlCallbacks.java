@@ -1,8 +1,14 @@
 package jpize.sdl.event;
 
+import io.github.libsdl4j.api.event.events.SDL_MouseButtonEvent;
 import io.github.libsdl4j.api.keyboard.SDL_Keysym;
 import jpize.io.Window;
+import jpize.sdl.event.keyboard.CharCallback;
+import jpize.sdl.event.keyboard.KeyCallback;
+import jpize.sdl.event.mouse.MouseButtonAction;
+import jpize.sdl.event.mouse.MouseButtonCallback;
 import jpize.sdl.event.window.*;
+import jpize.sdl.input.Btn;
 import jpize.sdl.input.Key;
 import jpize.sdl.input.KeyAction;
 import jpize.sdl.input.KeyMods;
@@ -12,9 +18,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SdlCallbacks{
 
-    // key
+    // keyboard
     private final List<CharCallback> charCallbacks = new CopyOnWriteArrayList<>();
     private final List<KeyCallback> keyCallbacks = new CopyOnWriteArrayList<>();
+    // mouse
+    private final List<MouseButtonCallback> mouseButtonCallbacks = new CopyOnWriteArrayList<>();
     // window
     private final List<WinCloseCallback> winCloseCallbacks = new CopyOnWriteArrayList<>();
     private final List<WinEnterCallback> winEnterCallbacks = new CopyOnWriteArrayList<>();
@@ -41,6 +49,32 @@ public class SdlCallbacks{
         this.mods = new KeyMods();
     }
 
+
+    // <--- INVOKE METHODS --->
+    // keyboard
+
+    public void invokeCharCallbacks(char character){
+        for(CharCallback callback: charCallbacks)
+            callback.invoke(character);
+    }
+
+    public void invokeKeyCallbacks(SDL_Keysym keySym, KeyAction action){
+        final Key key = Key.fromScancode(keySym.scancode);
+        mods.set(keySym.mod);
+
+        for(KeyCallback callback: keyCallbacks)
+            callback.invoke(key, action, mods);
+    }
+
+    // mouse
+
+    public void invokeMouseButtonCallback(SDL_MouseButtonEvent event, MouseButtonAction action){
+        final Btn button = Btn.fromSDL(event.button);
+        for(MouseButtonCallback callback: mouseButtonCallbacks)
+            callback.invoke(button, action);
+    }
+
+    // window
 
     public void invokeWinCloseCallbacks(Window window){
         for(WinCloseCallback callback: winCloseCallbacks)
@@ -133,25 +167,9 @@ public class SdlCallbacks{
     }
 
 
-    // invoke
 
-
-    public void invokeCharCallbacks(char character){
-        for(CharCallback callback: charCallbacks)
-            callback.invoke(character);
-    }
-
-    public void invokeKeyCallbacks(SDL_Keysym keySym, KeyAction action){
-        final Key key = Key.fromScancode(keySym.scancode);
-        mods.set(keySym.mod);
-
-        for(KeyCallback callback: keyCallbacks)
-            callback.invoke(key, action, mods);
-    }
-
-
-    // key
-
+    // <--- ADD / REMOVE METHODS --->
+    // keyboard
 
     public void addCharCallback(CharCallback callback){
         charCallbacks.add(callback);
@@ -170,9 +188,17 @@ public class SdlCallbacks{
         keyCallbacks.remove(callback);
     }
 
+    // mouse
+
+    public void addMouseButtonCallback(MouseButtonCallback callback){
+        mouseButtonCallbacks.add(callback);
+    }
+
+    public void removeMouseButtonCallback(MouseButtonCallback callback){
+        mouseButtonCallbacks.remove(callback);
+    }
 
     // window
-
 
     public void addWinCloseCallback(WinCloseCallback callback){
         winCloseCallbacks.add(callback);

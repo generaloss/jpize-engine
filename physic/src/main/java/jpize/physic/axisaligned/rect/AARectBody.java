@@ -52,7 +52,7 @@ public class AARectBody{
     }
 
 
-    public boolean isIntersectsRect(AARectBody rect){
+    public boolean isIntersectRect(AARectBody rect){
         return Intersector.isAARectIntersectAARect(this, rect);
     }
 

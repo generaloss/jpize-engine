@@ -5,6 +5,7 @@ import jpize.graphics.font.glyph.GlyphMap;
 import jpize.graphics.font.glyph.GlyphPages;
 import jpize.graphics.font.glyph.GlyphSprite;
 import jpize.graphics.util.batch.TextureBatch;
+import jpize.graphics.util.color.Color;
 import jpize.math.Maths;
 import jpize.math.vecmath.vector.Vec2f;
 import jpize.util.Disposable;
@@ -23,19 +24,19 @@ public class BitmapFont implements Disposable{
         this.options = new FontOptions(this);
     }
 
-    public FontInfo getInfo(){
+    public FontInfo info(){
         return info;
     }
 
-    public GlyphMap getGlyphs(){
+    public GlyphMap glyphs(){
         return glyphs;
     }
 
-    public GlyphPages getPages(){
+    public GlyphPages pages(){
         return pages;
     }
 
-    public FontOptions getOptions(){
+    public FontOptions options(){
         return options;
     }
 
@@ -96,6 +97,8 @@ public class BitmapFont implements Disposable{
         if(text == null)
             return;
 
+        final Color color = options.color;
+
         batch.setTransformOrigin(0, 0);
         batch.rotate(options.rotation);
         batch.shear(options.getItalicAngle(), 0);
@@ -113,7 +116,7 @@ public class BitmapFont implements Disposable{
             renderPos.y -= descent;
             renderPos.sub(centerPos).rotDeg(options.rotation).add(centerPos).add(x, y);
             renderPos.y += descent;
-            sprite.render(batch, renderPos.x, renderPos.y);
+            sprite.render(batch, renderPos.x, renderPos.y, color.r(), color.g(), color.b(), color.a());
         }
 
         batch.rotate(0);

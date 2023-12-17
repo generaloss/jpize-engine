@@ -124,6 +124,11 @@ public class SdlWindow implements Disposable{
         SdlVideo.SDL_SetWindowSize(windowSDL, width, height);
     }
 
+    public void setSizeCentered(int width, int height){
+        setSize(width, height);
+        toCenter();
+    }
+
 
     public Vec2i getMinimumSize(){
         SdlVideo.SDL_GetWindowMinimumSize(windowSDL, tmp_int_1, tmp_int_2);

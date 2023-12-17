@@ -19,6 +19,9 @@ public class UIComponentCache{
     public float paddingTop, paddingLeft, paddingBottom, paddingRight;
     public boolean hasPaddingTop, hasPaddingLeft, hasPaddingBottom, hasPaddingRight;
 
+    public float cornerRadius, borderSize;
+    public boolean pressed;
+
     public UIComponentCache(UIComponent component){
         this.component = component;
     }
@@ -30,6 +33,8 @@ public class UIComponentCache{
         calcPadding();
         // position
         calcPosition();
+        // style
+        calcStyle();
     }
 
     private void calcSize(){
@@ -74,22 +79,38 @@ public class UIComponentCache{
     }
 
     private void calcPosition(){
+        float parentX = 0;
+        float parentY = 0;
+        float parentW = Jpize.getWidth();
+        float parentH = Jpize.getHeight();
+
         final UIComponent parent = component.parent();
+        if(parent != null){
+            parentX = parent.cache.x;
+            parentY = parent.cache.y;
+            parentW = parent.cache.width;
+            parentH = parent.cache.height;
+        }
 
-        if(hasPaddingLeft && hasPaddingRight) x = (paddingLeft + Jpize.getWidth() - paddingRight - width) / 2;
-        else if(hasPaddingLeft) x = paddingLeft;
-        else if(hasPaddingRight) x = Jpize.getWidth() - paddingRight - width;
-        else x = 0;
+        if(hasPaddingLeft && hasPaddingRight) x = parentX + (paddingLeft + parentW - paddingRight - width) / 2;
+        else if(hasPaddingLeft) x = parentX + paddingLeft;
+        else if(hasPaddingRight) x = parentX + parentW - paddingRight - width;
+        else x = parentX;
 
-        if(hasPaddingTop && hasPaddingBottom) y = (paddingBottom + Jpize.getHeight() - paddingTop - height) / 2;
-        else if(hasPaddingTop) y = Jpize.getHeight() - paddingTop - height;
-        else if(hasPaddingBottom) y = paddingBottom;
-        else y = 0;
+        if(hasPaddingTop && hasPaddingBottom) y = parentY + (paddingBottom + parentH - paddingTop - height) / 2;
+        else if(hasPaddingTop) y = parentY + parentH - paddingTop - height;
+        else if(hasPaddingBottom) y = parentY + paddingBottom;
+        else y = parentY;
 
-        if(parent instanceof LayoutComponent layout){
+        if(parent instanceof AbstractLayout layout){
             x = layout.calcPosition(component, false);
             y = layout.calcPosition(component, true);
         }
+    }
+
+    private void calcStyle(){
+        cornerRadius = constrToPx(component.style.getCornerRadius(), false, true);
+        borderSize = constrToPx(component.style.getBorderSize(), false, true);
     }
 
 
@@ -119,10 +140,10 @@ public class UIComponentCache{
             case "wrap_content" -> {
                 final UIComponent parent = component.parent();
                 if(parent == null) yield 0;
-                if(parent instanceof LayoutComponent layout) yield layout.calcWrapContent(component, forY, forSize);
+                if(parent instanceof AbstractLayout layout) yield layout.calcWrapContent(component, forY, forSize);
                 yield 0;
             }
-            case "match_parent" -> forY ? parentHeight() : parentWidth();
+            case "match_parent" -> (forY ? parentHeight() : parentWidth());
         };
     }
 
@@ -176,6 +197,17 @@ public class UIComponentCache{
         final UIComponent parent = component.parent();
         if(parent == null) return 0;
         return parent.cache().heightMax;
+    }
+
+
+    public void press(){
+        pressed = true;
+    }
+
+    public boolean release(){
+        boolean pressed_last = pressed;
+        pressed = false;
+        return pressed_last;
     }
 
 

@@ -1,7 +1,11 @@
 package jpize.ui.component;
 
-import jpize.graphics.util.batch.TextureBatch;
+import jpize.graphics.texture.Texture;
 import jpize.graphics.util.color.Color;
+import jpize.ui.component.input.UIInput;
+import jpize.ui.component.render.UIRenderer;
+import jpize.ui.component.style.UIBackground;
+import jpize.ui.component.style.UIStyle;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Dimension;
 import jpize.ui.gravity.Gravity;
@@ -9,7 +13,6 @@ import jpize.ui.constraint.Insets;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public abstract class UIComponent{
@@ -17,14 +20,14 @@ public abstract class UIComponent{
     protected @Nullable UIComponent parent;
     protected final List<UIComponent> children;
     protected String ID;
-    protected UIRenderContext renderContext;
+    protected UIRenderer renderer;
     protected final UIComponentCache cache;
     protected final Insets margin, padding;
-    protected final Dimension size, sizeMin, sizeMax;
+    protected final Dimension size, minSize, maxSize;
     protected boolean paddingFixH, paddingFixW;
     protected final Gravity gravity;
-    protected final Color background;
-    protected float cornerRadius;
+    protected final UIStyle style;
+    protected final UIInput input;
 
     public UIComponent(){
         this.children = new ArrayList<>();
@@ -33,24 +36,44 @@ public abstract class UIComponent{
         this.margin = new Insets();
         this.padding = new Insets();
         this.size = new Dimension();
-        this.sizeMin = new Dimension(Constr.zero);
-        this.sizeMax = new Dimension();
+        this.minSize = new Dimension(Constr.zero);
+        this.maxSize = new Dimension();
         this.gravity = new Gravity();
-        this.background = new Color(1, 1, 1, 0);
+        this.style = new UIStyle();
+        this.input = new UIInput(this);
     }
 
 
     public void update(){ }
 
-    public void render(){ }
+    public void render(){
+        findRenderer();
+    }
+
+    private void findRenderer(){
+        if(renderer != null)
+            return;
+
+        UIComponent parent = this.parent;
+        while(true){
+            if(parent == null)
+                return;
+            if(parent.renderer == null)
+                parent = parent.parent;
+            else
+                break;
+        }
+        renderer = parent.renderer;
+    }
 
 
     protected void renderBackground(){
-        renderContext.rect(cache.x, cache.y, cache.width, cache.height, cornerRadius);
-        renderContext.batch().drawRect(
-                background.r(), background.g(), background.b(), background.a(),
-                cache.x, cache.y, cache.width, cache.height);
-        renderContext.batch().end();
+        renderer.rect(cache.x, cache.y, cache.width, cache.height, cache.cornerRadius, cache.borderSize, style.borderColor());
+        final UIBackground background = style.background();
+        final Color color = background.color();
+        final Texture image = background.getImage();
+        renderer.batch().draw(image, cache.x, cache.y, cache.width, cache.height, color.r(), color.g(), color.b(), color.a());
+        renderer.batch().end();
     }
 
 
@@ -60,20 +83,21 @@ public abstract class UIComponent{
 
     public final void setParent(@Nullable UIComponent parent){
         if(parent != null)
-            renderContext = parent.renderContext;
+            renderer = parent.renderer;
         this.parent = parent;
     }
 
 
-    public final Collection<UIComponent> children(){
+    public final List<UIComponent> children(){
         return children;
     }
 
-    public final UIComponent findByID(String ID){
+    @SuppressWarnings("unchecked")
+    public final <T extends UIComponent> T findByID(String ID){
         for(UIComponent child: children)
             if(child.ID.equals(ID))
-                return child;
-        return null;
+                return (T) child;
+        throw new RuntimeException("Component with ID " + ID + " not found");
     }
 
     public final void add(UIComponent child){
@@ -90,7 +114,7 @@ public abstract class UIComponent{
     }
 
 
-    public final String ID(){
+    public final String getID(){
         return ID;
     }
 
@@ -99,17 +123,21 @@ public abstract class UIComponent{
     }
 
 
-    public final UIRenderContext renderContext(){
-        return renderContext;
+    public final UIRenderer renderContext(){
+        return renderer;
     }
 
-    public final void setRenderContext(UIRenderContext renderContext){
-        this.renderContext = renderContext;
+    public final void setRenderer(UIRenderer renderer){
+        this.renderer = renderer;
     }
 
 
     public final UIComponentCache cache(){
         return cache;
+    }
+
+    public final UIInput input(){
+        return input;
     }
 
 
@@ -126,11 +154,11 @@ public abstract class UIComponent{
     }
 
     public final Dimension minSize(){
-        return sizeMin;
+        return minSize;
     }
 
     public final Dimension maxSize(){
-        return sizeMax;
+        return maxSize;
     }
 
 
@@ -139,16 +167,8 @@ public abstract class UIComponent{
     }
 
 
-    public final Color background(){
-        return background;
-    }
-
-    public final float cornerRadius(){
-        return cornerRadius;
-    }
-
-    public final void setCornerRadius(float cornerRadius){
-        this.cornerRadius = cornerRadius;
+    public final UIStyle style(){
+        return style;
     }
 
 }

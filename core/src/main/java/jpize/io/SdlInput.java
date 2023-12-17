@@ -119,7 +119,7 @@ public class SdlInput{
     }
 
     public int getY(){
-        return context.getWindow().getHeight() - y;
+        return context.window().getHeight() - y;
     }
 
     public int getDx(){
@@ -135,7 +135,7 @@ public class SdlInput{
     }
 
     public void setPos(int x, int y){
-        SdlMouse.SDL_WarpMouseInWindow(context.getWindow().getSDL(), x, y);
+        SdlMouse.SDL_WarpMouseInWindow(context.window().getSDL(), x, y);
     }
 
     public void setGlobalPos(int x, int y){
@@ -143,7 +143,7 @@ public class SdlInput{
     }
 
     public void toCenter(){
-        final Window window = context.getWindow();
+        final Window window = context.window();
         setPos(window.getWidth() / 2, window.getHeight() / 2);
     }
 
@@ -181,7 +181,7 @@ public class SdlInput{
 
 
     public boolean isInWindow(){
-        return isInBounds(0, 0, context.getWindow().getWidth(), context.getWindow().getHeight());
+        return isInBounds(0, 0, context.window().getWidth(), context.window().getHeight());
     }
 
     public boolean isInBounds(double x, double y, double width, double height){

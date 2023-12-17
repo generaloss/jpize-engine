@@ -80,13 +80,13 @@ public class GlyphSprite{
     }
 
 
-    public void render(TextureBatch batch, float x, float y){
+    public void render(TextureBatch batch, float x, float y, float r, float g, float b, float a){
         if(canRender)
-            batch.draw(page, x, y, width, height, region);
+            batch.draw(page, x, y, width, height, region, r, g, b, a);
     }
 
     public void render(TextureBatch batch){
-        render(batch, x, y);
+        render(batch, x, y, 1, 1, 1, 1);
     }
 
 }

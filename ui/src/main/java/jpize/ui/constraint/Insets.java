@@ -30,6 +30,11 @@ public class Insets{
         this.right = right;
     }
 
+    public void set(Constraint top, Constraint left){
+        this.top = top;
+        this.left = left;
+    }
+
     public void set(Constraint all){
         this.top = all;
         this.left = all;
@@ -51,6 +56,11 @@ public class Insets{
 
     public void setRight(Constraint right){
         this.right = right;
+    }
+
+    @Override
+    public String toString(){
+        return "{" + top + ", " + left + ", " + bottom + ", " + right + "}";
     }
 
 }

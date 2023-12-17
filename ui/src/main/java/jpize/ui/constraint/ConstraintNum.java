@@ -5,10 +5,15 @@ import jpize.util.stream.FloatSupplier;
 public class ConstraintNum extends Constraint{
 
     public enum Type{
-        PX,
-        REL_W,
-        REL_H,
-        ASPECT;
+        PX    ("px"),
+        REL_W ("rw"),
+        REL_H ("rh"),
+        ASPECT("ap");
+
+        public final String literal;
+        Type(String literal){
+            this.literal = literal;
+        }
     }
 
 
@@ -36,6 +41,11 @@ public class ConstraintNum extends Constraint{
 
     public Type type(){
         return type;
+    }
+
+    @Override
+    public String toString(){
+        return supplier.getAsFloat() + type.literal;
     }
 
 }

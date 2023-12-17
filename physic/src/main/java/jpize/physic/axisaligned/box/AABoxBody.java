@@ -1,6 +1,7 @@
 package jpize.physic.axisaligned.box;
 
 import jpize.math.vecmath.vector.Vec3f;
+import jpize.physic.Ray3f;
 import jpize.physic.utils.Intersector;
 
 public class AABoxBody{
@@ -52,8 +53,16 @@ public class AABoxBody{
     }
     
     
-    public boolean isIntersectsBox(AABoxBody box){
+    public boolean isIntersectBox(AABoxBody box){
         return Intersector.isAABoxIntersectAABox(this, box);
+    }
+
+    public float getIntersectionRay(Ray3f ray){
+        return Intersector.getRayIntersectionAABox(ray, this);
+    }
+
+    public boolean isIntersectRay(Ray3f ray){
+        return Intersector.isRayIntersectAABox(ray, this);
     }
 
 

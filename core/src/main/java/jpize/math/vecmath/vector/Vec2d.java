@@ -151,15 +151,83 @@ public class Vec2d{
         
         return this;
     }
-    
+
+
     public Vec2d zero(){
-        set(0, 0);
-        
-        return this;
+        return set(0, 0);
     }
-    
+
     public boolean isZero(){
         return x == 0 && y == 0;
+    }
+
+
+    public Vec2d zeroThatLess(double x, double y){
+        if(Math.abs(this.x) < Math.abs(x)) this.x = 0;
+        if(Math.abs(this.y) < Math.abs(y)) this.y = 0;
+        return this;
+    }
+
+    public Vec2d zeroThatLess(double xy){
+        return zeroThatLess(xy, xy);
+    }
+
+    public Vec2d zeroThatLess(Vec2d vector){
+        return zeroThatLess(vector.x, vector.y);
+    }
+
+    public Vec2d zeroThatLess(Vec2f vector){
+        return zeroThatLess(vector.x, vector.y);
+    }
+
+    public Vec2d zeroThatLess(Vec2i vector){
+        return zeroThatLess(vector.x, vector.y);
+    }
+
+
+    public Vec2d zeroThatZero(double x, double y){
+        if(x == 0) this.x = 0;
+        if(y == 0) this.y = 0;
+        return this;
+    }
+
+    public Vec2d zeroThatZero(double xy){
+        return zeroThatZero(xy, xy);
+    }
+
+    public Vec2d zeroThatZero(Vec2d vector){
+        return zeroThatZero(vector.x, vector.y);
+    }
+
+    public Vec2d zeroThatZero(Vec2f vector){
+        return zeroThatZero(vector.x, vector.y);
+    }
+
+    public Vec2d zeroThatZero(Vec2i vector){
+        return zeroThatZero(vector.x, vector.y);
+    }
+
+
+    public Vec2d zeroThatBigger(double x, double y){
+        if(Math.abs(this.x) > Math.abs(x)) this.x = 0;
+        if(Math.abs(this.y) > Math.abs(y)) this.y = 0;
+        return this;
+    }
+
+    public Vec2d zeroThatBigger(double xy){
+        return zeroThatBigger(xy, xy);
+    }
+
+    public Vec2d zeroThatBigger(Vec2d vector){
+        return zeroThatBigger(vector.x, vector.y);
+    }
+
+    public Vec2d zeroThatBigger(Vec2f vector){
+        return zeroThatBigger(vector.x, vector.y);
+    }
+
+    public Vec2d zeroThatBigger(Vec2i vector){
+        return zeroThatBigger(vector.x, vector.y);
     }
     
     

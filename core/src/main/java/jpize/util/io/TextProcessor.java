@@ -3,8 +3,8 @@ package jpize.util.io;
 import jpize.Jpize;
 import jpize.graphics.font.FontCharset;
 import jpize.math.Maths;
-import jpize.sdl.event.CharCallback;
-import jpize.sdl.event.KeyCallback;
+import jpize.sdl.event.keyboard.CharCallback;
+import jpize.sdl.event.keyboard.KeyCallback;
 import jpize.sdl.input.Key;
 import jpize.sdl.input.KeyAction;
 import jpize.sdl.input.KeyMods;
@@ -40,8 +40,8 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
         for(char c: FontCharset.SPECIAL_SYMBOLS.toArray())
             stopCursorChars.add(c);
 
-        Jpize.context().getCallbacks().addCharCallback(this);
-        Jpize.context().getCallbacks().addKeyCallback(this);
+        Jpize.context().callbacks().addCharCallback(this);
+        Jpize.context().callbacks().addKeyCallback(this);
     }
     
     public TextProcessor(){
@@ -437,8 +437,8 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     @Override
     public void dispose(){
         lines.clear();
-        Jpize.context().getCallbacks().removeCharCallback(this);
-        Jpize.context().getCallbacks().removeKeyCallback(this);
+        Jpize.context().callbacks().removeCharCallback(this);
+        Jpize.context().callbacks().removeKeyCallback(this);
     }
     
 }

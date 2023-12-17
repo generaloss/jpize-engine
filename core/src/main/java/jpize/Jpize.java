@@ -32,7 +32,7 @@ public class Jpize{
     }
 
     public static Window window(){
-        return context().getWindow();
+        return context().window();
     }
 
     public static AudioDeviceManager audio(){
@@ -67,7 +67,7 @@ public class Jpize{
 
 
     public static SdlInput input(){
-        return context().getInput();
+        return context().input();
     }
 
 

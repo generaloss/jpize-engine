@@ -176,17 +176,88 @@ public class Vec3d{
         
         return this;
     }
-    
+
+
     public Vec3d zero(){
-        set(0, 0, 0);
-        
-        return this;
+        return set(0, 0, 0);
     }
-    
+
     public boolean isZero(){
         return x == 0 && y == 0 && z == 0;
     }
-    
+
+
+    public Vec3d zeroThatLess(double x, double y, double z){
+        if(Math.abs(this.x) < Math.abs(x)) this.x = 0;
+        if(Math.abs(this.y) < Math.abs(y)) this.y = 0;
+        if(Math.abs(this.z) < Math.abs(z)) this.z = 0;
+        return this;
+    }
+
+    public Vec3d zeroThatLess(double xyz){
+        return zeroThatLess(xyz, xyz, xyz);
+    }
+
+    public Vec3d zeroThatLess(Vec3d vector){
+        return zeroThatLess(vector.x, vector.y, vector.z);
+    }
+
+    public Vec3d zeroThatLess(Vec3f vector){
+        return zeroThatLess(vector.x, vector.y, vector.z);
+    }
+
+    public Vec3d zeroThatLess(Vec3i vector){
+        return zeroThatLess(vector.x, vector.y, vector.z);
+    }
+
+
+    public Vec3d zeroThatZero(double x, double y, double z){
+        if(x == 0) this.x = 0;
+        if(y == 0) this.y = 0;
+        if(z == 0) this.z = 0;
+        return this;
+    }
+
+    public Vec3d zeroThatZero(double xyz){
+        return zeroThatZero(xyz, xyz, xyz);
+    }
+
+    public Vec3d zeroThatZero(Vec3d vector){
+        return zeroThatZero(vector.x, vector.y, vector.z);
+    }
+
+    public Vec3d zeroThatZero(Vec3f vector){
+        return zeroThatZero(vector.x, vector.y, vector.z);
+    }
+
+    public Vec3d zeroThatZero(Vec3i vector){
+        return zeroThatZero(vector.x, vector.y, vector.z);
+    }
+
+
+    public Vec3d zeroThatBigger(double x, double y, double z){
+        if(Math.abs(this.x) > Math.abs(x)) this.x = 0;
+        if(Math.abs(this.y) > Math.abs(y)) this.y = 0;
+        if(Math.abs(this.z) > Math.abs(z)) this.z = 0;
+        return this;
+    }
+
+    public Vec3d zeroThatBigger(double xyz){
+        return zeroThatBigger(xyz, xyz, xyz);
+    }
+
+    public Vec3d zeroThatBigger(Vec3d vector){
+        return zeroThatBigger(vector.x, vector.y, vector.z);
+    }
+
+    public Vec3d zeroThatBigger(Vec3f vector){
+        return zeroThatBigger(vector.x, vector.y, vector.z);
+    }
+
+    public Vec3d zeroThatBigger(Vec3i vector){
+        return zeroThatBigger(vector.x, vector.y, vector.z);
+    }
+
     
     public double dot(float x, float y, float z){
         return this.x * x + this.y * y + this.z * z;

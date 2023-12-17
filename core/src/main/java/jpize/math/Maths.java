@@ -289,6 +289,11 @@ public class Maths{
     }
 
 
+    public static int sigFlag(boolean negative){
+        return negative ? -1 : 1;
+    }
+
+
     public static byte toByteRange(double a){
         return (byte) ((int) (a * 255) & 0xFF);
     }

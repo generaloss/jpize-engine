@@ -32,20 +32,6 @@ public class ImmutableColor extends IColor{
         a = 1F;
     }
 
-    public ImmutableColor(int red, int green, int blue, int alpha){
-        r = red / 255F;
-        g = green / 255F;
-        b = blue / 255F;
-        a = alpha / 255F;
-    }
-
-    public ImmutableColor(int red, int green, int blue){
-        r = red / 255F;
-        g = green / 255F;
-        b = blue / 255F;
-        a = 1F;
-    }
-
     public ImmutableColor(IColor color){
         r = color.r();
         g = color.g();
@@ -90,6 +76,15 @@ public class ImmutableColor extends IColor{
     @Override
     public float a(){
         return a;
+    }
+
+
+    public static ImmutableColor newInt(int red, int green, int blue, int alpha){
+        return new ImmutableColor(red / 255F, green / 255F, blue / 255F, alpha / 255F);
+    }
+
+    public static ImmutableColor newInt(int red, int green, int blue){
+        return newInt(red, green, blue, 255);
     }
 
 }

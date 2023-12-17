@@ -15,33 +15,6 @@ public class Velocity3f extends Vec3f{
         super(vector);
         max = 1;
     }
-    
-    
-    public Velocity3f zeroAxesToZero(Vec3f collidedVelocity){
-        if(collidedVelocity == null)
-            return this;
-
-        if(x != 0 && collidedVelocity.x == 0)
-            x = 0;
-        if(y != 0 && collidedVelocity.y == 0)
-            y = 0;
-        if(z != 0 && collidedVelocity.z == 0)
-            z = 0;
-        return this;
-    }
-
-    public Velocity3f collidedAxesToZero(Vec3f collidedVelocity){
-        if(collidedVelocity == null)
-            return this;
-
-        if((x > 0 && collidedVelocity.x < x) || (x < 0 && collidedVelocity.x > x))
-            x = 0;
-        if((y > 0 && collidedVelocity.y < y) || (y < 0 && collidedVelocity.y > y))
-            y = 0;
-        if((z > 0 && collidedVelocity.z < z) || (z < 0 && collidedVelocity.z > z))
-            z = 0;
-        return this;
-    }
 
     public Velocity3f clampToMax(boolean clampX, boolean clampY, boolean clampZ){
         final Vec3f normalized = copy().nor().abs();
@@ -70,14 +43,6 @@ public class Velocity3f extends Vec3f{
         return clampToMax(true, true, true);
     }
     
-    public Velocity3f reduce(double reduce){
-        return reduce(reduce, reduce, reduce);
-    }
-    
-    public Velocity3f reduceXZ(double reduce){
-        return reduce(reduce, 0, reduce);
-    }
-    
     public Velocity3f reduce(double reduceX, double reduceY, double reduceZ){
         final Vec3f normalized = copy().nor().abs();
         float r;
@@ -96,7 +61,7 @@ public class Velocity3f extends Vec3f{
                     x = 0;
             }
         }
-        
+
         if(reduceY != 0){
             r = (float) reduceY * normalized.y;
             if(y > 0){
@@ -111,7 +76,7 @@ public class Velocity3f extends Vec3f{
                     y = 0;
             }
         }
-        
+
         if(reduceZ != 0){
             r = (float) reduceZ * normalized.z;
             if(z > 0){
@@ -126,10 +91,18 @@ public class Velocity3f extends Vec3f{
                     z = 0;
             }
         }
-        
+
         return this;
     }
-    
+
+    public Velocity3f reduce(double reduceXYZ){
+        return reduce(reduceXYZ, reduceXYZ, reduceXYZ);
+    }
+
+    public Velocity3f reduceXZ(double reduceXZ){
+        return reduce(reduceXZ, 0, reduceXZ);
+    }
+
     
     public float getMax(){
         return max;

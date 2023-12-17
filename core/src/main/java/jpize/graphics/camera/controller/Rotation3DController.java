@@ -10,14 +10,18 @@ public class Rotation3DController{
     private float speed, smoothness, targetYaw, targetPitch;
     private boolean enabled;
     private boolean lockNextFrame;
+    private boolean mirrorHorizontal, mirrorVertical;
 
-    public Rotation3DController(){
+    public Rotation3DController(boolean enabled){
         this.rotation = new EulerAngles();
         this.speed = 0.3F;
         this.smoothness = 0.4F;
         this.lockNextFrame = true;
-        Jpize.input().setRelativeMode(true);
-        this.enabled = true;
+        setEnabled(enabled);
+    }
+
+    public Rotation3DController(){
+        this(true);
     }
 
 
@@ -38,8 +42,8 @@ public class Rotation3DController{
     public void update(){
         if(Jpize.window().isInputFocus() && enabled){
             if(!lockNextFrame){
-                targetYaw -= Jpize.input().getDx() * speed;
-                targetPitch -= Jpize.input().getDy() * speed;
+                targetYaw -= Jpize.input().getDx() * speed * Maths.sigFlag(mirrorHorizontal);
+                targetPitch -= Jpize.input().getDy() * speed * Maths.sigFlag(mirrorVertical);
 
                 targetPitch = Maths.clamp(targetPitch, -90, 90);
 
@@ -50,6 +54,23 @@ public class Rotation3DController{
             }
             lockNextFrame = false;
         }
+    }
+
+
+    public boolean isMirrorHorizontal(){
+        return mirrorHorizontal;
+    }
+
+    public void setMirrorHorizontal(boolean mirrorHorizontal){
+        this.mirrorHorizontal = mirrorHorizontal;
+    }
+
+    public boolean isMirrorVertical(){
+        return mirrorVertical;
+    }
+
+    public void setMirrorVertical(boolean mirrorVertical){
+        this.mirrorVertical = mirrorVertical;
     }
     
     

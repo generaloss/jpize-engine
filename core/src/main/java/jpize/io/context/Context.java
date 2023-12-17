@@ -5,7 +5,6 @@ import jpize.io.Window;
 import jpize.io.SdlInput;
 import jpize.sdl.event.SdlCallbacks;
 import jpize.util.Disposable;
-import jpize.util.time.Stopwatch;
 
 public class Context implements Disposable{
 
@@ -19,8 +18,6 @@ public class Context implements Disposable{
     private boolean exitOnClose, enabled, showWindowOnInit;
 
     protected Context(Window window){
-        var s = new Stopwatch().start();
-
         contextManager.registerContext(this);
 
         this.window = window;
@@ -60,11 +57,15 @@ public class Context implements Disposable{
     }
 
 
-    public SdlInput getInput(){
+    public Window window(){
+        return window;
+    }
+
+    public SdlInput input(){
         return input;
     }
 
-    public SdlCallbacks getCallbacks(){
+    public SdlCallbacks callbacks(){
         return callbacks;
     }
 
@@ -96,7 +97,7 @@ public class Context implements Disposable{
             window.swapBuffers();
         }
 
-        callbacks.addWinResizedCallback((window, width, height) -> {
+        callbacks.addWinSizeChangedCallback((window, width, height) -> {
             final Context prev = setCurrent();
             if(adapter != null)
                 adapter.resize(width, height);
@@ -131,11 +132,6 @@ public class Context implements Disposable{
         this.screen.hide();
         this.screen = screen;
         this.screen.show();
-    }
-    
-
-    public Window getWindow(){
-        return window;
     }
 
     @Override

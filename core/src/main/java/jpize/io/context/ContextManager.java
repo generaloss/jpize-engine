@@ -18,6 +18,7 @@ import jpize.graphics.util.ScreenQuadShader;
 import jpize.graphics.util.TextureUtils;
 import jpize.io.Window;
 import jpize.sdl.Sdl;
+import jpize.sdl.event.mouse.MouseButtonAction;
 import jpize.sdl.input.KeyAction;
 import jpize.util.Utils;
 import jpize.util.time.DeltaTimeCounter;
@@ -93,7 +94,7 @@ public class ContextManager{
 
                 context.init();
                 contextsToInit.remove(context);
-                contexts.put(context.getWindow().getID(), context);
+                contexts.put(context.window().getID(), context);
             }
 
             // Sync tasks
@@ -126,7 +127,7 @@ public class ContextManager{
 
     private void handleEvents(){
         for(Context context: contexts.values())
-            context.getInput().update();
+            context.input().update();
 
         while(SdlEvents.SDL_PollEvent(event) != 0){
             switch(event.type){
@@ -136,7 +137,7 @@ public class ContextManager{
                     if(context == null)
                         continue;
 
-                    context.getCallbacks().invokeCharCallbacks((char) event.text.text[0]);
+                    context.callbacks().invokeCharCallbacks((char) event.text.text[0]);
                 }
 
                 // Keys
@@ -146,10 +147,10 @@ public class ContextManager{
                         continue;
 
                     final KeyAction action = (event.key.repeat == 0) ? KeyAction.DOWN : KeyAction.REPEAT;
-                    context.getCallbacks().invokeKeyCallbacks(event.key.keysym, action);
+                    context.callbacks().invokeKeyCallbacks(event.key.keysym, action);
 
                     if(event.key.repeat == 0)
-                        context.getInput().updateKeyDown(event.key.keysym);
+                        context.input().updateKeyDown(event.key.keysym);
                 }
 
                 case SDL_EventType.SDL_KEYUP -> {
@@ -157,8 +158,8 @@ public class ContextManager{
                     if(context == null)
                         continue;
 
-                    context.getInput().updateKeyUp(event.key.keysym);
-                    context.getCallbacks().invokeKeyCallbacks(event.key.keysym, KeyAction.UP);
+                    context.input().updateKeyUp(event.key.keysym);
+                    context.callbacks().invokeKeyCallbacks(event.key.keysym, KeyAction.UP);
                 }
 
                 // Buttons
@@ -167,7 +168,8 @@ public class ContextManager{
                     if(context == null)
                         continue;
 
-                    context.getInput().updateButtonDown(event.button.button);
+                    context.input().updateButtonDown(event.button.button);
+                    context.callbacks().invokeMouseButtonCallback(event.button, MouseButtonAction.DOWN);
                 }
 
                 case SDL_EventType.SDL_MOUSEBUTTONUP -> {
@@ -175,7 +177,8 @@ public class ContextManager{
                     if(context == null)
                         continue;
 
-                    context.getInput().updateButtonUp(event.button.button);
+                    context.input().updateButtonUp(event.button.button);
+                    context.callbacks().invokeMouseButtonCallback(event.button, MouseButtonAction.UP);
                 }
 
                 // Mouse
@@ -184,7 +187,7 @@ public class ContextManager{
                     if(context == null)
                         continue;
 
-                    context.getInput().updateScroll(event.wheel);
+                    context.input().updateScroll(event.wheel);
                 }
 
                 case SDL_EventType.SDL_MOUSEMOTION -> {
@@ -192,7 +195,7 @@ public class ContextManager{
                     if(context == null)
                         continue;
 
-                    context.getInput().updatePos(event.motion);
+                    context.input().updatePos(event.motion);
                 }
 
                 // Window
@@ -201,26 +204,26 @@ public class ContextManager{
                     if(context == null)
                         continue;
 
-                    final Window window = context.getWindow();
+                    final Window window = context.window();
                     switch(event.window.event){
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_SHOWN -> context.getCallbacks().invokeWinShownCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_HIDDEN -> context.getCallbacks().invokeWinHiddenCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_EXPOSED -> context.getCallbacks().invokeWinExposedCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_MOVED -> context.getCallbacks().invokeWinMovedCallbacks(window, event.window.data1, event.window.data2);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED -> context.getCallbacks().invokeWinResizedCallbacks(window, event.window.data1, event.window.data2);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_SIZE_CHANGED -> context.getCallbacks().invokeWinSizeChangedCallbacks(window, event.window.data1, event.window.data2);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_MINIMIZED -> context.getCallbacks().invokeWinMinimizedCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_MAXIMIZED -> context.getCallbacks().invokeWinMaximizedCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_RESTORED -> context.getCallbacks().invokeWinRestoredCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_ENTER -> context.getCallbacks().invokeWinEnterCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_LEAVE -> context.getCallbacks().invokeWinLeaveCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_FOCUS_GAINED -> context.getCallbacks().invokeWinFocusGainedCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_FOCUS_LOST -> context.getCallbacks().invokeWinFocusLostCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_CLOSE -> context.getCallbacks().invokeWinCloseCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_TAKE_FOCUS -> context.getCallbacks().invokeWinTakeFocusCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_HIT_TEST -> context.getCallbacks().invokeWinHitTestCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_ICCPROF_CHANGED -> context.getCallbacks().invokeWinIccProfChangedCallbacks(window);
-                        case SDL_WindowEventID.SDL_WINDOWEVENT_DISPLAY_CHANGE -> context.getCallbacks().invokeWinDisplayChangeCallbacks(window, event.window.data1);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_SHOWN -> context.callbacks().invokeWinShownCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_HIDDEN -> context.callbacks().invokeWinHiddenCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_EXPOSED -> context.callbacks().invokeWinExposedCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_MOVED -> context.callbacks().invokeWinMovedCallbacks(window, event.window.data1, event.window.data2);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED -> context.callbacks().invokeWinResizedCallbacks(window, event.window.data1, event.window.data2);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_SIZE_CHANGED -> context.callbacks().invokeWinSizeChangedCallbacks(window, event.window.data1, event.window.data2);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_MINIMIZED -> context.callbacks().invokeWinMinimizedCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_MAXIMIZED -> context.callbacks().invokeWinMaximizedCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_RESTORED -> context.callbacks().invokeWinRestoredCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_ENTER -> context.callbacks().invokeWinEnterCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_LEAVE -> context.callbacks().invokeWinLeaveCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_FOCUS_GAINED -> context.callbacks().invokeWinFocusGainedCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_FOCUS_LOST -> context.callbacks().invokeWinFocusLostCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_CLOSE -> context.callbacks().invokeWinCloseCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_TAKE_FOCUS -> context.callbacks().invokeWinTakeFocusCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_HIT_TEST -> context.callbacks().invokeWinHitTestCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_ICCPROF_CHANGED -> context.callbacks().invokeWinIccProfChangedCallbacks(window);
+                        case SDL_WindowEventID.SDL_WINDOWEVENT_DISPLAY_CHANGE -> context.callbacks().invokeWinDisplayChangeCallbacks(window, event.window.data1);
                     }
                 }
 
@@ -283,7 +286,7 @@ public class ContextManager{
 
     protected void setCurrentContext(Context context){
         currentContext = context;
-        context.getWindow().getGlContext().makeCurrent();
+        context.window().getGlContext().makeCurrent();
     }
 
 
@@ -297,7 +300,7 @@ public class ContextManager{
     }
 
     public void unregisterContext(Context context){
-        contexts.remove(context.getWindow().getID());
+        contexts.remove(context.window().getID());
     }
 
 

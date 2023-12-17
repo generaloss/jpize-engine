@@ -1,38 +1,36 @@
 package jpize.ui.palette;
 
-import jpize.ui.component.LayoutComponent;
+import jpize.ui.component.AbstractLayout;
 import jpize.ui.component.UIComponent;
 import jpize.ui.component.UIComponentCache;
+import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Constraint;
 
-public class HBox extends LayoutComponent{
+public class HBox extends AbstractLayout{
 
     public HBox(Constraint size){
-        super.minSize().set(size);
+        super.minSize.set(size);
     }
 
     public HBox(Constraint width, Constraint height){
-        super.minSize().set(width, height);
+        super.minSize.set(width, height);
+    }
+
+    public HBox(){
+        this(Constr.win_width, Constr.win_height);
     }
 
 
-    private float offsetH;
-
-    private void update(UIComponent component){
-        for(UIComponent child: component.children()){
-            child.update();
-            update(child);
-        }
-    }
+    private float offsetX;
 
     @Override
     public float calcPosition(UIComponent component, boolean forY){
         final UIComponentCache cache = component.cache();
         if(forY)
-            return cache.y;
+            return cache.y + super.cache.y;
 
-        final float x = offsetH + cache.paddingLeft;
-        offsetH += cache.width + cache.paddingLeft + cache.paddingRight;
+        final float x = offsetX + cache.paddingLeft;
+        offsetX += cache.width + cache.paddingLeft + cache.paddingRight;
         return x;
     }
 
@@ -43,18 +41,10 @@ public class HBox extends LayoutComponent{
 
     @Override
     public void render(){
-        offsetH = 0;
-        cache().calculate();
-
+        super.render();
+        cache.calculate();
+        offsetX = 0;
         super.renderBackground();
-        render(this);
-    }
-
-    private void render(UIComponent component){
-        for(UIComponent child: component.children()){
-            child.render();
-            render(child);
-        }
     }
 
 }

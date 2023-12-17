@@ -108,7 +108,7 @@ public class FontLoader{
 
         final FontInfo info = new FontInfo(height, ascent, descent);
         final BitmapFont font = new BitmapFont(info, pages, glyphs);
-        font.getOptions().italic = italic;
+        font.options().italic = italic;
 
         return font;
     }

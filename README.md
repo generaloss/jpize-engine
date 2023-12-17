@@ -328,25 +328,48 @@ body_1.getPosition().add( b1_velocity ); // box will be move only 3 units
 ---
 
 ## Module *UI*:
-* *[UIComponent](https://github.com/GeneralPashon/jpize-engine/blob/master/ui/src/main/java/jpize/gui/UIComponent.java)* - Base components class
-* *[Constraint](https://github.com/GeneralPashon/jpize-engine/tree/master/ui/src/main/java/jpize/gui/constraint)* - Pixel, Relative, Aspect (Used to determine the static or dynamic position and size of ui components)
-* *[Align](https://github.com/GeneralPashon/jpize-engine/blob/master/ui/src/main/java/jpize/gui/Align.java)* - Center, Up, Right ...
-* *[LayoutType](https://github.com/GeneralPashon/jpize-engine/blob/master/ui/src/main/java/jpize/gui/LayoutType.java)* - Vertical, Horizontal, None
+* *[UIComponent](ui/src/main/java/jpize/ui/component/UIComponent.java)* - Base component class
+* *[Constraint](ui/src/main/java/jpize/ui/constraint)* - Pixel, Relative, Aspect, Flag (Used to determine the static or dynamic position and size of ui components)
+* *[AbstractLayout](ui/src/main/java/jpize/ui/component/AbstractLayout.java)* - implemented in: ConstraintLayout, VBox, HBox
 
-#### 1. UI Example:
+#### 1. UI Java Example:
 ``` java
-// init
-Layout layout = new Layout();
-layout.setLayoutType(LayoutType.HORIZONTAL);
-layout.alignItems(Align.CENTER);
+// context
+UIContext ui = new UIContext();
 
-Image image = new Image(image_texture);
-layout.put("image_id", image);
+// Layout
+AbstractLayout layout = new VBox(Constr.win_width, Constr.win_height);
+ui.setRootComponent(layout);
 
-// render
-batch.begin();
-layout.render(batch);
-batch.end();
+// Button
+button = new Button(Constr.aspect(10), Constr.px(100), "Button Text", font);
+button.padding().set(Constr.relh(0.35), Constr.zero, Constr.auto, Constr.zero);
+
+// Slider
+slider = new Slider(Constr.aspect(10), Constr.px(100), "Slider: 0", font);
+slider.padding().set(Constr.px(10), Constr.zero, Constr.auto, Constr.zero);
+
+// Add to layout Button & Slider
+layout.add(button);
+layout.add(slider);
+
+// Callbacks
+button.input().addPressCallback((component, button, action) -> {
+    System.out.println("Press Button");
+});
+button.input().addReleaseCallback((component, button, action) -> {
+    System.out.println("Release Button");
+});
+
+slider.addSliderCallback(((component, value) -> {
+    component.textview().setText("Slider: " + Maths.round(value * 100));
+}));
+
+// Render
+ui.render();
+
+// Dispose
+ui.dispose();
 ```
 
 ---

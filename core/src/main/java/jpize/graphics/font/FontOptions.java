@@ -1,5 +1,6 @@
 package jpize.graphics.font;
 
+import jpize.graphics.util.color.Color;
 import jpize.math.vecmath.vector.Vec2f;
 
 public class FontOptions{
@@ -9,6 +10,7 @@ public class FontOptions{
     public float scale;
     public float rotation;
     public boolean italic;
+    public Color color;
 
     public float lineGaps;
     public float italicAngle;
@@ -20,6 +22,7 @@ public class FontOptions{
         this.font = font;
 
         this.scale = 1;
+        this.color = new Color();
         this.italicAngle = 15;
         this.textAreaWidth = -1;
         this.rotateOrigin = new Vec2f(0.5);

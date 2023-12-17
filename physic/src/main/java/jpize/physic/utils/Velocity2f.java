@@ -15,24 +15,8 @@ public class Velocity2f extends Vec2f{
         super(vector);
         max = 1;
     }
-    
-    
-    public Velocity2f zeroAxesToZero(Vec2f collidedVelocity){
-        if(x != 0 && collidedVelocity.x == 0)
-            x = 0;
-        if(y != 0 && collidedVelocity.y == 0)
-            y = 0;
-        return this;
-    }
 
-    public Velocity2f collidedAxesToZero(Vec2f collidedVelocity){
-        if((x > 0 && collidedVelocity.x < x) || (x < 0 && collidedVelocity.x > x))
-            x = 0;
-        if((y > 0 && collidedVelocity.y < y) || (y < 0 && collidedVelocity.y > y))
-            y = 0;
-        return this;
-    }
-    
+
     public Velocity2f clampToMax(){
         final Vec2f normalized = copy().nor().abs();
 
@@ -46,10 +30,6 @@ public class Velocity2f extends Vec2f{
         else if(y < -max * normalized.y)
             y = -max * normalized.y;
         return this;
-    }
-    
-    public Velocity2f reduce(double reduce){
-        return reduce(reduce, reduce);
     }
     
     public Velocity2f reduce(double reduceX, double reduceY){
@@ -86,7 +66,11 @@ public class Velocity2f extends Vec2f{
         }
         return this;
     }
-    
+
+    public Velocity2f reduce(double reduceXY){
+        return reduce(reduceXY, reduceXY);
+    }
+
     
     public float getMax(){
         return max;

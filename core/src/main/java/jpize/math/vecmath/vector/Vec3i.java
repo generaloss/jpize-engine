@@ -167,15 +167,86 @@ public class Vec3i{
         
         return this;
     }
-    
+
+
     public Vec3i zero(){
-        set(0, 0, 0);
-        
-        return this;
+        return set(0, 0, 0);
     }
-    
+
     public boolean isZero(){
         return x == 0 && y == 0 && z == 0;
+    }
+
+
+    public Vec3i zeroThatLess(double x, double y, double z){
+        if(Math.abs(this.x) < Math.abs(x)) this.x = 0;
+        if(Math.abs(this.y) < Math.abs(y)) this.y = 0;
+        if(Math.abs(this.z) < Math.abs(z)) this.z = 0;
+        return this;
+    }
+
+    public Vec3i zeroThatLess(double xyz){
+        return zeroThatLess(xyz, xyz, xyz);
+    }
+
+    public Vec3i zeroThatLess(Vec3d vector){
+        return zeroThatLess(vector.x, vector.y, vector.z);
+    }
+
+    public Vec3i zeroThatLess(Vec3f vector){
+        return zeroThatLess(vector.x, vector.y, vector.z);
+    }
+
+    public Vec3i zeroThatLess(Vec3i vector){
+        return zeroThatLess(vector.x, vector.y, vector.z);
+    }
+
+
+    public Vec3i zeroThatZero(double x, double y, double z){
+        if(x == 0) this.x = 0;
+        if(y == 0) this.y = 0;
+        if(z == 0) this.z = 0;
+        return this;
+    }
+
+    public Vec3i zeroThatZero(double xyz){
+        return zeroThatZero(xyz, xyz, xyz);
+    }
+
+    public Vec3i zeroThatZero(Vec3d vector){
+        return zeroThatZero(vector.x, vector.y, vector.z);
+    }
+
+    public Vec3i zeroThatZero(Vec3f vector){
+        return zeroThatZero(vector.x, vector.y, vector.z);
+    }
+
+    public Vec3i zeroThatZero(Vec3i vector){
+        return zeroThatZero(vector.x, vector.y, vector.z);
+    }
+
+
+    public Vec3i zeroThatBigger(double x, double y, double z){
+        if(Math.abs(this.x) > Math.abs(x)) this.x = 0;
+        if(Math.abs(this.y) > Math.abs(y)) this.y = 0;
+        if(Math.abs(this.z) > Math.abs(z)) this.z = 0;
+        return this;
+    }
+
+    public Vec3i zeroThatBigger(double xyz){
+        return zeroThatBigger(xyz, xyz, xyz);
+    }
+
+    public Vec3i zeroThatBigger(Vec3d vector){
+        return zeroThatBigger(vector.x, vector.y, vector.z);
+    }
+
+    public Vec3i zeroThatBigger(Vec3f vector){
+        return zeroThatBigger(vector.x, vector.y, vector.z);
+    }
+
+    public Vec3i zeroThatBigger(Vec3i vector){
+        return zeroThatBigger(vector.x, vector.y, vector.z);
     }
 
 

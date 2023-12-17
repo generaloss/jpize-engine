@@ -148,27 +148,95 @@ public class Vec2f{
         len = Maths.invSqrt(len);
         return mul(len);
     }
-    
-    
+
+
     public Vec2f abs(){
         if(x < 0)
             x *= -1;
         if(y < 0)
             y *= -1;
-        
+
         return this;
     }
-    
+
+
     public Vec2f zero(){
-        set(0, 0);
-        
-        return this;
+        return set(0, 0);
     }
-    
+
     public boolean isZero(){
         return x == 0 && y == 0;
     }
-    
+
+
+    public Vec2f zeroThatLess(double x, double y){
+        if(Math.abs(this.x) < Math.abs(x)) this.x = 0;
+        if(Math.abs(this.y) < Math.abs(y)) this.y = 0;
+        return this;
+    }
+
+    public Vec2f zeroThatLess(double xy){
+        return zeroThatLess(xy, xy);
+    }
+
+    public Vec2f zeroThatLess(Vec2d vector){
+        return zeroThatLess(vector.x, vector.y);
+    }
+
+    public Vec2f zeroThatLess(Vec2f vector){
+        return zeroThatLess(vector.x, vector.y);
+    }
+
+    public Vec2f zeroThatLess(Vec2i vector){
+        return zeroThatLess(vector.x, vector.y);
+    }
+
+
+    public Vec2f zeroThatZero(double x, double y){
+        if(x == 0) this.x = 0;
+        if(y == 0) this.y = 0;
+        return this;
+    }
+
+    public Vec2f zeroThatZero(double xy){
+        return zeroThatZero(xy, xy);
+    }
+
+    public Vec2f zeroThatZero(Vec2d vector){
+        return zeroThatZero(vector.x, vector.y);
+    }
+
+    public Vec2f zeroThatZero(Vec2f vector){
+        return zeroThatZero(vector.x, vector.y);
+    }
+
+    public Vec2f zeroThatZero(Vec2i vector){
+        return zeroThatZero(vector.x, vector.y);
+    }
+
+
+    public Vec2f zeroThatBigger(double x, double y){
+        if(Math.abs(this.x) > Math.abs(x)) this.x = 0;
+        if(Math.abs(this.y) > Math.abs(y)) this.y = 0;
+        return this;
+    }
+
+    public Vec2f zeroThatBigger(double xy){
+        return zeroThatBigger(xy, xy);
+    }
+
+    public Vec2f zeroThatBigger(Vec2d vector){
+        return zeroThatBigger(vector.x, vector.y);
+    }
+
+    public Vec2f zeroThatBigger(Vec2f vector){
+        return zeroThatBigger(vector.x, vector.y);
+    }
+
+    public Vec2f zeroThatBigger(Vec2i vector){
+        return zeroThatBigger(vector.x, vector.y);
+    }
+
     
     public float dot(float x, float y){
         return this.x * x + this.y * y;
