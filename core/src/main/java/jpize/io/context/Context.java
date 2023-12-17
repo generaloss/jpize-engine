@@ -112,10 +112,6 @@ public class Context implements Disposable{
     protected void render(){
         setCurrent();
 
-        // Render screen
-        if(screen != null)
-            screen.render();
-
         // Render adapter
         if(adapter != null){
             adapter.update();
@@ -123,13 +119,18 @@ public class Context implements Disposable{
                 adapter.render();
         }
 
+        // Render screen
+        if(screen != null)
+            screen.render();
+
         if(window.isShown())
             window.swapBuffers();
     }
     
 
     public void setScreen(Screen screen){
-        this.screen.hide();
+        if(this.screen != null)
+            this.screen.hide();
         this.screen = screen;
         this.screen.show();
     }
