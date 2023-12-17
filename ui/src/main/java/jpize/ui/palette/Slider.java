@@ -13,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Slider extends Rect{
 
     private final Rect handle;
-    private final TextView textView;
+    private final TextView textview;
     private boolean grabHandle;
     private float value;
     private final List<SliderCallback> callbacks;
@@ -28,10 +28,10 @@ public class Slider extends Rect{
         this.handle.input().setClickable(false);
         super.add(handle);
 
-        this.textView = new TextView(text, font);
-        textView.padding().set(Constr.zero);
-        textView.color().set(0.1, 0.1, 0.1, 1);
-        super.add(textView);
+        this.textview = new TextView(text, font);
+        textview.padding().set(Constr.zero);
+        textview.color().set(0.1, 0.1, 0.1, 1);
+        super.add(textview);
     }
 
     public Slider(Constraint size, String text, BitmapFont font){
@@ -44,7 +44,7 @@ public class Slider extends Rect{
     }
 
     public TextView textview(){
-        return textView;
+        return textview;
     }
 
 

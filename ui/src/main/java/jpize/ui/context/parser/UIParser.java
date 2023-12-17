@@ -44,11 +44,6 @@ public class UIParser{
         return token;
     }
 
-    private UIToken requireAndGet(String message, UITokenType... types){
-        require(message, types);
-        return next();
-    }
-
     private void requireAndSkip(String message, UITokenType... types){
         require(message, types);
         next();
@@ -57,13 +52,7 @@ public class UIParser{
     /** PARSE */
 
     public void parse(){
-        while(!tokens.isEmpty())
-            parseNext(next());
-    }
-
-    private void parseNext(UIToken token){
-        if(token.type.isComponent())
-            parseComponent(token.string);
+        parseComponent(next().string);
     }
 
     private List<UIToken> parseComponentArgs(){
@@ -77,7 +66,7 @@ public class UIParser{
         final List<UIToken> args = new ArrayList<>();
 
         token = next();
-        while(!token.type.isOpenBrace()){
+        while(!token.type.isCloseBrace()){
             args.add(token);
             token = next();
             if(token.type.isComma())

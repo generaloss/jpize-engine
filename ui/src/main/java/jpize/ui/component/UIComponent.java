@@ -8,16 +8,14 @@ import jpize.ui.component.style.UIBackground;
 import jpize.ui.component.style.UIStyle;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Dimension;
-import jpize.ui.gravity.Gravity;
 import jpize.ui.constraint.Insets;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class UIComponent{
 
-    protected @Nullable UIComponent parent;
+    protected UIComponent parent;
     protected final List<UIComponent> children;
     protected String ID;
     protected UIRenderer renderer;
@@ -25,7 +23,6 @@ public abstract class UIComponent{
     protected final Insets margin, padding;
     protected final Dimension size, minSize, maxSize;
     protected boolean paddingFixH, paddingFixW;
-    protected final Gravity gravity;
     protected final UIStyle style;
     protected final UIInput input;
 
@@ -38,7 +35,6 @@ public abstract class UIComponent{
         this.size = new Dimension();
         this.minSize = new Dimension(Constr.zero);
         this.maxSize = new Dimension();
-        this.gravity = new Gravity();
         this.style = new UIStyle();
         this.input = new UIInput(this);
     }
@@ -81,7 +77,7 @@ public abstract class UIComponent{
         return parent;
     }
 
-    public final void setParent(@Nullable UIComponent parent){
+    public final void setParent(UIComponent parent){
         if(parent != null)
             renderer = parent.renderer;
         this.parent = parent;
@@ -159,11 +155,6 @@ public abstract class UIComponent{
 
     public final Dimension maxSize(){
         return maxSize;
-    }
-
-
-    public final Gravity gravity(){
-        return gravity;
     }
 
 

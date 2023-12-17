@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 public class UILexer{
 
     public static Queue<UIToken> lexAnalysis(String input){
-        final Queue<UIToken> tokens = new ArrayDeque<>();
+        final Queue<UIToken> tokens = new LinkedList<>();
 
         int i = 0;
         final int length = input.length();

@@ -30,11 +30,10 @@ public class UIMapper{
         this.resources = new HashMap<>();
 
         this.tokenParsers = new HashMap<>();
-        this.typeSetters = new HashMap<>();
-        this.componentAliases = new HashMap<>();
-
         putTokenParsers();
+        this.typeSetters = new HashMap<>();
         putTypeParsers();
+        this.componentAliases = new HashMap<>();
         putComponentAliases();
     }
 
@@ -60,7 +59,8 @@ public class UIMapper{
 
     private void putTokenParsers(){
         // String
-        tokenParsers.put(UITokenType.LITERAL, (tokens) -> tokens[0].string);
+        tokenParsers.put(UITokenType.LITERAL_1, (tokens) -> tokens[0].string);
+        tokenParsers.put(UITokenType.LITERAL_2, (tokens) -> tokens[0].string);
         // Number
         tokenParsers.put(UITokenType.NUMBER, (tokens) -> Float.parseFloat(tokens[0].string));
         // Resource
@@ -85,6 +85,7 @@ public class UIMapper{
         typeSetters.put(Insets.class, (object, args) -> {
             switch(args.length){
                 case 1 -> ((Insets) object).set((Constraint) args[0]);
+                case 2 -> ((Insets) object).set((Constraint) args[0], (Constraint) args[1]);
                 case 4 -> ((Insets) object).set((Constraint) args[0], (Constraint) args[1], (Constraint) args[2], (Constraint) args[3]);
             }
         });

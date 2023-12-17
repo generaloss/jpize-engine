@@ -15,7 +15,8 @@ public enum UITokenType{
 
     COMPONENT     ("^@[\\w\\.]+"),
     CONSTRAINT    ("^(?:(?:[0-9\\.]+(?:px|rw|rh|ap))|auto|zero|match_parent|wrap_content)"),
-    LITERAL       ("^'[\\w\\s\\.\\/\\\\{}\\[\\]()\\-\\+\\:]*'"),
+    LITERAL_1     ("^'[\\w\\s\\.\\/\\\\{}\\[\\]()\\-\\+\\:]*'"),
+    LITERAL_2     ("^\"[\\w\\s\\.\\/\\\\{}\\[\\]()\\-\\+\\:]*\""),
     NUMBER        ("^[0-9]+(?:(?:\\.[0-9]+)(?:(?:e|E)(\\+|\\-|)[0-9]+|)|)"),
     KEY           ("^[\\w\\.]+:"),
     RESOURCE      ("^![\\w\\.\\:]+");
@@ -29,6 +30,7 @@ public enum UITokenType{
     public Matcher match(String input){
         return pattern.matcher(input);
     }
+
 
     public boolean isSpaces(){
         return this == SPACES;
@@ -55,7 +57,7 @@ public enum UITokenType{
     }
 
     public boolean isLiteral(){
-        return this == LITERAL;
+        return this == LITERAL_1 || this == LITERAL_2;
     }
 
     public boolean isComponent(){
