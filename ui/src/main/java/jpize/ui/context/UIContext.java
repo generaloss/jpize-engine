@@ -66,6 +66,10 @@ public class UIContext implements Disposable, Resizable{
         return root;
     }
 
+    public <T extends UIComponent> T getByID(String ID){
+        return root.getByID(ID);
+    }
+
     public void setRootComponent(UIComponent root){
         this.root = root;
         this.root.setRenderer(renderer);

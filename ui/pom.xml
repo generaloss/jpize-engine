@@ -7,7 +7,7 @@
     <parent>
         <groupId>net.generalpashon</groupId>
         <artifactId>jpize-engine</artifactId>
-        <version>23.11.3</version>
+        <version>23.12.1</version>
     </parent>
 
     <groupId>jpize-engine</groupId>
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>jpize-engine</groupId>
             <artifactId>core</artifactId>
-            <version>23.11.3</version>
+            <version>23.12.1</version>
             <scope>compile</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/javax.xml.parsers/jaxp-api -->

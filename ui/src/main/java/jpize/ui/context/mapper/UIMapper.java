@@ -100,7 +100,7 @@ public class UIMapper{
         typeSetters.put(Color.class, (object, args) -> {
             switch(args.length){
                 case 1 -> ((Color) object).setA((float) args[0]);
-                case 3 -> ((Color) object).set3((float) args[0], (float) args[1], (float) args[2]);
+                case 3 -> ((Color) object).setRgb((float) args[0], (float) args[1], (float) args[2]);
                 case 4 -> ((Color) object).set((float) args[0], (float) args[1], (float) args[2], (float) args[3]);
             }
         });

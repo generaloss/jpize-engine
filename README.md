@@ -342,11 +342,11 @@ AbstractLayout layout = new VBox(Constr.win_width, Constr.win_height);
 ui.setRootComponent(layout);
 
 // Button
-button = new Button(Constr.aspect(10), Constr.px(100), "Button Text", font);
+Button button = new Button(Constr.aspect(10), Constr.px(100), "Button Text", font);
 button.padding().set(Constr.relh(0.35), Constr.zero, Constr.auto, Constr.zero);
 
 // Slider
-slider = new Slider(Constr.aspect(10), Constr.px(100), "Slider: 0", font);
+Slider slider = new Slider(Constr.aspect(10), Constr.px(100), "Slider: 0", font);
 slider.padding().set(Constr.px(10), Constr.zero, Constr.auto, Constr.zero);
 
 // Add to layout Button & Slider
@@ -371,6 +371,73 @@ ui.render();
 // Dispose
 ui.dispose();
 ```
+
+#### 2. JPUI Markup Language Example:
+#### Java:
+``` java
+// resources
+Texture bg_0 = new Texture("ui/bg_0.jpg");
+BitmapFont font = FontLoader.getDefault();
+font.setScale(0.8F);
+
+// load context
+UILoader loader = new UILoader()
+    .putRes("font", font)
+    .putRes("layout:bg_0", bg_0)
+    .putRes("button:aspect", Constr.aspect(7))
+    .addComponentAlias("Btn", Button.class);
+
+UIContext ui = loader.mapUIFromResource("view.jpui");
+
+// callbacks
+Button button = ui.getByID("button");
+Slider slider = ui.getByID("slider");
+
+button.input().addPressCallback((component, btn) -> component.style().background().color().setRgb(0.75));
+button.input().addReleaseCallback((component, btn) -> component.style().background().color().setRgb(0.5));
+
+slider.addSliderCallback(((component, value) -> {
+    slider.textview().setText("Slider: " + Maths.round(value * 100));
+    slider.textview().color().setRgb(1 - value);
+    component.style().background().color().setA(value);
+}));
+
+...
+```
+#### File 'view.jpui':
+``` jpui
+@VBox {
+    style.background.image: !layout:bg_0
+
+    @Btn (!button:aspect, 70px, 'Button Text', !font) {
+        ID: 'button'
+        padding: (0.35rh, zero, auto, zero)
+        style: {
+            background.color: (0.5, 0.5, 0.5, 0.75)
+            border_size: 3px
+            border_color: (1.0, 1.0, 1.0, 0.9)
+            corner_radius: 35px
+        }
+    }
+
+    @Slider (7ap, 70px, 'Slider: 0', !font) {
+        ID: 'slider'
+        padding: (10px, 0px, auto, 0px)
+        style: {
+            background.color.a: 0
+            border_size: 3px
+            border_color: (1.0, 1.0, 1.0, 0.9)
+            corner_radius: 35px
+        }
+        handle.style: {
+            background.color: (1.0, 1.0, 1.0, 0.9)
+            corner_radius: 35px
+        }
+        textview.color: (1, 1, 1, 1)
+    }
+}
+```
+#### Result: ![preview](ui/preview.png)
 
 ---
 

@@ -92,18 +92,26 @@ public class Color extends IColor{
     }
 
 
-    public Color set3(float red, float green, float blue){
+    public Color setRgb(float red, float green, float blue){
         r = red;
         g = green;
         b = blue;
         return this;
     }
 
-    public Color set3(double red, double green, double blue){
+    public Color setRgb(double red, double green, double blue){
         r = (float) red;
         g = (float) green;
         b = (float) blue;
         return this;
+    }
+
+    public Color setRgb(float rgb){
+        return setRgb(rgb, rgb, rgb);
+    }
+
+    public Color setRgb(double rgb){
+        return setRgb(rgb, rgb, rgb);
     }
 
     public Color set3Int(int red, int green, int blue){
@@ -153,7 +161,7 @@ public class Color extends IColor{
 
 
     public Color add3(double r, double g, double b){
-        return set3(r() + r, g() + g, b() + b);
+        return setRgb(r() + r, g() + g, b() + b);
     }
 
     public Color add3(Color color){
@@ -173,7 +181,7 @@ public class Color extends IColor{
     }
 
     public Color mul3(double value){
-        set3(
+        setRgb(
             r() * value,
             g() * value,
             b() * value
@@ -183,7 +191,7 @@ public class Color extends IColor{
     }
 
     public Color div3(double value){
-        set3(
+        setRgb(
             r() / value,
             g() / value,
             b() / value

@@ -6,15 +6,15 @@ import jpize.ui.constraint.Constraint;
 
 public class Button extends Rect{
 
-    private final TextView textView;
+    private final TextView textview;
 
     public Button(Constraint width, Constraint height, String text, BitmapFont font){
         super(width, height);
 
-        this.textView = new TextView(text, font);
-        textView.padding().set(Constr.zero);
-        textView.color().set(0.1, 0.1, 0.1, 1);
-        super.add(textView);
+        this.textview = new TextView(text, font);
+        textview.padding().set(Constr.zero);
+        textview.color().set(0.1, 0.1, 0.1, 1);
+        super.add(textview);
     }
 
     public Button(Constraint size, String text, BitmapFont font){
@@ -27,7 +27,7 @@ public class Button extends Rect{
     }
 
     public TextView textview(){
-        return textView;
+        return textview;
     }
 
 }

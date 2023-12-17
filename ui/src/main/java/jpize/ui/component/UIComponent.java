@@ -89,7 +89,7 @@ public abstract class UIComponent{
     }
 
     @SuppressWarnings("unchecked")
-    public final <T extends UIComponent> T findByID(String ID){
+    public final <T extends UIComponent> T getByID(String ID){
         for(UIComponent child: children)
             if(child.ID.equals(ID))
                 return (T) child;
@@ -106,7 +106,7 @@ public abstract class UIComponent{
     }
 
     public final void remove(String childID){
-        children.remove(findByID(childID));
+        children.remove(getByID(childID));
     }
 
 

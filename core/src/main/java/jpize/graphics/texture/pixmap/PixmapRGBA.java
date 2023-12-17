@@ -307,7 +307,7 @@ public class PixmapRGBA extends Pixmap{
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
                 getPixelColor(x, y, color);
-                color.set3(
+                color.setRgb(
                     (color.r() * 0.2126 + r) / 2,
                     (color.g() * 0.7152 + g) / 2,
                     (color.b() * 0.0722 + b) / 2
