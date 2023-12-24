@@ -91,7 +91,7 @@ public abstract class UIComponent{
     @SuppressWarnings("unchecked")
     protected final <C extends UIComponent> C getChildWithID(String ID){
         for(UIComponent child: children)
-            if(child.ID.equals(ID))
+            if(ID.equals(child.ID))
                 return (C) child;
         throw new RuntimeException("Component with ID " + ID + " not found");
     }

@@ -372,6 +372,10 @@ ui.render();
 
 // Dispose
 ui.dispose();
+
+// Enables/Disables touch handling (disabled by defalut)
+ui.enable();
+ui.disable();
 ```
 
 #### 2. [PUI Markup Language](https://github.com/GeneralPashon/jpize-ui-idea-plugin) Example:

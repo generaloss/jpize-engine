@@ -35,13 +35,20 @@ public class UIContext implements Disposable, Resizable{
             component.cache().press();
             component.input().invokePressCallbacks(button);
         });
-
-        Jpize.context().callbacks().addMouseButtonCallback(mouseButtonCallback);
     }
 
     public UIContext(UIComponent root){
         this();
         setRootComponent(root);
+    }
+
+
+    public void enable(){
+        Jpize.context().callbacks().addMouseButtonCallback(mouseButtonCallback);
+    }
+
+    public void disable(){
+        Jpize.context().callbacks().removeMouseButtonCallback(mouseButtonCallback);
     }
 
 
