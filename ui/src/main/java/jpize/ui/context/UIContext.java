@@ -3,18 +3,20 @@ package jpize.ui.context;
 import jpize.Jpize;
 import jpize.sdl.event.mouse.MouseButtonAction;
 import jpize.sdl.event.mouse.MouseButtonCallback;
+import jpize.sdl.event.window.WinSizeChangedCallback;
 import jpize.sdl.input.Btn;
 import jpize.ui.component.UIComponent;
 import jpize.ui.component.UIComponentCache;
 import jpize.ui.component.render.UIRenderer;
 import jpize.util.Disposable;
-import jpize.util.Resizable;
 
-public class UIContext implements Disposable, Resizable{
+public class UIContext implements Disposable{
 
     private final UIRenderer renderer;
     private UIComponent root;
     private final MouseButtonCallback mouseButtonCallback;
+    private final WinSizeChangedCallback winSizeChangedCallback;
+    private boolean enableTouchingDelayed;
 
     public UIContext(){
         this.renderer = new UIRenderer();
@@ -35,6 +37,8 @@ public class UIContext implements Disposable, Resizable{
             component.cache().press();
             component.input().invokePressCallbacks(button);
         });
+
+        this.winSizeChangedCallback = (window, width, height) -> renderer.resize(width, height);
     }
 
     public UIContext(UIComponent root){
@@ -44,11 +48,14 @@ public class UIContext implements Disposable, Resizable{
 
 
     public void enable(){
-        Jpize.context().callbacks().addMouseButtonCallback(mouseButtonCallback);
+        Jpize.context().callbacks().addWinSizeChangedCallback(winSizeChangedCallback);
+        winSizeChangedCallback.invoke(null, Jpize.getWidth(), Jpize.getHeight());
+        enableTouchingDelayed = true;
     }
 
     public void disable(){
         Jpize.context().callbacks().removeMouseButtonCallback(mouseButtonCallback);
+        Jpize.context().callbacks().removeWinSizeChangedCallback(winSizeChangedCallback);
     }
 
 
@@ -87,6 +94,11 @@ public class UIContext implements Disposable, Resizable{
         renderer.begin();
         render(root);
         renderer.end();
+
+        if(enableTouchingDelayed){
+            Jpize.context().callbacks().addMouseButtonCallback(mouseButtonCallback);
+            enableTouchingDelayed = false;
+        }
     }
 
     private void render(UIComponent component){
@@ -108,13 +120,8 @@ public class UIContext implements Disposable, Resizable{
 
     @Override
     public void dispose(){
-        Jpize.context().callbacks().removeMouseButtonCallback(mouseButtonCallback);
+        disable();
         renderer.dispose();
-    }
-
-    @Override
-    public void resize(int width, int height){
-        renderer.resize(width, height);
     }
 
 }

@@ -373,7 +373,7 @@ ui.render();
 // Dispose
 ui.dispose();
 
-// Enables/Disables touch handling (disabled by defalut)
+// Enables/Disables touch & resize handling (disabled by defalut)
 ui.enable();
 ui.disable();
 ```
@@ -394,6 +394,7 @@ UILoader loader = new UILoader()
     .addComponentAlias("Btn", Button.class);
 
 UIContext ui = loader.loadRes("view_file.pui");
+ui.enable();
 
 // callbacks
 Button button = ui.getByID("button");
