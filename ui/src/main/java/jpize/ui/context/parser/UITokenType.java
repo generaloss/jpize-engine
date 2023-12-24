@@ -13,6 +13,7 @@ public enum UITokenType{
     CLOSE_BRACE   ("^\\)"),
     COMMA         ("^,"),
 
+    COMMENT       ("^#.*[^\\n]"),
     COMPONENT     ("^@[\\w\\.]+"),
     CONSTRAINT    ("^(?:(?:[0-9\\.]+(?:px|rw|rh|ap))|auto|zero|match_parent|wrap_content)"),
     LITERAL       ("^(?:(?:'[\\w\\s\\.\\/\\\\{}\\[\\]()\\-\\+\\:]*')|(\"[\\w\\s\\.\\/\\\\{}\\[\\]()\\-\\+\\:]*\"))"),
@@ -53,6 +54,10 @@ public enum UITokenType{
 
     public boolean isComma(){
         return this == COMMA;
+    }
+
+    public boolean isComment(){
+        return this == COMMENT;
     }
 
     public boolean isLiteral(){

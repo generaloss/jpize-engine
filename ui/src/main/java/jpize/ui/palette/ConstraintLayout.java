@@ -9,11 +9,11 @@ import jpize.ui.constraint.Constraint;
 public class ConstraintLayout extends AbstractLayout{
 
     public ConstraintLayout(Constraint size){
-        super.minSize.set(size);
+        super.size.set(size);
     }
 
     public ConstraintLayout(Constraint width, Constraint height){
-        super.minSize.set(width, height);
+        super.size.set(width, height);
     }
 
     public ConstraintLayout(){

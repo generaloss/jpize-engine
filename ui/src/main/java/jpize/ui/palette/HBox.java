@@ -9,11 +9,11 @@ import jpize.ui.constraint.Constraint;
 public class HBox extends AbstractLayout{
 
     public HBox(Constraint size){
-        super.minSize.set(size);
+        super.size.set(size);
     }
 
     public HBox(Constraint width, Constraint height){
-        super.minSize.set(width, height);
+        super.size.set(width, height);
     }
 
     public HBox(){

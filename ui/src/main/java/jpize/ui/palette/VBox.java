@@ -9,11 +9,11 @@ import jpize.ui.constraint.Constraint;
 public class VBox extends AbstractLayout{
 
     public VBox(Constraint size){
-        super.minSize.set(size);
+        super.size.set(size);
     }
 
     public VBox(Constraint width, Constraint height){
-        super.minSize.set(width, height);
+        super.size.set(width, height);
     }
 
     public VBox(){

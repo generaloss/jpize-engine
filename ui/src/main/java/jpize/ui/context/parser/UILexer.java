@@ -20,7 +20,7 @@ public class UILexer{
                     continue;
 
                 i += matcher.end() - 1;
-                if(type.isSpaces())
+                if(type.isSpaces() || type.isComment())
                     break;
 
                 String string = matcher.group();
