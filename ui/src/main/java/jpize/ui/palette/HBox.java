@@ -27,7 +27,7 @@ public class HBox extends AbstractLayout{
     public float calcPosition(UIComponent component, boolean forY){
         final UIComponentCache cache = component.cache();
         if(forY)
-            return cache.y + super.cache.y;
+            return cache.y;
 
         final float x = offsetX + cache.paddingLeft;
         offsetX += cache.width + cache.paddingLeft + cache.paddingRight;
