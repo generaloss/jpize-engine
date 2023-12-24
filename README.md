@@ -1,4 +1,6 @@
 # [Jpize](https://github.com/GeneralPashon/jpize-engine) - Java Game Engine
+![jpize](jpize-logo.svg)
+
 ### The Engine focuses on being:
 * *Intuitive*
 * *Simple*
@@ -372,7 +374,7 @@ ui.render();
 ui.dispose();
 ```
 
-#### 2. JPUI Markup Language Example:
+#### 2. [PUI Markup Language](https://github.com/GeneralPashon/jpize-ui-idea-plugin) Example:
 #### Java:
 ``` java
 // resources
@@ -387,7 +389,7 @@ UILoader loader = new UILoader()
     .putRes("button:aspect", Constr.aspect(7))
     .addComponentAlias("Btn", Button.class);
 
-UIContext ui = loader.mapUIFromResource("view.jpui");
+UIContext ui = loader.loadRes("view_file.pui");
 
 // callbacks
 Button button = ui.getByID("button");
@@ -404,8 +406,8 @@ slider.addSliderCallback(((component, value) -> {
 
 ...
 ```
-#### File 'view.jpui':
-``` jpui
+#### PUI File:
+``` pui
 @VBox {
     style.background.image: !layout:bg_0
 

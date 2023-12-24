@@ -1,5 +1,6 @@
 package jpize.ui.context;
 
+import jpize.ui.context.mapper.UITypeSetter;
 import jpize.ui.context.parser.UILexer;
 import jpize.ui.context.mapper.UIMapper;
 import jpize.ui.context.parser.UIParser;
@@ -7,6 +8,7 @@ import jpize.ui.context.parser.UIToken;
 import jpize.util.file.Resource;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.Queue;
 
 public class UILoader{
@@ -27,8 +29,13 @@ public class UILoader{
         return this;
     }
 
+    public UILoader addTypeSetter(Type type, UITypeSetter typeSetter){
+        mapper.addTypeSetter(type, typeSetter);
+        return this;
+    }
 
-    public UIContext mapUI(Resource resource){
+
+    public UIContext load(Resource resource){
         final String string = resource.readString();
         final Queue<UIToken> tokens = UILexer.lexAnalysis(string);
 
@@ -37,16 +44,16 @@ public class UILoader{
         return mapper.getContext();
     }
 
-    public UIContext mapUIFromResource(String resourceName){
-        return mapUI(Resource.internal(resourceName));
+    public UIContext loadRes(String resourceName){
+        return load(Resource.internal(resourceName));
     }
 
-    public UIContext mapUIFromFile(String filepath){
-        return mapUI(Resource.external(filepath));
+    public UIContext loadFile(String filepath){
+        return load(Resource.external(filepath));
     }
 
-    public UIContext mapUI(File file){
-        return mapUI(Resource.external(file));
+    public UIContext load(File file){
+        return load(Resource.external(file));
     }
 
 }

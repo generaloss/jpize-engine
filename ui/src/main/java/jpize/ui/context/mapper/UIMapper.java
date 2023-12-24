@@ -30,43 +30,35 @@ public class UIMapper{
         this.resources = new HashMap<>();
 
         this.tokenParsers = new HashMap<>();
-        putTokenParsers();
+        initTokenParsers();
         this.typeSetters = new HashMap<>();
-        putTypeParsers();
+        initTypeSetters();
         this.componentAliases = new HashMap<>();
-        putComponentAliases();
+        initComponentAliases();
     }
 
     public UIContext getContext(){
         return context;
     }
 
-    public void beginComponent(UIComponent component){
-        componentPath.addFirst(component);
-    }
-
-    public void endComponent(){
-        componentPath.pop();
-    }
-
     public void putResource(String name, Object resource){
         resources.put(name, resource);
     }
 
-    public void addComponentAlias(String alias, Class<?> componentClass){
-        componentAliases.put(alias, componentClass);
+
+    private void addTokenParser(UITokenType type, UITokenParser parser){
+        tokenParsers.put(type, parser);
     }
 
-    private void putTokenParsers(){
+    private void initTokenParsers(){
         // String
-        tokenParsers.put(UITokenType.LITERAL_1, (tokens) -> tokens[0].string);
-        tokenParsers.put(UITokenType.LITERAL_2, (tokens) -> tokens[0].string);
+        addTokenParser(UITokenType.LITERAL, (tokens) -> tokens[0].string);
         // Number
-        tokenParsers.put(UITokenType.NUMBER, (tokens) -> Float.parseFloat(tokens[0].string));
+        addTokenParser(UITokenType.NUMBER, (tokens) -> Float.parseFloat(tokens[0].string));
         // Resource
-        tokenParsers.put(UITokenType.RESOURCE, (tokens) -> resources.get(tokens[0].string));
+        addTokenParser(UITokenType.RESOURCE, (tokens) -> resources.get(tokens[0].string));
         // Constraint
-        tokenParsers.put(UITokenType.CONSTRAINT, (tokens) -> {
+        addTokenParser(UITokenType.CONSTRAINT, (tokens) -> {
             final String constr = tokens[0].string;
             final String numPart = constr.substring(0, constr.length() - 2);
             final String postfix = constr.substring(constr.length() - 2);
@@ -80,9 +72,13 @@ public class UIMapper{
         });
     }
 
-    private void putTypeParsers(){
+    public void addTypeSetter(Type type, UITypeSetter typeSetter){
+        typeSetters.put(type, typeSetter);
+    }
+
+    private void initTypeSetters(){
         // Insets
-        typeSetters.put(Insets.class, (object, args) -> {
+        addTypeSetter(Insets.class, (object, args) -> {
             switch(args.length){
                 case 1 -> ((Insets) object).set((Constraint) args[0]);
                 case 2 -> ((Insets) object).set((Constraint) args[0], (Constraint) args[1]);
@@ -90,23 +86,26 @@ public class UIMapper{
             }
         });
         // Dimension
-        typeSetters.put(Dimension.class, (object, args) -> {
+        addTypeSetter(Dimension.class, (object, args) -> {
             switch(args.length){
                 case 1 -> ((Dimension) object).set((Constraint) args[0]);
                 case 2 -> ((Dimension) object).set((Constraint) args[0], (Constraint) args[1]);
             }
         });
         // Color
-        typeSetters.put(Color.class, (object, args) -> {
+        addTypeSetter(Color.class, (object, args) -> {
             switch(args.length){
-                case 1 -> ((Color) object).setA((float) args[0]);
                 case 3 -> ((Color) object).setRgb((float) args[0], (float) args[1], (float) args[2]);
                 case 4 -> ((Color) object).set((float) args[0], (float) args[1], (float) args[2], (float) args[3]);
             }
         });
     }
 
-    private void putComponentAliases(){
+    public void addComponentAlias(String alias, Class<?> componentClass){
+        componentAliases.put(alias, componentClass);
+    }
+
+    private void initComponentAliases(){
         addComponentAlias("TextView", TextView.class);
         addComponentAlias("Button", Button.class);
         addComponentAlias("Slider", Slider.class);
@@ -115,6 +114,15 @@ public class UIMapper{
         addComponentAlias("ConstraintLayout", ConstraintLayout.class);
         addComponentAlias("HBox", HBox.class);
         addComponentAlias("VBox", VBox.class);
+    }
+
+
+    public void beginComponent(UIComponent component){
+        componentPath.addFirst(component);
+    }
+
+    public void endComponent(){
+        componentPath.pop();
     }
 
     /** MAPPER */
@@ -256,7 +264,7 @@ public class UIMapper{
         setFieldByKey(component, key, valueObject);
     }
 
-    public void mapComponentField(String key, List<UIToken> vectorPartsTokens){
+    public void mapComponentFieldVector(String key, List<UIToken> vectorPartsTokens){
         final UIComponent component = componentPath.peek();
         final ObjField field = getFieldByKey(component, key);
         if(field == null)

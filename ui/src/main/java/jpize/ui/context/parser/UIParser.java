@@ -100,26 +100,29 @@ public class UIParser{
         if(token.type.isComponent())
             parseComponent(token.string);
         else if(token.type.isKey())
-            parseComponentField(token.string, "");
+            parseField(token.string, "");
     }
 
-    private void parseComponentField(String key, String prefix){
+    private void parseField(String key, String prefix){
         if(!prefix.isEmpty())
             key = prefix + "." + key;
 
         final UIToken token = next();
-        if(token.type.isOpenBrace())
-            mapper.mapComponentField(key, parseVector());
-        else if(token.type.isOpenBracket())
+        if(token.type.isOpenBrace()){ // ( vector
+            final List<UIToken> values = parseVector();
+            mapper.mapComponentFieldVector(key, values);
+
+        }else if(token.type.isOpenBracket()){ // { group
             parseComponentFieldGroup(key);
-        else
+
+        }else if(token.type.isNumber() || token.type.isConstraint() || token.type.isResource() || token.type.isLiteral()) // value
             mapper.mapComponentField(key, token);
     }
 
     private void parseComponentFieldGroup(String prefix){
         UIToken token = next();
         while(!token.type.isCloseBracket()){
-            parseComponentField(token.string, prefix);
+            parseField(token.string, prefix);
             token = next();
         }
     }

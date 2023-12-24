@@ -24,7 +24,8 @@ public class Slider extends Rect{
         super.input().addReleaseCallback(((comp, btn) -> grabHandle = false));
         this.callbacks = new CopyOnWriteArrayList<>();
 
-        this.handle = new Rect(Constr.relh(0.5), height);
+        this.handle = new Rect(Constr.relh(0.5), Constr.relh(1));
+        this.handle.padding().set(Constr.zero, Constr.zero, Constr.zero, Constr.auto);
         this.handle.input().setClickable(false);
         super.add(handle);
 

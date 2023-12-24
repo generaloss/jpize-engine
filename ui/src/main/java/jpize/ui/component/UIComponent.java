@@ -89,11 +89,25 @@ public abstract class UIComponent{
     }
 
     @SuppressWarnings("unchecked")
-    public final <T extends UIComponent> T getByID(String ID){
+    protected final <C extends UIComponent> C getChildWithID(String ID){
         for(UIComponent child: children)
             if(child.ID.equals(ID))
-                return (T) child;
+                return (C) child;
         throw new RuntimeException("Component with ID " + ID + " not found");
+    }
+
+    @SuppressWarnings("unchecked")
+    public final <C extends UIComponent> C getByID(String ID){
+        if(ID.contains(".")){
+            final String[] links = ID.split("\\.");
+
+            C component = (C) this;
+            for(String link: links)
+                component = component.getChildWithID(link);
+
+            return component;
+        }
+        return getChildWithID(ID);
     }
 
     public final void add(UIComponent child){
