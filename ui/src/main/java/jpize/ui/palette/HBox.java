@@ -43,7 +43,7 @@ public class HBox extends AbstractLayout{
     public void render(){
         super.render();
         cache.calculate();
-        offsetX = 0;
+        offsetX = cache.x;
         super.renderBackground();
     }
 
