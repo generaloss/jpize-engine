@@ -4,8 +4,8 @@ import jpize.graphics.util.color.Color;
 import jpize.ui.component.UIComponent;
 import jpize.ui.constraint.*;
 import jpize.ui.context.UIContext;
-import jpize.ui.context.parser.UIToken;
-import jpize.ui.context.parser.UITokenType;
+import jpize.ui.context.parser.PuiToken;
+import jpize.ui.context.parser.PuiTokenType;
 import jpize.ui.palette.*;
 
 import java.lang.reflect.Constructor;
@@ -13,17 +13,17 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.*;
 
-public class UIMapper{
+public class PuiMapper{
 
     private final UIContext context;
     private final Deque<UIComponent> componentPath;
 
     private final Map<String, Object> resources;
-    private final Map<UITokenType, UITokenParser> tokenParsers;
-    private final Map<Type, UITypeSetter> typeSetters;
+    private final Map<PuiTokenType, PuiTokenParser> tokenParsers;
+    private final Map<Type, PuiTypeSetter> typeSetters;
     private final Map<String, Class<?>> componentAliases;
 
-    public UIMapper(){
+    public PuiMapper(){
         this.context = new UIContext();
         this.componentPath = new ArrayDeque<>();
 
@@ -46,19 +46,19 @@ public class UIMapper{
     }
 
 
-    private void addTokenParser(UITokenType type, UITokenParser parser){
+    private void addTokenParser(PuiTokenType type, PuiTokenParser parser){
         tokenParsers.put(type, parser);
     }
 
     private void initTokenParsers(){
         // String
-        addTokenParser(UITokenType.LITERAL, (tokens) -> tokens[0].string);
+        addTokenParser(PuiTokenType.LITERAL, (tokens) -> tokens[0].string);
         // Number
-        addTokenParser(UITokenType.NUMBER, (tokens) -> Float.parseFloat(tokens[0].string));
+        addTokenParser(PuiTokenType.NUMBER, (tokens) -> Float.parseFloat(tokens[0].string));
         // Resource
-        addTokenParser(UITokenType.RESOURCE, (tokens) -> resources.get(tokens[0].string));
+        addTokenParser(PuiTokenType.RESOURCE, (tokens) -> resources.get(tokens[0].string));
         // Constraint
-        addTokenParser(UITokenType.CONSTRAINT, (tokens) -> {
+        addTokenParser(PuiTokenType.CONSTRAINT, (tokens) -> {
             final String constr = tokens[0].string;
             final String numPart = constr.substring(0, constr.length() - 2);
             final String postfix = constr.substring(constr.length() - 2);
@@ -72,7 +72,7 @@ public class UIMapper{
         });
     }
 
-    public void addTypeSetter(Type type, UITypeSetter typeSetter){
+    public void addTypeSetter(Type type, PuiTypeSetter typeSetter){
         typeSetters.put(type, typeSetter);
     }
 
@@ -95,6 +95,14 @@ public class UIMapper{
         // Color
         addTypeSetter(Color.class, (object, args) -> {
             switch(args.length){
+                case 1 -> {
+                    final float grayscale = (float) args[0];
+                    ((Color) object).setRgb(grayscale, grayscale, grayscale);
+                }
+                case 2 -> {
+                    final float grayscale = (float) args[0];
+                    ((Color) object).set(grayscale, grayscale, grayscale, (float) args[1]);
+                }
                 case 3 -> ((Color) object).setRgb((float) args[0], (float) args[1], (float) args[2]);
                 case 4 -> ((Color) object).set((float) args[0], (float) args[1], (float) args[2], (float) args[3]);
             }
@@ -127,16 +135,16 @@ public class UIMapper{
 
     /** MAPPER */
 
-    public Object parseTokenToObject(UIToken token){
-        final UITokenParser parser = tokenParsers.get(token.type);
+    public Object parseTokenToObject(PuiToken token){
+        final PuiTokenParser parser = tokenParsers.get(token.type);
         if(parser == null)
             return null;
         return parser.parse(token);
     }
 
-    public List<Object> parseTokensToObjects(List<UIToken> tokens){
+    public List<Object> parseTokensToObjects(List<PuiToken> tokens){
         final List<Object> objects = new ArrayList<>();
-        for(UIToken token: tokens)
+        for(PuiToken token: tokens)
             objects.add(parseTokenToObject(token));
         return objects;
     }
@@ -166,17 +174,16 @@ public class UIMapper{
     }
 
     @SuppressWarnings("unchecked")
-    public UIComponent mapComponent(String name, List<UIToken> args){
+    public UIComponent mapComponent(String name, List<Object> args){
         try{
             final Class<?> componentClass = getComponentClass(name);
             final Constructor<?>[] componentConstructors = componentClass.getConstructors();
-            final List<Object> argsObj = parseTokensToObjects(args);
 
-            final Constructor<UIComponent> constructor = (Constructor<UIComponent>) findComponentConstructor(componentConstructors, argsObj);
+            final Constructor<UIComponent> constructor = (Constructor<UIComponent>) findComponentConstructor(componentConstructors, args);
             if(constructor == null)
                 throw new RuntimeException("No such constructor for class " + name);
 
-            final UIComponent component = constructor.newInstance(argsObj.toArray());
+            final UIComponent component = constructor.newInstance(args.toArray());
             if(componentPath.isEmpty())
                 context.setRootComponent(component);
             else
@@ -258,24 +265,22 @@ public class UIMapper{
         return null;
     }
 
-    public void mapComponentField(String key, UIToken valueToken){
+    public void mapFieldValue(String key, Object value){
         final UIComponent component = componentPath.peek();
-        final Object valueObject = parseTokenToObject(valueToken);
-        setFieldByKey(component, key, valueObject);
+        setFieldByKey(component, key, value);
     }
 
-    public void mapComponentFieldVector(String key, List<UIToken> vectorPartsTokens){
+    public void mapFieldVector(String key, List<Object> values){
         final UIComponent component = componentPath.peek();
         final ObjField field = getFieldByKey(component, key);
         if(field == null)
             throw new RuntimeException("Field " + key + " of " + component + " doesn't exists");
 
-        final UITypeSetter setter = typeSetters.get(field.object.getClass());
+        final PuiTypeSetter setter = typeSetters.get(field.object.getClass());
         if(setter == null)
             throw new RuntimeException("UITypeSetters doesn't exists for " + field.object.getClass());
 
-        final Object[] args = parseTokensToObjects(vectorPartsTokens).toArray();
-        setter.set(field.object, args);
+        setter.set(field.object, values.toArray());
     }
 
 }

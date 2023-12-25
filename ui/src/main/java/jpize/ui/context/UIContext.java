@@ -16,7 +16,7 @@ public class UIContext implements Disposable{
     private UIComponent root;
     private final MouseButtonCallback mouseButtonCallback;
     private final WinSizeChangedCallback winSizeChangedCallback;
-    private boolean enableTouchingDelayed;
+    private volatile boolean enableTouchingDelayed;
 
     public UIContext(){
         this.renderer = new UIRenderer();
@@ -56,6 +56,7 @@ public class UIContext implements Disposable{
     public void disable(){
         Jpize.context().callbacks().removeMouseButtonCallback(mouseButtonCallback);
         Jpize.context().callbacks().removeWinSizeChangedCallback(winSizeChangedCallback);
+        enableTouchingDelayed = false;
     }
 
 

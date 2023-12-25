@@ -1,35 +1,35 @@
 package jpize.ui.context;
 
-import jpize.ui.context.mapper.UITypeSetter;
-import jpize.ui.context.parser.UILexer;
-import jpize.ui.context.mapper.UIMapper;
-import jpize.ui.context.parser.UIParser;
-import jpize.ui.context.parser.UIToken;
+import jpize.ui.context.mapper.PuiTypeSetter;
+import jpize.ui.context.parser.PuiLexer;
+import jpize.ui.context.mapper.PuiMapper;
+import jpize.ui.context.parser.PuiParser;
+import jpize.ui.context.parser.PuiToken;
 import jpize.util.file.Resource;
 
 import java.io.File;
 import java.lang.reflect.Type;
-import java.util.Queue;
+import java.util.LinkedList;
 
-public class UILoader{
+public class PuiLoader{
 
-    private final UIMapper mapper;
+    private final PuiMapper mapper;
 
-    public UILoader(){
-        this.mapper = new UIMapper();
+    public PuiLoader(){
+        this.mapper = new PuiMapper();
     }
 
-    public UILoader putRes(String name, Object res){
+    public PuiLoader putRes(String name, Object res){
         mapper.putResource(name, res);
         return this;
     }
 
-    public UILoader addComponentAlias(String alias, Class<?> componentClass){
+    public PuiLoader addComponentAlias(String alias, Class<?> componentClass){
         mapper.addComponentAlias(alias, componentClass);
         return this;
     }
 
-    public UILoader addTypeSetter(Type type, UITypeSetter typeSetter){
+    public PuiLoader addTypeSetter(Type type, PuiTypeSetter typeSetter){
         mapper.addTypeSetter(type, typeSetter);
         return this;
     }
@@ -37,9 +37,9 @@ public class UILoader{
 
     public UIContext load(Resource resource){
         final String string = resource.readString();
-        final Queue<UIToken> tokens = UILexer.lexAnalysis(string);
+        final LinkedList<PuiToken> tokens = PuiLexer.lexAnalysis(string);
 
-        final UIParser parser = new UIParser(mapper, tokens);
+        final PuiParser parser = new PuiParser(mapper, tokens);
         parser.parse();
         return mapper.getContext();
     }

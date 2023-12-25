@@ -2,7 +2,7 @@ package jpize.ui.context.mapper;
 
 import java.lang.reflect.Field;
 
-public class ObjField{
+public class ObjField{ //: truly haram
 
     public final Field field;
     public final Object object;

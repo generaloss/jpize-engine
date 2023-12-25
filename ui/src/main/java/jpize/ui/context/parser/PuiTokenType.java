@@ -3,28 +3,36 @@ package jpize.ui.context.parser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum UITokenType{
+public enum PuiTokenType{
 
-    SPACES        ("^\\s+"),
+    NEXT_LINE     ("next line", "^\\n"),
+    SPACES        ("spaces",    "^\\s+"),
 
-    OPEN_BRACKET  ("^\\{"),
-    CLOSE_BRACKET ("^\\}"),
-    OPEN_BRACE    ("^\\("),
-    CLOSE_BRACE   ("^\\)"),
-    COMMA         ("^,"),
+    OPEN_BRACKET  ("{", "^\\{"),
+    CLOSE_BRACKET ("}", "^\\}"),
+    OPEN_BRACE    ("(", "^\\("),
+    CLOSE_BRACE   (")", "^\\)"),
+    COMMA         (",", "^,"  ),
 
-    COMMENT       ("^#.*[^\\n]"),
-    COMPONENT     ("^@[\\w\\.]+"),
-    CONSTRAINT    ("^(?:(?:[0-9\\.]+(?:px|rw|rh|ap))|auto|zero|match_parent|wrap_content)"),
-    LITERAL       ("^(?:(?:'[\\w\\s\\.\\/\\\\{}\\[\\]()\\-\\+\\:]*')|(\"[\\w\\s\\.\\/\\\\{}\\[\\]()\\-\\+\\:]*\"))"),
-    NUMBER        ("^[0-9]+(?:(?:\\.[0-9]+)(?:(?:e|E)(\\+|\\-|)[0-9]+|)|)"),
-    KEY           ("^[\\w\\.]+:"),
-    RESOURCE      ("^![\\w\\.\\:]+");
+    ALIAS         ("$alias"    , "^\\$[\\w\\.]+" ),
+    COMMENT       ("comment"   , "^#.*[^\\n\\r]" ),
+    COMPONENT     ("@Component", "^@[\\w\\.]+"   ),
+    CONSTRAINT    ("constraint", "^(?:(?:[0-9\\.]+(?:px|rw|rh|ap))|auto|zero|match_parent|wrap_content)"),
+    LITERAL       ("literal"   , "^(?:(?:'(?:\\\\.|[^\\'\\\\])*')|(?:\"(?:\\\\.|[^\\\"\\\\])*\"))"      ),
+    NUMBER        ("number"    , "^[0-9]+(?:(?:\\.[0-9]+)(?:(?:e|E)(\\+|\\-|)[0-9]+|)|)"),
+    KEY           ("key:"      , "^[\\w\\.]+:"   ),
+    RESOURCE      ("!resource" , "^![\\w\\.\\:]+");
 
+    private final String name;
     private final Pattern pattern;
 
-    UITokenType(String regex){
+    PuiTokenType(String name, String regex){
+        this.name = name;
         this.pattern = Pattern.compile(regex);
+    }
+
+    public String toString(){
+        return "'" + name + "'";
     }
 
     public Matcher match(String input){
@@ -34,6 +42,10 @@ public enum UITokenType{
 
     public boolean isSpaces(){
         return this == SPACES;
+    }
+
+    public boolean isNextLine(){
+        return this == NEXT_LINE;
     }
 
     public boolean isOpenBracket(){
@@ -78,6 +90,10 @@ public enum UITokenType{
 
     public boolean isKey(){
         return this == KEY;
+    }
+
+    public boolean isAlias(){
+        return this == ALIAS;
     }
 
     public boolean isResource(){
