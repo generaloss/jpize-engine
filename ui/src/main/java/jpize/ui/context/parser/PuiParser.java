@@ -67,10 +67,6 @@ public class PuiParser{
         while(current().type.isAlias())
             parseAlias(aliases);
 
-        System.out.println("Aliases: " + aliases.size());
-        for(List<PuiToken> tokens: aliases.values())
-            System.out.println(Arrays.toString(tokens.toArray()));
-
         for(int i = 0; i < tokens.size(); i++){
             if(!tokens.get(i).type.isAlias())
                 continue;
