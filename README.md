@@ -387,7 +387,7 @@ BitmapFont font = FontLoader.getDefault();
 font.setScale(0.8F);
 
 // load context
-UILoader loader = new UILoader()
+PuiLoader loader = new UILoader()
     .putRes("font", font)
     .putRes("layout:bg_0", bg_0)
     .putRes("button:aspect", Constr.aspect(7))
