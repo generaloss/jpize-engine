@@ -47,6 +47,15 @@ public class UIContext implements Disposable{
     }
 
 
+    public void setCornerSoftness(float softness){
+        renderer.setCornerSoftness(softness);
+    }
+
+    public void setBorderSoftness(float softness){
+        renderer.setBorderSoftness(softness);
+    }
+
+
     public void enable(){
         Jpize.context().callbacks().addWinSizeChangedCallback(winSizeChangedCallback);
         winSizeChangedCallback.invoke(null, Jpize.getWidth(), Jpize.getHeight());

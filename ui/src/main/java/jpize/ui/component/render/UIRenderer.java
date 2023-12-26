@@ -15,11 +15,21 @@ public class UIRenderer implements Disposable, Resizable{
 
     public UIRenderer(){
         this.shader = new Shader(Resource.internal("ui.vert"), Resource.internal("ui.frag"));
+        setCornerSoftness(0.5F);
+        setBorderSoftness(0.5F);
 
         this.batch = new TextureBatch();
         this.batch.useShader(shader);
 
         this.stencil = new UIComponentBuffer();
+    }
+
+    public void setCornerSoftness(float softness){
+        this.shader.setUniform("u_cornerSoftness", softness);
+    }
+
+    public void setBorderSoftness(float softness){
+        this.shader.setUniform("u_borderSoftness", softness);
     }
 
     public void rect(float x, float y, float width, float height, float cornerRadius, float borderSize, Color borderColor){
