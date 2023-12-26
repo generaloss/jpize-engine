@@ -27,7 +27,6 @@ public class TextView extends UIComponent{
         super.renderBackground();
         font.options().color.set(color);
         font.drawText(renderer.batch(), text, cache.x, cache.y);
-        renderer.batch().end();
     }
 
     public BitmapFont getFont(){

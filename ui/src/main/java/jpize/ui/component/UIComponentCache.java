@@ -35,6 +35,7 @@ public class UIComponentCache{
         calcPosition();
         // style
         calcStyle();
+        // correct
     }
 
     private void calcSize(){
@@ -106,6 +107,12 @@ public class UIComponentCache{
             x = layout.calcPosition(component, false);
             y = layout.calcPosition(component, true);
         }
+
+        // correct
+        x = Maths.round(x);
+        y = Maths.round(y);
+        width = Maths.round(width);
+        height = Maths.round(height);
     }
 
     private void calcStyle(){

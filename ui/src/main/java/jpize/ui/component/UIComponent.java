@@ -64,12 +64,12 @@ public abstract class UIComponent{
 
 
     protected void renderBackground(){
-        renderer.rect(cache.x, cache.y, cache.width, cache.height, cache.cornerRadius, cache.borderSize, style.borderColor());
+        renderer.beginRect(cache.x, cache.y, cache.width, cache.height, cache.cornerRadius, cache.borderSize, style.borderColor());
         final UIBackground background = style.background();
         final Color color = background.color();
         final Texture image = background.getImage();
         renderer.batch().draw(image, cache.x, cache.y, cache.width, cache.height, color.r(), color.g(), color.b(), color.a());
-        renderer.batch().end();
+        renderer.endRect();
     }
 
 

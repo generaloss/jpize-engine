@@ -22,7 +22,6 @@ float roundedBoxSDF(vec2 centerPosition, vec2 size, vec4 radius){
     return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - radius.x;
 }
 
-
 void main() {
     vec4 result = color * texture2D(u_texture, uv);
 

@@ -32,13 +32,20 @@ public class UIRenderer implements Disposable, Resizable{
         this.shader.setUniform("u_borderSoftness", softness);
     }
 
-    public void rect(float x, float y, float width, float height, float cornerRadius, float borderSize, Color borderColor){
-        this.shader.bind();
-        this.shader.setUniform("u_cornerRadius", cornerRadius);
-        this.shader.setUniform("u_borderSize", borderSize);
-        this.shader.setUniform("u_borderColor", borderColor);
-        this.shader.setUniform("u_center", x + width / 2, y + height / 2);
-        this.shader.setUniform("u_size", width, height);
+    public void beginRect(float x, float y, float width, float height, float cornerRadius, float borderSize, Color borderColor){
+        batch.end();
+        batch.useShader(shader);
+        shader.bind();
+        shader.setUniform("u_cornerRadius", cornerRadius);
+        shader.setUniform("u_borderSize", borderSize);
+        shader.setUniform("u_borderColor", borderColor);
+        shader.setUniform("u_center", x + width / 2, y + height / 2);
+        shader.setUniform("u_size", width, height);
+    }
+
+    public void endRect(){
+        batch.end();
+        batch.useShader(null);
     }
 
     public TextureBatch batch(){
