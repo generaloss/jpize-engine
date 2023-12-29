@@ -1,8 +1,8 @@
 package jpize.io.context;
 
 import jpize.gl.Gl;
-import jpize.io.Window;
 import jpize.io.SdlInput;
+import jpize.io.Window;
 import jpize.sdl.event.SdlCallbacks;
 import jpize.util.Disposable;
 
@@ -99,10 +99,12 @@ public class Context implements Disposable{
 
         callbacks.addWinSizeChangedCallback((window, width, height) -> {
             final Context prev = setCurrent();
+
+            Gl.viewport(width, height);
+
             if(adapter != null)
                 adapter.resize(width, height);
 
-            Gl.viewport(width, height);
             setCurrent(prev);
         });
 

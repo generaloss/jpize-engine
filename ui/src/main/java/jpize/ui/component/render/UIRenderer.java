@@ -1,5 +1,6 @@
 package jpize.ui.component.render;
 
+import jpize.graphics.camera.OrthographicCamera;
 import jpize.graphics.util.Shader;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.graphics.util.color.Color;
@@ -11,6 +12,7 @@ public class UIRenderer implements Disposable, Resizable{
 
     private final Shader shader;
     private final TextureBatch batch;
+    private final OrthographicCamera camera;
     private final UIComponentBuffer stencil;
 
     public UIRenderer(){
@@ -20,6 +22,8 @@ public class UIRenderer implements Disposable, Resizable{
 
         this.batch = new TextureBatch();
         this.batch.useShader(shader);
+
+        this.camera = new OrthographicCamera();
 
         this.stencil = new UIComponentBuffer();
     }
@@ -58,7 +62,8 @@ public class UIRenderer implements Disposable, Resizable{
 
     public void begin(){
         stencil.clear();
-        batch.begin();
+        camera.update();
+        batch.begin(camera);
     }
 
     public void end(){
@@ -74,6 +79,7 @@ public class UIRenderer implements Disposable, Resizable{
     @Override
     public void resize(int width, int height){
         stencil.resize(width, height);
+        camera.resize(width, height);
     }
 
 }

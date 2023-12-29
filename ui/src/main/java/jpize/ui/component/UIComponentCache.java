@@ -2,6 +2,7 @@ package jpize.ui.component;
 
 import jpize.Jpize;
 import jpize.math.Maths;
+import jpize.sdl.input.Key;
 import jpize.ui.constraint.Constraint;
 import jpize.ui.constraint.ConstraintFlag;
 import jpize.ui.constraint.ConstraintNum;
@@ -27,6 +28,9 @@ public class UIComponentCache{
     }
 
     public void calculate(){
+        if(Key.C.isPressed())
+            return;
+
         // size
         calcSize();
         // padding

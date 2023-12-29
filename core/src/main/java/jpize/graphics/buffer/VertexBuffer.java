@@ -1,20 +1,15 @@
 package jpize.graphics.buffer;
 
-import jpize.gl.buffer.GlBufUsage;
 import jpize.gl.buffer.GlVertexBuffer;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertexAttr;
 
-import java.nio.*;
-
 public class VertexBuffer extends GlVertexBuffer{
 
     private int vertexSize, vertexBytes;
-    private GlBufUsage defaultUsage;
 
     public VertexBuffer(){
         bind();
-        this.defaultUsage = GlBufUsage.STATIC_DRAW;
     }
 
 
@@ -48,56 +43,6 @@ public class VertexBuffer extends GlVertexBuffer{
 
     public int getVertexCount(){
         return getSize() / vertexSize;
-    }
-
-
-    public void setDefaultUsage(GlBufUsage defaultUsage){
-        this.defaultUsage = defaultUsage;
-    }
-
-
-    public void allocateData(long bytes){
-        super.allocateData(bytes, defaultUsage);
-    }
-
-    public void allocateData(int bytes){
-        super.allocateData(bytes, defaultUsage);
-    }
-
-    public void setData(float[] data){
-        setData(data, defaultUsage);
-    }
-
-    public void setData(double[] data){
-        setData(data, defaultUsage);
-    }
-
-    public void setData(int[] data){
-        setData(data, defaultUsage);
-    }
-
-    public void setData(short[] data){
-        setData(data, defaultUsage);
-    }
-
-    public void setData(IntBuffer data){
-        setData(data, defaultUsage);
-    }
-
-    public void setData(ByteBuffer data){
-        setData(data, defaultUsage);
-    }
-
-    public void setData(FloatBuffer data){
-        setData(data, defaultUsage);
-    }
-
-    public void setData(ShortBuffer data){
-        setData(data, defaultUsage);
-    }
-
-    public void setData(DoubleBuffer data){
-        setData(data, defaultUsage);
     }
 
 }

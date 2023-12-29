@@ -37,118 +37,121 @@ public class GlProgram extends GlObject{
     }
 
 
-    public int getUniformLocation(CharSequence uniform){
-        return glGetUniformLocation(ID, uniform);
-    }
-
-    public void bindAttribute(int index, String name){
-        glBindAttribLocation(ID, index, name);
-    }
-
-    public void bindFragData(int index, String name){
-        glBindFragDataLocation(ID, index, name);
-    }
-
-
-    public void setUniform(int location, float x){
+    public void uniform(int location, float x){
         glUniform1f(location, x);
     }
 
-    public void setUniform(int location, int x){
+    public void uniform(int location, int x){
         glUniform1i(location, x);
     }
 
-    public void setUniform(int location, float x, float y){
+    public void uniform(int location, float x, float y){
         glUniform2f(location, x, y);
     }
 
-    public void setUniform(int location, int x, int y){
+    public void uniform(int location, int x, int y){
         glUniform2i(location, x, y);
     }
 
-    public void setUniform(int location, float x, float y, float z){
+    public void uniform(int location, float x, float y, float z){
         glUniform3f(location, x, y, z);
     }
 
-    public void setUniform(int location, int x, int y, int z){
+    public void uniform(int location, int x, int y, int z){
         glUniform3i(location, x, y, z);
     }
 
-    public void setUniform(int location, float x, float y, float z, float w){
+    public void uniform(int location, float x, float y, float z, float w){
         glUniform4f(location, x, y, z, w);
     }
 
-    public void setUniform(int location, int x, int y, int z, int w){
+    public void uniform(int location, int x, int y, int z, int w){
         glUniform4i(location, x, y, z, w);
     }
 
 
-    public void setUniformMat4(int location, boolean transpose, float[] values){
+    public void uniformMat4(int location, boolean transpose, float[] values){
         glUniformMatrix4fv(location, transpose, values);
     }
 
-    public void setUniformMat4x3(int location, boolean transpose, float[] values){
+    public void uniformMat4x3(int location, boolean transpose, float[] values){
         glUniformMatrix4x3fv(location, transpose, values);
     }
 
-    public void setUniformMat4x2(int location, boolean transpose, float[] values){
+    public void uniformMat4x2(int location, boolean transpose, float[] values){
         glUniformMatrix4x2fv(location, transpose, values);
     }
 
 
-    public void setUniformMat3x4(int location, boolean transpose, float[] values){
+    public void uniformMat3x4(int location, boolean transpose, float[] values){
         glUniformMatrix3x4fv(location, transpose, values);
     }
 
-    public void setUniformMat3(int location, boolean transpose, float[] values){
+    public void uniformMat3(int location, boolean transpose, float[] values){
         glUniformMatrix3fv(location, transpose, values);
     }
 
-    public void setUniformMat3x2(int location, boolean transpose, float[] values){
+    public void uniformMat3x2(int location, boolean transpose, float[] values){
         glUniformMatrix3x2fv(location, transpose, values);
     }
 
 
-    public void setUniformMat2x4(int location, boolean transpose, float[] values){
+    public void uniformMat2x4(int location, boolean transpose, float[] values){
         glUniformMatrix2x4fv(location, transpose, values);
     }
 
-    public void setUniformMat2x3(int location, boolean transpose, float[] values){
+    public void uniformMat2x3(int location, boolean transpose, float[] values){
         glUniformMatrix2x3fv(location, transpose, values);
     }
 
-    public void setUniformMat2(int location, boolean transpose, float[] values){
+    public void uniformMat2(int location, boolean transpose, float[] values){
         glUniformMatrix2fv(location, transpose, values);
     }
 
 
-    public void setUniform(int location, float[] array){
+    public void uniform(int location, float[] array){
         glUniform1fv(location, array);
     }
 
-    public void setUniform(int location, int[] array){
+    public void uniform(int location, int[] array){
         glUniform1iv(location, array);
     }
 
-    public void setUniform(int location, FloatBuffer buffer){
+    public void uniform(int location, FloatBuffer buffer){
         glUniform1fv(location, buffer);
     }
 
-    public void setUniform(int location, IntBuffer buffer){
+    public void uniform(int location, IntBuffer buffer){
         glUniform1iv(location, buffer);
     }
 
 
-    public float setUniformFloat(int location){
+    public int getUniformLocation(CharSequence uniform){
+        return glGetUniformLocation(ID, uniform);
+    }
+
+    public float getUniformFloat(int location){
         return glGetUniformf(ID, location);
     }
 
-    public int setUniformInt(int location){
+    public int getUniformInt(int location){
         return glGetUniformi(ID, location);
     }
 
+    public void bindAttributeLoc(int index, String name){
+        glBindAttribLocation(ID, index, name);
+    }
 
-    public void bindUniformBlock(int location, int bindingPoint){
+    public void bindFragDataLoc(int index, String name){
+        glBindFragDataLocation(ID, index, name);
+    }
+
+
+    public int getUniformBlockIndex(String uniformBlockName){
+        return glGetUniformBlockIndex(ID, uniformBlockName);
+    }
+
+    public void uniformBlockBinding(int location, int bindingPoint){
         glUniformBlockBinding(ID, location, bindingPoint);
     }
 

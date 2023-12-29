@@ -11,10 +11,65 @@ import static org.lwjgl.opengl.GL43.*;
 public class GlBuffer extends GlObject{
 
     protected final GlBufTarget target;
+    private GlBufUsage defaultUsage;
 
     public GlBuffer(GlBufTarget target){
         super(glGenBuffers());
         this.target = target;
+        this.defaultUsage = GlBufUsage.STATIC_DRAW;
+    }
+
+
+    public GlBufUsage getDefaultUsage(){
+        return defaultUsage;
+    }
+
+    public void setDefaultUsage(GlBufUsage defaultUsage){
+        this.defaultUsage = defaultUsage;
+    }
+
+    public void allocateData(long bytes){
+        allocateData(bytes, defaultUsage);
+    }
+
+    public void allocateData(int bytes){
+        allocateData(bytes, defaultUsage);
+    }
+
+    public void setData(float[] data){
+        setData(data, defaultUsage);
+    }
+
+    public void setData(double[] data){
+        setData(data, defaultUsage);
+    }
+
+    public void setData(int[] data){
+        setData(data, defaultUsage);
+    }
+
+    public void setData(short[] data){
+        setData(data, defaultUsage);
+    }
+
+    public void setData(IntBuffer data){
+        setData(data, defaultUsage);
+    }
+
+    public void setData(ByteBuffer data){
+        setData(data, defaultUsage);
+    }
+
+    public void setData(FloatBuffer data){
+        setData(data, defaultUsage);
+    }
+
+    public void setData(ShortBuffer data){
+        setData(data, defaultUsage);
+    }
+
+    public void setData(DoubleBuffer data){
+        setData(data, defaultUsage);
     }
 
 
@@ -319,6 +374,14 @@ public class GlBuffer extends GlObject{
 
     public void bind(){
         glBindBuffer(target.GL, ID);
+    }
+
+    public void bind(int index){
+        glBindBufferBase(target.GL, index, ID);
+    }
+
+    public void bind(int index, long offset, long size){
+        glBindBufferRange(target.GL, index, ID, offset, size);
     }
 
     public void unbind(){
