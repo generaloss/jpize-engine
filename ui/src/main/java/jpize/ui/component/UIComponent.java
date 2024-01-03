@@ -104,7 +104,6 @@ public abstract class UIComponent{
             C component = (C) this;
             for(String link: links)
                 component = component.getChildWithID(link);
-
             return component;
         }
         return getChildWithID(ID);

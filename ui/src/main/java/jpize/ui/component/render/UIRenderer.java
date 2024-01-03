@@ -4,6 +4,8 @@ import jpize.graphics.camera.OrthographicCamera;
 import jpize.graphics.util.Shader;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.graphics.util.color.Color;
+import jpize.ui.component.UIComponent;
+import jpize.ui.component.UIComponentCache;
 import jpize.util.Disposable;
 import jpize.util.Resizable;
 import jpize.util.file.Resource;
@@ -29,27 +31,36 @@ public class UIRenderer implements Disposable, Resizable{
     }
 
     public void setCornerSoftness(float softness){
-        this.shader.setUniform("u_cornerSoftness", softness);
+        this.shader.uniform("u_cornerSoftness", softness);
     }
 
     public void setBorderSoftness(float softness){
-        this.shader.setUniform("u_borderSoftness", softness);
+        this.shader.uniform("u_borderSoftness", softness);
     }
 
     public void beginRect(float x, float y, float width, float height, float cornerRadius, float borderSize, Color borderColor){
         batch.end();
         batch.useShader(shader);
         shader.bind();
-        shader.setUniform("u_cornerRadius", cornerRadius);
-        shader.setUniform("u_borderSize", borderSize);
-        shader.setUniform("u_borderColor", borderColor);
-        shader.setUniform("u_center", x + width / 2, y + height / 2);
-        shader.setUniform("u_size", width, height);
+        shader.uniform("u_cornerRadius", cornerRadius);
+        shader.uniform("u_borderSize", borderSize);
+        shader.uniform("u_borderColor", borderColor);
+        shader.uniform("u_center", x + width / 2, y + height / 2);
+        shader.uniform("u_size", width, height);
     }
 
     public void endRect(){
         batch.end();
         batch.useShader(null);
+    }
+
+    public void beginScissor(UIComponent component){
+        final UIComponentCache cache = component.cache();
+        batch.getScissor().begin(component.hashCode(), cache.x, cache.y, cache.width, cache.height);
+    }
+
+    public void endScissor(UIComponent component){
+        batch.getScissor().end(component.hashCode());
     }
 
     public TextureBatch batch(){

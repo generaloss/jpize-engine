@@ -7,6 +7,7 @@ import jpize.graphics.texture.CubeMap;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.texture.TextureArray;
 import jpize.graphics.util.color.IColor;
+import jpize.math.vecmath.matrix.Matrix3f;
 import jpize.math.vecmath.matrix.Matrix4f;
 import jpize.math.vecmath.vector.Vec2f;
 import jpize.math.vecmath.vector.Vec3f;
@@ -84,67 +85,71 @@ public class Shader implements Disposable{
     }
 
 
-    public void setUniform(String uniformName, Matrix4f matrix4f){
+    public void uniform(String uniformName, Matrix4f matrix4f){
         program.uniformMat4(uniforms.get(uniformName), false, matrix4f.val);
     }
 
-    public void setUniform(String uniformName, Vec2f v){
+    public void uniform(String uniformName, Matrix3f matrix3f){
+        program.uniformMat3(uniforms.get(uniformName), false, matrix3f.val);
+    }
+
+    public void uniform(String uniformName, Vec2f v){
         program.uniform(uniforms.get(uniformName), v.x, v.y);
     }
 
-    public void setUniform(String uniformName, Vec3f v){
+    public void uniform(String uniformName, Vec3f v){
         program.uniform(uniforms.get(uniformName), v.x, v.y, v.z);
     }
 
-    public void setUniform(String uniformName, float x){
+    public void uniform(String uniformName, float x){
         program.uniform(uniforms.get(uniformName), x);
     }
 
-    public void setUniform(String uniformName, float x, float y){
+    public void uniform(String uniformName, float x, float y){
         program.uniform(uniforms.get(uniformName), x, y);
     }
 
-    public void setUniform(String uniformName, float x, float y, float z){
+    public void uniform(String uniformName, float x, float y, float z){
         program.uniform(uniforms.get(uniformName), x, y, z);
     }
 
-    public void setUniform(String uniformName, float x, float y, float z, float w){
+    public void uniform(String uniformName, float x, float y, float z, float w){
         program.uniform(uniforms.get(uniformName), x, y, z, w);
     }
 
-    public void setUniform(String uniformName, float[] array){
+    public void uniform(String uniformName, float[] array){
         program.uniform(uniforms.get(uniformName), array);
     }
 
-    public void setUniform(String uniformName, int value){
+    public void uniform(String uniformName, int value){
         program.uniform(uniforms.get(uniformName), value);
     }
 
-    public void setUniform(String uniformName, boolean value){
-        setUniform(uniformName, value ? 1 : 0);
+    public void uniform(String uniformName, boolean value){
+        uniform(uniformName, value ? 1 : 0);
     }
 
-    public void setUniform(String uniformName, int[] array){
+    public void uniform(String uniformName, int[] array){
         program.uniform(uniforms.get(uniformName), array);
     }
 
-    public void setUniform(String uniformName, IColor color){
+    public void uniform(String uniformName, IColor color){
         program.uniform(uniforms.get(uniformName), color.r(), color.g(), color.b(), color.a());
     }
 
-    public void setUniform(String uniformName, Texture texture){
+    public void uniform(String uniformName, Texture texture){
         texture.bind(num_sampler2D);
         program.uniform(uniforms.get(uniformName), num_sampler2D);
         num_sampler2D++;
     }
 
-    public void setUniform(String uniformName, TextureArray textureArray){
+    public void uniform(String uniformName, TextureArray textureArray){
         textureArray.bind(num_sampler2DArray);
         program.uniform(uniforms.get(uniformName), num_sampler2DArray);
         num_sampler2DArray++;
     }
 
-    public void setUniform(String uniformName, CubeMap cubeMap){
+    public void uniform(String uniformName, CubeMap cubeMap){
         cubeMap.bind(num_samplerCube);
         program.uniform(uniforms.get(uniformName), num_samplerCube);
         num_samplerCube++;
@@ -160,9 +165,11 @@ public class Shader implements Disposable{
     }
 
 
-    public void uniformBlockBinding(String uniformBlockName, int bindingPoint){
-        final int location = program.getUniformBlockIndex(uniformBlockName);
-        program.uniformBlockBinding(location, bindingPoint);
+    public void uniformBlockBinding(String uniformName, int bindingPoint){
+        final int index = program.getUniformBlockIndex(uniformName);
+        if(index < 0)
+            throw new RuntimeException("No uniform buffer called '" + uniformName + "'");
+        program.uniformBlockBinding(index, bindingPoint);
     }
 
     

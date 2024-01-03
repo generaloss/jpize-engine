@@ -44,7 +44,7 @@ public class SdlInput{
     }
 
 
-    public void update(){
+    public void clear(){
         Arrays.fill(keysDown, false);
         Arrays.fill(keysReleased, false);
         Arrays.fill(buttonsDown, false);

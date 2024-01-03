@@ -1,6 +1,8 @@
 package jpize.math.vecmath.matrix;
 
 import jpize.math.Maths;
+import jpize.math.util.EulerAngles;
+import jpize.math.util.Quaternion;
 import jpize.math.vecmath.vector.*;
 
 import java.util.Arrays;
@@ -8,13 +10,14 @@ import java.util.Arrays;
 public class Matrix4f implements Matrix4{
 
     private static final Vec3f UP = new Vec3f(0, 1, 0);
-    private final Vec3f tmp_camLeft = new Vec3f();
+    private final Vec3f tmp_camRight = new Vec3f();
     private final Vec3f tmp_camUp = new Vec3f();
 
 
     public final float[] val;
 
-    /** Constructor */
+    /* Constructor */
+
     public Matrix4f(){
         val = new float[16];
         val[m00] = 1;
@@ -33,7 +36,8 @@ public class Matrix4f implements Matrix4{
     }
 
 
-    /** Set */
+    /* Set */
+
     public Matrix4f set(float[] values){
         System.arraycopy(values, 0, val, 0, values.length);
         return this;
@@ -58,7 +62,114 @@ public class Matrix4f implements Matrix4{
     }
 
 
-    /** Translate */
+    /* To Projection */
+
+    public Matrix4f setOrthographic(float left, float right, float bottom, float top, float near, float far){
+        identity();
+        final float iw = 1 / (right - left);
+        final float ih = 1 / (top - bottom);
+        final float id = 1 / (far - near);
+
+        val[m00] =  2 * iw;                                         val[m30] = -(right + left) * iw;
+                            val[m11] =  2 * ih;                     val[m31] = -(top + bottom) * ih;
+                                                val[m22] = -2 * id; val[m32] = -(far + near)   * id;
+                                                                    val[m33] = 1;
+        return this;
+    }
+
+    public Matrix4f setOrthographic(float x, float y, float width, float height){
+        identity();
+        final float iw = 1 / width;
+        final float ih = 1 / height;
+
+        val[m00] =  2 * iw;
+        val[m11] =  2 * ih;
+        val[m22] = -2;
+        val[m30] = -(2 * x + width) * iw;
+        val[m31] = -(2 * y + height) * ih;
+        val[m32] = -1;
+        return this;
+    }
+
+    public Matrix4f setPerspective(float aspect, float near, float far, float fovY){
+        final float ys = 1 / Maths.tanDeg(fovY * 0.5);
+        final float xs = -ys / aspect;
+        final float far_near = far - near;
+        final float v22 = -(far + near) / far_near;
+        final float v23 = (2 * far * near) / far_near;
+
+        val[m00] = xs;
+                       val[m11] = ys;
+                                      val[m22] = v22; val[m32] = 1;
+                                      val[m23] = v23; val[m33] = 0;
+
+        return this;
+    }
+
+    public Matrix4f setPerspective(float width, float height, float near, float far, float fovY){
+        return setPerspective(width / height, near, far, fovY);
+    }
+
+
+    /* To Look At */
+
+    public Matrix4f setLookAt(float rightX, float rightY, float rightZ, float upX, float upY, float upZ, float forwardX, float forwardY, float forwardZ){
+        val[m00] = rightX;   val[m10] = rightY;   val[m20] = rightZ;   val[m30] = 0;
+        val[m01] = upX;      val[m11] = upY;      val[m21] = upZ;      val[m31] = 0;
+        val[m02] = forwardX; val[m12] = forwardY; val[m22] = forwardZ; val[m32] = 0;
+        val[m03] = 0;        val[m13] = 0;        val[m23] = 0;        val[m33] = 1;
+        return this;
+    }
+
+    public Matrix4f setLookAt(Vec3f right, Vec3f up, Vec3f forward){
+        return setLookAt(right.x, right.y, right.z, up.x, up.y, up.z, forward.x, forward.y, forward.z);
+    }
+
+    public Matrix4f setLookAt(float posX, float posY, float posZ, Vec3f right, Vec3f up, Vec3f forward){
+        return setLookAt(right, up, forward)
+            .translate(-posX, -posY, -posZ);
+    }
+
+    public Matrix4f setLookAt(Vec3f pos, Vec3f right, Vec3f up, Vec3f forward){
+        return setLookAt(pos.x, pos.y, pos.z, right, up, forward);
+    }
+
+
+    public Matrix4f setLookAt(Vec3f direction){
+        tmp_camRight.crs(direction, UP).nor();
+        tmp_camUp.crs(tmp_camRight, direction).nor();
+        return setLookAt(tmp_camRight, tmp_camUp, direction);
+    }
+
+    public Matrix4f setLookAt(float posX, float posY, float posZ, Vec3f direction){
+        return setLookAt(direction)
+            .translate(-posX, -posY, -posZ);
+    }
+
+    public Matrix4f setLookAt(Vec3f position, Vec3f direction){
+        return setLookAt(position.x, position.y, position.z, direction);
+    }
+
+
+    /* Culling */
+
+    public Matrix4f cullPosition(){
+        val[m30] = 0; // X
+        val[m31] = 0; // Y
+        val[m32] = 0; // Z
+        return this;
+    }
+
+    public Matrix4f cullRotation(){
+        val[m00] = 1; val[m10] = 0; val[m20] = 0;
+        val[m01] = 0; val[m11] = 1; val[m21] = 0;
+        val[m02] = 0; val[m12] = 0; val[m22] = 1;
+        return this;
+    }
+
+
+    /* Translate */
+
     public Matrix4f translate(float x, float y, float z){
         val[m30] += val[m00] * x + val[m10] * y + val[m20] * z;
         val[m31] += val[m01] * x + val[m11] * y + val[m21] * z;
@@ -100,8 +211,9 @@ public class Matrix4f implements Matrix4{
     }
 
 
-    /** To Translated */
-    public Matrix4f toTranslated(float x, float y, float z){
+    /* Set Translated */
+
+    public Matrix4f setTranslate(float x, float y, float z){
         identity();
         val[m30] = x;
         val[m31] = y;
@@ -109,40 +221,91 @@ public class Matrix4f implements Matrix4{
         return this;
     }
 
-    public Matrix4f toTranslated(float x, float y){
+    public Matrix4f setTranslate(float x, float y){
         identity();
         val[m30] = x;
         val[m31] = y;
         return this;
     }
 
-    public Matrix4f toTranslated(Vec2f vec2){
-        return toTranslated(vec2.x, vec2.y);
+    public Matrix4f setTranslate(Vec2f vec2){
+        return setTranslate(vec2.x, vec2.y);
     }
 
-    public Matrix4f toTranslated(Vec2d vec2){
-        return toTranslated((float) vec2.x, (float) vec2.y);
+    public Matrix4f setTranslate(Vec2d vec2){
+        return setTranslate((float) vec2.x, (float) vec2.y);
     }
 
-    public Matrix4f toTranslated(Vec2i vec2){
-        return toTranslated(vec2.x, vec2.y);
+    public Matrix4f setTranslate(Vec2i vec2){
+        return setTranslate(vec2.x, vec2.y);
     }
 
-    public Matrix4f toTranslated(Vec3f vec3){
-        return toTranslated(vec3.x, vec3.y, vec3.z);
+    public Matrix4f setTranslate(Vec3f vec3){
+        return setTranslate(vec3.x, vec3.y, vec3.z);
     }
 
-    public Matrix4f toTranslated(Vec3d vec3){
-        return toTranslated((float) vec3.x, (float) vec3.y, (float) vec3.z);
+    public Matrix4f setTranslate(Vec3d vec3){
+        return setTranslate((float) vec3.x, (float) vec3.y, (float) vec3.z);
     }
 
-    public Matrix4f toTranslated(Vec3i vec3){
-        return toTranslated(vec3.x, vec3.y, vec3.z);
+    public Matrix4f setTranslate(Vec3i vec3){
+        return setTranslate(vec3.x, vec3.y, vec3.z);
     }
 
 
-    /** To Scaled */
-    public Matrix4f toScaled(float x, float y, float z){
+    /* Scale */
+
+    public Matrix4f scale(float x, float y, float z){
+        identity();
+        val[m00] *= x;
+        val[m11] *= y;
+        val[m22] *= z;
+        return this;
+    }
+
+    public Matrix4f scale(float x, float y){
+        identity();
+        val[m00] *= x;
+        val[m11] *= y;
+        return this;
+    }
+
+    public Matrix4f scale(float scale){
+        return scale(scale, scale, scale);
+    }
+
+    public Matrix4f scale(double scale){
+        return scale((float) scale);
+    }
+
+    public Matrix4f scale(Vec3f vec3){
+        return scale(vec3.x, vec3.y, vec3.z);
+    }
+
+    public Matrix4f scale(Vec3d vec3){
+        return scale((float) vec3.x, (float) vec3.y, (float) vec3.z);
+    }
+
+    public Matrix4f scale(Vec3i vec3){
+        return scale(vec3.x, vec3.y, vec3.z);
+    }
+
+    public Matrix4f scale(Vec2f vec2){
+        return scale(vec2.x, vec2.y);
+    }
+
+    public Matrix4f scale(Vec2d vec2){
+        return scale((float) vec2.x, (float) vec2.y);
+    }
+
+    public Matrix4f scale(Vec2i vec2){
+        return scale(vec2.x, vec2.y);
+    }
+
+
+    /* Set Scale */
+
+    public Matrix4f setScale(float x, float y, float z){
         identity();
         val[m00] = x;
         val[m11] = y;
@@ -150,213 +313,331 @@ public class Matrix4f implements Matrix4{
         return this;
     }
 
-    public Matrix4f toScaled(float x, float y){
+    public Matrix4f setScale(float x, float y){
         identity();
         val[m00] = x;
         val[m11] = y;
         return this;
     }
 
-    public Matrix4f toScaled(float scale){
-        return toScaled(scale, scale, scale);
+    public Matrix4f setScale(float scale){
+        return setScale(scale, scale, scale);
     }
 
-    public Matrix4f toScaled(double scale){
-        return toScaled((float) scale);
+    public Matrix4f setScale(double scale){
+        return setScale((float) scale);
     }
 
-    public Matrix4f toScaled(Vec3f vec3){
-        return toScaled(vec3.x, vec3.y, vec3.z);
+    public Matrix4f setScale(Vec3f vec3){
+        return setScale(vec3.x, vec3.y, vec3.z);
     }
 
-    public Matrix4f toScaled(Vec3d vec3){
-        return toScaled((float) vec3.x, (float) vec3.y, (float) vec3.z);
+    public Matrix4f setScale(Vec3d vec3){
+        return setScale((float) vec3.x, (float) vec3.y, (float) vec3.z);
     }
 
-    public Matrix4f toScaled(Vec3i vec3){
-        return toScaled(vec3.x, vec3.y, vec3.z);
+    public Matrix4f setScale(Vec3i vec3){
+        return setScale(vec3.x, vec3.y, vec3.z);
     }
 
-    public Matrix4f toScaled(Vec2f vec2){
-        return toScaled(vec2.x, vec2.y);
+    public Matrix4f setScale(Vec2f vec2){
+        return setScale(vec2.x, vec2.y);
     }
 
-    public Matrix4f toScaled(Vec2d vec2){
-        return toScaled((float) vec2.x, (float) vec2.y);
+    public Matrix4f setScale(Vec2d vec2){
+        return setScale((float) vec2.x, (float) vec2.y);
     }
 
-    public Matrix4f toScaled(Vec2i vec2){
-        return toScaled(vec2.x, vec2.y);
+    public Matrix4f setScale(Vec2i vec2){
+        return setScale(vec2.x, vec2.y);
     }
 
 
-    /** To Rotated */
-    public Matrix4f toRotatedX(double degrees){
+    /* Rotate */
+
+    public Matrix4 rotate(Quaternion rotation){
+        final float x = rotation.x;
+        final float y = rotation.y;
+        final float z = rotation.z;
+        final float w = rotation.w;
+
+        final float xx = x * x;
+        final float xy = x * y;
+        final float xz = x * z;
+        final float xw = x * w;
+        final float yy = y * y;
+        final float yz = y * z;
+        final float yw = y * w;
+        final float zz = z * z;
+        final float zw = z * w;
+
+        final float r00 = 1 - (yy + zz) * 2;
+        final float r01 =     (xy - zw) * 2;
+        final float r02 =     (xz + yw) * 2;
+        final float r10 =     (xy + zw) * 2;
+        final float r11 = 1 - (xx + zz) * 2;
+        final float r12 =     (yz - xw) * 2;
+        final float r20 =     (xz - yw) * 2;
+        final float r21 =     (yz + xw) * 2;
+        final float r22 = 1 - (xx + yy) * 2;
+
+        final float M00 =  val[m00] * r00  +  val[m10] * r10  +  val[m20] * r20;
+        final float M01 =  val[m00] * r01  +  val[m10] * r11  +  val[m20] * r21;
+        final float M02 =  val[m00] * r02  +  val[m10] * r12  +  val[m20] * r22;
+        final float M10 =  val[m01] * r00  +  val[m11] * r10  +  val[m21] * r20;
+        final float M11 =  val[m01] * r01  +  val[m11] * r11  +  val[m21] * r21;
+        final float M12 =  val[m01] * r02  +  val[m11] * r12  +  val[m21] * r22;
+        final float M20 =  val[m02] * r00  +  val[m12] * r10  +  val[m22] * r20;
+        final float M21 =  val[m02] * r01  +  val[m12] * r11  +  val[m22] * r21;
+        final float M22 =  val[m02] * r02  +  val[m12] * r12  +  val[m22] * r22;
+        final float M30 =  val[m03] * r00  +  val[m13] * r10  +  val[m23] * r20;
+        final float M31 =  val[m03] * r01  +  val[m13] * r11  +  val[m23] * r21;
+        final float M32 =  val[m03] * r02  +  val[m13] * r12  +  val[m23] * r22;
+
+        val[m00] = M00;  val[m10] = M01;  val[m20] = M02;
+        val[m01] = M10;  val[m11] = M11;  val[m21] = M12;
+        val[m02] = M20;  val[m12] = M21;  val[m22] = M22;
+        val[m03] = M30;  val[m13] = M31;  val[m23] = M32;
+        return this;
+    }
+
+
+    /* Set Rotation */
+
+    public Matrix4f setRotationX(double degrees){
         identity();
-
         final float cos = Maths.cosDeg(degrees);
         final float sin = Maths.sinDeg(degrees);
-
         val[m11] = cos;
         val[m21] = -sin;
         val[m12] = sin;
         val[m22] = cos;
-
         return this;
     }
 
-    public Matrix4f toRotatedY(double degrees){
+    public Matrix4f setRotationY(double degrees){
         identity();
-
         final float cos = Maths.cosDeg(degrees);
         final float sin = Maths.sinDeg(degrees);
-
         val[m00] = cos;
         val[m20] = sin;
         val[m02] = -sin;
         val[m22] = cos;
-
         return this;
     }
 
-    public Matrix4f toRotatedZ(double degrees){
+    public Matrix4f setRotationZ(double degrees){
         identity();
-
         final float cos = Maths.cosDeg(degrees);
         final float sin = Maths.sinDeg(degrees);
-
         val[m00] = cos;
         val[m10] = -sin;
         val[m01] = sin;
         val[m11] = cos;
+        return this;
+    }
+
+    public Matrix4f setRotation(double yaw, double pitch, double roll){
+        setRotationZ(roll).mul(
+            new Matrix4f().setRotationX(pitch).mul(
+                new Matrix4f().setRotationY(yaw)
+            )
+        );
+        return this;
+    }
+
+    public Matrix4f setRotation(EulerAngles angles){
+        return setRotation(angles.yaw, angles.pitch, angles.roll);
+    }
+
+
+    /* Quaternion */
+
+    public Matrix4 setQuaternion(float qx, float qy, float qz, float qw){
+        final float qx2 = qx * 2;
+        final float qy2 = qy * 2;
+        final float qz2 = qz * 2;
+
+        final float qwx = qw * qx2;
+        final float qxx = qx * qx2;
+
+        final float qwy = qw * qy2;
+        final float qxy = qx * qy2;
+        final float qyy = qy * qy2;
+
+        final float qwz = qw * qz2;
+        final float qxz = qx * qz2;
+        final float qyz = qy * qz2;
+        final float qzz = qz * qz2;
+
+        val[m00] = 1 - (qyy + qzz);
+        val[m10] = qxy - qwz;
+        val[m20] = qxz + qwy;
+        val[m30] = 0;
+
+        val[m01] = qxy + qwz;
+        val[m11] = 1 - (qxx + qzz);
+        val[m21] = qyz - qwx;
+        val[m31] = 0;
+
+        val[m02] = qxz - qwy;
+        val[m12] = qyz + qwx;
+        val[m22] = 1 - (qxx + qyy);
+        val[m32] = 0;
+
+        val[m03] = 0;
+        val[m13] = 0;
+        val[m23] = 0;
+        val[m33] = 1;
 
         return this;
     }
 
+    public Matrix4 setQuaternion(Quaternion quaternion){
+        return setQuaternion(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+    }
 
-    /** To Projection */
-    public Matrix4f toOrthographic(float left, float right, float bottom, float top, float near, float far){
-        identity();
+    public Matrix4 setQuaternion(float x, float y, float z, float quaternionX, float quaternionY, float quaternionZ, float quaternionW){
+        final float qx2 = quaternionX * 2;
+        final float qy2 = quaternionY * 2;
+        final float qz2 = quaternionZ * 2;
 
-        final float width = right - left;
-        final float height = top - bottom;
-        final float depth = far - near;
+        final float qwx = quaternionW * qx2;
+        final float qxx = quaternionX * qx2;
 
-        val[m00] = 2 / width;
-        val[m11] = 2 / height;
-        val[m22] = -2 / depth;
+        final float qwy = quaternionW * qy2;
+        final float qxy = quaternionX * qy2;
+        final float qyy = quaternionY * qy2;
 
-        val[m30] = -(right + left) / width;
-        val[m31] = -(top + bottom) / height;
-        val[m32] = -(far + near) / depth;
+        final float qwz = quaternionW * qz2;
+        final float qxz = quaternionX * qz2;
+        final float qyz = quaternionY * qz2;
+        final float qzz = quaternionZ * qz2;
+
+        val[m00] = 1 - (qyy + qzz);
+        val[m10] = qxy - qwz;
+        val[m20] = qxz + qwy;
+        val[m30] = x;
+
+        val[m01] = qxy + qwz;
+        val[m11] = 1 - (qxx + qzz);
+        val[m21] = qyz - qwx;
+        val[m31] = y;
+
+        val[m02] = qxz - qwy;
+        val[m12] = qyz + qwx;
+        val[m22] = 1 - (qxx + qyy);
+        val[m32] = z;
+
+        val[m03] = 0;
+        val[m13] = 0;
+        val[m23] = 0;
+        val[m33] = 1;
 
         return this;
     }
 
-    public Matrix4f toOrthographic(float x, float y, float width, float height){
-        identity();
+    public Matrix4 setQuaternion(Vec3f position, float qx, float qy, float qz, float qw){
+        return setQuaternion(position.x, position.y, position.z, qx, qy, qz, qw);
+    }
 
-        val[m00] = 2 / width;
-        val[m11] = 2 / height;
-        val[m22] = -2;
+    public Matrix4 setQuaternion(float x, float y, float z, Quaternion quaternion){
+        return setQuaternion(x, y, z, quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+    }
 
-        val[m30] = -(x * 2 + width) / width;
-        val[m31] = -(y * 2 + height) / height;
-        val[m32] = -1;
+    public Matrix4 setQuaternion(Vec3f position, Quaternion quaternion){
+        return setQuaternion(position.x, position.y, position.z, quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+    }
+
+
+    public Matrix4 setQuaternion(float x, float y, float z, float scaleX, float scaleY, float scaleZ, float quaternionX, float quaternionY, float quaternionZ, float quaternionW){
+        final float qx2 = quaternionX * 2;
+        final float qy2 = quaternionY * 2;
+        final float qz2 = quaternionZ * 2;
+
+        final float qwx = quaternionW * qx2;
+        final float qxx = quaternionX * qx2;
+
+        final float qwy = quaternionW * qy2;
+        final float qxy = quaternionX * qy2;
+        final float qyy = quaternionY * qy2;
+
+        final float qwz = quaternionW * qz2;
+        final float qxz = quaternionX * qz2;
+        final float qyz = quaternionY * qz2;
+        final float qzz = quaternionZ * qz2;
+
+        val[m00] = scaleX * (1 - (qyy + qzz));
+        val[m10] = scaleY *      (qxy - qwz);
+        val[m20] = scaleZ *      (qxz + qwy);
+        val[m30] = x;
+
+        val[m01] = scaleX *      (qxy + qwz);
+        val[m11] = scaleY * (1 - (qxx + qzz));
+        val[m21] = scaleZ *      (qyz - qwx);
+        val[m31] = y;
+
+        val[m02] = scaleX *      (qxz - qwy);
+        val[m12] = scaleY *      (qyz + qwx);
+        val[m22] = scaleZ * (1 - (qxx + qyy));
+        val[m32] = z;
+
+        val[m03] = 0;
+        val[m13] = 0;
+        val[m23] = 0;
+        val[m33] = 1;
 
         return this;
     }
 
-    public Matrix4f toPerspective(float width, float height, float near, float far, float fov){
-        zero();
+    public Matrix4 setQuaternion(Vec3f position, float scaleX, float scaleY, float scaleZ, float quaternionX, float quaternionY, float quaternionZ, float quaternionW){
+        return setQuaternion(position.x, position.y, position.z, scaleX, scaleY, scaleZ, quaternionX, quaternionY, quaternionZ, quaternionW);
+    }
 
-        final float ctgFov = 1 / Maths.tanDeg(fov * 0.5);
-        final float aspect = width / height;
-        final float depth = far - near;
+    public Matrix4 setQuaternion(float x, float y, float z, Vec3f scale, float quaternionX, float quaternionY, float quaternionZ, float quaternionW){
+        return setQuaternion(x, y, z, scale.x, scale.y, scale.z, quaternionX, quaternionY, quaternionZ, quaternionW);
+    }
 
-        val[m00] = ctgFov / aspect;
-        val[m11] = ctgFov;
-        val[m22] = (far + near) / depth;
+    public Matrix4 setQuaternion(Vec3f position, Vec3f scale, float quaternionX, float quaternionY, float quaternionZ, float quaternionW){
+        return setQuaternion(position.x, position.y, position.z, scale.x, scale.y, scale.z, quaternionX, quaternionY, quaternionZ, quaternionW);
+    }
 
-        val[m23] = 1;
-        val[m32] = -(2 * far * near) / depth;
+    public Matrix4 setQuaternion(float x, float y, float z, float scaleX, float scaleY, float scaleZ, Quaternion quaternion){
+        return setQuaternion(x, y, z, scaleX, scaleY, scaleZ, quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+    }
 
+    public Matrix4 setQuaternion(Vec3f position, float scaleX, float scaleY, float scaleZ, Quaternion quaternion){
+        return setQuaternion(position.x, position.y, position.z, scaleX, scaleY, scaleZ, quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+    }
+
+    public Matrix4 setQuaternion(float x, float y, float z, Vec3f scale, Quaternion quaternion){
+        return setQuaternion(x, y, z, scale.x, scale.y, scale.z, quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+    }
+
+    public Matrix4 setQuaternion(Vec3f position, Vec3f scale, Quaternion quaternion){
+        return setQuaternion(position.x, position.y, position.z, scale.x, scale.y, scale.z, quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+    }
+
+
+    /* Linear Interpolation */
+
+    public Matrix4f lerp(Matrix4f matrix, float t){
+        final float ti = 1 - t;
+        for(int i = 0; i < 16; i++)
+            val[i] = val[i] * ti  +  matrix.val[i] * t;
         return this;
     }
 
 
-    /** To Look At */
-    public Matrix4f toLookAt(float leftX, float leftY, float leftZ, float upX, float upY, float upZ, float forwardX, float forwardY, float forwardZ){
-        identity();
-        
-        val[m00] = leftX;
-        val[m10] = leftY;
-        val[m20] = leftZ;
-        val[m01] = upX;
-        val[m11] = upY;
-        val[m21] = upZ;
-        val[m02] = forwardX;
-        val[m12] = forwardY;
-        val[m22] = forwardZ;
-        
-        return this;
-    }
+    /* Copy */
 
-    public Matrix4f toLookAt(Vec3f left, Vec3f up, Vec3f forward){
-        return toLookAt(left.x, left.y, left.z, up.x, up.y, up.z, forward.x, forward.y, forward.z);
-    }
-
-    public Matrix4f toLookAt(float posX, float posY, float posZ, Vec3f left, Vec3f up, Vec3f forward){
-        return toLookAt(left, up, forward).mul(new Matrix4f().toTranslated(-posX, -posY, -posZ));
-    }
-
-    public Matrix4f toLookAt(Vec3f pos, Vec3f left, Vec3f up, Vec3f forward){
-        return toLookAt(pos.x, pos.y, pos.z, left, up, forward);
-    }
-
-
-    public Matrix4f toLookAt(float posX, float posY, float posZ, Vec3f direction){
-        tmp_camLeft.crs(UP, direction).nor();
-        tmp_camUp.crs(direction, tmp_camLeft).nor();
-
-        return toLookAt(posX, posY, posZ, tmp_camLeft, tmp_camUp, direction);
-    }
-
-    public Matrix4f toLookAt(Vec3f position, Vec3f direction){
-        return toLookAt(position.x, position.y, position.z, direction);
-    }
-
-    public Matrix4f toLookAt(Vec3f direction){
-        tmp_camLeft.crs(UP, direction).nor();
-        tmp_camUp.crs(direction, tmp_camLeft).nor();
-        
-        return toLookAt(tmp_camLeft, tmp_camUp, direction);
-    }
-    
-
-    /** Culling */
-    public Matrix4f cullPosition(){
-        val[m30] = 0; // X
-        val[m31] = 0; // Y
-        val[m32] = 0; // Z
-        return this;
-    }
-    
-    public Matrix4f cullRotation(){
-        val[m00] = 1; val[m10] = 0; val[m20] = 0;
-        val[m01] = 0; val[m11] = 1; val[m21] = 0;
-        val[m02] = 0; val[m12] = 0; val[m22] = 1;
-        return this;
-    }
-
-
-    /** Copy */
     public Matrix4f copy(){
         return new Matrix4f(this);
     }
 
 
-    /** Multiply */
+    /* Multiply */
+
     public float[] getMul(float[] values){
         return mul(this.val, values);
     }

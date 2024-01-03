@@ -1087,7 +1087,7 @@ public class Vec3f{
             return false;
         
         final Vec3f tuple = (Vec3f) object;
-        return x == tuple.x && y == tuple.y;
+        return x == tuple.x && y == tuple.y && z == tuple.z;
     }
     
     @Override

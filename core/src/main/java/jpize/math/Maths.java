@@ -2,16 +2,17 @@ package jpize.math;
 
 public class Maths{
 
-    public static final float PI = (float) Math.PI;
-    public static final float PI2 = PI * 2;
-    public static final float HalfPI = PI / 2;
-    public static final float ToDeg = 180 / PI;
-    public static final float ToRad = PI / 180;
-    public static final float Sqrt2 = Mathc.sqrt(2);
-    public static final float Sqrt3 = Mathc.sqrt(3);
-    public static final float Sqrt4 = Mathc.sqrt(4);
-    public static final float NanosInSecond = 1000000000;
-    public static final float NanosInMs = 1000000;
+    public static final float e = 2.718281828459045F;
+    public static final float pi = 3.141592653589793F;
+    public static final float twoPI = pi * 2;
+    public static final float halfPI = pi * 0.5F;
+    public static final float toDeg = 57.29577951308232F;
+    public static final float toRad = 0.017453292519943295F;
+    public static final float sqrt2 = Mathc.sqrt(2);
+    public static final float sqrt3 = Mathc.sqrt(3);
+    public static final float sqrt4 = Mathc.sqrt(4);
+    public static final float nanosInSec = 1_000_000_000;
+    public static final float nanosInMs = 1_000_000;
     
 
     public static float sinFromCos(float cos){
@@ -161,7 +162,7 @@ public class Maths{
     }
     
     public static float cosine(float t){
-        return (1 - Mathc.cos(t / PI)) / 2;
+        return (1 - Mathc.cos(t / pi)) / 2;
     }
     
     public static float quintic(float t){
@@ -196,15 +197,15 @@ public class Maths{
     
     
     public static float sinDeg(double a){
-        return Mathc.sin(a * ToRad);
+        return Mathc.sin(a * toRad);
     }
     
     public static float cosDeg(double a){
-        return Mathc.cos(a * ToRad);
+        return Mathc.cos(a * toRad);
     }
     
     public static float tanDeg(double a){
-        return Mathc.tan(a * ToRad);
+        return Mathc.tan(a * toRad);
     }
 
 

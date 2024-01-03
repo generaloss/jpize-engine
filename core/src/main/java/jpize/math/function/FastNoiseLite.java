@@ -196,7 +196,7 @@ public class FastNoiseLite{
         
         switch(mNoiseType){
             case OpenSimplex2, OpenSimplex2S -> {
-                final float F2 = 0.5F * (Maths.Sqrt3 - 1);
+                final float F2 = 0.5F * (Maths.sqrt3 - 1);
                 float t = (x + y) * F2;
                 x += t;
                 y += t;
@@ -214,7 +214,7 @@ public class FastNoiseLite{
     }
 
     public float getUnitNoise(float x, float y){
-        return getNoise(x, y) * 2 / Maths.Sqrt2;
+        return getNoise(x, y) * 2 / Maths.sqrt2;
     }
 
     /// <summary>
@@ -265,7 +265,7 @@ public class FastNoiseLite{
     }
 
     public float getUnitNoise(float x, float y, float z){
-        return getNoise(x, y, z) / Maths.Sqrt3 / 2 + 0.5F;
+        return getNoise(x, y, z) / Maths.sqrt3 / 2 + 0.5F;
     }
     
     
@@ -594,7 +594,7 @@ public class FastNoiseLite{
     private float SingleSimplex(int seed, float x, float y){
         // 2D OpenSimplex2 case uses the same algorithm as ordinary Simplex.
         
-        final float G2 = (3 - Maths.Sqrt3) / 6;
+        final float G2 = (3 - Maths.sqrt3) / 6;
         
         /*
          * --- Skew moved to switch statements before fractal evaluation ---
@@ -746,7 +746,7 @@ public class FastNoiseLite{
     private float SingleOpenSimplex2S(int seed, float x, float y){
         // 2D OpenSimplex2S case is a modified 2D simplex noise.
         
-        final float G2 = (3 - Maths.Sqrt3) / 6;
+        final float G2 = (3 - Maths.sqrt3) / 6;
         
         /*
          * --- Skew moved to TransformNoiseCoordinate method ---
@@ -1431,7 +1431,7 @@ public class FastNoiseLite{
         float ys = coord.y;
         switch(mDomainWarpType){
             case OpenSimplex2, OpenSimplex2Reduced -> {
-                final float F2 = 0.5F * (Maths.Sqrt3 - 1);
+                final float F2 = 0.5F * (Maths.sqrt3 - 1);
                 float t = (xs + ys) * F2;
                 xs += t;
                 ys += t;
@@ -1495,7 +1495,7 @@ public class FastNoiseLite{
             float ys = coord.y;
             switch(mDomainWarpType){
                 case OpenSimplex2, OpenSimplex2Reduced -> {
-                    final float F2 = 0.5F * (Maths.Sqrt3 - 1);
+                    final float F2 = 0.5F * (Maths.sqrt3 - 1);
                     float t = (xs + ys) * F2;
                     xs += t;
                     ys += t;
@@ -1564,7 +1564,7 @@ public class FastNoiseLite{
         float ys = coord.y;
         switch(mDomainWarpType){
             case OpenSimplex2, OpenSimplex2Reduced -> {
-                final float F2 = 0.5F * (Maths.Sqrt3 - 1);
+                final float F2 = 0.5F * (Maths.sqrt3 - 1);
                 float t = (xs + ys) * F2;
                 xs += t;
                 ys += t;
@@ -1725,7 +1725,7 @@ public class FastNoiseLite{
     
     // Domain Warp Simplex/OpenSimplex2
     private void SingleDomainWarpSimplexGradient(int seed, float warpAmp, float frequency, float x, float y, Vec2f coord, boolean outGradOnly){
-        final float G2 = (3 - Maths.Sqrt3) / 6;
+        final float G2 = (3 - Maths.sqrt3) / 6;
         
         x *= frequency;
         y *= frequency;

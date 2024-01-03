@@ -17,10 +17,10 @@ public class Motion3DController{
     public void update(float yawDegrees){
         motion.zero();
 
-        if(Key.W.isPressed()) motion.x += 1;
-        if(Key.A.isPressed()) motion.z += 1;
-        if(Key.S.isPressed()) motion.x -= 1;
-        if(Key.D.isPressed()) motion.z -= 1;
+        if(Key.W.isPressed()) motion.z += 1;
+        if(Key.S.isPressed()) motion.z -= 1;
+        if(Key.A.isPressed()) motion.x -= 1;
+        if(Key.D.isPressed()) motion.x += 1;
 
         if(Key.SPACE.isPressed()) motion.y += 1;
         if(Key.LSHIFT.isPressed()) motion.y -= 1;

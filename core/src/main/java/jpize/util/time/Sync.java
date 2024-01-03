@@ -29,14 +29,14 @@ public class Sync{
 
 
     public double getTPS(){
-        return (frameNano != 0) ? Maths.NanosInSecond / frameNano : 0;
+        return (frameNano != 0) ? Maths.nanosInSec / frameNano : 0;
     }
 
     public void setTPS(double tps){
         if(tps == 0)
             return;
 
-        frameNano = (long) (Maths.NanosInSecond / tps); // Время между кадрами, при данном количестве тиков в секунду [tps]
+        frameNano = (long) (Maths.nanosInSec / tps); // Время между кадрами, при данном количестве тиков в секунду [tps]
         prevTime = System.nanoTime();                   // Для подсчета времени между кадрами
     }
 

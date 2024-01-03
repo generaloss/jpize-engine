@@ -13,8 +13,8 @@ public class BaseShader extends Shader{
     
     
     public void setMatrices(Matrix4f projection, Matrix4f view){
-        setUniform("u_projection", projection);
-        setUniform("u_view", view);
+        uniform("u_projection", projection);
+        uniform("u_view", view);
     }
     
     public void setMatrices(Camera camera){
@@ -23,11 +23,11 @@ public class BaseShader extends Shader{
     
     
     public void setColor(IColor color){
-        setUniform("u_color", color);
+        uniform("u_color", color);
     }
     
     public void setColor(float r, float g, float b, float a){
-        setUniform("u_color", r, g, b, a);
+        uniform("u_color", r, g, b, a);
     }
     
     public void setColor(float r, float g, float b){

@@ -3,7 +3,7 @@ package jpize.graphics.util;
 import jpize.graphics.buffer.VertexBuffer;
 import jpize.graphics.texture.Region;
 import jpize.graphics.util.color.IColor;
-import jpize.util.ArrayUtils;
+import jpize.util.array.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.List;

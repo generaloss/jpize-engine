@@ -67,8 +67,8 @@ public class MotionBlur implements PostProcessEffect{
         Gl.clearColorDepthBuffers();
         {
             shader.bind();
-            shader.setUniform("u_frame", fbo1.getTexture());
-            shader.setUniform("u_backFrame", backFrame);
+            shader.uniform("u_frame", fbo1.getTexture());
+            shader.uniform("u_backFrame", backFrame);
             ScreenQuad.render();
         }
         fbo2.unbind();
@@ -81,8 +81,8 @@ public class MotionBlur implements PostProcessEffect{
         // Draw Scene+FBO1 On Screen
 
         shader.bind();
-        shader.setUniform("u_frame", fbo1.getTexture());
-        shader.setUniform("u_backFrame", backFrame);
+        shader.uniform("u_frame", fbo1.getTexture());
+        shader.uniform("u_backFrame", backFrame);
         ScreenQuad.render();
     }
 
@@ -98,8 +98,8 @@ public class MotionBlur implements PostProcessEffect{
         Gl.clearColorDepthBuffers();
         {
             shader.bind();
-            shader.setUniform("u_frame", fbo1.getTexture());
-            shader.setUniform("u_backFrame", backFrame);
+            shader.uniform("u_frame", fbo1.getTexture());
+            shader.uniform("u_backFrame", backFrame);
             ScreenQuad.render();
         }
         fbo2.unbind();
@@ -114,8 +114,8 @@ public class MotionBlur implements PostProcessEffect{
         target.begin();
 
         shader.bind();
-        shader.setUniform("u_frame", fbo1.getTexture());
-        shader.setUniform("u_backFrame", backFrame);
+        shader.uniform("u_frame", fbo1.getTexture());
+        shader.uniform("u_backFrame", backFrame);
         ScreenQuad.render();
     }
 

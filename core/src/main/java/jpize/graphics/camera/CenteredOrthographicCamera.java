@@ -8,20 +8,23 @@ import jpize.math.vecmath.matrix.Matrix4f;
 public class CenteredOrthographicCamera extends Camera2D implements Resizable{
     
     private float scale, rotation;
-    private final Matrix4f projection, view, scalingMatrix, translationMatrix, rotationMatrix;
-    private boolean dirtyProjection, imaginaryX, imaginaryY;
+    private final Matrix4f projection, view, combined, scalingMatrix, translationMatrix, rotationMatrix;
+    private boolean imaginaryX, imaginaryY;
 
     public CenteredOrthographicCamera(int width, int height){
         super(width, height);
 
-        scale = 1;
-        view = new Matrix4f();
-
-        projection = new Matrix4f().toOrthographic(-Maths.round(this.width / 2F), -Maths.round(this.height / 2F), this.width, this.height);
+        scale = 1F;
 
         scalingMatrix = new Matrix4f();
         translationMatrix = new Matrix4f();
         rotationMatrix = new Matrix4f();
+        view = new Matrix4f();
+        projection = new Matrix4f();
+        combined = new Matrix4f();
+
+        updateProjectionMatrix();
+        updateViewMatrix();
     }
 
     public CenteredOrthographicCamera(){
@@ -31,16 +34,23 @@ public class CenteredOrthographicCamera extends Camera2D implements Resizable{
 
     @Override
     public void update(){
-        if(dirtyProjection){
-            projection.identity().toOrthographic(-Maths.round(this.width / 2F), -Maths.round(this.height / 2F), this.width, this.height);
-            dirtyProjection = false;
-        }
+        updateViewMatrix();
+    }
 
-        scalingMatrix.toScaled(scale, scale, 1);
-        translationMatrix.toTranslated(imaginaryX ? 0 : -position.x, imaginaryY ? 0 : -position.y, 0);
-        rotationMatrix.toRotatedZ(rotation);
+    private void updateProjectionMatrix(){
+        projection.identity().setOrthographic(-Maths.round(this.width / 2F), -Maths.round(this.height / 2F), this.width, this.height);
+    }
 
+    private void updateViewMatrix(){
+        scalingMatrix.setScale(scale);
+        translationMatrix.setTranslate(imaginaryX ? 0 : -position.x, imaginaryY ? 0 : -position.y);
+        rotationMatrix.setRotationZ(rotation);
         view.set(scalingMatrix.mul(rotationMatrix.mul(translationMatrix)));
+        updateCombinedMatrix();
+    }
+
+    private void updateCombinedMatrix(){
+        combined.set(projection).mul(view);
     }
 
     @Override
@@ -49,7 +59,7 @@ public class CenteredOrthographicCamera extends Camera2D implements Resizable{
             return;
     
         setSize(width, height);
-        dirtyProjection = true;
+        updateProjectionMatrix();
     }
 
     public void setImaginaryOrigins(boolean x, boolean y){
@@ -89,6 +99,11 @@ public class CenteredOrthographicCamera extends Camera2D implements Resizable{
     @Override
     public Matrix4f getView(){
         return view;
+    }
+
+    @Override
+    public Matrix4f getCombined(){
+        return combined;
     }
 
 }

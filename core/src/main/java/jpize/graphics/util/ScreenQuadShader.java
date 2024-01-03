@@ -18,7 +18,7 @@ public class ScreenQuadShader{
             instance = new ScreenQuadShader();
 
         instance.shader.bind();
-        instance.shader.setUniform("u_texture", texture);
+        instance.shader.uniform("u_texture", texture);
     }
 
     private static void dispose(){ // Calls from ContextManager

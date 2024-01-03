@@ -1045,7 +1045,7 @@ public class Vec3d{
             return false;
         
         Vec3d tuple = (Vec3d) object;
-        return x == tuple.x && y == tuple.y;
+        return x == tuple.x && y == tuple.y && z == tuple.z;
     }
     
     @Override

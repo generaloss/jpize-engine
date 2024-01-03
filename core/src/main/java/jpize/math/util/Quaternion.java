@@ -58,27 +58,39 @@ public class Quaternion{
     }
     
     public Quaternion set(Vec3f axis, double angle, boolean degrees){
-        return set(axis, (degrees ? (angle * Maths.ToRad) : angle));
+        return set(axis, (degrees ? (angle * Maths.toRad) : angle));
     }
     
     public Quaternion set(double yaw, double pitch, double roll){
-        float cr = Mathc.cos(roll * 0.5);
-        float sr = Mathc.sin(roll * 0.5);
-        float cp = Mathc.cos(pitch * 0.5);
-        float sp = Mathc.sin(pitch * 0.5);
-        float cy = Mathc.cos(yaw * 0.5);
-        float sy = Mathc.sin(yaw * 0.5);
+        final double hy = 0.5 * yaw;
+        final double hp = 0.5 * pitch;
+        final double hr = 0.5 * roll;
+
+        final float chr = Mathc.cos(hr);
+        final float shr = Mathc.sin(hr);
+        final float chp = Mathc.cos(hp);
+        final float shp = Mathc.sin(hp);
+        final float chy = Mathc.cos(hy);
+        final float shy = Mathc.sin(hy);
+
+        final float chy_shp = chy * shp;
+        final float shy_chp = shy * chp;
+        final float chy_chp = chy * chp;
+        final float shy_shp = shy * shp;
     
-        w = cr * cp * cy + sr * sp * sy;
-        x = sr * cp * cy - cr * sp * sy;
-        y = cr * sp * cy + sr * cp * sy;
-        z = cr * cp * sy - sr * sp * cy;
-        
+        x =  chy_shp * chr  +  shy_chp * shr;
+        y =  shy_chp * chr  -  chy_shp * shr;
+        z =  chy_chp * shr  -  shy_shp * chr;
+        w =  chy_chp * chr  +  shy_shp * shr;
         return this;
     }
     
     public Quaternion set(EulerAngles eulerAngles){
-        return set(eulerAngles.yaw * Maths.ToRad, eulerAngles.pitch * Maths.ToRad, eulerAngles.roll * Maths.ToRad);
+        return set(
+            Maths.toRad * eulerAngles.yaw,
+            Maths.toRad * eulerAngles.pitch,
+            Maths.toRad * eulerAngles.roll
+        );
     }
 
     
@@ -126,16 +138,16 @@ public class Quaternion{
     }
     
     public float getRoll(){
-        return getRollRad() * Maths.ToDeg;
+        return getRollRad() * Maths.toDeg;
     }
     
     public float getPitchRad(){
         final int pole = getGimbalPole();
-        return pole == 0 ? Mathc.asin(Maths.clamp(2 * (w * x - z * y), -1, 1)) : pole * Maths.PI * 0.5F;
+        return pole == 0 ? Mathc.asin(Maths.clamp(2 * (w * x - z * y), -1, 1)) : pole * Maths.pi * 0.5F;
     }
     
     public float getPitch(){
-        return getPitchRad() * Maths.ToDeg;
+        return getPitchRad() * Maths.toDeg;
     }
     
     public float getYawRad(){
@@ -143,7 +155,7 @@ public class Quaternion{
     }
     
     public float getYaw(){
-        return getYawRad() * Maths.ToDeg;
+        return getYawRad() * Maths.toDeg;
     }
     
     

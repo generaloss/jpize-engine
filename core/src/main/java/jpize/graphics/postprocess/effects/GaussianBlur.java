@@ -64,9 +64,9 @@ public class GaussianBlur implements PostProcessEffect{
         Gl.clearColorBuffer();
         {
             shader.bind();
-            shader.setUniform("u_frame", fbo1.getTexture());
-            shader.setUniform("u_axis", 0);
-            shader.setUniform("u_radius", radius);
+            shader.uniform("u_frame", fbo1.getTexture());
+            shader.uniform("u_axis", 0);
+            shader.uniform("u_radius", radius);
             ScreenQuad.render();
         }
         fbo2.unbind();
@@ -74,9 +74,9 @@ public class GaussianBlur implements PostProcessEffect{
         // Draw FBO2+BlurY On Screen
 
         shader.bind();
-        shader.setUniform("u_frame", fbo2.getTexture());
-        shader.setUniform("u_axis", 1);
-        shader.setUniform("u_radius", radius);
+        shader.uniform("u_frame", fbo2.getTexture());
+        shader.uniform("u_axis", 1);
+        shader.uniform("u_radius", radius);
         ScreenQuad.render();
     }
 
@@ -91,9 +91,9 @@ public class GaussianBlur implements PostProcessEffect{
         Gl.clearColorBuffer();
         {
             shader.bind();
-            shader.setUniform("u_frame", fbo1.getTexture());
-            shader.setUniform("u_axis", 0);
-            shader.setUniform("u_radius", radius);
+            shader.uniform("u_frame", fbo1.getTexture());
+            shader.uniform("u_axis", 0);
+            shader.uniform("u_radius", radius);
             ScreenQuad.render();
         }
         fbo2.unbind();
@@ -103,9 +103,9 @@ public class GaussianBlur implements PostProcessEffect{
         target.begin();
 
         shader.bind();
-        shader.setUniform("u_frame", fbo2.getTexture());
-        shader.setUniform("u_axis", 1);
-        shader.setUniform("u_radius", radius);
+        shader.uniform("u_frame", fbo2.getTexture());
+        shader.uniform("u_axis", 1);
+        shader.uniform("u_radius", radius);
         ScreenQuad.render();
     }
 

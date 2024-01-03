@@ -1,5 +1,7 @@
 package jpize.math.vecmath.vector;
 
+import java.util.Objects;
+
 public class Vec4i{
 
     public Vec4i(){ }
@@ -240,6 +242,26 @@ public class Vec4i{
         x = vector.x;
         y = vector.y;
         return this;
+    }
+
+
+    @Override
+    public String toString(){
+        return x + ", " + y + ", " + z + ", " + w;
+    }
+
+    @Override
+    public boolean equals(Object object){
+        if(object == null || getClass() != object.getClass())
+            return false;
+
+        final Vec4i tuple = (Vec4i) object;
+        return x == tuple.x && y == tuple.y && z == tuple.z && w == tuple.w;
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(x, y, z, w);
     }
     
 }

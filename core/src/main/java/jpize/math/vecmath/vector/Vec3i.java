@@ -906,7 +906,7 @@ public class Vec3i{
             return false;
         
         final Vec3i tuple = (Vec3i) object;
-        return x == tuple.x && y == tuple.y;
+        return x == tuple.x && y == tuple.y && z == tuple.z;
     }
     
     @Override

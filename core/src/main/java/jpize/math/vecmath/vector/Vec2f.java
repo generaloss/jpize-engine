@@ -307,7 +307,7 @@ public class Vec2f{
     
     
     public float deg(Vec2f vector){
-        return rad(vector) * Maths.ToDeg;
+        return rad(vector) * Maths.toDeg;
     }
     
     public float rad(Vec2f vector){
@@ -317,7 +317,7 @@ public class Vec2f{
     }
     
     public Vec2f rotDeg(double degrees){
-        return rotRad(degrees * Maths.ToRad);
+        return rotRad(degrees * Maths.toRad);
     }
 
     public Vec2f rotRad(double radians){
@@ -333,11 +333,11 @@ public class Vec2f{
     }
 
     public Vec2f rotDeg(double degrees, Vec2f origin){
-        return rotRad(degrees * Maths.ToRad, origin);
+        return rotRad(degrees * Maths.toRad, origin);
     }
 
     public Vec2f rotDeg(double degrees, float originX, float originY){
-        return rotRad(degrees * Maths.ToRad, originX, originY);
+        return rotRad(degrees * Maths.toRad, originX, originY);
     }
 
     public Vec2f rotRad(double radians, Vec2f origin){

@@ -1,6 +1,7 @@
 package jpize.io.context;
 
 import jpize.gl.Gl;
+import jpize.gl.glenum.GlDepthFunc;
 import jpize.gl.glenum.GlTarget;
 import jpize.gl.texture.GlBlendFactor;
 import jpize.graphics.util.color.Color;
@@ -96,6 +97,9 @@ public class ContextBuilder{
         // GL States
         Gl.enable(GlTarget.BLEND, GlTarget.CULL_FACE);
         Gl.blendFunc(GlBlendFactor.SRC_ALPHA, GlBlendFactor.ONE_MINUS_SRC_ALPHA);
+        // Left-Handled coordinate system options
+        Gl.depthFunc(GlDepthFunc.GEQUAL);
+        Gl.clearDepth(0);
 
         return context;
     }

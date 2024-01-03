@@ -1,5 +1,10 @@
 package jpize.math.vecmath.vector;
 
+import jpize.math.vecmath.matrix.Matrix4;
+import jpize.math.vecmath.matrix.Matrix4f;
+
+import java.util.Objects;
+
 public class Vec4f{
 
     public Vec4f(){ }
@@ -240,6 +245,40 @@ public class Vec4f{
         x = vector.x;
         y = vector.y;
         return this;
+    }
+
+
+    public Vec4f mulMat4(float[] matrix){
+        return set(
+            x * matrix[Matrix4.m00]  +  y * matrix[Matrix4.m10]  +  z * matrix[Matrix4.m20]  +  w * matrix[Matrix4.m30],
+            x * matrix[Matrix4.m01]  +  y * matrix[Matrix4.m11]  +  z * matrix[Matrix4.m21]  +  w * matrix[Matrix4.m31],
+            x * matrix[Matrix4.m02]  +  y * matrix[Matrix4.m12]  +  z * matrix[Matrix4.m22]  +  w * matrix[Matrix4.m32],
+            x * matrix[Matrix4.m03]  +  y * matrix[Matrix4.m13]  +  z * matrix[Matrix4.m23]  +  w * matrix[Matrix4.m33]
+        );
+    }
+
+    public Vec4f mulMat4(Matrix4f matrix){
+        return mulMat4(matrix.val);
+    }
+
+
+    @Override
+    public String toString(){
+        return x + ", " + y + ", " + z + ", " + w;
+    }
+
+    @Override
+    public boolean equals(Object object){
+        if(object == null || getClass() != object.getClass())
+            return false;
+
+        final Vec4f tuple = (Vec4f) object;
+        return x == tuple.x && y == tuple.y && z == tuple.z && w == tuple.w;
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(x, y, z, w);
     }
     
 }

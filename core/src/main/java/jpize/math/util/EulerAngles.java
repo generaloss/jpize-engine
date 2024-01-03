@@ -2,7 +2,7 @@ package jpize.math.util;
 
 import jpize.math.Mathc;
 import jpize.math.Maths;
-import jpize.math.vecmath.matrix.Matrix4f;
+import jpize.math.vecmath.vector.Vec2f;
 import jpize.math.vecmath.vector.Vec3d;
 import jpize.math.vecmath.vector.Vec3f;
 
@@ -38,41 +38,26 @@ public class EulerAngles{
         pitch = Maths.clamp(pitch, -90, 90);
     }
 
-    public Vec3f getDirection(){
-        final float cosPitch = Maths.cosDeg(pitch);
-        return new Vec3f(
-            cosPitch * Maths.cosDeg(yaw),
-            Maths.sinDeg(pitch),
-            cosPitch * Maths.sinDeg(yaw)
-        );
+    public Vec3f getDir(){
+        return dirOf(yaw, pitch);
     }
     
-    public Vec3f getDirectionHorizontal(){
+    public Vec3f getDirHorizontal(){
         return new Vec3f(Maths.cosDeg(yaw), 0, Maths.sinDeg(yaw));
     }
 
-    public EulerAngles setDirection(double x, double y, double z){
-        yaw = -Mathc.atan2(x, z) * Maths.ToDeg + 90;
-        pitch = Mathc.atan2(y, Math.sqrt(x * x + z * z)) * Maths.ToDeg;
-        
+    public EulerAngles setDir(double x, double y, double z){
+        yaw = yawOfDir(x, z) * Maths.toDeg;
+        pitch = pitchOfDir(x, y, z) * Maths.toDeg;
         return this;
     }
     
-    public EulerAngles setDirection(Vec3d dir){
-        return setDirection(dir.x, dir.y, dir.z);
+    public EulerAngles setDir(Vec3d dir){
+        return setDir(dir.x, dir.y, dir.z);
     }
 
-    public EulerAngles setDirection(Vec3f dir){
-        return setDirection(dir.x, dir.y, dir.z);
-    }
-    
-    
-    public Matrix4f toMatrix(){
-        return new Matrix4f()
-            //.toRotatedX(roll)
-            //.mul(new Matrix4f()
-            .toRotatedY(yaw) //)
-            .mul(new Matrix4f().toRotatedZ(pitch));
+    public EulerAngles setDir(Vec3f dir){
+        return setDir(dir.x, dir.y, dir.z);
     }
     
 
@@ -150,6 +135,35 @@ public class EulerAngles{
     @Override
     public int hashCode(){
         return Objects.hash(yaw, pitch, roll);
+    }
+
+
+    public static EulerAngles ofDir(float x, float y, float z){
+        final float yaw = yawOfDir(x, z) * Maths.toDeg;
+        final float pitch = pitchOfDir(x, y, z) * Maths.toDeg;
+        return new EulerAngles(yaw, pitch);
+    }
+
+    public static float yawOfDir(double x, double z){
+        return Mathc.atan2(-x, z);
+    }
+
+    public static float pitchOfDir(double x, double y, double z){
+        return Mathc.atan2(y, Vec2f.len(x, z));
+    }
+
+
+    public static Vec3f dirOf(double yaw, double pitch){
+        final float pitchCos = Maths.cosDeg(pitch);
+        return new Vec3f(
+            -Maths.sinDeg(yaw) * pitchCos,
+            Maths.sinDeg(pitch),
+            Maths.cosDeg(yaw) * pitchCos
+        );
+    }
+
+    public static Vec3f dirOf(double yaw){
+        return new Vec3f(Maths.cosDeg(yaw), 0, Maths.sinDeg(yaw));
     }
 
 }

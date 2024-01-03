@@ -129,7 +129,7 @@ public class TextureBatch implements Disposable{
         if(viewMat == null) viewMat = new Matrix4f();
         if(projectionMat == null) projectionMat = new Matrix4f();
 
-        begin(projectionMat.toOrthographic(0, 0, Jpize.getWidth(), Jpize.getHeight()), viewMat);
+        begin(projectionMat.setOrthographic(0, 0, Jpize.getWidth(), Jpize.getHeight()), viewMat);
     }
 
     public void end(){
@@ -144,9 +144,9 @@ public class TextureBatch implements Disposable{
         final Shader usedShader = (customShader != null) ? customShader : shader;
 
         usedShader.bind();
-        usedShader.setUniform("u_projection", projectionMat);
-        usedShader.setUniform("u_view", viewMat);
-        usedShader.setUniform("u_texture", lastTexture);
+        usedShader.uniform("u_projection", projectionMat);
+        usedShader.uniform("u_view", viewMat);
+        usedShader.uniform("u_texture", lastTexture);
 
         // Render
         mesh.render(size * QUAD_INDICES);

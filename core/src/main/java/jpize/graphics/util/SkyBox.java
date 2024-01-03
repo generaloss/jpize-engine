@@ -36,24 +36,18 @@ public class SkyBox implements Disposable{
              1,  1, -1  //7
         });
         mesh.getIndexBuffer().setData(new int[]{
-            //Top
-            7, 6, 2,
-            2, 3, 7,
-            //Bottom
-            0, 4, 5,
-            5, 1, 0,
-            //Left
-            0, 2, 6,
-            6, 4, 0,
-            //Right
-            7, 3, 1,
-            1, 5, 7,
-            //Front
-            3, 2, 0,
-            0, 1, 3,
-            //Back
-            4, 6, 7,
-            7, 5, 4
+            // 7, 6, 2,  2, 3, 7, //Top
+            // 0, 4, 5,  5, 1, 0, //Bottom
+            // 0, 2, 6,  6, 4, 0, //Left
+            // 7, 3, 1,  1, 5, 7, //Right
+            // 3, 2, 0,  0, 1, 3, //Front
+            // 4, 6, 7,  7, 5, 4, //Back
+            2, 6, 7,  7, 3, 2, //Top
+            5, 4, 0,  0, 1, 5, //Bottom
+            6, 2, 0,  0, 4, 6, //Left
+            1, 3, 7,  7, 5, 1, //Right
+            0, 2, 3,  3, 1, 0, //Front
+            7, 6, 4,  4, 5, 7, //Back
         });
     }
     
@@ -71,17 +65,15 @@ public class SkyBox implements Disposable{
 
     public void render(Matrix4f projection, Matrix4f view){
         Gl.depthMask(false);
-        
         shader.bind();
-        shader.setUniform("u_projection", projection);
-        shader.setUniform("u_view", view);
-        shader.setUniform("u_cubeMap", cubeMap);
+        shader.uniform("u_projection", projection);
+        shader.uniform("u_view", view);
+        shader.uniform("u_cubeMap", cubeMap);
 
         mesh.render();
-
         Gl.depthMask(true);
     }
-    
+
     public void render(Camera camera){
         final Matrix4f view = camera.getView().copy().cullPosition();
         render(camera.getProjection(), view);

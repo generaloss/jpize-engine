@@ -14,5 +14,6 @@ public abstract class Camera extends Sizable implements Resizable{
 
     public abstract Matrix4f getView();
     public abstract Matrix4f getProjection();
+    public abstract Matrix4f getCombined();
 
 }

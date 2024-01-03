@@ -57,6 +57,11 @@ public class Gl{
     public static void clearCDSBuffers(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     }
+
+
+    public static void clearDepth(float depth){
+        glClearDepth(depth);
+    }
     
 
     public static boolean isEnabled(GlTarget target){

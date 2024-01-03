@@ -26,7 +26,7 @@ public class SoundGenerator{
         final double sinPosInc = frequency / sampleRate;
 
         for(int i = 0; i < samples; i++){
-            final float sample = Maths.round(Byte.MAX_VALUE * Math.sin(sinPos * Maths.PI2));
+            final float sample = Maths.round(Byte.MAX_VALUE * Math.sin(sinPos * Maths.twoPI));
             for(int j = 0; j < channels; j++)
                 switch(bitsPerSample){
                     case 16 -> buffer.putShort((short) sample);
@@ -51,7 +51,7 @@ public class SoundGenerator{
         final double offset = sinPosInc / samples;
 
         for(int i = 0; i < samples; i++){
-            final float sample = Maths.round(Byte.MAX_VALUE * Math.sin(sinPos * Maths.PI2));
+            final float sample = Maths.round(Byte.MAX_VALUE * Math.sin(sinPos * Maths.twoPI));
             for(int j = 0; j < channels; j++)
                 switch(bitsPerSample){
                     case 16 -> buffer.putShort((short) sample);
@@ -78,7 +78,7 @@ public class SoundGenerator{
         final double offset = sinPosInc / samples;
 
         for(int i = 0; i < samples; i++){
-            final float sample = Maths.round(Byte.MAX_VALUE * Math.sin(sinPos * Maths.PI2));
+            final float sample = Maths.round(Byte.MAX_VALUE * Math.sin(sinPos * Maths.twoPI));
             for(int j = 0; j < channels; j++)
                 switch(bitsPerSample){
                     case 16 -> buffer.putShort((short) sample);
@@ -104,7 +104,7 @@ public class SoundGenerator{
         final double sinPosInc = frequency / sampleRate;
 
         for(int i = 0; i < size; i++){
-            final float sample = Maths.round(Byte.MAX_VALUE * Math.signum(Math.sin(sinPos * Maths.PI2)));
+            final float sample = Maths.round(Byte.MAX_VALUE * Math.signum(Math.sin(sinPos * Maths.twoPI)));
             for(int j = 0; j < channels; j++)
                 switch(bitsPerSample){
                     case 16 -> buffer.putShort((short) sample);
@@ -129,7 +129,7 @@ public class SoundGenerator{
         final double offset = sinPosInc / samples;
 
         for(int i = 0; i < samples; i++){
-            final float sample = Maths.round(Byte.MAX_VALUE * Math.signum(Math.sin(sinPos * Maths.PI2)));
+            final float sample = Maths.round(Byte.MAX_VALUE * Math.signum(Math.sin(sinPos * Maths.twoPI)));
             for(int j = 0; j < channels; j++)
                 switch(bitsPerSample){
                     case 16 -> buffer.putShort((short) sample);
@@ -156,7 +156,7 @@ public class SoundGenerator{
         final double offset = sinPosInc / samples;
 
         for(int i = 0; i < samples; i++){
-            final float sample = Maths.round(Byte.MAX_VALUE * Math.signum(Math.sin(sinPos * Maths.PI2)));
+            final float sample = Maths.round(Byte.MAX_VALUE * Math.signum(Math.sin(sinPos * Maths.twoPI)));
             for(int j = 0; j < channels; j++)
                 switch(bitsPerSample){
                     case 16 -> buffer.putShort((short) sample);

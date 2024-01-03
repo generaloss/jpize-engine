@@ -116,6 +116,7 @@ public class UIContext implements Disposable{
             return;
 
         component.update();
+        renderer.beginScissor(component);
         component.render();
 
         if(component.input().isClickable()){
@@ -125,6 +126,7 @@ public class UIContext implements Disposable{
 
         for(UIComponent child: component.children())
             render(child);
+        renderer.endScissor(component);
     }
 
 

@@ -90,8 +90,8 @@ public class Bloom implements PostProcessEffect{
         Gl.clearColorBuffer();
         {
             brightShader.bind();
-            brightShader.setUniform("u_frame", colorBuffer.getTexture());
-            brightShader.setUniform("u_brightness", brightness);
+            brightShader.uniform("u_frame", colorBuffer.getTexture());
+            brightShader.uniform("u_brightness", brightness);
             ScreenQuad.render();
         }
         fbo2.unbind();
@@ -100,18 +100,18 @@ public class Bloom implements PostProcessEffect{
         Gl.clearColorBuffer();
         {
             blurShader.bind();
-            blurShader.setUniform("u_frame", fbo2.getTexture());
-            blurShader.setUniform("u_radius", radius);
+            blurShader.uniform("u_frame", fbo2.getTexture());
+            blurShader.uniform("u_radius", radius);
             ScreenQuad.render();
         }
         blurBuffer.unbind();
 
         combineShader.bind();
-        combineShader.setUniform("u_frame1", colorBuffer.getTexture());
-        combineShader.setUniform("u_frame2", blurBuffer.getTexture());
-        combineShader.setUniform("u_bloom", bloom);
-        combineShader.setUniform("u_exposure", exposure);
-        combineShader.setUniform("u_gamma", gamma);
+        combineShader.uniform("u_frame1", colorBuffer.getTexture());
+        combineShader.uniform("u_frame2", blurBuffer.getTexture());
+        combineShader.uniform("u_bloom", bloom);
+        combineShader.uniform("u_exposure", exposure);
+        combineShader.uniform("u_gamma", gamma);
         ScreenQuad.render();
     }
 

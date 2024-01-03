@@ -56,7 +56,7 @@ public class ShadowMapping implements Disposable{
         // Shader
         shader = new Shader(Resource.internal("shader/shadowMapping/shadow.vert"), Resource.internal("shader/shadowMapping/shadow.frag"));
 
-        projectionMatrix = new Matrix4f().toOrthographic(-size.x / 2, size.x / 2, size.y / 2, -size.y / 2, 1, size.z + 1);
+        projectionMatrix = new Matrix4f().setOrthographic(-size.x / 2, size.x / 2, size.y / 2, -size.y / 2, 1, size.z + 1);
         spaceMatrix = new Matrix4f();
         lookAtMatrix = new Matrix4f();
     }
@@ -68,8 +68,8 @@ public class ShadowMapping implements Disposable{
         glClear(GL_DEPTH_BUFFER_BIT);
         
         shader.bind();
-        spaceMatrix.set(projectionMatrix.getMul(lookAtMatrix.toLookAt(pos, dir)));
-        shader.setUniform("u_space", spaceMatrix);
+        spaceMatrix.set(projectionMatrix.getMul(lookAtMatrix.setLookAt(pos, dir)));
+        shader.uniform("u_space", spaceMatrix);
     }
 
     public void end(){
@@ -86,7 +86,7 @@ public class ShadowMapping implements Disposable{
     }
 
     public void setModelMatrix(Matrix4f model){
-        shader.setUniform("u_model", model);
+        shader.uniform("u_model", model);
     }
 
     public Vec3f pos(){
