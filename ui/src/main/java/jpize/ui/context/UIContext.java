@@ -1,9 +1,9 @@
 package jpize.ui.context;
 
 import jpize.Jpize;
-import jpize.sdl.event.mouse.MouseButtonAction;
-import jpize.sdl.event.mouse.MouseButtonCallback;
-import jpize.sdl.event.window.WinSizeChangedCallback;
+import jpize.sdl.event.callback.mouse.MouseButtonAction;
+import jpize.sdl.event.callback.mouse.MouseButtonCallback;
+import jpize.sdl.event.callback.window.WinSizeChangedCallback;
 import jpize.sdl.input.Btn;
 import jpize.ui.component.UIComponent;
 import jpize.ui.component.UIComponentCache;

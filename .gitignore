@@ -1,6 +1,6 @@
 ### Modules ###
 tilemap/
-tests/
+#tests/
 
 ### Target ###
 target/

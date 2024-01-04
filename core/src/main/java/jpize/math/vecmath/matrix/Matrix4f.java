@@ -65,44 +65,52 @@ public class Matrix4f implements Matrix4{
     /* To Projection */
 
     public Matrix4f setOrthographic(float left, float right, float bottom, float top, float near, float far){
-        identity();
         final float iw = 1 / (right - left);
         final float ih = 1 / (top - bottom);
         final float id = 1 / (far - near);
 
-        val[m00] =  2 * iw;                                         val[m30] = -(right + left) * iw;
-                            val[m11] =  2 * ih;                     val[m31] = -(top + bottom) * ih;
-                                                val[m22] = -2 * id; val[m32] = -(far + near)   * id;
-                                                                    val[m33] = 1;
+        final float A =  2 * iw;
+        final float B =  2 * ih;
+        final float C = -2 * id;
+        final float D = -(right + left) * iw;
+        final float E = -(top + bottom) * ih;
+        final float F = -(far + near)   * id;
+
+        val[m00] = A; val[m10] = 0; val[m20] = 0; val[m30] = D;
+        val[m01] = 0; val[m11] = B; val[m21] = 0; val[m31] = E;
+        val[m02] = 0; val[m12] = 0; val[m22] = C; val[m32] = F;
+        val[m03] = 0; val[m13] = 0; val[m23] = 0; val[m33] = 1;
         return this;
     }
 
     public Matrix4f setOrthographic(float x, float y, float width, float height){
-        identity();
         final float iw = 1 / width;
         final float ih = 1 / height;
 
-        val[m00] =  2 * iw;
-        val[m11] =  2 * ih;
-        val[m22] = -2;
-        val[m30] = -(2 * x + width) * iw;
-        val[m31] = -(2 * y + height) * ih;
-        val[m32] = -1;
+        final float A = 2 * iw;
+        final float B = 2 * ih;
+        final float C = -(2 * x + width) * iw;
+        final float D = -(2 * y + height) * ih;
+
+        val[m00] = A; val[m10] = 0; val[m20] =  0; val[m30] =  C;
+        val[m01] = 0; val[m11] = B; val[m21] =  0; val[m31] =  D;
+        val[m02] = 0; val[m12] = 0; val[m22] = -2; val[m32] = -1;
+        val[m03] = 0; val[m13] = 0; val[m23] =  0; val[m33] =  1;
         return this;
     }
 
     public Matrix4f setPerspective(float aspect, float near, float far, float fovY){
-        final float ys = 1 / Maths.tanDeg(fovY * 0.5);
-        final float xs = -ys / aspect;
-        final float far_near = far - near;
-        final float v22 = -(far + near) / far_near;
-        final float v23 = (2 * far * near) / far_near;
+        final float fmn = far - near;
 
-        val[m00] = xs;
-                       val[m11] = ys;
-                                      val[m22] = v22; val[m32] = 1;
-                                      val[m23] = v23; val[m33] = 0;
+        final float A = 1 / Maths.tanDeg(fovY * 0.5);
+        final float B = A * aspect;
+        final float C = (far + near) / fmn;
+        final float D = (2 * far * near) / fmn;
 
+        val[m00] = -A; val[m10] = 0; val[m20] =  0; val[m30] = 0;
+        val[m01] =  0; val[m11] = B; val[m21] =  0; val[m31] = 0;
+        val[m02] =  0; val[m12] = 0; val[m22] = -C; val[m32] = 1;
+        val[m03] =  0; val[m13] = 0; val[m23] =  D; val[m33] = 0;
         return this;
     }
 

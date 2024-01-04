@@ -1,14 +1,9 @@
 package jpize.io.context;
 
-import io.github.libsdl4j.api.event.SDL_Event;
-import io.github.libsdl4j.api.event.SDL_EventType;
-import io.github.libsdl4j.api.video.SDL_WindowEventID;
 import jpize.gl.Gl;
 import jpize.io.SdlInput;
 import jpize.io.Window;
-import jpize.sdl.event.SdlCallbacks;
-import jpize.sdl.event.mouse.MouseButtonAction;
-import jpize.sdl.input.KeyAction;
+import jpize.sdl.event.callback.SdlCallbacks;
 import jpize.util.Disposable;
 
 public class Context implements Disposable{
@@ -75,14 +70,14 @@ public class Context implements Disposable{
     }
 
 
+    private void setCurrent(Context context){
+        contextManager.setCurrentContext(context);
+    }
+
     private Context setCurrent(){
         final Context previous = contextManager.getCurrentContext();
         setCurrent(this);
         return previous;
-    }
-
-    private void setCurrent(Context context){
-        contextManager.setCurrentContext(context);
     }
 
 
@@ -112,6 +107,8 @@ public class Context implements Disposable{
 
             setCurrent(prev);
         });
+
+        callbacks.addWinCloseCallback((window) -> dispose());
     }
 
     protected void render(){
@@ -155,75 +152,6 @@ public class Context implements Disposable{
 
         if(exitOnClose)
             contextManager.exit();
-    }
-
-
-    protected void onEvent(SDL_Event event){
-        switch(event.type){
-            // Quit
-            case SDL_EventType.SDL_QUIT ->
-                dispose();
-
-            // Mouse
-            case SDL_EventType.SDL_MOUSEWHEEL ->
-                input.updateScroll(event.wheel);
-
-            case SDL_EventType.SDL_MOUSEMOTION ->
-                input.updatePos(event.motion);
-
-            // Text
-            case SDL_EventType.SDL_TEXTINPUT ->
-                callbacks.invokeCharCallbacks((char) event.text.text[0]);
-
-            // Keys
-            case SDL_EventType.SDL_KEYDOWN -> {
-                final KeyAction action = (event.key.repeat == 0) ? KeyAction.DOWN : KeyAction.REPEAT;
-                callbacks.invokeKeyCallbacks(event.key.keysym, action);
-
-                if(event.key.repeat == 0)
-                    input.updateKeyDown(event.key.keysym);
-            }
-
-            case SDL_EventType.SDL_KEYUP -> {
-                input.updateKeyUp(event.key.keysym);
-                callbacks.invokeKeyCallbacks(event.key.keysym, KeyAction.UP);
-            }
-
-            // Buttons
-            case SDL_EventType.SDL_MOUSEBUTTONDOWN -> {
-                input.updateButtonDown(event.button.button);
-                callbacks.invokeMouseButtonCallback(event.button, MouseButtonAction.DOWN);
-            }
-
-            case SDL_EventType.SDL_MOUSEBUTTONUP -> {
-                input.updateButtonUp(event.button.button);
-                callbacks.invokeMouseButtonCallback(event.button, MouseButtonAction.UP);
-            }
-
-            // Window
-            case SDL_EventType.SDL_WINDOWEVENT -> {
-                switch(event.window.event){
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_SHOWN           -> callbacks.invokeWinShownCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_HIDDEN          -> callbacks.invokeWinHiddenCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_EXPOSED         -> callbacks.invokeWinExposedCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_MOVED           -> callbacks.invokeWinMovedCallbacks      (window, event.window.data1, event.window.data2);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED         -> callbacks.invokeWinResizedCallbacks    (window, event.window.data1, event.window.data2);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_SIZE_CHANGED    -> callbacks.invokeWinSizeChangedCallbacks(window, event.window.data1, event.window.data2);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_MINIMIZED       -> callbacks.invokeWinMinimizedCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_MAXIMIZED       -> callbacks.invokeWinMaximizedCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_RESTORED        -> callbacks.invokeWinRestoredCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_ENTER           -> callbacks.invokeWinEnterCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_LEAVE           -> callbacks.invokeWinLeaveCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_FOCUS_GAINED    -> callbacks.invokeWinFocusGainedCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_FOCUS_LOST      -> callbacks.invokeWinFocusLostCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_CLOSE           -> callbacks.invokeWinCloseCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_TAKE_FOCUS      -> callbacks.invokeWinTakeFocusCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_HIT_TEST        -> callbacks.invokeWinHitTestCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_ICCPROF_CHANGED -> callbacks.invokeWinIccProfChangedCallbacks(window);
-                    case SDL_WindowEventID.SDL_WINDOWEVENT_DISPLAY_CHANGE  -> callbacks.invokeWinDisplayChangeCallbacks(window, event.window.data1);
-                }
-            }
-        }
     }
 
 }
