@@ -1,10 +1,10 @@
 package jpize.sdl.event.callback.window;
 
-import jpize.io.Window;
+import jpize.sdl.window.SdlWindow;
 
 @FunctionalInterface
 public interface WinMinimizedCallback{
 
-    void invoke(Window window);
+    void invoke(SdlWindow window);
 
 }

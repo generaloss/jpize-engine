@@ -19,7 +19,9 @@ public class Main{
         //MyGreedyMesh3D.main(args);
         //IoTest.main(args);
         //SdlWindowTest.main(args);
-        //System.exit(0);
+        //OpenGLTest.main(args);
+
+        // System.exit(0);
 
         ContextBuilder.newContext("Dev-Test", 900, 900).icon("textures/texture8.png")
         //.register().setAdapter(new KeyboardTest());
@@ -36,8 +38,8 @@ public class Main{
         //.register().setAdapter(new ListTest());
         //.register().setAdapter(new ResTest());
         //.register().setAdapter(new TilemapTest());
-        //.register().setAdapter(new TriangleIntersectionTest());
         .register().setAdapter(new VecMathTest());
+        //.register().setAdapter(new TriangleIntersectionTest());
         Jpize.runContexts();
     }
 

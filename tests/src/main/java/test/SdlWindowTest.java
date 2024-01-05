@@ -4,14 +4,14 @@ import io.github.libsdl4j.api.event.SDL_Event;
 import io.github.libsdl4j.api.event.SDL_EventType;
 import io.github.libsdl4j.api.event.SdlEvents;
 import jpize.gl.Gl;
-import jpize.io.Window;
+import jpize.sdl.window.SdlWindow;
 import jpize.sdl.Sdl;
 
 public class SdlWindowTest{
 
     public static void main(String[] args){
         Sdl.init();
-        final Window window = new Window("Window Title", 1280, 720);
+        final SdlWindow window = new SdlWindow("Window Title", 1280, 720);
 
         SDL_Event event = new SDL_Event();
 

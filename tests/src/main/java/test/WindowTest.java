@@ -5,7 +5,7 @@ import jpize.gl.Gl;
 import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.io.Window;
+import jpize.sdl.window.SdlWindow;
 import jpize.io.context.JpizeApplication;
 import jpize.sdl.input.Key;
 import jpize.sdl.window.SdlFlashOp;
@@ -26,7 +26,7 @@ public class WindowTest extends JpizeApplication{
         font.setScale(0.5F);
         font.options().invLineWrap = true;
 
-        Window window = Jpize.window();
+        SdlWindow window = Jpize.window();
 
         // window.setIconifyCallback((boolean iconify) -> {
         //     Stopwatch stopwatch = new Stopwatch().start();
@@ -35,7 +35,7 @@ public class WindowTest extends JpizeApplication{
     }
 
     public void update(){
-        Window window = Jpize.window();
+        SdlWindow window = Jpize.window();
 
         if(Key.ESCAPE.isDown())
             Jpize.exit();
@@ -54,7 +54,7 @@ public class WindowTest extends JpizeApplication{
     }
 
     public void render(){
-        Window window = Jpize.window();
+        SdlWindow window = Jpize.window();
         String info =
 //                "Clipboard string: " + window.getClipboardString() + "\n" +
                 "Size: " + window.getSize() + "\n"

@@ -3,7 +3,7 @@ package test;
 import jpize.gl.Gl;
 import jpize.gl.glenum.GlTarget;
 import jpize.gl.texture.GlBlendFactor;
-import jpize.io.Window;
+import jpize.sdl.window.SdlWindow;
 import jpize.sdl.Sdl;
 import jpize.sdl.gl.SdlGlAttr;
 import jpize.sdl.window.SdlWinFlags;
@@ -13,7 +13,8 @@ public class SdlTest{
     public static void main(String[] args){
         Sdl.init();
 
-        final Window window = new Window("Window Title", 1280, 720, true, new SdlWinFlags().openGL().shown().resizable());
+        final SdlWindow window = new SdlWindow("Window Title", 1280, 720, new SdlWinFlags().openGL().shown().resizable());
+        Sdl.enableVsync(true);
         window.toCenter();
 
         Sdl.setGlAttribute(SdlGlAttr.GL_CONTEXT_MAJOR_VERSION, 3);

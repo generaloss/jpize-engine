@@ -26,14 +26,14 @@ public class SkyBox implements Disposable{
 
         mesh = new IndexedMesh(new GlVertexAttr(3, GlType.FLOAT));
         mesh.getBuffer().setData(new float[]{
-            -1, -1,  1, //0
-             1, -1,  1, //1
-            -1,  1,  1, //2
-             1,  1,  1, //3
-            -1, -1, -1, //4
-             1, -1, -1, //5
-            -1,  1, -1, //6
-             1,  1, -1  //7
+            -2, -2,  2, //0
+             2, -2,  2, //1
+            -2,  2,  2, //2
+             2,  2,  2, //3
+            -2, -2, -2, //4
+             2, -2, -2, //5
+            -2,  2, -2, //6
+             2,  2, -2  //7
         });
         mesh.getIndexBuffer().setData(new int[]{
             7, 6, 2,  2, 3, 7, //Top
@@ -42,6 +42,7 @@ public class SkyBox implements Disposable{
             7, 3, 1,  1, 5, 7, //Right
             3, 2, 0,  0, 1, 3, //Front
             4, 6, 7,  7, 5, 4, //Back
+
             //2, 6, 7,  7, 3, 2, //Top
             //5, 4, 0,  0, 1, 5, //Bottom
             //6, 2, 0,  0, 4, 6, //Left

@@ -4,8 +4,7 @@ import jpize.gl.Gl;
 import jpize.gl.glenum.GlDepthFunc;
 import jpize.gl.glenum.GlTarget;
 import jpize.gl.texture.GlBlendFactor;
-import jpize.graphics.util.color.Color;
-import jpize.io.Window;
+import jpize.sdl.window.SdlWindow;
 import jpize.math.vecmath.vector.Vec2i;
 import jpize.sdl.Sdl;
 import jpize.sdl.gl.SdlGlAttr;
@@ -44,12 +43,11 @@ public class ContextBuilder{
     private boolean exitOnClose = true;
     private boolean showWindowOnInit = true;
     private boolean borderless = false;
-    private int depthBufferSize = 16;
+    private int depthBufferSize = 24;
 
     private int samples = 0;
     private float opacity = 1F;
     private Vec2i position = null;
-    private Color initialColor = null;
 
     private int openGlMajorVersion = 4;
     private int openGlMinorVersion = 5;
@@ -67,26 +65,22 @@ public class ContextBuilder{
         Sdl.setGlAttribute(SdlGlAttr.GL_CONTEXT_MAJOR_VERSION, openGlMajorVersion);
         Sdl.setGlAttribute(SdlGlAttr.GL_CONTEXT_MINOR_VERSION, openGlMinorVersion);
         Sdl.setGlAttribute(SdlGlAttr.GL_DEPTH_SIZE, depthBufferSize);
+
         if(samples > 0){
             Sdl.setGlAttribute(SdlGlAttr.GL_MULTISAMPLEBUFFERS, 1);
             Sdl.setGlAttribute(SdlGlAttr.GL_MULTISAMPLESAMPLES, samples);
         }
 
         // Window
-        final Window window = new Window(title, size.x, size.y, vsync, flags);
-        window.setFullscreenDesktop(fullscreen);
-        window.setOpacity(opacity);
+        final SdlWindow window = new SdlWindow(title, size.x, size.y, flags);
 
-        if(icon != null)
-            window.setIcon(icon);
+        if(fullscreen) window.setFullscreenDesktop(true);
+        if(opacity != 1F) window.setOpacity(opacity);
+        if(vsync) Sdl.enableVsync(false);
+        if(icon != null) window.setIcon(icon);
 
-        if(position != null)
-            window.setPos(position.x, position.y);
-        else
-            window.toCenter();
-
-        if(initialColor != null)
-            window.show();
+        if(position != null) window.setPos(position.x, position.y);
+        else window.toCenter();
 
         // Context
         final Context context = new Context(window);
@@ -125,12 +119,6 @@ public class ContextBuilder{
         return this;
     }
 
-
-    /** Показать окно перед выполнением {@link JpizeApplication#init()} */
-    public ContextBuilder showBeforeInit(float r, float g, float b){
-        this.initialColor = new Color(r, g, b);
-        return this;
-    }
 
     /** Включить вертикальную синхронизацию */
     public ContextBuilder vsync(boolean vsync){

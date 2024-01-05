@@ -3,6 +3,7 @@ package jpize.io.context;
 import io.github.libsdl4j.api.event.SDL_Event;
 import io.github.libsdl4j.api.event.SdlEvents;
 import jpize.audio.AudioDeviceManager;
+import jpize.gl.Gl;
 import jpize.gl.buffer.GlBuffer;
 import jpize.gl.shader.GlProgram;
 import jpize.gl.vertex.GlVertexArray;
@@ -14,7 +15,7 @@ import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.ScreenQuad;
 import jpize.graphics.util.ScreenQuadShader;
 import jpize.graphics.util.TextureUtils;
-import jpize.io.Window;
+import jpize.sdl.window.SdlWindow;
 import jpize.sdl.Sdl;
 import jpize.sdl.event.SdlEventType;
 import jpize.sdl.event.SdlWindowEventType;
@@ -24,7 +25,6 @@ import jpize.sdl.input.KeyAction;
 import jpize.util.Utils;
 import jpize.util.time.DeltaTimeCounter;
 import jpize.util.time.FpsCounter;
-import org.lwjgl.opengl.GL;
 
 import java.util.Collection;
 import java.util.List;
@@ -196,7 +196,7 @@ public class ContextManager{
             case WINDOWEVENT -> {
                 final Context context = getContext(event.window.windowID);
                 if(context == null) return;
-                final Window window = context.window();
+                final SdlWindow window = context.window();
                 final SdlCallbacks callbacks = context.callbacks();
 
                 final SdlWindowEventType winEvent = SdlWindowEventType.fromID(event.window.event); //: 2) It still does not make sense
@@ -248,7 +248,7 @@ public class ContextManager{
         CubeMap.unbind();
         TextureArray.unbind();
 
-        GL.setCapabilities(null);
+        Gl.setCapabilities(null);
         Sdl.quit();
     }
 
@@ -278,7 +278,7 @@ public class ContextManager{
 
     protected void setCurrentContext(Context context){
         currentContext = context;
-        context.window().getGlContext().makeCurrent();
+        context.gl().makeCurrent();
     }
 
 

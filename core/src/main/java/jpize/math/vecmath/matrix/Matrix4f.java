@@ -10,8 +10,8 @@ import java.util.Arrays;
 public class Matrix4f implements Matrix4{
 
     private static final Vec3f UP = new Vec3f(0, 1, 0);
-    private final Vec3f tmp_camRight = new Vec3f();
-    private final Vec3f tmp_camUp = new Vec3f();
+    private final Vec3f tmp_vec_x = new Vec3f();
+    private final Vec3f tmp_vec_y = new Vec3f();
 
 
     public final float[] val;
@@ -104,13 +104,13 @@ public class Matrix4f implements Matrix4{
 
         final float A = 1 / Maths.tanDeg(fovY * 0.5);
         final float B = A * aspect;
-        final float C = (far + near) / fmn;
+        final float C = -(far + near) / fmn;
         final float D = (2 * far * near) / fmn;
 
-        val[m00] = -A; val[m10] = 0; val[m20] =  0; val[m30] = 0;
-        val[m01] =  0; val[m11] = B; val[m21] =  0; val[m31] = 0;
-        val[m02] =  0; val[m12] = 0; val[m22] = -C; val[m32] = 1;
-        val[m03] =  0; val[m13] = 0; val[m23] =  D; val[m33] = 0;
+        val[m00] = A; val[m10] = 0; val[m20] = 0; val[m30] = 0;
+        val[m01] = 0; val[m11] = B; val[m21] = 0; val[m31] = 0;
+        val[m02] = 0; val[m12] = 0; val[m22] = C; val[m32] = D;
+        val[m03] = 0; val[m13] = 0; val[m23] = 1; val[m33] = 0;
         return this;
     }
 
@@ -119,11 +119,11 @@ public class Matrix4f implements Matrix4{
     }
 
 
-    /* To Look At */
+    /* To Look At (Left-Handled) */
 
     public Matrix4f setLookAt(float rightX, float rightY, float rightZ, float upX, float upY, float upZ, float forwardX, float forwardY, float forwardZ){
-        val[m00] = rightX;   val[m10] = rightY;   val[m20] = rightZ;   val[m30] = 0;
-        val[m01] = upX;      val[m11] = upY;      val[m21] = upZ;      val[m31] = 0;
+        val[m00] =   rightX; val[m10] =   rightY; val[m20] =   rightZ; val[m30] = 0;
+        val[m01] =      upX; val[m11] =      upY; val[m21] =      upZ; val[m31] = 0;
         val[m02] = forwardX; val[m12] = forwardY; val[m22] = forwardZ; val[m32] = 0;
         val[m03] = 0;        val[m13] = 0;        val[m23] = 0;        val[m33] = 1;
         return this;
@@ -144,9 +144,9 @@ public class Matrix4f implements Matrix4{
 
 
     public Matrix4f setLookAt(Vec3f direction){
-        tmp_camRight.crs(direction, UP).nor();
-        tmp_camUp.crs(tmp_camRight, direction).nor();
-        return setLookAt(tmp_camRight, tmp_camUp, direction);
+        tmp_vec_x.crs(UP, direction).nor();
+        tmp_vec_y.crs(direction, tmp_vec_x).nor();
+        return setLookAt(tmp_vec_x, tmp_vec_y, direction);
     }
 
     public Matrix4f setLookAt(float posX, float posY, float posZ, Vec3f direction){

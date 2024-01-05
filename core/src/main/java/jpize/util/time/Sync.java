@@ -15,7 +15,7 @@ public class Sync{
     }
 
     public Sync(){
-        this(Jpize.window().getDisplayMode().refreshRate);
+        this(Jpize.window().getWindowDisplayMode().refreshRate);
     }
 
 

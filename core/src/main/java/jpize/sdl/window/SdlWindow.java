@@ -14,7 +14,6 @@ import jpize.util.Disposable;
 
 import java.awt.*;
 
-import static io.github.libsdl4j.api.video.SdlVideo.SDL_GetDisplayMode;
 import static io.github.libsdl4j.api.video.SdlVideoConst.SDL_WINDOWPOS_CENTERED;
 
 public class SdlWindow implements Disposable{
@@ -258,7 +257,7 @@ public class SdlWindow implements Disposable{
     }
 
 
-    public SDL_DisplayMode getDisplayMode(){
+    public SDL_DisplayMode getWindowDisplayMode(){
         final SDL_DisplayMode mode = new SDL_DisplayMode();
         SdlVideo.SDL_GetWindowDisplayMode(windowSDL, mode);
         return mode;
@@ -266,8 +265,12 @@ public class SdlWindow implements Disposable{
 
     public SDL_DisplayMode getDisplayMode(int modeIndex){
         final SDL_DisplayMode mode = new SDL_DisplayMode();
-        SDL_GetDisplayMode(Jpize.window().getDisplayIndex(), modeIndex, mode);
+        SdlVideo.SDL_GetDisplayMode(Jpize.window().getDisplayIndex(), modeIndex, mode);
         return mode;
+    }
+
+    public SDL_DisplayMode getDisplayMode(){
+        return getDisplayMode(0);
     }
 
     public void setDisplayMode(SDL_DisplayMode mode){

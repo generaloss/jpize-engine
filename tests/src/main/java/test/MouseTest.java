@@ -30,7 +30,7 @@ public class MouseTest extends JpizeApplication{
 
         SDL_DisplayMode mode = new SDL_DisplayMode();
         SDL_GetDisplayMode(Jpize.window().getDisplayIndex(), 0, mode);
-        mode = Jpize.window().getDisplayMode();
+        mode = Jpize.window().getWindowDisplayMode();
         System.out.println(mode.w + ", " + mode.h + ", " + mode.refreshRate);
 //        GlfwCursor cursor = new GlfwCursor("textures/texture15.png");
 //        Jpize.mouse().setCursor(cursor);

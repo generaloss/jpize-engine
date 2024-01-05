@@ -2,7 +2,6 @@ package jpize.sdl.event.callback;
 
 import io.github.libsdl4j.api.event.events.SDL_MouseButtonEvent;
 import io.github.libsdl4j.api.keyboard.SDL_Keysym;
-import jpize.io.Window;
 import jpize.sdl.event.callback.keyboard.CharCallback;
 import jpize.sdl.event.callback.keyboard.KeyCallback;
 import jpize.sdl.event.callback.mouse.MouseButtonAction;
@@ -12,6 +11,7 @@ import jpize.sdl.input.Btn;
 import jpize.sdl.input.Key;
 import jpize.sdl.input.KeyAction;
 import jpize.sdl.input.KeyMods;
+import jpize.sdl.window.SdlWindow;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -76,92 +76,92 @@ public class SdlCallbacks{
 
     // window
 
-    public void invokeWinCloseCallbacks(Window window){
+    public void invokeWinCloseCallbacks(SdlWindow window){
         for(WinCloseCallback callback: winCloseCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinEnterCallbacks(Window window){
+    public void invokeWinEnterCallbacks(SdlWindow window){
         for(WinEnterCallback callback: winEnterCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinExposedCallbacks(Window window){
+    public void invokeWinExposedCallbacks(SdlWindow window){
         for(WinExposedCallback callback: winExposedCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinFocusGainedCallbacks(Window window){
+    public void invokeWinFocusGainedCallbacks(SdlWindow window){
         for(WinFocusGainedCallback callback: winFocusGainedCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinFocusLostCallbacks(Window window){
+    public void invokeWinFocusLostCallbacks(SdlWindow window){
         for(WinFocusLostCallback callback: winFocusLostCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinHiddenCallbacks(Window window){
+    public void invokeWinHiddenCallbacks(SdlWindow window){
         for(WinHiddenCallback callback: winHiddenCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinHitTestCallbacks(Window window){
+    public void invokeWinHitTestCallbacks(SdlWindow window){
         for(WinHitTestCallback callback: winHitTestCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinLeaveCallbacks(Window window){
+    public void invokeWinLeaveCallbacks(SdlWindow window){
         for(WinLeaveCallback callback: winLeaveCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinMaximizedCallbacks(Window window){
+    public void invokeWinMaximizedCallbacks(SdlWindow window){
         for(WinMaximizedCallback callback: winMaximizedCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinMinimizedCallbacks(Window window){
+    public void invokeWinMinimizedCallbacks(SdlWindow window){
         for(WinMinimizedCallback callback: winMinimizedCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinMovedCallbacks(Window window, int x, int y){
+    public void invokeWinMovedCallbacks(SdlWindow window, int x, int y){
         for(WinMovedCallback callback: winMovedCallbacks)
             callback.invoke(window, x, y);
     }
 
-    public void invokeWinResizedCallbacks(Window window, int width, int height){
+    public void invokeWinResizedCallbacks(SdlWindow window, int width, int height){
         for(WinResizedCallback callback: winResizedCallbacks)
             callback.invoke(window, width, height);
     }
 
-    public void invokeWinRestoredCallbacks(Window window){
+    public void invokeWinRestoredCallbacks(SdlWindow window){
         for(WinRestoredCallback callback: winRestoredCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinShownCallbacks(Window window){
+    public void invokeWinShownCallbacks(SdlWindow window){
         for(WinShownCallback callback: winShownCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinSizeChangedCallbacks(Window window, int width, int height){
+    public void invokeWinSizeChangedCallbacks(SdlWindow window, int width, int height){
         for(WinSizeChangedCallback callback: winSizeChangedCallbacks)
             callback.invoke(window, width, height);
     }
 
-    public void invokeWinTakeFocusCallbacks(Window window){
+    public void invokeWinTakeFocusCallbacks(SdlWindow window){
         for(WinTakeFocusCallback callback: winTakeFocusCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinIccProfChangedCallbacks(Window window){
+    public void invokeWinIccProfChangedCallbacks(SdlWindow window){
         for(WinIccProfChangedCallback callback: winIccProfChangedCallbacks)
             callback.invoke(window);
     }
 
-    public void invokeWinDisplayChangeCallbacks(Window window, int data1){
+    public void invokeWinDisplayChangeCallbacks(SdlWindow window, int data1){
         for(WinDisplayChangeCallback callback: winDisplayChangeCallbacks)
             callback.invoke(window, data1);
     }

@@ -14,6 +14,7 @@ import jpize.math.vecmath.vector.Vec2i;
 import jpize.sdl.input.Btn;
 import jpize.sdl.input.Key;
 import jpize.sdl.input.KeyMods;
+import jpize.sdl.window.SdlWindow;
 
 import java.util.Arrays;
 
@@ -143,7 +144,7 @@ public class SdlInput{
     }
 
     public void toCenter(){
-        final Window window = context.window();
+        final SdlWindow window = context.window();
         setPos(window.getWidth() / 2, window.getHeight() / 2);
     }
 

@@ -118,7 +118,6 @@ public class GreedyMesh extends Scene3D{
          * voxel face.
          */
         for(boolean backFace = true, b = false; b != backFace; backFace = false, b = !b){
-
             /*
              * We sweep over the 3 dimensions - most of what follows is well described by Mikola Lysenko
              * in his post - and is ported from his Javascript implementation.  Where this implementation

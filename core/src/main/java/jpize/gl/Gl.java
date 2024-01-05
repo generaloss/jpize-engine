@@ -8,6 +8,8 @@ import jpize.gl.texture.GlBlendFactor;
 import jpize.gl.texture.GlSizedFormat;
 import jpize.graphics.util.color.Color;
 import jpize.graphics.util.color.IColor;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GLCapabilities;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -225,6 +227,10 @@ public class Gl{
 
     public static void blendFuncSeparate(int srcFactorRGB, int dstFactorRGB, int srcFactorAlpha, int dstFactorAlpha){
         glBlendFuncSeparate(srcFactorRGB, dstFactorRGB, srcFactorAlpha, dstFactorAlpha);
+    }
+
+    public static void setCapabilities(GLCapabilities capabilities){
+        GL.setCapabilities(capabilities);
     }
 
 }

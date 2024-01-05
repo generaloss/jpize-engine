@@ -3,7 +3,7 @@ package jpize;
 import io.github.libsdl4j.api.clipboard.SdlClipboard;
 import jpize.audio.AudioDeviceManager;
 import jpize.io.SdlInput;
-import jpize.io.Window;
+import jpize.sdl.window.SdlWindow;
 import jpize.io.context.Context;
 import jpize.io.context.ContextManager;
 import jpize.io.context.Screen;
@@ -31,7 +31,7 @@ public class Jpize{
         return contextManager.getCurrentContext();
     }
 
-    public static Window window(){
+    public static SdlWindow window(){
         return context().window();
     }
 

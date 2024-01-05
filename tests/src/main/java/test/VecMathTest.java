@@ -7,7 +7,6 @@ import jpize.graphics.util.SkyBox;
 import jpize.io.context.JpizeApplication;
 import jpize.math.util.EulerAngles;
 import jpize.math.vecmath.matrix.Matrix4f;
-import jpize.math.vecmath.vector.Vec4f;
 import jpize.sdl.input.Key;
 
 public class VecMathTest extends JpizeApplication{
@@ -20,6 +19,7 @@ public class VecMathTest extends JpizeApplication{
     Matrix4f projection;
     Matrix4f view;
 
+
     public void init(){
         skybox = new SkyBox();
 
@@ -27,10 +27,12 @@ public class VecMathTest extends JpizeApplication{
         controller.setSpeed(0.25F);
         rotation = controller.getRotation();
 
-        projection = new Matrix4f().setPerspective(Jpize.getAspect(), 1, 1000, 70);
-        view = new Matrix4f();
+        projection = new Matrix4f().setPerspective(Jpize.getAspect(), 1, 500, 70);
+        view = new Matrix4f().setLookAt(rotation.getDir());
 
-        System.out.println(new Vec4f(0, 0, 100, 1).mulMat4(projection));
+        // System.out.println(new Vec4f(1, 1, 1, 1).mulMat4(projection));
+
+        // Gl.disable(GlTarget.CULL_FACE);
     }
 
     @Override

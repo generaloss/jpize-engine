@@ -1,6 +1,7 @@
 package jpize.gl.type;
 
-import static org.lwjgl.opengl.GL44.*;
+
+import static org.lwjgl.opengl.GL46.*;
 
 public enum GlType{
 
@@ -18,8 +19,7 @@ public enum GlType{
     FIXED                        (GL_FIXED                       , 4),
     INT_2_10_10_10_REV           (GL_INT_2_10_10_10_REV          , 4),
     UNSIGNED_INT_2_10_10_10_REV  (GL_UNSIGNED_INT_2_10_10_10_REV , 4),
-    UNSIGNED_INT_10F_11F_11F_REV (GL_UNSIGNED_INT_10F_11F_11F_REV, 4)
-    ;
+    UNSIGNED_INT_10F_11F_11F_REV (GL_UNSIGNED_INT_10F_11F_11F_REV, 4);
 
 
     public final int GL;

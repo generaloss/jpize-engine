@@ -2,25 +2,28 @@ package jpize.io.context;
 
 import jpize.gl.Gl;
 import jpize.io.SdlInput;
-import jpize.io.Window;
 import jpize.sdl.event.callback.SdlCallbacks;
+import jpize.sdl.gl.SdlGlContext;
+import jpize.sdl.window.SdlWindow;
 import jpize.util.Disposable;
 
 public class Context implements Disposable{
 
     private static final ContextManager contextManager = ContextManager.getInstance();
 
-    private final Window window;
+    private final SdlWindow window;
+    private final SdlGlContext gl;
     private final SdlInput input;
     private final SdlCallbacks callbacks;
     protected JpizeApplication adapter;
     private Screen screen;
     private boolean exitOnClose, enabled, showWindowOnInit;
 
-    protected Context(Window window){
+    protected Context(SdlWindow window){
         contextManager.registerContext(this);
 
         this.window = window;
+        this.gl = new SdlGlContext(window);
         this.exitOnClose = true;
         this.showWindowOnInit = true;
 
@@ -57,8 +60,12 @@ public class Context implements Disposable{
     }
 
 
-    public Window window(){
+    public SdlWindow window(){
         return window;
+    }
+
+    public SdlGlContext gl(){
+        return gl;
     }
 
     public SdlInput input(){

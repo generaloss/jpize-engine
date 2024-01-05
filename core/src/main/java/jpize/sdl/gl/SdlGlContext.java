@@ -14,7 +14,6 @@ public class SdlGlContext implements Disposable{
 
     private static final IntByReference tmp_int_1 = new IntByReference();
 
-
     private final SDL_Window windowSDL;
     private final SDL_GLContext glContextSDL;
     private final GLCapabilities capabilities;
