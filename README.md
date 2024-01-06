@@ -2,14 +2,14 @@
 ![jpize](jpize-logo.svg)
 
 ### The Engine focuses on being:
-* *Intuitive*
-* *Simple*
-* *Efficient*
+* **Intuitive**
+* **Simple**
+* **Efficient**
 
 ### Support OS:
-* *Windows*
-* *Linux x64*
-* *MacOS*
+* **Windows**
+* **Linux x64**
+* _(possibly MacOS)_
 
 ---
 
@@ -25,11 +25,15 @@
 
 ## Forks
 * *[Kotlin Fork](https://github.com/Raf0707/Pizza-Engine-Kotlin)* by *[Raf0707](https://github.com/Raf0707)*
-* *[C++ Version](https://github.com/GeneralPashon/Pizza-Engine-Cpp)* (In Dev)
+* *[C++ Version](https://github.com/GeneralPashon/Pizza-Engine-Cpp)* (abandoned)
 
 ---
 
 # Getting Started
+
+### What you need to know about the engine?
+*  Matrices indexed with _**mᵢⱼ**_, where _**i**_ - column index, _**j**_ - row index
+*  Left-Hand Coordinate System
 
 ---
 

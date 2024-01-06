@@ -38,8 +38,8 @@ public class Main{
         //.register().setAdapter(new ListTest());
         //.register().setAdapter(new ResTest());
         //.register().setAdapter(new TilemapTest());
-        .register().setAdapter(new VecMathTest());
-        //.register().setAdapter(new TriangleIntersectionTest());
+        //.register().setAdapter(new VecMathTest());
+        .register().setAdapter(new TriangleIntersectionTest());
         Jpize.runContexts();
     }
 
