@@ -159,8 +159,8 @@ public class FloatList{
         return slice;
     }
 
-    public float[] slice(int offset){
-        return slice(offset, size - offset);
+    public float[] slice(int length){
+        return slice(0, length);
     }
 
     public void capacity(int newCapacity){

@@ -159,8 +159,8 @@ public class CharList{
         return slice;
     }
 
-    public char[] slice(int offset){
-        return slice(offset, size - offset);
+    public char[] slice(int length){
+        return slice(0, length);
     }
 
     public void capacity(int newCapacity){

@@ -159,8 +159,8 @@ public class DoubleList{
         return slice;
     }
 
-    public double[] slice(int offset){
-        return slice(offset, size - offset);
+    public double[] slice(int length){
+        return slice(0, length);
     }
 
     public void capacity(int newCapacity){

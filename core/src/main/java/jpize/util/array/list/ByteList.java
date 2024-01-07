@@ -159,8 +159,8 @@ public class ByteList{
         return slice;
     }
 
-    public byte[] slice(int offset){
-        return slice(offset, size - offset);
+    public byte[] slice(int length){
+        return slice(0, length);
     }
 
     public void capacity(int newCapacity){

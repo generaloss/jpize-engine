@@ -159,8 +159,8 @@ public class BoolList{
         return slice;
     }
 
-    public boolean[] slice(int offset){
-        return slice(offset, size - offset);
+    public boolean[] slice(int length){
+        return slice(0, length);
     }
 
     public void capacity(int newCapacity){

@@ -159,8 +159,8 @@ public class IntList{
         return slice;
     }
 
-    public int[] slice(int offset){
-         return slice(offset, size - offset);
+    public int[] slice(int length){
+        return slice(0, length);
     }
 
     public void capacity(int newCapacity){

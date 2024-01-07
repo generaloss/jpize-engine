@@ -159,8 +159,8 @@ public class ShortList{
         return slice;
     }
 
-    public short[] slice(int offset){
-        return slice(offset, size - offset);
+    public short[] slice(int length){
+        return slice(0, length);
     }
 
     public void capacity(int newCapacity){

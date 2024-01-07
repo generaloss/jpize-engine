@@ -159,8 +159,8 @@ public class LongList{
         return slice;
     }
 
-    public long[] slice(int offset){
-        return slice(offset, size - offset);
+    public long[] slice(int length){
+        return slice(0, length);
     }
 
     public void capacity(int newCapacity){
