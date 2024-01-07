@@ -1,8 +1,12 @@
 package jpize.util.array.list;
 
+import jpize.util.array.ArraysSupport;
+
 import java.util.Arrays;
 
 public class DoubleList{
+
+    public static final int DEFAULT_CAPACITY = 10;
 
     private double[] array;
     private int size;
@@ -14,7 +18,7 @@ public class DoubleList{
     }
 
     public DoubleList(){
-        this(2);
+        this(DEFAULT_CAPACITY);
     }
 
 
@@ -31,10 +35,13 @@ public class DoubleList{
     }
 
     private void grow(int minCapacity){
-        if(array.length == 0)
-            array = new double[minCapacity];
-        else
-            array = Arrays.copyOf(array, minCapacity);
+        final int oldCapacity = array.length;
+        if(oldCapacity == 0){
+            array = new double[Math.max(minCapacity, DEFAULT_CAPACITY)];
+        }else{
+            final int newCapacity = ArraysSupport.newLength(oldCapacity, minCapacity - oldCapacity, oldCapacity >> 1);
+            array = Arrays.copyOf(array, newCapacity);
+        }
     }
 
     private void grow(){

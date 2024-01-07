@@ -1,8 +1,12 @@
 package jpize.util.array.list;
 
+import jpize.util.array.ArraysSupport;
+
 import java.util.Arrays;
 
 public class CharList{
+
+    public static final int DEFAULT_CAPACITY = 10;
 
     private char[] array;
     private int size;
@@ -14,7 +18,7 @@ public class CharList{
     }
 
     public CharList(){
-        this(2);
+        this(DEFAULT_CAPACITY);
     }
 
 
@@ -31,10 +35,13 @@ public class CharList{
     }
 
     private void grow(int minCapacity){
-        if(array.length == 0)
-            array = new char[minCapacity];
-        else
-            array = Arrays.copyOf(array, minCapacity);
+        final int oldCapacity = array.length;
+        if(oldCapacity == 0){
+            array = new char[Math.max(minCapacity, DEFAULT_CAPACITY)];
+        }else{
+            final int newCapacity = ArraysSupport.newLength(oldCapacity, minCapacity - oldCapacity, oldCapacity >> 1);
+            array = Arrays.copyOf(array, newCapacity);
+        }
     }
 
     private void grow(){

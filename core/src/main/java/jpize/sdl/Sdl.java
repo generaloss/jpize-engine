@@ -57,6 +57,11 @@ public class Sdl{
         return SdlVideo.SDL_GL_SetSwapInterval(interval);
     }
 
+
+    public static boolean isVsyncEnabled(){
+        return getSwapInterval() == 1;
+    }
+
     public static void enableVsync(boolean vsync){
         setSwapInterval(vsync ? 1 : 0);
     }

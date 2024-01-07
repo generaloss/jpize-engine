@@ -10,6 +10,7 @@ public class Main{
 
         //myMultipleWindows();
 
+        PrimitiveListTest.main(args);
         //SdlTest.main(args);
         //ResourceTest.main(args);
         //NeuralTest.main(args);
@@ -23,7 +24,7 @@ public class Main{
 
         // System.exit(0);
 
-        ContextBuilder.newContext("Dev-Test", 900, 900).icon("textures/texture8.png")
+        //ContextBuilder.newContext("Dev-Test", 900, 900).icon("textures/texture8.png")
         //.register().setAdapter(new KeyboardTest());
         //.register().setAdapter(new MouseTest());
         //.register().setAdapter(new WindowTest());
@@ -39,8 +40,8 @@ public class Main{
         //.register().setAdapter(new ResTest());
         //.register().setAdapter(new TilemapTest());
         //.register().setAdapter(new VecMathTest());
-        .register().setAdapter(new TriangleIntersectionTest());
-        Jpize.runContexts();
+        //.register().setAdapter(new TriangleIntersectionTest());
+        //Jpize.runContexts();
     }
 
     private static void myMultipleWindows(){
