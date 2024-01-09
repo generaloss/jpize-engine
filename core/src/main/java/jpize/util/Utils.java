@@ -69,7 +69,13 @@ public class Utils{
             closeable.close();
         }catch(Exception ignored){ }
     }
-    
+
+
+    public static void delayElapsedNanos(long nanos){
+        final long current = System.nanoTime();
+        while(System.nanoTime() - current < nanos)
+            Thread.onSpinWait();
+    }
     
     public static void delayElapsed(long millis){
         final long current = System.currentTimeMillis();

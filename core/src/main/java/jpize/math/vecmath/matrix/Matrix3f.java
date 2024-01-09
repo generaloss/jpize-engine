@@ -74,58 +74,58 @@ public class Matrix3f implements Matrix3{
     }
 
 
-    /** To Translated */
-    public Matrix3f toTranslated(float x, float y){
+    /** Set Translate */
+    public Matrix3f setTranslate(float x, float y){
         identity();
         val[m20] = x;
         val[m21] = y;
         return this;
     }
 
-    public Matrix3f toTranslated(Vec2f vec2){
-        return toTranslated(vec2.x, vec2.y);
+    public Matrix3f setTranslate(Vec2f vec2){
+        return setTranslate(vec2.x, vec2.y);
     }
 
-    public Matrix3f toTranslated(Vec2d vec2){
-        return toTranslated((float) vec2.x, (float) vec2.y);
+    public Matrix3f setTranslate(Vec2d vec2){
+        return setTranslate((float) vec2.x, (float) vec2.y);
     }
 
-    public Matrix3f toTranslated(Vec2i vec2){
-        return toTranslated(vec2.x, vec2.y);
+    public Matrix3f setTranslate(Vec2i vec2){
+        return setTranslate(vec2.x, vec2.y);
     }
 
 
-    /** To Scaled */
-    public Matrix3f toScaled(float x, float y){
+    /** Set Scale */
+    public Matrix3f setScale(float x, float y){
         identity();
         val[m00] = x;
         val[m11] = y;
         return this;
     }
 
-    public Matrix3f toScaled(float scale){
-        return toScaled(scale, scale);
+    public Matrix3f setScale(float scale){
+        return setScale(scale, scale);
     }
 
-    public Matrix3f toScaled(double scale){
-        return toScaled((float) scale);
+    public Matrix3f setScale(double scale){
+        return setScale((float) scale);
     }
 
-    public Matrix3f toScaled(Vec2f vec2){
-        return toScaled(vec2.x, vec2.y);
+    public Matrix3f setScale(Vec2f vec2){
+        return setScale(vec2.x, vec2.y);
     }
 
-    public Matrix3f toScaled(Vec2d vec2){
-        return toScaled((float) vec2.x, (float) vec2.y);
+    public Matrix3f setScale(Vec2d vec2){
+        return setScale((float) vec2.x, (float) vec2.y);
     }
 
-    public Matrix3f toScaled(Vec2i vec2){
-        return toScaled(vec2.x, vec2.y);
+    public Matrix3f setScale(Vec2i vec2){
+        return setScale(vec2.x, vec2.y);
     }
 
 
-    /** To Rotated */
-    public Matrix3f toRotated(double degrees){
+    /** Set Rotation */
+    public Matrix3f setRotation(double degrees){
         identity();
 
         final float cos = Maths.cosDeg(degrees);
@@ -140,16 +140,40 @@ public class Matrix3f implements Matrix3{
     }
 
 
-    /** To Sheared */
-    public Matrix3f toSheared(double degreesX, double degreesY){
+    /** Shear */
+
+    public Matrix3f shear(double degreesX, double degreesY){
+        final float M10 = Maths.tanDeg(degreesX);
+        final float M01 = Maths.tanDeg(degreesY);
+
+        final float oldM10 = val[m10];
+        final float oldM11 = val[m11];
+        final float oldM12 = val[m12];
+
+        val[m10] += val[m00] * M10;
+        val[m11] += val[m01] * M10;
+        val[m12] += val[m02] * M10;
+        val[m00] += oldM10 * M01;
+        val[m01] += oldM11 * M01;
+        val[m02] += oldM12 * M01;
+        return this;
+    }
+
+    public Matrix3f shear(Vec2f vec2){
+        return shear(vec2.x, vec2.y);
+    }
+
+
+    /** Set Shear */
+    public Matrix3f setShear(double degreesX, double degreesY){
         identity();
         val[m10] = Maths.tanDeg(degreesX);
         val[m01] = Maths.tanDeg(degreesY);
         return this;
     }
 
-    public Matrix3f toSheared(Vec2f vec2){
-        return toSheared(vec2.x, vec2.y);
+    public Matrix3f setShear(Vec2f vec2){
+        return setShear(vec2.x, vec2.y);
     }
 
 

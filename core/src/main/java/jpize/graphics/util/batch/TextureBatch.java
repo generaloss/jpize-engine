@@ -1,11 +1,12 @@
 package jpize.graphics.util.batch;
 
 import jpize.Jpize;
+import jpize.gl.tesselation.GlPrimitive;
+import jpize.graphics.mesh.Mesh;
 import jpize.util.file.Resource;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertexAttr;
 import jpize.graphics.camera.Camera;
-import jpize.graphics.mesh.QuadMesh;
 import jpize.graphics.texture.Region;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.texture.TextureRegion;
@@ -19,13 +20,12 @@ import jpize.math.vecmath.matrix.Matrix4f;
 import jpize.math.vecmath.vector.Vec2f;
 import jpize.util.Disposable;
 
-import static jpize.graphics.buffer.QuadIndexBuffer.QUAD_INDICES;
 import static jpize.graphics.buffer.QuadIndexBuffer.QUAD_VERTICES;
 
 public class TextureBatch implements Disposable{
 
     // Tesselation
-    private final QuadMesh mesh;
+    private final Mesh mesh;
     private final Shader shader;
     private final Color color;
     private Texture lastTexture;
@@ -55,12 +55,12 @@ public class TextureBatch implements Disposable{
         );
 
         // Mesh
-        this.mesh = new QuadMesh(
-                maxSize,
+        this.mesh = new Mesh(
                 new GlVertexAttr(2, GlType.FLOAT),
                 new GlVertexAttr(2, GlType.FLOAT),
                 new GlVertexAttr(4, GlType.FLOAT)
         );
+        this.mesh.setMode(GlPrimitive.QUADS);
 
         // Get vertex size
         final int vertexSize = mesh.getBuffer().getVertexSize();
@@ -149,7 +149,7 @@ public class TextureBatch implements Disposable{
         usedShader.uniform("u_texture", lastTexture);
 
         // Render
-        mesh.render(size * QUAD_INDICES);
+        mesh.render(size * QUAD_VERTICES);
 
         // Reset
         size = 0;
@@ -338,19 +338,19 @@ public class TextureBatch implements Disposable{
     }
 
     public void rotate(double angle){
-        rotationMat.toRotated(angle);
+        rotationMat.setRotation(angle);
     }
 
     public void shear(double angleX, double angleY){
-        shearMat.toSheared(angleX, angleY);
+        shearMat.setShear(angleX, angleY);
     }
 
     public void scale(double scale){
-        scaleMat.toScaled(scale);
+        scaleMat.setScale(scale);
     }
 
     public void scale(float x, float y){
-        scaleMat.toScaled(x, y);
+        scaleMat.setScale(x, y);
     }
 
     public void flip(boolean x, boolean y){

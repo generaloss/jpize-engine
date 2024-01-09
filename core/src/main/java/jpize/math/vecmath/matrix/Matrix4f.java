@@ -102,8 +102,8 @@ public class Matrix4f implements Matrix4{
     public Matrix4f setPerspective(float aspect, float near, float far, float fovY){
         final float fmn = far - near;
 
-        final float A = 1 / Maths.tanDeg(fovY * 0.5);
-        final float B = A * aspect;
+        final float B = 1 / Maths.tanDeg(fovY * 0.5);
+        final float A = B / aspect;
         final float C = -(far + near) / fmn;
         final float D = (2 * far * near) / fmn;
 

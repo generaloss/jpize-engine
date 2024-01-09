@@ -22,9 +22,13 @@ public class Mesh implements IMesh{
         this.mode = mode;
     }
 
+    public void render(int vertexCount){
+        vertexArray.drawArrays(vertexCount, mode);
+    }
+
     @Override
     public void render(){
-        vertexArray.drawArrays(vertexBuffer.getVertexCount(), mode);
+        render(vertexBuffer.getVertexCount());
     }
 
     @Override

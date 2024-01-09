@@ -1,14 +1,25 @@
 package jpize.graphics.font;
 
+import jpize.Jpize;
+import jpize.gl.tesselation.GlPrimitive;
+import jpize.gl.type.GlType;
+import jpize.gl.vertex.GlVertexAttr;
 import jpize.graphics.font.glyph.GlyphIterator;
 import jpize.graphics.font.glyph.GlyphMap;
 import jpize.graphics.font.glyph.GlyphPages;
 import jpize.graphics.font.glyph.GlyphSprite;
+import jpize.graphics.mesh.Mesh;
+import jpize.graphics.texture.Region;
+import jpize.graphics.texture.Texture;
+import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.graphics.util.color.Color;
 import jpize.math.Maths;
+import jpize.math.vecmath.matrix.Matrix3f;
+import jpize.math.vecmath.matrix.Matrix4f;
 import jpize.math.vecmath.vector.Vec2f;
 import jpize.util.Disposable;
+import jpize.util.array.list.FloatList;
 
 public class BitmapFont implements Disposable{
 
@@ -58,7 +69,7 @@ public class BitmapFont implements Disposable{
         options.scale = scale;
     }
 
-    
+
     public Vec2f getBounds(String text){
         float width = 0;
         float height = 0;
@@ -94,7 +105,7 @@ public class BitmapFont implements Disposable{
 
 
     public void drawText(TextureBatch batch, String text, float x, float y){
-        if(text == null)
+        if(text == null || text.isEmpty() || text.isBlank())
             return;
 
         final Color color = options.color;
@@ -109,7 +120,7 @@ public class BitmapFont implements Disposable{
         final float descent = getDescentScaled();
 
         for(GlyphSprite sprite: iterableText(text)){
-            if((char) sprite.getCode() == ' ')
+            if((char) sprite.getCode() == ' ' || !sprite.isCanRender())
                 continue;
 
             final Vec2f renderPos = new Vec2f(sprite.getX(), sprite.getY());
@@ -118,10 +129,103 @@ public class BitmapFont implements Disposable{
             renderPos.y += descent;
             sprite.render(batch, renderPos.x, renderPos.y, color.r(), color.g(), color.b(), color.a());
         }
-
-        batch.rotate(0);
-        batch.shear(0, 0);
     }
+
+    public void drawText(String text, float x, float y){
+        if(text == null || text.isEmpty() || text.isBlank())
+            return;
+
+        if(tmpMesh == null){
+            tmpMesh = new Mesh(new GlVertexAttr(2, GlType.FLOAT), new GlVertexAttr(2, GlType.FLOAT), new GlVertexAttr(4, GlType.FLOAT));
+            tmpMesh.setMode(GlPrimitive.QUADS);
+            tmpShader = BaseShader.getPos2UvColor();
+            tmpMatrix1 = new Matrix4f();
+            tmpMatrix2 = new Matrix4f();
+        }
+        tmpMatrix1.setOrthographic(0, 0, Jpize.getWidth(), Jpize.getHeight());
+
+        final Color color = options.color;
+
+        final Matrix3f mat = new Matrix3f();
+        mat.setRotation(options.rotation);
+        mat.shear(options.getItalicAngle(), 0);
+
+        final Vec2f centerPos = getBounds(text).mul(options.rotateOrigin);
+        centerPos.y *= options.getLineWrapSign();
+
+        final float descent = getDescentScaled();
+
+        final FloatList vertices = new FloatList(text.length() * 4);
+        Texture lastTexture = null;
+
+        for(GlyphSprite sprite: iterableText(text)){
+            if((char) sprite.getCode() == ' ' || !sprite.isCanRender())
+                continue;
+
+            final Vec2f renderPos = new Vec2f(sprite.getX(), sprite.getY());
+            renderPos.y -= descent;
+            renderPos.sub(centerPos).rotDeg(options.rotation).add(centerPos).add(x, y);
+            renderPos.y += descent;
+            renderPos.mulMat3(mat);
+
+            final Texture page = sprite.getPage();
+            final float width = sprite.getWidth();
+            final float height = sprite.getHeight();
+            final Region region = sprite.getRegion();
+
+            final float renderX = renderPos.x;
+            final float renderY = renderPos.y;
+
+            final float u1 = region.u1();
+            final float u2 = region.u2();
+            final float v1 = region.v1();
+            final float v2 = region.v2();
+
+            final float r = color.r();
+            final float g = color.g();
+            final float b = color.b();
+            final float a = color.a();
+
+            final Vec2f vertex1 = new Vec2f(0,     height).mulMat3(mat).add(renderX, renderY);
+            final Vec2f vertex2 = new Vec2f(0,     0     ).mulMat3(mat).add(renderX, renderY);
+            final Vec2f vertex3 = new Vec2f(width, 0     ).mulMat3(mat).add(renderX, renderY);
+            final Vec2f vertex4 = new Vec2f(width, height).mulMat3(mat).add(renderX, renderY);
+
+            vertices.add(new float[]{
+                vertex1.x, vertex1.y,  u1, v1,  r, g, b, a,
+                vertex2.x, vertex2.y,  u1, v2,  r, g, b, a,
+                vertex3.x, vertex3.y,  u2, v2,  r, g, b, a,
+                vertex4.x, vertex4.y,  u2, v1,  r, g, b, a,
+            });
+
+            if(lastTexture == null)
+                lastTexture = page;
+            if(lastTexture != page){
+                lastTexture = page;
+
+                tmpMesh.getBuffer().setData(vertices.slice(vertices.size()));
+                vertices.clear();
+
+                tmpShader.bind();
+                tmpShader.setMatrices(tmpMatrix1, tmpMatrix2);
+                tmpShader.setTexture(lastTexture);
+                tmpMesh.render();
+            }
+        }
+
+        if(lastTexture == null || vertices.isEmpty())
+            return;
+
+        tmpMesh.getBuffer().setData(vertices.slice(vertices.size()));
+        tmpShader.bind();
+        tmpShader.setMatrices(tmpMatrix1, tmpMatrix2);
+        tmpShader.setTexture(lastTexture);
+        tmpMesh.render();
+    }
+
+    private static Mesh tmpMesh;
+    private static BaseShader tmpShader;
+    private static Matrix4f tmpMatrix1, tmpMatrix2;
 
 
     public Iterable<GlyphSprite> iterableText(String text){

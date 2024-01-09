@@ -13,7 +13,8 @@ public class Maths{
     public static final float sqrt4 = Mathc.sqrt(4);
     public static final float nanosInSec = 1_000_000_000;
     public static final float nanosInMs = 1_000_000;
-    
+    public static final float msInSec = 1_000;
+
 
     public static float sinFromCos(float cos){
         return Mathc.sqrt(1 - cos * cos);

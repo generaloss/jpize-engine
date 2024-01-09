@@ -79,6 +79,10 @@ public class GlyphSprite{
         return canRender;
     }
 
+    public Region getRegion(){
+        return region;
+    }
+
 
     public void render(TextureBatch batch, float x, float y, float r, float g, float b, float a){
         if(canRender)

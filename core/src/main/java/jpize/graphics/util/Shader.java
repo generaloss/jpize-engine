@@ -85,12 +85,20 @@ public class Shader implements Disposable{
     }
 
 
+    public void uniformMat4(String uniformName, float[] values){
+        program.uniformMat4(uniforms.get(uniformName), false, values);
+    }
+
     public void uniform(String uniformName, Matrix4f matrix4f){
-        program.uniformMat4(uniforms.get(uniformName), false, matrix4f.val);
+        uniformMat4(uniformName, matrix4f.val);
+    }
+
+    public void uniformMat3(String uniformName, float[] values){
+        program.uniformMat3(uniforms.get(uniformName), false, values);
     }
 
     public void uniform(String uniformName, Matrix3f matrix3f){
-        program.uniformMat3(uniforms.get(uniformName), false, matrix3f.val);
+        uniformMat3(uniformName, matrix3f.val);
     }
 
     public void uniform(String uniformName, Vec2f v){

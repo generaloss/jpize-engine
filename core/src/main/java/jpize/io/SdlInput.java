@@ -111,6 +111,29 @@ public class SdlInput{
     }
 
 
+    public int getDx(){
+        return xrel;
+    }
+
+    public int getDy(){
+        return yrel;
+    }
+
+
+    public void toCenter(){
+        final SdlWindow window = context.window();
+        setPos(window.getWidth() / 2, window.getHeight() / 2);
+    }
+
+
+    public Vec2i getPos(){
+        return new Vec2i(x, y);
+    }
+
+    public void setPos(int x, int y){
+        SdlMouse.SDL_WarpMouseInWindow(context.window().getSDL(), x, y);
+    }
+
     public int getX(){
         return x;
     }
@@ -123,31 +146,15 @@ public class SdlInput{
         return context.window().getHeight() - y;
     }
 
-    public int getDx(){
-        return xrel;
-    }
 
-    public int getDy(){
-        return yrel;
-    }
-
-    public Vec2i getPos(){
-        return new Vec2i(x, y);
-    }
-
-    public void setPos(int x, int y){
-        SdlMouse.SDL_WarpMouseInWindow(context.window().getSDL(), x, y);
+    public Vec2i getGlobalPos(){
+        SdlMouse.SDL_GetGlobalMouseState(tmp_int_1, tmp_int_2);
+        return new Vec2i(tmp_int_1.getValue(), tmp_int_2.getValue());
     }
 
     public void setGlobalPos(int x, int y){
         SdlMouse.SDL_WarpMouseGlobal(x, y);
     }
-
-    public void toCenter(){
-        final SdlWindow window = context.window();
-        setPos(window.getWidth() / 2, window.getHeight() / 2);
-    }
-
 
     public int getGlobalX(){
         SdlMouse.SDL_GetGlobalMouseState(tmp_int_1, null);
@@ -157,6 +164,12 @@ public class SdlInput{
     public int getGlobalY(){
         SdlMouse.SDL_GetGlobalMouseState(null, tmp_int_2);
         return tmp_int_2.getValue();
+    }
+
+
+    public Vec2i getRelativeState(Vec2i ref){
+        SdlMouse.SDL_GetRelativeMouseState(tmp_int_1, tmp_int_2);
+        return ref.set(tmp_int_1.getValue(), tmp_int_2.getValue());
     }
 
 

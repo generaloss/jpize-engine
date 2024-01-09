@@ -34,7 +34,7 @@ public class EulerAngles{
             yaw += 360;
     }
     
-    public void clampPitch90(){
+    public void clampPitch(){
         pitch = Maths.clamp(pitch, -90, 90);
     }
 

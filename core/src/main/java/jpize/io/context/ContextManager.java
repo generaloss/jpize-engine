@@ -96,12 +96,12 @@ public class ContextManager{
 
             // Render
             if(!contexts.isEmpty()){
+                // Handle events
+                handleEvents();
+
                 // Fps & DeltaTime
                 fpsCounter.count();
                 dtCounter.count();
-
-                // Handle events
-                handleEvents();
 
                 // Render
                 for(Context context: contexts.values()){

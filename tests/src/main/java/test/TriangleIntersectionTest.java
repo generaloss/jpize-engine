@@ -7,8 +7,10 @@ import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertexAttr;
 import jpize.graphics.camera.PerspectiveCamera;
-import jpize.graphics.camera.controller.Motion3DController;
-import jpize.graphics.camera.controller.Rotation3DController;
+import jpize.graphics.camera.ctrl.MotionCtrl;
+import jpize.graphics.camera.ctrl.EulerRotCtrl;
+import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.FontLoader;
 import jpize.graphics.mesh.IndexedMesh;
 import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.SkyBox;
@@ -17,7 +19,9 @@ import jpize.math.vecmath.matrix.Matrix4f;
 import jpize.math.vecmath.vector.Vec3f;
 import jpize.physic.Ray3f;
 import jpize.physic.utils.Intersector;
+import jpize.sdl.Sdl;
 import jpize.sdl.input.Key;
+import jpize.util.time.Sync;
 
 public class TriangleIntersectionTest extends JpizeApplication{
     
@@ -25,18 +29,22 @@ public class TriangleIntersectionTest extends JpizeApplication{
     
     BaseShader shader;
     PerspectiveCamera camera;
-    Rotation3DController rotationController;
-    Motion3DController motionController;
+    EulerRotCtrl rotCtrl;
+    MotionCtrl motionCtrl;
     Ray3f ray;
     
     IndexedMesh rayMesh;
     IndexedMesh mesh;
+
+    Sync sync = new Sync(40);
+    BitmapFont font = FontLoader.getDefault();
     
     public void init(){
         // Camera
         camera = new PerspectiveCamera(0.5F, 500, 70);
-        rotationController = new Rotation3DController();
-        motionController = new Motion3DController();
+        rotCtrl = new EulerRotCtrl(camera.getRotation());
+        // rotCtrl.setSpeed(0.25F);
+        motionCtrl = new MotionCtrl();
         ray = new Ray3f();
         // Skybox
         skybox = new SkyBox();
@@ -67,6 +75,7 @@ public class TriangleIntersectionTest extends JpizeApplication{
     }
     
     public void render(){
+        // sync.sync();
         // Clear color
         Gl.clearColorDepthBuffers();
 
@@ -82,6 +91,7 @@ public class TriangleIntersectionTest extends JpizeApplication{
         rayMesh.render();
 
         //Utils.delayElapsed(100);
+        font.drawText("fps: " + Jpize.getFPS(), 10, 10);
     }
 
     public void update(){
@@ -91,16 +101,18 @@ public class TriangleIntersectionTest extends JpizeApplication{
         if(Key.F11.isDown())
             Jpize.window().toggleFullscreenDesktop();
         if(Key.M.isDown())
-            rotationController.toggleEnabled();
+            rotCtrl.toggleEnabled();
+
+        if(Key.V.isDown())
+            Sdl.enableVsync(!Sdl.isVsyncEnabled());
 
         // Camera control
-        motionController.update(camera.getRotation().yaw);
-        final Vec3f cameraMotion = motionController.getDirectedMotion();
+        motionCtrl.update(camera.getRotation().yaw);
+        final Vec3f cameraMotion = motionCtrl.getDirectedMotion();
 
         // Camera update
         camera.getPosition().add(cameraMotion.mul(Jpize.getDt() * 2));
-        rotationController.update();
-        camera.getRotation().set(rotationController.getRotation());
+        rotCtrl.update();
         camera.update();
 
         ray.set(camera.getPosition(), camera.getRotation().getDir(), 100);

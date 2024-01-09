@@ -6,7 +6,7 @@ import jpize.gl.glenum.GlTarget;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertexAttr;
 import jpize.graphics.camera.PerspectiveCamera;
-import jpize.graphics.camera.controller.Rotation3DController;
+import jpize.graphics.camera.ctrl.EulerRotCtrl;
 import jpize.graphics.mesh.IndexedMesh;
 import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.SkyBox;
@@ -22,7 +22,7 @@ public class QuadFromNormalTest extends JpizeApplication{
 
     BaseShader shader;
     PerspectiveCamera camera;
-    Rotation3DController rotationController;
+    EulerRotCtrl rotCtrl;
 
     IndexedMesh quadMesh;
 
@@ -31,7 +31,7 @@ public class QuadFromNormalTest extends JpizeApplication{
         camera = new PerspectiveCamera(0.5F, 500, 70);
         camera.setImaginaryOrigins(true, true, true);
         camera.getPosition().y += 3;
-        rotationController = new Rotation3DController();
+        rotCtrl = new EulerRotCtrl(camera.getRotation());
         // Skybox
         skyBox = new SkyBox();
         // Shader
@@ -54,7 +54,7 @@ public class QuadFromNormalTest extends JpizeApplication{
         if(Key.ESCAPE.isDown())
             Jpize.closeWindow();
         if(Key.M.isDown())
-            rotationController.toggleEnabled();
+            rotCtrl.toggleEnabled();
         if(Key.F11.isDown())
             Jpize.window().toggleFullscreenDesktop();
 
@@ -67,8 +67,7 @@ public class QuadFromNormalTest extends JpizeApplication{
 
         // Camera update
         camera.getPosition().add(cameraMotion.mul(Jpize.getDt() * 2));
-        rotationController.update();
-        camera.getRotation().set(rotationController.getRotation());
+        rotCtrl.update();
         camera.update();
     }
 

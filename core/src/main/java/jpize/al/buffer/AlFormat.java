@@ -11,7 +11,6 @@ public enum AlFormat{
     STEREO8 (AL_FORMAT_STEREO8 , 2, 8 ),
     STEREO16(AL_FORMAT_STEREO16, 2, 16);
 
-
     public final int AL;
     private final int channels;
     private final int bits;

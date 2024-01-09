@@ -2,20 +2,21 @@ package jpize.util.time;
 
 import jpize.Jpize;
 import jpize.math.Maths;
+import jpize.sdl.Sdl;
 
 public class Sync{
 
-    private long prevTime;
-    private long frameNano;
+    private int prevTime;
+    private int frameTime;
     private boolean enabled;
 
-    public Sync(double fps){
-        setTPS(fps);
+    public Sync(double tps){
+        setTps(tps);
         enable(true);
     }
 
     public Sync(){
-        this(Jpize.window().getWindowDisplayMode().refreshRate);
+        this(Jpize.window().getDisplayMode().refreshRate);
     }
 
 
@@ -28,36 +29,32 @@ public class Sync{
     }
 
 
-    public double getTPS(){
-        return (frameNano != 0) ? Maths.nanosInSec / frameNano : 0;
+    public double getTps(){
+        return (frameTime != 0) ? (Maths.nanosInSec / frameTime) : 0;
     }
 
-    public void setTPS(double tps){
+    public void setTps(double tps){
         if(tps == 0)
             return;
 
-        frameNano = (long) (Maths.nanosInSec / tps); // Время между кадрами, при данном количестве тиков в секунду [tps]
-        prevTime = System.nanoTime();                   // Для подсчета времени между кадрами
+        frameTime = (int) (Maths.msInSec / tps); // Время между кадрами, при данном количестве тиков в секунду [tps]
+        prevTime = Sdl.getTicks();               // Для подсчета времени между кадрами
     }
 
 
     public void sync(){
-        if(!enabled || frameNano == 0)
+        if(!enabled || frameTime == 0)
             return;
 
-        final long deltaNano = System.nanoTime() - prevTime; // Текущее время между кадрами
-        final long sleepNano = frameNano - deltaNano;        // Время для коррекции количества тиков в секунду
-
-        if(sleepNano > 0L){
-            // Коррекция
-            final long startTime = System.nanoTime();
-            long elapsed;
-            do{
-                elapsed = System.nanoTime() - startTime;
-            }while(elapsed < sleepNano);
+        final int deltaTime = Sdl.getTicks() - prevTime; // Текущее время между кадрами
+        if(deltaTime >= 0){
+            
+            final int sleepTime = frameTime - deltaTime; // Время для коррекции количества тиков в секунду
+            if(sleepTime > 0)
+                Sdl.delay(sleepTime);
         }
-
-        prevTime = System.nanoTime();
+        
+        prevTime = Sdl.getTicks();
     }
 
 }

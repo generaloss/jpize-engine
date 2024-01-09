@@ -1,8 +1,11 @@
 package jpize.sdl;
 
+import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
 import io.github.libsdl4j.api.SdlSubSystemConst;
+import io.github.libsdl4j.api.timer.SdlTimer;
 import io.github.libsdl4j.api.video.SdlVideo;
+import jpize.Jpize;
 import jpize.sdl.gl.SdlGlAttr;
 import jpize.sdl.window.SdlWindow;
 
@@ -13,6 +16,7 @@ import static io.github.libsdl4j.api.error.SdlError.SDL_GetError;
 public class Sdl{
 
     private static final IntByReference tmp_int_1 = new IntByReference();
+    private static final FloatByReference tmp_float_1 = new FloatByReference();
 
 
     public static void init(){
@@ -59,11 +63,49 @@ public class Sdl{
 
 
     public static boolean isVsyncEnabled(){
-        return getSwapInterval() == 1;
+        return getSwapInterval() == -1;
     }
 
     public static void enableVsync(boolean vsync){
         setSwapInterval(vsync ? 1 : 0);
+    }
+
+
+    public static int getTicks(){
+        return SdlTimer.SDL_GetTicks();
+    }
+
+    public static void delay(int ticks){
+        SdlTimer.SDL_Delay(ticks);
+    }
+
+
+    public static float getDisplayDDPI(int displayIndex){
+        SdlVideo.SDL_GetDisplayDPI(0, tmp_float_1, null, null);
+        return tmp_float_1.getValue();
+    }
+
+    public static float getDisplayHDPI(int displayIndex){
+        SdlVideo.SDL_GetDisplayDPI(0, null, tmp_float_1, null);
+        return tmp_float_1.getValue();
+    }
+
+    public static float getDisplayVDPI(int displayIndex){
+        SdlVideo.SDL_GetDisplayDPI(0, null, null, tmp_float_1);
+        return tmp_float_1.getValue();
+    }
+
+
+    public static float getDisplayDDPI(){
+        return getDisplayDDPI(Jpize.window().getDisplayIndex());
+    }
+
+    public static float getDisplayHDPI(){
+        return getDisplayHDPI(Jpize.window().getDisplayIndex());
+    }
+
+    public static float getDisplayVDPI(){
+        return getDisplayVDPI(Jpize.window().getDisplayIndex());
     }
 
 

@@ -15,7 +15,7 @@ public class TickGenerator{
     }
 
     public void setTPS(float ticksPerSecond){
-        sync.setTPS(ticksPerSecond);
+        sync.setTps(ticksPerSecond);
     }
 
 

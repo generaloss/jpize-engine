@@ -2,7 +2,7 @@ package test;
 
 import jpize.Jpize;
 import jpize.gl.Gl;
-import jpize.graphics.camera.controller.Rotation3DController;
+import jpize.graphics.camera.ctrl.EulerRotCtrl;
 import jpize.graphics.util.SkyBox;
 import jpize.io.context.JpizeApplication;
 import jpize.math.util.EulerAngles;
@@ -13,7 +13,7 @@ public class VecMathTest extends JpizeApplication{
 
     SkyBox skybox;
 
-    Rotation3DController controller;
+    EulerRotCtrl controller;
     EulerAngles rotation;
 
     Matrix4f projection;
@@ -23,9 +23,10 @@ public class VecMathTest extends JpizeApplication{
     public void init(){
         skybox = new SkyBox();
 
-        controller = new Rotation3DController();
+        rotation = new EulerAngles();
+
+        controller = new EulerRotCtrl(rotation);
         controller.setSpeed(0.25F);
-        rotation = controller.getRotation();
 
         projection = new Matrix4f().setPerspective(Jpize.getAspect(), 1, 500, 70);
         view = new Matrix4f().setLookAt(rotation.getDir());
