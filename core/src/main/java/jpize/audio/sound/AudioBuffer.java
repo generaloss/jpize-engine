@@ -34,31 +34,31 @@ public class AudioBuffer extends AlBuffer{
 
 
     public void setData(IntBuffer data, int channels, int frequency) throws UnsupportedAlFormatException{
-        super.setData(AlFormat.from(channels, super.getBits()), data, frequency);
+        super.setData(AlFormat.by(channels, super.getBits()), data, frequency);
     }
 
     public void setData(ByteBuffer data, int channels, int frequency) throws UnsupportedAlFormatException{
-        super.setData(AlFormat.from(channels, super.getBits()), data, frequency);
+        super.setData(AlFormat.by(channels, super.getBits()), data, frequency);
     }
 
     public void setData(FloatBuffer data, int channels, int frequency) throws UnsupportedAlFormatException{
-        super.setData(AlFormat.from(channels, super.getBits()), data, frequency);
+        super.setData(AlFormat.by(channels, super.getBits()), data, frequency);
     }
 
     public void setData(ShortBuffer data, int channels, int frequency) throws UnsupportedAlFormatException{
-        super.setData(AlFormat.from(channels, super.getBits()), data, frequency);
+        super.setData(AlFormat.by(channels, super.getBits()), data, frequency);
     }
 
     public void setData(int[] data, int channels, int frequency) throws UnsupportedAlFormatException{
-        super.setData(AlFormat.from(channels, super.getBits()), data, frequency);
+        super.setData(AlFormat.by(channels, super.getBits()), data, frequency);
     }
 
     public void setData(float[] data, int channels, int frequency) throws UnsupportedAlFormatException{
-        super.setData(AlFormat.from(channels, super.getBits()), data, frequency);
+        super.setData(AlFormat.by(channels, super.getBits()), data, frequency);
     }
 
     public void setData(short[] data, int channels, int frequency) throws UnsupportedAlFormatException{
-        super.setData(AlFormat.from(channels, super.getBits()), data, frequency);
+        super.setData(AlFormat.by(channels, super.getBits()), data, frequency);
     }
 
 

@@ -4,16 +4,16 @@ public abstract class Constraint implements Cloneable{
 
     public boolean isFlag(String flag){
         if(this instanceof ConstraintFlag constraintFlag)
-            return constraintFlag.getFlag().equals(flag);
+            return constraintFlag.getName().equals(flag);
         return false;
     }
 
     public boolean isFlagAuto(){
-        return isFlag(ConstraintFlag.auto.getFlag());
+        return isFlag(ConstraintFlag.auto.getName());
     }
 
     public boolean isFlagWrapContent(){
-        return isFlag(ConstraintFlag.wrap_content.getFlag());
+        return isFlag(ConstraintFlag.wrap_content.getName());
     }
 
     public float numValue(){

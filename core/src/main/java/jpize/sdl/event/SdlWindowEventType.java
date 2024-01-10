@@ -31,7 +31,7 @@ public enum SdlWindowEventType{
         this.ID = ID;
     }
 
-    public static SdlWindowEventType fromID(int ID){
+    public static SdlWindowEventType byID(int ID){
         return values()[ID];
     }
 

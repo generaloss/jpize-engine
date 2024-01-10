@@ -20,10 +20,9 @@ public enum AlError{
     }
 
 
-    public static AlError fromALC(int AL){
+    public static AlError byAlConst(int AL){
         if(AL == 0)
             return NO_ERROR;
-
         return values()[AL - INVALID_NAME.AL];
     }
 

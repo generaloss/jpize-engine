@@ -59,7 +59,7 @@ public class SdlCallbacks{
     }
 
     public void invokeKeyCallbacks(SDL_Keysym keySym, KeyAction action){
-        final Key key = Key.fromScancode(keySym.scancode);
+        final Key key = Key.byScancode(keySym.scancode);
         mods.set(keySym.mod);
 
         for(KeyCallback callback: keyCallbacks)
@@ -69,7 +69,7 @@ public class SdlCallbacks{
     // mouse
 
     public void invokeMouseButtonCallback(SDL_MouseButtonEvent event, MouseButtonAction action){
-        final Btn button = Btn.fromSDL(event.button);
+        final Btn button = Btn.bySdlConst(event.button);
         for(MouseButtonCallback callback: mouseButtonCallbacks)
             callback.invoke(button, action);
     }

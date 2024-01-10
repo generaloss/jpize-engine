@@ -7,8 +7,8 @@ public class ConstraintFlag extends Constraint{
     public static final ConstraintFlag auto = new ConstraintFlag("auto");
     public static final ConstraintFlag zero = new ConstraintFlag("zero");
 
-    public static ConstraintFlag fromString(String string){
-        return switch(string){
+    public static ConstraintFlag byName(String name){
+        return switch(name){
             default -> zero;
             case "auto" -> auto;
             case "match_parent" -> match_parent;
@@ -17,19 +17,19 @@ public class ConstraintFlag extends Constraint{
     }
 
 
-    protected final String flag;
+    protected final String name;
 
-    protected ConstraintFlag(String flag){
-        this.flag = flag;
+    protected ConstraintFlag(String name){
+        this.name = name;
     }
 
-    public String getFlag(){
-        return flag;
+    public String getName(){
+        return name;
     }
 
     @Override
     public String toString(){
-        return flag;
+        return getName();
     }
 
 }

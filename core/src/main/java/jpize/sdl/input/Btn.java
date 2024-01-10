@@ -33,7 +33,7 @@ public enum Btn{
     }
 
 
-    public static Btn fromSDL(int SDL){
+    public static Btn bySdlConst(int SDL){
         return values()[SDL - LEFT.SDL];
     }
     

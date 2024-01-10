@@ -136,7 +136,7 @@ public class ContextManager{
     }
 
     private void onEvent(SDL_Event event){
-        final SdlEventType type = SdlEventType.fromSDL(event.type); //: 1) It still does not make sense
+        final SdlEventType type = SdlEventType.bySdlConst(event.type); //: 1) It still does not make sense
         switch(type){
             // Mouse
             case MOUSEWHEEL -> {
@@ -144,20 +144,17 @@ public class ContextManager{
                 if(context == null) return;
                 context.input().updateScroll(event.wheel);
             }
-
             case MOUSEMOTION -> {
                 final Context context = getContext(event.motion.windowID);
                 if(context == null) return;
                 context.input().updatePos(event.motion);
             }
-
             // Text
             case TEXTINPUT -> {
                 final Context context = getContext(event.text.windowID);
                 if(context == null) return;
                 context.callbacks().invokeCharCallbacks((char) event.text.text[0]);
             }
-
             // Keys
             case KEYDOWN -> {
                 final Context context = getContext(event.key.windowID);
@@ -169,14 +166,12 @@ public class ContextManager{
                 if(event.key.repeat == 0)
                     context.input().updateKeyDown(event.key.keysym);
             }
-
             case KEYUP -> {
                 final Context context = getContext(event.key.windowID);
                 if(context == null) return;
                 context.input().updateKeyUp(event.key.keysym);
                 context.callbacks().invokeKeyCallbacks(event.key.keysym, KeyAction.UP);
             }
-
             // Buttons
             case MOUSEBUTTONDOWN -> {
                 final Context context = getContext(event.button.windowID);
@@ -184,14 +179,12 @@ public class ContextManager{
                 context.input().updateButtonDown(event.button.button);
                 context.callbacks().invokeMouseButtonCallback(event.button, MouseButtonAction.DOWN);
             }
-
             case MOUSEBUTTONUP -> {
                 final Context context = getContext(event.button.windowID);
                 if(context == null) return;
                 context.input().updateButtonUp(event.button.button);
                 context.callbacks().invokeMouseButtonCallback(event.button, MouseButtonAction.UP);
             }
-
             // Window
             case WINDOWEVENT -> {
                 final Context context = getContext(event.window.windowID);
@@ -199,7 +192,7 @@ public class ContextManager{
                 final SdlWindow window = context.window();
                 final SdlCallbacks callbacks = context.callbacks();
 
-                final SdlWindowEventType winEvent = SdlWindowEventType.fromID(event.window.event); //: 2) It still does not make sense
+                final SdlWindowEventType winEvent = SdlWindowEventType.byID(event.window.event); //: 2) It still does not make sense
                 switch(winEvent){
                     case SHOWN           -> callbacks.invokeWinShownCallbacks(window);
                     case HIDDEN          -> callbacks.invokeWinHiddenCallbacks(window);

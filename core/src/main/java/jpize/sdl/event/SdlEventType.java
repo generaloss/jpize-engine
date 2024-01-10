@@ -74,70 +74,13 @@ public enum SdlEventType{
     }
 
 
-    public static SdlEventType fromSDL(int SDL){
-        return sdlMap.get(SDL);
+    public static SdlEventType bySdlConst(int SDL){
+        return BY_SDL_CONST.get(SDL);
     }
 
-    private static final Map<Integer, SdlEventType> sdlMap = new HashMap<>(){{
-        put(FIRSTEVENT              .SDL, FIRSTEVENT              );
-        put(QUIT                    .SDL, QUIT                    );
-        put(APP_TERMINATING         .SDL, APP_TERMINATING         );
-        put(APP_LOWMEMORY           .SDL, APP_LOWMEMORY           );
-        put(APP_WILLENTERBACKGROUND .SDL, APP_WILLENTERBACKGROUND );
-        put(APP_DIDENTERBACKGROUND  .SDL, APP_DIDENTERBACKGROUND  );
-        put(APP_WILLENTERFOREGROUND .SDL, APP_WILLENTERFOREGROUND );
-        put(APP_DIDENTERFOREGROUND  .SDL, APP_DIDENTERFOREGROUND  );
-        put(LOCALECHANGED           .SDL, LOCALECHANGED           );
-        put(DISPLAYEVENT            .SDL, DISPLAYEVENT            );
-        put(WINDOWEVENT             .SDL, WINDOWEVENT             );
-        put(SYSWMEVENT              .SDL, SYSWMEVENT              );
-        put(KEYDOWN                 .SDL, KEYDOWN                 );
-        put(KEYUP                   .SDL, KEYUP                   );
-        put(TEXTEDITING             .SDL, TEXTEDITING             );
-        put(TEXTINPUT               .SDL, TEXTINPUT               );
-        put(KEYMAPCHANGED           .SDL, KEYMAPCHANGED           );
-        put(TEXTEDITING_EXT         .SDL, TEXTEDITING_EXT         );
-        put(MOUSEMOTION             .SDL, MOUSEMOTION             );
-        put(MOUSEBUTTONDOWN         .SDL, MOUSEBUTTONDOWN         );
-        put(MOUSEBUTTONUP           .SDL, MOUSEBUTTONUP           );
-        put(MOUSEWHEEL              .SDL, MOUSEWHEEL              );
-        put(JOYAXISMOTION           .SDL, JOYAXISMOTION           );
-        put(JOYBALLMOTION           .SDL, JOYBALLMOTION           );
-        put(JOYHATMOTION            .SDL, JOYHATMOTION            );
-        put(JOYBUTTONDOWN           .SDL, JOYBUTTONDOWN           );
-        put(JOYBUTTONUP             .SDL, JOYBUTTONUP             );
-        put(JOYDEVICEADDED          .SDL, JOYDEVICEADDED          );
-        put(JOYDEVICEREMOVED        .SDL, JOYDEVICEREMOVED        );
-        put(JOYBATTERYUPDATED       .SDL, JOYBATTERYUPDATED       );
-        put(CONTROLLERAXISMOTION    .SDL, CONTROLLERAXISMOTION    );
-        put(CONTROLLERBUTTONDOWN    .SDL, CONTROLLERBUTTONDOWN    );
-        put(CONTROLLERBUTTONUP      .SDL, CONTROLLERBUTTONUP      );
-        put(CONTROLLERDEVICEADDED   .SDL, CONTROLLERDEVICEADDED   );
-        put(CONTROLLERDEVICEREMOVED .SDL, CONTROLLERDEVICEREMOVED );
-        put(CONTROLLERDEVICEREMAPPED.SDL, CONTROLLERDEVICEREMAPPED);
-        put(CONTROLLERTOUCHPADDOWN  .SDL, CONTROLLERTOUCHPADDOWN  );
-        put(CONTROLLERTOUCHPADMOTION.SDL, CONTROLLERTOUCHPADMOTION);
-        put(CONTROLLERTOUCHPADUP    .SDL, CONTROLLERTOUCHPADUP    );
-        put(CONTROLLERSENSORUPDATE  .SDL, CONTROLLERSENSORUPDATE  );
-        put(FINGERDOWN              .SDL, FINGERDOWN              );
-        put(FINGERUP                .SDL, FINGERUP                );
-        put(FINGERMOTION            .SDL, FINGERMOTION            );
-        put(DOLLARGESTURE           .SDL, DOLLARGESTURE           );
-        put(DOLLARRECORD            .SDL, DOLLARRECORD            );
-        put(MULTIGESTURE            .SDL, MULTIGESTURE            );
-        put(CLIPBOARDUPDATE         .SDL, CLIPBOARDUPDATE         );
-        put(DROPFILE                .SDL, DROPFILE                );
-        put(DROPTEXT                .SDL, DROPTEXT                );
-        put(DROPBEGIN               .SDL, DROPBEGIN               );
-        put(DROPCOMPLETE            .SDL, DROPCOMPLETE            );
-        put(AUDIODEVICEADDED        .SDL, AUDIODEVICEADDED        );
-        put(AUDIODEVICEREMOVED      .SDL, AUDIODEVICEREMOVED      );
-        put(SENSORUPDATE            .SDL, SENSORUPDATE            );
-        put(RENDER_TARGETS_RESET    .SDL, RENDER_TARGETS_RESET    );
-        put(RENDER_DEVICE_RESET     .SDL, RENDER_DEVICE_RESET     );
-        put(POLLSENTINEL            .SDL, POLLSENTINEL            );
-        put(USEREVENT               .SDL, USEREVENT               );
-        put(LASTEVENT               .SDL, LASTEVENT               );
+    private static final Map<Integer, SdlEventType> BY_SDL_CONST = new HashMap<>(){{
+        for(SdlEventType value: values())
+            put(value.SDL, value);
     }};
 
 }

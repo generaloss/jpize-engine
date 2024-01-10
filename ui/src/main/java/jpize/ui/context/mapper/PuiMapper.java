@@ -67,7 +67,7 @@ public class PuiMapper{
                 case "rw" -> Constr.relw(Float.parseFloat(numPart));
                 case "rh" -> Constr.relh(Float.parseFloat(numPart));
                 case "ap" -> Constr.aspect(Float.parseFloat(numPart));
-                default -> ConstraintFlag.fromString(constr);
+                default -> ConstraintFlag.byName(constr);
             };
         });
     }

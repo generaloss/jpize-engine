@@ -30,19 +30,19 @@ public enum AlFormat{
     }
 
 
-    public static AlFormat fromAL(int AL){
+    public static AlFormat byAlConst(int AL){
         return values()[AL - MONO8.AL];
     }
 
-    public static AlFormat from(int channels, int bits) throws UnsupportedAlFormatException{
+    public static AlFormat by(int channels, int bits) throws UnsupportedAlFormatException{
         if(!(bits == 16 || bits == 8) || !(channels == 2 || channels == 1))
             throw new UnsupportedAlFormatException("Unsupported format (" + bits + " bits, " + channels + " channels)");
 
         return valueOf((channels == 2 ? "STEREO" : "MONO") + bits);
     }
 
-    public static AlFormat from(AudioFormat format) throws UnsupportedAlFormatException{
-        return from(format.getChannels(), format.getSampleSizeInBits());
+    public static AlFormat by(AudioFormat format) throws UnsupportedAlFormatException{
+        return by(format.getChannels(), format.getSampleSizeInBits());
     }
 
 }

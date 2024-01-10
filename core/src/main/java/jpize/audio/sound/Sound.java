@@ -22,7 +22,7 @@ public class Sound extends AudioSource{
     public Sound(ByteBuffer data, int bits, int channels, int frequency){
         this.buffer = new AudioBuffer();
         try{
-            buffer.setData(AlFormat.from(channels, bits), data, frequency);
+            buffer.setData(AlFormat.by(channels, bits), data, frequency);
             super.setBuffer(buffer);
 
         }catch(UnsupportedAlFormatException e){

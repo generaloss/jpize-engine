@@ -76,7 +76,7 @@ public abstract class AlAbstractDevice extends AlObjectLong{
     }
 
     public AlcError getError(){
-        return AlcError.fromALC(alcGetError(ID));
+        return AlcError.byAlcConst(alcGetError(ID));
     }
 
 

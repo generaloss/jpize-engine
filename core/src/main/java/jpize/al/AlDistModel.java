@@ -19,7 +19,7 @@ public enum AlDistModel{
     }
 
 
-    public static AlDistModel fromAL(int AL){
+    public static AlDistModel byAlConst(int AL){
         return values()[AL - AL_INVERSE_DISTANCE];
     }
 

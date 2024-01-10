@@ -58,7 +58,7 @@ public class Al{
 
 
     public static AlDistModel getDistanceModel(){
-        return AlDistModel.fromAL(alGetInteger(AL_DISTANCE_MODEL));
+        return AlDistModel.byAlConst(alGetInteger(AL_DISTANCE_MODEL));
     }
 
     public static void setDistanceModel(AlDistModel distanceModel){

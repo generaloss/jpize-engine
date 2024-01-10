@@ -18,7 +18,7 @@ public enum AlSourceState{
     }
 
 
-    public static AlSourceState fromAL(int AL){
+    public static AlSourceState byAlConst(int AL){
         if(AL == 0)
             return NONE;
         return values()[AL - AL_INITIAL];

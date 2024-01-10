@@ -91,6 +91,7 @@ public class ContextBuilder{
         // GL States
         Gl.enable(GlTarget.BLEND, GlTarget.CULL_FACE);
         Gl.blendFunc(GlBlendFactor.SRC_ALPHA, GlBlendFactor.ONE_MINUS_SRC_ALPHA);
+        if(samples > 0) Gl.enable(GlTarget.MULTISAMPLE);
         // Left-Handled coordinate system options
         Gl.depthFunc(GlDepthFunc.GEQUAL);
         Gl.clearDepth(0);

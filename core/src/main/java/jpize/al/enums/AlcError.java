@@ -19,11 +19,9 @@ public enum AlcError{
         this.ALC = ALC;
     }
 
-
-    public static AlcError fromALC(int ALC){
+    public static AlcError byAlcConst(int ALC){
         if(ALC == 0)
             return NO_ERROR;
-
         return values()[ALC - INVALID_DEVICE.ALC];
     }
 

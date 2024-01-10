@@ -207,7 +207,7 @@ public class AlSource extends AlObjectInt{
 
 
     public AlSourceType getType(){
-        return AlSourceType.fromAL(alGetSourcei(ID, AL_SOURCE_TYPE));
+        return AlSourceType.byAlConst(alGetSourcei(ID, AL_SOURCE_TYPE));
     }
 
     public void setType(AlSourceType type){
@@ -216,7 +216,7 @@ public class AlSource extends AlObjectInt{
 
 
     private AlSourceState getState(){
-        return AlSourceState.fromAL(alGetSourcei(ID, AL_SOURCE_STATE));
+        return AlSourceState.byAlConst(alGetSourcei(ID, AL_SOURCE_STATE));
     }
 
     public boolean isPlaying(){

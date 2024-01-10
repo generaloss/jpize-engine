@@ -15,7 +15,7 @@ public enum AlSourceType{
     }
 
 
-    public static AlSourceType fromAL(int AL){
+    public static AlSourceType byAlConst(int AL){
         return switch(AL){
             case AL_STATIC -> STATIC;
             case AL_STREAMING -> STREAMING;
