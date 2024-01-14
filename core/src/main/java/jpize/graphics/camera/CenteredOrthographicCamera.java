@@ -1,9 +1,9 @@
 package jpize.graphics.camera;
 
 import jpize.Jpize;
-import jpize.util.Resizable;
-import jpize.math.Maths;
-import jpize.math.vecmath.matrix.Matrix4f;
+import jpize.app.Resizable;
+import jpize.util.math.Maths;
+import jpize.util.math.vecmath.matrix.Matrix4f;
 
 public class CenteredOrthographicCamera extends Camera2D implements Resizable{
     

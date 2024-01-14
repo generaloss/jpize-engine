@@ -2,7 +2,7 @@ package jpize.graphics.texture;
 
 import jpize.gl.texture.*;
 import jpize.gl.type.GlType;
-import jpize.graphics.util.color.Color;
+import jpize.util.color.Color;
 
 import java.nio.ByteBuffer;
 

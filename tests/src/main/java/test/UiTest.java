@@ -5,8 +5,8 @@ import jpize.gl.Gl;
 import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
-import jpize.graphics.util.color.Color;
-import jpize.io.context.JpizeApplication;
+import jpize.util.color.Color;
+import jpize.app.JpizeApplication;
 import jpize.sdl.input.Key;
 import jpize.ui.constraint.Constr;
 import jpize.ui.context.UIContext;
@@ -38,6 +38,9 @@ public class UiTest extends JpizeApplication{
         ui = loader.loadRes("ui/view_test.pui");
         ui.enable();
 
+        Button pizza = ui.findByID("pizza");
+        System.out.println(pizza);
+
         final Button button = ui.getByID("done");
         // final Slider slider = ui.getByID("slider");
 
@@ -68,8 +71,6 @@ public class UiTest extends JpizeApplication{
         Gl.clearColorBuffer();
         ui.render();
     }
-
-    public void resize(int width, int height){ }
 
     public void dispose(){
         ui.dispose();

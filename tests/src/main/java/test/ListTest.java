@@ -4,8 +4,8 @@ import jpize.gl.Gl;
 import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.io.context.JpizeApplication;
-import jpize.math.vecmath.vector.Vec2f;
+import jpize.app.JpizeApplication;
+import jpize.util.math.vecmath.vector.Vec2f;
 import jpize.sdl.input.Key;
 import jpize.util.array.list.IntList;
 

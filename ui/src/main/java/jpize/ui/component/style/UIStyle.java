@@ -1,6 +1,6 @@
 package jpize.ui.component.style;
 
-import jpize.graphics.util.color.Color;
+import jpize.util.color.Color;
 import jpize.ui.constraint.Constraint;
 
 public class UIStyle{

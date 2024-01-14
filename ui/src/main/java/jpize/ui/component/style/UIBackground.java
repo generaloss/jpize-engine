@@ -2,7 +2,7 @@ package jpize.ui.component.style;
 
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.TextureUtils;
-import jpize.graphics.util.color.Color;
+import jpize.util.color.Color;
 
 public class UIBackground{
 

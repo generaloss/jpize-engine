@@ -1,11 +1,11 @@
 package jpize.graphics.texture.pixmap;
 
 import jpize.gl.texture.GlSizedFormat;
-import jpize.graphics.util.color.Color;
-import jpize.graphics.util.color.IColor;
-import jpize.math.Mathc;
-import jpize.math.Maths;
-import jpize.math.vecmath.vector.Vec2d;
+import jpize.util.color.Color;
+import jpize.util.color.IColor;
+import jpize.util.math.Mathc;
+import jpize.util.math.Maths;
+import jpize.util.math.vecmath.vector.Vec2d;
 import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;

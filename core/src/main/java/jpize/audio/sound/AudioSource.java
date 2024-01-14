@@ -2,8 +2,8 @@ package jpize.audio.sound;
 
 import jpize.Jpize;
 import jpize.al.source.AlSource;
-import jpize.math.Mathc;
-import jpize.math.vecmath.vector.Vec3f;
+import jpize.util.math.Mathc;
+import jpize.util.math.vecmath.vector.Vec3f;
 import jpize.util.time.Stopwatch;
 
 import static org.lwjgl.openal.AL11.*;

@@ -1,6 +1,6 @@
 package jpize.al.object;
 
-import jpize.util.Disposable;
+import jpize.app.Disposable;
 
 public abstract class AlObjectLong implements Disposable{
 

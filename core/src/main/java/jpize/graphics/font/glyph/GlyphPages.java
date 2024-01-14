@@ -1,7 +1,7 @@
 package jpize.graphics.font.glyph;
 
 import jpize.graphics.texture.Texture;
-import jpize.util.Disposable;
+import jpize.app.Disposable;
 
 import java.util.HashMap;
 import java.util.Map;

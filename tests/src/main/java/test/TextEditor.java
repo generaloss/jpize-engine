@@ -6,11 +6,11 @@ import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.font.glyph.GlyphSprite;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.io.context.JpizeApplication;
-import jpize.math.Maths;
-import jpize.math.vecmath.vector.Vec2i;
+import jpize.app.JpizeApplication;
+import jpize.util.math.Maths;
+import jpize.util.math.vecmath.vector.Vec2i;
 import jpize.sdl.input.Key;
-import jpize.util.io.TextProcessor;
+import jpize.io.TextProcessor;
 
 import java.util.List;
 import java.util.StringJoiner;

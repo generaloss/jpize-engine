@@ -2,7 +2,7 @@ package jpize.graphics.util;
 
 import jpize.gl.type.GlType;
 import jpize.graphics.mesh.IndexedMesh;
-import jpize.gl.vertex.GlVertexAttr;
+import jpize.gl.vertex.GlVertAttr;
 
 public class ScreenQuad{
     
@@ -10,7 +10,7 @@ public class ScreenQuad{
     private final IndexedMesh mesh;
 
     private ScreenQuad(){
-        mesh = new IndexedMesh(new GlVertexAttr(2, GlType.FLOAT), new GlVertexAttr(2, GlType.FLOAT)); // pos, uv
+        mesh = new IndexedMesh(new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(2, GlType.FLOAT)); // pos, uv
         mesh.getBuffer().setData(new float[]{
             -1, +1,  0, 1, // 0
             -1, -1,  0, 0, // 1

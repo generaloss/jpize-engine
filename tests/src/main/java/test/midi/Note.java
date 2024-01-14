@@ -1,6 +1,6 @@
 package test.midi;
 
-import jpize.math.Mathc;
+import jpize.util.math.Mathc;
 
 import java.util.Objects;
 

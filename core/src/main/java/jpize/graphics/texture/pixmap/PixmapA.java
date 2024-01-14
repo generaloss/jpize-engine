@@ -1,7 +1,7 @@
 package jpize.graphics.texture.pixmap;
 
 import jpize.gl.texture.GlSizedFormat;
-import jpize.math.Maths;
+import jpize.util.math.Maths;
 import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;

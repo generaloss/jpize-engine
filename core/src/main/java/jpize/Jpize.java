@@ -2,12 +2,12 @@ package jpize;
 
 import io.github.libsdl4j.api.clipboard.SdlClipboard;
 import jpize.audio.AudioDeviceManager;
-import jpize.io.SdlInput;
+import jpize.app.input.ContextInput;
 import jpize.sdl.window.SdlWindow;
-import jpize.io.context.Context;
-import jpize.io.context.ContextManager;
-import jpize.io.context.Screen;
-import jpize.math.vecmath.vector.Vec2f;
+import jpize.app.context.Context;
+import jpize.app.context.ContextManager;
+import jpize.app.Screen;
+import jpize.util.math.vecmath.vector.Vec2f;
 import jpize.sdl.Sdl;
 import jpize.sdl.input.Btn;
 
@@ -66,7 +66,7 @@ public class Jpize{
     }
 
 
-    public static SdlInput input(){
+    public static ContextInput input(){
         return context().input();
     }
 

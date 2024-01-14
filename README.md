@@ -38,6 +38,7 @@
 ---
 
 ## Modules:
+* *Util*
 * *Core*
 * *Net*
 * *Physic*
@@ -45,11 +46,111 @@
 
 ---
 
+## Module *Util*:
+* *[Maths](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/math)* - Vectors, Matrices, Utils ...
+* *[Arrays](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/array)* - IntList, FloatList, [...], ArrayUtils, ArraysSupport (Java 17)
+* *[Files](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/file)* - Resource, [...], MapConfig
+* *[IO](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/io)* - FastReader, Jpize IO Streams ...
+* *[Colors](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/color)* - IColor, Color, ImmutableColor
+* *[Time](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/time)* - Stopwatch, Sync, TickGenerator, FpsCounter, DeltaTimeCounter, [...]
+* *[Streams](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/stream)* - FloatSupplier
+* *[Other](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util)* - Utils, StringUtils, SyncTaskExecutor
+
+### Usage example:
+``` java
+// Utils
+EulerAngles rotation = new EulerAngles(45, 0, 0);
+
+Vec3f direction = rotation.getDir();
+Vec3f position = new Vec3f(1, 2, 3);
+
+Matrix4f projection = new Matrix4f()
+    .setPerspective(Jpize.getAspect(), 0.1F, 1000F, 70);
+
+Matrix4f view = new Matrix4f()
+    .setLookAt(position, direction);
+
+// Core
+Shader shader = new Shader(Resource.internal("shader.vsh"), Resource.internal("shader.fsh"));
+shader.bind();
+shader.uniform("u_view", view);
+shader.uniform("u_projection", projection);
+
+Mesh mesh = new Mesh(new GlVertAttr(3, GlType.FLOAT), new GlVertAttr(4, GlType.FLOAT));
+mesh.getBuffer().setData(new float[]{ ... });
+mesh.render();
+```
+
+### 1. Vectors:
+| **Type**     | **2D**  | **3D**  | **4D**  |
+|--------------|---------|---------|---------|
+| _**Double**_ | _Vec2d_ | _Vec3d_ | _Vec4d_ |
+| _**Float**_  | _Vec2f_ | _Vec3f_ | _Vec4f_ |
+| _**Int**_    | _Vec2i_ | _Vec3i_ | _Vec4i_ |
+
+#### Available operations:
+| _**Operations**_                                                        | **Description**                                                        | **Has 2D** | **Has 3D** | **Has 4D** | **Has Int** |
+|-------------------------------------------------------------------------|------------------------------------------------------------------------|------------|------------|------------|-------------|
+| **add, sub, mul, div**                                                  | Addition, Subtraction, Multiplication, Division                        | ✔️         | ✔️         |            | ✔️          |
+| **set**                                                                 | Sets new value                                                         | ✔️         | ✔️         | ✔️         | ✔️          |
+| **dst**                                                                 | Returns distance between vectors                                       | ✔️         | ✔️         |            | ✔️          |
+| **min, max**                                                            | Returns a vector with greater\|less length                             | ✔️         | ✔️         |            | ✔️          |
+| **len, len2, lenh**                                                     | Returns length \| squared length \| horizontal length                  | ✔️         | ✔️         |            | ✔️          |
+| **nor**                                                                 | Normalize vector                                                       | ✔️         | ✔️         |            |             |
+| **abs**                                                                 | Applies Math.abs() to each vector component                            | ✔️         | ✔️         |            | ✔️          |
+| **zero, isZero**                                                        | Sets to zero \| Returns true is components equals zero                 | ✔️         | ✔️         |            | ✔️          |
+| **zeroThatLess, zeroThatZero, zeroThatBigger**                          | Sets to zero components that is less\|zero\|bigger argument components | ✔️         | ✔️         |            | ✔️          |
+| **dot**                                                                 | Returns dot product                                                    | ✔️         | ✔️         |            | ✔️          |
+| **crs**                                                                 | Returns cross product                                                  | ✔️         | ✔️         |            | ✔️          |
+| **rotX, rotY, rotZ**                                                    | Rotate point around axis                                               |            | ✔️         |            |             |
+| **frac**                                                                | Returns fractional part                                                | ✔️         | ✔️         |            |             |
+| **lerp**                                                                | Returns linear interpolated vector                                     | ✔️         | ✔️         |            |             |
+| **xy, xz, yz**                                                          | Takes 3D vector components and creates 2D vector                       |            | ✔️         |            | ✔️          |
+| **floor, round, ceil**                                                  | Rounds vector components                                               | ✔️         | ✔️         |            |             |
+| **xFloor, xRound, xCeil, yFloor, yRound, yCeil, zFloor, zRound, zCeil** | Returns a rounded component                                            | ✔️         | ✔️         |            |             |
+| **area**                                                                | Returns area (X * Y)                                                   | ✔️         |            |            | ✔️          |
+| **volume**                                                              | Returns volume (X * Y * Z)                                             |            |            |            | ✔️          |
+| **mulMat3**                                                             | Multiply to Matrix3f                                                   | ✔️         | ✔️         |            | ✔️          |
+| **mulMat4**                                                             | Multiply to Matrix4f                                                   |            | ✔️         | ✔️         | ✔️          |
+| **castDouble, castFloat, castInt**                                      | Creates vector of the same dimension but different datatype            | ✔️         | ✔️         |            | ✔️          |
+| **deg, rad**                                                            | Get angle in degrees\|radians between vectors                          | ✔️         |            |            |             |
+| **rotd, rotr**                                                          | Rotate vector degrees\|radians around origin                           | ✔️         |            |            |             |
+| **copy**                                                                | Creates a copy                                                         | ✔️         | ✔️         | ✔️         | ✔️          |
+
+### 2. Matrices:
+| **Matrices** | **3D**     | **4D**     |
+|--------------|------------|------------|
+| _**Float**_  | _Matrix3f_ | _Matrix4f_ |
+
+#### Available operations:
+| _**Operations**_                             | **Description**                             | **has 3D** | **has 4D** |
+|----------------------------------------------|---------------------------------------------|------------|------------|
+| **set**                                      | Sets new values                             | ✔️         | ✔️         |
+| **zero**                                     | Fills with zeros                            | ✔️         | ✔️         |
+| **identity**                                 | Sets matrix to identity                     | ✔️         | ✔️         |
+| **setOrthographic, setPerspective**          | Sets to projection                          |            | ✔️         |
+| **setLookAt**                                | Sets to lookAt matrix                       |            | ✔️         |
+| **cullPosition, cullRotation**               | Removes matrix part with rotation\|position | ✔️         | ✔️         |
+| **translate**                                | Translates current matrix                   | ✔️         | ✔️         |
+| **setTranslate**                             | Sets to translated                          | ✔️         | ✔️         |
+| **scale**                                    | Scales current matrix                       |            | ✔️         |
+| **setScale**                                 | Sets to scaled                              | ✔️         | ✔️         |
+| **shear**                                    | Shear current matrix                        | ✔️         |            |
+| **setShear**                                 | Sets to sheared                             | ✔️         |            |
+| **rotate**                                   | Rotates current matrix                      |            | ✔️         |
+| **setRotation**                              | Sets to rotated                             | ✔️         | ✔️         |
+| **setRotationX, setRotationY, setRotationZ** | Sets rotation around axis                   |            | ✔️         |
+| **setQuaternion**                            | Sets position and quaternion rotation       |            | ✔️         |
+| **lerp**                                     | Returns linear interpolated matrix          | ✔️         | ✔️         |
+| **mul**                                      | Multiplies                                  | ✔️         | ✔️         |
+| **getMul**                                   | Returns multiply result                     | ✔️         | ✔️         |
+| **copy**                                     | Creates a copy                              | ✔️         | ✔️         |
+
+---
+
 ## Module *Core*:
+* *[Graphics](https://github.com/GeneralPashon/jpize-engine/tree/master/core/src/main/java/jpize/graphics)* - Camera, Fonts, Postprocessing, Meshes, Textures, Utils ...
 * *[Audio](https://github.com/GeneralPashon/jpize-engine/tree/master/core/src/main/java/jpize/audio)* - OGG, MP3, WAV
-* *[Graphics](https://github.com/GeneralPashon/jpize-engine/tree/master/core/src/main/java/jpize/graphics)* - Camera, Fonts, Postprocessing ...
-* *[Maths](https://github.com/GeneralPashon/jpize-engine/tree/master/core/src/main/java/jpize/math)* - Vectors, Matrices ...
-* *[Utils](https://github.com/GeneralPashon/jpize-engine/tree/master/core/src/main/java/jpize/util)* - Resources, FastReader, Stopwatch, Jpize IO Streams ...
 
 #### 1. Main class
 ``` java

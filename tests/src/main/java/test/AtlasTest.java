@@ -1,7 +1,7 @@
 package test;
 
 import jpize.Jpize;
-import jpize.io.context.JpizeApplication;
+import jpize.app.JpizeApplication;
 import jpize.graphics.texture.atlas.TextureAtlas;
 import jpize.gl.Gl;
 import jpize.graphics.util.batch.TextureBatch;

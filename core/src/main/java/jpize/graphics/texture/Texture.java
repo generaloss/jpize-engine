@@ -6,7 +6,7 @@ import jpize.gl.texture.GlTexParam;
 import jpize.gl.texture.GlTexTarget;
 import jpize.graphics.texture.pixmap.Pixmap;
 import jpize.graphics.texture.pixmap.PixmapRGBA;
-import jpize.util.Resizable;
+import jpize.app.Resizable;
 
 import static org.lwjgl.opengl.GL33.*;
 

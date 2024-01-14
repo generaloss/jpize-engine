@@ -1,6 +1,6 @@
 package jpize.gl;
 
-import jpize.util.Disposable;
+import jpize.app.Disposable;
 
 public abstract class GlObject implements Disposable{
     

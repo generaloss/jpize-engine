@@ -9,7 +9,7 @@ import jpize.audio.io.WavFile;
 import jpize.audio.sound.AudioBuffer;
 import jpize.audio.sound.AudioSource;
 import jpize.audio.sound.Sound;
-import jpize.io.context.JpizeApplication;
+import jpize.app.JpizeApplication;
 import jpize.util.Utils;
 import org.lwjgl.BufferUtils;
 

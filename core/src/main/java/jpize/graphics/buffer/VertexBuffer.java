@@ -2,7 +2,7 @@ package jpize.graphics.buffer;
 
 import jpize.gl.buffer.GlVertexBuffer;
 import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertexAttr;
+import jpize.gl.vertex.GlVertAttr;
 
 public class VertexBuffer extends GlVertexBuffer{
 
@@ -13,15 +13,15 @@ public class VertexBuffer extends GlVertexBuffer{
     }
 
 
-    public void enableAttributes(GlVertexAttr... attributes){
-        for(GlVertexAttr attribute: attributes){
+    public void enableAttributes(GlVertAttr... attributes){
+        for(GlVertAttr attribute: attributes){
             vertexSize += attribute.getCount();
             vertexBytes += attribute.getCount() * attribute.getType().getSize();
         }
 
         int pointer = 0;
         for(byte i = 0; i < attributes.length; i++){
-            final GlVertexAttr attribute = attributes[i];
+            final GlVertAttr attribute = attributes[i];
             
             final int count = attribute.getCount();
             final GlType type = attribute.getType();

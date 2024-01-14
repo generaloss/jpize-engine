@@ -1,7 +1,7 @@
 package jpize.graphics.util;
 
-import jpize.util.Disposable;
-import jpize.util.Resizable;
+import jpize.app.Disposable;
+import jpize.app.Resizable;
 import jpize.gl.Gl;
 import jpize.graphics.postprocess.FrameBufferObject;
 import jpize.graphics.texture.Texture;

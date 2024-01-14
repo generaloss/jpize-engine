@@ -3,7 +3,7 @@ package jpize.graphics.mesh;
 import jpize.gl.buffer.GlBufUsage;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.vertex.GlVertexArray;
-import jpize.gl.vertex.GlVertexAttr;
+import jpize.gl.vertex.GlVertAttr;
 import jpize.graphics.buffer.QuadIndexBuffer;
 import jpize.graphics.buffer.VertexBuffer;
 
@@ -14,7 +14,7 @@ public class QuadMesh implements IMesh{
     private final QuadIndexBuffer indexBuffer;
     private GlPrimitive mode;
 
-    public QuadMesh(int maxSize, GlBufUsage bufferUsage, GlVertexAttr... attributes){
+    public QuadMesh(int maxSize, GlBufUsage bufferUsage, GlVertAttr... attributes){
         this.vertexArray = new GlVertexArray();
         this.vertexBuffer = new VertexBuffer();
         this.vertexBuffer.setDefaultUsage(bufferUsage);
@@ -23,7 +23,7 @@ public class QuadMesh implements IMesh{
         this.mode = GlPrimitive.TRIANGLES;
     }
 
-    public QuadMesh(int maxSize, GlVertexAttr... attributes){
+    public QuadMesh(int maxSize, GlVertAttr... attributes){
         this(maxSize, GlBufUsage.STATIC_DRAW, attributes);
     }
 

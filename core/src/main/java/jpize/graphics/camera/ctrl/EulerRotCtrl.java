@@ -1,9 +1,9 @@
 package jpize.graphics.camera.ctrl;
 
 import jpize.Jpize;
-import jpize.math.Maths;
-import jpize.math.util.EulerAngles;
-import jpize.math.vecmath.vector.Vec2i;
+import jpize.util.math.Maths;
+import jpize.util.math.util.EulerAngles;
+import jpize.util.math.vecmath.vector.Vec2i;
 import jpize.sdl.Sdl;
 
 public class EulerRotCtrl{

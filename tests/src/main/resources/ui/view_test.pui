@@ -33,6 +33,7 @@ $button_style = {
         padding: (20px, zero, auto, zero)
 
         @Button (6.75ap, match_parent, "Others", !font) {
+            ID: "pizza"
             padding: (zero, zero, zero, zero)
             style: $button_style
             textview.color: (1, 1, 1, 1)

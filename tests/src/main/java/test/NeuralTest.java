@@ -1,6 +1,6 @@
 package test;
 
-import jpize.math.Maths;
+import jpize.util.math.Maths;
 
 import java.util.Arrays;
 

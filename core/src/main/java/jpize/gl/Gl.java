@@ -6,8 +6,8 @@ import jpize.gl.type.GlType;
 import jpize.gl.tesselation.GlPolygonMode;
 import jpize.gl.texture.GlBlendFactor;
 import jpize.gl.texture.GlSizedFormat;
-import jpize.graphics.util.color.Color;
-import jpize.graphics.util.color.IColor;
+import jpize.util.color.Color;
+import jpize.util.color.IColor;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
 

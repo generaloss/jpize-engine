@@ -5,13 +5,13 @@ import jpize.gl.Gl;
 import jpize.gl.tesselation.GlPolygonMode;
 import jpize.gl.texture.GlSizedFormat;
 import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertexAttr;
+import jpize.gl.vertex.GlVertAttr;
 import jpize.graphics.camera.OrthographicCamera;
 import jpize.graphics.mesh.QuadMesh;
 import jpize.graphics.util.BaseShader;
-import jpize.graphics.util.color.Color;
-import jpize.io.context.ContextBuilder;
-import jpize.io.context.JpizeApplication;
+import jpize.util.color.Color;
+import jpize.app.context.ContextBuilder;
+import jpize.app.JpizeApplication;
 
 import java.util.Arrays;
 
@@ -74,8 +74,8 @@ public class MyGreedyMesh3D extends JpizeApplication{
         shader = BaseShader.getPos3Color();
         mesh = new QuadMesh(
                 GRID_SIZE * GRID_SIZE * GRID_SIZE * 6,
-                new GlVertexAttr(3, GlType.FLOAT), // position
-                new GlVertexAttr(4, GlType.FLOAT)  // color
+                new GlVertAttr(3, GlType.FLOAT), // position
+                new GlVertAttr(4, GlType.FLOAT)  // color
         );
         mesh.getBuffer().allocateData(GRID_SIZE * GRID_SIZE * GRID_SIZE * 6 * 4 * Float.SIZE);
 

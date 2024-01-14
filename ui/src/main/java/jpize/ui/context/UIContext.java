@@ -8,7 +8,7 @@ import jpize.sdl.input.Btn;
 import jpize.ui.component.UIComponent;
 import jpize.ui.component.UIComponentCache;
 import jpize.ui.component.render.UIRenderer;
-import jpize.util.Disposable;
+import jpize.app.Disposable;
 
 public class UIContext implements Disposable{
 
@@ -78,11 +78,11 @@ public class UIContext implements Disposable{
     }
 
     private void release(UIComponent component, Btn button, MouseButtonAction action){
-        if(component.cache().release())
+        if(component.input().isClickable() && component.cache().release())
             component.input().invokeReleaseCallbacks(button);
+
         for(UIComponent child: component.children())
-            if(child.input().isClickable())
-                release(child, button, action);
+            release(child, button, action);
     }
 
 
@@ -90,13 +90,17 @@ public class UIContext implements Disposable{
         return root;
     }
 
+    public void setRootComponent(UIComponent root){
+        this.root = root;
+        this.root.setRenderer(renderer);
+    }
+
     public <T extends UIComponent> T getByID(String ID){
         return root.getByID(ID);
     }
 
-    public void setRootComponent(UIComponent root){
-        this.root = root;
-        this.root.setRenderer(renderer);
+    public <T extends UIComponent> T findByID(String ID){
+        return root.findByID(ID);
     }
 
 

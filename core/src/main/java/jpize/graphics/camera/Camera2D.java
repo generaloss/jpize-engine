@@ -1,6 +1,6 @@
 package jpize.graphics.camera;
 
-import jpize.math.vecmath.vector.Vec2f;
+import jpize.util.math.vecmath.vector.Vec2f;
 
 public abstract class Camera2D extends Camera{
 

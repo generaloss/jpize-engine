@@ -5,8 +5,8 @@ import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.io.context.JpizeApplication;
-import jpize.io.context.ContextBuilder;
+import jpize.app.JpizeApplication;
+import jpize.app.context.ContextBuilder;
 import jpize.util.Utils;
 
 public class LoadingTest{

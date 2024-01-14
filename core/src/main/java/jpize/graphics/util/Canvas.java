@@ -1,7 +1,7 @@
 package jpize.graphics.util;
 
 import jpize.Jpize;
-import jpize.util.Disposable;
+import jpize.app.Disposable;
 import jpize.graphics.camera.OrthographicCamera;
 import jpize.gl.Gl;
 import jpize.gl.glenum.GlTarget;

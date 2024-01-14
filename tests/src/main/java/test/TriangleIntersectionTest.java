@@ -5,7 +5,7 @@ import jpize.gl.Gl;
 import jpize.gl.glenum.GlTarget;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertexAttr;
+import jpize.gl.vertex.GlVertAttr;
 import jpize.graphics.camera.PerspectiveCamera;
 import jpize.graphics.camera.ctrl.MotionCtrl;
 import jpize.graphics.camera.ctrl.EulerRotCtrl;
@@ -14,9 +14,9 @@ import jpize.graphics.font.FontLoader;
 import jpize.graphics.mesh.IndexedMesh;
 import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.SkyBox;
-import jpize.io.context.JpizeApplication;
-import jpize.math.vecmath.matrix.Matrix4f;
-import jpize.math.vecmath.vector.Vec3f;
+import jpize.app.JpizeApplication;
+import jpize.util.math.vecmath.matrix.Matrix4f;
+import jpize.util.math.vecmath.vector.Vec3f;
 import jpize.physic.Ray3f;
 import jpize.physic.utils.Intersector;
 import jpize.sdl.Sdl;
@@ -51,7 +51,7 @@ public class TriangleIntersectionTest extends JpizeApplication{
         // Shader
         shader = BaseShader.getPos3UColor();
         // Mesh
-        mesh = new IndexedMesh(new GlVertexAttr(3, GlType.FLOAT));
+        mesh = new IndexedMesh(new GlVertAttr(3, GlType.FLOAT));
         mesh.getBuffer().setData(new float[]{
             1, 3, 0, // 0
             0, 0, 0, // 1
@@ -62,7 +62,7 @@ public class TriangleIntersectionTest extends JpizeApplication{
         });
         
         // Ray Mesh
-        rayMesh = new IndexedMesh(new GlVertexAttr(3, GlType.FLOAT));
+        rayMesh = new IndexedMesh(new GlVertAttr(3, GlType.FLOAT));
         rayMesh.setMode(GlPrimitive.LINES);
         rayMesh.getIndexBuffer().setData(new int[]{
             0, 1,

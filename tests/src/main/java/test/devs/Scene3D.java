@@ -6,7 +6,7 @@ import jpize.graphics.camera.Camera3D;
 import jpize.graphics.camera.PerspectiveCamera;
 import jpize.graphics.camera.ctrl.MotionCtrl;
 import jpize.graphics.camera.ctrl.EulerRotCtrl;
-import jpize.io.context.JpizeApplication;
+import jpize.app.JpizeApplication;
 
 import java.util.ArrayList;
 import java.util.List;

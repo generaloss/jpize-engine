@@ -8,9 +8,9 @@ import io.github.libsdl4j.api.rect.SDL_Rect;
 import io.github.libsdl4j.api.surface.SDL_Surface;
 import io.github.libsdl4j.api.video.*;
 import jpize.Jpize;
-import jpize.math.vecmath.vector.Vec2i;
+import jpize.util.math.vecmath.vector.Vec2i;
 import jpize.sdl.image.SdlImage;
-import jpize.util.Disposable;
+import jpize.app.Disposable;
 
 import java.awt.*;
 

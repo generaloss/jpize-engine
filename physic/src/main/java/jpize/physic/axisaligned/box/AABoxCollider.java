@@ -1,6 +1,6 @@
 package jpize.physic.axisaligned.box;
 
-import jpize.math.vecmath.vector.Vec3f;
+import jpize.util.math.vecmath.vector.Vec3f;
 
 import java.util.Collection;
 

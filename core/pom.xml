@@ -59,5 +59,12 @@
             <artifactId>jlayer</artifactId>
             <version>1.0.1</version>
         </dependency>
+        <!-- Jpize util -->
+        <dependency>
+            <groupId>jpize-engine</groupId>
+            <artifactId>util</artifactId>
+            <version>23.12.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

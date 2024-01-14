@@ -1,7 +1,7 @@
 package test;
 
 import jpize.Jpize;
-import jpize.io.context.ContextBuilder;
+import jpize.app.context.ContextBuilder;
 
 public class Main{
     
@@ -35,13 +35,13 @@ public class Main{
         //.register().setAdapter(new TextTest());
         //.register().setAdapter(new TextEditor());
         //.register().setAdapter(new AudioTest());
-        //.register().setAdapter(new UiTest());
+        .register().setAdapter(new UiTest());
         //.register().setAdapter(new ListTest());
         //.register().setAdapter(new ResTest());
         //.register().setAdapter(new TilemapTest());
         //.register().setAdapter(new BatchPerformanceTest());
         //.register().setAdapter(new VecMathTest());
-        .register().setAdapter(new TriangleIntersectionTest());
+        //.register().setAdapter(new TriangleIntersectionTest());
         Jpize.runContexts();
     }
 

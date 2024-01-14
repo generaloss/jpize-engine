@@ -30,12 +30,24 @@ public class TcpServer extends TcpDisconnector implements Closeable{
         try{
             serverSocket = new ServerSocket();
             serverSocket.bind(new InetSocketAddress(InetAddress.getByName(address), port));
-            
             connectionList = new CopyOnWriteArrayList<>();
             waitConnections();
             closed = false;
-            
         }catch(IOException e){
+            System.err.println("TcpServer (run error): " + e.getMessage());
+        }
+    }
+
+    public void run(int port){
+        if(!closed)
+            throw new RuntimeException("Server already running");
+
+        try{
+            serverSocket = new ServerSocket(port);
+            connectionList = new CopyOnWriteArrayList<>();
+            waitConnections();
+            closed = false;
+        }catch(Exception e){
             System.err.println("TcpServer (run error): " + e.getMessage());
         }
     }

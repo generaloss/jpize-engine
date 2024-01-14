@@ -1,5 +1,7 @@
 package jpize.sdl.event;
 
+import jpize.util.Utils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,9 +80,9 @@ public enum SdlEventType{
         return BY_SDL_CONST.get(SDL);
     }
 
-    private static final Map<Integer, SdlEventType> BY_SDL_CONST = new HashMap<>(){{
+    private static final Map<Integer, SdlEventType> BY_SDL_CONST = Utils.make(new HashMap<>(), map -> {
         for(SdlEventType value: values())
-            put(value.SDL, value);
-    }};
+            map.put(value.SDL, value);
+    });
 
 }

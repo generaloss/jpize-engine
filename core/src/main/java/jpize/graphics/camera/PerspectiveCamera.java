@@ -1,9 +1,9 @@
 package jpize.graphics.camera;
 
 import jpize.Jpize;
-import jpize.util.Resizable;
-import jpize.math.util.Frustum;
-import jpize.math.vecmath.matrix.Matrix4f;
+import jpize.app.Resizable;
+import jpize.util.math.util.Frustum;
+import jpize.util.math.vecmath.matrix.Matrix4f;
 
 public class PerspectiveCamera extends Camera3D implements Resizable{
 

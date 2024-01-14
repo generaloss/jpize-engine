@@ -1,6 +1,6 @@
 package jpize.physic.utils;
 
-import jpize.math.vecmath.vector.Vec3f;
+import jpize.util.math.vecmath.vector.Vec3f;
 
 public class Velocity3f extends Vec3f{
     

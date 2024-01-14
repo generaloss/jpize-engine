@@ -2,7 +2,7 @@ package jpize.graphics.mesh;
 
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.vertex.GlVertexArray;
-import jpize.gl.vertex.GlVertexAttr;
+import jpize.gl.vertex.GlVertAttr;
 import jpize.graphics.buffer.IndexBuffer;
 import jpize.graphics.buffer.VertexBuffer;
 
@@ -13,7 +13,7 @@ public class IndexedMesh implements IMesh{
     private final VertexBuffer vertexBuffer;
     private final IndexBuffer indexBuffer;
 
-    public IndexedMesh(GlVertexAttr... attributes){
+    public IndexedMesh(GlVertAttr... attributes){
         this.mode = GlPrimitive.TRIANGLES;
         this.vertexArray = new GlVertexArray();
 

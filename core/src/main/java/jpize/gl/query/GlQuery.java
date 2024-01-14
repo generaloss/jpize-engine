@@ -1,6 +1,6 @@
 package jpize.gl.query;
 
-import jpize.util.Disposable;
+import jpize.app.Disposable;
 import jpize.gl.GlObject;
 
 import static org.lwjgl.opengl.GL46.*;

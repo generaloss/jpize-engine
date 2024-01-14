@@ -6,7 +6,7 @@ import jpize.graphics.font.BitmapFont;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.sdl.window.SdlWindow;
-import jpize.io.context.JpizeApplication;
+import jpize.app.JpizeApplication;
 import jpize.sdl.input.Key;
 import jpize.sdl.window.SdlFlashOp;
 import jpize.util.time.Stopwatch;

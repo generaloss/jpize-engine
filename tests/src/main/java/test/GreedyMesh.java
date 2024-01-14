@@ -5,11 +5,11 @@ import jpize.gl.Gl;
 import jpize.gl.glenum.GlTarget;
 import jpize.gl.tesselation.GlPolygonMode;
 import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertexAttr;
+import jpize.gl.vertex.GlVertAttr;
 import jpize.graphics.mesh.IndexedMesh;
 import jpize.graphics.util.BaseShader;
-import jpize.io.context.ContextBuilder;
-import jpize.math.vecmath.vector.Vec3f;
+import jpize.app.context.ContextBuilder;
+import jpize.util.math.vecmath.vector.Vec3f;
 import jpize.sdl.input.Key;
 import test.devs.MeshInstance;
 import test.devs.Scene3D;
@@ -332,7 +332,7 @@ public class GreedyMesh extends Scene3D{
             vertices[vertexOffset + 6] = colorArray[c + 3];
         }
 
-        IndexedMesh mesh = new IndexedMesh(new GlVertexAttr(3, GlType.FLOAT), new GlVertexAttr(4, GlType.FLOAT));
+        IndexedMesh mesh = new IndexedMesh(new GlVertAttr(3, GlType.FLOAT), new GlVertAttr(4, GlType.FLOAT));
         mesh.getBuffer().setData(vertices);
         mesh.getIndexBuffer().setData(indexes);
 

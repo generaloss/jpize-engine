@@ -1,7 +1,7 @@
 package test;
 
 import jpize.Jpize;
-import jpize.io.context.JpizeApplication;
+import jpize.app.JpizeApplication;
 
 public class TilemapTest extends JpizeApplication{
 

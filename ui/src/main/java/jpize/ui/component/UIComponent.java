@@ -1,7 +1,7 @@
 package jpize.ui.component;
 
 import jpize.graphics.texture.Texture;
-import jpize.graphics.util.color.Color;
+import jpize.util.color.Color;
 import jpize.ui.component.input.UIInput;
 import jpize.ui.component.render.UIRenderer;
 import jpize.ui.component.style.UIBackground;
@@ -10,8 +10,8 @@ import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Dimension;
 import jpize.ui.constraint.Insets;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class UIComponent{
 
@@ -27,7 +27,7 @@ public abstract class UIComponent{
     protected final UIInput input;
 
     public UIComponent(){
-        this.children = new ArrayList<>();
+        this.children = new CopyOnWriteArrayList<>();
         this.ID = null;
         this.cache = new UIComponentCache(this);
         this.margin = new Insets();
@@ -107,6 +107,19 @@ public abstract class UIComponent{
             return component;
         }
         return getChildWithID(ID);
+    }
+
+    @SuppressWarnings("unchecked")
+    public final <C extends UIComponent> C findByID(String ID){
+        for(UIComponent child: this.children){
+            if(ID.equals(child.ID))
+                return (C) child;
+
+            final UIComponent component = child.findByID(ID);
+            if(component != null)
+                return (C) component;
+        }
+        return null;
     }
 
     public final void add(UIComponent child){

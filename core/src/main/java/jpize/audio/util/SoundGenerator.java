@@ -2,7 +2,7 @@ package jpize.audio.util;
 
 import org.lwjgl.BufferUtils;
 import jpize.Jpize;
-import jpize.math.Maths;
+import jpize.util.math.Maths;
 
 import java.nio.ByteBuffer;
 

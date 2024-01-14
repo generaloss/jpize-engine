@@ -3,10 +3,10 @@ package jpize.graphics.util.batch.scissor;
 import jpize.gl.Gl;
 import jpize.gl.glenum.GlTarget;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.math.Maths;
-import jpize.math.vecmath.vector.Vec2d;
-import jpize.math.vecmath.vector.Vec2f;
-import jpize.math.vecmath.vector.Vec2i;
+import jpize.util.math.Maths;
+import jpize.util.math.vecmath.vector.Vec2d;
+import jpize.util.math.vecmath.vector.Vec2f;
+import jpize.util.math.vecmath.vector.Vec2i;
 
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;

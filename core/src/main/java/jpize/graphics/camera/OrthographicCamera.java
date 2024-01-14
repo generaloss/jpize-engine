@@ -1,8 +1,8 @@
 package jpize.graphics.camera;
 
 import jpize.Jpize;
-import jpize.util.Resizable;
-import jpize.math.vecmath.matrix.Matrix4f;
+import jpize.app.Resizable;
+import jpize.util.math.vecmath.matrix.Matrix4f;
 
 public class OrthographicCamera extends Camera2D implements Resizable{
 

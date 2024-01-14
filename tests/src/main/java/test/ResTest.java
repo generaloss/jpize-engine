@@ -2,7 +2,7 @@ package test;
 
 import jpize.audio.sound.Sound;
 import jpize.graphics.texture.Texture;
-import jpize.io.context.JpizeApplication;
+import jpize.app.JpizeApplication;
 
 public class ResTest extends JpizeApplication{
 

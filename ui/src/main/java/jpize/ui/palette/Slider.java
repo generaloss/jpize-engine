@@ -2,7 +2,7 @@ package jpize.ui.palette;
 
 import jpize.Jpize;
 import jpize.graphics.font.BitmapFont;
-import jpize.math.Maths;
+import jpize.util.math.Maths;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Constraint;
 import jpize.ui.palette.callback.SliderCallback;

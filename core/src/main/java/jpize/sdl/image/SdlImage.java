@@ -15,8 +15,10 @@ public class SdlImage{
         final int width = bufferedImage.getWidth();
         final int height = bufferedImage.getHeight();
 
-        final SDL_Surface surface = SdlSurface.SDL_CreateRGBSurface(0, width, height, 32,
-            0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+        final SDL_Surface surface = SdlSurface.SDL_CreateRGBSurface(
+            0, width, height, 32,
+            0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000
+        );
 
         final IntBuffer buffer = surface.getPixels().getByteBuffer(0, width * height * 4L).asIntBuffer();
 

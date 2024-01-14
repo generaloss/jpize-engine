@@ -3,11 +3,11 @@ package jpize.ui.component.render;
 import jpize.graphics.camera.OrthographicCamera;
 import jpize.graphics.util.Shader;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.graphics.util.color.Color;
+import jpize.util.color.Color;
 import jpize.ui.component.UIComponent;
 import jpize.ui.component.UIComponentCache;
-import jpize.util.Disposable;
-import jpize.util.Resizable;
+import jpize.app.Disposable;
+import jpize.app.Resizable;
 import jpize.util.file.Resource;
 
 public class UIRenderer implements Disposable, Resizable{

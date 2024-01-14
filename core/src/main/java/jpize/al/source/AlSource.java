@@ -2,8 +2,7 @@ package jpize.al.source;
 
 import jpize.al.buffer.AlBuffer;
 import jpize.al.object.AlObjectInt;
-import jpize.math.vecmath.vector.Vec3f;
-import jpize.util.Utils;
+import jpize.util.math.vecmath.vector.Vec3f;
 
 import static org.lwjgl.openal.AL11.*;
 
@@ -254,7 +253,7 @@ public class AlSource extends AlObjectInt{
 
 
     public void waitForStop(){
-        Utils.waitFor(this::isStopped);
+        jpize.util.Utils.waitFor(this::isStopped);
     }
 
 

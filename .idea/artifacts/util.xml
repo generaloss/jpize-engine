@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="util">
+    <output-path>$PROJECT_DIR$/out</output-path>
+    <root id="archive" name="jpize-util-.jar">
+      <element id="module-output" name="util" />
+    </root>
+  </artifact>
+</component>

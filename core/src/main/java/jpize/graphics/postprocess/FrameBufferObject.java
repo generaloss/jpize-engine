@@ -2,7 +2,7 @@ package jpize.graphics.postprocess;
 
 import org.lwjgl.BufferUtils;
 import jpize.Jpize;
-import jpize.util.Resizable;
+import jpize.app.Resizable;
 import jpize.gl.buffer.GlAttachment;
 import jpize.gl.texture.GlFilter;
 import jpize.gl.GlObject;

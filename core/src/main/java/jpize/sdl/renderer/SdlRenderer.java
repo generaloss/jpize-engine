@@ -5,7 +5,7 @@ import io.github.libsdl4j.api.render.SDL_Renderer;
 import io.github.libsdl4j.api.render.SDL_Texture;
 import io.github.libsdl4j.api.render.SdlRender;
 import jpize.sdl.window.SdlWindow;
-import jpize.util.Disposable;
+import jpize.app.Disposable;
 
 public class SdlRenderer implements Disposable{
 

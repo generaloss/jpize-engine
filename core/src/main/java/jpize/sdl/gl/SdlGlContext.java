@@ -6,7 +6,7 @@ import io.github.libsdl4j.api.video.SDL_GLContext;
 import io.github.libsdl4j.api.video.SDL_Window;
 import io.github.libsdl4j.api.video.SdlVideo;
 import jpize.sdl.window.SdlWindow;
-import jpize.util.Disposable;
+import jpize.app.Disposable;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
 

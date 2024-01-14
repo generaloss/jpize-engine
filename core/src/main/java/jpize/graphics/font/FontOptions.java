@@ -1,7 +1,7 @@
 package jpize.graphics.font;
 
-import jpize.graphics.util.color.Color;
-import jpize.math.vecmath.vector.Vec2f;
+import jpize.util.color.Color;
+import jpize.util.math.vecmath.vector.Vec2f;
 
 public class FontOptions{
 

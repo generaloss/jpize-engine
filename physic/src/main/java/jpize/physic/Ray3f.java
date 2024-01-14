@@ -1,6 +1,6 @@
 package jpize.physic;
 
-import jpize.math.vecmath.vector.Vec3f;
+import jpize.util.math.vecmath.vector.Vec3f;
 import jpize.physic.axisaligned.box.AABoxBody;
 import jpize.physic.utils.Intersector;
 

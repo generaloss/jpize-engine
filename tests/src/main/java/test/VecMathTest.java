@@ -1,13 +1,13 @@
 package test;
 
 import jpize.Jpize;
+import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.graphics.camera.ctrl.EulerRotCtrl;
 import jpize.graphics.util.SkyBox;
-import jpize.io.context.JpizeApplication;
-import jpize.math.util.EulerAngles;
-import jpize.math.vecmath.matrix.Matrix4f;
 import jpize.sdl.input.Key;
+import jpize.util.math.util.EulerAngles;
+import jpize.util.math.vecmath.matrix.Matrix4f;
 
 public class VecMathTest extends JpizeApplication{
 
@@ -30,10 +30,6 @@ public class VecMathTest extends JpizeApplication{
 
         projection = new Matrix4f().setPerspective(Jpize.getAspect(), 1, 500, 70);
         view = new Matrix4f().setLookAt(rotation.getDir());
-
-        // System.out.println(new Vec4f(1, 1, 1, 1).mulMat4(projection));
-
-        // Gl.disable(GlTarget.CULL_FACE);
     }
 
     @Override

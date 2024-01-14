@@ -3,7 +3,7 @@ package jpize.graphics.font;
 import jpize.Jpize;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertexAttr;
+import jpize.gl.vertex.GlVertAttr;
 import jpize.graphics.font.glyph.GlyphIterator;
 import jpize.graphics.font.glyph.GlyphMap;
 import jpize.graphics.font.glyph.GlyphPages;
@@ -13,12 +13,12 @@ import jpize.graphics.texture.Region;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.graphics.util.color.Color;
-import jpize.math.Maths;
-import jpize.math.vecmath.matrix.Matrix3f;
-import jpize.math.vecmath.matrix.Matrix4f;
-import jpize.math.vecmath.vector.Vec2f;
-import jpize.util.Disposable;
+import jpize.util.color.Color;
+import jpize.util.math.Maths;
+import jpize.util.math.vecmath.matrix.Matrix3f;
+import jpize.util.math.vecmath.matrix.Matrix4f;
+import jpize.util.math.vecmath.vector.Vec2f;
+import jpize.app.Disposable;
 import jpize.util.array.list.FloatList;
 
 public class BitmapFont implements Disposable{
@@ -125,7 +125,7 @@ public class BitmapFont implements Disposable{
 
             final Vec2f renderPos = new Vec2f(sprite.getX(), sprite.getY());
             renderPos.y -= descent;
-            renderPos.sub(centerPos).rotDeg(options.rotation).add(centerPos).add(x, y);
+            renderPos.sub(centerPos).rotd(options.rotation).add(centerPos).add(x, y);
             renderPos.y += descent;
             sprite.render(batch, renderPos.x, renderPos.y, color.r(), color.g(), color.b(), color.a());
         }
@@ -136,7 +136,7 @@ public class BitmapFont implements Disposable{
             return;
 
         if(tmpMesh == null){
-            tmpMesh = new Mesh(new GlVertexAttr(2, GlType.FLOAT), new GlVertexAttr(2, GlType.FLOAT), new GlVertexAttr(4, GlType.FLOAT));
+            tmpMesh = new Mesh(new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(2, GlType.FLOAT), new GlVertAttr(4, GlType.FLOAT));
             tmpMesh.setMode(GlPrimitive.QUADS);
             tmpShader = BaseShader.getPos2UvColor();
             tmpMatrix1 = new Matrix4f();
@@ -164,7 +164,7 @@ public class BitmapFont implements Disposable{
 
             final Vec2f renderPos = new Vec2f(sprite.getX(), sprite.getY());
             renderPos.y -= descent;
-            renderPos.sub(centerPos).rotDeg(options.rotation).add(centerPos).add(x, y);
+            renderPos.sub(centerPos).rotd(options.rotation).add(centerPos).add(x, y);
             renderPos.y += descent;
             renderPos.mulMat3(mat);
 

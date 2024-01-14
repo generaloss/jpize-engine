@@ -6,7 +6,7 @@ import jpize.graphics.texture.Region;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.texture.pixmap.PixmapA;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.io.context.JpizeApplication;
+import jpize.app.JpizeApplication;
 import jpize.util.file.Resource;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBTTAlignedQuad;
@@ -22,7 +22,7 @@ import java.nio.IntBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
-import static jpize.math.Mathc.round;
+import static jpize.util.math.Mathc.round;
 import static org.lwjgl.BufferUtils.createByteBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.stb.STBTruetype.*;

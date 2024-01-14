@@ -1,7 +1,7 @@
 package jpize.graphics.camera;
 
-import jpize.math.util.EulerAngles;
-import jpize.math.vecmath.vector.Vec3f;
+import jpize.util.math.util.EulerAngles;
+import jpize.util.math.vecmath.vector.Vec3f;
 
 public abstract class Camera3D extends Camera{
 

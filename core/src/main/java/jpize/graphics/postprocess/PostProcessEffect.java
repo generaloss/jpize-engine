@@ -1,7 +1,7 @@
 package jpize.graphics.postprocess;
 
-import jpize.util.Disposable;
-import jpize.util.Resizable;
+import jpize.app.Disposable;
+import jpize.app.Resizable;
 
 public interface PostProcessEffect extends Disposable, Resizable{
 

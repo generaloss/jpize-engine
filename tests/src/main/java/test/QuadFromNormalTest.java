@@ -4,16 +4,16 @@ import jpize.Jpize;
 import jpize.gl.Gl;
 import jpize.gl.glenum.GlTarget;
 import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertexAttr;
+import jpize.gl.vertex.GlVertAttr;
 import jpize.graphics.camera.PerspectiveCamera;
 import jpize.graphics.camera.ctrl.EulerRotCtrl;
 import jpize.graphics.mesh.IndexedMesh;
 import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.SkyBox;
-import jpize.io.context.JpizeApplication;
-import jpize.math.Maths;
-import jpize.math.vecmath.vector.Vec3f;
-import jpize.math.vecmath.vector.Vec3i;
+import jpize.app.JpizeApplication;
+import jpize.util.math.Maths;
+import jpize.util.math.vecmath.vector.Vec3f;
+import jpize.util.math.vecmath.vector.Vec3i;
 import jpize.sdl.input.Key;
 
 public class QuadFromNormalTest extends JpizeApplication{
@@ -38,7 +38,7 @@ public class QuadFromNormalTest extends JpizeApplication{
         shader = BaseShader.getPos3UColor();
         // Mesh
 
-        quadMesh = new IndexedMesh(new GlVertexAttr(3, GlType.FLOAT));
+        quadMesh = new IndexedMesh(new GlVertAttr(3, GlType.FLOAT));
         generateFromBlockFace(new Vec3i(0, 1, 0));
         quadMesh.getIndexBuffer().setData(new int[]{
             0, 1, 2,

@@ -1,8 +1,8 @@
 package test.midi;
 
-import jpize.io.context.JpizeApplication;
-import jpize.math.Mathc;
-import jpize.math.Maths;
+import jpize.app.JpizeApplication;
+import jpize.util.math.Mathc;
+import jpize.util.math.Maths;
 import jpize.util.Utils;
 
 public class MidiTest extends JpizeApplication{

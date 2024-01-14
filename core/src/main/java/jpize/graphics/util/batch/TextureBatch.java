@@ -5,7 +5,7 @@ import jpize.gl.tesselation.GlPrimitive;
 import jpize.graphics.mesh.Mesh;
 import jpize.util.file.Resource;
 import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertexAttr;
+import jpize.gl.vertex.GlVertAttr;
 import jpize.graphics.camera.Camera;
 import jpize.graphics.texture.Region;
 import jpize.graphics.texture.Texture;
@@ -13,12 +13,12 @@ import jpize.graphics.texture.TextureRegion;
 import jpize.graphics.util.Shader;
 import jpize.graphics.util.TextureUtils;
 import jpize.graphics.util.batch.scissor.Scissor;
-import jpize.graphics.util.color.Color;
-import jpize.graphics.util.color.IColor;
-import jpize.math.vecmath.matrix.Matrix3f;
-import jpize.math.vecmath.matrix.Matrix4f;
-import jpize.math.vecmath.vector.Vec2f;
-import jpize.util.Disposable;
+import jpize.util.color.Color;
+import jpize.util.color.IColor;
+import jpize.util.math.vecmath.matrix.Matrix3f;
+import jpize.util.math.vecmath.matrix.Matrix4f;
+import jpize.util.math.vecmath.vector.Vec2f;
+import jpize.app.Disposable;
 
 import static jpize.graphics.buffer.QuadIndexBuffer.QUAD_VERTICES;
 
@@ -56,9 +56,9 @@ public class TextureBatch implements Disposable{
 
         // Mesh
         this.mesh = new Mesh(
-                new GlVertexAttr(2, GlType.FLOAT),
-                new GlVertexAttr(2, GlType.FLOAT),
-                new GlVertexAttr(4, GlType.FLOAT)
+                new GlVertAttr(2, GlType.FLOAT),
+                new GlVertAttr(2, GlType.FLOAT),
+                new GlVertAttr(4, GlType.FLOAT)
         );
         this.mesh.setMode(GlPrimitive.QUADS);
 

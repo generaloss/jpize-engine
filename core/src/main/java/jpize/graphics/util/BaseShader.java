@@ -3,8 +3,8 @@ package jpize.graphics.util;
 import jpize.graphics.texture.Texture;
 import jpize.util.file.Resource;
 import jpize.graphics.camera.Camera;
-import jpize.graphics.util.color.IColor;
-import jpize.math.vecmath.matrix.Matrix4f;
+import jpize.util.color.IColor;
+import jpize.util.math.vecmath.matrix.Matrix4f;
 
 public class BaseShader extends Shader{
     

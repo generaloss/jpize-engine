@@ -1,6 +1,6 @@
 package jpize.physic.axisaligned.rect;
 
-import jpize.math.vecmath.vector.Vec2f;
+import jpize.util.math.vecmath.vector.Vec2f;
 import jpize.physic.utils.Intersector;
 
 public class AARectBody{

@@ -1,6 +1,6 @@
 package jpize.ui.context.mapper;
 
-import jpize.graphics.util.color.Color;
+import jpize.util.color.Color;
 import jpize.ui.component.UIComponent;
 import jpize.ui.constraint.*;
 import jpize.ui.context.UIContext;

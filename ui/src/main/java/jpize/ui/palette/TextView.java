@@ -1,7 +1,7 @@
 package jpize.ui.palette;
 
 import jpize.graphics.font.BitmapFont;
-import jpize.graphics.util.color.Color;
+import jpize.util.color.Color;
 import jpize.ui.component.UIComponent;
 import jpize.ui.constraint.Constr;
 

@@ -2,12 +2,12 @@ package jpize.graphics.util;
 
 import jpize.gl.Gl;
 import jpize.gl.type.GlType;
-import jpize.gl.vertex.GlVertexAttr;
+import jpize.gl.vertex.GlVertAttr;
 import jpize.graphics.camera.Camera;
 import jpize.graphics.mesh.IndexedMesh;
 import jpize.graphics.texture.CubeMap;
-import jpize.math.vecmath.matrix.Matrix4f;
-import jpize.util.Disposable;
+import jpize.util.math.vecmath.matrix.Matrix4f;
+import jpize.app.Disposable;
 import jpize.util.file.Resource;
 
 public class SkyBox implements Disposable{
@@ -24,7 +24,7 @@ public class SkyBox implements Disposable{
 
         shader = new Shader(Resource.internal("shader/skybox/skybox.vert"), Resource.internal("shader/skybox/skybox.frag"));
 
-        mesh = new IndexedMesh(new GlVertexAttr(3, GlType.FLOAT));
+        mesh = new IndexedMesh(new GlVertAttr(3, GlType.FLOAT));
         mesh.getBuffer().setData(new float[]{
             -2, -2,  2, //0
              2, -2,  2, //1

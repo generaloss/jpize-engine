@@ -2,7 +2,7 @@ package jpize.graphics.texture.pixmap;
 
 import jpize.gl.texture.GlSizedFormat;
 import jpize.graphics.util.Sizable;
-import jpize.util.Resizable;
+import jpize.app.Resizable;
 import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;

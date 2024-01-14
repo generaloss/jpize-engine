@@ -1,9 +1,9 @@
 package jpize.physic.utils;
 
-import jpize.math.Maths;
-import jpize.math.vecmath.matrix.Matrix4f;
-import jpize.math.vecmath.vector.Vec2f;
-import jpize.math.vecmath.vector.Vec3f;
+import jpize.util.math.Maths;
+import jpize.util.math.vecmath.matrix.Matrix4f;
+import jpize.util.math.vecmath.vector.Vec2f;
+import jpize.util.math.vecmath.vector.Vec3f;
 import jpize.physic.Ray3f;
 import jpize.physic.axisaligned.box.AABoxBody;
 import jpize.physic.axisaligned.rect.AARectBody;

@@ -1,7 +1,7 @@
 package jpize.ui.component;
 
 import jpize.Jpize;
-import jpize.math.Maths;
+import jpize.util.math.Maths;
 import jpize.sdl.input.Key;
 import jpize.ui.constraint.Constraint;
 import jpize.ui.constraint.ConstraintFlag;

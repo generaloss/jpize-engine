@@ -1,6 +1,7 @@
 package jpize.sdl.input;
 
 import jpize.Jpize;
+import jpize.util.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -283,9 +284,9 @@ public enum Key{
     }
 
 
-    public static final Map<Integer, Key> BY_SCANCODE = new HashMap<>(){{
-        for(Key key: values())
-            put(key.SDL, key);
-    }};
+    public static final Map<Integer, Key> BY_SCANCODE = Utils.make(new HashMap<>(), map -> {
+        for(Key value: values())
+            map.put(value.SDL, value);
+    });
 
 }
