@@ -133,7 +133,7 @@ public class PuiParser{
             final List<Object> values = parseVector();
             mapper.mapFieldVector(key, values);
 
-        }else if(token.type.isLiteral() || token.type.isNumber() || token.type.isConstraint() || token.type.isResource()){
+        }else if(token.type.isLiteral() || token.type.isNumber() || token.type.isBool() || token.type.isConstraint() || token.type.isResource()){
             final Object value = parseSingleValue();
             mapper.mapFieldValue(key, value);
         }else
@@ -175,7 +175,7 @@ public class PuiParser{
 
     private Object parseSingleValue(){
         final PuiToken token = current();
-        require(LITERAL, NUMBER, CONSTRAINT, RESOURCE);
+        require(LITERAL, NUMBER, BOOL, CONSTRAINT, RESOURCE);
         next();
         return mapper.parseTokenToObject(token);
     }

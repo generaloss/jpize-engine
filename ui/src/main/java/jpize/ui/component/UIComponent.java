@@ -25,6 +25,7 @@ public abstract class UIComponent{
     protected boolean paddingFixH, paddingFixW;
     protected final UIStyle style;
     protected final UIInput input;
+    protected boolean hidden;
 
     public UIComponent(){
         this.children = new CopyOnWriteArrayList<>();
@@ -186,6 +187,15 @@ public abstract class UIComponent{
 
     public final UIStyle style(){
         return style;
+    }
+
+
+    public final boolean isHidden(){
+        return hidden;
+    }
+
+    public final void setHidden(boolean hidden){
+        this.hidden = hidden;
     }
 
 }

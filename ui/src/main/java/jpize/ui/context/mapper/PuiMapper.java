@@ -55,6 +55,8 @@ public class PuiMapper{
         addTokenParser(PuiTokenType.LITERAL, (tokens) -> tokens[0].string);
         // Number
         addTokenParser(PuiTokenType.NUMBER, (tokens) -> Float.parseFloat(tokens[0].string));
+        // Boolean
+        addTokenParser(PuiTokenType.BOOL, (tokens) -> Boolean.parseBoolean(tokens[0].string));
         // Resource
         addTokenParser(PuiTokenType.RESOURCE, (tokens) -> resources.get(tokens[0].string));
         // Constraint

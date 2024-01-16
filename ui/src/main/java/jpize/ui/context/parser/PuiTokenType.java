@@ -20,6 +20,7 @@ public enum PuiTokenType{
     CONSTRAINT    ("constraint", "^(?:(?:[0-9\\.]+(?:px|rw|rh|ap))|auto|zero|match_parent|wrap_content)"),
     LITERAL       ("literal"   , "^(?:(?:'(?:\\\\.|[^\\'\\\\])*')|(?:\"(?:\\\\.|[^\\\"\\\\])*\"))"      ),
     NUMBER        ("number"    , "^[0-9]+(?:(?:\\.[0-9]+)(?:(?:e|E)(\\+|\\-|)[0-9]+|)|)"),
+    BOOL          ("bool"      , "^(?:true|false|True|False|TRUE|FALSE)"),
     KEY           ("key:"      , "^[\\w\\.]+:"   ),
     RESOURCE      ("!resource" , "^![\\w\\.\\:]+");
 
@@ -86,6 +87,10 @@ public enum PuiTokenType{
 
     public boolean isNumber(){
         return this == NUMBER;
+    }
+
+    public boolean isBool(){
+        return this == BOOL;
     }
 
     public boolean isKey(){
