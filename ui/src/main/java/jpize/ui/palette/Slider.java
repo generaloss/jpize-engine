@@ -18,25 +18,35 @@ public class Slider extends Rect{
     private float value;
     private final List<SliderCallback> callbacks;
 
-    public Slider(Constraint width, Constraint height, String text, BitmapFont font){
+    public Slider(Constraint width, Constraint height, String text, BitmapFont font, Constraint text_size){
         super(width, height);
         super.input().addPressCallback(((comp, btn) -> grabHandle = true));
         super.input().addReleaseCallback(((comp, btn) -> grabHandle = false));
         this.callbacks = new CopyOnWriteArrayList<>();
 
         this.handle = new Rect(Constr.relh(0.5), Constr.relh(1));
+        this.handle.setID("handle");
         this.handle.padding().set(Constr.zero, Constr.zero, Constr.zero, Constr.auto);
         this.handle.input().setClickable(false);
         super.add(handle);
 
-        this.textview = new TextView(text, font);
-        textview.padding().set(Constr.zero);
-        textview.color().set(0.1, 0.1, 0.1, 1);
+        this.textview = new TextView(text, font, text_size);
+        this.textview.setID("text");
+        this.textview.padding().set(Constr.zero);
+        this.textview.color().set(0.1, 0.1, 0.1, 1);
         super.add(textview);
     }
 
+    public Slider(Constraint width, Constraint height, String text, BitmapFont font){
+        this(width, height, text, font, Constr.match_parent);
+    }
+
+    public Slider(Constraint size, String text, BitmapFont font, Constraint text_size){
+        this(size, size, text, font, text_size);
+    }
+
     public Slider(Constraint size, String text, BitmapFont font){
-        this(size, size, text, font);
+        this(size, text, font, Constr.match_parent);
     }
 
 

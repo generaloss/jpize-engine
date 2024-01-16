@@ -8,6 +8,7 @@ import jpize.util.math.vecmath.vector.*;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.UUID;
 
 public class JpizeInputStream extends DataInputStream{
@@ -151,6 +152,14 @@ public class JpizeInputStream extends DataInputStream{
             readFloat(),
             readFloat()
         );
+    }
+
+    public ByteBuffer readByteBuffer() throws IOException{
+        final byte[] array = readByteArray();
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(array.length);
+        buffer.put(array);
+        buffer.flip();
+        return buffer;
     }
     
 }

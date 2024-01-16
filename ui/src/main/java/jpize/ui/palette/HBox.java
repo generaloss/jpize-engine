@@ -40,9 +40,13 @@ public class HBox extends AbstractLayout{
     }
 
     @Override
+    public void update(){
+        cache.calculate();
+    }
+
+    @Override
     public void render(){
         super.render();
-        cache.calculate();
         offsetX = cache.x;
         super.renderBackground();
     }

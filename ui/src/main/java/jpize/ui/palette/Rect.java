@@ -17,9 +17,13 @@ public class Rect extends UIComponent{
     }
 
     @Override
+    public void update(){
+        cache.calculate();
+    }
+
+    @Override
     public void render(){
         super.render();
-        cache.calculate();
         super.renderBackground();
     }
 

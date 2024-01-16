@@ -1,5 +1,7 @@
 package jpize.net.tcp;
 
+import jpize.net.tcp.packet.IPacket;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -44,7 +46,11 @@ public class TcpClient extends TcpDisconnector{
     public void send(PacketWriter data){
         connection.send(data);
     }
-    
+
+    public void send(IPacket<?> packet){
+        connection.send(packet);
+    }
+
     
     synchronized public void disconnect(){
         if(connection == null || connection.isClosed())

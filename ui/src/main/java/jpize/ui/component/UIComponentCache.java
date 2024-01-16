@@ -125,7 +125,7 @@ public class UIComponentCache{
     }
 
 
-    private float constrToPx(Constraint c, boolean forY, boolean forSize){
+    public float constrToPx(Constraint c, boolean forY, boolean forSize){
         autoConstrFlag = false;
 
         if(c instanceof ConstraintFlag flag)

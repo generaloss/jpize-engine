@@ -7,6 +7,7 @@ import jpize.util.math.vecmath.vector.*;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.UUID;
 
 public class JpizeOutputStream extends DataOutputStream{
@@ -118,6 +119,12 @@ public class JpizeOutputStream extends DataOutputStream{
         writeFloat(color.g());
         writeFloat(color.b());
         writeFloat(color.a());
+    }
+
+    public void writeByteBuffer(ByteBuffer buffer) throws IOException{
+        final byte[] array = new byte[buffer.remaining()];
+        buffer.get(array);
+        writeByteArray(array);
     }
     
 }

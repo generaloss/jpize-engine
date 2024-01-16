@@ -1,0 +1,80 @@
+@VBox {
+
+    # top navbar
+    @ConstraintLayout (match_parent, 0.08rh) {
+        style.background.color: (0.23, 1)
+
+        @TextView ("UI TEST 2", !font, match_parent) {
+            padding: (0px)
+        }
+        @Rect (0.75rh, 0.75rh) {
+            padding: (0px, auto, 0px, 0.6rh)
+            style.background.image: !icon
+        }
+    }
+    @Rect (match_parent, 0.005rh) {
+         style.background.color: (0.2, 1)
+    }
+
+    # other content
+    @HBox (match_parent, 0.915rh) {
+        style.background: {
+            image: !background
+            color.a: 1.0
+        }
+
+        # left navbar
+        @VBox (0.3rw, match_parent) {
+            style.background.color: (0.45, 0.6)
+            @ConstraintLayout (match_parent, 0.075rh) {
+                style.background.color: (0.33, 1)
+                @TextView ("List:", !font, match_parent) {
+                    padding: (0px)
+                }
+            }
+            @Rect (match_parent, 0.005rh) {
+                style.background.color: (0.28, 1)
+            }
+            @VBox (match_parent, 0.92rh) {
+                ID: "server_list"
+            }
+        }
+
+        @VBox (0.68rw, 0.98rh) {
+            padding: (0.01rh, 0.01rw)
+            # path
+            @ConstraintLayout (match_parent, 0.075rh) {
+                style.background.color: (0.9, 0.6)
+                @TextView ("Path / ", !font, match_parent) {
+                    color: (0.1)
+                    padding: (0px, 10px, 0px, auto)
+                }
+            }
+            # panel
+            @HBox (match_parent, 0.4rh) {
+                padding.top: 0.01rh
+                style.background.color: (0.9, 0.6)
+                @Rect (1.77ap, match_parent) {
+                    ID: "server_icon"
+                    style.background.color: (1)
+                }
+                @Button (3ap, 0.15rh, "Start", !font, match_parent) {
+                    ID: "start_button"
+                    padding: (0.05rh, 0.05rh)
+                    style.corner_radius: 0.01rw
+                }
+                @Button (3ap, 0.15rh, "Stop", !font, match_parent) {
+                    ID: "stop_button"
+                    padding: (0.05rh, 0.05rh)
+                    style.corner_radius: 0.01rw
+                }
+                @Button (3ap, 0.15rh, "Kill", !font, match_parent) {
+                    ID: "kill_button"
+                    padding: (0.05rh, 0.05rh)
+                    style.corner_radius: 0.01rw
+                }
+            }
+        }
+    }
+
+}

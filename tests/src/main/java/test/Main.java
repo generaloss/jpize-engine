@@ -35,7 +35,8 @@ public class Main{
         //.register().setAdapter(new TextTest());
         //.register().setAdapter(new TextEditor());
         //.register().setAdapter(new AudioTest());
-        .register().setAdapter(new UiTest());
+        //.register().setAdapter(new UiTest());
+        .register().setAdapter(new UiTest2());
         //.register().setAdapter(new ListTest());
         //.register().setAdapter(new ResTest());
         //.register().setAdapter(new TilemapTest());

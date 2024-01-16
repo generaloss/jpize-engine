@@ -41,9 +41,13 @@ public class VBox extends AbstractLayout{
     }
 
     @Override
+    public void update(){
+        cache.calculate();
+    }
+
+    @Override
     public void render(){
         super.render();
-        cache.calculate();
         offsetY = cache.y + cache.height;
 
         super.renderBackground();
