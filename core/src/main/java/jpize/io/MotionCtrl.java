@@ -1,4 +1,4 @@
-package jpize.graphics.camera.ctrl;
+package jpize.io;
 
 import jpize.util.math.vecmath.vector.Vec3f;
 import jpize.util.math.vecmath.vector.Vec3i;

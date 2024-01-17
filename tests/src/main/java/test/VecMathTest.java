@@ -3,7 +3,7 @@ package test;
 import jpize.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
-import jpize.graphics.camera.ctrl.EulerRotCtrl;
+import jpize.io.EulerRotCtrl;
 import jpize.graphics.util.SkyBox;
 import jpize.sdl.input.Key;
 import jpize.util.math.util.EulerAngles;

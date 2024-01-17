@@ -1,4 +1,4 @@
-package jpize.graphics.camera.ctrl;
+package jpize.io;
 
 import jpize.Jpize;
 import jpize.util.math.Maths;
@@ -21,7 +21,6 @@ public class EulerRotCtrl{
     private final Vec2i mouseRelState;
 
     public EulerRotCtrl(EulerAngles target, boolean enabled){
-        System.out.println(SPEED_MULTIPLIER);
         this.target = target;
         this.lockNextFrame = true;
         this.speed = 1F;

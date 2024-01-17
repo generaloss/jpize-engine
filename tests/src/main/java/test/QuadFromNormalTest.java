@@ -6,7 +6,7 @@ import jpize.gl.glenum.GlTarget;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
 import jpize.graphics.camera.PerspectiveCamera;
-import jpize.graphics.camera.ctrl.EulerRotCtrl;
+import jpize.io.EulerRotCtrl;
 import jpize.graphics.mesh.IndexedMesh;
 import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.SkyBox;

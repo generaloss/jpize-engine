@@ -4,8 +4,8 @@ import jpize.Jpize;
 import jpize.gl.Gl;
 import jpize.graphics.camera.Camera3D;
 import jpize.graphics.camera.PerspectiveCamera;
-import jpize.graphics.camera.ctrl.MotionCtrl;
-import jpize.graphics.camera.ctrl.EulerRotCtrl;
+import jpize.io.MotionCtrl;
+import jpize.io.EulerRotCtrl;
 import jpize.app.JpizeApplication;
 
 import java.util.ArrayList;
