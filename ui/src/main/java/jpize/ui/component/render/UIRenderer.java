@@ -56,11 +56,13 @@ public class UIRenderer implements Disposable, Resizable{
 
     public void beginScissor(UIComponent component){
         final UIComponentCache cache = component.cache();
-        batch.getScissor().begin(component.hashCode(), cache.x, cache.y, cache.width, cache.height);
+        final UIComponent parent = component.parent();
+        final int parentIndex = (parent == null) ? -1 : Math.abs(parent.hashCode());
+        batch.getScissor().begin(Math.abs(component.hashCode()), cache.x, cache.y, cache.width, cache.height, parentIndex);
     }
 
     public void endScissor(UIComponent component){
-        batch.getScissor().end(component.hashCode());
+        batch.getScissor().end(Math.abs(component.hashCode()));
     }
 
     public TextureBatch batch(){

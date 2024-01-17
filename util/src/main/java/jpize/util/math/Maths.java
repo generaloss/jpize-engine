@@ -25,19 +25,6 @@ public class Maths{
     }
 
 
-    public static int abs(int a){
-        return a < 0 ? -a : a;
-    }
-
-    public static float abs(float a){
-        return a < 0 ? -a : a;
-    }
-
-    public static double abs(double a){
-        return a < 0 ? -a : a;
-    }
-
-
     public static int floor(double a){
         return (int) (a < 0 ? a - 1 : a);
     }

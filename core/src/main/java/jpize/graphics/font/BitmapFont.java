@@ -14,7 +14,6 @@ import jpize.graphics.texture.Texture;
 import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.util.color.Color;
-import jpize.util.math.Maths;
 import jpize.util.math.vecmath.matrix.Matrix3f;
 import jpize.util.math.vecmath.matrix.Matrix4f;
 import jpize.util.math.vecmath.vector.Vec2f;
@@ -76,7 +75,7 @@ public class BitmapFont implements Disposable{
 
         for(GlyphSprite glyph: iterableText(text)){
             final float glyphX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
-            final float glyphY = Maths.abs(glyph.getY() + info.getDescent() + glyph.getHeight()) - info.getDescent();
+            final float glyphY = Math.abs(glyph.getY() + info.getDescent() + glyph.getHeight()) - info.getDescent();
 
             width = Math.max(width, glyphX);
             height = Math.max(height, glyphY);
@@ -97,7 +96,7 @@ public class BitmapFont implements Disposable{
     public float getTextHeight(String text){
         float height = 0;
         for(GlyphSprite glyph: iterableText(text)){
-            final float glyphY = Maths.abs(glyph.getY() + info.getDescent() + glyph.getHeight()) - info.getDescent();
+            final float glyphY = Math.abs(glyph.getY() + info.getDescent() + glyph.getHeight()) - info.getDescent();
             height = Math.max(height, glyphY);
         }
         return height;

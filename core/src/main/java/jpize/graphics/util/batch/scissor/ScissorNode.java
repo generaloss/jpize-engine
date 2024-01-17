@@ -33,7 +33,7 @@ public class ScissorNode{
         return rectangle;
     }
     
-    public int getScissorOfIndex(){
+    public int getParentIndex(){
         return scissorOfIndex;
     }
     

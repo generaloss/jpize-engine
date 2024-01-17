@@ -27,8 +27,8 @@ public class Scissor{
         this.begin(index, Maths.round(x), Maths.round(y), Maths.round(width), Maths.round(height));
     }
     
-    public void begin(int index, double x, double y, double width, double height, int scissorOfIndex){
-        this.begin(index, Maths.round(x), Maths.round(y), Maths.round(width), Maths.round(height), scissorOfIndex);
+    public void begin(int index, double x, double y, double width, double height, int parentIndex){
+        this.begin(index, Maths.round(x), Maths.round(y), Maths.round(width), Maths.round(height), parentIndex);
     }
     
     public void begin(int index, int x, int y, int width, int height){
@@ -39,19 +39,19 @@ public class Scissor{
         if(scissor.getIndex() < 0)
             return;
         
-        if(scissor.getScissorOfIndex() != -1 &&!scissorList.isEmpty()){
-            final ScissorNode scissorOf = scissorList.get(scissor.getScissorOfIndex());
+        if(scissor.getParentIndex() != -1 && !scissorList.isEmpty()){
+            final ScissorNode parent = scissorList.get(scissor.getParentIndex());
             
-            final int scissorOfX2 = scissorOf.getX2();
-            final int scissorOfY2 = scissorOf.getY2();
+            final int scissorOfX2 = parent.getX2();
+            final int scissorOfY2 = parent.getY2();
             
             final int oldX2 = scissor.getX2();
             final int oldY2 = scissor.getY2();
             
-            scissor.getRectangle().x = Math.max(Math.min(scissor.getX(), scissorOfX2), scissorOf.getX());
-            scissor.getRectangle().y = Math.max(Math.min(scissor.getY(), scissorOfY2), scissorOf.getY());
-            scissor.getRectangle().width  = Math.max(0, Math.min(Math.min(scissor.getWidth() , oldX2 - scissorOf.getX()), Math.min(scissorOfX2, scissor.getX2()) - scissor.getX()));
-            scissor.getRectangle().height = Math.max(0, Math.min(Math.min(scissor.getHeight(), oldY2 - scissorOf.getY()), Math.min(scissorOfY2, scissor.getY2()) - scissor.getY()));
+            scissor.getRectangle().x = Math.max(Math.min(scissor.getX(), scissorOfX2), parent.getX());
+            scissor.getRectangle().y = Math.max(Math.min(scissor.getY(), scissorOfY2), parent.getY());
+            scissor.getRectangle().width  = Math.max(0, Math.min(Math.min(scissor.getWidth() , oldX2 - parent.getX()), Math.min(scissorOfX2, scissor.getX2()) - scissor.getX()));
+            scissor.getRectangle().height = Math.max(0, Math.min(Math.min(scissor.getHeight(), oldY2 - parent.getY()), Math.min(scissorOfY2, scissor.getY2()) - scissor.getY()));
         }
         
         scissorList.put(scissor.getIndex(), scissor);
@@ -62,30 +62,30 @@ public class Scissor{
         scissor.activate();
     }
     
-    public void begin(int index, int x, int y, int width, int height, int scissorOfIndex){
+    public void begin(int index, int x, int y, int width, int height, int parentIndex){
         if(index < 0)
             return;
         
-        if(scissorOfIndex != -1 &&!scissorList.isEmpty()){
-            final ScissorNode scissorOf = scissorList.get(scissorOfIndex);
+        if(parentIndex != -1 && !scissorList.isEmpty()){
+            final ScissorNode parent = scissorList.get(parentIndex);
             
-            final int scissorOfX2 = scissorOf.getX2();
-            final int scissorOfY2 = scissorOf.getY2();
+            final int scissorOfX2 = parent.getX2();
+            final int scissorOfY2 = parent.getY2();
             
             final int oldX2 = x + width;
             final int oldY2 = y + height;
             
-            x = Math.max(Math.min(x, scissorOfX2), scissorOf.getX());
-            y = Math.max(Math.min(y, scissorOfY2), scissorOf.getY());
+            x = Math.max(Math.min(x, scissorOfX2), parent.getX());
+            y = Math.max(Math.min(y, scissorOfY2), parent.getY());
             
             final int x2 = x + width;
             final int y2 = y + height;
             
-            width  = Math.max(0, Math.min(Math.min(width , oldX2 - scissorOf.getX()), Math.min(scissorOfX2, x2) - x));
-            height = Math.max(0, Math.min(Math.min(height, oldY2 - scissorOf.getY()), Math.min(scissorOfY2, y2) - y));
+            width  = Math.max(0, Math.min(Math.min(width , oldX2 - parent.getX()), Math.min(scissorOfX2, x2) - x));
+            height = Math.max(0, Math.min(Math.min(height, oldY2 - parent.getY()), Math.min(scissorOfY2, y2) - y));
         }
         
-        final ScissorNode scissor = new ScissorNode(index, x, y, width, height, scissorOfIndex);
+        final ScissorNode scissor = new ScissorNode(index, x, y, width, height, parentIndex);
         scissorList.put(index, scissor);
         
         batch.end();
@@ -96,7 +96,7 @@ public class Scissor{
     
     public void end(int index){
         final ScissorNode removedScissor = scissorList.remove(index);
-        final int removedIndexOf = removedScissor.getScissorOfIndex();
+        final int removedIndexOf = removedScissor.getParentIndex();
         
         batch.end();
         if(removedIndexOf != -1 && !scissorList.isEmpty()){
