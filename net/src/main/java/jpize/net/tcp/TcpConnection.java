@@ -110,6 +110,10 @@ public class TcpConnection{
         return closed;
     }
 
+    public boolean isConnected(){
+        return socket.isConnected();
+    }
+
     public void close(){
         if(closed)
             return;

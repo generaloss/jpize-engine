@@ -70,4 +70,8 @@ public class TcpClient extends TcpDisconnector{
         return connection;
     }
 
+    public boolean isConnected(){
+        return connection != null && connection.isConnected();
+    }
+
 }
