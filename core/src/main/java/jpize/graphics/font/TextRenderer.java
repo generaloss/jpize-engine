@@ -4,133 +4,53 @@ import jpize.Jpize;
 import jpize.gl.tesselation.GlPrimitive;
 import jpize.gl.type.GlType;
 import jpize.gl.vertex.GlVertAttr;
-import jpize.graphics.font.glyph.GlyphIterator;
-import jpize.graphics.font.glyph.GlyphMap;
-import jpize.graphics.font.glyph.GlyphPages;
 import jpize.graphics.font.glyph.GlyphSprite;
 import jpize.graphics.mesh.Mesh;
 import jpize.graphics.texture.Region;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.batch.TextureBatch;
+import jpize.util.array.list.FloatList;
 import jpize.util.color.Color;
 import jpize.util.math.vecmath.matrix.Matrix3f;
 import jpize.util.math.vecmath.matrix.Matrix4f;
 import jpize.util.math.vecmath.vector.Vec2f;
-import jpize.app.Disposable;
-import jpize.util.array.list.FloatList;
 
-public class BitmapFont implements Disposable{
+public class TextRenderer{
 
-    private final FontInfo info;
-    private final GlyphPages pages;
-    private final GlyphMap glyphs;
-    private final FontOptions options;
-
-    protected BitmapFont(FontInfo info, GlyphPages pages, GlyphMap glyphs){
-        this.info = info;
-        this.pages = pages;
-        this.glyphs = glyphs;
-        this.options = new FontOptions(this);
-    }
-
-    public FontInfo info(){
-        return info;
-    }
-
-    public GlyphMap glyphs(){
-        return glyphs;
-    }
-
-    public GlyphPages pages(){
-        return pages;
-    }
-
-    public FontOptions options(){
-        return options;
-    }
-
-
-    public float getLineHeight(){
-        return info.getHeight();
-    }
-
-    public float getDescentScaled(){
-        return info.getDescent() * options.scale;
-    }
-
-
-    public float getScale(){
-        return options.scale;
-    }
-
-    public void setScale(float scale){
-        options.scale = scale;
-    }
-
-
-    public Vec2f getBounds(String text){
-        float width = 0;
-        float height = 0;
-
-        for(GlyphSprite glyph: iterableText(text)){
-            final float glyphX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
-            final float glyphY = Math.abs(glyph.getY() + info.getDescent() + glyph.getHeight()) - info.getDescent();
-
-            width = Math.max(width, glyphX);
-            height = Math.max(height, glyphY);
-        }
-
-        return new Vec2f(width, height);
-    }
-
-    public float getTextWidth(String text){
-        float width = 0;
-        for(GlyphSprite glyph: iterableText(text)){
-            final float glyphX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
-            width = Math.max(width, glyphX);
-        }
-        return width;
-    }
-
-    public float getTextHeight(String text){
-        float height = 0;
-        for(GlyphSprite glyph: iterableText(text)){
-            final float glyphY = Math.abs(glyph.getY() + info.getDescent() + glyph.getHeight()) - info.getDescent();
-            height = Math.max(height, glyphY);
-        }
-        return height;
-    }
-
-
-    public void drawText(TextureBatch batch, String text, float x, float y){
+    public static void render(Font font, TextureBatch batch, String text, float x, float y){
         if(text == null || text.isEmpty() || text.isBlank())
             return;
 
-        final Color color = options.color;
+        final Color color = font.options.color;
 
         batch.setTransformOrigin(0, 0);
-        batch.rotate(options.rotation);
-        batch.shear(options.getItalicAngle(), 0);
+        batch.rotate(font.options.rotation);
+        batch.shear(font.options.getItalicAngle(), 0);
 
-        final Vec2f centerPos = getBounds(text).mul(options.rotateOrigin);
-        centerPos.y *= options.getLineWrapSign();
+        final Vec2f centerPos = font.getBounds(text).mul(font.options.rotateOrigin);
+        centerPos.y *= font.options.getLineWrapSign();
 
-        final float descent = getDescentScaled();
+        final float descent = font.getDescentScaled();
 
-        for(GlyphSprite sprite: iterableText(text)){
+        for(GlyphSprite sprite: font.iterable(text)){
             if((char) sprite.getCode() == ' ' || !sprite.isCanRender())
                 continue;
 
             final Vec2f renderPos = new Vec2f(sprite.getX(), sprite.getY());
             renderPos.y -= descent;
-            renderPos.sub(centerPos).rotd(options.rotation).add(centerPos).add(x, y);
+            renderPos.sub(centerPos).rotd(font.options.rotation).add(centerPos).add(x, y);
             renderPos.y += descent;
             sprite.render(batch, renderPos.x, renderPos.y, color.r(), color.g(), color.b(), color.a());
         }
     }
 
-    public void drawText(String text, float x, float y){
+
+    private static Mesh tmpMesh;
+    private static BaseShader tmpShader;
+    private static Matrix4f tmpMatrix1, tmpMatrix2;
+
+    public static void render(Font font, String text, float x, float y){
         if(text == null || text.isEmpty() || text.isBlank())
             return;
 
@@ -143,27 +63,27 @@ public class BitmapFont implements Disposable{
         }
         tmpMatrix1.setOrthographic(0, 0, Jpize.getWidth(), Jpize.getHeight());
 
-        final Color color = options.color;
+        final Color color = font.options.color;
 
         final Matrix3f mat = new Matrix3f();
-        mat.setRotation(options.rotation);
-        mat.shear(options.getItalicAngle(), 0);
+        mat.setRotation(font.options.rotation);
+        mat.shear(font.options.getItalicAngle(), 0);
 
-        final Vec2f centerPos = getBounds(text).mul(options.rotateOrigin);
-        centerPos.y *= options.getLineWrapSign();
+        final Vec2f centerPos = font.getBounds(text).mul(font.options.rotateOrigin);
+        centerPos.y *= font.options.getLineWrapSign();
 
-        final float descent = getDescentScaled();
+        final float descent = font.getDescentScaled();
 
         final FloatList vertices = new FloatList(text.length() * 4);
         Texture lastTexture = null;
 
-        for(GlyphSprite sprite: iterableText(text)){
+        for(GlyphSprite sprite: font.iterable(text)){
             if((char) sprite.getCode() == ' ' || !sprite.isCanRender())
                 continue;
 
             final Vec2f renderPos = new Vec2f(sprite.getX(), sprite.getY());
             renderPos.y -= descent;
-            renderPos.sub(centerPos).rotd(options.rotation).add(centerPos).add(x, y);
+            renderPos.sub(centerPos).rotd(font.options.rotation).add(centerPos).add(x, y);
             renderPos.y += descent;
             renderPos.mulMat3(mat);
 
@@ -220,21 +140,6 @@ public class BitmapFont implements Disposable{
         tmpShader.setMatrices(tmpMatrix1, tmpMatrix2);
         tmpShader.setTexture(lastTexture);
         tmpMesh.render();
-    }
-
-    private static Mesh tmpMesh;
-    private static BaseShader tmpShader;
-    private static Matrix4f tmpMatrix1, tmpMatrix2;
-
-
-    public Iterable<GlyphSprite> iterableText(String text){
-        return () -> new GlyphIterator(glyphs, options, text, 1, 1);
-    }
-
-
-    @Override
-    public void dispose(){
-        pages.dispose();
     }
 
 }

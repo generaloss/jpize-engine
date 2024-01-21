@@ -1,4 +1,4 @@
-package jpize.ui.palette;
+package jpize.ui.palette.layout;
 
 import jpize.ui.component.AbstractLayout;
 import jpize.ui.component.UIComponent;
@@ -29,6 +29,9 @@ public class VBox extends AbstractLayout{
         if(!forY)
             return cache.x;
 
+        if(component.cache().hasPaddingBottom)
+            return cache.y;
+
         offsetY -= cache.height;
         final float y = offsetY - cache.paddingTop;
         offsetY -= cache.paddingTop + cache.paddingBottom;
@@ -48,7 +51,7 @@ public class VBox extends AbstractLayout{
     @Override
     public void render(){
         super.render();
-        offsetY = cache.y + cache.height;
+        offsetY = cache.y + cache.height - cache.marginTop;
 
         super.renderBackground();
     }

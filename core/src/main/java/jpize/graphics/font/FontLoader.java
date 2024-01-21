@@ -24,9 +24,9 @@ import static org.lwjgl.stb.STBTruetype.*;
 public class FontLoader{
 
 
-    private static BitmapFont defaultFont;
+    private static Font defaultFont;
 
-    public static BitmapFont getDefault(){
+    public static Font getDefault(){
         if(defaultFont == null)
             defaultFont = loadTrueType("font/OpenSans-Regular.ttf", 64, FontCharset.DEFAULT_ENG_RUS);
 
@@ -34,7 +34,7 @@ public class FontLoader{
     }
 
 
-    public static BitmapFont loadFnt(Resource resource){
+    public static Font loadFnt(Resource resource){
         final GlyphPages pages = new GlyphPages();
         final GlyphMap glyphs = new GlyphMap();
 
@@ -107,13 +107,13 @@ public class FontLoader{
         }
 
         final FontInfo info = new FontInfo(height, ascent, descent);
-        final BitmapFont font = new BitmapFont(info, pages, glyphs);
-        font.options().italic = italic;
+        final Font font = new Font(info, pages, glyphs);
+        font.options.italic = italic;
 
         return font;
     }
 
-    public static BitmapFont loadFnt(String filepath){
+    public static Font loadFnt(String filepath){
         return loadFnt(Resource.internal(filepath));
     }
 
@@ -123,7 +123,7 @@ public class FontLoader{
     }
 
 
-    public static BitmapFont loadTrueType(Resource resource, int size, FontCharset charset){
+    public static Font loadTrueType(Resource resource, int size, FontCharset charset){
         final GlyphPages pages = new GlyphPages();
         final GlyphMap glyphs = new GlyphMap();
 
@@ -196,18 +196,18 @@ public class FontLoader{
         }
 
         final FontInfo info = new FontInfo(size, ascent, descent);
-        return new BitmapFont(info, pages, glyphs);
+        return new Font(info, pages, glyphs);
     }
 
-    public static BitmapFont loadTrueType(String filepath, int size, FontCharset charset){
+    public static Font loadTrueType(String filepath, int size, FontCharset charset){
         return loadTrueType(Resource.internal(filepath), size, charset);
     }
 
-    public static BitmapFont loadTrueType(Resource resource, int size){
+    public static Font loadTrueType(Resource resource, int size){
         return loadTrueType(resource, size, FontCharset.DEFAULT);
     }
 
-    public static BitmapFont loadTrueType(String filePath, int size){
+    public static Font loadTrueType(String filePath, int size){
         return loadTrueType(filePath, size, FontCharset.DEFAULT);
     }
 

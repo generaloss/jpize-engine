@@ -9,7 +9,7 @@ import jpize.gl.vertex.GlVertAttr;
 import jpize.graphics.camera.PerspectiveCamera;
 import jpize.io.MotionCtrl;
 import jpize.io.EulerRotCtrl;
-import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.mesh.IndexedMesh;
 import jpize.graphics.util.BaseShader;
@@ -37,7 +37,7 @@ public class TriangleIntersectionTest extends JpizeApplication{
     IndexedMesh mesh;
 
     Sync sync = new Sync(40);
-    BitmapFont font = FontLoader.getDefault();
+    Font font = FontLoader.getDefault();
     
     public void init(){
         // Camera

@@ -2,7 +2,7 @@ package test;
 
 import jpize.Jpize;
 import jpize.gl.Gl;
-import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.app.JpizeApplication;
@@ -13,7 +13,7 @@ import java.util.StringJoiner;
 public class KeyboardTest extends JpizeApplication{
 
     TextureBatch batch;
-    BitmapFont font;
+    Font font;
 
     public void init(){
         Gl.clearColor(0.4, 0.5, 0.7);
@@ -21,8 +21,8 @@ public class KeyboardTest extends JpizeApplication{
 
         font = FontLoader.loadFnt("fonts/font.fnt");
         font.setScale(0.5F);
-        font.options().textAreaWidth = Jpize.getWidth();
-        font.options().invLineWrap = true;
+        font.options.textAreaWidth = Jpize.getWidth();
+        font.options.invLineWrap = true;
     }
 
     public void update(){

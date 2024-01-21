@@ -2,7 +2,7 @@ package test;
 
 import jpize.Jpize;
 import jpize.gl.Gl;
-import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.sdl.window.SdlWindow;
@@ -14,7 +14,7 @@ import jpize.util.time.Stopwatch;
 public class WindowTest extends JpizeApplication{
 
     TextureBatch batch;
-    BitmapFont font;
+    Font font;
 
     public void init(){
         Jpize.window().setSize(1280, 720);
@@ -24,7 +24,7 @@ public class WindowTest extends JpizeApplication{
 
         font = FontLoader.loadFnt("fonts/font.fnt");
         font.setScale(0.5F);
-        font.options().invLineWrap = true;
+        font.options.invLineWrap = true;
 
         SdlWindow window = Jpize.window();
 
@@ -50,7 +50,7 @@ public class WindowTest extends JpizeApplication{
             Jpize.execIf(window::show, () -> stopwatch.getSeconds() > 2);
         }
 
-        font.options().textAreaWidth = Jpize.getWidth();
+        font.options.textAreaWidth = Jpize.getWidth();
     }
 
     public void render(){

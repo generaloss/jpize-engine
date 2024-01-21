@@ -1,6 +1,6 @@
 package jpize.ui.palette;
 
-import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.Font;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Constraint;
 
@@ -8,7 +8,7 @@ public class Button extends Rect{
 
     private final TextView textview;
 
-    public Button(Constraint width, Constraint height, String text, BitmapFont font, Constraint text_size){
+    public Button(Constraint width, Constraint height, String text, Font font, Constraint text_size){
         super(width, height);
 
         this.textview = new TextView(text, font, text_size);
@@ -18,15 +18,15 @@ public class Button extends Rect{
         super.add(textview);
     }
 
-    public Button(Constraint width, Constraint height, String text, BitmapFont font){
+    public Button(Constraint width, Constraint height, String text, Font font){
         this(width, height, text, font, Constr.match_parent);
     }
 
-    public Button(Constraint size, String text, BitmapFont font, Constraint text_size){
+    public Button(Constraint size, String text, Font font, Constraint text_size){
         this(size, size, text, font, text_size);
     }
 
-    public Button(Constraint size, String text, BitmapFont font){
+    public Button(Constraint size, String text, Font font){
         this(size, text, font, Constr.match_parent);
     }
 

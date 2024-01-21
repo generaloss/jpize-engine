@@ -2,7 +2,7 @@ package test;
 
 import jpize.Jpize;
 import jpize.gl.Gl;
-import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.font.glyph.GlyphSprite;
 import jpize.graphics.util.batch.TextureBatch;
@@ -20,7 +20,7 @@ public class TextEditor extends JpizeApplication{
     public static final int beginX = 100;
 
     private TextureBatch batch;
-    private BitmapFont font;
+    private Font font;
     private TextProcessor text;
 
     private Vec2i dragCursorPos;
@@ -54,14 +54,14 @@ public class TextEditor extends JpizeApplication{
 
         if(Jpize.isTouched()){
             final int x = Jpize.getX() - beginX;
-            final int y = Maths.floor((Jpize.getY() / font.options().getAdvanceScaled()));
+            final int y = Maths.floor((Jpize.getY() / font.options.getAdvanceScaled()));
 
             final int cursorY = text.getLines().size() - 1 - y;
             text.setCursorY(cursorY);
             final String curLine = text.getCurrentLine();
 
             int cursorX = 0;
-            for(GlyphSprite glyph: font.iterableText(curLine)){
+            for(GlyphSprite glyph: font.iterable(curLine)){
                 if(glyph.getX() + glyph.getWidth() / 2 > x)
                     break;
 
@@ -84,7 +84,7 @@ public class TextEditor extends JpizeApplication{
         batch.begin();
 
         final String string = text.getString(true);
-        final float advance = font.options().getAdvanceScaled();
+        final float advance = font.options.getAdvanceScaled();
 
         // Iterate lines
         final StringJoiner lineNumbersJoiner = new StringJoiner("\n");

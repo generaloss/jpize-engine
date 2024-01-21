@@ -1,20 +1,23 @@
 package jpize.ui.palette;
 
-import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.Font;
 import jpize.ui.constraint.Constraint;
 import jpize.util.color.Color;
 import jpize.ui.component.UIComponent;
 import jpize.ui.constraint.Constr;
+import jpize.util.math.vecmath.vector.Vec2f;
 
 public class TextView extends UIComponent{
 
     private String text;
-    private BitmapFont font;
+    private Font font;
     private final Color color;
     private Constraint text_size;
     private float text_scale;
+    private boolean wrap;
+    private Vec2f bounds;
 
-    public TextView(String text, BitmapFont font, Constraint text_size){
+    public TextView(String text, Font font, Constraint text_size){
         style.background().color().setA(0);
         input.setClickable(false);
         this.color = new Color();
@@ -23,18 +26,30 @@ public class TextView extends UIComponent{
         this.text_size = text_size;
     }
 
-    public TextView(String text, BitmapFont font){
+    public TextView(String text, Font font){
         this(text, font, Constr.match_parent);
     }
 
     @Override
     public void update(){
+        // init
         final float cache_text_size = cache.constrToPx(text_size, true, true);
-        final float advance = font.options().getAdvance();
+        final float advance = font.options.getAdvance();
         text_scale = cache_text_size / advance;
 
+        // font options
         font.setScale(text_scale);
-        size.set(Constr.px( font.getTextWidth(text) ), Constr.px( font.options().getAdvanceScaled() ));
+        font.options.invLineWrap = true;
+        if(wrap && cache.hasParent)
+            font.options.textAreaWidth = Math.max(0, cache.parentWidth() - cache.parent.cache().marginRight);
+        else
+            font.options.textAreaWidth = -1;
+
+        // bounds
+        bounds = font.getBounds(text);
+
+        // size
+        size.set(Constr.px(bounds.x), Constr.px(bounds.y));
         cache.calculate();
     }
 
@@ -43,16 +58,16 @@ public class TextView extends UIComponent{
         super.render();
 
         super.renderBackground();
-        font.options().color.set(color);
+        font.options.color.set(color);
 
-        font.drawText(renderer.batch(), text, cache.x, cache.y);
+        font.drawText(renderer.batch(), text, cache.x, cache.y + bounds.y);
     }
 
-    public BitmapFont getFont(){
+    public Font getFont(){
         return font;
     }
 
-    public void setFont(BitmapFont font){
+    public void setFont(Font font){
         this.font = font;
     }
 

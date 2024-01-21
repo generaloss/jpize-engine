@@ -2,7 +2,6 @@ package jpize.ui.component;
 
 import jpize.Jpize;
 import jpize.util.math.Maths;
-import jpize.sdl.input.Key;
 import jpize.ui.constraint.Constraint;
 import jpize.ui.constraint.ConstraintFlag;
 import jpize.ui.constraint.ConstraintNum;
@@ -10,13 +9,17 @@ import jpize.ui.constraint.ConstraintNum;
 public class UIComponentCache{
 
     private final UIComponent component;
-    private boolean precalculatedHeightFlag, autoConstrFlag;
+    public boolean precalculatedHeightFlag, autoConstrFlag;
+
+    public UIComponent parent;
+    public boolean hasParent;
 
     public float x, y, width, height;
 
     public float widthMin, heightMin, widthMax, heightMax;
     public boolean hasWidthMax, hasHeightMax;
 
+    public float marginTop, marginLeft, marginBottom, marginRight;
     public float paddingTop, paddingLeft, paddingBottom, paddingRight;
     public boolean hasPaddingTop, hasPaddingLeft, hasPaddingBottom, hasPaddingRight;
 
@@ -28,18 +31,17 @@ public class UIComponentCache{
     }
 
     public void calculate(){
-        if(Key.C.isPressed())
-            return;
-
-        // size
+        updateParent();
         calcSize();
-        // padding
+        calcMargin();
         calcPadding();
-        // position
         calcPosition();
-        // style
         calcStyle();
-        // correct
+    }
+
+    private void updateParent(){
+        parent = component.parent;
+        hasParent = parent != null;
     }
 
     private void calcSize(){
@@ -68,18 +70,25 @@ public class UIComponentCache{
         else height = Math.max(height, heightMin);
     }
 
+    private void calcMargin(){
+        marginTop = Math.max(0, constrToPx(component.margin.top, true, false));
+        marginLeft = Math.max(0, constrToPx(component.margin.left, false, false));
+        marginBottom = Math.max(0, constrToPx(component.margin.bottom, true, false));
+        marginRight = Math.max(0, constrToPx(component.margin.right, false, false));
+    }
+
     private void calcPadding(){
         // top
-        paddingTop = Math.max(0, constrToPx(component.padding().top, true, false));
+        paddingTop = Math.max(0, constrToPx(component.padding.top, true, false));
         hasPaddingTop = !autoConstrFlag;
         // left
-        paddingLeft = Math.max(0, constrToPx(component.padding().left, false, false));
+        paddingLeft = Math.max(0, constrToPx(component.padding.left, false, false));
         hasPaddingLeft = !autoConstrFlag;
         // bottom
-        paddingBottom = Math.max(0, constrToPx(component.padding().bottom, true, false));
+        paddingBottom = Math.max(0, constrToPx(component.padding.bottom, true, false));
         hasPaddingBottom = !autoConstrFlag;
         // right
-        paddingRight = Math.max(0, constrToPx(component.padding().right, false, false));
+        paddingRight = Math.max(0, constrToPx(component.padding.right, false, false));
         hasPaddingRight = !autoConstrFlag;
     }
 
@@ -89,8 +98,7 @@ public class UIComponentCache{
         float parentW = Jpize.getWidth();
         float parentH = Jpize.getHeight();
 
-        final UIComponent parent = component.parent();
-        if(parent != null){
+        if(hasParent){
             parentX = parent.cache.x;
             parentY = parent.cache.y;
             parentW = parent.cache.width;
@@ -149,8 +157,7 @@ public class UIComponentCache{
                 yield 0;
             }
             case "wrap_content" -> {
-                final UIComponent parent = component.parent();
-                if(parent == null) yield 0;
+                if(!hasParent) yield 0;
                 if(parent instanceof AbstractLayout layout) yield layout.calcWrapContent(component, forY, forSize);
                 yield 0;
             }
@@ -174,38 +181,32 @@ public class UIComponentCache{
     }
 
 
-    private float parentWidth(){
-        final UIComponent parent = component.parent();
+    public float parentWidth(){
         if(parent == null) return Jpize.getWidth();
         return parent.cache().width;
     }
 
-    private float parentHeight(){
-        final UIComponent parent = component.parent();
+    public float parentHeight(){
         if(parent == null) return Jpize.getHeight();
         return parent.cache().height;
     }
 
-    private float parentMinWidth(){
-        final UIComponent parent = component.parent();
+    public float parentMinWidth(){
         if(parent == null) return 0;
         return parent.cache().widthMin;
     }
 
-    private float parentMinHeight(){
-        final UIComponent parent = component.parent();
+    public float parentMinHeight(){
         if(parent == null) return 0;
         return parent.cache().heightMin;
     }
 
-    private float parentMaxWidth(){
-        final UIComponent parent = component.parent();
+    public float parentMaxWidth(){
         if(parent == null) return 0;
         return parent.cache().widthMax;
     }
 
-    private float parentMaxHeight(){
-        final UIComponent parent = component.parent();
+    public float parentMaxHeight(){
         if(parent == null) return 0;
         return parent.cache().heightMax;
     }

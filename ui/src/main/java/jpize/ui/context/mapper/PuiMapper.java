@@ -1,5 +1,8 @@
 package jpize.ui.context.mapper;
 
+import jpize.ui.palette.layout.ConstraintLayout;
+import jpize.ui.palette.layout.HBox;
+import jpize.ui.palette.layout.VBox;
 import jpize.util.color.Color;
 import jpize.ui.component.UIComponent;
 import jpize.ui.constraint.*;

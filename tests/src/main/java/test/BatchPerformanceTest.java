@@ -2,7 +2,7 @@ package test;
 
 import jpize.Jpize;
 import jpize.gl.Gl;
-import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
@@ -12,7 +12,7 @@ public class BatchPerformanceTest extends JpizeApplication{
 
     TextureBatch batch = new TextureBatch();
     Texture texture = new Texture("textures/texture17.png");
-    BitmapFont font = FontLoader.getDefault();
+    Font font = FontLoader.getDefault();
 
     public void render(){
         Gl.clearColorBuffer();

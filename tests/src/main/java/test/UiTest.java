@@ -2,7 +2,7 @@ package test;
 
 import jpize.Jpize;
 import jpize.gl.Gl;
-import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
 import jpize.util.color.Color;
@@ -20,7 +20,7 @@ public class UiTest extends JpizeApplication{
     Texture bg_1 = new Texture("ui/bg_1.png");
     Texture button_normal = new Texture("ui/button_normal.png");
     Texture button_pressed = new Texture("ui/button_pressed.png");
-    BitmapFont font = FontLoader.getDefault();
+    Font font = FontLoader.getDefault();
 
     UIContext ui;
 

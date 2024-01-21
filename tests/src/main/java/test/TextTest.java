@@ -2,7 +2,7 @@ package test;
 
 import jpize.Jpize;
 import jpize.gl.Gl;
-import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.app.JpizeApplication;
@@ -12,7 +12,7 @@ import jpize.io.TextProcessor;
 public class TextTest extends JpizeApplication{
 
     TextureBatch batch;
-    BitmapFont font;
+    Font font;
     TextProcessor processor;
 
     public void init(){
@@ -23,8 +23,8 @@ public class TextTest extends JpizeApplication{
 
         font = FontLoader.getDefault();
         font.setScale(1);
-        font.options().textAreaWidth = Jpize.getWidth();
-        font.options().invLineWrap = true;
+        font.options.textAreaWidth = Jpize.getWidth();
+        font.options.invLineWrap = true;
 
         processor = new TextProcessor();
         processor.insertText("1) I want pizza\n");
@@ -47,8 +47,8 @@ public class TextTest extends JpizeApplication{
         batch.begin();
 
         // Render text 1
-        font.options().rotation = rotation;
-        font.options().italic = false;
+        font.options.rotation = rotation;
+        font.options.italic = false;
         batch.setColor(0.5, 0.2, 0.3);
         font.drawText(batch, processor.getString(), 500, 500);
 
@@ -60,8 +60,8 @@ public class TextTest extends JpizeApplication{
 
         // Render text2
         batch.resetColor();
-        font.options().rotation = 0;
-        font.options().italic = true;
+        font.options.rotation = 0;
+        font.options.italic = true;
         font.drawText(batch, text2, 0, Jpize.getHeight());
 
         batch.end();

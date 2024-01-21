@@ -3,7 +3,7 @@ package test;
 import jpize.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
-import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
 import jpize.ui.constraint.Constr;
@@ -14,7 +14,7 @@ import jpize.ui.palette.Rect;
 
 public class UiTest2 extends JpizeApplication{
 
-    private final BitmapFont font;
+    private final Font font;
     private final Texture background, icon, minecraftIcon;
     private final UIContext ui;
 
@@ -54,7 +54,7 @@ public class UiTest2 extends JpizeApplication{
     }
 
 
-    public BitmapFont getFont(){
+    public Font getFont(){
         return font;
     }
 

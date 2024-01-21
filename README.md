@@ -203,12 +203,12 @@ batch.end();
 #### 3. Fonts:
 ``` java
 // load
-BitmapFont font = FontLoader.getDefault();
+Font font = FontLoader.getDefault();
 
-BitmapFont font = FontLoader.loadFnt(path_or_resource);
+Font font = FontLoader.loadFnt(path_or_resource);
 
-BitmapFont font = FontLoader.loadTrueType(path_or_resource, size);
-BitmapFont font = FontLoader.loadTrueType(path_or_resource, size, charset);
+Font font = FontLoader.loadTrueType(path_or_resource, size);
+Font font = FontLoader.loadTrueType(path_or_resource, size, charset);
 
 // options
 FontOptions options = font.getOptions();
@@ -488,7 +488,7 @@ ui.disable();
 ``` java
 // resources
 Texture bg_0 = new Texture("ui/bg_0.jpg");
-BitmapFont font = FontLoader.getDefault();
+Font font = FontLoader.getDefault();
 font.setScale(0.8F);
 
 // load context

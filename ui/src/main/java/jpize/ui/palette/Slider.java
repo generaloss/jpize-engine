@@ -1,7 +1,7 @@
 package jpize.ui.palette;
 
 import jpize.Jpize;
-import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.Font;
 import jpize.util.math.Maths;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Constraint;
@@ -18,7 +18,7 @@ public class Slider extends Rect{
     private float value;
     private final List<SliderCallback> callbacks;
 
-    public Slider(Constraint width, Constraint height, String text, BitmapFont font, Constraint text_size){
+    public Slider(Constraint width, Constraint height, String text, Font font, Constraint text_size){
         super(width, height);
         super.input().addPressCallback(((comp, btn) -> grabHandle = true));
         super.input().addReleaseCallback(((comp, btn) -> grabHandle = false));
@@ -37,15 +37,15 @@ public class Slider extends Rect{
         super.add(textview);
     }
 
-    public Slider(Constraint width, Constraint height, String text, BitmapFont font){
+    public Slider(Constraint width, Constraint height, String text, Font font){
         this(width, height, text, font, Constr.match_parent);
     }
 
-    public Slider(Constraint size, String text, BitmapFont font, Constraint text_size){
+    public Slider(Constraint size, String text, Font font, Constraint text_size){
         this(size, size, text, font, text_size);
     }
 
-    public Slider(Constraint size, String text, BitmapFont font){
+    public Slider(Constraint size, String text, Font font){
         this(size, text, font, Constr.match_parent);
     }
 

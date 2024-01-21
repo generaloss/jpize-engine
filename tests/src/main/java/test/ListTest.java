@@ -1,7 +1,7 @@
 package test;
 
 import jpize.gl.Gl;
-import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.app.JpizeApplication;
@@ -16,7 +16,7 @@ public class ListTest extends JpizeApplication{
     IntList list = new IntList(1);
 
     TextureBatch batch = new TextureBatch();
-    BitmapFont font = FontLoader.getDefault();
+    Font font = FontLoader.getDefault();
 
     @Override
     public void update(){

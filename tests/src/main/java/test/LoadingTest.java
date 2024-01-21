@@ -1,7 +1,7 @@
 package test;
 
 import jpize.Jpize;
-import jpize.graphics.font.BitmapFont;
+import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.batch.TextureBatch;
@@ -25,7 +25,7 @@ public class LoadingTest{
         // Image, font
         final TextureBatch batch = new TextureBatch();
         final Texture splash = new Texture("textures/background.jpg");
-        final BitmapFont font = FontLoader.getDefault();
+        final Font font = FontLoader.getDefault();
 
         public void init(){
             // Render loading window

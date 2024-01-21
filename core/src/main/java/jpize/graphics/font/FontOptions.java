@@ -5,7 +5,7 @@ import jpize.util.math.vecmath.vector.Vec2f;
 
 public class FontOptions{
 
-    private final BitmapFont font;
+    private final Font font;
 
     public float scale;
     public float rotation;
@@ -17,8 +17,9 @@ public class FontOptions{
     public double textAreaWidth;
     public boolean invLineWrap;
     public final Vec2f rotateOrigin;
+    public final Vec2f advanceFactor;
 
-    public FontOptions(BitmapFont font){
+    public FontOptions(Font font){
         this.font = font;
 
         this.scale = 1;
@@ -26,14 +27,15 @@ public class FontOptions{
         this.italicAngle = 15;
         this.textAreaWidth = -1;
         this.rotateOrigin = new Vec2f(0.5);
+        this.advanceFactor = new Vec2f(1);
     }
 
-    public BitmapFont getFont(){
+    public Font getFont(){
         return font;
     }
 
     public float getAdvance(){
-        return font.getLineHeight() + lineGaps;
+        return font.info.getHeight() + lineGaps;
     }
 
     public float getAdvanceScaled(){

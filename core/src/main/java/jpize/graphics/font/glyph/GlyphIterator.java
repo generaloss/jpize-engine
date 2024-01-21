@@ -11,19 +11,19 @@ public class GlyphIterator implements Iterator<GlyphSprite>{
     private final FontOptions options;
     private final CharSequence text;
     private final int size;
-    private final Vec2f advanceK;
+    private final Vec2f advanceFactor;
 
     private int cursor;
     private float advanceX;
     private float advanceY;
 
-    public GlyphIterator(GlyphMap glyphs, FontOptions options, CharSequence text, float advanceKX, float advanceKY){
+    public GlyphIterator(GlyphMap glyphs, FontOptions options, CharSequence text, float advanceFactorX, float advanceFactorY){
         this.glyphs = glyphs;
         this.options = options;
         this.text = textWithoutNullGlyphs(text);
         this.size = this.text.length();
 
-        this.advanceK = new Vec2f(advanceKX, advanceKY);
+        this.advanceFactor = new Vec2f(advanceFactorX, advanceFactorY);
 
         this.cursor = 0;
         this.advanceX = 0;
@@ -66,9 +66,9 @@ public class GlyphIterator implements Iterator<GlyphSprite>{
 
         // Wrap line (area width)
         final double textAreaWidth = options.textAreaWidth;
-        if(textAreaWidth >= 0 && (advanceX + glyph.advanceX * advanceK.x) * scale > textAreaWidth){
+        if(textAreaWidth >= 0 && (advanceX + glyph.advanceX * advanceFactor.x) * scale > textAreaWidth){
             advanceX = 0;
-            advanceY += options.getLineWrapSign() * options.getAdvance() * advanceK.y;
+            advanceY += options.getLineWrapSign() * options.getAdvance() * advanceFactor.y;
         }
 
         // Calc position
@@ -76,7 +76,7 @@ public class GlyphIterator implements Iterator<GlyphSprite>{
         final float y = (advanceY + glyph.offset.y) * scale;
 
         // Advance advance :)
-        advanceX += glyph.advanceX * advanceK.x;
+        advanceX += glyph.advanceX * advanceFactor.x;
         cursor++;
 
         // Return
@@ -84,9 +84,6 @@ public class GlyphIterator implements Iterator<GlyphSprite>{
     }
 
     private Glyph findNextGlyph(){
-        // if(!hasNext())
-        //     throw new NoSuchElementException();
-
         int code = -1;
 
         while(hasNext()){
@@ -96,7 +93,7 @@ public class GlyphIterator implements Iterator<GlyphSprite>{
 
             // Wrap line
             advanceX = 0;
-            advanceY += options.getLineWrapSign() * options.getAdvance() * advanceK.y;
+            advanceY += options.getLineWrapSign() * options.getAdvance() * advanceFactor.y;
 
             cursor++;
         }
