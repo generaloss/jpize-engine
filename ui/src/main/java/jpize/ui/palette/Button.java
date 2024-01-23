@@ -10,7 +10,7 @@ public class Button extends Rect{
 
     public Button(Constraint width, Constraint height, String text, Font font, Constraint text_size){
         super(width, height);
-
+        super.input.setClickable(true);
         this.textview = new TextView(text, font, text_size);
         this.textview.setID("text");
         this.textview.padding().set(Constr.zero);

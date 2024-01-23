@@ -18,7 +18,6 @@ public class UIInput{
         this.component = component;
         this.pressCallbacks = new CopyOnWriteArrayList<>();
         this.releaseCallbacks = new CopyOnWriteArrayList<>();
-        this.clickable = true;
     }
 
     public boolean isCursorBounds(){
@@ -77,6 +76,11 @@ public class UIInput{
 
     public void setClickable(boolean clickable){
         this.clickable = clickable;
+    }
+
+
+    public boolean isHovered(){
+        return component.context().isComponentHovered(component);
     }
 
 }

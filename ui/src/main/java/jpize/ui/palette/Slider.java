@@ -27,7 +27,7 @@ public class Slider extends Rect{
         this.handle = new Rect(Constr.relh(0.5), Constr.relh(1));
         this.handle.setID("handle");
         this.handle.padding().set(Constr.zero, Constr.zero, Constr.zero, Constr.auto);
-        this.handle.input().setClickable(false);
+        this.handle.input().setClickable(true);
         super.add(handle);
 
         this.textview = new TextView(text, font, text_size);

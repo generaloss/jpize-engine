@@ -18,8 +18,7 @@ public class TextView extends UIComponent{
     private Vec2f bounds;
 
     public TextView(String text, Font font, Constraint text_size){
-        style.background().color().setA(0);
-        input.setClickable(false);
+        super.style.background().color().setA(0);
         this.color = new Color();
         this.text = text;
         this.font = font;
@@ -51,6 +50,10 @@ public class TextView extends UIComponent{
         // size
         size.set(Constr.px(bounds.x), Constr.px(bounds.y));
         cache.calculate();
+
+        context.renderer().batch().begin();
+        context.renderer().batch().drawRect(0.1, 0.7, 0.2, 0.6, cache.x, cache.y, cache.width, cache.height);
+        context.renderer().batch().end();
     }
 
     @Override
@@ -59,7 +62,7 @@ public class TextView extends UIComponent{
 
         font.options.color.set(color);
 
-        font.drawText(renderer.batch(), text, cache.x, cache.y + bounds.y - font.options.getDescentScaled());
+        font.drawText(context.renderer().batch(), text, cache.x, cache.y + bounds.y - font.options.getDescentScaled());
     }
 
     public Font getFont(){

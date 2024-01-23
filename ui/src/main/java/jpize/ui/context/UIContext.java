@@ -69,6 +69,10 @@ public class UIContext implements Disposable{
     }
 
 
+    public UIRenderer renderer(){
+        return renderer;
+    }
+
     public UIComponent getHoveredComponent(){
         return renderer.stencil().get(Jpize.getX(), Jpize.getY());
     }
@@ -92,7 +96,7 @@ public class UIContext implements Disposable{
 
     public void setRootComponent(UIComponent root){
         this.root = root;
-        this.root.setRenderer(renderer);
+        this.root.setContext(this);
     }
 
     public <T extends UIComponent> T getByID(String ID){

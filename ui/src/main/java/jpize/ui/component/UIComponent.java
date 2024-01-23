@@ -1,6 +1,7 @@
 package jpize.ui.component;
 
 import jpize.graphics.texture.Texture;
+import jpize.ui.context.UIContext;
 import jpize.util.color.Color;
 import jpize.ui.component.input.UIInput;
 import jpize.ui.component.render.UIRenderer;
@@ -15,11 +16,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class UIComponent{
 
-    protected UIComponent parent;
-    protected final List<UIComponent> children;
-    protected String ID;
-    protected UIRenderer renderer;
+    protected UIContext context;
     protected final UIComponentCache cache;
+    protected final List<UIComponent> children;
+    protected UIComponent parent;
+    protected String ID;
     protected final Insets margin, padding;
     protected final Dimension size, minSize, maxSize;
     protected boolean paddingFixH, paddingFixW;
@@ -47,6 +48,7 @@ public abstract class UIComponent{
 
 
     public void renderBackground(){
+        final UIRenderer renderer = context.renderer();
         renderer.beginRect(cache.x, cache.y, cache.width, cache.height, cache.cornerRadius, cache.borderSize, style.borderColor());
         final UIBackground background = style.background();
         final Color color = background.color();
@@ -63,7 +65,7 @@ public abstract class UIComponent{
     public final void setParent(UIComponent parent){
         this.parent = parent;
         if(parent == null) return;
-        renderer = parent.renderer;
+        context = parent.context;
 
         // Recursive set parent for children
         for(UIComponent child: children)
@@ -132,12 +134,12 @@ public abstract class UIComponent{
     }
 
 
-    public final UIRenderer renderContext(){
-        return renderer;
+    public final UIContext context(){
+        return context;
     }
 
-    public final void setRenderer(UIRenderer renderer){
-        this.renderer = renderer;
+    public final void setContext(UIContext context){
+        this.context = context;
     }
 
 

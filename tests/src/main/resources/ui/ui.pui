@@ -63,37 +63,51 @@
                         ID: "off_backend"
                         hidden: true
                         padding: (0px)
-                        color: (0, 1)
+                        color: (0.1, 1)
                         text_size: 0.3rh
                     }
+
+                    @Rect (0.05rh, 0.05rh) {
+                        ID: "status"
+                        padding: (0.05rh, auto, auto, 0.05rh)
+                        style.background.color: (0.7, 0, 0)
+                        style.corner_radius: 0.5rh
+                    }
                 }
-                @Button (3ap, 0.15rh, "Start", !font) {
-                    ID: "start_button"
-                    padding: (0.05rh, 0.05rh)
-                    style.corner_radius: 0.4rh
-                }
-                @Button (3ap, 0.15rh, "Stop", !font) {
-                    ID: "stop_button"
-                    padding: (0.05rh, 0.05rh)
-                    style.corner_radius: 0.4rh
-                }
-                @Button (3ap, 0.15rh, "Kill", !font) {
-                    ID: "kill_button"
-                    padding: (0.05rh, 0.05rh)
-                    style.corner_radius: 0.4rh
+
+                # buttons
+                @VBox (0.45rh, match_parent) {
+                    padding.left: 0.05rh
+                    @Button (match_parent, 0.15rh, "Start", !font) {
+                        ID: "start_button"
+                        padding.top: 0.05rh
+                        style.corner_radius: 0.4rh
+                    }
+                    @Button (match_parent, 0.15rh, "Stop", !font) {
+                        ID: "stop_button"
+                        padding.top: 0.05rh
+                        style.corner_radius: 0.4rh
+                    }
+                    @Button (match_parent, 0.15rh, "Kill", !font) {
+                        ID: "kill_button"
+                        padding.top: 0.05rh
+                        style.corner_radius: 0.4rh
+                    }
                 }
             }
             # history
-            @ConstraintLayout (match_parent, 0.495rh) {
+            @ConstraintLayout (match_parent, 0.515rh) { # 1 - (0.075 + 0.4 + 0.01)  =  1 - 0.485  =  0.515
                 padding.top: 0.01rh
                 margin: (zero, zero, 0.01rh, 0.01rh)
                 style.background.color: (0.9, 0.6)
 
-                @TextView ("I want pizza 123567567565675675675", !font, 0.1rh) {
-                    ID: "history"
-                    padding: (0.01rh, 0.01rh)
-                    color: (0, 1)
-                    wrap: true
+                @ScrollView(match_parent, match_parent){
+                    @TextView ("Some Console text\nStarting server\nTimings reset\nStopping server\n1\n2\n3\n4\n5\n6\n7\nAgain normal text\nAnd again\nSome Console text\nStarting server\nTimings reset\nStopping server\n1\n2\n3\n4\n5\n6\n7\nAgain normal text\nAnd again", !font, 0.1rh) {
+                        ID: "history"
+                        padding: (0.01rh, 0.01rh)
+                        color: (0, 1)
+                        wrap: true
+                    }
                 }
             }
         }
