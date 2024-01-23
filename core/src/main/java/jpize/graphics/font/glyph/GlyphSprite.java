@@ -6,49 +6,65 @@ import jpize.graphics.util.batch.TextureBatch;
 
 public class GlyphSprite{
 
-    private final Texture page;
+    private final int code;
     private final Region region;
+    private final Texture page;
+
     private final float x;
     private final float y;
     private final float width;
     private final float height;
 
-    private final int code;
-    private final float advanceX;
+    private final int lineY;
     private final boolean canRender;
+    private final float advanceX;
+    private final float offsetY;
 
-    public GlyphSprite(Glyph glyph, float x, float y, float scale){
-        this.page = glyph.pages.get(glyph.pageID);
+    public GlyphSprite(Glyph glyph, float cursorX, float cursorY, float scale, int lineY){
+        this.code   = glyph.code;
         this.region = glyph.region;
+        this.page   = glyph.pages.get(glyph.pageID);
 
-        this.x = x;
-        this.y = y;
-        this.width = glyph.width * scale;
-        this.height = glyph.height * scale;
+        this.x      = scale * (glyph.offset.x + cursorX);
+        this.y      = scale * (glyph.offset.y + cursorY);
+        this.width  = scale * (glyph.width );
+        this.height = scale * (glyph.height);
 
-        this.code = glyph.code;
-        this.advanceX = glyph.advanceX * scale;
+        this.lineY = lineY;
         this.canRender = true;
+        this.advanceX = glyph.advanceX * scale;
+        this.offsetY = glyph.offset.y * scale;
     }
 
-    public GlyphSprite(float y, float height){
-        this.page = null;
+    public GlyphSprite(float cursorY, float height, float scale, int lineY){
+        this.code   = -1;
         this.region = null;
+        this.page   = null;
+        
+        this.x      = 0;
+        this.y      = scale * cursorY;
+        this.width  = 0;
+        this.height = scale * height;
 
-        this.x = 0;
-        this.y = y;
-        this.width = 0;
-        this.height = height;
-
-        this.code = -1;
-        this.advanceX = 0;
+        this.lineY = lineY;
         this.canRender = false;
+        this.advanceX = 0;
+        this.offsetY = 0;
     }
 
+
+    public int getCode(){
+        return code;
+    }
+
+    public Region getRegion(){
+        return region;
+    }
 
     public Texture getPage(){
         return page;
     }
+    
 
     public float getX(){
         return x;
@@ -67,20 +83,20 @@ public class GlyphSprite{
     }
 
 
-    public int getCode(){
-        return code;
-    }
-
-    public float getAdvanceX(){
-        return advanceX;
+    public int getLineY(){
+        return lineY;
     }
 
     public boolean isCanRender(){
         return canRender;
     }
 
-    public Region getRegion(){
-        return region;
+    public float getAdvanceX(){
+        return advanceX;
+    }
+
+    public float getOffsetY(){
+        return offsetY;
     }
 
 

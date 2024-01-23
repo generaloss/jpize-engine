@@ -128,22 +128,26 @@ public class UIComponentCache{
     }
 
     private void calcStyle(){
-        cornerRadius = constrToPx(component.style.getCornerRadius(), false, true);
-        borderSize = constrToPx(component.style.getBorderSize(), false, true);
+        cornerRadius = constrToPx(component.style.getCornerRadius(), component, false, true);
+        borderSize = constrToPx(component.style.getBorderSize(), component, false, true);
     }
 
 
     public float constrToPx(Constraint c, boolean forY, boolean forSize){
+        return constrToPx(c, parent, forY, forSize);
+    }
+
+    public float constrToPx(Constraint c, UIComponent relative, boolean forY, boolean forSize){
         autoConstrFlag = false;
 
         if(c instanceof ConstraintFlag flag)
-            return constrFlagToPx(flag, forY, forSize);
+            return constrFlagToPx(flag, relative, forY, forSize);
         if(c instanceof ConstraintNum num)
-            return constrNumToPx(num, forY, forSize);
+            return constrNumToPx(num, relative, forY, forSize);
         return 0;
     }
 
-    private float constrFlagToPx(ConstraintFlag flag, boolean forY, boolean forSize){
+    private float constrFlagToPx(ConstraintFlag flag, UIComponent relative, boolean forY, boolean forSize){
         return switch(flag.toString()){
             default -> 0;
             case "auto" -> {
@@ -165,31 +169,40 @@ public class UIComponentCache{
         };
     }
 
-    private float constrNumToPx(ConstraintNum num, boolean forY, boolean forSize){
+    private float constrNumToPx(ConstraintNum num, UIComponent relative, boolean forY, boolean forSize){
         return switch(num.type()){
             case PX -> num.value();
             case ASPECT -> {
                 if(forSize && !forY){
-                    height = constrToPx(component.size().y, true, true);
+                    height = constrToPx(component.size().y, relative, true, true);
                     precalculatedHeightFlag = true;
                 }
                 yield num.value() * (forY ? width : height);
             }
-            case REL_W -> num.value() * parentWidth();
-            case REL_H -> num.value() * parentHeight();
+            case REL_W -> num.value() * width(relative);
+            case REL_H -> num.value() * height(relative);
         };
     }
 
 
+    public float width(UIComponent component){
+        if(component == null) return Jpize.getWidth();
+        return component.cache().width;
+    }
+
     public float parentWidth(){
-        if(parent == null) return Jpize.getWidth();
-        return parent.cache().width;
+        return width(parent);
+    }
+
+    public float height(UIComponent component){
+        if(component == null) return Jpize.getHeight();
+        return component.cache().height;
     }
 
     public float parentHeight(){
-        if(parent == null) return Jpize.getHeight();
-        return parent.cache().height;
+        return height(parent);
     }
+
 
     public float parentMinWidth(){
         if(parent == null) return 0;

@@ -70,17 +70,17 @@
                 @Button (3ap, 0.15rh, "Start", !font) {
                     ID: "start_button"
                     padding: (0.05rh, 0.05rh)
-                    style.corner_radius: 0.06rh
+                    style.corner_radius: 0.4rh
                 }
                 @Button (3ap, 0.15rh, "Stop", !font) {
                     ID: "stop_button"
                     padding: (0.05rh, 0.05rh)
-                    style.corner_radius: 0.06rh
+                    style.corner_radius: 0.4rh
                 }
                 @Button (3ap, 0.15rh, "Kill", !font) {
                     ID: "kill_button"
                     padding: (0.05rh, 0.05rh)
-                    style.corner_radius: 0.06rh
+                    style.corner_radius: 0.4rh
                 }
             }
             # history

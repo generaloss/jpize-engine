@@ -60,7 +60,7 @@ public class TextView extends UIComponent{
         super.renderBackground();
         font.options.color.set(color);
 
-        font.drawText(renderer.batch(), text, cache.x, cache.y + bounds.y);
+        font.drawText(renderer.batch(), text, cache.x, cache.y + bounds.y - font.options.getDescentScaled());
     }
 
     public Font getFont(){

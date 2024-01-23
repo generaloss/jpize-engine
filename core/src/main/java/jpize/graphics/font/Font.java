@@ -23,15 +23,6 @@ public class Font implements Disposable{
     }
 
 
-    public float getLineHeightScaled(){
-        return info.getHeight() * options.scale;
-    }
-
-    public float getDescentScaled(){
-        return info.getDescent() * options.scale;
-    }
-
-
     public float getScale(){
         return options.scale;
     }
@@ -46,13 +37,10 @@ public class Font implements Disposable{
         float height = 0;
 
         for(GlyphSprite glyph: iterable(text)){
-            final float glyphX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
-            float glyphY = options.getLineWrapSign() * glyph.getY() + glyph.getHeight();
-            if(options.invLineWrap)
-                glyphY -= options.getAdvanceScaled() / 2;
-
-            width = Math.max(width, glyphX);
-            height = Math.max(height, glyphY);
+            final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
+            final float glyphMaxY = glyph.getOffsetY() + glyph.getHeight() + glyph.getLineY() * options.getAdvanceScaled();
+            width = Math.max(width, glyphMaxX);
+            height = Math.max(height, glyphMaxY);
         }
 
         return new Vec2f(width, height);
@@ -61,8 +49,8 @@ public class Font implements Disposable{
     public float getTextWidth(String text){
         float width = 0;
         for(GlyphSprite glyph: iterable(text)){
-            final float glyphX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
-            width = Math.max(width, glyphX);
+            final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
+            width = Math.max(width, glyphMaxX);
         }
         return width;
     }
@@ -70,8 +58,8 @@ public class Font implements Disposable{
     public float getTextHeight(String text){
         float height = 0;
         for(GlyphSprite glyph: iterable(text)){
-            final float glyphY = Math.abs(glyph.getY() + info.getDescent() + glyph.getHeight()) - info.getDescent();
-            height = Math.max(height, glyphY);
+            final float glyphMaxY = Math.abs(glyph.getY() + info.getDescent() + glyph.getHeight()) - info.getDescent();
+            height = Math.max(height, glyphMaxY);
         }
         return height;
     }

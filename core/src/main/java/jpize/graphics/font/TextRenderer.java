@@ -31,7 +31,7 @@ public class TextRenderer{
         final Vec2f centerPos = font.getBounds(text).mul(font.options.rotateOrigin);
         centerPos.y *= font.options.getLineWrapSign();
 
-        final float descent = font.getDescentScaled();
+        final float descent = font.options.getDescentScaled();
 
         for(GlyphSprite sprite: font.iterable(text)){
             if((char) sprite.getCode() == ' ' || !sprite.isCanRender())
@@ -72,7 +72,7 @@ public class TextRenderer{
         final Vec2f centerPos = font.getBounds(text).mul(font.options.rotateOrigin);
         centerPos.y *= font.options.getLineWrapSign();
 
-        final float descent = font.getDescentScaled();
+        final float descent = font.options.getDescentScaled();
 
         final FloatList vertices = new FloatList(text.length() * 4);
         Texture lastTexture = null;

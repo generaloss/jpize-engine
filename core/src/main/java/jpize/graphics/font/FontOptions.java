@@ -46,6 +46,14 @@ public class FontOptions{
         return lineGaps * scale;
     }
 
+    public float getDescentScaled(){
+        return font.info.getDescent() * scale;
+    }
+
+    public float getLineHeightScaled(){
+        return font.info.getHeight() * scale;
+    }
+
     public float getItalicAngle(){
         if(italic)
             return italicAngle;

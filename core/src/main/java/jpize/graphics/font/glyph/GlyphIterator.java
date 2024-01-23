@@ -14,35 +14,19 @@ public class GlyphIterator implements Iterator<GlyphSprite>{
     private final Vec2f advanceFactor;
 
     private int cursor;
-    private float advanceX;
-    private float advanceY;
+    private int lineY;
+    private float cursorX;
+    private float cursorY;
 
     public GlyphIterator(GlyphMap glyphs, FontOptions options, CharSequence text, float advanceFactorX, float advanceFactorY){
         this.glyphs = glyphs;
         this.options = options;
         this.text = textWithoutNullGlyphs(text);
-        this.size = this.text.length();
+        this.size = text.length();
 
         this.advanceFactor = new Vec2f(advanceFactorX, advanceFactorY);
 
-        this.cursor = 0;
-        this.advanceX = 0;
-        this.advanceY = 0;
-
-        if(options.invLineWrap)
-            this.advanceY -= options.getAdvance();
-    }
-
-    private CharSequence textWithoutNullGlyphs(CharSequence text){
-        final StringBuilder builder = new StringBuilder();
-
-        for(int i = 0; i < text.length(); i++){
-            final int code = Character.codePointAt(text, i);
-            if(code == 10 || glyphs.has(code))
-                builder.append((char) code);
-        }
-
-        return builder.toString();
+        this.cursorY = -(options.invLineWrap ? options.getAdvance() : 0);
     }
 
 
@@ -59,28 +43,27 @@ public class GlyphIterator implements Iterator<GlyphSprite>{
         final float scale = options.scale;
 
         // Last '\n' for correct bounds
-        if(glyph == null){
-            final float y = advanceY * scale;
-            return new GlyphSprite(y, options.getAdvanceScaled());
-        }
+        if(glyph == null)
+            return new GlyphSprite(cursorY, options.getAdvance(), scale, lineY);
+
+        final float cursorXAdvance = glyph.advanceX * advanceFactor.x;
 
         // Wrap line (area width)
-        final double textAreaWidth = options.textAreaWidth;
-        if(textAreaWidth >= 0 && (advanceX + glyph.advanceX * advanceFactor.x) * scale > textAreaWidth){
-            advanceX = 0;
-            advanceY += options.getLineWrapSign() * options.getAdvance() * advanceFactor.y;
+        final double maxWidth = options.textAreaWidth / scale;
+        if(maxWidth >= 0 && cursorX + cursorXAdvance > maxWidth){
+            cursorX = 0;
+            cursorY += options.getLineWrapSign() * options.getAdvance() * advanceFactor.y;
+            lineY++;
         }
 
-        // Calc position
-        final float x = (advanceX + glyph.offset.x) * scale;
-        final float y = (advanceY + glyph.offset.y) * scale;
+        // Create sprite
+        final GlyphSprite sprite = new GlyphSprite(glyph, cursorX, cursorY, scale, lineY);
 
-        // Advance advance :)
-        advanceX += glyph.advanceX * advanceFactor.x;
+        // Advance cursor :|
+        cursorX += cursorXAdvance;
         cursor++;
 
-        // Return
-        return new GlyphSprite(glyph, x, y, scale);
+        return sprite;
     }
 
     private Glyph findNextGlyph(){
@@ -92,13 +75,26 @@ public class GlyphIterator implements Iterator<GlyphSprite>{
                 break;
 
             // Wrap line
-            advanceX = 0;
-            advanceY += options.getLineWrapSign() * options.getAdvance() * advanceFactor.y;
+            cursorX = 0;
+            cursorY += options.getLineWrapSign() * options.getAdvance() * advanceFactor.y;
+            lineY++;
 
             cursor++;
         }
 
         return glyphs.get(code);
+    }
+
+    private CharSequence textWithoutNullGlyphs(CharSequence text){
+        final StringBuilder builder = new StringBuilder();
+
+        for(int i = 0; i < text.length(); i++){
+            final int code = Character.codePointAt(text, i);
+            if(code == 10 || glyphs.has(code))
+                builder.append((char) code);
+        }
+
+        return builder.toString();
     }
 
 }

@@ -20,7 +20,7 @@ public class GlyphIteratorTest extends JpizeApplication{
     public GlyphIteratorTest(){
         this.batch = new TextureBatch();
         this.font = FontLoader.getDefault();
-        // this.font.options.invLineWrap = true;
+        this.font.options.invLineWrap = true;
         this.substring = "";
     }
 
@@ -35,8 +35,12 @@ public class GlyphIteratorTest extends JpizeApplication{
         batch.begin();
 
         Vec2f bounds = font.getBounds(substring);
+        batch.drawRect(0.8, 0.2, 0.1, 0.9, 100, 100 + font.options.getAdvanceScaled(), bounds.x, 2);
         batch.drawRect(0.8, 0.2, 0.1, 0.9, 100, 100, bounds.x, 2);
+        batch.drawRect(0.8, 0.2, 0.1, 0.9, 100, 100 - font.options.getAdvanceScaled(), bounds.x, 2);
+        batch.drawRect(0.1, 0.7, 0.3, 0.3, 100, 100 + font.options.getAdvanceScaled(), bounds.x, bounds.y);
         batch.drawRect(0.1, 0.7, 0.3, 0.3, 100, 100, bounds.x, bounds.y);
+        batch.drawRect(0.1, 0.7, 0.3, 0.3, 100, 100 - font.options.getAdvanceScaled(), bounds.x, bounds.y);
 
         font.drawText(batch, substring, 100, 100);
 
