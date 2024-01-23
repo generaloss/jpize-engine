@@ -34,7 +34,7 @@ public class PuiLexer{
 
                 String string = matcher.group();
                 if(type.isLiteral())
-                    string = string.substring(1, string.length() - 1);
+                    string = string.substring(1, string.length() - 1).replace("\\n", "\n");
                 else if(type.isComponent() || type.isResource() || type.isAlias())
                     string = string.substring(1);
                 else if(type.isKey())
