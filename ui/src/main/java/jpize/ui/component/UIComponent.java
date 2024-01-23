@@ -43,28 +43,10 @@ public abstract class UIComponent{
 
     public void update(){ }
 
-    public void render(){
-        findRenderer();
-    }
-
-    private void findRenderer(){
-        if(renderer != null)
-            return;
-
-        UIComponent parent = this.parent;
-        while(true){
-            if(parent == null)
-                return;
-            if(parent.renderer == null)
-                parent = parent.parent;
-            else
-                break;
-        }
-        renderer = parent.renderer;
-    }
+    public void render(){ }
 
 
-    protected void renderBackground(){
+    public void renderBackground(){
         renderer.beginRect(cache.x, cache.y, cache.width, cache.height, cache.cornerRadius, cache.borderSize, style.borderColor());
         final UIBackground background = style.background();
         final Color color = background.color();
@@ -79,9 +61,13 @@ public abstract class UIComponent{
     }
 
     public final void setParent(UIComponent parent){
-        if(parent != null)
-            renderer = parent.renderer;
         this.parent = parent;
+        if(parent == null) return;
+        renderer = parent.renderer;
+
+        // Recursive set parent for children
+        for(UIComponent child: children)
+            child.setParent(this);
     }
 
 
@@ -124,8 +110,8 @@ public abstract class UIComponent{
     }
 
     public final void add(UIComponent child){
-        child.setParent(this);
         children.add(child);
+        child.setParent(this);
     }
 
     public final void remove(UIComponent child){

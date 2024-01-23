@@ -116,10 +116,11 @@ public class UIContext implements Disposable{
     }
 
     private void render(UIComponent component){
-        if(component == null || component.isHidden())
+        if(component == null || component.isHidden() || renderer == null)
             return;
 
         component.update();
+        component.renderBackground();
         renderer.beginScissor(component);
         component.render();
 

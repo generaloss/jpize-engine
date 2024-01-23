@@ -24,7 +24,6 @@ public class Rect extends UIComponent{
     @Override
     public void render(){
         super.render();
-        super.renderBackground();
     }
 
 }

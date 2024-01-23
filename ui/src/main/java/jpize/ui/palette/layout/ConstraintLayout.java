@@ -42,7 +42,6 @@ public class ConstraintLayout extends AbstractLayout{
     @Override
     public void render(){
         super.render();
-        super.renderBackground();
     }
 
 }
