@@ -51,9 +51,9 @@ public class TextView extends UIComponent{
         size.set(Constr.px(bounds.x), Constr.px(bounds.y));
         cache.calculate();
 
-        context.renderer().batch().begin();
-        context.renderer().batch().drawRect(0.1, 0.7, 0.2, 0.6, cache.x, cache.y, cache.width, cache.height);
-        context.renderer().batch().end();
+        // context.renderer().batch().begin();
+        // context.renderer().batch().drawRect(0.1, 0.7, 0.2, 0.6, cache.x, cache.y, cache.width, cache.height);
+        // context.renderer().batch().end();
     }
 
     @Override

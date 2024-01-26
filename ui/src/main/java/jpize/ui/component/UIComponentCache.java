@@ -22,6 +22,7 @@ public class UIComponentCache{
     public float marginTop, marginLeft, marginBottom, marginRight;
     public float paddingTop, paddingLeft, paddingBottom, paddingRight;
     public boolean hasPaddingTop, hasPaddingLeft, hasPaddingBottom, hasPaddingRight;
+    public float paddingX, paddingY;
 
     public float cornerRadius, borderSize;
     public boolean pressed;
@@ -105,15 +106,18 @@ public class UIComponentCache{
             parentH = parent.cache.height;
         }
 
-        if(hasPaddingLeft && hasPaddingRight) x = parentX + (paddingLeft + parentW - paddingRight - width) / 2;
-        else if(hasPaddingLeft) x = parentX + paddingLeft;
-        else if(hasPaddingRight) x = parentX + parentW - paddingRight - width;
-        else x = parentX;
+        if(hasPaddingLeft && hasPaddingRight) paddingX = (paddingLeft + parentW - paddingRight - width) / 2;
+        else if(hasPaddingLeft) paddingX = paddingLeft;
+        else if(hasPaddingRight) paddingX = parentW - paddingRight - width;
+        else paddingX = 0;
 
-        if(hasPaddingTop && hasPaddingBottom) y = parentY + (paddingBottom + parentH - paddingTop - height) / 2;
-        else if(hasPaddingTop) y = parentY + parentH - paddingTop - height;
-        else if(hasPaddingBottom) y = parentY + paddingBottom;
-        else y = parentY;
+        if(hasPaddingTop && hasPaddingBottom) paddingY = (paddingBottom + parentH - paddingTop - height) / 2;
+        else if(hasPaddingTop) paddingY = parentH - paddingTop - height;
+        else if(hasPaddingBottom) paddingY = paddingBottom;
+        else paddingY = 0;
+
+        x = parentX + paddingX;
+        y = parentY + paddingY;
 
         if(parent instanceof AbstractLayout layout){
             x = layout.calcPosition(component, false);

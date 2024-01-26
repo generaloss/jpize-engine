@@ -40,17 +40,17 @@ public class UiTest2 extends JpizeApplication{
         final Button stop_button = this.ui.findByID("stop_button");
         final Button kill_button = this.ui.findByID("kill_button");
 
-        // start
-        start_button.input().addPressCallback((view, btn) -> view.style().background().color().setRgb(0.8));
-        start_button.input().addReleaseCallback((view, btn) -> view.style().background().color().setRgb(1));
+        // // start
+        // start_button.input().addPressCallback((view, btn) -> view.style().background().color().setRgb(0.8));
+        // start_button.input().addReleaseCallback((view, btn) -> view.style().background().color().setRgb(1));
 
-        // stop
-        stop_button.input().addPressCallback((view, btn) -> view.style().background().color().setRgb(0.8));
-        stop_button.input().addReleaseCallback((view, btn) -> view.style().background().color().setRgb(1));
+        // // stop
+        // stop_button.input().addPressCallback((view, btn) -> view.style().background().color().setRgb(0.8));
+        // stop_button.input().addReleaseCallback((view, btn) -> view.style().background().color().setRgb(1));
 
-        // kill
-        kill_button.input().addPressCallback((view, btn) -> view.style().background().color().setRgb(0.8));
-        kill_button.input().addReleaseCallback((view, btn) -> view.style().background().color().setRgb(1));
+        // // kill
+        // kill_button.input().addPressCallback((view, btn) -> view.style().background().color().setRgb(0.8));
+        // kill_button.input().addReleaseCallback((view, btn) -> view.style().background().color().setRgb(1));
     }
 
 
@@ -65,7 +65,6 @@ public class UiTest2 extends JpizeApplication{
     public Texture getMinecraftIcon(){
         return minecraftIcon;
     }
-
 
     @Override
     public void render(){

@@ -82,4 +82,16 @@ public class Mathc{
         return (int) Math.signum(a);
     }
 
+    public static float log(float a){
+        return (float) Math.log(a);
+    }
+
+    public static float log10(float a){
+        return (float) Math.log10(a);
+    }
+
+    public static float log1p(float a){
+        return (float) Math.log1p(a);
+    }
+
 }

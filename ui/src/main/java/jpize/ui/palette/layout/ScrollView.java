@@ -1,7 +1,6 @@
 package jpize.ui.palette.layout;
 
 import jpize.Jpize;
-import jpize.sdl.input.Key;
 import jpize.ui.component.AbstractLayout;
 import jpize.ui.component.UIComponent;
 import jpize.ui.component.UIComponentCache;
@@ -12,14 +11,17 @@ import jpize.util.math.Maths;
 
 public class ScrollView extends AbstractLayout{
 
-    private float scrollFactor;
     private final Rect handle;
+    private float scrollFactor;
+    private float imaginaryScrollFactor;
+    private float scrollComponentHeight;
+    private float scrollSpeedPxSec;
 
     public ScrollView(Constraint width, Constraint height){
         super.size.set(width, height);
         this.handle = new Rect(Constr.px(10), Constr.relh(1));
         this.handle.padding().right = Constr.px(1);
-        super.input.setClickable(true);
+        this.handle.input().setClickable(true);
         super.add(handle);
     }
 
@@ -36,8 +38,10 @@ public class ScrollView extends AbstractLayout{
     public float calcPosition(UIComponent component, boolean forY){
         final UIComponentCache cache = component.cache();
         if(forY){
-            if(component == getScrollComponent())
-                return cache.y + scrollFactor * (cache.height - super.cache.height);
+            if(component == getScrollComponent()){
+                scrollComponentHeight = cache.height + cache.paddingTop * 2 + super.cache.marginBottom - super.cache.height;
+                return cache.y + scrollFactor * scrollComponentHeight;
+            }
             return cache.y;
         }
         return cache.x;
@@ -51,20 +55,29 @@ public class ScrollView extends AbstractLayout{
     @Override
     public void update(){
         super.cache.calculate();
-
         System.out.println(input.isHovered() + " " + context.getHoveredComponent());
+
+        // scroll
+        final float maxFactor = getMaxScrollFactor();
         final int scroll = Jpize.input().getScroll();
         if(scroll != 0 && Jpize.input().isInBounds(cache.x, cache.y, cache.width, cache.height))
-            scrollFactor -= scroll / 10F;
+            imaginaryScrollFactor -= scroll * maxFactor * 0.3F;
 
-        final float maxFactor = getMaxScrollFactor();
-        System.out.println(maxFactor);
-        if(!Key.S.isPressed())
+        // clamp scroll
+        imaginaryScrollFactor = Maths.clamp(imaginaryScrollFactor, 0, 1);
+        final float difference = imaginaryScrollFactor - scrollFactor;
+        scrollSpeedPxSec =  1000;
+        final float deltaFactor = scrollSpeedPxSec / scrollComponentHeight * Jpize.getDt();
+        if(Math.abs(difference) > deltaFactor){
+            scrollFactor += Math.signum(difference) * deltaFactor;
             scrollFactor = Maths.clamp(scrollFactor, 0, 1);
+        }else
+            scrollFactor = imaginaryScrollFactor;
 
+        // pos & size
         handle.size().y        = Constr.relh(maxFactor);
         handle.padding().top   = Constr.relh(scrollFactor * (1 - maxFactor));
-        handle.padding().right = Constr.px(1 + (parent != null ? parent.cache().marginRight : 0));
+        handle.padding().right = Constr.px(1 + handle.cache().width + (parent != null ? parent.cache().marginRight : 0));
     }
 
     private float getMaxScrollFactor(){
@@ -77,7 +90,8 @@ public class ScrollView extends AbstractLayout{
         if(contentHeight == 0)
             return 0;
 
-        return Math.max(0, super.cache.height / contentHeight);
+        final float height = super.cache.height;
+        return Math.max(0, height / contentHeight);
     }
 
     public UIComponent getScrollComponent(){

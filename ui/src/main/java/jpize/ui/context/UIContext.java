@@ -1,6 +1,7 @@
 package jpize.ui.context;
 
 import jpize.Jpize;
+import jpize.app.Disposable;
 import jpize.sdl.event.callback.mouse.MouseButtonAction;
 import jpize.sdl.event.callback.mouse.MouseButtonCallback;
 import jpize.sdl.event.callback.window.WinSizeChangedCallback;
@@ -8,7 +9,6 @@ import jpize.sdl.input.Btn;
 import jpize.ui.component.UIComponent;
 import jpize.ui.component.UIComponentCache;
 import jpize.ui.component.render.UIRenderer;
-import jpize.app.Disposable;
 
 public class UIContext implements Disposable{
 
@@ -120,12 +120,11 @@ public class UIContext implements Disposable{
     }
 
     private void render(UIComponent component){
-        if(component == null || component.isHidden() || renderer == null)
+        if(component == null || component.isHidden())
             return;
 
         component.update();
         component.renderBackground();
-        renderer.beginScissor(component);
         component.render();
 
         if(component.input().isClickable()){
@@ -133,6 +132,7 @@ public class UIContext implements Disposable{
             renderer.stencil().fill(cache.x, cache.y, cache.width, cache.height, component);
         }
 
+        renderer.beginScissor(component);
         for(UIComponent child: component.children())
             render(child);
         renderer.endScissor(component);
