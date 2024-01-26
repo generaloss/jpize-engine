@@ -11,17 +11,20 @@ import jpize.util.math.Maths;
 
 public class ScrollView extends AbstractLayout{
 
-    private final Rect handle;
+    private float maxFactor;
     private float scrollFactor;
     private float imaginaryScrollFactor;
     private float scrollComponentHeight;
-    private float scrollSpeedPxSec;
+
+    private final Rect handle;
+    private boolean handleGrabbed;
+    private float handleGrabY;
 
     public ScrollView(Constraint width, Constraint height){
         super.size.set(width, height);
+        // handle
         this.handle = new Rect(Constr.px(10), Constr.relh(1));
-        this.handle.padding().right = Constr.px(1);
-        this.handle.input().setClickable(true);
+        setupHandle();
         super.add(handle);
     }
 
@@ -34,13 +37,22 @@ public class ScrollView extends AbstractLayout{
     }
 
 
+    public UIComponent getScrollComponent(){
+        return super.children.get(1);
+    }
+
+    public Rect getHandle(){
+        return handle;
+    }
+
+
     @Override
     public float calcPosition(UIComponent component, boolean forY){
         final UIComponentCache cache = component.cache();
         if(forY){
             if(component == getScrollComponent()){
                 scrollComponentHeight = cache.height + cache.paddingTop * 2 + super.cache.marginBottom - super.cache.height;
-                return cache.y + scrollFactor * scrollComponentHeight;
+                return cache.y + (1 - scrollFactor) * scrollComponentHeight;
             }
             return cache.y;
         }
@@ -55,18 +67,33 @@ public class ScrollView extends AbstractLayout{
     @Override
     public void update(){
         super.cache.calculate();
-        System.out.println(input.isHovered() + " " + context.getHoveredComponent());
+        processScroll();
+    }
 
-        // scroll
-        final float maxFactor = getMaxScrollFactor();
+    private void processScroll(){
+        // max scroll bound
+        maxFactor = getMaxScrollFactor();
+
+        // size
+        handle.size().y         = Constr.relh(maxFactor);
+        handle.padding().right  = Constr.px(1 + handle.cache().width + (parent != null ? parent.cache().marginRight : 0));
+
+        // mouse wheel scroll
         final int scroll = Jpize.input().getScroll();
         if(scroll != 0 && Jpize.input().isInBounds(cache.x, cache.y, cache.width, cache.height))
-            imaginaryScrollFactor -= scroll * maxFactor * 0.3F;
+            imaginaryScrollFactor += scroll * maxFactor * 0.3F;
+
+        // handle scroll
+        if(handleGrabbed){
+            imaginaryScrollFactor = (Jpize.getY() - handleGrabY - super.cache.y) / scrollComponentHeight / maxFactor;
+            scrollFactor = imaginaryScrollFactor;
+            System.out.println(imaginaryScrollFactor);
+        }
 
         // clamp scroll
         imaginaryScrollFactor = Maths.clamp(imaginaryScrollFactor, 0, 1);
         final float difference = imaginaryScrollFactor - scrollFactor;
-        scrollSpeedPxSec =  1000;
+        final float scrollSpeedPxSec =  1500;
         final float deltaFactor = scrollSpeedPxSec / scrollComponentHeight * Jpize.getDt();
         if(Math.abs(difference) > deltaFactor){
             scrollFactor += Math.signum(difference) * deltaFactor;
@@ -74,10 +101,8 @@ public class ScrollView extends AbstractLayout{
         }else
             scrollFactor = imaginaryScrollFactor;
 
-        // pos & size
-        handle.size().y        = Constr.relh(maxFactor);
-        handle.padding().top   = Constr.relh(scrollFactor * (1 - maxFactor));
-        handle.padding().right = Constr.px(1 + handle.cache().width + (parent != null ? parent.cache().marginRight : 0));
+        // pos
+        handle.padding().bottom = Constr.relh(scrollFactor * (1 - maxFactor));
     }
 
     private float getMaxScrollFactor(){
@@ -94,12 +119,14 @@ public class ScrollView extends AbstractLayout{
         return Math.max(0, height / contentHeight);
     }
 
-    public UIComponent getScrollComponent(){
-        return super.children.get(1);
-    }
-
-    public Rect getHandle(){
-        return handle;
+    private void setupHandle(){
+        handle.padding().right = Constr.px(1);
+        handle.input().setClickable(true);
+        handle.input().addPressCallback((view, btn) -> {
+            handleGrabbed = true;
+            handleGrabY = Jpize.getY() - view.cache().y;
+        });
+        handle.input().addReleaseCallback((view, btn) -> handleGrabbed = false);
     }
 
 }

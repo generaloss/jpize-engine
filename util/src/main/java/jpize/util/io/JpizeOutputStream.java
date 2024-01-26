@@ -123,7 +123,7 @@ public class JpizeOutputStream extends DataOutputStream{
 
     public void writeByteBuffer(ByteBuffer buffer) throws IOException{
         final byte[] array = new byte[buffer.remaining()];
-        buffer.get(array);
+        buffer.asReadOnlyBuffer().get(array);
         writeByteArray(array);
     }
     

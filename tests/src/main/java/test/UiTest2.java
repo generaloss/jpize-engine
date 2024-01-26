@@ -1,12 +1,10 @@
 package test;
 
-import jpize.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
-import jpize.ui.constraint.Constr;
 import jpize.ui.context.PuiLoader;
 import jpize.ui.context.UIContext;
 import jpize.ui.palette.Button;
@@ -68,11 +66,13 @@ public class UiTest2 extends JpizeApplication{
 
     @Override
     public void render(){
-        if(Jpize.isTouched())
-            ui.getRootComponent().size().set(Constr.px(Jpize.getX()), Constr.px(Jpize.getY()));
+        //if(Jpize.isTouched())
+        //    ui.getRootComponent().size().set(Constr.px(Jpize.getX()), Constr.px(Jpize.getY()));
 
         Gl.clearColorBuffer();
         ui.render();
+
+        System.out.println(ui.getHoveredComponent());
     }
 
     @Override

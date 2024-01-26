@@ -1,4 +1,4 @@
-package jpize.util.stream;
+package jpize.util.streamapi;
 
 @FunctionalInterface
 public interface FloatSupplier{
