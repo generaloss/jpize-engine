@@ -80,7 +80,11 @@ public class UIInput{
 
 
     public boolean isHovered(){
-        return component.context().isComponentHovered(component);
+        return component.context().isHovered(component);
+    }
+
+    public boolean isFocused(){
+        return component.context().isFocused(component);
     }
 
 }

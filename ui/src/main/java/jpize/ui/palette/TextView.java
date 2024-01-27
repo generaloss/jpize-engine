@@ -1,10 +1,10 @@
 package jpize.ui.palette;
 
 import jpize.graphics.font.Font;
-import jpize.ui.constraint.Constraint;
-import jpize.util.color.Color;
 import jpize.ui.component.UIComponent;
 import jpize.ui.constraint.Constr;
+import jpize.ui.constraint.Constraint;
+import jpize.util.color.Color;
 import jpize.util.math.vecmath.vector.Vec2f;
 
 public class TextView extends UIComponent{
@@ -22,7 +22,7 @@ public class TextView extends UIComponent{
         this.text = text;
         this.font = font;
         this.text_size = textSize;
-        this.color = new Color(0, 0, 0, 1);
+        this.color = new Color(0.1);
 
         super.style.background().color().setA(0);
     }
@@ -47,7 +47,7 @@ public class TextView extends UIComponent{
             font.options.textAreaWidth = -1;
 
         // bounds
-        _bounds = font.getBounds(text);
+        _bounds = font.getMaxBounds(text);
 
         // size
         size.set(Constr.px(_bounds.x), Constr.px(_bounds.y));
@@ -57,7 +57,7 @@ public class TextView extends UIComponent{
     @Override
     public void render(){
         font.options.color.set(color);
-        font.drawText(context.renderer().batch(), text, cache.x, cache.y + _bounds.y - font.options.getDescentScaled());
+        font.drawText(context.renderer().batch(), text, cache.x, cache.y + cache.height);
     }
 
     public Font getFont(){

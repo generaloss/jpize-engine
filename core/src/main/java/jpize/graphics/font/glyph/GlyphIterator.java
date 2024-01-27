@@ -22,7 +22,7 @@ public class GlyphIterator implements Iterator<GlyphSprite>{
         this.glyphs = glyphs;
         this.options = options;
         this.text = textWithoutNullGlyphs(text);
-        this.size = text.length();
+        this.size = this.text.length();
 
         this.advanceFactor = new Vec2f(advanceFactorX, advanceFactorY);
 
@@ -70,8 +70,8 @@ public class GlyphIterator implements Iterator<GlyphSprite>{
         int code = -1;
 
         while(hasNext()){
-            code = Character.codePointAt(text, cursor);
-            if(code != 10)
+            code = text.charAt(cursor);
+            if(code != '\n')
                 break;
 
             // Wrap line
@@ -90,7 +90,7 @@ public class GlyphIterator implements Iterator<GlyphSprite>{
 
         for(int i = 0; i < text.length(); i++){
             final int code = Character.codePointAt(text, i);
-            if(code == 10 || glyphs.has(code))
+            if(code == '\n' || glyphs.has(code))
                 builder.append((char) code);
         }
 

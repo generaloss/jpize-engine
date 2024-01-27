@@ -16,10 +16,16 @@ public class Scissor{
     
     private final TextureBatch batch;
     private final Map<Integer, ScissorNode> scissorList;
+    private ScissorNode active;
     
     public Scissor(TextureBatch batch){
         this.batch = batch;
         scissorList = new HashMap<>();
+    }
+
+
+    public ScissorNode getActive(){
+        return active;
     }
     
     
@@ -60,6 +66,7 @@ public class Scissor{
         if(!Gl.isEnabled(GlTarget.SCISSOR_TEST))
             Gl.enable(GlTarget.SCISSOR_TEST);
         scissor.activate();
+        active = scissor;
     }
     
     public void begin(int index, int x, int y, int width, int height, int parentIndex){
@@ -92,6 +99,7 @@ public class Scissor{
         if(!Gl.isEnabled(GlTarget.SCISSOR_TEST))
             Gl.enable(GlTarget.SCISSOR_TEST);
         scissor.activate();
+        active = scissor;
     }
     
     public void end(int index){
@@ -102,18 +110,19 @@ public class Scissor{
         if(removedIndexOf != -1 && !scissorList.isEmpty()){
             final ScissorNode scissor = scissorList.get(removedIndexOf);
             scissor.activate();
+            active = scissor;
             
-        }else if(Gl.isEnabled(GlTarget.SCISSOR_TEST))
+        }else if(Gl.isEnabled(GlTarget.SCISSOR_TEST)){
             Gl.disable(GlTarget.SCISSOR_TEST);
+            active = null;
+        }
     }
 
 
     public boolean contains(double x, double y){
-        for(ScissorNode node: scissorList.values())
-            if(node.getRectangle().contains(x, y))
-                return true;
-
-        return false;
+        if(isActive())
+            return active.getRectangle().contains(x, y);
+        return true;
     }
 
     public boolean contains(Vec2d vec2){
@@ -130,11 +139,9 @@ public class Scissor{
 
 
     public boolean contains(double x, double y, double width, double height){
-        for(ScissorNode node: scissorList.values())
-            if(node.getRectangle().contains(x, y, width, height))
-                return true;
-
-        return false;
+        if(isActive())
+            return active.getRectangle().contains(x, y, width, height);
+        return true;
     }
 
     public boolean contains(Rectangle2D rectangle){
@@ -143,15 +150,17 @@ public class Scissor{
 
 
     public boolean intersects(double x, double y, double width, double height){
-        for(ScissorNode node: scissorList.values())
-            if(node.getRectangle().intersects(x, y, width, height))
-                return true;
-
-        return false;
+        if(isActive())
+            return active.getRectangle().intersects(x, y, width, height);
+        return true;
     }
 
     public boolean intersects(Rectangle2D rectangle){
         return intersects(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
+    }
+
+    public boolean isActive(){
+        return active != null;
     }
     
 }

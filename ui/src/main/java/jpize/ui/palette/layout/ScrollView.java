@@ -85,7 +85,6 @@ public class ScrollView extends AbstractLayout{
 
         // mouse wheel scroll
         final int scroll = Jpize.input().getScroll();
-        System.out.println(super.input.isHovered() + " : " + context.getHoveredComponent());
         if(scroll != 0 && (super.input.isHovered() || handle.input().isHovered()))
             imaginaryScrollFactor += scroll * maxFactor * 0.3F;
 

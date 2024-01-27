@@ -28,7 +28,7 @@ public class FontLoader{
 
     public static Font getDefault(){
         if(defaultFont == null)
-            defaultFont = loadTrueType("font/OpenSans-Regular.ttf", 64, FontCharset.DEFAULT_ENG_RUS);
+            defaultFont = loadTrueType("font/DroidSans.ttf", 64, FontCharset.DEFAULT_ENG_RUS);
 
         return defaultFont;
     }

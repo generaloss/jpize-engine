@@ -36,19 +36,23 @@ public class TcpClient extends TcpDisconnector{
     
     
     public void send(byte[] packet){
-        connection.send(packet);
+        if(connection != null)
+            connection.send(packet);
     }
     
     public void send(ByteArrayOutputStream stream){
-        connection.send(stream);
+        if(connection != null)
+            connection.send(stream);
     }
     
     public void send(PacketWriter data){
-        connection.send(data);
+        if(connection != null)
+            connection.send(data);
     }
 
     public void send(IPacket<?> packet){
-        connection.send(packet);
+        if(connection != null)
+            connection.send(packet);
     }
 
     

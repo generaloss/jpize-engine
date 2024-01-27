@@ -10,16 +10,18 @@ public class Button extends Rect{
 
     public Button(Constraint width, Constraint height, String text, Font font, Constraint text_size){
         super(width, height);
+        super.style.background().color().set(0.4, 0.1, 0.9);
+        super.style.setCornerRadius(Constr.relh(0.15));
         super.input.setClickable(true);
+
         this.textview = new TextView(text, font, text_size);
-        this.textview.setID("text");
         this.textview.padding().set(Constr.zero);
-        this.textview.color().set(0.1);
+        this.textview.color().set(0.85);
         super.add(textview);
     }
 
     public Button(Constraint width, Constraint height, String text, Font font){
-        this(width, height, text, font, Constr.match_parent);
+        this(width, height, text, font, Constr.relh(0.8));
     }
 
     public Button(Constraint size, String text, Font font, Constraint text_size){

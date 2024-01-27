@@ -47,6 +47,21 @@ public class Font implements Disposable{
         return new Vec2f(width, height);
     }
 
+    public Vec2f getMaxBounds(String text){
+        float width = 0;
+        float height = 0;
+
+        for(GlyphSprite glyph: iterable(text)){
+            final float glyphMaxX = glyph.getX() + ((char) glyph.getCode() == ' ' ? glyph.getAdvanceX() : glyph.getWidth());
+            final float glyphMaxY = (glyph.getLineY() + 1) * options.getAdvanceScaled();
+
+            width = Math.max(width, glyphMaxX);
+            height = Math.max(height, glyphMaxY);
+        }
+
+        return new Vec2f(width, height);
+    }
+
     public float getTextWidth(String text){
         float width = 0;
         for(GlyphSprite glyph: iterable(text)){

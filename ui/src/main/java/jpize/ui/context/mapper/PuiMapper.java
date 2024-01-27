@@ -193,7 +193,7 @@ public class PuiMapper{
 
             final UIComponent component = constructor.newInstance(args.toArray());
             if(componentPath.isEmpty())
-                context.setRootComponent(component);
+                context.setRoot(component);
             else
                 componentPath.peek().add(component);
             return component;

@@ -46,9 +46,9 @@ public abstract class UIComponent{
 
     public void render(){ }
 
-    public void onSelect(){ }
+    public void onFocus(){ }
 
-    public void onDeselect(){ }
+    public void onUnfocus(){ }
 
 
     public void renderBackground(){

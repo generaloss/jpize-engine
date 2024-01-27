@@ -38,7 +38,7 @@
             @VBox (match_parent, 0.92rh) {
                 ID: "server_list"
 
-                @TextField (match_parent, 0.2rw, !font, "text") {
+                @TextField (match_parent, 0.1rw, !font, "text") {
                     padding.top: 0.05rw
                 }
             }
@@ -85,17 +85,14 @@
                     @Button (match_parent, 0.15rh, "Start", !font) {
                         ID: "start_button"
                         padding.top: 0.05rh
-                        style.corner_radius: 0.4rh
                     }
                     @Button (match_parent, 0.15rh, "Stop", !font) {
                         ID: "stop_button"
                         padding.top: 0.05rh
-                        style.corner_radius: 0.4rh
                     }
                     @Button (match_parent, 0.15rh, "Kill", !font) {
                         ID: "kill_button"
                         padding.top: 0.05rh
-                        style.corner_radius: 0.4rh
                     }
                 }
             }

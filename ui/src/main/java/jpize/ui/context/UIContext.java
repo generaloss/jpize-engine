@@ -14,7 +14,7 @@ public class UIContext implements Disposable{
 
     private final UIRenderer renderer;
     private UIComponent root;
-    private UIComponent selected;
+    private UIComponent focused;
     private final MouseButtonCallback mouseButtonCallback;
     private final WinSizeChangedCallback winResizeCallback;
     private volatile boolean enableTouchingDelayed;
@@ -31,16 +31,19 @@ public class UIContext implements Disposable{
                 return;
             }
 
-            final UIComponent hovered = getHoveredComponent();
+            final UIComponent hovered = getHovered();
 
-            if(selected != null)
-                selected.onDeselect();
-            selected = hovered;
+            final UIComponent oldFocused = focused;
+            if(oldFocused != null && oldFocused != hovered)
+                oldFocused.onUnfocus();
 
+            focused = hovered;
             if(hovered == null)
                 return;
 
-            hovered.onSelect();
+            if(focused != oldFocused)
+                focused.onFocus();
+
             hovered.cache().press();
             hovered.input().invokePressCallbacks(button);
         });
@@ -50,7 +53,7 @@ public class UIContext implements Disposable{
 
     public UIContext(UIComponent root){
         this();
-        setRootComponent(root);
+        setRoot(root);
     }
 
 
@@ -81,21 +84,21 @@ public class UIContext implements Disposable{
     }
 
 
-    public UIComponent getHoveredComponent(){
+    public UIComponent getHovered(){
         return renderer.stencil().get(Jpize.getX(), Jpize.getY());
     }
 
-    public boolean isComponentHovered(UIComponent component){
-        return component == getHoveredComponent();
+    public boolean isHovered(UIComponent component){
+        return component == getHovered();
     }
 
 
-    public UIComponent getSelectedComponent(){
-        return selected;
+    public UIComponent getFocused(){
+        return focused;
     }
 
-    public boolean isComponentSelected(UIComponent component){
-        return component == getSelectedComponent();
+    public boolean isFocused(UIComponent component){
+        return component == getFocused();
     }
 
 
@@ -108,11 +111,11 @@ public class UIContext implements Disposable{
     }
 
 
-    public UIComponent getRootComponent(){
+    public UIComponent getRoot(){
         return root;
     }
 
-    public void setRootComponent(UIComponent root){
+    public void setRoot(UIComponent root){
         this.root = root;
         this.root.setContext(this);
     }
@@ -158,9 +161,17 @@ public class UIContext implements Disposable{
     }
 
 
+    private void dispose(UIComponent component){
+        for(UIComponent child: component.children()){
+            child.onUnfocus();
+            dispose(child);
+        }
+    }
+
     @Override
     public void dispose(){
         disable();
+        dispose(root);
         renderer.dispose();
     }
 

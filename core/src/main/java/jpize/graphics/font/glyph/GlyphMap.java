@@ -12,6 +12,7 @@ public class GlyphMap{
     }
 
     public void add(Glyph glyph){
+        System.out.println("code: " + (char) glyph.code);
         map.put(glyph.code, glyph);
     }
 

@@ -162,6 +162,9 @@ public class TextureBatch implements Disposable{
 
 
     public void draw(Texture texture, float x, float y, float width, float height){
+        if(!scissor.intersects(x, y, width, height))
+            return;
+
         if(size == maxSize)
             flush();
 
@@ -176,6 +179,9 @@ public class TextureBatch implements Disposable{
     }
     
     public void draw(TextureRegion textureRegion, float x, float y, float width, float height){
+        if(!scissor.intersects(x, y, width, height))
+            return;
+
         if(size == maxSize)
             flush();
 
@@ -193,6 +199,9 @@ public class TextureBatch implements Disposable{
     }
 
     public void draw(Texture texture, float x, float y, float width, float height, Region region){
+        if(!scissor.intersects(x, y, width, height))
+            return;
+
         if(size == maxSize)
             flush();
 
@@ -209,6 +218,9 @@ public class TextureBatch implements Disposable{
     }
 
     public void draw(TextureRegion texReg, float x, float y, float width, float height, Region region){
+        if(!scissor.intersects(x, y, width, height))
+            return;
+
         if(size == maxSize)
             flush();
 
@@ -228,6 +240,9 @@ public class TextureBatch implements Disposable{
     }
 
     public void draw(Texture texture, float x, float y, float width, float height, float r, float g, float b, float a){
+        if(!scissor.intersects(x, y, width, height))
+            return;
+
         if(size == maxSize)
             flush();
 
@@ -242,6 +257,9 @@ public class TextureBatch implements Disposable{
     }
 
     public void draw(Texture texture, float x, float y, float width, float height, Region region, float r, float g, float b, float a){
+        if(!scissor.intersects(x, y, width, height))
+            return;
+
         if(size == maxSize)
             flush();
 
@@ -258,6 +276,9 @@ public class TextureBatch implements Disposable{
     }
 
     public void draw(TextureRegion texReg, float x, float y, float width, float height, Region region, float r, float g, float b, float a){
+        if(!scissor.intersects(x, y, width, height))
+            return;
+
         if(size == maxSize)
             flush();
 
