@@ -129,6 +129,7 @@ public class PuiMapper{
         addComponentAlias("HBox", HBox.class);
         addComponentAlias("VBox", VBox.class);
         addComponentAlias("ScrollView", ScrollView.class);
+        addComponentAlias("TextField", TextField.class);
     }
 
 

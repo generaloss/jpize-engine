@@ -14,7 +14,7 @@ public class Button extends Rect{
         this.textview = new TextView(text, font, text_size);
         this.textview.setID("text");
         this.textview.padding().set(Constr.zero);
-        this.textview.color().set(0.1, 0.1, 0.1, 1);
+        this.textview.color().set(0.1);
         super.add(textview);
     }
 
@@ -28,11 +28,6 @@ public class Button extends Rect{
 
     public Button(Constraint size, String text, Font font){
         this(size, text, font, Constr.match_parent);
-    }
-
-    @Override
-    public void render(){
-        super.render();
     }
 
     public TextView textview(){

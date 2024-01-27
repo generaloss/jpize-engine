@@ -49,7 +49,6 @@ public class HBox extends AbstractLayout{
 
     @Override
     public void render(){
-        super.render();
         offsetX = cache.x + cache.marginLeft;
     }
 

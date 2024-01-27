@@ -72,7 +72,7 @@ public class UiTest2 extends JpizeApplication{
         Gl.clearColorBuffer();
         ui.render();
 
-        System.out.println(ui.getHoveredComponent());
+        //System.out.println(ui.getHoveredComponent());
     }
 
     @Override

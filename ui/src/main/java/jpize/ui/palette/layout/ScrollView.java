@@ -22,6 +22,7 @@ public class ScrollView extends AbstractLayout{
 
     public ScrollView(Constraint width, Constraint height){
         super.size.set(width, height);
+        super.input.setClickable(true);
         // handle
         this.handle = new Rect(Constr.px(10), Constr.relh(1));
         setupHandle();
@@ -66,7 +67,11 @@ public class ScrollView extends AbstractLayout{
 
     @Override
     public void update(){
-        super.cache.calculate();
+        cache.calculate();
+    }
+
+    @Override
+    public void render(){
         processScroll();
     }
 
@@ -80,14 +85,14 @@ public class ScrollView extends AbstractLayout{
 
         // mouse wheel scroll
         final int scroll = Jpize.input().getScroll();
-        if(scroll != 0 && Jpize.input().isInBounds(cache.x, cache.y, cache.width, cache.height))
+        System.out.println(super.input.isHovered() + " : " + context.getHoveredComponent());
+        if(scroll != 0 && (super.input.isHovered() || handle.input().isHovered()))
             imaginaryScrollFactor += scroll * maxFactor * 0.3F;
 
         // handle scroll
         if(handleGrabbed){
             imaginaryScrollFactor = (Jpize.getY() - handleGrabY - super.cache.y) / scrollComponentHeight / maxFactor;
             scrollFactor = imaginaryScrollFactor;
-            System.out.println(imaginaryScrollFactor);
         }
 
         // clamp scroll

@@ -33,7 +33,7 @@ public class Slider extends Rect{
         this.textview = new TextView(text, font, text_size);
         this.textview.setID("text");
         this.textview.padding().set(Constr.zero);
-        this.textview.color().set(0.1, 0.1, 0.1, 1);
+        this.textview.color().set(0.1);
         super.add(textview);
     }
 
@@ -61,7 +61,6 @@ public class Slider extends Rect{
 
     @Override
     public void render(){
-        super.render();
         if(grabHandle){
             final float handleWidth = handle.cache().width;
             final float grabX = Jpize.getX() - cache.x - handleWidth / 2;

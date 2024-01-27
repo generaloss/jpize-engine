@@ -300,7 +300,7 @@ public class TextureBatch implements Disposable{
 
 
     public void resetColor(){
-        color.set(1, 1, 1, 1F);
+        color.set(1);
     }
 
     public void setColor(IColor color){
@@ -312,7 +312,7 @@ public class TextureBatch implements Disposable{
     }
 
     public void setColor(double r, double g, double b){
-        color.set(r, g, b, 1F);
+        color.set(r, g, b);
     }
 
     public Color getColor(){

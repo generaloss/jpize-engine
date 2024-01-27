@@ -46,6 +46,10 @@ public abstract class UIComponent{
 
     public void render(){ }
 
+    public void onSelect(){ }
+
+    public void onDeselect(){ }
+
 
     public void renderBackground(){
         final UIRenderer renderer = context.renderer();

@@ -37,6 +37,10 @@
             }
             @VBox (match_parent, 0.92rh) {
                 ID: "server_list"
+
+                @TextField (match_parent, 0.2rw, !font, "text") {
+                    padding.top: 0.05rw
+                }
             }
         }
 
@@ -105,7 +109,6 @@
                 @TextView ("@NotNull\nprivate List<Block> buildBlocks() {\n    List<Block> list = this.getOriginal().getSubBlocks();\n\n    if (list.isEmpty()) {\n        return AbstractBlock.EMPTY;\n    } else {\n        ArrayList<Block> result = new ArrayList<>(list.size());\n        Iterator var3 = list.iterator();\n        while(var3.hasNext()) {\n            Block block = (Block)var3.next();\n            if (block.getTextRange().intersects(this.myRange)) {\n                result.add(new InjectedLanguageBlockWrapper(block, this.myOffset, this.myRange, null, this.getLanguage()));\n            }\n        }\n\n        return result;\n    }\n}", !font, 0.1rh) {
                     ID: "history"
                     padding: (0.01rh, 0.01rh)
-                    color: (0, 1)
                     wrap: true
                 }
             }

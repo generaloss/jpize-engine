@@ -39,9 +39,4 @@ public class ConstraintLayout extends AbstractLayout{
         cache.calculate();
     }
 
-    @Override
-    public void render(){
-        super.render();
-    }
-
 }

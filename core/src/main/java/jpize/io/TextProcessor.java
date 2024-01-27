@@ -18,7 +18,7 @@ import java.util.StringJoiner;
 
 public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     
-    private boolean active, newLineOnEnter;
+    private boolean enabled, newLineOnEnter;
     private final List<String> lines;
     private int currentLineLength;
     
@@ -29,8 +29,8 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
 
     private final List<Character> stopCursorChars;
     
-    public TextProcessor(boolean newLineOnEnter){
-        this.active = true;
+    public TextProcessor(boolean enabled, boolean newLineOnEnter){
+        this.enabled = enabled;
         this.newLineOnEnter = newLineOnEnter;
         this.lines = new ArrayList<>();
         this.lines.add("");
@@ -45,13 +45,13 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     }
     
     public TextProcessor(){
-        this(true);
+        this(true, true);
     }
     
     
     @Override
     public void invoke(char character){
-        if(!active)
+        if(!enabled)
             return;
 
         insertChar(character);
@@ -60,7 +60,7 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
 
     @Override
     public void invoke(Key key, KeyAction action, KeyMods mods){
-        if(!active || action == KeyAction.UP)
+        if(!enabled || action == KeyAction.UP)
             return;
 
         final boolean hasCtrl = mods.hasCtrl();
@@ -337,12 +337,20 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     }
     
     
-    public boolean isActive(){
-        return active;
+    public boolean isEnabled(){
+        return enabled;
     }
     
-    public void setActive(boolean active){
-        this.active = active;
+    public void setEnabled(boolean enabled){
+        this.enabled = enabled;
+    }
+
+    public void enable(){
+        setEnabled(true);
+    }
+
+    public void disable(){
+        setEnabled(false);
     }
     
     
@@ -361,7 +369,7 @@ public class TextProcessor implements Disposable, CharCallback, KeyCallback{
     }
 
     public boolean isCursorRender(){
-        return (getCursorBlinkingSeconds() < 1 || Maths.frac(getCursorBlinkingSeconds()) >= 0.5) && isActive();
+        return (getCursorBlinkingSeconds() < 1 || Maths.frac(getCursorBlinkingSeconds()) >= 0.5) && isEnabled();
     }
 
     public String getLine(int cursorY){

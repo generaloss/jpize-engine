@@ -50,7 +50,6 @@ public class VBox extends AbstractLayout{
 
     @Override
     public void render(){
-        super.render();
         offsetY = cache.y + cache.height - cache.marginTop;
     }
 

@@ -9,20 +9,20 @@ public class Color extends IColor{
     private float r, g, b, a;
 
 
-    public Color(float red, float green, float blue, float alpha){
-        set(red, green, blue, alpha);
-    }
-
-    public Color(float red, float green, float blue){
-        set(red, green, blue, 1F);
-    }
-
     public Color(double red, double green, double blue, double alpha){
         set(red, green, blue, alpha);
     }
 
     public Color(double red, double green, double blue){
-        set(red, green, blue, 1F);
+        set(red, green, blue, 1);
+    }
+
+    public Color(double grayscale, double alpha){
+        set(grayscale, alpha);
+    }
+
+    public Color(double grayscale){
+        set(grayscale);
     }
 
     public Color(IColor color){
@@ -59,20 +59,24 @@ public class Color extends IColor{
     }
 
 
-    public Color set(float red, float green, float blue, float alpha){
-        r = red;
-        g = green;
-        b = blue;
-        a = alpha;
-        return this;
-    }
-
     public Color set(double red, double green, double blue, double alpha){
         r = (float) red;
         g = (float) green;
         b = (float) blue;
         a = (float) alpha;
         return this;
+    }
+
+    public Color set(double red, double green, double blue){
+        return set(red, green, blue, 1);
+    }
+
+    public Color set(double grayscale, double alpha){
+        return set(grayscale, grayscale, grayscale, alpha);
+    }
+
+    public Color set(double grayscale){
+        return set(grayscale, 1);
     }
 
     public Color setInt(int red, int green, int blue, int alpha){
@@ -92,13 +96,6 @@ public class Color extends IColor{
     }
 
 
-    public Color setRgb(float red, float green, float blue){
-        r = red;
-        g = green;
-        b = blue;
-        return this;
-    }
-
     public Color setRgb(double red, double green, double blue){
         r = (float) red;
         g = (float) green;
@@ -106,12 +103,8 @@ public class Color extends IColor{
         return this;
     }
 
-    public Color setRgb(float rgb){
-        return setRgb(rgb, rgb, rgb);
-    }
-
-    public Color setRgb(double rgb){
-        return setRgb(rgb, rgb, rgb);
+    public Color setRgb(double grayscale){
+        return setRgb(grayscale, grayscale, grayscale);
     }
 
     public Color set3Int(int red, int green, int blue){

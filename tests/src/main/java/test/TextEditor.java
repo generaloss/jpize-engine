@@ -30,7 +30,7 @@ public class TextEditor extends JpizeApplication{
     public void init(){
         batch = new TextureBatch();
 
-        text = new TextProcessor(true);
+        text = new TextProcessor(true, true);
 
         font = FontLoader.getDefault();
         font.setScale(1F);

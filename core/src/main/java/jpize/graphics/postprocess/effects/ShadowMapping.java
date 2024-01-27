@@ -49,7 +49,7 @@ public class ShadowMapping implements Disposable{
             .setWrap(GlWrap.CLAMP_TO_BORDER)
             .setFilter(GlFilter.NEAREST)
             .setType(GlType.FLOAT)
-            .getBorderColor().set(1F, 1F, 1F, 1F);
+            .getBorderColor().set(1);
 
         fbo.create();
 

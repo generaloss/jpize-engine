@@ -11,18 +11,20 @@ public class TextView extends UIComponent{
 
     private String text;
     private Font font;
-    private final Color color;
     private Constraint text_size;
-    private float text_scale;
+    private final Color color;
     private boolean wrap;
-    private Vec2f bounds;
 
-    public TextView(String text, Font font, Constraint text_size){
-        super.style.background().color().setA(0);
-        this.color = new Color();
+    private float _text_scale;
+    private Vec2f _bounds;
+
+    public TextView(String text, Font font, Constraint textSize){
         this.text = text;
         this.font = font;
-        this.text_size = text_size;
+        this.text_size = textSize;
+        this.color = new Color(0, 0, 0, 1);
+
+        super.style.background().color().setA(0);
     }
 
     public TextView(String text, Font font){
@@ -34,10 +36,10 @@ public class TextView extends UIComponent{
         // init
         final float cache_text_size = cache.constrToPx(text_size, true, true);
         final float advance = font.options.getAdvance();
-        text_scale = cache_text_size / advance;
+        _text_scale = cache_text_size / advance;
 
         // font options
-        font.setScale(text_scale);
+        font.setScale(_text_scale);
         font.options.invLineWrap = true;
         if(wrap && cache.hasParent)
             font.options.textAreaWidth = Math.max(0, cache.parentWidth() - cache.parent.cache().marginRight);
@@ -45,20 +47,17 @@ public class TextView extends UIComponent{
             font.options.textAreaWidth = -1;
 
         // bounds
-        bounds = font.getBounds(text);
+        _bounds = font.getBounds(text);
 
         // size
-        size.set(Constr.px(bounds.x), Constr.px(bounds.y));
+        size.set(Constr.px(_bounds.x), Constr.px(_bounds.y));
         cache.calculate();
     }
 
     @Override
     public void render(){
-        super.render();
-
         font.options.color.set(color);
-
-        font.drawText(context.renderer().batch(), text, cache.x, cache.y + bounds.y - font.options.getDescentScaled());
+        font.drawText(context.renderer().batch(), text, cache.x, cache.y + _bounds.y - font.options.getDescentScaled());
     }
 
     public Font getFont(){

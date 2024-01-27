@@ -14,6 +14,7 @@ public class UIContext implements Disposable{
 
     private final UIRenderer renderer;
     private UIComponent root;
+    private UIComponent selected;
     private final MouseButtonCallback mouseButtonCallback;
     private final WinSizeChangedCallback winResizeCallback;
     private volatile boolean enableTouchingDelayed;
@@ -30,12 +31,18 @@ public class UIContext implements Disposable{
                 return;
             }
 
-            final UIComponent component = getHoveredComponent();
-            if(component == null)
+            final UIComponent hovered = getHoveredComponent();
+
+            if(selected != null)
+                selected.onDeselect();
+            selected = hovered;
+
+            if(hovered == null)
                 return;
 
-            component.cache().press();
-            component.input().invokePressCallbacks(button);
+            hovered.onSelect();
+            hovered.cache().press();
+            hovered.input().invokePressCallbacks(button);
         });
 
         this.winResizeCallback = (window, width, height) -> renderer.resize(width, height);
@@ -73,6 +80,7 @@ public class UIContext implements Disposable{
         return renderer;
     }
 
+
     public UIComponent getHoveredComponent(){
         return renderer.stencil().get(Jpize.getX(), Jpize.getY());
     }
@@ -80,6 +88,16 @@ public class UIContext implements Disposable{
     public boolean isComponentHovered(UIComponent component){
         return component == getHoveredComponent();
     }
+
+
+    public UIComponent getSelectedComponent(){
+        return selected;
+    }
+
+    public boolean isComponentSelected(UIComponent component){
+        return component == getSelectedComponent();
+    }
+
 
     private void release(UIComponent component, Btn button, MouseButtonAction action){
         if(component.input().isClickable() && component.cache().release())
@@ -124,13 +142,14 @@ public class UIContext implements Disposable{
             return;
 
         component.update();
-        component.renderBackground();
-        component.render();
 
         if(component.input().isClickable()){
             final UIComponentCache cache = component.cache();
             renderer.stencil().fill(cache.x, cache.y, cache.width, cache.height, component);
         }
+
+        component.renderBackground();
+        component.render();
 
         renderer.beginScissor(component);
         for(UIComponent child: component.children())
