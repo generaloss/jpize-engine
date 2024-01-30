@@ -110,7 +110,6 @@ public class ScrollView extends AbstractLayout{
 
         // pos
         handle.padding().bottom = Constr.relh(scrollFactor * (1 - maxFactor));
-        System.out.println(scrollFactor + " | " + maxFactor);
     }
 
     private float getMaxScrollFactor(){
