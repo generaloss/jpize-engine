@@ -25,7 +25,7 @@ public class ScrollView extends AbstractLayout{
         super.input.setClickable(true);
 
         // handle
-        this.handle = new Rect(Constr.px(10), Constr.relh(1));
+        this.handle = new Rect(Constr.relh(0.03), Constr.relh(1));
         setupHandle();
         super.add(handle);
     }
@@ -60,8 +60,8 @@ public class ScrollView extends AbstractLayout{
         final UIComponentCache cache = component.cache();
         if(forY){
             if(component == getScrollComponent()){
-                scrollComponentHeight = cache.height + cache.paddingTop * 2 + super.cache.marginBottom - super.cache.height;
-                return cache.y + (1 - scrollFactor) * scrollComponentHeight;
+                scrollComponentHeight = cache.height + cache.paddingTop * 2 - super.cache.contentHeight;
+                return cache.y + Math.max(0, (1 - scrollFactor) * scrollComponentHeight);
             }
             return cache.y;
         }
@@ -85,7 +85,6 @@ public class ScrollView extends AbstractLayout{
 
         // size
         handle.size().y         = Constr.relh(maxFactor);
-        handle.padding().right  = Constr.px(1 + handle.cache().width + (parent != null ? parent.cache().marginRight : 0));
 
         // mouse wheel scroll
         final int scroll = Jpize.input().getScroll();
@@ -111,6 +110,7 @@ public class ScrollView extends AbstractLayout{
 
         // pos
         handle.padding().bottom = Constr.relh(scrollFactor * (1 - maxFactor));
+        System.out.println(scrollFactor + " | " + maxFactor);
     }
 
     private float getMaxScrollFactor(){
@@ -129,7 +129,8 @@ public class ScrollView extends AbstractLayout{
 
     private void setupHandle(){
         handle.setOrder(1);
-        handle.padding().right = Constr.px(1);
+        handle.style().background().color().set(0.4, 0.1, 0.9);
+        handle.padding().right = Constr.zero;
         handle.input().setClickable(true);
         handle.input().addPressCallback((view, btn) -> {
             handleGrabbed = true;

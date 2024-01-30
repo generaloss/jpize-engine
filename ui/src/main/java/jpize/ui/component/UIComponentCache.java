@@ -19,6 +19,8 @@ public class UIComponentCache{
     public float widthMin, heightMin, widthMax, heightMax;
     public boolean hasWidthMax, hasHeightMax;
 
+    public float contentWidth, contentHeight;
+
     public float marginTop, marginLeft, marginBottom, marginRight;
     public float paddingTop, paddingLeft, paddingBottom, paddingRight;
     public boolean hasPaddingTop, hasPaddingLeft, hasPaddingBottom, hasPaddingRight;
@@ -33,8 +35,8 @@ public class UIComponentCache{
 
     public void calculate(){
         updateParent();
-        calcSize();
         calcMargin();
+        calcSize();
         calcPadding();
         calcPosition();
         calcStyle();
@@ -69,6 +71,10 @@ public class UIComponentCache{
 
         if(hasHeightMax) height = Maths.clamp(height, heightMin, heightMax);
         else height = Math.max(height, heightMin);
+
+        // content size
+        contentWidth = width - marginLeft - marginRight;
+        contentHeight = height - marginTop - marginBottom;
     }
 
     private void calcMargin(){
@@ -107,13 +113,13 @@ public class UIComponentCache{
         }
 
         if(hasPaddingLeft && hasPaddingRight) paddingX = (paddingLeft + parentW - paddingRight - width) / 2;
-        else if(hasPaddingLeft) paddingX = paddingLeft;
-        else if(hasPaddingRight) paddingX = parentW - paddingRight - width;
+        else if(hasPaddingLeft) paddingX = paddingLeft + parentMarginLeft();
+        else if(hasPaddingRight) paddingX = parentW - paddingRight - parentMarginRight() - width;
         else paddingX = 0;
 
         if(hasPaddingTop && hasPaddingBottom) paddingY = (paddingBottom + parentH - paddingTop - height) / 2;
-        else if(hasPaddingTop) paddingY = parentH - paddingTop - height;
-        else if(hasPaddingBottom) paddingY = paddingBottom;
+        else if(hasPaddingTop) paddingY = parentH - paddingTop - parentMarginTop() - height;
+        else if(hasPaddingBottom) paddingY = paddingBottom + parentMarginBottom();
         else paddingY = 0;
 
         x = parentX + paddingX;
@@ -226,6 +232,27 @@ public class UIComponentCache{
     public float parentMaxHeight(){
         if(parent == null) return 0;
         return parent.cache().heightMax;
+    }
+
+
+    public float parentMarginTop(){
+        if(parent == null) return 0;
+        return parent.cache().marginTop;
+    }
+
+    public float parentMarginLeft(){
+        if(parent == null) return 0;
+        return parent.cache().marginLeft;
+    }
+
+    public float parentMarginBottom(){
+        if(parent == null) return 0;
+        return parent.cache().marginBottom;
+    }
+
+    public float parentMarginRight(){
+        if(parent == null) return 0;
+        return parent.cache().marginRight;
     }
 
 

@@ -32,7 +32,6 @@ public abstract class UIComponent{
 
     public UIComponent(){
         this.children = new CopyOnWriteArrayList<>();
-        this.ID = "null";
         this.order = -1;
         this.cache = new UIComponentCache(this);
         this.margin = new Insets();
