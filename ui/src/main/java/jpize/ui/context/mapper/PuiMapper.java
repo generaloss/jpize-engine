@@ -14,6 +14,7 @@ import jpize.ui.palette.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.*;
 
@@ -160,15 +161,16 @@ public class PuiMapper{
     public Constructor<?> findComponentConstructor(Constructor<?>[] constructors, List<Object> arguments){
         constructorsCycle:
         for(Constructor<?> constructor: constructors){
+
             if(constructor.getParameterCount() != arguments.size())
                 continue;
 
             final Class<?>[] constructorParams = constructor.getParameterTypes();
             for(int i = 0; i < arguments.size(); i++){
+
                 final Class<?> argumentClass = arguments.get(i).getClass();
-                if(constructorParams[i] != argumentClass && constructorParams[i] != argumentClass.getSuperclass()){
+                if(constructorParams[i] != argumentClass && constructorParams[i] != argumentClass.getSuperclass())
                     continue constructorsCycle;
-                }
             }
             return constructor;
         }
@@ -183,24 +185,32 @@ public class PuiMapper{
 
     @SuppressWarnings("unchecked")
     public UIComponent mapComponent(String name, List<Object> args){
+        final Class<?> componentClass;
         try{
-            final Class<?> componentClass = getComponentClass(name);
-            final Constructor<?>[] componentConstructors = componentClass.getConstructors();
-
-            final Constructor<UIComponent> constructor = (Constructor<UIComponent>) findComponentConstructor(componentConstructors, args);
-            if(constructor == null)
-                throw new RuntimeException("No such constructor for class " + name);
-
-            final UIComponent component = constructor.newInstance(args.toArray());
-            if(componentPath.isEmpty())
-                context.setRoot(component);
-            else
-                componentPath.peek().add(component);
-            return component;
-
-        }catch(Exception e){
+            componentClass = getComponentClass(name);
+        }catch(ClassNotFoundException e){
             throw new RuntimeException(e);
         }
+
+        final Constructor<?>[] componentConstructors = componentClass.getConstructors();
+
+        final Constructor<UIComponent> constructor = (Constructor<UIComponent>) findComponentConstructor(componentConstructors, args);
+        if(constructor == null)
+            throw new RuntimeException("No such constructor for class " + name);
+
+        final UIComponent component;
+        try{
+            component = constructor.newInstance(args.toArray());
+        }catch(InstantiationException | IllegalAccessException | InvocationTargetException e){
+            throw new RuntimeException(e);
+        }
+
+        if(componentPath.isEmpty())
+            context.setRoot(component);
+        else
+            componentPath.peek().add(component);
+
+        return component;
     }
 
     public Field getFieldOfSuperclasses(Object object, String name){

@@ -11,8 +11,7 @@ import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Dimension;
 import jpize.ui.constraint.Insets;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
 
 public abstract class UIComponent{
 
@@ -21,6 +20,8 @@ public abstract class UIComponent{
     protected final List<UIComponent> children;
     protected UIComponent parent;
     protected String ID;
+    protected int order;
+
     protected final Insets margin, padding;
     protected final Dimension size, minSize, maxSize;
     protected boolean paddingFixH, paddingFixW;
@@ -29,8 +30,9 @@ public abstract class UIComponent{
     protected boolean hidden;
 
     public UIComponent(){
-        this.children = new CopyOnWriteArrayList<>();
-        this.ID = null;
+        this.children = new ArrayList<>();
+        this.ID = "null";
+        this.order = -1;
         this.cache = new UIComponentCache(this);
         this.margin = new Insets();
         this.padding = new Insets();
@@ -77,15 +79,19 @@ public abstract class UIComponent{
     }
 
 
-    public final List<UIComponent> children(){
+    private void sortChildren(){
+        children.sort(Comparator.comparingInt(c -> c.order));
+    }
+
+    public final Collection<UIComponent> children(){
         return children;
     }
 
-    @SuppressWarnings("unchecked")
-    protected final <C extends UIComponent> C getChildWithID(String ID){
+    protected final UIComponent getChildWithID(String ID){
         for(UIComponent child: children)
             if(ID.equals(child.ID))
-                return (C) child;
+                return child;
+
         throw new RuntimeException("Component with ID " + ID + " not found");
     }
 
@@ -96,15 +102,15 @@ public abstract class UIComponent{
 
             C component = (C) this;
             for(String link: links)
-                component = component.getChildWithID(link);
+                component = (C) component.getChildWithID(link);
             return component;
         }
-        return getChildWithID(ID);
+        return (C) getChildWithID(ID);
     }
 
     @SuppressWarnings("unchecked")
     public final <C extends UIComponent> C findByID(String ID){
-        for(UIComponent child: this.children){
+        for(UIComponent child: children){
             if(ID.equals(child.ID))
                 return (C) child;
 
@@ -115,17 +121,18 @@ public abstract class UIComponent{
         return null;
     }
 
-    public final void add(UIComponent child){
-        children.add(child);
+    public void add(UIComponent child){
         child.setParent(this);
+        children.add(child);
+        sortChildren();
     }
 
-    public final void remove(UIComponent child){
+    public void remove(UIComponent child){
         children.remove(child);
     }
 
-    public final void remove(String childID){
-        children.remove(getByID(childID));
+    public void remove(String ID){
+        children.remove(findByID(ID));
     }
 
 
@@ -135,6 +142,17 @@ public abstract class UIComponent{
 
     public final void setID(String ID){
         this.ID = ID;
+    }
+
+
+    public final int getOrder(){
+        return order;
+    }
+
+    public final void setOrder(int order){
+        this.order = order;
+        if(parent != null)
+            parent.sortChildren();
     }
 
 

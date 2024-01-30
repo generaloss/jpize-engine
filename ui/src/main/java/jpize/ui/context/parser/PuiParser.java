@@ -100,10 +100,9 @@ public class PuiParser{
         next();
         final List<Object> args = parseComponentArgs();
         final UIComponent component = mapper.mapComponent(token.string, args);
+
         mapper.beginComponent(component);
-
         parseComponentBlock();
-
         mapper.endComponent();
     }
 

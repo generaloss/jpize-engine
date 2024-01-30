@@ -10,6 +10,8 @@ import jpize.ui.component.UIComponent;
 import jpize.ui.component.UIComponentCache;
 import jpize.ui.component.render.UIRenderer;
 
+
+
 public class UIContext implements Disposable{
 
     private final UIRenderer renderer;

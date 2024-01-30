@@ -23,6 +23,7 @@ public class ScrollView extends AbstractLayout{
     public ScrollView(Constraint width, Constraint height){
         super.size.set(width, height);
         super.input.setClickable(true);
+
         // handle
         this.handle = new Rect(Constr.px(10), Constr.relh(1));
         setupHandle();
@@ -39,11 +40,18 @@ public class ScrollView extends AbstractLayout{
 
 
     public UIComponent getScrollComponent(){
-        return super.children.get(1);
+        return super.children.get(0);
     }
 
     public Rect getHandle(){
         return handle;
+    }
+
+
+    @Override
+    public void add(UIComponent child){
+        child.setOrder(0);
+        super.add(child);
     }
 
 
@@ -72,10 +80,6 @@ public class ScrollView extends AbstractLayout{
 
     @Override
     public void render(){
-        processScroll();
-    }
-
-    private void processScroll(){
         // max scroll bound
         maxFactor = getMaxScrollFactor();
 
@@ -97,7 +101,7 @@ public class ScrollView extends AbstractLayout{
         // clamp scroll
         imaginaryScrollFactor = Maths.clamp(imaginaryScrollFactor, 0, 1);
         final float difference = imaginaryScrollFactor - scrollFactor;
-        final float scrollSpeedPxSec =  1500;
+        final float scrollSpeedPxSec = 1500;
         final float deltaFactor = scrollSpeedPxSec / scrollComponentHeight * Jpize.getDt();
         if(Math.abs(difference) > deltaFactor){
             scrollFactor += Math.signum(difference) * deltaFactor;
@@ -124,6 +128,7 @@ public class ScrollView extends AbstractLayout{
     }
 
     private void setupHandle(){
+        handle.setOrder(1);
         handle.padding().right = Constr.px(1);
         handle.input().setClickable(true);
         handle.input().addPressCallback((view, btn) -> {
