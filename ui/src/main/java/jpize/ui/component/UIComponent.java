@@ -12,6 +12,7 @@ import jpize.ui.constraint.Dimension;
 import jpize.ui.constraint.Insets;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class UIComponent{
 
@@ -30,7 +31,7 @@ public abstract class UIComponent{
     protected boolean hidden;
 
     public UIComponent(){
-        this.children = new ArrayList<>();
+        this.children = new CopyOnWriteArrayList<>();
         this.ID = "null";
         this.order = -1;
         this.cache = new UIComponentCache(this);
@@ -83,7 +84,7 @@ public abstract class UIComponent{
         children.sort(Comparator.comparingInt(c -> c.order));
     }
 
-    public final Collection<UIComponent> children(){
+    public final List<UIComponent> children(){
         return children;
     }
 
