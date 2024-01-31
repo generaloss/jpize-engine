@@ -4,7 +4,7 @@
 
   <groupId>net.generalpashon</groupId>
   <artifactId>jpize-engine</artifactId>
-  <version>23.12.1</version>
+  <version>24.1.1</version>
   <packaging>pom</packaging>
 
   <build>
