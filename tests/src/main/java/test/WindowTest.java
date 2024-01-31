@@ -50,7 +50,7 @@ public class WindowTest extends JpizeApplication{
             Jpize.execIf(window::show, () -> stopwatch.getSeconds() > 2);
         }
 
-        font.options.textAreaWidth = Jpize.getWidth();
+        font.options.wrapThreesholdWidth = Jpize.getWidth();
     }
 
     public void render(){

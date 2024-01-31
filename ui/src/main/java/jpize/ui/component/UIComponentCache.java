@@ -19,7 +19,7 @@ public class UIComponentCache{
     public float widthMin, heightMin, widthMax, heightMax;
     public boolean hasWidthMax, hasHeightMax;
 
-    public float contentWidth, contentHeight;
+    public float containerWidth, containerHeight; //: containerX, containerY - aliases to marginLeft, marginBottom  =  HARAM, DELETE IT
 
     public float marginTop, marginLeft, marginBottom, marginRight;
     public float paddingTop, paddingLeft, paddingBottom, paddingRight;
@@ -37,6 +37,7 @@ public class UIComponentCache{
         updateParent();
         calcMargin();
         calcSize();
+        recalcMargin();
         calcPadding();
         calcPosition();
         calcStyle();
@@ -73,15 +74,22 @@ public class UIComponentCache{
         else height = Math.max(height, heightMin);
 
         // content size
-        contentWidth = width - marginLeft - marginRight;
-        contentHeight = height - marginTop - marginBottom;
+        containerWidth  = width  - marginLeft   - marginRight;
+        containerHeight = height - marginBottom - marginTop  ;
     }
 
     private void calcMargin(){
-        marginTop = Math.max(0, constrToPx(component.margin.top, true, false));
-        marginLeft = Math.max(0, constrToPx(component.margin.left, false, false));
-        marginBottom = Math.max(0, constrToPx(component.margin.bottom, true, false));
-        marginRight = Math.max(0, constrToPx(component.margin.right, false, false));
+        marginTop    = Math.max(0, constrToPx(component.margin.top   , true , false));
+        marginLeft   = Math.max(0, constrToPx(component.margin.left  , false, false));
+        marginBottom = Math.max(0, constrToPx(component.margin.bottom, true , false));
+        marginRight  = Math.max(0, constrToPx(component.margin.right , false, false));
+    }
+
+    private void recalcMargin(){
+        /// marginTop    = Math.max(marginTop   , height - parentContainerHeight());
+        /// marginLeft   = Math.max(marginLeft  , parentContainerX());
+        /// marginBottom = Math.max(marginBottom, parentContainerY());
+        /// marginRight  = Math.max(marginRight , width - parentContainerWidth());
     }
 
     private void calcPadding(){
@@ -112,15 +120,15 @@ public class UIComponentCache{
             parentH = parent.cache.height;
         }
 
-        if(hasPaddingLeft && hasPaddingRight) paddingX = (paddingLeft + parentW - paddingRight - width) / 2;
-        else if(hasPaddingLeft) paddingX = paddingLeft + parentMarginLeft();
-        else if(hasPaddingRight) paddingX = parentW - paddingRight - parentMarginRight() - width;
-        else paddingX = 0;
+        if(hasPaddingLeft && hasPaddingRight) paddingX = (paddingLeft + parentW - paddingRight - width) * 0.5F;
+        else if(hasPaddingLeft)               paddingX = parentMarginLeft() + paddingLeft;
+        else if(hasPaddingRight)              paddingX = parentW - paddingRight - parentMarginRight() - width;
+        else                                  paddingX = parentMarginLeft();
 
-        if(hasPaddingTop && hasPaddingBottom) paddingY = (paddingBottom + parentH - paddingTop - height) / 2;
-        else if(hasPaddingTop) paddingY = parentH - paddingTop - parentMarginTop() - height;
-        else if(hasPaddingBottom) paddingY = paddingBottom + parentMarginBottom();
-        else paddingY = 0;
+        if(hasPaddingTop && hasPaddingBottom) paddingY = (paddingBottom + parentH - paddingTop - height) * 0.5F;
+        else if(hasPaddingTop)                paddingY = parentH - paddingTop - parentMarginTop() - height;
+        else if(hasPaddingBottom)             paddingY = parentMarginBottom() + paddingBottom;
+        else                                  paddingY = parentMarginBottom();
 
         x = parentX + paddingX;
         y = parentY + paddingY;
@@ -197,7 +205,7 @@ public class UIComponentCache{
 
     public float width(UIComponent component){
         if(component == null) return Jpize.getWidth();
-        return component.cache().width;
+        return component.cache().containerWidth;
     }
 
     public float parentWidth(){
@@ -206,7 +214,7 @@ public class UIComponentCache{
 
     public float height(UIComponent component){
         if(component == null) return Jpize.getHeight();
-        return component.cache().height;
+        return component.cache().containerHeight;
     }
 
     public float parentHeight(){
@@ -253,6 +261,17 @@ public class UIComponentCache{
     public float parentMarginRight(){
         if(parent == null) return 0;
         return parent.cache().marginRight;
+    }
+
+
+    public float parentContainerWidth(){
+        if(parent == null) return 0;
+        return parent.cache().containerWidth;
+    }
+
+    public float parentContainerHeight(){
+        if(parent == null) return 0;
+        return parent.cache().containerHeight;
     }
 
 

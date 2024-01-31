@@ -14,7 +14,7 @@ public class FontOptions{
 
     public float lineGaps;
     public float italicAngle;
-    public double textAreaWidth;
+    public double wrapThreesholdWidth;
     public boolean invLineWrap;
     public final Vec2f rotateOrigin;
     public final Vec2f advanceFactor;
@@ -25,7 +25,7 @@ public class FontOptions{
         this.scale = 1;
         this.color = new Color();
         this.italicAngle = 15;
-        this.textAreaWidth = -1;
+        this.wrapThreesholdWidth = -1;
         this.rotateOrigin = new Vec2f(0.5);
         this.advanceFactor = new Vec2f(1);
     }

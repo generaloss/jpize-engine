@@ -49,7 +49,7 @@ public class GlyphIterator implements Iterator<GlyphSprite>{
         final float cursorXAdvance = glyph.advanceX * advanceFactor.x;
 
         // Wrap line (area width)
-        final double maxWidth = options.textAreaWidth / scale;
+        final double maxWidth = options.wrapThreesholdWidth / scale;
         if(maxWidth >= 0 && cursorX + cursorXAdvance > maxWidth){
             cursorX = 0;
             cursorY += options.getLineWrapSign() * options.getAdvance() * advanceFactor.y;

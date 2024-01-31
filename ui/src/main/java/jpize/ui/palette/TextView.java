@@ -42,9 +42,9 @@ public class TextView extends UIComponent{
         font.setScale(_text_scale);
         font.options.invLineWrap = true;
         if(wrap && cache.hasParent)
-            font.options.textAreaWidth = Math.max(0, cache.parentWidth() - cache.parent.cache().marginRight);
+            font.options.wrapThreesholdWidth = Math.max(0, cache.parentContainerWidth());
         else
-            font.options.textAreaWidth = -1;
+            font.options.wrapThreesholdWidth = -1;
 
         // bounds
         _bounds = font.getMaxBounds(text);

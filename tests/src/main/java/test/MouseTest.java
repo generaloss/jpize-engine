@@ -26,7 +26,7 @@ public class MouseTest extends JpizeApplication{
 
         font = FontLoader.loadFnt("fonts/font.fnt");
         font.setScale(0.5F);
-        font.options.textAreaWidth = Jpize.getWidth();
+        font.options.wrapThreesholdWidth = Jpize.getWidth();
 
         SDL_DisplayMode mode = new SDL_DisplayMode();
         SDL_GetDisplayMode(Jpize.window().getDisplayIndex(), 0, mode);

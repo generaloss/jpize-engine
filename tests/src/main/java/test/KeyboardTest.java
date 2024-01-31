@@ -21,7 +21,7 @@ public class KeyboardTest extends JpizeApplication{
 
         font = FontLoader.loadFnt("fonts/font.fnt");
         font.setScale(0.5F);
-        font.options.textAreaWidth = Jpize.getWidth();
+        font.options.wrapThreesholdWidth = Jpize.getWidth();
         font.options.invLineWrap = true;
     }
 

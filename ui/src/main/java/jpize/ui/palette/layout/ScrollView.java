@@ -51,6 +51,7 @@ public class ScrollView extends AbstractLayout{
     @Override
     public void add(UIComponent child){
         child.setOrder(0);
+        child.padding().top = Constr.zero;
         super.add(child);
     }
 
@@ -60,7 +61,7 @@ public class ScrollView extends AbstractLayout{
         final UIComponentCache cache = component.cache();
         if(forY){
             if(component == getScrollComponent()){
-                scrollComponentHeight = cache.height + cache.paddingTop * 2 - super.cache.contentHeight;
+                scrollComponentHeight = cache.height + cache.paddingTop * 2 - super.cache.containerHeight;
                 return cache.y + Math.max(0, (1 - scrollFactor) * scrollComponentHeight);
             }
             return cache.y;
@@ -84,7 +85,7 @@ public class ScrollView extends AbstractLayout{
         maxFactor = getMaxScrollFactor();
 
         // size
-        handle.size().y         = Constr.relh(maxFactor);
+        handle.size().y = Constr.relh(maxFactor);
 
         // mouse wheel scroll
         final int scroll = Jpize.input().getScroll();

@@ -59,8 +59,9 @@ public class TextField extends UIComponent{
     public void update(){
         cache.calculate();
 
-        // scale
+        // scale, disable wrapping
         font.setScale(cache.height / (font.info.getHeight()));
+        font.options.wrapThreesholdWidth = -1;
 
         // set text
         if(processor.isEnabled()){

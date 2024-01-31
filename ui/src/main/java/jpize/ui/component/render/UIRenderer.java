@@ -60,10 +60,10 @@ public class UIRenderer implements Disposable, Resizable{
         final UIComponent parent = cache.parent;
         final int parentIndex = (parent == null) ? -1 : Math.abs(parent.hashCode());
 
-        float x = cache.x + cache.marginLeft  ;
-        float y = cache.y + cache.marginBottom;
-        float width  = cache.width  - (cache.marginRight + cache.marginLeft  );
-        float height = cache.height - (cache.marginTop   + cache.marginBottom);
+        float x = cache.x + cache.marginLeft;
+        float y = cache.y + cache.marginBottom ;
+        float width  = cache.containerWidth ;
+        float height = cache.containerHeight;
 
         batch.getScissor().begin(Math.abs(component.hashCode()), x, y, width, height, parentIndex);
     }

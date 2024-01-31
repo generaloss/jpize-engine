@@ -23,7 +23,7 @@ public class TextTest extends JpizeApplication{
 
         font = FontLoader.getDefault();
         font.setScale(1);
-        font.options.textAreaWidth = Jpize.getWidth();
+        font.options.wrapThreesholdWidth = Jpize.getWidth();
         font.options.invLineWrap = true;
 
         processor = new TextProcessor();
