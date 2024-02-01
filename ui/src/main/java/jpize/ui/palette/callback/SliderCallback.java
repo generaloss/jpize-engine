@@ -1,10 +1,10 @@
 package jpize.ui.palette.callback;
 
-import jpize.ui.component.UIComponent;
+import jpize.ui.palette.Slider;
 
 @FunctionalInterface
 public interface SliderCallback{
 
-    void invoke(UIComponent component, float value);
+    void invoke(Slider view, float value);
 
 }

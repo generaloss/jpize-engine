@@ -47,7 +47,7 @@
 ---
 
 ## Module *Util*:
-* *[Maths](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/math)* - Vectors, Matrices, Utils ...
+* *[Maths](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/math)* - Vectors, Matrices, Utils, Velocity, Intersector, Ray, Axis-Aligned Box & Rect, Colliders, etc...
 * *[Arrays](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/array)* - IntList, FloatList, [...], ArrayUtils, ArraysSupport (Java 17)
 * *[Files](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/file)* - Resource, [...], MapConfig
 * *[IO](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/io)* - FastReader, Jpize IO Streams ...
@@ -56,7 +56,7 @@
 * *[Streams](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/stream)* - FloatSupplier
 * *[Other](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util)* - Utils, StringUtils, SyncTaskExecutor
 
-### Usage example:
+### 1. Usage example:
 ``` java
 // Utils
 EulerAngles rotation = new EulerAngles(45, 0, 0);
@@ -80,6 +80,21 @@ Mesh mesh = new Mesh(new GlVertAttr(3, GlType.FLOAT), new GlVertAttr(4, GlType.F
 mesh.getBuffer().setData(new float[]{ ... });
 mesh.render();
 ```
+
+### 2. AABB Collider Example:
+``` java
+AABoxBody body_1 = new AABoxBody( new AABox(-1,-1,-1,  1, 1, 1) ); // 2x2x2 axis-aligned box
+AABoxBody body_2 = new AABoxBody( new AABox(-1,-1,-1,  1, 1, 1) ); // another axis-aligned box
+
+body_1.getPosition().set(-5F, 0, 0);
+
+Vec3f b1_velocity = new Vec3f(10F, 0, 0);
+velocity = AABoxCollider.getCollidedMovement(b1_velocity, body_1, body_2);
+
+body_1.getPosition().add( b1_velocity ); // box will be move only 3 units
+```
+
+---
 
 ### 1. Vectors:
 | **Type**     | **2D**  | **3D**  | **4D**  |
@@ -411,25 +426,6 @@ packetDispatcher.register(AnotherPacket.PACKET_ID, AnotherPacket.class);
 void received(byte[] bytes, TcpConnection sender){
     packetDispatcher.handlePacket(bytes, handler);
 }
-```
-
----
-
-## Module *Physic*:
-* *[Axis-Aligned](https://github.com/GeneralPashon/jpize-engine/tree/master/physic/src/main/java/jpize/physic/axisaligned)* - Box, Rect & Collider
-* *[Utils](https://github.com/GeneralPashon/jpize-engine/tree/master/physic/src/main/java/jpize/physic/utils)* - Velocity, Intersector, Ray
-
-#### 1. AABB Collider Example:
-``` java
-AABoxBody body_1 = new AABoxBody( new AABox(-1,-1,-1,  1, 1, 1) ); // 2x2x2 axis-aligned box
-AABoxBody body_2 = new AABoxBody( new AABox(-1,-1,-1,  1, 1, 1) ); // another axis-aligned box
-
-body_1.getPosition().set(-5F, 0, 0);
-
-Vec3f b1_velocity = new Vec3f(10F, 0, 0);
-velocity = AABoxCollider.getCollidedMovement(b1_velocity, body_1, body_2);
-
-body_1.getPosition().add( b1_velocity ); // box will be move only 3 units
 ```
 
 ---

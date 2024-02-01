@@ -1,5 +1,6 @@
 package test;
 
+import jpize.Jpize;
 import jpize.app.JpizeApplication;
 import jpize.gl.Gl;
 import jpize.graphics.font.Font;
@@ -7,8 +8,9 @@ import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
 import jpize.ui.context.PuiLoader;
 import jpize.ui.context.UIContext;
-import jpize.ui.palette.Button;
 import jpize.ui.palette.Rect;
+import jpize.ui.palette.TextField;
+import jpize.ui.palette.TextView;
 
 public class UiTest2 extends JpizeApplication{
 
@@ -17,6 +19,7 @@ public class UiTest2 extends JpizeApplication{
     private final UIContext ui;
 
     private final Rect serverIcon;
+    private final TextView fps;
 
     public UiTest2(){
         this.font = FontLoader.getDefault();
@@ -33,22 +36,13 @@ public class UiTest2 extends JpizeApplication{
         this.ui.enable();
 
         this.serverIcon = ui.findByID("server_icon");
+        this.fps = ui.findByID("fps");
 
-        final Button start_button = this.ui.findByID("start_button");
-        final Button stop_button = this.ui.findByID("stop_button");
-        final Button kill_button = this.ui.findByID("kill_button");
-
-        // // start
-        // start_button.input().addPressCallback((view, btn) -> view.style().background().color().setRgb(0.8));
-        // start_button.input().addReleaseCallback((view, btn) -> view.style().background().color().setRgb(1));
-
-        // // stop
-        // stop_button.input().addPressCallback((view, btn) -> view.style().background().color().setRgb(0.8));
-        // stop_button.input().addReleaseCallback((view, btn) -> view.style().background().color().setRgb(1));
-
-        // // kill
-        // kill_button.input().addPressCallback((view, btn) -> view.style().background().color().setRgb(0.8));
-        // kill_button.input().addReleaseCallback((view, btn) -> view.style().background().color().setRgb(1));
+        // Jpize.setVsync(false);
+        TextField text_field = ui.findByID("text_field");
+        text_field.addInputCallback((view, text) -> {
+            System.out.println(text);
+        });
     }
 
 
@@ -66,13 +60,9 @@ public class UiTest2 extends JpizeApplication{
 
     @Override
     public void render(){
-        //if(Jpize.isTouched())
-        //    ui.getRootComponent().size().set(Constr.px(Jpize.getX()), Constr.px(Jpize.getY()));
-
+        fps.setText("fps: " + Jpize.getFPS());
         Gl.clearColorBuffer();
         ui.render();
-
-        //System.out.println(ui.getHoveredComponent());
     }
 
     @Override

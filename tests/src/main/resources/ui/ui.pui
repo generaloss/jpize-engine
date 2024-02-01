@@ -6,11 +6,11 @@
 
         @TextView ("fps: ?", !font, 0.5rh) {
             ID: "fps"
-            padding: (0px, 0px, 0px, auto)
+            padding: (0px, 0.1rh, 0px, auto)
             hidden: False
             color: (0.8, 0.8, 0.9, 1)
         }
-        @TextView ("SERVER STARTER", !font) {
+        @TextView ("UI Test", !font, 0.9rh) {
             padding: (0px)
             color: (0.8, 0.8, 0.9, 1)
         }
@@ -35,18 +35,32 @@
             style.background.color: (0.45, 0.6)
             @ConstraintLayout (match_parent, 0.075rh) {
                 style.background.color: (0.4, 0.4, 0.5, 1)
-                @TextView ("Servers:", !font) {
+                @TextView ("Sliders", !font) {
                     padding: (0px)
                 }
             }
             @Rect (match_parent, 0.005rh) {
                 style.background.color: (0.28, 1)
             }
-            @ScrollView (match_parent, 0.92rh) {
+            #@ScrollView (match_parent, 0.92rh) {
                 @VBox (match_parent, match_parent) {
-                    ID: "server_list"
+                    ID: "list"
+                    margin: (zero, 0.01rh, zero, 0.01rh)
+
+                    @Slider (match_parent, 0.04rh) {
+                        padding.top: 0.01rh
+                        value: 0.15
+                    }
+                    @Slider (match_parent, 0.04rh) {
+                        padding.top: 0.01rh
+                        value: 0.9
+                    }
+                    @Slider (match_parent, 0.04rh) {
+                        padding.top: 0.01rh
+                        value: 0.45
+                    }
                 }
-            }
+            #}
         }
 
         @VBox (0.68rw, 0.98rh) {
@@ -56,13 +70,13 @@
                 style.corner_radius: 0.2rh
                 style.background.color: (0.9, 0.6)
 
-                @TextView ("Servers / ", !font) {
-                    ID: "server_path"
+                @TextView ("Path / ", !font) {
+                    ID: "path"
                     padding: (zero, 10px, zero, auto)
                     color: (0.1)
                 }
             }
-            # server panel
+            # panel
             @HBox (match_parent, 0.4rh) {
                 style.corner_radius: 0.05rh
                 padding.top: 0.01rh
@@ -70,7 +84,7 @@
 
                 @Rect (1.77ap, match_parent) {
                     padding.left: 0.1rh
-                    ID: "server_icon"
+                    ID: "icon"
                     style.background.color: (1)
 
                     @TextView ("Backend is OFF", !font) {
@@ -92,24 +106,25 @@
                 # buttons
                 @VBox (0.45rh, match_parent) {
                     padding.left: 0.05rh
-                    @Button (match_parent, 0.15rh, "Start", !font) {
-                        ID: "start_button"
+                    @Button (match_parent, 0.15rh, "Button 1", !font) {
+                        ID: "button 1"
                         padding.top: 0.05rh
                     }
-                    @Button (match_parent, 0.15rh, "Stop", !font) {
-                        ID: "stop_button"
+                    @Button (match_parent, 0.15rh, "Button 2", !font) {
+                        ID: "button 2"
                         padding.top: 0.05rh
                     }
-                    @Button (match_parent, 0.15rh, "Kill", !font) {
-                        ID: "kill_button"
+                    @Button (match_parent, 0.15rh, "Button 3", !font) {
+                        ID: "button 3"
                         padding.top: 0.05rh
                     }
                 }
             }
             # history
-            @ScrollView (match_parent, 0.45rh) { # 1 - (0.075 + 0.4 + 0.01)  =  1 - 0.485 (..) =  0.515 - (0.05 + 0.01)  = 0.504
+            @ScrollView (match_parent, 0.445rh) { # 1 - (0.075 + 0.4 + 0.01)  =  1 - 0.485 (..) =  0.515 - (0.05 + 0.01)  = 0.504
                 padding.top: 0.01rh
                 margin: (0.01rh, 0.01rh, 0.01rh, 0.01rh)
+                style.corner_radius: 0.05rh
                 style.background.color: (0.9, 0.6)
 
                 @TextView ("@NotNull\nprivate List<Block> buildBlocks() {\n    List<Block> list = this.getOriginal().getSubBlocks();\n\n    if (list.isEmpty()) {\n        return AbstractBlock.EMPTY;\n    } else {\n        ArrayList<Block> result = new ArrayList<>(list.size());\n        Iterator var3 = list.iterator();\n        while(var3.hasNext()) {\n            Block block = (Block)var3.next();\n            if (block.getTextRange().intersects(this.myRange)) {\n                result.add(new InjectedLanguageBlockWrapper(block, this.myOffset, this.myRange, null, this.getLanguage()));\n            }\n        }\n\n        return result;\n    }\n}", !font, 0.1rh) {
@@ -119,9 +134,11 @@
                 }
             }
 
-            @TextField (match_parent, 0.05rh, !font) {
+            @TextField (match_parent, 0.05rh, !font, "text input line") {
+                ID: "text_field"
                 padding.top: 0.01rh
-                ID: "command_line"
+                margin: (0.005rh, 0.005rh, 0.005rh, 0.005rh)
+                style.corner_radius: 0.3rh
             }
         }
     }

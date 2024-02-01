@@ -1,7 +1,8 @@
 package jpize.ui.palette;
 
 import jpize.Jpize;
-import jpize.graphics.font.Font;
+import jpize.ui.component.input.UIPressCallback;
+import jpize.ui.component.input.UIReleaseCallback;
 import jpize.util.math.Maths;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Constraint;
@@ -12,65 +13,71 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Slider extends Rect{
 
+    private final Rect lineBg;
+    private final Rect line;
     private final Rect handle;
-    private final TextView textview;
-    private boolean grabHandle;
+
     private float value;
-    private final List<SliderCallback> callbacks;
+    private boolean _grabHandle;
+    private final List<SliderCallback> _callbacks;
+    private final Constraint _lineWidth;
 
-    public Slider(Constraint width, Constraint height, String text, Font font, Constraint text_size){
+    public Slider(Constraint width, Constraint height){
         super(width, height);
-        super.input().addPressCallback(((comp, btn) -> grabHandle = true));
-        super.input().addReleaseCallback(((comp, btn) -> grabHandle = false));
-        this.callbacks = new CopyOnWriteArrayList<>();
+        super.style.background().color().setA(0);
+        this._callbacks = new CopyOnWriteArrayList<>();
 
-        this.handle = new Rect(Constr.relh(0.5), Constr.relh(1));
-        this.handle.setID("handle");
-        this.handle.padding().set(Constr.zero, Constr.zero, Constr.zero, Constr.auto);
-        this.handle.input().setClickable(true);
+        this.handle = new Rect(Constr.relh(1), Constr.aspect(1));
+        this.handle.setOrder(1);
         super.add(handle);
 
-        this.textview = new TextView(text, font, text_size);
-        this.textview.setID("text");
-        this.textview.padding().set(Constr.zero);
-        this.textview.color().set(0.1);
-        super.add(textview);
+        final Constraint lineBgHeight = Constr.px(() -> super.cache.height * 0.35F);
+        final Constraint lineBgWidth  = Constr.px(() -> super.cache.width - handle.cache().height + lineBgHeight.numValue());
+        final Constraint lineHeight   = Constr.px(() -> super.cache.height * 0.42F);
+        this._lineWidth = Constr.px(() -> super.cache.width - handle.cache().height + lineHeight.numValue());
+
+        this.lineBg = new Rect(lineBgWidth, lineBgHeight);
+        super.add(lineBg);
+        this.line = new Rect(_lineWidth, lineHeight);
+        super.add(line);
+
+        setupSubcomponent();
     }
 
-    public Slider(Constraint width, Constraint height, String text, Font font){
-        this(width, height, text, font, Constr.match_parent);
+    public Slider(Constraint size){
+        this(size, size);
     }
 
-    public Slider(Constraint size, String text, Font font, Constraint text_size){
-        this(size, size, text, font, text_size);
+
+    public Rect lineBg(){
+        return lineBg;
     }
 
-    public Slider(Constraint size, String text, Font font){
-        this(size, text, font, Constr.match_parent);
+    public Rect line(){
+        return line;
     }
-
 
     public Rect handle(){
         return handle;
     }
 
-    public TextView textview(){
-        return textview;
-    }
-
 
     @Override
     public void render(){
-        if(grabHandle){
+        if(_grabHandle){
             final float handleWidth = handle.cache().width;
             final float grabX = Jpize.getX() - cache.x - handleWidth / 2;
             final float sliderWidth = cache.width - handleWidth;
-            final float value = grabX / sliderWidth;
+            final float value = Maths.clamp01(grabX / sliderWidth);
             if(value != this.value){
                 setValue(value);
                 invokeCallbacks();
             }
         }
+
+        final float maxValue = (1 - handle.cache().width / super.cache.width);
+        handle.padding().setLeft(Constr.relw(maxValue * value));
+        line.size().setX(Constr.px(() -> line.cache().height + (_lineWidth.numValue() - line.cache().height) * value));
     }
 
 
@@ -79,29 +86,49 @@ public class Slider extends Rect{
     }
 
     public void setValue(float value){
-        if(value == this.value)
-            return;
-
-        value = Maths.clamp(value, 0, 1);
-        this.value = value;
-
-        final float handleWidth = handle.cache().width;
-        final float sliderWidth = cache.width - handleWidth;
-        handle.padding().setLeft(Constr.relw(value * (sliderWidth / cache.width)));
+        value = Maths.clamp01(value);
+        if(this.value != value)
+            this.value = value;
     }
 
 
     public void addSliderCallback(SliderCallback callback){
-        callbacks.add(callback);
+        _callbacks.add(callback);
     }
 
     public void removeCallback(SliderCallback callback){
-        callbacks.remove(callback);
+        _callbacks.remove(callback);
     }
 
     private void invokeCallbacks(){
-        for(SliderCallback callback: callbacks)
+        for(SliderCallback callback: _callbacks)
             callback.invoke(this, value);
+    }
+
+    private void setupSubcomponent(){
+        final UIPressCallback pressCallback = (comp, btn) -> _grabHandle = true;
+        final UIReleaseCallback releaseCallback = (comp, btn) -> _grabHandle = false;
+
+        this.lineBg.padding().set(Constr.zero, Constr.px(() -> (handle.cache().height - lineBg.cache().height) * 0.5F), Constr.zero, Constr.auto);
+        this.lineBg.style().background().color().set(1);
+        this.lineBg.style().setCornerRadius(Constr.relh(0.5));
+        this.lineBg.input().setClickable(true);
+        this.lineBg.input().addPressCallback(pressCallback);
+        this.lineBg.input().addReleaseCallback(releaseCallback);
+
+        this.line.padding().set(Constr.zero, Constr.px(() -> (handle.cache().height - line.cache().height) * 0.5F), Constr.zero, Constr.auto);
+        this.line.style().background().color().set(0.2, 0.2, 0.6);
+        this.line.style().setCornerRadius(Constr.relh(0.5));
+        this.line.input().setClickable(true);
+        this.line.input().addPressCallback(pressCallback);
+        this.line.input().addReleaseCallback(releaseCallback);
+
+        this.handle.padding().set(Constr.zero, Constr.zero, Constr.zero, Constr.auto);
+        this.handle.style().background().color().set(0.1, 0.1, 0.4);
+        this.handle.style().setCornerRadius(Constr.relh(0.5));
+        this.handle.input().setClickable(true);
+        this.handle.input().addPressCallback(pressCallback);
+        this.handle.input().addReleaseCallback(releaseCallback);
     }
 
 }

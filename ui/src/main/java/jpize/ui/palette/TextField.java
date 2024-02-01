@@ -12,7 +12,12 @@ import jpize.sdl.input.KeyAction;
 import jpize.ui.component.UIComponent;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Constraint;
+import jpize.ui.palette.callback.TextFieldEnterCallback;
+import jpize.ui.palette.callback.TextFieldInputCallback;
 import jpize.util.color.Color;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class TextField extends UIComponent{
 
@@ -20,34 +25,47 @@ public class TextField extends UIComponent{
     private Font font;
     private final Color color;
 
-    private final TextProcessor processor;
     private final Rect cursor;
-    private final KeyCallback keyCallback;
+
+    private final TextProcessor _processor;
+    private final KeyCallback _keyCallback;
+    private String _oldText;
+
+    private final List<TextFieldInputCallback> inputCallbacks;
+    private final List<TextFieldEnterCallback> enterCallbacks;
 
     public TextField(Constraint width, Constraint height, Font font, String text){
         super.size.set(width, height);
         super.style.background().color().set(0.85);
+        super.input.setClickable(true);
 
         this.font = font;
         this.color = new Color(0.1);
+        this.inputCallbacks = new CopyOnWriteArrayList<>();
+        this.enterCallbacks = new CopyOnWriteArrayList<>();
 
-        super.input.setClickable(true);
-
-        this.processor = new TextProcessor(false, false);
+        this._processor = new TextProcessor(false, false);
         setText(text);
 
         this.cursor = new Rect(Constr.relh(0.07), Constr.match_parent);
-        this.cursor.style().background().color().set(0.4, 0.1, 0.9);
+        this.cursor.style().background().color().set(0.38, 0, 0.9);
         this.cursor.setHidden(true);
         super.add(cursor);
 
-        this.keyCallback = (key, action, mods) -> {
-            if(action != KeyAction.DOWN || !mods.hasCtrl())
+        this._keyCallback = (key, action, mods) -> {
+            if(action != KeyAction.DOWN)
+                return;
+            if(key == Key.ENTER)
+                invokeEnterCallbacks();
+
+            if(!mods.hasCtrl())
                 return;
             if(key == Key.C)
-                Jpize.setClipboardText(processor.getString());
-            else if(key == Key.V)
-                processor.insertText(Jpize.getClipboardText().replace("\n", ""));
+                Jpize.setClipboardText(_processor.getString());
+            else if(key == Key.V){
+                _processor.insertText(Jpize.getClipboardText().replace("\n", ""));
+                invokeInputCallbacks();
+            }
         };
     }
 
@@ -60,13 +78,18 @@ public class TextField extends UIComponent{
         cache.calculate();
 
         // scale, disable wrapping
-        font.setScale(cache.height / (font.info.getHeight()));
+        font.setScale(cache.containerHeight / (font.info.getHeight()));
         font.options.wrapThreesholdWidth = -1;
 
         // set text
-        if(processor.isEnabled()){
-            text = processor.getString();
-            cursor.setHidden(processor.getCursorBlinkingSeconds() % 1 > 0.5);
+        if(_processor.isEnabled()){
+            cursor.setHidden(_processor.getCursorBlinkingSeconds() % 1 > 0.5);
+            text = _processor.getString();
+
+            if(!text.equals(_oldText)){
+                invokeInputCallbacks();
+                _oldText = text;
+            }
         }
 
         // cursor x
@@ -79,33 +102,32 @@ public class TextField extends UIComponent{
                     break;
                 cursorX++;
             }
-            processor.setCursorX(cursorX);
+            _processor.setCursorX(cursorX);
         }
 
-        cursor.padding().left = Constr.px(font.getTextWidth(text.substring(0, processor.getCursorX())));
+        cursor.padding().left = Constr.px(font.getTextWidth(text.substring(0, _processor.getCursorX())));
     }
 
     @Override
     public void render(){
         final TextureBatch batch = super.context.renderer().batch();
-
         font.options.color.set(color);
-        font.drawText(batch, text, cache.x, cache.y + font.options.getAdvanceScaled());
+        font.drawText(batch, text, cache.x + cache.marginLeft, cache.y + cache.marginBottom + font.options.getAdvanceScaled());
     }
 
     @Override
     public void onFocus(){
-        processor.enable();
-        processor.resetCursorBlinking();
+        _processor.enable();
+        _processor.resetCursorBlinking();
         cursor.setHidden(false);
-        Jpize.context().callbacks().addKeyCallback(keyCallback);
+        Jpize.context().callbacks().addKeyCallback(_keyCallback);
     }
 
     @Override
     public void onUnfocus(){
-        processor.disable();
+        _processor.disable();
         cursor.setHidden(true);
-        Jpize.context().callbacks().removeKeyCallback(keyCallback);
+        Jpize.context().callbacks().removeKeyCallback(_keyCallback);
     }
 
 
@@ -123,13 +145,43 @@ public class TextField extends UIComponent{
     }
 
     public void setText(String text){
-        this.text = text;
-        processor.clear();
-        processor.insertText(text.replace("\n", ""));
+        this.text = text.replace("\n", "");
+        _oldText = this.text;
+        _processor.clear();
+        _processor.insertText(this.text);
+        invokeInputCallbacks();
     }
 
     public Color color(){
         return color;
+    }
+
+
+    public void addInputCallback(TextFieldInputCallback callback){
+        inputCallbacks.add(callback);
+    }
+
+    public void removeInputCallback(TextFieldInputCallback callback){
+        inputCallbacks.remove(callback);
+    }
+
+    private void invokeInputCallbacks(){
+        for(TextFieldInputCallback callback: inputCallbacks)
+            callback.invoke(this, text);
+    }
+
+
+    public void addEnterCallback(TextFieldEnterCallback callback){
+        enterCallbacks.add(callback);
+    }
+
+    public void removeEnterCallback(TextFieldEnterCallback callback){
+        enterCallbacks.remove(callback);
+    }
+
+    private void invokeEnterCallbacks(){
+        for(TextFieldEnterCallback callback: enterCallbacks)
+            callback.invoke(this, text);
     }
 
 }

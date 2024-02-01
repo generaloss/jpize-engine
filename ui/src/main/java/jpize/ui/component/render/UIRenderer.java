@@ -15,19 +15,16 @@ public class UIRenderer implements Disposable, Resizable{
     private final Shader shader;
     private final TextureBatch batch;
     private final OrthographicCamera camera;
-    private final UIComponentBuffer stencil;
 
     public UIRenderer(){
-        this.shader = new Shader(Resource.internal("ui.vert"), Resource.internal("ui.frag"));
-        setCornerSoftness(0.5F);
-        setBorderSoftness(0.5F);
-
         this.batch = new TextureBatch();
-        this.batch.useShader(shader);
-
+        this.shader = new Shader(Resource.internal("ui.vert"), Resource.internal("ui.frag"));
+        this.batch.useShader(null);
+        
         this.camera = new OrthographicCamera();
 
-        this.stencil = new UIComponentBuffer();
+        setCornerSoftness(0.5F);
+        setBorderSoftness(0.5F);
     }
 
     public void setCornerSoftness(float softness){
@@ -60,10 +57,10 @@ public class UIRenderer implements Disposable, Resizable{
         final UIComponent parent = cache.parent;
         final int parentIndex = (parent == null) ? -1 : Math.abs(parent.hashCode());
 
-        float x = cache.x + cache.marginLeft;
-        float y = cache.y + cache.marginBottom ;
-        float width  = cache.containerWidth ;
-        float height = cache.containerHeight;
+        final float x = cache.x + cache.marginLeft;
+        final float y = cache.y + cache.marginBottom ;
+        final float width  = cache.containerWidth ;
+        final float height = cache.containerHeight;
 
         batch.getScissor().begin(Math.abs(component.hashCode()), x, y, width, height, parentIndex);
     }
@@ -76,12 +73,7 @@ public class UIRenderer implements Disposable, Resizable{
         return batch;
     }
 
-    public UIComponentBuffer stencil(){
-        return stencil;
-    }
-
     public void begin(){
-        stencil.clear();
         camera.update();
         batch.begin(camera);
     }
@@ -98,7 +90,6 @@ public class UIRenderer implements Disposable, Resizable{
 
     @Override
     public void resize(int width, int height){
-        stencil.resize(width, height);
         camera.resize(width, height);
     }
 

@@ -6,7 +6,6 @@ tilemap/
 target/
 core/target/
 net/target/
-physic/target/
 ui/target/
 tilemap/target/
 tests/target/

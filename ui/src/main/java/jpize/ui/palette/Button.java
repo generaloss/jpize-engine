@@ -10,7 +10,7 @@ public class Button extends Rect{
 
     public Button(Constraint width, Constraint height, String text, Font font, Constraint text_size){
         super(width, height);
-        super.style.background().color().set(0.4, 0.1, 0.9);
+        super.style.background().color().set(0.38, 0, 0.9);
         super.style.setCornerRadius(Constr.relh(0.15));
         super.input.setClickable(true);
 

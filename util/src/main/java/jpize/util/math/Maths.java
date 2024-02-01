@@ -65,6 +65,15 @@ public class Maths{
     }
 
 
+    public static float clamp01(float a){
+        return clamp(a, 0F, 1F);
+    }
+
+    public static double clamp01(double a){
+        return clamp(a, 0D, 1D);
+    }
+
+
     public static float random(float min, float max){
         return lerp(min, max, Mathc.random());
     }

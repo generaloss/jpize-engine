@@ -23,16 +23,20 @@ public class Gl{
         glClearColor(r, g, b, a);
     }
     
-    public static void clearColor(float r, float g, float b){
-        clearColor(r, g, b, 1F);
-    }
-
     public static void clearColor(double r, double g, double b, double a){
         glClearColor((float) r, (float) g, (float) b, (float) a);
     }
     
     public static void clearColor(double r, double g, double b){
         clearColor(r, g, b, 1D);
+    }
+
+    public static void clearColor(double grayscale, double alpha){
+        clearColor(grayscale, grayscale, grayscale, alpha);
+    }
+
+    public static void clearColor(double grayscale){
+        clearColor(grayscale, 1D);
     }
     
     public static void clearColor(IColor color){

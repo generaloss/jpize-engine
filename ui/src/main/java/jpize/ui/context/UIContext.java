@@ -9,7 +9,7 @@ import jpize.sdl.input.Btn;
 import jpize.ui.component.UIComponent;
 import jpize.ui.component.UIComponentCache;
 import jpize.ui.component.render.UIRenderer;
-
+import jpize.util.math.util.Intersector;
 
 
 public class UIContext implements Disposable{
@@ -86,8 +86,24 @@ public class UIContext implements Disposable{
     }
 
 
+    private UIComponent getHovered(UIComponent component, int x, int y){
+        final UIComponentCache cache = component.cache();
+        if(!Intersector.isPointOnRect(x, y, cache.x, cache.y, cache.width, cache.height))
+            return null;
+
+        for(UIComponent child: component.children()){
+            final UIComponent hovered = getHovered(child, x, y);
+            if(hovered != null)
+                return hovered;
+        }
+
+        if(component.input().isClickable())
+            return component;
+        return null;
+    }
+
     public UIComponent getHovered(){
-        return renderer.stencil().get(Jpize.getX(), Jpize.getY());
+        return getHovered(root, Jpize.getX(), Jpize.getY());
     }
 
     public boolean isHovered(UIComponent component){
@@ -147,11 +163,6 @@ public class UIContext implements Disposable{
             return;
 
         component.update();
-
-        if(component.input().isClickable()){
-            final UIComponentCache cache = component.cache();
-            renderer.stencil().fill(cache.x, cache.y, cache.width, cache.height, component);
-        }
 
         component.renderBackground();
         component.render();
