@@ -24,7 +24,7 @@ public class Main{
 
         //System.exit(0);
 
-        ContextBuilder.newContext("Dev-Test", 900, 900).icon("textures/texture8.png")
+        ContextBuilder.newContext("Dev-Test", 1280, 900).icon("textures/texture8.png")
         //.register().setAdapter(new KeyboardTest());
         //.register().setAdapter(new MouseTest());
         //.register().setAdapter(new WindowTest());

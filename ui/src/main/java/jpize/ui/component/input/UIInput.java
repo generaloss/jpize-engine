@@ -1,6 +1,5 @@
 package jpize.ui.component.input;
 
-import jpize.Jpize;
 import jpize.sdl.input.Btn;
 import jpize.ui.component.UIComponent;
 
@@ -18,28 +17,6 @@ public class UIInput{
         this.component = component;
         this.pressCallbacks = new CopyOnWriteArrayList<>();
         this.releaseCallbacks = new CopyOnWriteArrayList<>();
-    }
-
-    public boolean isCursorBounds(){
-        return Jpize.input().isInBounds(component.cache().x, component.cache().y, component.cache().width, component.cache().height);
-    }
-
-    public boolean isTouchDown(){
-        if(isCursorBounds() && Jpize.isTouchDown()){
-            component.cache().press();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isTouched(){
-        return isCursorBounds() && Jpize.isTouched();
-    }
-
-    public boolean isTouchReleased(){
-        if(Jpize.isTouchReleased())
-            return component.cache().release();
-        return false;
     }
 
 
@@ -85,6 +62,10 @@ public class UIInput{
 
     public boolean isFocused(){
         return component.context().isFocused(component);
+    }
+
+    public boolean isPressed(){
+        return component.context().isPressed(component);
     }
 
 }

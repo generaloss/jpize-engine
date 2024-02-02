@@ -17,6 +17,7 @@ public class UIContext implements Disposable{
     private final UIRenderer renderer;
     private UIComponent root;
     private UIComponent focused;
+    private UIComponent pressed;
     private final MouseButtonCallback mouseButtonCallback;
     private final WinSizeChangedCallback winResizeCallback;
     private volatile boolean enableTouchingDelayed;
@@ -29,7 +30,10 @@ public class UIContext implements Disposable{
                 return;
 
             if(action == MouseButtonAction.UP){
-                release(root, button, action);
+                if(pressed != null){
+                    pressed.input().invokeReleaseCallbacks(button);
+                    pressed = null;
+                }
                 return;
             }
 
@@ -46,8 +50,11 @@ public class UIContext implements Disposable{
             if(focused != oldFocused)
                 focused.onFocus();
 
-            hovered.cache().press();
-            hovered.input().invokePressCallbacks(button);
+            if(pressed != null)
+                return;
+
+            pressed = hovered;
+            pressed.input().invokePressCallbacks(button);
         });
 
         this.winResizeCallback = (window, width, height) -> renderer.resize(width, height);
@@ -120,12 +127,12 @@ public class UIContext implements Disposable{
     }
 
 
-    private void release(UIComponent component, Btn button, MouseButtonAction action){
-        if(component.input().isClickable() && component.cache().release())
-            component.input().invokeReleaseCallbacks(button);
+    public UIComponent getPressed(){
+        return pressed;
+    }
 
-        for(UIComponent child: component.children())
-            release(child, button, action);
+    public boolean isPressed(UIComponent component){
+        return component == getPressed();
     }
 
 

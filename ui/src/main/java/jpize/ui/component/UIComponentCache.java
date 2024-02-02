@@ -27,7 +27,6 @@ public class UIComponentCache{
     public float paddingX, paddingY;
 
     public float cornerRadius, borderSize;
-    public boolean pressed;
 
     public UIComponentCache(UIComponent component){
         this.component = component;
@@ -272,17 +271,6 @@ public class UIComponentCache{
     public float parentContainerHeight(){
         if(parent == null) return 0;
         return parent.cache().containerHeight;
-    }
-
-
-    public void press(){
-        pressed = true;
-    }
-
-    public boolean release(){
-        boolean pressed_last = pressed;
-        pressed = false;
-        return pressed_last;
     }
 
 }
