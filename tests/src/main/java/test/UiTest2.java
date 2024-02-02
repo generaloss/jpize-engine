@@ -6,12 +6,10 @@ import jpize.gl.Gl;
 import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
+import jpize.sdl.Sdl;
 import jpize.ui.context.PuiLoader;
 import jpize.ui.context.UIContext;
-import jpize.ui.palette.Rect;
-import jpize.ui.palette.Slider;
-import jpize.ui.palette.TextField;
-import jpize.ui.palette.TextView;
+import jpize.ui.palette.*;
 
 public class UiTest2 extends JpizeApplication{
 
@@ -40,6 +38,9 @@ public class UiTest2 extends JpizeApplication{
         this.fps = ui.findByID("fps");
 
         // Jpize.setVsync(false);
+
+        Button button1 = ui.findByID("button 1");
+        button1.input().addPressCallback((view, btn) -> Sdl.enableVsync(!Sdl.isVsyncEnabled()));
 
 
         Slider s1 = ui.findByID("slider 1");

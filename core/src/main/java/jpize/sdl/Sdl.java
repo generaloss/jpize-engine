@@ -63,7 +63,7 @@ public class Sdl{
 
 
     public static boolean isVsyncEnabled(){
-        return getSwapInterval() == -1;
+        return Math.abs(getSwapInterval()) == 1;
     }
 
     public static void enableVsync(boolean vsync){
