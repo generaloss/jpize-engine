@@ -129,7 +129,7 @@ public class ScrollView extends AbstractLayout{
 
     private void setupHandle(){
         handle.setOrder(1);
-        handle.style().background().color().set(0.38, 0, 0.9);
+        handle.style().background().color().set(0.35, 0.1, 0.9);
         handle.style().setCornerRadius(Constr.relw(0.5));
         handle.padding().right = Constr.zero;
         handle.input().setClickable(true);

@@ -117,14 +117,14 @@ public class Slider extends Rect{
         this.lineBg.input().addReleaseCallback(releaseCallback);
 
         this.line.padding().set(Constr.zero, Constr.px(() -> (handle.cache().height - line.cache().height) * 0.5F), Constr.zero, Constr.auto);
-        this.line.style().background().color().set(0.2, 0.2, 0.6);
+        this.line.style().background().color().set(0.25, 0.0, 0.7);
         this.line.style().setCornerRadius(Constr.relh(0.5));
         this.line.input().setClickable(true);
         this.line.input().addPressCallback(pressCallback);
         this.line.input().addReleaseCallback(releaseCallback);
 
         this.handle.padding().set(Constr.zero, Constr.zero, Constr.zero, Constr.auto);
-        this.handle.style().background().color().set(0.1, 0.1, 0.4);
+        this.handle.style().background().color().set(0.35, 0.1, 0.9);
         this.handle.style().setCornerRadius(Constr.relh(0.5));
         this.handle.input().setClickable(true);
         this.handle.input().addPressCallback(pressCallback);

@@ -94,7 +94,7 @@ public class TextField extends UIComponent{
 
         // cursor x
         if(input.isFocused() && Btn.LEFT.isPressed()){
-            final float touchX = Jpize.getX() - super.cache.x;
+            final float touchX = Jpize.getX() - super.cache.x - super.cache.marginLeft;
 
             int cursorX = 0;
             for(GlyphSprite glyph: font.iterable(text)){

@@ -50,14 +50,17 @@
                     @Slider (match_parent, 0.04rh) {
                         padding.top: 0.01rh
                         value: 0.15
+                        ID: "slider 1"
                     }
                     @Slider (match_parent, 0.04rh) {
                         padding.top: 0.01rh
                         value: 0.9
+                        ID: "slider 2"
                     }
                     @Slider (match_parent, 0.04rh) {
                         padding.top: 0.01rh
                         value: 0.45
+                        ID: "slider 3"
                     }
                 }
             #}
