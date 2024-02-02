@@ -41,7 +41,6 @@
 * *Util*
 * *Core*
 * *Net*
-* *Physic*
 * *UI*
 
 ---
