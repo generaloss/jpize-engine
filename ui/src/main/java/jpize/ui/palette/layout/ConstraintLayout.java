@@ -22,16 +22,18 @@ public class ConstraintLayout extends AbstractLayout{
 
 
     @Override
-    public float calcPosition(UIComponent component, boolean forY){
+    public float getPositionForComponent(UIComponent component, boolean forY){
         final UIComponentCache cache = component.cache();
-        if(forY)
-            return cache.y;
-        return cache.x;
+        return forY ? cache.y : cache.x;
     }
 
     @Override
-    public float calcWrapContent(UIComponent component, boolean forY, boolean forSize){
-        return 0;
+    public float getSizeForWrapContent(UIComponent component, boolean forY){
+        return forY ? super.cache.height : super.cache.width;
+    }
+
+    public float getRemainingAreaForComponent(UIComponent component, boolean forY){
+        return forY ? super.cache.containerHeight : super.cache.containerWidth;
     }
 
     @Override

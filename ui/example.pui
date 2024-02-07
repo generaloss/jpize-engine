@@ -11,6 +11,7 @@
             border_size: 3px
             border_color: (1.0, 1.0, 1.0, 0.9)
             corner_radius: 35px
+            hidden: false
         }
     }
 }

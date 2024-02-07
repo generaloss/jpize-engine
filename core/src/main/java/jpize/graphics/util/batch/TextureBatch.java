@@ -56,9 +56,9 @@ public class TextureBatch implements Disposable{
 
         // Mesh
         this.mesh = new Mesh(
-                new GlVertAttr(2, GlType.FLOAT),
-                new GlVertAttr(2, GlType.FLOAT),
-                new GlVertAttr(4, GlType.FLOAT)
+            new GlVertAttr(2, GlType.FLOAT),
+            new GlVertAttr(2, GlType.FLOAT),
+            new GlVertAttr(4, GlType.FLOAT)
         );
         this.mesh.setMode(GlPrimitive.QUADS);
 
@@ -164,7 +164,6 @@ public class TextureBatch implements Disposable{
     public void draw(Texture texture, float x, float y, float width, float height){
         if(!scissor.intersects(x, y, width, height))
             return;
-
         if(size == maxSize)
             flush();
 
@@ -177,11 +176,10 @@ public class TextureBatch implements Disposable{
 
         size++;
     }
-    
+
     public void draw(TextureRegion textureRegion, float x, float y, float width, float height){
         if(!scissor.intersects(x, y, width, height))
             return;
-
         if(size == maxSize)
             flush();
 
@@ -192,8 +190,8 @@ public class TextureBatch implements Disposable{
         }
 
         addTexturedQuad(x, y, width, height,
-                textureRegion.u1(), textureRegion.v1(), textureRegion.u2(), textureRegion.v2(),
-                color.r(), color.g(), color.b(), color.a());
+            textureRegion.u1(), textureRegion.v1(), textureRegion.u2(), textureRegion.v2(),
+            color.r(), color.g(), color.b(), color.a());
 
         size++;
     }
@@ -201,7 +199,6 @@ public class TextureBatch implements Disposable{
     public void draw(Texture texture, float x, float y, float width, float height, Region region){
         if(!scissor.intersects(x, y, width, height))
             return;
-
         if(size == maxSize)
             flush();
 
@@ -211,8 +208,8 @@ public class TextureBatch implements Disposable{
         }
 
         addTexturedQuad(x, y, width, height,
-                region.u1(), region.v1(), region.u2(), region.v2(),
-                color.r(), color.g(), color.b(), color.a());
+            region.u1(), region.v1(), region.u2(), region.v2(),
+            color.r(), color.g(), color.b(), color.a());
 
         size++;
     }
@@ -220,7 +217,6 @@ public class TextureBatch implements Disposable{
     public void draw(TextureRegion texReg, float x, float y, float width, float height, Region region){
         if(!scissor.intersects(x, y, width, height))
             return;
-
         if(size == maxSize)
             flush();
 
@@ -242,7 +238,6 @@ public class TextureBatch implements Disposable{
     public void draw(Texture texture, float x, float y, float width, float height, float r, float g, float b, float a){
         if(!scissor.intersects(x, y, width, height))
             return;
-
         if(size == maxSize)
             flush();
 
@@ -259,7 +254,6 @@ public class TextureBatch implements Disposable{
     public void draw(Texture texture, float x, float y, float width, float height, Region region, float r, float g, float b, float a){
         if(!scissor.intersects(x, y, width, height))
             return;
-
         if(size == maxSize)
             flush();
 
@@ -278,7 +272,6 @@ public class TextureBatch implements Disposable{
     public void draw(TextureRegion texReg, float x, float y, float width, float height, Region region, float r, float g, float b, float a){
         if(!scissor.intersects(x, y, width, height))
             return;
-
         if(size == maxSize)
             flush();
 
@@ -321,7 +314,7 @@ public class TextureBatch implements Disposable{
 
 
     public void resetColor(){
-        color.set(1);
+        color.set(1, 1, 1, 1F);
     }
 
     public void setColor(IColor color){
@@ -333,7 +326,7 @@ public class TextureBatch implements Disposable{
     }
 
     public void setColor(double r, double g, double b){
-        color.set(r, g, b);
+        color.set(r, g, b, 1F);
     }
 
     public Color getColor(){

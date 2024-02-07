@@ -1,7 +1,10 @@
 package jpize.net.tcp;
 
+import jpize.net.tcp.packet.IPacket;
 import jpize.util.Utils;
+import jpize.util.io.JpizeOutputStream;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -73,11 +76,34 @@ public class TcpServer extends TcpDisconnector implements Closeable{
     }
     
     
-    public void broadcast(byte[] packet){
+    public void broadcast(byte[] bytes){
         for(TcpConnection channel: connectionList)
-            channel.send(packet);
+            channel.send(bytes);
     }
-    
+
+    public void broadcast(ByteArrayOutputStream stream){
+        broadcast(stream.toByteArray());
+    }
+
+    public synchronized void broadcast(PacketWriter data){
+        final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        final JpizeOutputStream dataStream = new JpizeOutputStream(byteStream);
+
+        data.write(dataStream);
+        broadcast(byteStream);
+    }
+
+    public void broadcast(IPacket<?> packet){
+        broadcast(dataStream -> {
+            try{
+                dataStream.writeShort(packet.getPacketID());
+                packet.write(dataStream);
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        });
+    }
+
     @Override
     synchronized public void disconnected(TcpConnection connection){
         listener.disconnected(connection);

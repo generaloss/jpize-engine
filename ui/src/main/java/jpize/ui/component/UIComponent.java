@@ -96,6 +96,14 @@ public abstract class UIComponent{
     }
 
     @SuppressWarnings("unchecked")
+    public final <C extends UIComponent> C getByOrder(int order){
+        for(UIComponent child: children)
+            if(order == child.order)
+                return (C) child;
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
     public final <C extends UIComponent> C getByID(String ID){
         if(ID.contains(".")){
             final String[] links = ID.split("\\.");

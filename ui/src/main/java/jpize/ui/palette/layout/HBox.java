@@ -8,6 +8,8 @@ import jpize.ui.constraint.Constraint;
 
 public class HBox extends AbstractLayout{
 
+    private float offsetX;
+
     public HBox(Constraint size){
         super.size.set(size);
     }
@@ -20,11 +22,14 @@ public class HBox extends AbstractLayout{
         this(Constr.win_width, Constr.win_height);
     }
 
-
-    private float offsetX;
+    @Override
+    public void update(){
+        cache.calculate();
+        offsetX = cache.x + cache.marginLeft;
+    }
 
     @Override
-    public float calcPosition(UIComponent component, boolean forY){
+    public float getPositionForComponent(UIComponent component, boolean forY){
         final UIComponentCache cache = component.cache();
         if(forY)
             return cache.y;
@@ -38,18 +43,38 @@ public class HBox extends AbstractLayout{
     }
 
     @Override
-    public float calcWrapContent(UIComponent component, boolean forY, boolean forSize){
-        return 0;
+    public float getSizeForWrapContent(UIComponent component, boolean forY){
+        if(forY)
+            return super.cache.containerHeight;
+
+        float remaining = cache.containerWidth - component.cache().paddingLeft;
+        int wrapCompNum = 0;
+
+        for(UIComponent child: children){
+            if(child.size().x.isFlagWrapContent())
+                wrapCompNum++;
+            else
+                remaining -= child.cache().width + child.cache().paddingLeft;
+        }
+
+        if(remaining <= 0)
+            return 0;
+        return remaining / wrapCompNum;
     }
 
     @Override
-    public void update(){
-        cache.calculate();
-    }
+    public float getRemainingAreaForComponent(UIComponent component, boolean forY){
+        if(forY)
+            return super.cache.containerHeight;
 
-    @Override
-    public void render(){
-        offsetX = cache.x + cache.marginLeft;
+        float remaining = cache.containerHeight;
+        for(UIComponent child: children){
+            if(child == component)
+                break;
+            remaining -= child.cache().width + child.cache().paddingLeft;
+        }
+
+        return remaining;
     }
 
 }

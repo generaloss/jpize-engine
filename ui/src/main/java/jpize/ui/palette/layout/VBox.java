@@ -8,6 +8,8 @@ import jpize.ui.constraint.Constraint;
 
 public class VBox extends AbstractLayout{
 
+    private float offsetY;
+
     public VBox(Constraint size){
         super.size.set(size);
     }
@@ -20,37 +22,61 @@ public class VBox extends AbstractLayout{
         this(Constr.win_width, Constr.win_height);
     }
 
-
-    private float offsetY;
+    @Override
+    public void update(){
+        cache.calculate();
+        offsetY = cache.y + cache.marginBottom + cache.containerHeight;
+    }
 
     @Override
-    public float calcPosition(UIComponent component, boolean forY){
+    public float getPositionForComponent(UIComponent component, boolean forY){
         final UIComponentCache cache = component.cache();
         if(!forY)
             return cache.x;
 
-        if(component.cache().hasPaddingBottom)
+        final boolean hasPaddingTopBottom = component.cache().hasPaddingTopBottom;
+        if(component.cache().hasPaddingBottom && !hasPaddingTopBottom)
             return cache.y;
 
         offsetY -= cache.height;
         final float y = offsetY - cache.paddingTop;
-        offsetY -= cache.paddingTop + cache.paddingBottom;
+        offsetY -= cache.paddingTop;
         return y;
     }
 
     @Override
-    public float calcWrapContent(UIComponent component, boolean forY, boolean forSize){
-        return 0;
+    public float getSizeForWrapContent(UIComponent component, boolean forY){
+        if(!forY)
+            return super.cache.containerWidth;
+
+        float remaining = cache.containerHeight - component.cache().paddingTop;
+        int wrapCompNum = 0;
+
+        for(UIComponent child: children){
+            if(child.size().y.isFlagWrapContent())
+                wrapCompNum++;
+            else
+                remaining -= child.cache().height + child.cache().paddingTop;
+        }
+
+        if(remaining <= 0)
+            return 0;
+        return remaining / wrapCompNum;
     }
 
     @Override
-    public void update(){
-        cache.calculate();
-    }
+    public float getRemainingAreaForComponent(UIComponent component, boolean forY){
+        if(!forY)
+            return super.cache.containerWidth;
 
-    @Override
-    public void render(){
-        offsetY = cache.y + cache.height - cache.marginTop;
+        float remaining = cache.containerHeight;
+        for(UIComponent child: children){
+            if(child == component)
+                break;
+            remaining -= child.cache().height + child.cache().paddingTop;
+        }
+
+        return remaining;
     }
 
 }

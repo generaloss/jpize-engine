@@ -78,11 +78,10 @@ public class TcpConnection{
     }
 
     public void send(IPacket<?> packet){
-        send(dataStream->{
+        send(dataStream -> {
             try{
                 dataStream.writeShort(packet.getPacketID());
                 packet.write(dataStream);
-                // System.out.println("Write packet " + packetID + " (size: " + dataStream.size() + ")");
             }catch(IOException e){
                 e.printStackTrace();
             }

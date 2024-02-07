@@ -169,6 +169,12 @@ public class UIContext implements Disposable{
         if(component == null || component.isHidden())
             return;
 
+        if(component.context() == null){
+            System.out.println("NULL UI CONTEXT (COMPONENT " + component + " : " + component.getID() + ")");
+            return;
+        }
+
+        component.cache().updateParent();
         component.update();
 
         component.renderBackground();

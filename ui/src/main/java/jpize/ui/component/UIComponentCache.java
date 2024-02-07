@@ -23,7 +23,7 @@ public class UIComponentCache{
 
     public float marginTop, marginLeft, marginBottom, marginRight;
     public float paddingTop, paddingLeft, paddingBottom, paddingRight;
-    public boolean hasPaddingTop, hasPaddingLeft, hasPaddingBottom, hasPaddingRight;
+    public boolean hasPaddingTop, hasPaddingLeft, hasPaddingBottom, hasPaddingRight, hasPaddingTopBottom, hasPaddingLeftRight;
     public float paddingX, paddingY;
 
     public float cornerRadius, borderSize;
@@ -33,7 +33,6 @@ public class UIComponentCache{
     }
 
     public void calculate(){
-        updateParent();
         calcMargin();
         calcSize();
         recalcMargin();
@@ -42,7 +41,7 @@ public class UIComponentCache{
         calcStyle();
     }
 
-    private void updateParent(){
+    public void updateParent(){
         parent = component.parent;
         hasParent = parent != null;
     }
@@ -104,6 +103,9 @@ public class UIComponentCache{
         // right
         paddingRight = Math.max(0, constrToPx(component.padding.right, false, false));
         hasPaddingRight = !autoConstrFlag;
+        // mixed
+        hasPaddingTopBottom = hasPaddingTop && hasPaddingBottom;
+        hasPaddingLeftRight = hasPaddingLeft && hasPaddingRight;
     }
 
     private void calcPosition(){
@@ -119,22 +121,32 @@ public class UIComponentCache{
             parentH = parent.cache.height;
         }
 
-        if(hasPaddingLeft && hasPaddingRight) paddingX = (paddingLeft + parentW - paddingRight - width) * 0.5F;
-        else if(hasPaddingLeft)               paddingX = parentMarginLeft() + paddingLeft;
-        else if(hasPaddingRight)              paddingX = parentW - paddingRight - parentMarginRight() - width;
-        else                                  paddingX = parentMarginLeft();
+        if(hasPaddingLeft && hasPaddingRight){
+            final float remainingAreaW = (parent instanceof AbstractLayout layout) ? layout.getRemainingAreaForComponent(component, false) : parentW;
+            paddingX = (remainingAreaW - width + paddingLeft - paddingRight) * 0.5F;
+        }else if(hasPaddingLeft)
+            paddingX = parentMarginLeft() + paddingLeft;
+        else if(hasPaddingRight)
+            paddingX = parentW - paddingRight - parentMarginRight() - width;
+        else
+            paddingX = parentMarginLeft();
 
-        if(hasPaddingTop && hasPaddingBottom) paddingY = (paddingBottom + parentH - paddingTop - height) * 0.5F;
-        else if(hasPaddingTop)                paddingY = parentH - paddingTop - parentMarginTop() - height;
-        else if(hasPaddingBottom)             paddingY = parentMarginBottom() + paddingBottom;
-        else                                  paddingY = parentMarginBottom();
+        if(hasPaddingTop && hasPaddingBottom){
+            final float remainingAreaH = (parent instanceof AbstractLayout layout) ? layout.getRemainingAreaForComponent(component, true) : parentH;
+            paddingY = (remainingAreaH - height + paddingBottom - paddingTop) * 0.5F;
+        }else if(hasPaddingTop)
+            paddingY = parentH - paddingTop - parentMarginTop() - height;
+        else if(hasPaddingBottom)
+            paddingY = parentMarginBottom() + paddingBottom;
+        else
+            paddingY = parentMarginBottom();
 
         x = parentX + paddingX;
         y = parentY + paddingY;
 
         if(parent instanceof AbstractLayout layout){
-            x = layout.calcPosition(component, false);
-            y = layout.calcPosition(component, true);
+            x = layout.getPositionForComponent(component, false);
+            y = layout.getPositionForComponent(component, true);
         }
 
         // correct
@@ -178,8 +190,8 @@ public class UIComponentCache{
                 yield 0;
             }
             case "wrap_content" -> {
-                if(!hasParent) yield 0;
-                if(parent instanceof AbstractLayout layout) yield layout.calcWrapContent(component, forY, forSize);
+                if(!hasParent || !forSize) yield 0;
+                if(parent instanceof AbstractLayout layout) yield layout.getSizeForWrapContent(component, forY);
                 yield 0;
             }
             case "match_parent" -> (forY ? parentHeight() : parentWidth());

@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>jpize-engine</groupId>
-            <artifactId>net</artifactId>
+            <artifactId>util</artifactId>
             <version>24.1.2</version>
             <scope>compile</scope>
         </dependency>
@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>jpize-engine</groupId>
-            <artifactId>tilemap</artifactId>
+            <artifactId>net</artifactId>
             <version>24.1.2</version>
             <scope>compile</scope>
         </dependency>

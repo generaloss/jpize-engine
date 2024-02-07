@@ -124,8 +124,9 @@
                 }
             }
             # history
-            @ScrollView (match_parent, 0.445rh) { # 1 - (0.075 + 0.4 + 0.01)  =  1 - 0.485 (..) =  0.515 - (0.05 + 0.01)  = 0.504
+            @ScrollView (wrap_content, 0.445rh) { # 1 - (0.075 + 0.4 + 0.01)  =  1 - 0.485 (..) =  0.515 - (0.05 + 0.01)  = 0.504
                 padding.top: 0.01rh
+                padding.bottom: 0.01rh
                 margin: (0.01rh, 0.01rh, 0.01rh, 0.01rh)
                 style.corner_radius: 0.05rh
                 style.background.color: (0.9, 0.6)
@@ -137,7 +138,7 @@
                 }
             }
 
-            @TextField (match_parent, 0.05rh, !font, "text input line") {
+            @TextField (match_parent, wrap_content, !font, "text input line") {
                 ID: "text_field"
                 padding.top: 0.01rh
                 margin: (0.005rh, 0.005rh, 0.005rh, 0.005rh)

@@ -67,6 +67,7 @@ public class UiTest2 extends JpizeApplication{
                 s1.line().style().background().color().set(r2, g2, b2);
                 s2.line().style().background().color().set(r2, g2, b2);
                 s3.line().style().background().color().set(r2, g2, b2);
+
             }catch(Exception ignored){ }
         });
     }
