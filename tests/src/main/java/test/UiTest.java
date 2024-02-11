@@ -29,11 +29,11 @@ public class UiTest extends JpizeApplication{
         font.setScale(0.8F);
 
         final PuiLoader loader = new PuiLoader()
-            .putRes("font", font)
-            .putRes("layout:bg_0", bg_0)
-            .putRes("layout:bg_1", bg_1)
-            .putRes("button:aspect", Constr.aspect(6))
-            .putRes("button:color", new Color(1, 0, 0, 1));
+            .setRes("font", font)
+            .setRes("layout:bg_0", bg_0)
+            .setRes("layout:bg_1", bg_1)
+            .setRes("button:aspect", Constr.aspect(6))
+            .setRes("button:color", new Color(1, 0, 0, 1));
 
         ui = loader.loadCtxRes("ui/view_test.pui");
         ui.enable();

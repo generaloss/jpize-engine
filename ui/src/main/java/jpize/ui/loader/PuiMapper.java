@@ -28,7 +28,7 @@ public class PuiMapper{
     public PuiMapper(){
         this.componentPath = new ArrayDeque<>();
 
-        this.resources = new HashMap<>();
+        this.resources = new TreeMap<>();
 
         this.tokenParsers = new HashMap<>();
         initTokenParsers();
@@ -47,7 +47,7 @@ public class PuiMapper{
         return root;
     }
 
-    public void putResource(String name, Object resource){
+    public void setResource(String name, Object resource){
         resources.put(name, resource);
     }
 

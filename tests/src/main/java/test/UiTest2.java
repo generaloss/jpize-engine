@@ -28,9 +28,9 @@ public class UiTest2 extends JpizeApplication{
         this.minecraftIcon = new Texture("ui/minecraft-icon.png");
 
         this.ui = new PuiLoader()
-            .putRes("font", font)
-            .putRes("background", background)
-            .putRes("icon", icon)
+            .setRes("font", font)
+            .setRes("background", background)
+            .setRes("icon", icon)
             .loadCtxRes("ui/ui.pui");
         this.ui.enable();
 

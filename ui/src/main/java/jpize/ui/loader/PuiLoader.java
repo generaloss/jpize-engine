@@ -16,8 +16,8 @@ public class PuiLoader{
         this.mapper = new PuiMapper();
     }
 
-    public PuiLoader putRes(String name, Object res){
-        mapper.putResource(name, res);
+    public PuiLoader setRes(String name, Object res){
+        mapper.setResource(name, res);
         return this;
     }
 
