@@ -2,8 +2,8 @@ package jpize.io;
 
 import jpize.Jpize;
 import jpize.util.math.Maths;
-import jpize.util.math.util.EulerAngles;
-import jpize.util.math.vecmath.vector.Vec2i;
+import jpize.util.math.rot.EulerAngles;
+import jpize.util.math.vector.Vec2i;
 import jpize.sdl.Sdl;
 
 public class EulerRotCtrl{

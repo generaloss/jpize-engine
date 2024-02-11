@@ -1,7 +1,7 @@
 package jpize.graphics.font.glyph;
 
 import jpize.graphics.font.FontOptions;
-import jpize.util.math.vecmath.vector.Vec2f;
+import jpize.util.math.vector.Vec2f;
 
 import java.util.Iterator;
 

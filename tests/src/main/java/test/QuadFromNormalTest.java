@@ -12,8 +12,8 @@ import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.SkyBox;
 import jpize.app.JpizeApplication;
 import jpize.util.math.Maths;
-import jpize.util.math.vecmath.vector.Vec3f;
-import jpize.util.math.vecmath.vector.Vec3i;
+import jpize.util.math.vector.Vec3f;
+import jpize.util.math.vector.Vec3i;
 import jpize.sdl.input.Key;
 
 public class QuadFromNormalTest extends JpizeApplication{

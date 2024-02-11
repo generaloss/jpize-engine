@@ -7,8 +7,8 @@ import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
 import jpize.sdl.Sdl;
-import jpize.ui.context.PuiLoader;
-import jpize.ui.context.UIContext;
+import jpize.ui.loader.PuiLoader;
+import jpize.ui.UIContext;
 import jpize.ui.palette.*;
 
 public class UiTest2 extends JpizeApplication{
@@ -31,7 +31,7 @@ public class UiTest2 extends JpizeApplication{
             .putRes("font", font)
             .putRes("background", background)
             .putRes("icon", icon)
-            .loadRes("ui/ui.pui");
+            .loadCtxRes("ui/ui.pui");
         this.ui.enable();
 
         this.serverIcon = ui.findByID("server_icon");

@@ -7,12 +7,12 @@ import jpize.graphics.texture.CubeMap;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.texture.TextureArray;
 import jpize.util.color.IColor;
-import jpize.util.math.vecmath.matrix.Matrix3f;
-import jpize.util.math.vecmath.matrix.Matrix4f;
-import jpize.util.math.vecmath.vector.Vec2f;
-import jpize.util.math.vecmath.vector.Vec3f;
+import jpize.util.math.matrix.Matrix3f;
+import jpize.util.math.matrix.Matrix4f;
+import jpize.util.math.vector.Vec2f;
+import jpize.util.math.vector.Vec3f;
 import jpize.app.Disposable;
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 
 import java.util.HashMap;
 

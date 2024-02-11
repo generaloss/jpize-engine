@@ -1,8 +1,8 @@
 package jpize.ui.palette;
 
 import jpize.graphics.font.Font;
-import jpize.ui.component.input.UIPressCallback;
-import jpize.ui.component.input.UIReleaseCallback;
+import jpize.ui.component.UIPressCallback;
+import jpize.ui.component.UIReleaseCallback;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Constraint;
 

@@ -20,7 +20,7 @@ public class TcpClient extends TcpDisconnector{
 
     public void connect(String address, int port){
         if(connection != null && !connection.isClosed())
-            throw new RuntimeException("Already connected");
+            return;
         
         try{
             final Socket socket = new Socket();
@@ -30,7 +30,7 @@ public class TcpClient extends TcpDisconnector{
             connection = new TcpConnection(socket, listener, this);
             listener.connected(connection);
         }catch(IOException e){
-            System.err.println("TcpClient: " + e.getMessage());
+            e.printStackTrace();
         }
     }
     

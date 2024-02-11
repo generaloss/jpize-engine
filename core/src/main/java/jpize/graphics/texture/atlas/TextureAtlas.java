@@ -1,6 +1,6 @@
 package jpize.graphics.texture.atlas;
 
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 import jpize.graphics.texture.pixmap.PixmapRGBA;
 import jpize.graphics.texture.pixmap.PixmapIO;
 import jpize.graphics.texture.Region;

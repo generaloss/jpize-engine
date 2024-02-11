@@ -4,7 +4,7 @@ import jpize.al.buffer.AlBuffer;
 import jpize.al.buffer.AlFormat;
 import jpize.al.buffer.UnsupportedAlFormatException;
 import jpize.audio.io.AudioLoader;
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;

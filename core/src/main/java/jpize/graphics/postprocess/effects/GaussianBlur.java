@@ -7,7 +7,7 @@ import jpize.graphics.postprocess.PostProcessEffect;
 import jpize.graphics.postprocess.RenderBufferObject;
 import jpize.graphics.util.ScreenQuad;
 import jpize.graphics.util.Shader;
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 
 public class GaussianBlur implements PostProcessEffect{
 

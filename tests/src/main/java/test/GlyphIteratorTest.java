@@ -6,7 +6,7 @@ import jpize.graphics.font.Font;
 import jpize.graphics.font.FontLoader;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.sdl.input.Key;
-import jpize.util.math.vecmath.vector.Vec2f;
+import jpize.util.math.vector.Vec2f;
 
 public class GlyphIteratorTest extends JpizeApplication{
 

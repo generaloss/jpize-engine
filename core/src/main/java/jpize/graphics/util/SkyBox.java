@@ -6,9 +6,9 @@ import jpize.gl.vertex.GlVertAttr;
 import jpize.graphics.camera.Camera;
 import jpize.graphics.mesh.IndexedMesh;
 import jpize.graphics.texture.CubeMap;
-import jpize.util.math.vecmath.matrix.Matrix4f;
+import jpize.util.math.matrix.Matrix4f;
 import jpize.app.Disposable;
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 
 public class SkyBox implements Disposable{
 

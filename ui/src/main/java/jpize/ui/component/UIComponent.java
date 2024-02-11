@@ -1,12 +1,8 @@
 package jpize.ui.component;
 
 import jpize.graphics.texture.Texture;
-import jpize.ui.context.UIContext;
+import jpize.ui.UIContext;
 import jpize.util.color.Color;
-import jpize.ui.component.input.UIInput;
-import jpize.ui.component.render.UIRenderer;
-import jpize.ui.component.style.UIBackground;
-import jpize.ui.component.style.UIStyle;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Dimension;
 import jpize.ui.constraint.Insets;

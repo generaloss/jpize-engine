@@ -2,7 +2,7 @@ package jpize.al.source;
 
 import jpize.al.buffer.AlBuffer;
 import jpize.al.object.AlObjectInt;
-import jpize.util.math.vecmath.vector.Vec3f;
+import jpize.util.math.vector.Vec3f;
 
 import static org.lwjgl.openal.AL11.*;
 

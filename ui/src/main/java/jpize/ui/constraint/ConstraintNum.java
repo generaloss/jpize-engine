@@ -1,6 +1,6 @@
 package jpize.ui.constraint;
 
-import jpize.util.streamapi.FloatSupplier;
+import jpize.util.function.FloatSupplier;
 
 public class ConstraintNum extends Constraint{
 

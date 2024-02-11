@@ -2,7 +2,7 @@ package jpize.audio.sound;
 
 import jpize.al.buffer.AlFormat;
 import jpize.al.buffer.UnsupportedAlFormatException;
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 
 import java.nio.ByteBuffer;
 

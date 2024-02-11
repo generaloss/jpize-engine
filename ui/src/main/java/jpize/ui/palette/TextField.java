@@ -12,8 +12,6 @@ import jpize.sdl.input.KeyAction;
 import jpize.ui.component.UIComponent;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Constraint;
-import jpize.ui.palette.callback.TextFieldEnterCallback;
-import jpize.ui.palette.callback.TextFieldInputCallback;
 import jpize.util.color.Color;
 
 import java.util.List;

@@ -2,7 +2,7 @@ package jpize.graphics.util;
 
 import org.lwjgl.BufferUtils;
 import jpize.Jpize;
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 import jpize.gl.texture.GlFormat;
 import jpize.gl.type.GlType;
 

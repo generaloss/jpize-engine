@@ -1,7 +1,7 @@
 package jpize.io;
 
-import jpize.util.math.vecmath.vector.Vec3f;
-import jpize.util.math.vecmath.vector.Vec3i;
+import jpize.util.math.vector.Vec3f;
+import jpize.util.math.vector.Vec3i;
 import jpize.sdl.input.Key;
 
 public class MotionCtrl{

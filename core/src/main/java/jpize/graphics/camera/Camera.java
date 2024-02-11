@@ -2,7 +2,7 @@ package jpize.graphics.camera;
 
 import jpize.app.Resizable;
 import jpize.graphics.util.Sizable;
-import jpize.util.math.vecmath.matrix.Matrix4f;
+import jpize.util.math.matrix.Matrix4f;
 
 public abstract class Camera extends Sizable implements Resizable{
     

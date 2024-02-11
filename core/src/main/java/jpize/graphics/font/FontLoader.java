@@ -1,6 +1,6 @@
 package jpize.graphics.font;
 
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 import jpize.gl.texture.GlFilter;
 import jpize.graphics.font.glyph.Glyph;
 import jpize.graphics.font.glyph.GlyphMap;

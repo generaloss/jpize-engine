@@ -1,8 +1,8 @@
 package jpize.util.io;
 
 import jpize.util.color.IColor;
-import jpize.util.math.util.EulerAngles;
-import jpize.util.math.vecmath.vector.*;
+import jpize.util.math.rot.EulerAngles;
+import jpize.util.math.vector.*;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

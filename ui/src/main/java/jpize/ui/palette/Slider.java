@@ -1,12 +1,11 @@
 package jpize.ui.palette;
 
 import jpize.Jpize;
-import jpize.ui.component.input.UIPressCallback;
-import jpize.ui.component.input.UIReleaseCallback;
+import jpize.ui.component.UIPressCallback;
+import jpize.ui.component.UIReleaseCallback;
 import jpize.util.math.Maths;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Constraint;
-import jpize.ui.palette.callback.SliderCallback;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

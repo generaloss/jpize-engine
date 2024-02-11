@@ -2,8 +2,8 @@ package jpize.graphics.camera;
 
 import jpize.Jpize;
 import jpize.app.Resizable;
-import jpize.util.math.util.Frustum;
-import jpize.util.math.vecmath.matrix.Matrix4f;
+import jpize.util.math.matrix.Frustum;
+import jpize.util.math.matrix.Matrix4f;
 
 public class PerspectiveCamera extends Camera3D implements Resizable{
 
@@ -63,14 +63,11 @@ public class PerspectiveCamera extends Camera3D implements Resizable{
         }else
             view.set(imaginaryView);
 
-        // Frustum
-        frustum.setFrustum(imaginaryView, projection);
         // Update combined
-        updateCombinedMatrix();
-    }
+        combined.set(projection).mul(imaginaryView);
 
-    private void updateCombinedMatrix(){
-        combined.set(projection).mul(view);
+        // Update frustum
+        frustum.setFrustum(combined);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package jpize.net.security;
 
-import jpize.util.file.Resource;
-import jpize.util.file.ResourceExt;
+import jpize.util.res.Resource;
+import jpize.util.res.ResourceExt;
 
 import javax.crypto.Cipher;
 import java.io.InputStream;

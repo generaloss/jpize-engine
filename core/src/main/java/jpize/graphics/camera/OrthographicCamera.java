@@ -2,7 +2,7 @@ package jpize.graphics.camera;
 
 import jpize.Jpize;
 import jpize.app.Resizable;
-import jpize.util.math.vecmath.matrix.Matrix4f;
+import jpize.util.math.matrix.Matrix4f;
 
 public class OrthographicCamera extends Camera2D implements Resizable{
 
@@ -13,14 +13,14 @@ public class OrthographicCamera extends Camera2D implements Resizable{
     public OrthographicCamera(int width, int height){
         super(width, height);
 
-        scale = 1F;
+        this.scale = 1F;
 
-        scalingMatrix = new Matrix4f();
-        translationMatrix = new Matrix4f();
-        rotationMatrix = new Matrix4f();
-        view = new Matrix4f();
-        projection = new Matrix4f();
-        combined = new Matrix4f();
+        this.scalingMatrix = new Matrix4f();
+        this.translationMatrix = new Matrix4f();
+        this.rotationMatrix = new Matrix4f();
+        this.view = new Matrix4f();
+        this.projection = new Matrix4f();
+        this.combined = new Matrix4f();
 
         updateProjectionMatrix();
         updateViewMatrix();

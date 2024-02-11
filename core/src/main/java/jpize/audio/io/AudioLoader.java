@@ -5,7 +5,7 @@ import javazoom.jl.decoder.Decoder;
 import javazoom.jl.decoder.Header;
 import javazoom.jl.decoder.SampleBuffer;
 import jpize.audio.sound.AudioBuffer;
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 import org.lwjgl.BufferUtils;
 
 import java.io.ByteArrayOutputStream;

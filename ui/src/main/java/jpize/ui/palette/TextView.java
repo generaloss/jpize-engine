@@ -5,7 +5,7 @@ import jpize.ui.component.UIComponent;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Constraint;
 import jpize.util.color.Color;
-import jpize.util.math.vecmath.vector.Vec2f;
+import jpize.util.math.vector.Vec2f;
 
 public class TextView extends UIComponent{
 

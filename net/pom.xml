@@ -7,7 +7,7 @@
     <parent>
         <groupId>net.generalpashon</groupId>
         <artifactId>jpize-engine</artifactId>
-        <version>24.1.2</version>
+        <version>24.1.3</version>
     </parent>
 
     <groupId>jpize-engine</groupId>
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>jpize-engine</groupId>
             <artifactId>core</artifactId>
-            <version>24.1.2</version>
+            <version>24.1.3</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

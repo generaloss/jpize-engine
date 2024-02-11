@@ -37,7 +37,7 @@ public class TcpServer extends TcpDisconnector implements Closeable{
             waitConnections();
             closed = false;
         }catch(IOException e){
-            System.err.println("TcpServer (run error): " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -51,7 +51,7 @@ public class TcpServer extends TcpDisconnector implements Closeable{
             waitConnections();
             closed = false;
         }catch(Exception e){
-            System.err.println("TcpServer (run error): " + e.getMessage());
+            e.printStackTrace();
         }
     }
     
@@ -76,13 +76,23 @@ public class TcpServer extends TcpDisconnector implements Closeable{
     }
     
     
+    public void broadcast(TcpConnection exclude, byte[] bytes){
+        for(TcpConnection connection: connectionList)
+            if(connection != exclude)
+                connection.send(bytes);
+    }
+
     public void broadcast(byte[] bytes){
-        for(TcpConnection channel: connectionList)
-            channel.send(bytes);
+        for(TcpConnection connection: connectionList)
+            connection.send(bytes);
     }
 
     public void broadcast(ByteArrayOutputStream stream){
         broadcast(stream.toByteArray());
+    }
+
+    public void broadcast(TcpConnection exclude, ByteArrayOutputStream stream){
+        broadcast(exclude, stream.toByteArray());
     }
 
     public synchronized void broadcast(PacketWriter data){
@@ -93,8 +103,27 @@ public class TcpServer extends TcpDisconnector implements Closeable{
         broadcast(byteStream);
     }
 
+    public synchronized void broadcast(TcpConnection exclude, PacketWriter data){
+        final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        final JpizeOutputStream dataStream = new JpizeOutputStream(byteStream);
+
+        data.write(dataStream);
+        broadcast(exclude, byteStream);
+    }
+
     public void broadcast(IPacket<?> packet){
         broadcast(dataStream -> {
+            try{
+                dataStream.writeShort(packet.getPacketID());
+                packet.write(dataStream);
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void broadcast(TcpConnection exclude, IPacket<?> packet){
+        broadcast(exclude, dataStream -> {
             try{
                 dataStream.writeShort(packet.getPacketID());
                 packet.write(dataStream);

@@ -8,7 +8,7 @@ import jpize.graphics.font.glyph.GlyphSprite;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.app.JpizeApplication;
 import jpize.util.math.Maths;
-import jpize.util.math.vecmath.vector.Vec2i;
+import jpize.util.math.vector.Vec2i;
 import jpize.sdl.input.Key;
 import jpize.io.TextProcessor;
 

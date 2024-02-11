@@ -1,6 +1,6 @@
 package jpize.al.listener;
 
-import jpize.util.math.vecmath.vector.Vec3f;
+import jpize.util.math.vector.Vec3f;
 
 import static org.lwjgl.openal.AL11.*;
 

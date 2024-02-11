@@ -5,7 +5,7 @@ import jpize.util.color.Color;
 import jpize.util.color.IColor;
 import jpize.util.math.Mathc;
 import jpize.util.math.Maths;
-import jpize.util.math.vecmath.vector.Vec2d;
+import jpize.util.math.vector.Vec2d;
 import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;

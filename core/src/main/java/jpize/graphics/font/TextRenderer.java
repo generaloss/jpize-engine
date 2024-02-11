@@ -10,11 +10,11 @@ import jpize.graphics.texture.Region;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.util.array.list.FloatList;
+import jpize.util.array.FloatList;
 import jpize.util.color.Color;
-import jpize.util.math.vecmath.matrix.Matrix3f;
-import jpize.util.math.vecmath.matrix.Matrix4f;
-import jpize.util.math.vecmath.vector.Vec2f;
+import jpize.util.math.matrix.Matrix3f;
+import jpize.util.math.matrix.Matrix4f;
+import jpize.util.math.vector.Vec2f;
 
 public class TextRenderer{
 

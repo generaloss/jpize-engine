@@ -7,7 +7,7 @@ import jpize.graphics.texture.Texture;
 import jpize.graphics.texture.pixmap.PixmapA;
 import jpize.graphics.util.batch.TextureBatch;
 import jpize.app.JpizeApplication;
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBTTAlignedQuad;
 import org.lwjgl.stb.STBTTBakedChar;

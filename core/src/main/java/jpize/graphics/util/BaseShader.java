@@ -1,10 +1,10 @@
 package jpize.graphics.util;
 
 import jpize.graphics.texture.Texture;
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 import jpize.graphics.camera.Camera;
 import jpize.util.color.IColor;
-import jpize.util.math.vecmath.matrix.Matrix4f;
+import jpize.util.math.matrix.Matrix4f;
 
 public class BaseShader extends Shader{
     

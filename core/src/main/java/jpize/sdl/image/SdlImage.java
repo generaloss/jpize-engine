@@ -2,7 +2,7 @@ package jpize.sdl.image;
 
 import io.github.libsdl4j.api.surface.SDL_Surface;
 import io.github.libsdl4j.api.surface.SdlSurface;
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

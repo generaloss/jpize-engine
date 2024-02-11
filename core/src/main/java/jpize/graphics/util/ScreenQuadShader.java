@@ -1,6 +1,6 @@
 package jpize.graphics.util;
 
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 import jpize.graphics.texture.Texture;
 
 public class ScreenQuadShader{

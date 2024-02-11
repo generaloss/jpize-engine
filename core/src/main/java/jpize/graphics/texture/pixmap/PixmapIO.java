@@ -1,7 +1,7 @@
 package jpize.graphics.texture.pixmap;
 
-import jpize.util.file.Resource;
-import jpize.util.file.ResourceExt;
+import jpize.util.res.Resource;
+import jpize.util.res.ResourceExt;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

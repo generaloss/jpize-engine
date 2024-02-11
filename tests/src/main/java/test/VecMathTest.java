@@ -6,8 +6,8 @@ import jpize.gl.Gl;
 import jpize.io.EulerRotCtrl;
 import jpize.graphics.util.SkyBox;
 import jpize.sdl.input.Key;
-import jpize.util.math.util.EulerAngles;
-import jpize.util.math.vecmath.matrix.Matrix4f;
+import jpize.util.math.rot.EulerAngles;
+import jpize.util.math.matrix.Matrix4f;
 
 public class VecMathTest extends JpizeApplication{
 

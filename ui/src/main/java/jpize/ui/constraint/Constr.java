@@ -1,7 +1,7 @@
 package jpize.ui.constraint;
 
 import jpize.Jpize;
-import jpize.util.streamapi.FloatSupplier;
+import jpize.util.function.FloatSupplier;
 
 public class Constr{
 

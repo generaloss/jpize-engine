@@ -15,10 +15,10 @@ import jpize.graphics.mesh.IndexedMesh;
 import jpize.graphics.util.BaseShader;
 import jpize.graphics.util.SkyBox;
 import jpize.app.JpizeApplication;
-import jpize.util.math.vecmath.matrix.Matrix4f;
-import jpize.util.math.vecmath.vector.Vec3f;
-import jpize.util.math.util.Ray3f;
-import jpize.util.math.util.Intersector;
+import jpize.util.math.matrix.Matrix4f;
+import jpize.util.math.vector.Vec3f;
+import jpize.util.math.rot.Ray3f;
+import jpize.util.math.Intersector;
 import jpize.sdl.Sdl;
 import jpize.sdl.input.Key;
 import jpize.util.time.Sync;
@@ -92,6 +92,13 @@ public class TriangleIntersectionTest extends JpizeApplication{
 
         //Utils.delayElapsed(100);
         font.drawText("fps: " + Jpize.getFPS(), 10, 10);
+
+        System.out.println("in frustum: " + (
+            camera.getFrustum().isVertexInFrustum(1, 3, 0) |
+            camera.getFrustum().isVertexInFrustum(0, 0, 0) |
+            camera.getFrustum().isVertexInFrustum(3, 1, 0)
+        ));
+
     }
 
     public void update(){

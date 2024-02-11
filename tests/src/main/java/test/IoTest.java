@@ -10,15 +10,23 @@ import java.util.Arrays;
 public class IoTest{
 
     public static void main(String[] args) throws Throwable{
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        // longTest();
+        byteBufTest();
+    }
 
-        JpizeOutputStream out = new JpizeOutputStream(bytes);
+    public static void longTest() throws Throwable{
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
+        final JpizeOutputStream out = new JpizeOutputStream(bytes);
         out.writeLongArray(new long[]{3452095223453535353L, -109735460983535353L});
-
         out.close();
 
-        JpizeInputStream in = new JpizeInputStream(new ByteArrayInputStream(bytes.toByteArray()));
+        final JpizeInputStream in = new JpizeInputStream(new ByteArrayInputStream(bytes.toByteArray()));
         System.out.println(Arrays.toString(in.readLongArray()));
+    }
+
+    public static void byteBufTest(){
+
     }
 
 }

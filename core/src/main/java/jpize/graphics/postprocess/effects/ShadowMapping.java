@@ -2,7 +2,7 @@ package jpize.graphics.postprocess.effects;
 
 import jpize.Jpize;
 import jpize.app.Disposable;
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 import jpize.gl.Gl;
 import jpize.gl.buffer.GlAttachment;
 import jpize.gl.texture.GlFilter;
@@ -12,8 +12,8 @@ import jpize.gl.type.GlType;
 import jpize.graphics.postprocess.FrameBufferObject;
 import jpize.graphics.texture.Texture;
 import jpize.graphics.util.Shader;
-import jpize.util.math.vecmath.matrix.Matrix4f;
-import jpize.util.math.vecmath.vector.Vec3f;
+import jpize.util.math.matrix.Matrix4f;
+import jpize.util.math.vector.Vec3f;
 
 import static org.lwjgl.opengl.GL33.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL33.glClear;

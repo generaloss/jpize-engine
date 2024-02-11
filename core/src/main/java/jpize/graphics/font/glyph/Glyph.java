@@ -2,7 +2,7 @@ package jpize.graphics.font.glyph;
 
 import jpize.graphics.texture.Region;
 import jpize.graphics.util.batch.TextureBatch;
-import jpize.util.math.vecmath.vector.Vec2f;
+import jpize.util.math.vector.Vec2f;
 
 public class Glyph{
 

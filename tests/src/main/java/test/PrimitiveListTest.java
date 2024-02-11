@@ -1,6 +1,6 @@
 package test;
 
-import jpize.util.array.list.FloatList;
+import jpize.util.array.FloatList;
 import jpize.util.time.Stopwatch;
 
 import java.util.ArrayList;

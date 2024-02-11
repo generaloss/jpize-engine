@@ -42,7 +42,7 @@ public class TcpConnection{
                     
                     listener.received(bytes, this);
                 }
-            }catch(IOException e){
+            }catch(IOException ignored){
                 setClosed();
             }
         }, "TcpConnection-Thread");

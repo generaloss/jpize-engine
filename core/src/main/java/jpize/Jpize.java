@@ -7,7 +7,7 @@ import jpize.sdl.window.SdlWindow;
 import jpize.app.context.Context;
 import jpize.app.context.ContextManager;
 import jpize.app.Screen;
-import jpize.util.math.vecmath.vector.Vec2f;
+import jpize.util.math.vector.Vec2f;
 import jpize.sdl.Sdl;
 import jpize.sdl.input.Btn;
 

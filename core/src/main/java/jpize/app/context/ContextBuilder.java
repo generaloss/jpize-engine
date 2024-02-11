@@ -5,7 +5,7 @@ import jpize.gl.glenum.GlDepthFunc;
 import jpize.gl.glenum.GlTarget;
 import jpize.gl.texture.GlBlendFactor;
 import jpize.sdl.window.SdlWindow;
-import jpize.util.math.vecmath.vector.Vec2i;
+import jpize.util.math.vector.Vec2i;
 import jpize.sdl.Sdl;
 import jpize.sdl.gl.SdlGlAttr;
 import jpize.sdl.window.SdlWinFlags;

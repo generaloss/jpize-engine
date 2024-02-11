@@ -1,7 +1,7 @@
 package jpize.graphics.postprocess.effects;
 
 import jpize.Jpize;
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 import jpize.gl.Gl;
 import jpize.graphics.postprocess.FrameBufferObject;
 import jpize.graphics.postprocess.PostProcessEffect;

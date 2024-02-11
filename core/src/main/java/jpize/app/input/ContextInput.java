@@ -10,7 +10,7 @@ import io.github.libsdl4j.api.mouse.SDL_Button;
 import io.github.libsdl4j.api.mouse.SdlMouse;
 import io.github.libsdl4j.api.scancode.SdlScancodeConst;
 import jpize.app.context.Context;
-import jpize.util.math.vecmath.vector.Vec2i;
+import jpize.util.math.vector.Vec2i;
 import jpize.sdl.input.Btn;
 import jpize.sdl.input.Key;
 import jpize.sdl.input.KeyMods;

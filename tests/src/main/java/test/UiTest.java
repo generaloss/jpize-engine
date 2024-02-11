@@ -9,8 +9,8 @@ import jpize.util.color.Color;
 import jpize.app.JpizeApplication;
 import jpize.sdl.input.Key;
 import jpize.ui.constraint.Constr;
-import jpize.ui.context.UIContext;
-import jpize.ui.context.PuiLoader;
+import jpize.ui.UIContext;
+import jpize.ui.loader.PuiLoader;
 import jpize.ui.palette.Button;
 import jpize.ui.palette.TextView;
 
@@ -35,7 +35,7 @@ public class UiTest extends JpizeApplication{
             .putRes("button:aspect", Constr.aspect(6))
             .putRes("button:color", new Color(1, 0, 0, 1));
 
-        ui = loader.loadRes("ui/view_test.pui");
+        ui = loader.loadCtxRes("ui/view_test.pui");
         ui.enable();
 
         Button pizza = ui.findByID("pizza");

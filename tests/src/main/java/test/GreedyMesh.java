@@ -9,7 +9,7 @@ import jpize.gl.vertex.GlVertAttr;
 import jpize.graphics.mesh.IndexedMesh;
 import jpize.graphics.util.BaseShader;
 import jpize.app.context.ContextBuilder;
-import jpize.util.math.vecmath.vector.Vec3f;
+import jpize.util.math.vector.Vec3f;
 import jpize.sdl.input.Key;
 import test.devs.MeshInstance;
 import test.devs.Scene3D;

@@ -1,6 +1,6 @@
 package jpize.net;
 
-import jpize.util.file.ResourceExt;
+import jpize.util.res.ResourceExt;
 
 import java.io.*;
 import java.net.URL;

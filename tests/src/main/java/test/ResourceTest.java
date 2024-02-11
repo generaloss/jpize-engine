@@ -1,6 +1,6 @@
 package test;
 
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 
 import java.util.Arrays;
 

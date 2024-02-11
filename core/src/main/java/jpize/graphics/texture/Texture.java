@@ -1,7 +1,7 @@
 package jpize.graphics.texture;
 
 import jpize.graphics.texture.pixmap.PixmapIO;
-import jpize.util.file.Resource;
+import jpize.util.res.Resource;
 import jpize.gl.texture.GlTexParam;
 import jpize.gl.texture.GlTexTarget;
 import jpize.graphics.texture.pixmap.Pixmap;
