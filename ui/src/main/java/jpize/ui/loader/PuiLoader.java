@@ -32,7 +32,8 @@ public class PuiLoader{
     }
 
 
-    public UIComponent loadComp(Resource resource){
+    @SuppressWarnings("unchecked")
+    public <C extends UIComponent> C loadComp(Resource resource){
         // Lex analysis
         final String string = resource.readString();
         final LinkedList<PuiToken> tokens = PuiLexer.lexAnalysis(string);
@@ -42,18 +43,18 @@ public class PuiLoader{
         // Return
         final UIComponent root = mapper.getRootComponent();
         mapper.reset();
-        return root;
+        return (C) root;
     }
 
-    public UIComponent loadComp(File file){
+    public <C extends UIComponent> C loadComp(File file){
         return loadComp(Resource.external(file));
     }
 
-    public UIComponent loadCompRes(String resourceName){
+    public <C extends UIComponent> C loadCompRes(String resourceName){
         return loadComp(Resource.internal(resourceName));
     }
 
-    public UIComponent loadCompFile(String filepath){
+    public <C extends UIComponent> C loadCompFile(String filepath){
         return loadComp(Resource.external(filepath));
     }
 
