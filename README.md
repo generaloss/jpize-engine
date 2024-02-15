@@ -55,7 +55,7 @@
 * *[Streams](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/stream)* - FloatSupplier
 * *[Other](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util)* - Utils, StringUtils, SyncTaskExecutor
 
-### 1. Usage example:
+### 1. Usage with graphics:
 ``` java
 // Utils
 EulerAngles rotation = new EulerAngles(45, 0, 0);
@@ -88,7 +88,7 @@ AABoxBody body_2 = new AABoxBody( new AABox(-1,-1,-1,  1, 1, 1) ); // another ax
 body_1.getPosition().set(-5F, 0, 0);
 
 Vec3f b1_velocity = new Vec3f(10F, 0, 0);
-velocity = AABoxCollider.getCollidedMovement(b1_velocity, body_1, body_2);
+b1_velocity = AABoxCollider.getCollidedMovement(b1_velocity, body_1, body_2);
 
 body_1.getPosition().add( b1_velocity ); // box will be move only 3 units
 ```
@@ -189,7 +189,7 @@ public class App extends JpizeApplication{
     
     public void update(){ } // Update loop
     
-    public void resize(int widht, int height){ } // Calls when window resizes
+    public void resize(int width, int height){ } // Calls when window resizes
     
     public void dispose(){ } // Exit app
     
@@ -208,8 +208,11 @@ batch.begin();
 batch.rotate(angle);
 batch.shear(angle_x, angle_y);
 batch.scale(scale);
-// texture drawing
+// draw texture
 batch.draw(texture, x, y, width, height);
+// draw rectangle
+batch.drawRect(r, g, b, a,  x, y,  width, height);
+batch.drawRect(a,  x, y,  width, height);
 
 batch.end();
 ```
@@ -225,15 +228,13 @@ Font font = FontLoader.loadTrueType(path_or_resource, size);
 Font font = FontLoader.loadTrueType(path_or_resource, size, charset);
 
 // options
-FontOptions options = font.getOptions();
-
-options.scale = 1.5F;
-options.rotation = 45;
-options.italic = true;
-options.invLineWrap = true;
+font.options.scale = 1.5F;
+font.options.rotation = 45;
+font.options.italic = true;
+font.options.invLineWrap = true;
 
 // bounds
-float width = font.getLineWidth(line);
+float width = font.getTextWidth(line);
 float height = font.getTextHeight(text);
 Vec2f bounds = font.getBounds(text);
 
@@ -267,15 +268,9 @@ Jpize.getWidth()
 Jpize.getHeight()
 Jpize.getAspect()
 
-// monitor
-Jpize.monitor()         // window monitor
-Jpize.primaryMonitor()  // primary monitor
-
 // FPS & Delta Time
 Jpize.getFPS()
 Jpize.getDt()
-Jpize.setFixedUpdateTPS(update_rate)
-Jpize.getFixedUpdateDt()
 ```
 
 #### 5. Audio:
@@ -283,7 +278,7 @@ Jpize.getFixedUpdateDt()
 // sound
 Sound sound = new Sound("sound.mp3");
 
-sound.setVolume(0.5F);
+sound.setGain(0.5F);
 sound.setLooping(true);
 sound.setPitch(1.5F);
 
@@ -301,46 +296,45 @@ source.play();
 #### 6. Resources:
 ``` java
 // internal / external
-Resource res = new Resource(path, true); // external
-Resource res = new Resource(path); // internal
+Resource res = Resource.external(path); // external
+Resource res = Resource.internal(path); // internal
+
+ResourceInt resInt = res.asInternal();
+ResourceExt resExt = res.asExternal();
 
 res.isExternal()
 res.isInternal()
 
+// in file "file.ext"
+res.extension()  // returns 'ext' of 'file.ext'
+res.simpleName() // returns 'file' of 'file.ext'
 
-// as file
-Resource res = new Resource("file.ext");
-
-res.getExtension()  // returns 'ext' of 'file.ext'
-res.getSimpleName() // returns 'file' of 'file.ext'
-
-res.getFile()
+res.file()
 res.exists()
 
-res.mkDirsAndFile()
-res.mkParentDirs()
+resExt.mkDirsAndFile()
+resExt.mkParentDirs()
 
 // io
 res.inStream()
-res.outStream()
+resExt.outStream()
 
-res.getJpizeIn()  // JpizeInputStream
-res.getJpizeOut() // JpizeOutputStream
+res.jpizeIn()     // JpizeInputStream
+resExt.jpizeOut() // JpizeOutputStream
 
-res.getReader()  // FastReader
-res.getWriter()  // PrintStream
+res.reader()    // FastReader
+resExt.writer() // PrintStream
 
-// write/read
-res.writeString(text)
-res.appendString(text)
+// write / read
+resExt.writeString(text)
+resExt.appendString(text)
 
 res.readString()
 res.readBytes()
-res.readByteBuffer()  // ByteBuffer
-
+res.readByteBuffer()  // java.nio.ByteBuffer
 
 // resources (images, sounds, fonts, ...etc)
-Resource res = new Resource( ... );
+Resource res = Resource.internal( ... );
 
 new Texture(res);
 new Sound(res);
@@ -366,17 +360,17 @@ TcpServer server = new TcpServer(new TcpListener(){
     public void received(byte[] bytes, TcpConnection sender){
         System.out.printf("received: %f\n", new String(bytes)); // 'received: Hello, World!'
     }
-    public void connected(TcpChannel channel){
-        channel.encrypt(key);
+    public void connected(TcpConnection connection){
+        channel.encode(key);
     }
-    public void disconnected(TcpChannel channel){ ... }
+    public void disconnected(TcpConnection connection){ ... }
 });
 server.run("localhost", 8080);
 
 // client
 TcpClient client = new TcpClient(new TcpListener(){ ... });
 client.connect("localhost", 8080);
-client.encrypt(key);
+client.encode(key);
 client.send("Hello, World!".getBytes()); // send 'Hello, World!'
 ```
 
@@ -441,14 +435,14 @@ UIContext ui = new UIContext();
 
 // Layout
 AbstractLayout layout = new VBox(Constr.win_width, Constr.win_height);
-ui.setRootComponent(layout);
+ui.setRoot(layout);
 
 // Button
 Button button = new Button(Constr.aspect(10), Constr.px(100), "Button Text", font);
 button.padding().set(Constr.relh(0.35), Constr.zero, Constr.auto, Constr.zero);
 
 // Slider
-Slider slider = new Slider(Constr.aspect(10), Constr.px(100), "Slider: 0", font);
+Slider slider = new Slider(Constr.aspect(10), Constr.px(100));
 slider.padding().set(Constr.px(10), Constr.zero, Constr.auto, Constr.zero);
 
 // Add to layout Button & Slider
@@ -456,15 +450,15 @@ layout.add(button);
 layout.add(slider);
 
 // Callbacks
-button.input().addPressCallback((component, button, action) -> {
+button.input().addPressCallback((component, btn) -> {
     System.out.println("Press Button");
 });
-button.input().addReleaseCallback((component, button, action) -> {
+button.input().addReleaseCallback((component, btn) -> {
     System.out.println("Release Button");
 });
 
 slider.addSliderCallback(((component, value) -> {
-    component.textview().setText("Slider: " + Maths.round(value * 100));
+    System.out.println("Slider value: " + value);
 }));
 
 // Render
@@ -481,70 +475,57 @@ ui.disable();
 #### 2. [PUI Markup Language](https://github.com/GeneralPashon/jpize-ui-idea-plugin) Example:
 #### Java:
 ``` java
-// resources
-Texture bg_0 = new Texture("ui/bg_0.jpg");
-Font font = FontLoader.getDefault();
-font.setScale(0.8F);
+Texture background = new Texture("background.png");
+Font font = FontLoader.getDefaultBold();
 
-// load context
-PuiLoader loader = new UILoader()
-    .putRes("font", font)
-    .putRes("layout:bg_0", bg_0)
-    .putRes("button:aspect", Constr.aspect(7))
-    .addComponentAlias("Btn", Button.class);
+// create loader, put resources
+PuiLoader loader = new PuiLoader();
+loader.setRes("background", background);
+loader.setRes("font", font);
 
-UIContext ui = loader.loadRes("view_file.pui");
+// create ui context
+ui = loader.loadCtxRes("view.pui");
 ui.enable();
 
-// callbacks
-Button button = ui.getByID("button");
-Slider slider = ui.getByID("slider");
-
-button.input().addPressCallback((component, btn) -> component.style().background().color().setRgb(0.75));
-button.input().addReleaseCallback((component, btn) -> component.style().background().color().setRgb(0.5));
-
-slider.addSliderCallback(((component, value) -> {
-    slider.textview().setText("Slider: " + Maths.round(value * 100));
-    slider.textview().color().setRgb(1 - value);
-    component.style().background().color().setA(value);
-}));
-
 ...
+// render loop
+Gl.clearColorBuffer();
+ui.render();
 ```
 #### PUI File:
+[Download IDEA plugin for .PUI support](https://github.com/GeneralPashon/jpize-ui-idea-plugin)
 ``` pui
+# Root component (Vertical Box)
 @VBox {
-    style.background.image: !layout:bg_0
-
-    @Btn (!button:aspect, 70px, 'Button Text', !font) {
-        ID: 'button'
-        padding: (0.35rh, zero, auto, zero)
-        style: {
-            background.color: (0.5, 0.5, 0.5, 0.75)
-            border_size: 3px
-            border_color: (1.0, 1.0, 1.0, 0.9)
-            corner_radius: 35px
-        }
+    # Parameters
+    margin: (0.05rw, 0.01rw, 0.05rw, 0.01rw) # (top, left, bottom, right)
+    style.background: {
+        image: !background # BG image
+        color.a: 0.4 # BG alpha
     }
 
-    @Slider (7ap, 70px, 'Slider: 0', !font) {
-        ID: 'slider'
-        padding: (10px, 0px, auto, 0px)
-        style: {
-            background.color.a: 0
-            border_size: 3px
-            border_color: (1.0, 1.0, 1.0, 0.9)
-            corner_radius: 35px
-        }
-        handle.style: {
-            background.color: (1.0, 1.0, 1.0, 0.9)
-            corner_radius: 35px
-        }
-        textview.color: (1, 1, 1, 1)
+    # Components:
+    @Button (0.4rw, 0.14ap, "Button", !font, 0.7rh) {
+        padding: (auto, zero, auto, zero) # (top, left, bottom, right)
+    }
+    @Slider (0.4rw, 0.1ap) {
+        padding: (0.02rw, zero, auto, zero)
+    }
+    @TextField (0.4rw, 0.12ap, !font) {
+        padding: (0.02rw, zero, auto, zero)
+        hint: "hint"
+    }
+    @ScrollView (0.4rw, wrap_content) {
+        padding: (0.02rw, zero, auto, zero)
+        margin: (zero, 0.01rw, zero, 0.01rw)
+        style.background.color.a: 0.8
+
+        # ScrollView Component:
+        @TextView ("The\nquick\nbrown\nfox\njumps\nover\nthe\nlazy\ndog", !font, 0.1rw) { }
     }
 }
 ```
-#### Result: ![preview](ui/preview.png)
+#### Result: ![preview](ui/preview.gif)
 
 ---
 

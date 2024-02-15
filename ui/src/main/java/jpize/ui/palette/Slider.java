@@ -109,7 +109,7 @@ public class Slider extends Rect{
         final UIReleaseCallback releaseCallback = (comp, btn) -> _grabHandle = false;
 
         this.lineBg.padding().set(Constr.zero, Constr.px(() -> (handle.cache().height - lineBg.cache().height) * 0.5F), Constr.zero, Constr.auto);
-        this.lineBg.style().background().color().set(1);
+        this.lineBg.style().background().color().set(0.85);
         this.lineBg.style().setCornerRadius(Constr.relh(0.5));
         this.lineBg.input().setClickable(true);
         this.lineBg.input().addPressCallback(pressCallback);

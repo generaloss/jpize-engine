@@ -24,13 +24,18 @@ import static org.lwjgl.stb.STBTruetype.*;
 public class FontLoader{
 
 
-    private static Font defaultFont;
+    private static Font defaultFont, defaultFontBold;
 
     public static Font getDefault(){
         if(defaultFont == null)
             defaultFont = loadTrueType("font/DroidSans.ttf", 64, FontCharset.DEFAULT_ENG_RUS);
-
         return defaultFont;
+    }
+
+    public static Font getDefaultBold(){
+        if(defaultFontBold == null)
+            defaultFontBold = loadTrueType("font/DroidSans-Bold.ttf", 64, FontCharset.DEFAULT_ENG_RUS);
+        return defaultFontBold;
     }
 
 

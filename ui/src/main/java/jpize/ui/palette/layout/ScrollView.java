@@ -26,7 +26,6 @@ public class ScrollView extends AbstractLayout{
         super.input.setClickable(true);
 
         this.handle = new Rect(Constr.relh(0.03), Constr.relh(1));
-
         // final Constraint contentWidth = Constr.px(() -> super.cache.containerWidth - handle.cache().width);
 
         setupHandle();
@@ -67,7 +66,7 @@ public class ScrollView extends AbstractLayout{
         if(forY){
             if(component == getScrollComponent()){
                 _scrollComponentHeight = cache.height + cache.paddingTop * 2 - super.cache.containerHeight;
-                return cache.y + Math.max(0, (1 - _scrollFactor) * _scrollComponentHeight);
+                return cache.y + Math.max(0, _scrollFactor * _scrollComponentHeight);
             }
             return cache.y;
         }
@@ -83,6 +82,7 @@ public class ScrollView extends AbstractLayout{
     public void render(){
         // max scroll bound
         _maxFactor = getMaxScrollFactor();
+        handle.setHidden(_maxFactor == 1);
 
         // size
         handle.size().y = Constr.relh(_maxFactor);
@@ -90,11 +90,11 @@ public class ScrollView extends AbstractLayout{
         // mouse wheel scroll
         final int scroll = Jpize.input().getScroll();
         if(scroll != 0 && (super.input.isHovered() || handle.input().isHovered()))
-            _imaginaryScrollFactor += scroll * _maxFactor * 0.3F;
+            _imaginaryScrollFactor += -scroll * _maxFactor * 0.3F;
 
         // handle scroll
         if(_handleGrabbed){
-            _imaginaryScrollFactor = (Jpize.getY() - _handleGrabY - super.cache.y) / _scrollComponentHeight / _maxFactor;
+            _imaginaryScrollFactor = 1 - (Jpize.getY() - _handleGrabY - super.cache.y) / _scrollComponentHeight / _maxFactor;
             _scrollFactor = _imaginaryScrollFactor;
         }
 
@@ -110,7 +110,7 @@ public class ScrollView extends AbstractLayout{
             _scrollFactor = _imaginaryScrollFactor;
 
         // pos
-        handle.padding().bottom = Constr.relh(_scrollFactor * (1 - _maxFactor));
+        handle.padding().top = Constr.relh(_scrollFactor * (1 - _maxFactor));
     }
 
     private float getMaxScrollFactor(){
@@ -129,7 +129,8 @@ public class ScrollView extends AbstractLayout{
 
     private void setupHandle(){
         handle.padding().right = Constr.zero;
-        handle.minSize().setY(Constr.aspect(1));
+        handle.minSize().set(Constr.px(10), Constr.aspect(1));
+        handle.maxSize().setX(Constr.relw(0.01));
         handle.setOrder(Integer.MAX_VALUE);
         handle.style().background().color().set(0.35, 0.1, 0.9);
         handle.style().setCornerRadius(Constr.relw(0.5));

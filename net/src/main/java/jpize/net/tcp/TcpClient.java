@@ -1,5 +1,6 @@
 package jpize.net.tcp;
 
+import jpize.net.security.KeyAES;
 import jpize.net.tcp.packet.IPacket;
 
 import java.io.ByteArrayOutputStream;
@@ -53,6 +54,11 @@ public class TcpClient extends TcpDisconnector{
     public void send(IPacket<?> packet){
         if(connection != null)
             connection.send(packet);
+    }
+
+
+    public void encode(KeyAES encodeKey){
+        connection.encode(encodeKey);
     }
 
     

@@ -23,7 +23,6 @@ public class Main{
         //OpenGLTest.main(args);
 
         //System.exit(0);
-
         ContextBuilder.newContext("Dev-Test", 1280, 900).icon("textures/texture8.png")
         //.register().setAdapter(new KeyboardTest());
         //.register().setAdapter(new MouseTest());
@@ -35,8 +34,9 @@ public class Main{
         //.register().setAdapter(new TextTest());
         //.register().setAdapter(new TextEditor());
         //.register().setAdapter(new AudioTest());
-        //.register().setAdapter(new UiTest());
-        .register().setAdapter(new UiTest2());
+        //.register().setAdapter(new NoiseTest());
+        .register().setAdapter(new UiTest());
+        //.register().setAdapter(new UiTest2());
         //.register().setAdapter(new GlyphIteratorTest());
         //.register().setAdapter(new ListTest());
         //.register().setAdapter(new ResTest());

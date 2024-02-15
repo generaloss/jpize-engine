@@ -19,9 +19,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class TextField extends UIComponent{
 
-    private String text;
     private Font font;
+    private String text;
     private final Color color;
+    private String hint;
+    private final Color hint_color;
 
     private final Rect cursor;
 
@@ -35,10 +37,13 @@ public class TextField extends UIComponent{
     public TextField(Constraint width, Constraint height, Font font, String text){
         super.size.set(width, height);
         super.style.background().color().set(0.85);
+        super.style.setCornerRadius(Constr.relh(0.1));
         super.input.setClickable(true);
+        super.margin.set(Constr.relh(0.05));
 
         this.font = font;
         this.color = new Color(0.1);
+        this.hint_color = new Color(0.55);
         this.inputCallbacks = new CopyOnWriteArrayList<>();
         this.enterCallbacks = new CopyOnWriteArrayList<>();
 
@@ -108,9 +113,19 @@ public class TextField extends UIComponent{
 
     @Override
     public void render(){
+        final boolean drawHint = (text == null || text.isEmpty());
+        if(drawHint && (hint == null || hint.isBlank()))
+            return;
         final TextureBatch batch = super.context.renderer().batch();
-        font.options.color.set(color);
-        font.drawText(batch, text, cache.x + cache.marginLeft, cache.y + cache.marginBottom + font.options.getAdvanceScaled());
+
+        font.options.color.set(drawHint ? hint_color : color);
+
+        final float x = cache.x + cache.marginLeft;
+        final float y = cache.y + cache.marginBottom + font.options.getAdvanceScaled();
+        if(drawHint)
+            font.drawText(batch, hint, x, y);
+        else
+            font.drawText(batch, text, x, y);
     }
 
     @Override
@@ -149,6 +164,16 @@ public class TextField extends UIComponent{
         _processor.insertText(this.text);
         invokeInputCallbacks();
     }
+
+
+    public String getHint(){
+        return hint;
+    }
+
+    public void setHint(String hint){
+        this.hint = hint;
+    }
+
 
     public Color color(){
         return color;

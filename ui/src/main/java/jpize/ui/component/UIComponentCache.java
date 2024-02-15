@@ -77,10 +77,10 @@ public class UIComponentCache{
     }
 
     private void calcMargin(){
-        marginTop    = Math.max(0, constrToPx(component.margin.top   , true , false));
-        marginLeft   = Math.max(0, constrToPx(component.margin.left  , false, false));
-        marginBottom = Math.max(0, constrToPx(component.margin.bottom, true , false));
-        marginRight  = Math.max(0, constrToPx(component.margin.right , false, false));
+        marginTop    = Math.max(0, constrToPx(component.margin.top   , component, true , false));
+        marginLeft   = Math.max(0, constrToPx(component.margin.left  , component, false, false));
+        marginBottom = Math.max(0, constrToPx(component.margin.bottom, component, true , false));
+        marginRight  = Math.max(0, constrToPx(component.margin.right , component, false, false));
     }
 
     private void recalcMargin(){

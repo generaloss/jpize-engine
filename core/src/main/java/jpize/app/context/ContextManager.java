@@ -84,7 +84,6 @@ public class ContextManager{
         while(!Thread.interrupted()){
             if(stopRequest)
                 break;
-
             // Init
             for(Context context: contextsToInit){
                 if(context.adapter == null)

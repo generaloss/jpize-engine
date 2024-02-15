@@ -177,11 +177,10 @@ public class UIContext implements Disposable{
 
         component.cache().updateParent();
         component.update();
-
         component.renderBackground();
-        component.render();
 
         renderer.beginScissor(component);
+        component.render();
         for(UIComponent child: component.children())
             render(child);
         renderer.endScissor(component);

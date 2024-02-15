@@ -23,7 +23,7 @@ public class UiTest2 extends JpizeApplication{
     public UiTest2(){
         this.font = FontLoader.getDefault();
         this.font.setScale(0.7F);
-        this.background = new Texture("ui/background.png");
+        this.background = new Texture("ui/background_2.png");
         this.icon = new Texture("ui/icon.png");
         this.minecraftIcon = new Texture("ui/minecraft-icon.png");
 
