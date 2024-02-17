@@ -9,7 +9,7 @@ public class Rect extends UIComponent{
     public Rect(Constraint width, Constraint height){
         super.size.set(width, height);
         super.minSize.set(Constr.px(1));
-        super.style.background().color().set(1);
+        super.background().color().set(1);
     }
 
     public Rect(Constraint size){

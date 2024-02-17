@@ -1,7 +1,7 @@
 package jpize.ui.loader;
 
 import jpize.ui.component.UIComponent;
-import jpize.ui.UIContext;
+import jpize.ui.component.UIContext;
 import jpize.util.res.Resource;
 
 import java.io.File;

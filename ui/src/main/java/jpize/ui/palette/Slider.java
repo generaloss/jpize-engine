@@ -23,7 +23,7 @@ public class Slider extends Rect{
 
     public Slider(Constraint width, Constraint height){
         super(width, height);
-        super.style.background().color().setA(0);
+        super.background().color().setA(0);
         this._callbacks = new CopyOnWriteArrayList<>();
 
         this.handle = new Rect(Constr.relh(1), Constr.aspect(1));
@@ -109,25 +109,25 @@ public class Slider extends Rect{
         final UIReleaseCallback releaseCallback = (comp, btn) -> _grabHandle = false;
 
         this.lineBg.padding().set(Constr.zero, Constr.px(() -> (handle.cache().height - lineBg.cache().height) * 0.5F), Constr.zero, Constr.auto);
-        this.lineBg.style().background().color().set(0.85);
-        this.lineBg.style().setCornerRadius(Constr.relh(0.5));
-        this.lineBg.input().setClickable(true);
-        this.lineBg.input().addPressCallback(pressCallback);
-        this.lineBg.input().addReleaseCallback(releaseCallback);
+        this.lineBg.background().color().set(0.85);
+        this.lineBg.setCornerRadius(Constr.relh(0.5));
+        this.lineBg.setClickable(true);
+        this.lineBg.addPressCallback(pressCallback);
+        this.lineBg.addReleaseCallback(releaseCallback);
 
         this.line.padding().set(Constr.zero, Constr.px(() -> (handle.cache().height - line.cache().height) * 0.5F), Constr.zero, Constr.auto);
-        this.line.style().background().color().set(0.25, 0.0, 0.7);
-        this.line.style().setCornerRadius(Constr.relh(0.5));
-        this.line.input().setClickable(true);
-        this.line.input().addPressCallback(pressCallback);
-        this.line.input().addReleaseCallback(releaseCallback);
+        this.line.background().color().set(0.25, 0.0, 0.7);
+        this.line.setCornerRadius(Constr.relh(0.5));
+        this.line.setClickable(true);
+        this.line.addPressCallback(pressCallback);
+        this.line.addReleaseCallback(releaseCallback);
 
         this.handle.padding().set(Constr.zero, Constr.zero, Constr.zero, Constr.auto);
-        this.handle.style().background().color().set(0.35, 0.1, 0.9);
-        this.handle.style().setCornerRadius(Constr.relh(0.5));
-        this.handle.input().setClickable(true);
-        this.handle.input().addPressCallback(pressCallback);
-        this.handle.input().addReleaseCallback(releaseCallback);
+        this.handle.background().color().set(0.35, 0.1, 0.9);
+        this.handle.setCornerRadius(Constr.relh(0.5));
+        this.handle.setClickable(true);
+        this.handle.addPressCallback(pressCallback);
+        this.handle.addReleaseCallback(releaseCallback);
     }
 
 }

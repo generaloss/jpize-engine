@@ -1,6 +1,6 @@
 
 @VBox {
-    style.background.image: !image_1
+    background.image: !image_1
 
     @Button (7ap, 70px, 'Button Text', !font) {
         ID: "button"

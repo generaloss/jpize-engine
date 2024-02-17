@@ -157,8 +157,8 @@ public class UIComponentCache{
     }
 
     private void calcStyle(){
-        cornerRadius = constrToPx(component.style.getCornerRadius(), component, false, true);
-        borderSize = constrToPx(component.style.getBorderSize(), component, false, true);
+        cornerRadius = constrToPx(component.getCornerRadius(), component, false, true);
+        borderSize = constrToPx(component.getBorderSize(), component, false, true);
     }
 
 

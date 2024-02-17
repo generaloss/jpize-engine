@@ -1,7 +1,8 @@
 package jpize.ui.component;
 
 import jpize.graphics.texture.Texture;
-import jpize.ui.UIContext;
+import jpize.sdl.input.Btn;
+import jpize.ui.constraint.Constraint;
 import jpize.util.color.Color;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Dimension;
@@ -13,18 +14,26 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public abstract class UIComponent{
 
     protected UIContext context;
-    protected final UIComponentCache cache;
-    protected final List<UIComponent> children;
     protected UIComponent parent;
+    protected final List<UIComponent> children;
+    protected final UIComponentCache cache;
+    // properties
     protected String ID;
     protected int order;
-
     protected final Insets margin, padding;
     protected final Dimension size, minSize, maxSize;
     protected boolean paddingFixH, paddingFixW;
-    protected final UIStyle style;
-    protected final UIInput input;
     protected boolean hidden;
+    // style
+    private final UIBackground background;
+    private final Color border_color;
+    private Constraint border_size;
+    private Constraint corner_radius;
+    // input
+    private boolean clickable;
+    private final List<UIPressCallback> pressCallbacks;
+    private final List<UIReleaseCallback> releaseCallbacks;
+    private final List<UIFocusCallback> focusCallbacks;
 
     public UIComponent(){
         this.children = new CopyOnWriteArrayList<>();
@@ -35,8 +44,11 @@ public abstract class UIComponent{
         this.size = new Dimension();
         this.minSize = new Dimension(Constr.zero);
         this.maxSize = new Dimension();
-        this.style = new UIStyle();
-        this.input = new UIInput(this);
+        this.background = new UIBackground();
+        this.border_color = new Color();
+        this.pressCallbacks = new CopyOnWriteArrayList<>();
+        this.releaseCallbacks = new CopyOnWriteArrayList<>();
+        this.focusCallbacks = new CopyOnWriteArrayList<>();
     }
 
 
@@ -44,15 +56,10 @@ public abstract class UIComponent{
 
     public void render(){ }
 
-    public void onFocus(){ }
 
-    public void onUnfocus(){ }
-
-
-    public void renderBackground(){
+    protected void renderBackground(){
         final UIRenderer renderer = context.renderer();
-        renderer.beginRect(cache.x, cache.y, cache.width, cache.height, cache.cornerRadius, cache.borderSize, style.borderColor());
-        final UIBackground background = style.background();
+        renderer.beginRect(cache.x, cache.y, cache.width, cache.height, cache.cornerRadius, cache.borderSize, border_color);
         final Color color = background.color();
         final Texture image = background.getImage();
         renderer.batch().draw(image, cache.x, cache.y, cache.width, cache.height, color.r(), color.g(), color.b(), color.a());
@@ -60,11 +67,11 @@ public abstract class UIComponent{
     }
 
 
-    public final UIComponent parent(){
+    public UIComponent parent(){
         return parent;
     }
 
-    public final void setParent(UIComponent parent){
+    public void setParent(UIComponent parent){
         this.parent = parent;
         if(parent == null) return;
         context = parent.context;
@@ -79,11 +86,11 @@ public abstract class UIComponent{
         children.sort(Comparator.comparingInt(c -> c.order));
     }
 
-    public final List<UIComponent> children(){
+    public List<UIComponent> children(){
         return children;
     }
 
-    protected final UIComponent getChildWithID(String ID){
+    protected UIComponent getChildWithID(String ID){
         for(UIComponent child: children)
             if(ID.equals(child.ID))
                 return child;
@@ -92,7 +99,7 @@ public abstract class UIComponent{
     }
 
     @SuppressWarnings("unchecked")
-    public final <C extends UIComponent> C getByOrder(int order){
+    public <C extends UIComponent> C getByOrder(int order){
         for(UIComponent child: children)
             if(order == child.order)
                 return (C) child;
@@ -100,7 +107,7 @@ public abstract class UIComponent{
     }
 
     @SuppressWarnings("unchecked")
-    public final <C extends UIComponent> C getByID(String ID){
+    public <C extends UIComponent> C getByID(String ID){
         if(ID.contains(".")){
             final String[] links = ID.split("\\.");
 
@@ -113,7 +120,7 @@ public abstract class UIComponent{
     }
 
     @SuppressWarnings("unchecked")
-    public final <C extends UIComponent> C findByID(String ID){
+    public <C extends UIComponent> C findByID(String ID){
         for(UIComponent child: children){
             if(ID.equals(child.ID))
                 return (C) child;
@@ -140,76 +147,165 @@ public abstract class UIComponent{
     }
 
 
-    public final String getID(){
+    public String getID(){
         return ID;
     }
 
-    public final void setID(String ID){
+    public void setID(String ID){
         this.ID = ID;
     }
 
 
-    public final int getOrder(){
+    public int getOrder(){
         return order;
     }
 
-    public final void setOrder(int order){
+    public void setOrder(int order){
         this.order = order;
         if(parent != null)
             parent.sortChildren();
     }
 
 
-    public final UIContext context(){
+    public UIContext context(){
         return context;
     }
 
-    public final void setContext(UIContext context){
+    public void setContext(UIContext context){
         this.context = context;
     }
 
 
-    public final UIComponentCache cache(){
+    public UIComponentCache cache(){
         return cache;
     }
 
-    public final UIInput input(){
-        return input;
-    }
 
-
-    public final Insets margin(){
+    public Insets margin(){
         return margin;
     }
 
-    public final Insets padding(){
+    public Insets padding(){
         return padding;
     }
 
-    public final Dimension size(){
+    public Dimension size(){
         return size;
     }
 
-    public final Dimension minSize(){
+    public Dimension minSize(){
         return minSize;
     }
 
-    public final Dimension maxSize(){
+    public Dimension maxSize(){
         return maxSize;
     }
 
 
-    public final UIStyle style(){
-        return style;
-    }
-
-
-    public final boolean isHidden(){
+    public boolean isHidden(){
         return hidden;
     }
 
-    public final void setHidden(boolean hidden){
+    public void setHidden(boolean hidden){
         this.hidden = hidden;
+    }
+
+    // Style
+
+    public UIBackground background(){
+        return background;
+    }
+
+
+    public Constraint getCornerRadius(){
+        return corner_radius;
+    }
+
+    public void setCornerRadius(Constraint corner_radius){
+        this.corner_radius = corner_radius;
+    }
+
+
+    public Constraint getBorderSize(){
+        return border_size;
+    }
+
+    public void setBorderSize(Constraint border_size){
+        this.border_size = border_size;
+    }
+
+
+    public Color borderColor(){
+        return border_color;
+    }
+
+    // Input
+
+    public boolean isClickable(){
+        return clickable;
+    }
+
+    public void setClickable(boolean clickable){
+        this.clickable = clickable;
+    }
+
+
+    public boolean isHovered(){
+        return context.isHovered(this);
+    }
+
+    public boolean isPressed(){
+        return context.isPressed(this);
+    }
+
+    public boolean isFocused(){
+        return context.isFocused(this);
+    }
+
+    public void focus(){
+        context.setFocused(this);
+    }
+
+
+    public void addPressCallback(UIPressCallback callback){
+        pressCallbacks.add(callback);
+    }
+
+    public void removePressCallback(UIPressCallback callback){
+        pressCallbacks.remove(callback);
+    }
+
+    protected void invokePressCallbacks(Btn button){
+        for(UIPressCallback callback: pressCallbacks)
+            callback.invoke(this, button);
+    }
+
+
+    public void addReleaseCallback(UIReleaseCallback callback){
+        releaseCallbacks.add(callback);
+    }
+
+    public void removeReleaseCallback(UIReleaseCallback callback){
+        releaseCallbacks.remove(callback);
+    }
+
+    protected void invokeReleaseCallbacks(Btn button){
+        for(UIReleaseCallback callback: releaseCallbacks)
+            callback.invoke(this, button);
+    }
+
+
+    public void addFocusCallback(UIFocusCallback callback){
+        focusCallbacks.add(callback);
+    }
+
+    public void removeFocusCallback(UIFocusCallback callback){
+        focusCallbacks.remove(callback);
+    }
+
+    protected void invokeFocusCallbacks(boolean focus){
+        for(UIFocusCallback callback: focusCallbacks)
+            callback.invoke(this, focus);
     }
 
 }

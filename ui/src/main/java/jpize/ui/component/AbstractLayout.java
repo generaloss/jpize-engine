@@ -3,7 +3,7 @@ package jpize.ui.component;
 public abstract class AbstractLayout extends UIComponent{
 
     public AbstractLayout(){
-        super.style.background().color().setA(0);
+        super.background().color().setA(0);
     }
 
     public float getPositionForComponent(UIComponent component, boolean forY){

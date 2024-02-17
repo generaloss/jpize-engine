@@ -499,7 +499,7 @@ ui.render();
 @VBox {
     # Parameters
     margin: (0.05rw, 0.01rw, 0.05rw, 0.01rw) # (top, left, bottom, right)
-    style.background: {
+    background: {
         image: !background # BG image
         color.a: 0.4 # BG alpha
     }
@@ -518,14 +518,15 @@ ui.render();
     @ScrollView (0.4rw, wrap_content) {
         padding: (0.02rw, zero, auto, zero)
         margin: (zero, 0.01rw, zero, 0.01rw)
-        style.background.color.a: 0.8
+        background.color.a: 0.8
 
         # ScrollView Component:
         @TextView ("The\nquick\nbrown\nfox\njumps\nover\nthe\nlazy\ndog", !font, 0.1rw) { }
     }
 }
 ```
-#### Result: ![preview](ui/preview.gif)
+#### Result:
+![preview](ui/preview.gif)
 
 ---
 

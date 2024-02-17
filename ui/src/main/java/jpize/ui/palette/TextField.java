@@ -24,7 +24,6 @@ public class TextField extends UIComponent{
     private final Color color;
     private String hint;
     private final Color hint_color;
-
     private final Rect cursor;
 
     private final TextProcessor _processor;
@@ -36,9 +35,9 @@ public class TextField extends UIComponent{
 
     public TextField(Constraint width, Constraint height, Font font, String text){
         super.size.set(width, height);
-        super.style.background().color().set(0.85);
-        super.style.setCornerRadius(Constr.relh(0.1));
-        super.input.setClickable(true);
+        super.background().color().set(0.85);
+        super.setCornerRadius(Constr.relh(0.1));
+        super.setClickable(true);
         super.margin.set(Constr.relh(0.05));
 
         this.font = font;
@@ -51,7 +50,7 @@ public class TextField extends UIComponent{
         setText(text);
 
         this.cursor = new Rect(Constr.relh(0.07), Constr.match_parent);
-        this.cursor.style().background().color().set(0.38, 0, 0.9);
+        this.cursor.background().color().set(0.38, 0, 0.9);
         this.cursor.setHidden(true);
         super.add(cursor);
 
@@ -70,6 +69,19 @@ public class TextField extends UIComponent{
                 invokeInputCallbacks();
             }
         };
+
+        super.addFocusCallback((view, focus) -> {
+            if(focus){
+                _processor.enable();
+                _processor.resetCursorBlinking();
+                cursor.setHidden(false);
+                Jpize.context().callbacks().addKeyCallback(_keyCallback);
+            }else{
+                _processor.disable();
+                cursor.setHidden(true);
+                Jpize.context().callbacks().removeKeyCallback(_keyCallback);
+            }
+        });
     }
 
     public TextField(Constraint width, Constraint height, Font font){
@@ -96,7 +108,7 @@ public class TextField extends UIComponent{
         }
 
         // cursor x
-        if(input.isFocused() && Btn.LEFT.isPressed()){
+        if(super.isFocused() && Btn.LEFT.isPressed()){
             final float touchX = Jpize.getX() - super.cache.x - super.cache.marginLeft;
 
             int cursorX = 0;
@@ -126,21 +138,6 @@ public class TextField extends UIComponent{
             font.drawText(batch, hint, x, y);
         else
             font.drawText(batch, text, x, y);
-    }
-
-    @Override
-    public void onFocus(){
-        _processor.enable();
-        _processor.resetCursorBlinking();
-        cursor.setHidden(false);
-        Jpize.context().callbacks().addKeyCallback(_keyCallback);
-    }
-
-    @Override
-    public void onUnfocus(){
-        _processor.disable();
-        cursor.setHidden(true);
-        Jpize.context().callbacks().removeKeyCallback(_keyCallback);
     }
 
 

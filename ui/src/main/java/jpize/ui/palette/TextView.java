@@ -24,7 +24,7 @@ public class TextView extends UIComponent{
         this.text_size = textSize;
         this.color = new Color(0.1);
 
-        super.style.background().color().setA(0);
+        super.background().color().setA(0);
     }
 
     public TextView(String text, Font font){

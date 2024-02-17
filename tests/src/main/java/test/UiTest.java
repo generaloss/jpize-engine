@@ -6,8 +6,9 @@ import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
 import jpize.app.JpizeApplication;
 import jpize.sdl.input.Key;
-import jpize.ui.UIContext;
+import jpize.ui.component.UIContext;
 import jpize.ui.loader.PuiLoader;
+import jpize.ui.palette.TextField;
 
 public class UiTest extends JpizeApplication{
 
@@ -23,6 +24,12 @@ public class UiTest extends JpizeApplication{
 
         ui = loader.loadCtxRes("ui/view.pui");
         ui.enable();
+
+        TextField username = ui.findByID("username");
+        TextField password = ui.findByID("password");
+
+        username.addEnterCallback(((view, text) -> password.focus()));
+        password.addEnterCallback(((view, text) -> username.focus()));
     }
 
     public void render(){

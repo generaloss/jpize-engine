@@ -5,6 +5,6 @@ import jpize.sdl.input.Btn;
 @FunctionalInterface
 public interface UIPressCallback{
 
-    void invoke(UIComponent comp, Btn btn);
+    void invoke(UIComponent view, Btn btn);
 
 }

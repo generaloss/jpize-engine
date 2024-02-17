@@ -25,7 +25,7 @@ package test;
 // import jpize.net.tcp.packet.PacketHandler;
 // import jpize.sdl.input.Btn;
 // import jpize.sdl.input.Key;
-// import jpize.ui.UIContext;
+// import jpize.ui.component.UIContext;
 // import jpize.ui.component.AbstractLayout;
 // import jpize.ui.constraint.Constr;
 // import jpize.ui.loader.PuiLoader;

@@ -8,7 +8,7 @@ import jpize.graphics.font.FontLoader;
 import jpize.graphics.texture.Texture;
 import jpize.sdl.Sdl;
 import jpize.ui.loader.PuiLoader;
-import jpize.ui.UIContext;
+import jpize.ui.component.UIContext;
 import jpize.ui.palette.*;
 
 public class UiTest2 extends JpizeApplication{
@@ -40,8 +40,7 @@ public class UiTest2 extends JpizeApplication{
         // Jpize.setVsync(false);
 
         Button button1 = ui.findByID("button 1");
-        button1.input().addPressCallback((view, btn) -> Sdl.enableVsync(!Sdl.isVsyncEnabled()));
-
+        button1.addPressCallback((view, btn) -> Sdl.enableVsync(!Sdl.isVsyncEnabled()));
 
         Slider s1 = ui.findByID("slider 1");
         Slider s2 = ui.findByID("slider 2");
@@ -57,16 +56,16 @@ public class UiTest2 extends JpizeApplication{
                 float r1 = Float.parseFloat(c[0]);
                 float g1 = Float.parseFloat(c[1]);
                 float b1 = Float.parseFloat(c[2]);
-                s1.handle().style().background().color().set(r1, g1, b1);
-                s2.handle().style().background().color().set(r1, g1, b1);
-                s3.handle().style().background().color().set(r1, g1, b1);
+                s1.handle().background().color().set(r1, g1, b1);
+                s2.handle().background().color().set(r1, g1, b1);
+                s3.handle().background().color().set(r1, g1, b1);
 
                 float r2 = Float.parseFloat(c[3]);
                 float g2 = Float.parseFloat(c[4]);
                 float b2 = Float.parseFloat(c[5]);
-                s1.line().style().background().color().set(r2, g2, b2);
-                s2.line().style().background().color().set(r2, g2, b2);
-                s3.line().style().background().color().set(r2, g2, b2);
+                s1.line().background().color().set(r2, g2, b2);
+                s2.line().background().color().set(r2, g2, b2);
+                s3.line().background().color().set(r2, g2, b2);
 
             }catch(Exception ignored){ }
         });
