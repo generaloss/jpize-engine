@@ -10,68 +10,36 @@ import jpize.util.math.Intersector;
 
 public class UIContext implements Disposable{
 
-    private final UIRenderer renderer;
     private UIComponent root;
     private UIComponent focused;
     private UIComponent pressed;
+    private final UIRenderer renderer;
     private final MouseButtonCallback mouseButtonCallback;
     private final WinSizeChangedCallback winResizeCallback;
-    private volatile boolean enableTouchingDelayed;
-
-    public UIContext(){
-        this.renderer = new UIRenderer();
-
-        this.mouseButtonCallback = ((button, action) -> {
-            if(button == Btn.X1 || button == Btn.X2)
-                return;
-
-            // если отпустили компонент
-            if(action == MouseButtonAction.UP){
-                if(pressed != null){
-                    pressed.invokeReleaseCallbacks(button);
-                    pressed = null;
-                }
-                return;
-            }
-
-            final UIComponent hovered = getHovered();
-            setFocused(hovered);
-
-            // если нажали на компонент
-            if(pressed != null || hovered == null)
-                return;
-            pressed = hovered;
-            pressed.invokePressCallbacks(button);
-        });
-
-        this.winResizeCallback = (window, width, height) -> renderer.resize(width, height);
-    }
+    private volatile boolean enableTouchDelayed;
 
     public UIContext(UIComponent root){
         this();
         setRoot(root);
     }
 
-
-    public void setCornerSoftness(float softness){
-        renderer.setCornerSoftness(softness);
-    }
-
-    public void setBorderSoftness(float softness){
-        renderer.setBorderSoftness(softness);
+    public UIContext(){
+        this.renderer = new UIRenderer();
+        this.mouseButtonCallback = this::buttonCallback;
+        this.winResizeCallback = (window, width, height) -> renderer.resize(width, height);
     }
 
 
     public void enable(){
         Jpize.context().callbacks().addWinSizeChangedCallback(winResizeCallback);
         winResizeCallback.invoke(null, Jpize.getWidth(), Jpize.getHeight());
-        enableTouchingDelayed = true;
+        enableTouchDelayed = true;
     }
 
     public void disable(){
         Jpize.context().callbacks().removeMouseButtonCallback(mouseButtonCallback);
         Jpize.context().callbacks().removeWinSizeChangedCallback(winResizeCallback);
-        enableTouchingDelayed = false;
+        enableTouchDelayed = false;
     }
 
 
@@ -80,21 +48,15 @@ public class UIContext implements Disposable{
     }
 
 
-    private UIComponent getHovered(UIComponent component, int x, int y){
-        final UIComponentCache cache = component.cache();
-        if(!Intersector.isPointOnRect(x, y, cache.x, cache.y, cache.width, cache.height))
-            return null;
-
-        for(UIComponent child: component.children()){
-            final UIComponent hovered = getHovered(child, x, y);
-            if(hovered != null)
-                return hovered;
-        }
-
-        if(component.isClickable())
-            return component;
-        return null;
+    public UIComponent getRoot(){
+        return root;
     }
+
+    public void setRoot(UIComponent root){
+        this.root = root;
+        setThisContext(root);
+    }
+
 
     public UIComponent getHovered(){
         return getHovered(root, Jpize.getX(), Jpize.getY());
@@ -130,20 +92,25 @@ public class UIContext implements Disposable{
     }
 
 
-    public UIComponent getRoot(){
-        return root;
+    public void render(){
+        renderer.begin();
+        render(root);
+        renderer.end();
+
+        if(enableTouchDelayed){
+            Jpize.context().callbacks().addMouseButtonCallback(mouseButtonCallback);
+            enableTouchDelayed = false;
+        }
     }
 
-    public void setRoot(UIComponent root){
-        this.root = root;
-        setThisContext(root);
+    @Override
+    public void dispose(){
+        disable();
+        dispose(root);
+        renderer.dispose();
     }
 
-    private void setThisContext(UIComponent component){
-        component.setContext(this);
-        for(UIComponent child: component.children())
-            setThisContext(child);
-    }
+    // Aliases
 
     public <T extends UIComponent> T getByID(String ID){
         return root.getByID(ID);
@@ -154,16 +121,15 @@ public class UIContext implements Disposable{
     }
 
 
-    public void render(){
-        renderer.begin();
-        render(root);
-        renderer.end();
-
-        if(enableTouchingDelayed){
-            Jpize.context().callbacks().addMouseButtonCallback(mouseButtonCallback);
-            enableTouchingDelayed = false;
-        }
+    public void setCornerSoftness(float softness){
+        renderer.setCornerSoftness(softness);
     }
+
+    public void setBorderSoftness(float softness){
+        renderer.setBorderSoftness(softness);
+    }
+
+    // Private
 
     private void render(UIComponent component){
         if(component == null || component.isHidden())
@@ -180,7 +146,6 @@ public class UIContext implements Disposable{
         renderer.endScissor(component);
     }
 
-
     private void dispose(UIComponent component){
         for(UIComponent child: component.children()){
             child.invokeFocusCallbacks(false);
@@ -188,11 +153,48 @@ public class UIContext implements Disposable{
         }
     }
 
-    @Override
-    public void dispose(){
-        disable();
-        dispose(root);
-        renderer.dispose();
+
+    private UIComponent getHovered(UIComponent component, int x, int y){
+        final UIComponentCache cache = component.cache();
+        if(!Intersector.isPointOnRect(x, y, cache.x, cache.y, cache.width, cache.height))
+            return null;
+
+        for(UIComponent child: component.children()){
+            final UIComponent hovered = getHovered(child, x, y);
+            if(hovered != null)
+                return hovered;
+        }
+
+        if(component.isClickable())
+            return component;
+        return null;
+    }
+
+
+    private void setThisContext(UIComponent component){
+        component.setContext(this);
+        for(UIComponent child: component.children())
+            setThisContext(child);
+    }
+
+    private void buttonCallback(Btn button, MouseButtonAction action){
+        if(button == Btn.X1 || button == Btn.X2)
+            return;
+
+        if(action == MouseButtonAction.DOWN){
+            final UIComponent hovered = getHovered();
+            setFocused(hovered);
+
+            if(pressed != null || hovered == null)
+                return;
+            pressed = hovered;
+            pressed.invokePressCallbacks(button);
+        }else{
+            if(pressed == null)
+                return;
+            pressed.invokeReleaseCallbacks(button);
+            pressed = null;
+        }
     }
 
 }

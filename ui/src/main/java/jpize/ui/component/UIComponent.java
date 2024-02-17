@@ -13,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class UIComponent{
 
+    // general
     protected UIContext context;
     protected UIComponent parent;
     protected final List<UIComponent> children;
@@ -22,7 +23,6 @@ public abstract class UIComponent{
     protected int order;
     protected final Insets margin, padding;
     protected final Dimension size, minSize, maxSize;
-    protected boolean paddingFixH, paddingFixW;
     protected boolean hidden;
     // style
     private final UIBackground background;
@@ -51,11 +51,13 @@ public abstract class UIComponent{
         this.focusCallbacks = new CopyOnWriteArrayList<>();
     }
 
+    // Override
 
     public void update(){ }
 
     public void render(){ }
 
+    // Protected
 
     protected void renderBackground(){
         final UIRenderer renderer = context.renderer();
@@ -66,28 +68,8 @@ public abstract class UIComponent{
         renderer.endRect();
     }
 
-
-    public UIComponent parent(){
-        return parent;
-    }
-
-    public void setParent(UIComponent parent){
-        this.parent = parent;
-        if(parent == null) return;
-        context = parent.context;
-
-        // Recursive set parent for children
-        for(UIComponent child: children)
-            child.setParent(this);
-    }
-
-
     private void sortChildren(){
         children.sort(Comparator.comparingInt(c -> c.order));
-    }
-
-    public List<UIComponent> children(){
-        return children;
     }
 
     protected UIComponent getChildWithID(String ID){
@@ -97,6 +79,23 @@ public abstract class UIComponent{
 
         throw new RuntimeException("Component with ID " + ID + " not found");
     }
+
+    // Children (Add / Remove / Get)
+
+    public void add(UIComponent child){
+        child.setParent(this);
+        children.add(child);
+        sortChildren();
+    }
+
+    public void remove(UIComponent child){
+        children.remove(child);
+    }
+
+    public void remove(String ID){
+        children.remove(findByID(ID));
+    }
+
 
     @SuppressWarnings("unchecked")
     public <C extends UIComponent> C getByOrder(int order){
@@ -132,20 +131,41 @@ public abstract class UIComponent{
         return null;
     }
 
-    public void add(UIComponent child){
-        child.setParent(this);
-        children.add(child);
-        sortChildren();
+    // General
+
+    public UIContext context(){
+        return context;
     }
 
-    public void remove(UIComponent child){
-        children.remove(child);
+    public void setContext(UIContext context){
+        this.context = context;
     }
 
-    public void remove(String ID){
-        children.remove(findByID(ID));
+
+    public UIComponent parent(){
+        return parent;
     }
 
+    public void setParent(UIComponent parent){
+        this.parent = parent;
+        if(parent == null) return;
+        context = parent.context;
+
+        // Recursive set parent for children
+        for(UIComponent child: children)
+            child.setParent(this);
+    }
+
+
+    public List<UIComponent> children(){
+        return children;
+    }
+
+    public UIComponentCache cache(){
+        return cache;
+    }
+
+    // Properties
 
     public String getID(){
         return ID;
@@ -164,20 +184,6 @@ public abstract class UIComponent{
         this.order = order;
         if(parent != null)
             parent.sortChildren();
-    }
-
-
-    public UIContext context(){
-        return context;
-    }
-
-    public void setContext(UIContext context){
-        this.context = context;
-    }
-
-
-    public UIComponentCache cache(){
-        return cache;
     }
 
 

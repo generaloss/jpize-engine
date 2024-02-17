@@ -22,6 +22,7 @@ public class HBox extends AbstractLayout{
         this(Constr.win_width, Constr.win_height);
     }
 
+
     @Override
     public void update(){
         cache.calculate();

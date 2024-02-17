@@ -18,6 +18,10 @@ public class TextView extends UIComponent{
     private float _text_scale;
     private Vec2f _bounds;
 
+    public TextView(String text, Font font){
+        this(text, font, Constr.match_parent);
+    }
+
     public TextView(String text, Font font, Constraint textSize){
         this.text = text;
         this.font = font;
@@ -27,9 +31,6 @@ public class TextView extends UIComponent{
         super.background().color().setA(0);
     }
 
-    public TextView(String text, Font font){
-        this(text, font, Constr.match_parent);
-    }
 
     @Override
     public void update(){
@@ -60,6 +61,7 @@ public class TextView extends UIComponent{
         font.drawText(context.renderer().batch(), text, cache.x, cache.y + cache.height);
     }
 
+
     public Font getFont(){
         return font;
     }
@@ -67,6 +69,7 @@ public class TextView extends UIComponent{
     public void setFont(Font font){
         this.font = font;
     }
+
 
     public String getText(){
         return text;
@@ -77,9 +80,11 @@ public class TextView extends UIComponent{
         size.setX(Constr.px(font.getTextWidth(text)));
     }
 
+
     public Color color(){
         return color;
     }
+
 
     public void setTextSize(Constraint text_size){
         this.text_size = text_size;

@@ -9,6 +9,7 @@ import jpize.sdl.event.callback.keyboard.KeyCallback;
 import jpize.sdl.input.Btn;
 import jpize.sdl.input.Key;
 import jpize.sdl.input.KeyAction;
+import jpize.sdl.input.KeyMods;
 import jpize.ui.component.UIComponent;
 import jpize.ui.constraint.Constr;
 import jpize.ui.constraint.Constraint;
@@ -39,54 +40,29 @@ public class TextField extends UIComponent{
         super.setCornerRadius(Constr.relh(0.1));
         super.setClickable(true);
         super.margin.set(Constr.relh(0.05));
+        super.addFocusCallback(this::focusCallback);
+
+        this._keyCallback = this::keyCallback;
 
         this.font = font;
         this.color = new Color(0.1);
         this.hint_color = new Color(0.55);
         this.inputCallbacks = new CopyOnWriteArrayList<>();
         this.enterCallbacks = new CopyOnWriteArrayList<>();
-
         this._processor = new TextProcessor(false, false);
-        setText(text);
 
         this.cursor = new Rect(Constr.relh(0.07), Constr.match_parent);
         this.cursor.background().color().set(0.38, 0, 0.9);
         this.cursor.setHidden(true);
         super.add(cursor);
 
-        this._keyCallback = (key, action, mods) -> {
-            if(action != KeyAction.DOWN)
-                return;
-            if(key == Key.ENTER)
-                invokeEnterCallbacks();
-
-            if(!mods.hasCtrl())
-                return;
-            if(key == Key.C)
-                Jpize.setClipboardText(_processor.getString());
-            else if(key == Key.V){
-                _processor.insertText(Jpize.getClipboardText().replace("\n", ""));
-                invokeInputCallbacks();
-            }
-        };
-
-        super.addFocusCallback((view, focus) -> {
-            if(focus){
-                _processor.enable();
-                _processor.resetCursorBlinking();
-                cursor.setHidden(false);
-                Jpize.context().callbacks().addKeyCallback(_keyCallback);
-            }else{
-                _processor.disable();
-                cursor.setHidden(true);
-                Jpize.context().callbacks().removeKeyCallback(_keyCallback);
-            }
-        });
+        setText(text);
     }
 
     public TextField(Constraint width, Constraint height, Font font){
         this(width, height, font, "");
     }
+
 
     @Override
     public void update(){
@@ -202,6 +178,36 @@ public class TextField extends UIComponent{
     private void invokeEnterCallbacks(){
         for(TextFieldEnterCallback callback: enterCallbacks)
             callback.invoke(this, text);
+    }
+
+
+    private void keyCallback(Key key, KeyAction action, KeyMods mods){
+        if(action != KeyAction.DOWN)
+            return;
+        if(key == Key.ENTER)
+            invokeEnterCallbacks();
+
+        if(!mods.hasCtrl())
+            return;
+        if(key == Key.C)
+            Jpize.setClipboardText(_processor.getString());
+        else if(key == Key.V){
+            _processor.insertText(Jpize.getClipboardText().replace("\n", ""));
+            invokeInputCallbacks();
+        }
+    }
+
+    private void focusCallback(UIComponent view, boolean focus){
+        if(focus){
+            _processor.enable();
+            _processor.resetCursorBlinking();
+            cursor.setHidden(false);
+            Jpize.context().callbacks().addKeyCallback(_keyCallback);
+        }else{
+            _processor.disable();
+            cursor.setHidden(true);
+            Jpize.context().callbacks().removeKeyCallback(_keyCallback);
+        }
     }
 
 }
