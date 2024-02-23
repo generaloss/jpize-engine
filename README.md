@@ -31,6 +31,35 @@
 
 # Getting Started
 
+### Installing
+#### Maven
+```
+<!-- Jpize Core -->
+<dependency>
+    <groupId>io.github.generaloss</groupId>
+    <artifactId>jpize-core</artifactId>
+    <version>24.2.1</version>
+</dependency>
+<!-- Jpize Utils -->
+<dependency>
+    <groupId>io.github.generaloss</groupId>
+    <artifactId>jpize-utils</artifactId>
+    <version>24.2.1</version>
+</dependency>
+<!-- Jpize UI -->
+<dependency>
+    <groupId>io.github.generaloss</groupId>
+    <artifactId>jpize-ui</artifactId>
+    <version>24.2.1</version>
+</dependency>
+<!-- Jpize Net -->
+<dependency>
+    <groupId>io.github.generaloss</groupId>
+    <artifactId>jpize-net</artifactId>
+    <version>24.2.1</version>
+</dependency>
+```
+
 ### What you need to know about the engine?
 *  Matrices indexed with _**mᵢⱼ**_, where _**i**_ - column index, _**j**_ - row index
 *  Left-Hand Coordinate System
