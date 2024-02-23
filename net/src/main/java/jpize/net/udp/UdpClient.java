@@ -6,20 +6,20 @@ public class UdpClient{
 
     private Thread receiverThread;
     private final UdpListener listener;
-    private UdpChannel connection;
+    private UdpConnection connection;
 
     public UdpClient(UdpListener listener){
         this.listener = listener;
     }
 
-    public synchronized UdpClient connect(String ip, int port){
+    public synchronized UdpClient connect(String address, int port){
         if(connection != null && !connection.isClosed())
             throw new RuntimeException("Already enabled");
 
         try{
             final DatagramSocket socket = new DatagramSocket();
-            socket.connect(InetAddress.getByName(ip), port);
-            connection = new UdpChannel(socket, listener);
+            socket.connect(InetAddress.getByName(address), port);
+            connection = new UdpConnection(socket, listener);
             
         }catch(Exception e){
             throw new RuntimeException("UdpClient startup error: " + e.getMessage());
@@ -32,8 +32,8 @@ public class UdpClient{
         connection.send(new DatagramPacket(data, data.length, address));
     }
 
-    public void send(byte[] data, String ip, int port){
-        send(data, new InetSocketAddress(ip, port));
+    public void send(byte[] data, String address, int port){
+        send(data, new InetSocketAddress(address, port));
     }
 
     public void disconnect(){
@@ -44,7 +44,7 @@ public class UdpClient{
         connection.close();
     }
 
-    public UdpChannel getConnection(){
+    public UdpConnection getConnection(){
         return connection;
     }
 

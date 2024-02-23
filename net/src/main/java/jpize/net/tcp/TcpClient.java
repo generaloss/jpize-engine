@@ -9,7 +9,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-public class TcpClient extends TcpDisconnector{
+public class TcpClient implements TcpConnection.Disconnector{
 
     private TcpConnection connection;
     private final TcpListener listener;
@@ -71,7 +71,7 @@ public class TcpClient extends TcpDisconnector{
     }
     
     @Override
-    protected void disconnected(TcpConnection connection){
+    public void disconnect(TcpConnection connection){
         listener.disconnected(connection);
     }
 

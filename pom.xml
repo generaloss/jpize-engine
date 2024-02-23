@@ -2,30 +2,41 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>net.generalpashon</groupId>
+  <groupId>io.github.generaloss</groupId>
   <artifactId>jpize-engine</artifactId>
-  <version>24.1.3</version>
+  <version>24.2.1</version>
+
   <packaging>pom</packaging>
+  <name>Jpize Engine</name>
+  <description>A Java Open Source Library, which provides tools to facilitate writing graphics for game development, and tools for developing desktop applications.</description>
+  <url>https://github.com/generaloss/jpize-engine</url>
+
+  <licenses>
+    <license>
+      <name>BSD 3-Clause License</name>
+      <url>https://opensource.org/license/bsd-3-clause</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:git://github.com/generaloss/jpize-engine.git</connection>
+    <developerConnection>scm:git:ssh://github.com:generaloss/jpize-engine.git</developerConnection>
+    <url>https://github.com/generaloss/jpize-engine/tree/master</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>General Okudzhava</name>
+      <email>goloborodkojava@gmail.com</email>
+    </developer>
+  </developers>
 
   <modules>
     <module>core</module>
     <module>net</module>
     <module>ui</module>
-    <module>util</module>
+    <module>utils</module>
   </modules>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>17</source>
-          <target>17</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
   <dependencies>
     <dependency>

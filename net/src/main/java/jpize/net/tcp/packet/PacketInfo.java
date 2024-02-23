@@ -6,15 +6,15 @@ import java.io.IOException;
 
 public class PacketInfo{
     
-    private final short packetID;
+    private final int packetID;
     private final JpizeInputStream dataStream;
     
-    public PacketInfo(short packetID, JpizeInputStream inStream){
+    public PacketInfo(int packetID, JpizeInputStream inStream){
         this.packetID = packetID;
         this.dataStream = inStream;
     }
     
-    public short getPacketID(){
+    public int getPacketID(){
         return packetID;
     }
     

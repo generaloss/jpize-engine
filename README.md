@@ -1,4 +1,4 @@
-# [Jpize](https://github.com/GeneralPashon/jpize-engine) - Java Game Engine
+# [Jpize](https://github.com/generaloss/jpize-engine) - Java Game Engine
 ![jpize](jpize-logo.svg)
 
 ### The Engine focuses on being:
@@ -14,8 +14,8 @@
 ---
 
 ## Demos
-* *[Demo Repository](https://github.com/GeneralPashon/jpize-demos)*
-* *[Minecraft Open Source Edition](https://github.com/GeneralPashon/minecraft-open-source-edition)*
+* *[Demo Repository](https://github.com/generaloss/jpize-demos)*
+* *[Minecraft Open Source Edition](https://github.com/generaloss/minecraft-open-source-edition)*
 
 ## Libraries: 
 * *[libsdl4j](https://github.com/libsdl4j/libsdl4j)* - SDL2
@@ -25,7 +25,7 @@
 
 ## Forks
 * *[Kotlin Fork](https://github.com/Raf0707/Pizza-Engine-Kotlin)* by *[Raf0707](https://github.com/Raf0707)*
-* *[C++ Version](https://github.com/GeneralPashon/Pizza-Engine-Cpp)* (abandoned)
+* *[C++ Version](https://github.com/generaloss/Pizza-Engine-Cpp)* (abandoned)
 
 ---
 
@@ -38,22 +38,25 @@
 ---
 
 ## Modules:
-* *Util*
-* *Core*
-* *Net*
-* *UI*
+
+| **Module** | **Depends** |
+|------------|-------------|
+| _**Util**_ | -           |
+| _**Core**_ | util        |
+| _**Net**_  | util        |
+| _**UI**_   | core        |
 
 ---
 
 ## Module *Util*:
-* *[Maths](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/math)* - Vectors, Matrices, Utils, Velocity, Intersector, Ray, Axis-Aligned Box & Rect, Colliders, etc...
-* *[Arrays](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/array)* - IntList, FloatList, [...], ArrayUtils, ArraysSupport (Java 17)
-* *[Files](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/file)* - Resource, [...], MapConfig
-* *[IO](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/io)* - FastReader, Jpize IO Streams ...
-* *[Colors](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/color)* - IColor, Color, ImmutableColor
-* *[Time](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/time)* - Stopwatch, Sync, TickGenerator, FpsCounter, DeltaTimeCounter, [...]
-* *[Streams](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util/stream)* - FloatSupplier
-* *[Other](https://github.com/GeneralPashon/jpize-engine/tree/master/util/src/main/java/jpize/util)* - Utils, StringUtils, SyncTaskExecutor
+* *[Maths](https://github.com/generaloss/jpize-engine/tree/master/util/src/main/java/jpize/util/math)* - Vectors, Matrices, Utils, Velocity, Intersector, Ray, Axis-Aligned Box & Rect, Colliders, etc...
+* *[Arrays](https://github.com/generaloss/jpize-engine/tree/master/util/src/main/java/jpize/util/array)* - IntList, FloatList, [...], ArrayUtils, ArraysSupport (Java 17)
+* *[Files](https://github.com/generaloss/jpize-engine/tree/master/util/src/main/java/jpize/util/file)* - Resource, [...], MapConfig
+* *[IO](https://github.com/generaloss/jpize-engine/tree/master/util/src/main/java/jpize/util/io)* - FastReader, Jpize IO Streams ...
+* *[Colors](https://github.com/generaloss/jpize-engine/tree/master/util/src/main/java/jpize/util/color)* - IColor, Color, ImmutableColor
+* *[Time](https://github.com/generaloss/jpize-engine/tree/master/util/src/main/java/jpize/util/time)* - Stopwatch, Sync, TickGenerator, FpsCounter, DeltaTimeCounter, [...]
+* *[Streams](https://github.com/generaloss/jpize-engine/tree/master/util/src/main/java/jpize/util/stream)* - FloatSupplier
+* *[Other](https://github.com/generaloss/jpize-engine/tree/master/util/src/main/java/jpize/util)* - Utils, StringUtils, SyncTaskExecutor
 
 ### 1. Usage with graphics:
 ``` java
@@ -163,8 +166,8 @@ body_1.getPosition().add( b1_velocity ); // box will be move only 3 units
 ---
 
 ## Module *Core*:
-* *[Graphics](https://github.com/GeneralPashon/jpize-engine/tree/master/core/src/main/java/jpize/graphics)* - Camera, Fonts, Postprocessing, Meshes, Textures, Utils ...
-* *[Audio](https://github.com/GeneralPashon/jpize-engine/tree/master/core/src/main/java/jpize/audio)* - OGG, MP3, WAV
+* *[Graphics](https://github.com/generaloss/jpize-engine/tree/master/core/src/main/java/jpize/graphics)* - Camera, Fonts, Postprocessing, Meshes, Textures, Utils ...
+* *[Audio](https://github.com/generaloss/jpize-engine/tree/master/core/src/main/java/jpize/audio)* - OGG, MP3, WAV
 
 #### 1. Main class
 ``` java
@@ -347,9 +350,9 @@ PixmapIO.load(res);
 ---
 
 ## Module *Net*:
-* *[Security](https://github.com/GeneralPashon/jpize-engine/tree/master/net/src/main/java/jpize/net/security)* - AES, RSA
-* *[TCP](https://github.com/GeneralPashon/jpize-engine/tree/master/net/src/main/java/jpize/net/tcp)* - Packets, Server / Client
-* *[UDP](https://github.com/GeneralPashon/jpize-engine/tree/master/net/src/main/java/jpize/net/udp)* - Server / Client
+* *[Security](https://github.com/generaloss/jpize-engine/tree/master/net/src/main/java/jpize/net/security)* - AES, RSA
+* *[TCP](https://github.com/generaloss/jpize-engine/tree/master/net/src/main/java/jpize/net/tcp)* - Packets, Server / Client
+* *[UDP](https://github.com/generaloss/jpize-engine/tree/master/net/src/main/java/jpize/net/udp)* - Server / Client
 
 #### 1. Encrypted Server-Client Example:
 ``` java
@@ -376,57 +379,56 @@ client.send("Hello, World!".getBytes()); // send 'Hello, World!'
 
 #### 2. Packet Example:
 ``` java
-// Packets Handler
-class MyPacketHandler implements PacketHandler{
+// Message Packet
+public static class MsgPacket extends IPacket<MyPacketHandler>{ // MyPacketHandler 
 
-    public void handleMyPacket(MyPacket packet){ ... }
+    String message;
     
+    public MsgPacket(String message){
+        this.message = message;
+    }
+    
+    public MsgPacket(){ } // Constructor for instancing packet class after reading
+
+    public void write(JpizeOutputStream stream) throws IOException{ // write data before send
+        stream.writeUTF(message);
+    }
+    public void read(JpizeInputStream stream) throws IOException{ // read data after receive
+        message = stream.readUTF();
+    }
+    public void handle(MyPacketHandler handler){ // handle this packet
+        handler.handleMessage(this);
+    }
+}
+
+// Packets handler interface
+public static class MyPacketHandler implements PacketHandler{
+    public void handleMessage(MsgPacket packet){ ... }
     public void handleAnotherPacket(AnotherPacket packet){ ... }
 }
-
-// Packet
-class MyPacket extends IPacket<MyPacketHandler>{ // MyPacketHandler
-    public static final int PACKET_ID = /*Your packet ID*/;
-    
-    public MyPacket(){
-        super(PACKET_ID);
-    }
-    public MyPacket(some_data){
-        this();
-        ...
-    }
-
-    public void write(JpizeOutputStream outStream){ ... } // write data when sending
-    public void read(JpizeInputStream inStream){ ... } // read data when receivind
-
-    public void handle(MyPacketHandler handler){ // handle this packet
-        handler.handleMyPacket(this); 
-    }
-}
-
-
-// packet sending
-TcpConnection connection = ...;
-connection.send(new MyPacket(some_data));
 
 // packet receiving
 MyPacketHandler handler = ...;
 // register packets
 PacketDispatcher packetDispatcher = new PacketDispatcher();
-packetDispatcher.register(MyPacket     .PACKET_ID, MyPacket     .class);
-packetDispatcher.register(AnotherPacket.PACKET_ID, AnotherPacket.class);
-...
+packetDispatcher.register(MsgPacket.class);
+packetDispatcher.register(AnotherPacket.class);
+// listener
 void received(byte[] bytes, TcpConnection sender){
     packetDispatcher.handlePacket(bytes, handler);
 }
+
+// packet sending
+TcpConnection connection = ...;
+connection.send(new MsgPacket("My message!"));
 ```
 
 ---
 
 ## Module *UI*:
-* *[UIComponent](ui/src/main/java/jpize/ui/component/UIComponent.java)* - Base component class
-* *[Constraint](ui/src/main/java/jpize/ui/constraint)* - Pixel, Relative, Aspect, Flag (Used to determine the static or dynamic position and size of ui components)
-* *[AbstractLayout](ui/src/main/java/jpize/ui/component/AbstractLayout.java)* - implemented in: ConstraintLayout, VBox, HBox
+* *[UIComponent](ui/src/main/java/jpize/ui/component/UIComponent.java)* - Base GUI component class
+* *[Constraint](ui/src/main/java/jpize/ui/constraint)* - Pixel, Relative (to width / height), Aspect, Flag (zero, auto, match_parent, wrap_content)
+* *[AbstractLayout](ui/src/main/java/jpize/ui/component/AbstractLayout.java)* - implemented in: ConstraintLayout, VBox, HBox, ScrollView
 
 #### 1. UI Java Example:
 ``` java
@@ -472,7 +474,7 @@ ui.enable();
 ui.disable();
 ```
 
-#### 2. [PUI Markup Language](https://github.com/GeneralPashon/jpize-ui-idea-plugin) Example:
+#### 2. [PUI Markup Language](https://github.com/generaloss/jpize-ui-idea-plugin) Example:
 #### Java:
 ``` java
 Texture background = new Texture("background.png");
@@ -493,7 +495,7 @@ Gl.clearColorBuffer();
 ui.render();
 ```
 #### PUI File:
-[Download IDEA plugin for .PUI support](https://github.com/GeneralPashon/jpize-ui-idea-plugin)
+[Install IDEA plugin for .PUI support](https://github.com/generaloss/jpize-ui-idea-plugin)
 ``` pui
 # Root component (Vertical Box)
 @VBox {
@@ -531,4 +533,4 @@ ui.render();
 ---
 
 ## Bugs and Feedback
-For bugs, questions and discussions please use the [GitHub Issues](https://github.com/GeneralPashon/jpize-engine/issues).
+For bugs, questions and discussions please use the [GitHub Issues](https://github.com/generaloss/jpize-engine/issues).

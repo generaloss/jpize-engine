@@ -1,36 +1,49 @@
 package jpize.net.udp;
 
+import java.io.IOException;
 import java.net.*;
 
 public class UdpServer{
     
     private final UdpListener listener;
-    private UdpChannel connection;
+    private UdpConnection connection;
 
     public UdpServer(UdpListener listener){
         this.listener = listener;
     }
 
-    public synchronized UdpServer start(String ip, int port){
+
+    public void run(int port){
         if(connection != null && !connection.isClosed())
-            throw new RuntimeException("Already enabled");
+            throw new RuntimeException("UDP Server already running");
 
         try{
-            final DatagramSocket socket = new DatagramSocket(port, InetAddress.getByName(ip));
-            connection = new UdpChannel(socket, listener);
-        }catch(Exception e){
-            throw new RuntimeException("UdpServer startup error: " + e.getMessage());
+            final DatagramSocket socket = new DatagramSocket(port);
+            connection = new UdpConnection(socket, listener);
+        }catch(IOException e){
+            e.printStackTrace();
         }
-
-        return this;
     }
+
+    public void run(String address, int port){
+        if(connection != null && !connection.isClosed())
+            throw new RuntimeException("UDP Server already running");
+
+        try{
+            final DatagramSocket socket = new DatagramSocket(port, InetAddress.getByName(address));
+            connection = new UdpConnection(socket, listener);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
 
     public void send(byte[] data, SocketAddress address){
         connection.send(new DatagramPacket(data, data.length, address));
     }
 
-    public void send(byte[] data, String ip, int port){
-        send(data, new InetSocketAddress(ip, port));
+    public void send(byte[] data, String address, int port){
+        send(data, new InetSocketAddress(address, port));
     }
 
     public void close(){
@@ -38,7 +51,7 @@ public class UdpServer{
             connection.close();
     }
 
-    public UdpChannel getConnection(){
+    public UdpConnection getConnection(){
         return connection;
     }
 

@@ -35,7 +35,9 @@ public class Main{
         //.register().setAdapter(new TextEditor());
         //.register().setAdapter(new AudioTest());
         //.register().setAdapter(new NoiseTest());
-        .register().setAdapter(new UiTest());
+        //.register().setAdapter(new UiTest());
+        //.register().setAdapter(new TcpTest());
+        .register().setAdapter(new UdpTest());
         //.register().setAdapter(new UiTest2());
         //.register().setAdapter(new GlyphIteratorTest());
         //.register().setAdapter(new ListTest());

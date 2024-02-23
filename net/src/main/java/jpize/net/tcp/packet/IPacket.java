@@ -7,14 +7,14 @@ import java.io.IOException;
 
 public abstract class IPacket<H extends PacketHandler>{
     
-    private final short packetID;
+    private final int packetID;
     
-    public IPacket(int packetID){
-        this.packetID = (byte) packetID;
+    public IPacket(){
+        this.packetID = getClass().getSimpleName().hashCode();
     }
     
     
-    public short getPacketID(){
+    public int getPacketID(){
         return packetID;
     }
     

@@ -13,7 +13,7 @@ import java.net.ServerSocket;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class TcpServer extends TcpDisconnector implements Closeable{
+public class TcpServer implements TcpConnection.Disconnector, Closeable{
 
     private ServerSocket serverSocket;
     private CopyOnWriteArrayList<TcpConnection> connectionList;
@@ -28,7 +28,7 @@ public class TcpServer extends TcpDisconnector implements Closeable{
     
     public void run(String address, int port){
         if(!closed)
-            throw new RuntimeException("Server already running");
+            throw new RuntimeException("TCP Server already running");
 
         try{
             serverSocket = new ServerSocket();
@@ -43,7 +43,7 @@ public class TcpServer extends TcpDisconnector implements Closeable{
 
     public void run(int port){
         if(!closed)
-            throw new RuntimeException("Server already running");
+            throw new RuntimeException("TCP Server already running");
 
         try{
             serverSocket = new ServerSocket(port);
@@ -114,7 +114,7 @@ public class TcpServer extends TcpDisconnector implements Closeable{
     public void broadcast(IPacket<?> packet){
         broadcast(dataStream -> {
             try{
-                dataStream.writeShort(packet.getPacketID());
+                dataStream.writeInt(packet.getPacketID());
                 packet.write(dataStream);
             }catch(IOException e){
                 e.printStackTrace();
@@ -125,7 +125,7 @@ public class TcpServer extends TcpDisconnector implements Closeable{
     public void broadcast(TcpConnection exclude, IPacket<?> packet){
         broadcast(exclude, dataStream -> {
             try{
-                dataStream.writeShort(packet.getPacketID());
+                dataStream.writeInt(packet.getPacketID());
                 packet.write(dataStream);
             }catch(IOException e){
                 e.printStackTrace();
@@ -134,7 +134,7 @@ public class TcpServer extends TcpDisconnector implements Closeable{
     }
 
     @Override
-    synchronized public void disconnected(TcpConnection connection){
+    public void disconnect(TcpConnection connection){
         listener.disconnected(connection);
         connectionList.remove(connection);
         connection.close();

@@ -19,7 +19,7 @@ public class Context implements Disposable{
     private final CallbackHolder callbacks;
     protected JpizeApplication adapter;
     private Screen screen;
-    private boolean exitOnClose, enabled, showWindowOnInit;
+    private boolean exitOnClose, enabled, showWindowOnInit, alive;
 
     protected Context(SdlWindow window){
         contextManager.registerContext(this);
@@ -33,6 +33,8 @@ public class Context implements Disposable{
         this.callbacks = new CallbackHolder();
 
         setCurrent();
+
+        this.alive = true;
     }
 
 
@@ -166,8 +168,13 @@ public class Context implements Disposable{
             adapter.dispose();
         window.dispose();
 
+        alive = false;
         if(exitOnClose)
             contextManager.exit();
+    }
+
+    public boolean isAlive(){
+        return alive;
     }
 
 }

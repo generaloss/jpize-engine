@@ -9,11 +9,11 @@ public class Packets{
     
     public static PacketInfo getPacketInfo(byte[] data){
         try{
-            if(data.length < 3) // PACKET_ID + minimum data  =  2 + 1 bytes
+            if(data.length < 5) // int bytes (PACKET_ID) + minimum data bytes  =  4 + 1 bytes
                 return null;
             
             final JpizeInputStream stream = new JpizeInputStream(new ByteArrayInputStream(data));
-            final short packetID = stream.readShort();
+            final int packetID = stream.readInt();
             
             return new PacketInfo(packetID, stream);
         }catch(IOException e){
