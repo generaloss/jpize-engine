@@ -31,8 +31,7 @@
 
 # Getting Started
 
-### Installing
-#### Maven
+### Install the Engine
 ```
 <!-- Jpize Core -->
 <dependency>
@@ -58,43 +57,32 @@
     <artifactId>jpize-net</artifactId>
     <version>24.2.1</version>
 </dependency>
-
+```
+### And used libs:
+```
 <!-- SDL -->
 <dependency>
     <groupId>io.github.libsdl4j</groupId>
     <artifactId>libsdl4j</artifactId>
     <version>2.28.4-1.6</version>
 </dependency>
-<!-- Jorbis (OGG lib) -->
+<!-- Jorbis (OGG) -->
 <dependency>
     <groupId>org.jcraft</groupId>
     <artifactId>jorbis</artifactId>
     <version>0.0.17</version>
 </dependency>
-<!-- JLayer (MP3 lib) -->
+<!-- JLayer (MP3) -->
 <dependency>
     <groupId>javazoom</groupId>
     <artifactId>jlayer</artifactId>
     <version>1.0.1</version>
 </dependency>
-<!-- LWJGL -->
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId><version>3.3.3</version></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId><version>3.3.3</version><classifier>natives-linux</classifier></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId><version>3.3.3</version><classifier>natives-macos</classifier></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId><version>3.3.3</version><classifier>natives-windows</classifier></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-openal</artifactId><version>3.3.3</version></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-openal</artifactId><version>3.3.3</version><classifier>natives-linux</classifier></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-openal</artifactId><version>3.3.3</version><classifier>natives-macos</classifier></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-openal</artifactId><version>3.3.3</version><classifier>natives-windows</classifier></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-opengl</artifactId><version>3.3.3</version></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-opengl</artifactId><version>3.3.3</version><classifier>natives-linux</classifier></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-opengl</artifactId><version>3.3.3</version><classifier>natives-macos</classifier></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-opengl</artifactId><version>3.3.3</version><classifier>natives-windows</classifier></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-stb</artifactId><version>3.3.3</version></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-stb</artifactId><version>3.3.3</version><classifier>natives-linux</classifier></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-stb</artifactId><version>3.3.3</version><classifier>natives-macos</classifier></dependency>
-<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-stb</artifactId><version>3.3.3</version><classifier>natives-windows</classifier></dependency>
 ```
+### Don’t forget also to add LWJGL 3.3.3 to dependencies:
+### https://www.lwjgl.org/customize
+
+---
 
 ### Honorable mention
 *  Matrices indexed with _**mᵢⱼ**_, where _**i**_ - column index, _**j**_ - row index
