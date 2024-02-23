@@ -4,13 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>io.github.generaloss</groupId>
-        <artifactId>jpize-engine</artifactId>
-        <version>24.2.1</version>
-    </parent>
-
+    <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
+    <version>24.2.2</version>
     <name>Jpize Core</name>
 
     <description>A Java Open Source Library, which provides tools to facilitate writing graphics for game development, and tools for developing desktop applications.</description>
@@ -113,8 +109,6 @@
                 <groupId>org.lwjgl</groupId>
                 <artifactId>lwjgl-bom</artifactId>
                 <version>3.3.3</version>
-                <scope>import</scope>
-                <type>pom</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -159,8 +153,7 @@
         <dependency>
             <groupId>io.github.generaloss</groupId>
             <artifactId>jpize-utils</artifactId>
-            <version>24.2.1</version>
-            <scope>compile</scope>
+            <version>24.2.2</version>
         </dependency>
     </dependencies>
 </project>

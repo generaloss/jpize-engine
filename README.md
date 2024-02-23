@@ -31,58 +31,47 @@
 
 # Getting Started
 
-### Install the Engine
-```pom
+### Maven
+```xml
 <!-- Jpize Utils -->
 <dependency>
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-utils</artifactId>
-    <version>24.2.1</version>
+    <version>24.2.2</version>
 </dependency>
 <!-- Jpize Net -->
 <dependency>
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-net</artifactId>
-    <version>24.2.1</version>
+    <version>24.2.2</version>
 </dependency>
 <!-- Jpize Core -->
 <dependency>
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-core</artifactId>
-    <version>24.2.1</version>
+    <version>24.2.2</version>
 </dependency>
 <!-- Jpize UI -->
 <dependency>
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-ui</artifactId>
-    <version>24.2.1</version>
+    <version>24.2.2</version>
 </dependency>
 ```
-### And used libs:
-```pom
-<!-- SDL (Input\Output)-->
-<dependency>
-    <groupId>io.github.libsdl4j</groupId>
-    <artifactId>libsdl4j</artifactId>
-    <version>2.28.4-1.6</version>
-</dependency>
-<!-- Jorbis (OGG) -->
-<dependency>
-    <groupId>org.jcraft</groupId>
-    <artifactId>jorbis</artifactId>
-    <version>0.0.17</version>
-</dependency>
-<!-- JLayer (MP3) -->
-<dependency>
-    <groupId>javazoom</groupId>
-    <artifactId>jlayer</artifactId>
-    <version>1.0.1</version>
-</dependency>
-```
-### Don’t forget also to add LWJGL 3.3.3 to dependencies:
-### _https://www.lwjgl.org/customize_
+### Gradle (Kotlin)
+```kotlin
+repositories {
+    mavenCentral()
+}
 
----
+dependencies {
+    implementation("io.github.generaloss:jpize-utils:24.2.2")
+    implementation("io.github.generaloss:jpize-net:24.2.2")
+    implementation("io.github.generaloss:jpize-core:24.2.2")
+    implementation("io.github.generaloss:jpize-ui:24.2.2")
+}
+```
+
 
 ### Honorable mention
 *  Matrices indexed with _**mᵢⱼ**_, where _**i**_ - column index, _**j**_ - row index
