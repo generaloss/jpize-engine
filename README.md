@@ -80,7 +80,7 @@
 </dependency>
 ```
 ### Don’t forget also to add LWJGL 3.3.3 to dependencies:
-### https://www.lwjgl.org/customize
+### _https://www.lwjgl.org/customize_
 
 ---
 
