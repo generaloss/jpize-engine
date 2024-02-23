@@ -58,9 +58,44 @@
     <artifactId>jpize-net</artifactId>
     <version>24.2.1</version>
 </dependency>
+<!-- SDL -->
+<dependency>
+    <groupId>io.github.libsdl4j</groupId>
+    <artifactId>libsdl4j</artifactId>
+    <version>2.28.4-1.6</version>
+</dependency>
+<!-- Jorbis (OGG) -->
+<dependency>
+    <groupId>org.jcraft</groupId>
+    <artifactId>jorbis</artifactId>
+    <version>0.0.17</version>
+</dependency>
+<!-- JLayer (MP3) -->
+<dependency>
+    <groupId>javazoom</groupId>
+    <artifactId>jlayer</artifactId>
+    <version>1.0.1</version>
+</dependency>
+<!-- LWJGL -->
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId><version>3.3.3</version></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId><version>3.3.3</version><classifier>natives-linux</classifier></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId><version>3.3.3</version><classifier>natives-macos</classifier></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId><version>3.3.3</version><classifier>natives-windows</classifier></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-openal</artifactId><version>3.3.3</version></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-openal</artifactId><version>3.3.3</version><classifier>natives-linux</classifier></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-openal</artifactId><version>3.3.3</version><classifier>natives-macos</classifier></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-openal</artifactId><version>3.3.3</version><classifier>natives-windows</classifier></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-opengl</artifactId><version>3.3.3</version></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-opengl</artifactId><version>3.3.3</version><classifier>natives-linux</classifier></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-opengl</artifactId><version>3.3.3</version><classifier>natives-macos</classifier></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-opengl</artifactId><version>3.3.3</version><classifier>natives-windows</classifier></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-stb</artifactId><version>3.3.3</version></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-stb</artifactId><version>3.3.3</version><classifier>natives-linux</classifier></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-stb</artifactId><version>3.3.3</version><classifier>natives-macos</classifier></dependency>
+<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-stb</artifactId><version>3.3.3</version><classifier>natives-windows</classifier></dependency>
 ```
 
-### What you need to know about the engine?
+### Honorable mention
 *  Matrices indexed with _**mᵢⱼ**_, where _**i**_ - column index, _**j**_ - row index
 *  Left-Hand Coordinate System
 
@@ -87,7 +122,7 @@
 * *[Streams](https://github.com/generaloss/jpize-engine/tree/master/util/src/main/java/jpize/util/stream)* - FloatSupplier
 * *[Other](https://github.com/generaloss/jpize-engine/tree/master/util/src/main/java/jpize/util)* - Utils, StringUtils, SyncTaskExecutor
 
-### 1. Usage with graphics:
+### 1. Average usage:
 ``` java
 // Utils
 EulerAngles rotation = new EulerAngles(45, 0, 0);
