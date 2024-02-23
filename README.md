@@ -58,19 +58,20 @@
     <artifactId>jpize-net</artifactId>
     <version>24.2.1</version>
 </dependency>
+
 <!-- SDL -->
 <dependency>
     <groupId>io.github.libsdl4j</groupId>
     <artifactId>libsdl4j</artifactId>
     <version>2.28.4-1.6</version>
 </dependency>
-<!-- Jorbis (OGG) -->
+<!-- Jorbis (OGG lib) -->
 <dependency>
     <groupId>org.jcraft</groupId>
     <artifactId>jorbis</artifactId>
     <version>0.0.17</version>
 </dependency>
-<!-- JLayer (MP3) -->
+<!-- JLayer (MP3 lib) -->
 <dependency>
     <groupId>javazoom</groupId>
     <artifactId>jlayer</artifactId>
@@ -559,7 +560,7 @@ Gl.clearColorBuffer();
 ui.render();
 ```
 #### PUI File:
-[Install IDEA plugin for .PUI support](https://github.com/generaloss/jpize-ui-idea-plugin)
+[Install IDEA plugin for .PUI support](https://plugins.jetbrains.com/plugin/23406-jpize-ui)
 ``` pui
 # Root component (Vertical Box)
 @VBox {
