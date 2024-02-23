@@ -33,22 +33,10 @@
 
 ### Install the Engine
 ```pom
-<!-- Jpize Core -->
-<dependency>
-    <groupId>io.github.generaloss</groupId>
-    <artifactId>jpize-core</artifactId>
-    <version>24.2.1</version>
-</dependency>
 <!-- Jpize Utils -->
 <dependency>
     <groupId>io.github.generaloss</groupId>
     <artifactId>jpize-utils</artifactId>
-    <version>24.2.1</version>
-</dependency>
-<!-- Jpize UI -->
-<dependency>
-    <groupId>io.github.generaloss</groupId>
-    <artifactId>jpize-ui</artifactId>
     <version>24.2.1</version>
 </dependency>
 <!-- Jpize Net -->
@@ -57,10 +45,22 @@
     <artifactId>jpize-net</artifactId>
     <version>24.2.1</version>
 </dependency>
+<!-- Jpize Core -->
+<dependency>
+    <groupId>io.github.generaloss</groupId>
+    <artifactId>jpize-core</artifactId>
+    <version>24.2.1</version>
+</dependency>
+<!-- Jpize UI -->
+<dependency>
+    <groupId>io.github.generaloss</groupId>
+    <artifactId>jpize-ui</artifactId>
+    <version>24.2.1</version>
+</dependency>
 ```
 ### And used libs:
 ```pom
-<!-- SDL -->
+<!-- SDL (Input\Output)-->
 <dependency>
     <groupId>io.github.libsdl4j</groupId>
     <artifactId>libsdl4j</artifactId>
