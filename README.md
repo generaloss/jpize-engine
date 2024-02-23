@@ -32,7 +32,7 @@
 # Getting Started
 
 ### Install the Engine
-```
+```pom
 <!-- Jpize Core -->
 <dependency>
     <groupId>io.github.generaloss</groupId>
@@ -59,7 +59,7 @@
 </dependency>
 ```
 ### And used libs:
-```
+```pom
 <!-- SDL -->
 <dependency>
     <groupId>io.github.libsdl4j</groupId>
