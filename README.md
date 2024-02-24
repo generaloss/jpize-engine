@@ -9,7 +9,7 @@
 ### Support OS:
 * **Windows**
 * **Linux x64**
-* _(possibly MacOS)_
+* **MacOS** (Not tested)
 
 ---
 
