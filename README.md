@@ -7,7 +7,7 @@
 * **Efficient**
 
 ### Support OS:
-* **Windows**
+* **Windows x64**
 * **Linux x64**
 * **MacOS** (Not tested)
 
